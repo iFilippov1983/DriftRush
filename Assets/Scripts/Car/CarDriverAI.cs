@@ -27,15 +27,30 @@ public class CarDriverAI : MonoBehaviour
     private bool _haveFinished;
     private bool _onFinalNode;
 
-    public bool Cruising;
+    private bool _isCruising;
+
+    public bool Cruising 
+    {
+        get => _isCruising;
+        set 
+        {
+            if (value)
+                _carDriver.StartCruise();
+            else
+                _carDriver.StartAccelerate();
+
+            _isCruising = value;
+        } 
+    }
 
     private void Awake() 
     {
         _carDriver = GetComponent<CarDriver>();
+        _carDriver.SetValues(_carSettings);
+
         _haveFinished = false;
         _onFinalNode = false;
         Cruising = true;
-        _carDriver.SetValues(_carSettings);
     }
 
     private void OnDrawGizmos()
@@ -50,7 +65,7 @@ public class CarDriverAI : MonoBehaviour
     {
         SetTargetPosition(_targetPositionTransform.position);
         Drive();
-        SetDriveMode();
+
         _lastPosition = transform.position;
     }
 
@@ -151,7 +166,7 @@ public class CarDriverAI : MonoBehaviour
             return;
         _onFinalNode = true;
 
-        float moveTime = 2f;
+        float moveTime = 1f;
         while (moveTime > 0)
         {
             SetAmounts(distanceToTarget);
@@ -194,14 +209,6 @@ public class CarDriverAI : MonoBehaviour
         }
     }
 
-    private void SetDriveMode()
-    {
-        if (Cruising)
-            _carDriver.StartCruise();
-        else
-            _carDriver.StartAccelerate();
-    }
-
     private void SetTargetPosition(Vector3 targetPosition) 
     {
         _targetPosition = targetPosition;
@@ -215,7 +222,7 @@ public class CarDriverAI : MonoBehaviour
         _tranformToRespawn = _targetPositionTransform;
         _targetPositionTransform = newTragetTansform;
 
-        $"New target: {newTragetTansform.gameObject.name}".Log();
+        //$"New target: {newTragetTansform.gameObject.name}".Log();
     }
 
     public void Finish(Transform finalTarget)

@@ -10,11 +10,6 @@ public class CarDriverPlayer : MonoBehaviour
         _carDriverAI = GetComponent<CarDriverAI>();
     }
 
-    private void Start()
-    {
-        Cruise();
-    }
-
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))

@@ -42,16 +42,21 @@ public class CarDriver : MonoBehaviour, IObservable<CarDriver.MoveValues>, IDisp
     public float Speed => _speed;
     public float TurnSpeed => _turnSpeed;
 
-    private void Start() 
-    {
-        //_motorRB.transform.parent = null;
-        StartCruise();
-    }
+    //private void Start() 
+    //{
+    //    //_motorRB.transform.parent = null;
+    //    _speedMaxCurrent = _speedCruising;
+    //}
 
     private void FixedUpdate()
     {
         MoveCar();
         NotifyObservers();
+    }
+
+    private void OnDestroy()
+    {
+        StopAllCoroutines();
     }
 
     private void MoveCar()
@@ -174,12 +179,14 @@ public class CarDriver : MonoBehaviour, IObservable<CarDriver.MoveValues>, IDisp
 
     public void StartCruise()
     {
+        "Start cruise".Log(StringConsoleLog.Color.Yellow);
         StopAllCoroutines();
         StartCoroutine(InterpolateSpeed(_speedMax, _speedCruising));
     }
 
     public void StartAccelerate()
     {
+        "Start acceleration".Log(StringConsoleLog.Color.Green);
         StopAllCoroutines();
         StartCoroutine(InterpolateSpeed(_speedCruising, _speedMax));
     }

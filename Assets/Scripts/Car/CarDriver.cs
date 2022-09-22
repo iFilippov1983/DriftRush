@@ -14,6 +14,7 @@ public class CarDriver : MonoBehaviour
 
     public Vector3 MotorPosition => _motorRB.position;
     public Vector3 AngularVelosity => _motorRB.angularVelocity;
+    public Vector3 Velosity => _motorRB.velocity;
     public float Speed => _speed;
     public float TurnSpeed => _turnSpeed;
 

@@ -51,14 +51,15 @@ public class CarDriverAI : MonoBehaviour
 
     private void FixedUpdate()
     {
-        SetSelfPosition();
+        //SetSelfPosition();
     }
 
     private void SetSelfPosition()
     {
         transform.position = _carDriver.MotorPosition;
-        Vector3 vel = Vector3.Lerp(_carDriver.AngularVelosity, _lastAngularVelosity , 0.1f);
-        Vector3 newAngularVector = Mathf.Approximately(vel.y, 0f) ? Vector3.zero: vel;
+
+        Vector3 angVel = Vector3.Lerp(_carDriver.AngularVelosity, _lastAngularVelosity, 0.1f);
+        Vector3 newAngularVector = Mathf.Approximately(angVel.y, 0f) ? Vector3.zero : angVel * _forwardAmount;
         transform.Rotate(0, newAngularVector.y, 0, Space.World);
         _lastAngularVelosity = newAngularVector;
     }
@@ -190,7 +191,6 @@ public class CarDriverAI : MonoBehaviour
         float moveTime = 2f;
         while (moveTime > 0)
         {
-            $"{moveTime}".Log();
             SetAmounts(distanceToTarget);
             moveTime -= Time.deltaTime;
             await Task.Yield();

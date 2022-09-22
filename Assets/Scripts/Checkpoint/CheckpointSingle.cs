@@ -17,11 +17,27 @@ public class CheckpointSingle : MonoBehaviour
         _pasedDrivers = new List<CarDriverAI>();
     }
 
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.TryGetComponent<CarMotor>(out CarMotor carMotor))
+    //    {
+    //        CarDriverAI carDriverAI = carMotor.CarDriverAI;
+    //        if (_pasedDrivers.Contains(carDriverAI))
+    //            return;
+    //        _pasedDrivers.Add(carDriverAI);
+    //        bool continueTrack = _checkpointsTrack.CarThoughCheckpoint(this, carDriverAI.transform, (t) => carDriverAI.Finish(t));
+    //        if (continueTrack)
+    //        {
+    //            Transform nextTraget = _checkpointsTrack.GetNextTargetFor(carDriverAI.transform);
+    //            carDriverAI.SetTarget(nextTraget);
+    //        }
+    //    }
+    //}
+
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent<CarMotor>(out CarMotor carMotor))
+        if (other.TryGetComponent<CarDriverAI>(out CarDriverAI carDriverAI))
         {
-            CarDriverAI carDriverAI = carMotor.CarDriverAI;
             if (_pasedDrivers.Contains(carDriverAI))
                 return;
             _pasedDrivers.Add(carDriverAI);

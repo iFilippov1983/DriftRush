@@ -1,45 +1,57 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-public class CarDriver : MonoBehaviour 
+public class CarDriver : MonoBehaviour, IObservable<CarDriver.MoveValues>, IDisposable 
 {
+    public struct MoveValues
+    {
+        public float Speed;
+        public float TurnSpeed;
+        public Vector3 MotorVelosity;
+        public Vector3 MotorAngularVelosity;
+    }
+
     private const float Min_Turn_Amount = 20f;
 
     [SerializeField] private Rigidbody _motorRB;
-    //[SerializeField] private CarSettings _settings;
+    private List<IObserver<MoveValues>> _observersList = new List<IObserver<MoveValues>>();
 
-    private float _speedMax;
-    private float _speedCruising;
-    private float _speedMin;
-    private float _acceleration;
-    private float _reverseSpeed;
+    private float _speedMax = 10f;
+    private float _speedCruising = 8f;
+    private float _speedMin = -10f;
+    private float _acceleration = 10f;
+    private float _reverseSpeed = 5f;
 
-    private float _brakeSpeed;
-    private float _idleSlowdown;
+    private float _brakeSpeed = 10f;
+    private float _idleSlowdown = 15f;
 
-    private float _turnSpeedMax;
-    private float _turnSpeedAcceleration;
-    private float _turnIdleSlowdown;
+    private float _turnSpeedMax = 20f;
+    private float _turnSpeedAcceleration = 10f;
+    private float _turnIdleSlowdown = 15f;
 
     private float _speed;
+    private float _speedMaxCurrent;
+    private float _skidThresholdSpeed;
     private float _turnSpeed;
 
     private float _forwardAmount;
     private float _turnAmount;
 
-    public Vector3 MotorPosition => _motorRB.position;
-    public Vector3 AngularVelosity => _motorRB.angularVelocity;
-    public Vector3 Velosity => _motorRB.velocity;
     public float Speed => _speed;
     public float TurnSpeed => _turnSpeed;
 
     private void Start() 
     {
         //_motorRB.transform.parent = null;
+        StartCruise();
     }
 
     private void FixedUpdate()
     {
         MoveCar();
+        NotifyObservers();
     }
 
     private void MoveCar()
@@ -77,14 +89,14 @@ public class CarDriver : MonoBehaviour
             }
         }
 
-        _speed = Mathf.Clamp(_speed, _speedMin, _speedMax);
+        _speed = Mathf.Clamp(_speed, _speedMin, _speedMaxCurrent);
         //_motorRB.velocity = transform.forward * _speed;
         _motorRB.AddForce(_motorRB.transform.forward * _speed, ForceMode.Acceleration);
 
         if (_speed < 0)
         {
             // Going backwards, invert wheels
-            _turnAmount = _turnAmount * -1f;
+            _turnAmount *= -1f;
         }
 
         if (_turnAmount > 0 || _turnAmount < 0)
@@ -115,7 +127,7 @@ public class CarDriver : MonoBehaviour
             }
         }
 
-        float speedNormalized = _speed / _speedMax;
+        float speedNormalized = _speed / _speedMaxCurrent;
         float invertSpeedNormalized = Mathf.Clamp(1 - speedNormalized, .75f, 1f);
 
         _turnSpeed = Mathf.Clamp(_turnSpeed, -_turnSpeedMax, _turnSpeedMax);
@@ -154,36 +166,56 @@ public class CarDriver : MonoBehaviour
         _turnIdleSlowdown = carSettings.turnIdleSlowdown;
     }
 
-    public void ClearTurnSpeed() 
-    {
-        _turnSpeed = 0f;
-    }
-
-    public void SetTurnSpeedStraightly(float value)
-    { 
-        _turnSpeed = value;
-    }
-
-    public void SetSpeedMax(float speedMax) 
-    {
-        _speedMax = speedMax;
-    }
-
-    public void SetTurnSpeedMax(float turnSpeedMax) 
-    {
-        _turnSpeedMax = turnSpeedMax;
-    }
-
-    public void SetTurnSpeedAcceleration(float turnSpeedAcceleration) 
-    {
-        _turnSpeedAcceleration = turnSpeedAcceleration;
-    }
-
     public void StopCompletely() 
     {
         _speed = 0f;
         _turnSpeed = 0f;
-        //_motorRB.velocity = Vector3.zero;
-        //_motorRB.angularVelocity = Vector3.zero;
+    }
+
+    public void StartCruise()
+    {
+        StopAllCoroutines();
+        StartCoroutine(InterpolateSpeed(_speedMax, _speedCruising));
+    }
+
+    public void StartAccelerate()
+    {
+        StopAllCoroutines();
+        StartCoroutine(InterpolateSpeed(_speedCruising, _speedMax));
+    }
+
+    private IEnumerator InterpolateSpeed(float from, float to)
+    {
+        float persentage = 0f;
+        while (persentage < 1)
+        {
+            persentage += Time.deltaTime;
+            _speedMaxCurrent = Mathf.Lerp(from, to, persentage);
+            yield return null;
+        }
+    }
+
+
+    private void NotifyObservers()
+    { 
+        MoveValues moveValues = new MoveValues();
+        moveValues.Speed = _speed;
+        moveValues.TurnSpeed = _turnSpeed;
+        moveValues.MotorVelosity = _motorRB.velocity;
+        moveValues.MotorAngularVelosity = _motorRB.angularVelocity;
+
+        foreach(var o in _observersList)
+            o.OnNext(moveValues);
+    }
+
+    public IDisposable Subscribe(IObserver<MoveValues> observer)
+    {
+        _observersList.Add(observer);
+        return this;
+    }
+
+    public void Dispose()
+    {
+        _observersList.Clear();
     }
 }

@@ -12,7 +12,7 @@ public class CarDriverPlayer : MonoBehaviour
 
     private void Start()
     {
-        _carDriverAI.manualTurn = true;
+        //_carDriverAI.manual = true;
     }
 
     private void Update()
@@ -25,6 +25,6 @@ public class CarDriverPlayer : MonoBehaviour
 
     private void SwitchTurningMode()
     {
-        _carDriverAI.manualTurn = !_carDriverAI.manualTurn;
+        //_carDriverAI.manual = !_carDriverAI.manual;
     }
 }

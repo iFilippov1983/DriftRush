@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-[CreateAssetMenu(menuName = "CarSettings/CarSettings", fileName = "CarSet_Name")]
+[CreateAssetMenu(menuName = "ValuesSettings/CarSettings", fileName = "CarSet_Name")]
 public class CarSettings : ScriptableObject
 {
     [Title("Move options")]

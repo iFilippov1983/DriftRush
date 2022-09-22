@@ -2,27 +2,21 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 
 [RequireComponent(typeof(CarDriver))]
 public class CarDriverAI : MonoBehaviour
 {
-    private const float Reached_Target_Distance = 1f;//5
-    private const float Stopping_Distance = 1f;//10
-    private const float Stopping_Speed_Limit = 80f;
-    private const float Stopping_Speed_Limit_Final = 15f;
-    private const float Angle_Critical = 45f;
-    private const float Reverse_Distance = 5f;
-    private const float Stuck_Distance = 0.6f;
-    private const float Max_Stuck_Time = 2f;
-
     [SerializeField] private Transform _targetPositionTransform;
-    [SerializeField] private Transform _tranformToRespawn;
+    [SerializeField] private CarDriverSettings _settings;
+    private Transform _tranformToRespawn;
     private CarDriver _carDriver;
     private Vector3 _targetPosition;
     private bool _hasReachedTargetPosition;
 
+    private Vector3 _lastAngularVelosity;
     private Vector3 _lastPosition;
     private Vector3 _lastStuckPosition;
     private float _stuckTimer;
@@ -30,15 +24,13 @@ public class CarDriverAI : MonoBehaviour
     private float _turnAmount;
 
     private bool _haveFinished;
-
-    [ReadOnly]
-    public bool manualTurn;
+    private bool _onFinalNode;
 
     private void Awake() 
     {
         _carDriver = GetComponent<CarDriver>();
-        manualTurn = false;
         _haveFinished = false;
+        _onFinalNode = false;
     }
 
     private void OnDrawGizmos()
@@ -53,8 +45,23 @@ public class CarDriverAI : MonoBehaviour
     {
         SetTargetPosition(_targetPositionTransform.position);
         Drive();
-
+        
         _lastPosition = transform.position;
+    }
+
+    private void FixedUpdate()
+    {
+        //SetSelfPosition();
+    }
+
+    private void SetSelfPosition()
+    {
+        transform.position = _carDriver.MotorPosition;
+
+        Vector3 angVel = Vector3.Lerp(_carDriver.AngularVelosity, _lastAngularVelosity, 0.1f);
+        Vector3 newAngularVector = Mathf.Approximately(angVel.y, 0f) ? Vector3.zero : angVel * _forwardAmount;
+        transform.Rotate(0, newAngularVector.y, 0, Space.World);
+        _lastAngularVelosity = newAngularVector;
     }
 
     private void Drive()
@@ -63,14 +70,14 @@ public class CarDriverAI : MonoBehaviour
         _turnAmount = 0f;
 
         float distanceToTarget = Vector3.Distance(transform.position, _targetPosition);
-        if (distanceToTarget > Reached_Target_Distance)
+        if (distanceToTarget > _settings.ReachedTargetDistance && !_haveFinished)
         {
-            // Still too far, keep going
+            _hasReachedTargetPosition = false;
             SetAmounts(distanceToTarget);
         }
         else
         {
-            HandleStop();
+            HandleStop(distanceToTarget);
         }
 
         HandleStuckSafety();
@@ -81,48 +88,11 @@ public class CarDriverAI : MonoBehaviour
     {
         Vector3 dirToMovePosition = (_targetPosition - transform.position).normalized;
         float dot = Vector3.Dot(transform.forward, dirToMovePosition);
-
-        _hasReachedTargetPosition = false;
-        _forwardAmount = 1f;
-
-        if (distanceToTarget < Stopping_Distance && _carDriver.GetSpeed() > Stopping_Speed_Limit)
-        {
-            // Within stopping distance and moving forward
-            _forwardAmount = -1f;
-        }
-
-        ///-------------------
-
         float angleToDir = Vector3.SignedAngle(transform.forward, dirToMovePosition, Vector3.up);
 
-        if (angleToDir < 0)
-        {
-            _turnAmount = -1f;
-        }
-        else
-        {
-            _turnAmount = 1f;
-        }
-
-        if (angleToDir >= Angle_Critical)
-        {
-            _turnAmount *= 2f;
-        }
-
-        if (manualTurn)
-        {
-            _turnAmount = 0.01f;
-        }
-
-        if (dot < 0)
-        {
-            // Target is behind
-            if (distanceToTarget < Reverse_Distance)
-            {
-                _forwardAmount = -1f;
-                _turnAmount *= -1f;
-            }
-        }
+        SetForwardAmount(distanceToTarget);
+        SetTurnAmount(angleToDir);
+        CheckIfTargetIsBehind(dot, distanceToTarget);
 
         #region Old
         //------------------
@@ -162,14 +132,75 @@ public class CarDriverAI : MonoBehaviour
         #endregion
     }
 
-    private void HandleStop()
+    private void SetForwardAmount(float distanceToTarget)
     {
-        // Close enough
+        if (distanceToTarget >= 0)
+        {
+            _forwardAmount = 1f;
+        }
+
+        if (distanceToTarget < _settings.StoppingDistance && _carDriver.Speed > _settings.StoppingSpeedLimit)
+        {
+            // Within stopping distance and moving forward
+            _forwardAmount = -1f;
+        }
+    }
+
+    private void SetTurnAmount(float angleToDir)
+    {
+        _turnAmount = angleToDir < 0 ? -1f : 1f;
+
+        if (Mathf.Abs(angleToDir) >= _settings.AngleCritical)
+        {
+            _turnAmount *= 2f;
+        }
+    }
+
+    private void CheckIfTargetIsBehind(float dot, float distanceToTarget)
+    {
+        if (dot < 0 && distanceToTarget < _settings.ReverseDistance)
+        {
+            _forwardAmount = -1f;
+            _turnAmount *= -1f;
+        }
+    }
+
+    private void HandleStop(float distanceToTarget)
+    {
         _hasReachedTargetPosition = true;
-        if (_carDriver.GetSpeed() > Stopping_Speed_Limit_Final)
+
+        if (_haveFinished)
+        {
+            GetAside(distanceToTarget);
+            return;
+        }
+
+        if (_carDriver.Speed > _settings.StoppingSpeedLimitFinal)
         {
             // Hit the brakes!
             _forwardAmount = -1f;
+        }
+    }
+
+    private async void GetAside(float distanceToTarget)
+    {
+        if (_onFinalNode)
+            return;
+        _onFinalNode = true;
+
+        float moveTime = 2f;
+        while (moveTime > 0)
+        {
+            SetAmounts(distanceToTarget);
+            moveTime -= Time.deltaTime;
+            await Task.Yield();
+
+            if (moveTime <= 0)
+            {
+                _turnAmount = 0;
+                _forwardAmount = 0;
+                _carDriver.StopCompletely();
+            }
         }
     }
 
@@ -177,11 +208,11 @@ public class CarDriverAI : MonoBehaviour
     {
         if (!_hasReachedTargetPosition) 
         {
-            if (Vector3.Distance(transform.position, _lastStuckPosition) < Stuck_Distance) 
+            if (Vector3.Distance(transform.position, _lastStuckPosition) < _settings.StuckDistance) 
             {
                 _stuckTimer += Time.deltaTime;
 
-                if (_stuckTimer > Max_Stuck_Time) 
+                if (_stuckTimer > _settings.MaxStuckTime && _tranformToRespawn != null) 
                 {
                     transform.position = _tranformToRespawn.position;
                     transform.rotation = _tranformToRespawn.rotation;
@@ -203,18 +234,22 @@ public class CarDriverAI : MonoBehaviour
         _targetPosition = targetPosition;
 
         float distanceToTarget = Vector3.Distance(transform.position, targetPosition);
-        _hasReachedTargetPosition = distanceToTarget < Reached_Target_Distance;
+        _hasReachedTargetPosition = distanceToTarget < _settings.ReachedTargetDistance;
     }
 
-    public void SetTarget(Transform tragetTansform)
+    public void SetTarget(Transform newTragetTansform)
     {
         _tranformToRespawn = _targetPositionTransform;
-        _targetPositionTransform = tragetTansform;
+        _targetPositionTransform = newTragetTansform;
+
+        $"New target: {newTragetTansform.gameObject.name}".Log();
     }
 
-    public Action Finish()
+    public void Finish(Transform finalTarget)
     {
-        return () => _haveFinished = true;
+        $"FINISHED".Log(StringConsoleLog.Color.Red);
+        SetTarget(finalTarget);
+        _haveFinished = true;
     }
 
     //public bool GetHasReachedMoveToPosition()

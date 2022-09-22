@@ -4,6 +4,7 @@ public class CarDriver : MonoBehaviour
 {
     private const float Min_Turn_Amount = 20f;
 
+    [SerializeField] private Rigidbody _motorRB;
     [SerializeField] private CarSettings _settings;
     private float _speed;
     private float _turnSpeed;
@@ -11,11 +12,15 @@ public class CarDriver : MonoBehaviour
     private float _forwardAmount;
     private float _turnAmount;
 
-    private Rigidbody _carRigidbody;
+    public Vector3 MotorPosition => _motorRB.position;
+    public Vector3 AngularVelosity => _motorRB.angularVelocity;
+    public Vector3 Velosity => _motorRB.velocity;
+    public float Speed => _speed;
+    public float TurnSpeed => _turnSpeed;
 
-    private void Awake() 
+    private void Start() 
     {
-        _carRigidbody = GetComponent<Rigidbody>();
+        _motorRB.transform.parent = null;
     }
 
     private void FixedUpdate()
@@ -59,7 +64,8 @@ public class CarDriver : MonoBehaviour
         }
 
         _speed = Mathf.Clamp(_speed, _settings.speedMin, _settings.speedMax);
-        _carRigidbody.velocity = transform.forward * _speed;// * Time.deltaTime;
+        _motorRB.velocity = transform.forward * _speed;// * Time.deltaTime;
+        //_motorRB.AddForce(_motorRB.transform.forward * _speed, ForceMode.Acceleration);
 
         if (_speed < 0)
         {
@@ -99,7 +105,7 @@ public class CarDriver : MonoBehaviour
         float invertSpeedNormalized = Mathf.Clamp(1 - speedNormalized, .75f, 1f);
 
         _turnSpeed = Mathf.Clamp(_turnSpeed, -_settings.turnSpeedMax, _settings.turnSpeedMax);
-        _carRigidbody.angularVelocity = new Vector3(0, _turnSpeed * (invertSpeedNormalized * 1f) * Mathf.Deg2Rad, 0);
+        _motorRB.angularVelocity = new Vector3(0, _turnSpeed * (invertSpeedNormalized * 1f) * Mathf.Deg2Rad, 0);
 
         if (transform.eulerAngles.x > 2 || transform.eulerAngles.x < -2 || transform.eulerAngles.z > 2 || transform.eulerAngles.z < -2)
         {
@@ -130,11 +136,6 @@ public class CarDriver : MonoBehaviour
         _turnSpeed = value;
     }
 
-    public float GetSpeed() 
-    {
-        return _speed;
-    }
-
     public void SetSpeedMax(float speedMax) 
     {
         _settings.speedMax = speedMax;
@@ -154,5 +155,7 @@ public class CarDriver : MonoBehaviour
     {
         _speed = 0f;
         _turnSpeed = 0f;
+        _motorRB.velocity = Vector3.zero;
+        _motorRB.angularVelocity = Vector3.zero;
     }
 }

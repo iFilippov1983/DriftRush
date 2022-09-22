@@ -5,7 +5,21 @@ public class CarDriver : MonoBehaviour
     private const float Min_Turn_Amount = 20f;
 
     [SerializeField] private Rigidbody _motorRB;
-    [SerializeField] private CarSettings _settings;
+    //[SerializeField] private CarSettings _settings;
+
+    private float _speedMax;
+    private float _speedCruising;
+    private float _speedMin;
+    private float _acceleration;
+    private float _reverseSpeed;
+
+    private float _brakeSpeed;
+    private float _idleSlowdown;
+
+    private float _turnSpeedMax;
+    private float _turnSpeedAcceleration;
+    private float _turnIdleSlowdown;
+
     private float _speed;
     private float _turnSpeed;
 
@@ -20,7 +34,7 @@ public class CarDriver : MonoBehaviour
 
     private void Start() 
     {
-        _motorRB.transform.parent = null;
+        //_motorRB.transform.parent = null;
     }
 
     private void FixedUpdate()
@@ -33,7 +47,7 @@ public class CarDriver : MonoBehaviour
         if (_forwardAmount > 0)
         {
             // Accelerating
-            _speed += _forwardAmount * _settings.acceleration * Time.deltaTime;
+            _speed += _forwardAmount * _acceleration * Time.deltaTime;
         }
 
         if (_forwardAmount < 0)
@@ -41,12 +55,12 @@ public class CarDriver : MonoBehaviour
             if (_speed > 0)
             {
                 // Braking
-                _speed += _forwardAmount * _settings.brakeSpeed * Time.deltaTime;
+                _speed += _forwardAmount * _brakeSpeed * Time.deltaTime;
             }
             else
             {
                 // Reversing
-                _speed += _forwardAmount * _settings.reverseSpeed * Time.deltaTime;
+                _speed += _forwardAmount * _reverseSpeed * Time.deltaTime;
             }
         }
 
@@ -55,17 +69,17 @@ public class CarDriver : MonoBehaviour
             // Not accelerating or braking
             if (_speed > 0)
             {
-                _speed -= _settings.idleSlowdown * Time.deltaTime;
+                _speed -= _idleSlowdown * Time.deltaTime;
             }
             if (_speed < 0)
             {
-                _speed += _settings.idleSlowdown * Time.deltaTime;
+                _speed += _idleSlowdown * Time.deltaTime;
             }
         }
 
-        _speed = Mathf.Clamp(_speed, _settings.speedMin, _settings.speedMax);
-        _motorRB.velocity = transform.forward * _speed;// * Time.deltaTime;
-        //_motorRB.AddForce(_motorRB.transform.forward * _speed, ForceMode.Acceleration);
+        _speed = Mathf.Clamp(_speed, _speedMin, _speedMax);
+        //_motorRB.velocity = transform.forward * _speed;
+        _motorRB.AddForce(_motorRB.transform.forward * _speed, ForceMode.Acceleration);
 
         if (_speed < 0)
         {
@@ -81,18 +95,18 @@ public class CarDriver : MonoBehaviour
                 // Changing turn direction
                 _turnSpeed = _turnAmount * Min_Turn_Amount;
             }
-            _turnSpeed += _turnAmount * _settings.turnSpeedAcceleration * Time.deltaTime;
+            _turnSpeed += _turnAmount * _turnSpeedAcceleration * Time.deltaTime;
         }
         else
         {
             // Not turning
             if (_turnSpeed > 0)
             {
-                _turnSpeed -= _settings.turnIdleSlowdown * Time.deltaTime;
+                _turnSpeed -= _turnIdleSlowdown * Time.deltaTime;
             }
             if (_turnSpeed < 0)
             {
-                _turnSpeed += _settings.turnIdleSlowdown * Time.deltaTime;
+                _turnSpeed += _turnIdleSlowdown * Time.deltaTime;
             }
             if (_turnSpeed > -1f && _turnSpeed < +1f)
             {
@@ -101,10 +115,10 @@ public class CarDriver : MonoBehaviour
             }
         }
 
-        float speedNormalized = _speed / _settings.speedMax;
+        float speedNormalized = _speed / _speedMax;
         float invertSpeedNormalized = Mathf.Clamp(1 - speedNormalized, .75f, 1f);
 
-        _turnSpeed = Mathf.Clamp(_turnSpeed, -_settings.turnSpeedMax, _settings.turnSpeedMax);
+        _turnSpeed = Mathf.Clamp(_turnSpeed, -_turnSpeedMax, _turnSpeedMax);
         _motorRB.angularVelocity = new Vector3(0, _turnSpeed * (invertSpeedNormalized * 1f) * Mathf.Deg2Rad, 0);
 
         if (transform.eulerAngles.x > 2 || transform.eulerAngles.x < -2 || transform.eulerAngles.z > 2 || transform.eulerAngles.z < -2)
@@ -126,6 +140,20 @@ public class CarDriver : MonoBehaviour
         _turnAmount = turnAmount;
     }
 
+    public void SetValues(CarSettings carSettings)
+    {
+        _speedMax = carSettings.speedMax;
+        _speedCruising = carSettings.speedCruising;
+        _speedMin = carSettings.speedMin;
+        _acceleration = carSettings.acceleration;
+        _reverseSpeed = carSettings.reverseSpeed;
+        _brakeSpeed = carSettings.brakeSpeed;
+        _idleSlowdown = carSettings.idleSlowdown;
+        _turnSpeedMax = carSettings.turnSpeedMax;
+        _turnSpeedAcceleration = carSettings.turnSpeedAcceleration;
+        _turnIdleSlowdown = carSettings.turnIdleSlowdown;
+    }
+
     public void ClearTurnSpeed() 
     {
         _turnSpeed = 0f;
@@ -138,24 +166,24 @@ public class CarDriver : MonoBehaviour
 
     public void SetSpeedMax(float speedMax) 
     {
-        _settings.speedMax = speedMax;
+        _speedMax = speedMax;
     }
 
     public void SetTurnSpeedMax(float turnSpeedMax) 
     {
-        _settings.turnSpeedMax = turnSpeedMax;
+        _turnSpeedMax = turnSpeedMax;
     }
 
     public void SetTurnSpeedAcceleration(float turnSpeedAcceleration) 
     {
-        _settings.turnSpeedAcceleration = turnSpeedAcceleration;
+        _turnSpeedAcceleration = turnSpeedAcceleration;
     }
 
     public void StopCompletely() 
     {
         _speed = 0f;
         _turnSpeed = 0f;
-        _motorRB.velocity = Vector3.zero;
-        _motorRB.angularVelocity = Vector3.zero;
+        //_motorRB.velocity = Vector3.zero;
+        //_motorRB.angularVelocity = Vector3.zero;
     }
 }

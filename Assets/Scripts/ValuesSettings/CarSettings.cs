@@ -7,6 +7,7 @@ public class CarSettings : ScriptableObject
 {
     [Title("Move options")]
     public float speedMax = 10f;
+    public float speedCruising = 8f;
     public float speedMin = -50f;
     public float acceleration = 10f;
     public float reverseSpeed = 30f;

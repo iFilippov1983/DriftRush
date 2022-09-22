@@ -12,19 +12,24 @@ public class CarDriverPlayer : MonoBehaviour
 
     private void Start()
     {
-        //_carDriverAI.manual = true;
+        Cruise();
     }
 
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
-            SwitchTurningMode();
+            Accelerate();
         if (Input.GetMouseButtonUp(0))
-            SwitchTurningMode();
+            Cruise();
     }
 
-    private void SwitchTurningMode()
+    private void Accelerate()
     {
-        //_carDriverAI.manual = !_carDriverAI.manual;
+        
+    }
+
+    private void Cruise()
+    { 
+    
     }
 }

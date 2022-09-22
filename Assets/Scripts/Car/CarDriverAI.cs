@@ -27,11 +27,14 @@ public class CarDriverAI : MonoBehaviour
     private bool _haveFinished;
     private bool _onFinalNode;
 
+    public bool Cruising;
+
     private void Awake() 
     {
         _carDriver = GetComponent<CarDriver>();
         _haveFinished = false;
         _onFinalNode = false;
+        Cruising = true;
         _carDriver.SetValues(_carSettings);
     }
 
@@ -47,7 +50,7 @@ public class CarDriverAI : MonoBehaviour
     {
         SetTargetPosition(_targetPositionTransform.position);
         Drive();
-        
+        SetDriveMode();
         _lastPosition = transform.position;
     }
 
@@ -90,43 +93,6 @@ public class CarDriverAI : MonoBehaviour
         SetForwardAmount(distanceToTarget);
         SetTurnAmount(angleToDir);
         CheckIfTargetIsBehind(dot, distanceToTarget);
-
-        #region Old
-        //------------------
-
-        //if (manualTurn)
-        //{
-        //    turnAmount = 0.5f + Time.deltaTime;
-        //    //_carDriver.ClearTurnSpeed();
-        //    _carDriver.SetTurnSpeedStraightly(turnAmount);
-        //}
-        //else
-        //{
-        //    float angleToDir = Vector3.SignedAngle(transform.forward, dirToMovePosition, Vector3.up);
-        //    if (angleToDir < 0)
-        //    {
-        //        turnAmount = -1f;
-        //    }
-        //    else
-        //    {
-        //        turnAmount = 1f;
-        //    }
-
-        //    if (dot < 0)
-        //    {
-        //        // Target is behind
-        //        if (distanceToTarget > Reverse_Distance)
-        //        {
-        //            // Too far to reverse
-        //        }
-        //        else
-        //        {
-        //            forwardAmount = -1f;
-        //            turnAmount *= -1f;
-        //        }
-        //    }
-        //}
-        #endregion
     }
 
     private void SetForwardAmount(float distanceToTarget)
@@ -226,6 +192,14 @@ public class CarDriverAI : MonoBehaviour
                 _lastStuckPosition = _lastPosition;
             }
         }
+    }
+
+    private void SetDriveMode()
+    {
+        if (Cruising)
+            _carDriver.StartCruise();
+        else
+            _carDriver.StartAccelerate();
     }
 
     private void SetTargetPosition(Vector3 targetPosition) 

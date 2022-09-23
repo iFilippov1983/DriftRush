@@ -15,6 +15,7 @@ public class CheckpointSingle : MonoBehaviour
     private void Awake()
     {
         _pasedDrivers = new List<CarDriverAI>();
+        _drawMesh = false;
     }
 
     //private void OnTriggerEnter(Collider other)

@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 
-[RequireComponent(typeof(CarDriver))]
+[RequireComponent(typeof(CarEngine))]
 public class CarDriverAI : MonoBehaviour
 {
     [SerializeField] private Transform _targetPositionTransform;
     [SerializeField] private CarDriverSettings _driverSettings;
     [SerializeField] private CarSettings _carSettings;
     private Transform _tranformToRespawn;
-    private CarDriver _carDriver;
+    private CarEngine _carDriver;
     private Vector3 _targetPosition;
     private bool _hasReachedTargetPosition;
 
@@ -45,7 +45,7 @@ public class CarDriverAI : MonoBehaviour
 
     private void Awake() 
     {
-        _carDriver = GetComponent<CarDriver>();
+        _carDriver = GetComponent<CarEngine>();
         _carDriver.SetValues(_carSettings);
 
         _haveFinished = false;
@@ -68,16 +68,6 @@ public class CarDriverAI : MonoBehaviour
 
         _lastPosition = transform.position;
     }
-
-    //private void SetSelfPosition()
-    //{
-    //    transform.position = _carDriver.MotorPosition;
-
-    //    Vector3 angVel = Vector3.Lerp(_carDriver.AngularVelosity, _lastAngularVelosity, 0.1f);
-    //    Vector3 newAngularVector = Mathf.Approximately(angVel.y, 0f) ? Vector3.zero : angVel * _forwardAmount;
-    //    transform.Rotate(0, newAngularVector.y, 0, Space.World);
-    //    _lastAngularVelosity = newAngularVector;
-    //}
 
     private void Drive()
     {
@@ -170,6 +160,8 @@ public class CarDriverAI : MonoBehaviour
         while (moveTime > 0)
         {
             SetAmounts(distanceToTarget);
+            _carDriver.StopSlowly();
+
             moveTime -= Time.deltaTime;
             await Task.Yield();
 

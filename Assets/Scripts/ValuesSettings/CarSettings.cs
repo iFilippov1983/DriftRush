@@ -18,4 +18,5 @@ public class CarSettings : ScriptableObject
     public float turnSpeedMax = 300f;
     public float turnSpeedAcceleration = 300f;
     public float turnIdleSlowdown = 500f;
+    public float skidDrag = 10f;
 }

@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 5569816862008697505}
   - component: {fileID: 2893869394501769220}
   - component: {fileID: 8835839041712182886}
-  - component: {fileID: 6278147999002601141}
+  - component: {fileID: 5081734365498778445}
   - component: {fileID: 95028499675759190}
   - component: {fileID: 5219072490258965829}
   m_Layer: 3
@@ -169,7 +169,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5102737993911891336}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ee9e42fa384a68a49aae70b9b2916920, type: 3}
   m_Name: 
@@ -187,8 +187,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _targetPositionTransform: {fileID: 0}
-  _settings: {fileID: 11400000, guid: cd1528b2a93c6b84f82b2a3e9ed0c659, type: 2}
---- !u!114 &6278147999002601141
+  _driverSettings: {fileID: 11400000, guid: cd1528b2a93c6b84f82b2a3e9ed0c659, type: 2}
+  _carSettings: {fileID: 11400000, guid: 4359a5bcf09c8ba43b1c25cd588cb5a5, type: 2}
+--- !u!114 &5081734365498778445
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -197,11 +198,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 5102737993911891336}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bef0a544cbd237049ace8d0fc063b4be, type: 3}
+  m_Script: {fileID: 11500000, guid: 5067bcadb793d26419d4155eece80eb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _motorRB: {fileID: 5219072490258965829}
-  _settings: {fileID: 11400000, guid: 4359a5bcf09c8ba43b1c25cd588cb5a5, type: 2}
 --- !u!65 &95028499675759190
 BoxCollider:
   m_ObjectHideFlags: 0

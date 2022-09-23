@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: bde483d6947b40a44ba70c1e7b742ba9
 ModelImporter:
-  serializedVersion: 21202
+  serializedVersion: 20200
   internalIDToNameTable:
   - first:
       74: -623603649343465320
@@ -22,10 +22,8 @@ ModelImporter:
     bakeSimulation: 0
     resampleCurves: 1
     optimizeGameObjects: 0
-    removeConstantScaleCurves: 1
     motionNodeName: 
-    rigImportErrors: "Invalid Avatar Rig Configuration. Missing or invalid transform:\n\tRequired
-      human bone 'Hips' not found\n"
+    rigImportErrors: 
     rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
@@ -73,7 +71,7 @@ ModelImporter:
     isReadable: 0
   meshes:
     lODScreenPercentages: []
-    globalScale: 0.15
+    globalScale: 0.4
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
@@ -82,7 +80,6 @@ ModelImporter:
     importBlendShapes: 1
     importCameras: 1
     importLights: 1
-    nodeNameCollisionStrategy: 1
     fileIdsGeneration: 2
     swapUVChannels: 0
     generateSecondaryUV: 0
@@ -94,7 +91,6 @@ ModelImporter:
     skinWeightsMode: 0
     maxBonesPerVertex: 4
     minBoneWeight: 0.001
-    optimizeBones: 1
     meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8
@@ -126,47 +122,47 @@ ModelImporter:
       scale: {x: 1, y: 1, z: 1}
     - name: Capot
       parentName: tesla(Clone)
-      position: {x: -0, y: 0.0028057606, z: 0}
+      position: {x: -0, y: 0.007482028, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 0.8128151, y: 0.8128151, z: 0.8128151}
     - name: Weel_back
       parentName: tesla(Clone)
-      position: {x: 0.000000021967573, y: 0.0712274, z: -0.30061045}
+      position: {x: 0.00000005858019, y: 0.18993974, z: -0.8016279}
       rotation: {x: 2.2367643e-33, y: -2.962538e-17, z: 7.550162e-17, w: 1}
       scale: {x: 0.813372, y: 0.813372, z: 0.813372}
     - name: Bumper_back
       parentName: tesla(Clone)
-      position: {x: -0, y: 0.0028057606, z: 0}
+      position: {x: -0, y: 0.007482028, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 0.8128151, y: 0.8128151, z: 0.8128151}
     - name: Doors
       parentName: tesla(Clone)
-      position: {x: -0, y: 0.0028057606, z: 0}
+      position: {x: -0, y: 0.007482028, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 0.8128151, y: 0.8128151, z: 0.8128151}
     - name: bumper_front
       parentName: tesla(Clone)
-      position: {x: -0, y: 0.0028057606, z: 0}
+      position: {x: -0, y: 0.007482028, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 0.8128151, y: 0.8128151, z: 0.8128151}
     - name: Bottom
       parentName: tesla(Clone)
-      position: {x: -0, y: 0.0028057606, z: 0}
+      position: {x: -0, y: 0.007482028, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 0.8128151, y: 0.8128151, z: 0.8128151}
     - name: top_glass
       parentName: tesla(Clone)
-      position: {x: -0, y: 0.0028057606, z: 0}
+      position: {x: -0, y: 0.007482028, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 0.8128151, y: 0.8128151, z: 0.8128151}
     - name: Main_shpe
       parentName: tesla(Clone)
-      position: {x: -0, y: 0.0028057606, z: 0}
+      position: {x: -0, y: 0.007482028, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 0.8128151, y: 0.8128151, z: 0.8128151}
     - name: Weel_front
       parentName: tesla(Clone)
-      position: {x: 0.000000021967573, y: 0.0712274, z: 0.2897214}
+      position: {x: 0.00000005858019, y: 0.18993974, z: 0.77259046}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 0.813372, y: 0.813372, z: 0.813372}
     armTwist: 0.5
@@ -176,7 +172,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 0.15
+    globalScale: 0.4
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 1

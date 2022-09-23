@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CarDriver : MonoBehaviour, IObservable<CarDriver.MoveValues>, IDisposable 
+public class CarEngine : MonoBehaviour, IObservable<CarEngine.MoveValues>, IDisposable 
 {
     public struct MoveValues
     {
@@ -14,6 +14,7 @@ public class CarDriver : MonoBehaviour, IObservable<CarDriver.MoveValues>, IDisp
     }
 
     private const float Min_Turn_Amount = 20f;
+    private const string FinishLayer = "Finish";
 
     [SerializeField] private Rigidbody _motorRB;
     private List<IObserver<MoveValues>> _observersList = new List<IObserver<MoveValues>>();
@@ -30,6 +31,7 @@ public class CarDriver : MonoBehaviour, IObservable<CarDriver.MoveValues>, IDisp
     private float _turnSpeedMax = 20f;
     private float _turnSpeedAcceleration = 10f;
     private float _turnIdleSlowdown = 15f;
+    private float _skidDrag = 1f;
 
     private float _speed;
     private float _speedMaxCurrent;
@@ -42,15 +44,11 @@ public class CarDriver : MonoBehaviour, IObservable<CarDriver.MoveValues>, IDisp
     public float Speed => _speed;
     public float TurnSpeed => _turnSpeed;
 
-    //private void Start() 
-    //{
-    //    //_motorRB.transform.parent = null;
-    //    _speedMaxCurrent = _speedCruising;
-    //}
-
     private void FixedUpdate()
     {
-        MoveCar();
+        MoveForward();
+        Turn();
+        Skidding();
         NotifyObservers();
     }
 
@@ -59,7 +57,7 @@ public class CarDriver : MonoBehaviour, IObservable<CarDriver.MoveValues>, IDisp
         StopAllCoroutines();
     }
 
-    private void MoveCar()
+    private void MoveForward()
     {
         if (_forwardAmount > 0)
         {
@@ -97,7 +95,10 @@ public class CarDriver : MonoBehaviour, IObservable<CarDriver.MoveValues>, IDisp
         _speed = Mathf.Clamp(_speed, _speedMin, _speedMaxCurrent);
         //_motorRB.velocity = transform.forward * _speed;
         _motorRB.AddForce(_motorRB.transform.forward * _speed, ForceMode.Acceleration);
+    }
 
+    private void Turn()
+    {
         if (_speed < 0)
         {
             // Going backwards, invert wheels
@@ -138,18 +139,31 @@ public class CarDriver : MonoBehaviour, IObservable<CarDriver.MoveValues>, IDisp
         _turnSpeed = Mathf.Clamp(_turnSpeed, -_turnSpeedMax, _turnSpeedMax);
         _motorRB.angularVelocity = new Vector3(0, _turnSpeed * (invertSpeedNormalized * 1f) * Mathf.Deg2Rad, 0);
 
+        //Stable in plain
         if (transform.eulerAngles.x > 2 || transform.eulerAngles.x < -2 || transform.eulerAngles.z > 2 || transform.eulerAngles.z < -2)
         {
             transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
         }
     }
 
-    //private void OnCollisionEnter(Collision collision) {
-    //    if (collision.gameObject.layer == GameHandler.SOLID_OBJECTS_LAYER) {
-    //        speed = Mathf.Clamp(speed, 0f, 20f);
-    //        //turnSpeed = Mathf.Clamp(turnSpeed, 0f, 20f);
-    //    }
-    //}
+    private void Skidding()
+    {
+        _skidThresholdSpeed = (_speedCruising + _speedMax) / 2;
+        bool turning = !Mathf.Approximately(_turnSpeed, 0f);
+        if (_speed > _skidThresholdSpeed && turning)
+        {
+            "SKID".Log(StringConsoleLog.Color.Blue);
+            _motorRB.AddForce(Vector3.right * _skidDrag, ForceMode.Acceleration);
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer(FinishLayer))
+        {
+            StopSlowly();
+        }
+    }
 
     public void SetInputs(float forwardAmount, float turnAmount) 
     {
@@ -169,12 +183,19 @@ public class CarDriver : MonoBehaviour, IObservable<CarDriver.MoveValues>, IDisp
         _turnSpeedMax = carSettings.turnSpeedMax;
         _turnSpeedAcceleration = carSettings.turnSpeedAcceleration;
         _turnIdleSlowdown = carSettings.turnIdleSlowdown;
+        _skidDrag = carSettings.skidDrag;
     }
 
     public void StopCompletely() 
     {
         _speed = 0f;
         _turnSpeed = 0f;
+    }
+
+    public void StopSlowly()
+    {
+        _speed = Mathf.Clamp(_speed, 0f, 20f);
+        _turnSpeed = Mathf.Clamp(_turnSpeed, 0f, 20f);
     }
 
     public void StartCruise()

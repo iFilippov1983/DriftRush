@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameUI : MonoBehaviour
 {
     [SerializeField] private SpeedIndicatorView _speedIndicatorView;
-    [SerializeField] private CarDriver _carDriver;
+    [SerializeField] private CarEngine _carDriver;
 
     private void OnGUI()
     {

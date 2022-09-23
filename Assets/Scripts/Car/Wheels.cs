@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class Wheels : MonoBehaviour, IObserver<CarDriver.MoveValues>
+public class Wheels : MonoBehaviour, IObserver<CarEngine.MoveValues>
 {
     [SerializeField] private WheelCollider _wheelFL;
     [SerializeField] private WheelCollider _wheelFR;
@@ -25,7 +25,7 @@ public class Wheels : MonoBehaviour, IObserver<CarDriver.MoveValues>
     
     }
 
-    public void OnNext(CarDriver.MoveValues value)
+    public void OnNext(CarEngine.MoveValues value)
     {
         throw new NotImplementedException();
     }

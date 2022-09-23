@@ -20,13 +20,13 @@ public class CarDriverPlayer : MonoBehaviour
 
     private void Accelerate()
     {
-        "Accelerating".Log(StringConsoleLog.Color.Green);
+        "Accelerating".Log(Color.green);
         _carDriverAI.Cruising = false;
     }
 
     private void Cruise()
     {
-        "Cruising".Log(StringConsoleLog.Color.Yellow);
+        "Cruising".Log(Color.yellow);
         _carDriverAI.Cruising = true;
     }
 }

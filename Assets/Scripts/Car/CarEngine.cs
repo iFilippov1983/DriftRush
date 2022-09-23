@@ -48,7 +48,7 @@ public class CarEngine : MonoBehaviour, IObservable<CarEngine.MoveValues>, IDisp
     {
         MoveForward();
         Turn();
-        Skidding();
+        //Skidding();
         NotifyObservers();
     }
 
@@ -152,7 +152,7 @@ public class CarEngine : MonoBehaviour, IObservable<CarEngine.MoveValues>, IDisp
         bool turning = !Mathf.Approximately(_turnSpeed, 0f);
         if (_speed > _skidThresholdSpeed && turning)
         {
-            "SKID".Log(StringConsoleLog.Color.Blue);
+            "SKID".Log(Color.blue);
             _motorRB.AddForce(Vector3.right * _skidDrag, ForceMode.Acceleration);
         }
     }
@@ -200,14 +200,12 @@ public class CarEngine : MonoBehaviour, IObservable<CarEngine.MoveValues>, IDisp
 
     public void StartCruise()
     {
-        "Start cruise".Log(StringConsoleLog.Color.Yellow);
         StopAllCoroutines();
         StartCoroutine(InterpolateSpeed(_speedMax, _speedCruising));
     }
 
     public void StartAccelerate()
     {
-        "Start acceleration".Log(StringConsoleLog.Color.Green);
         StopAllCoroutines();
         StartCoroutine(InterpolateSpeed(_speedCruising, _speedMax));
     }

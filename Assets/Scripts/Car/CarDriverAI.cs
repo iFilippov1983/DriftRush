@@ -6,14 +6,16 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 
-[RequireComponent(typeof(CarEngine))]
+[RequireComponent(typeof(CarEngine), typeof(Wheels))]
 public class CarDriverAI : MonoBehaviour
 {
     [SerializeField] private Transform _targetPositionTransform;
     [SerializeField] private CarDriverSettings _driverSettings;
     [SerializeField] private CarSettings _carSettings;
     private Transform _tranformToRespawn;
-    private CarEngine _carDriver;
+    private CarEngine _carEngine;
+    private Wheels _wheels;
+    
     private Vector3 _targetPosition;
     private bool _hasReachedTargetPosition;
 
@@ -35,9 +37,9 @@ public class CarDriverAI : MonoBehaviour
         set 
         {
             if (value)
-                _carDriver.StartCruise();
+                _carEngine.StartCruise();
             else
-                _carDriver.StartAccelerate();
+                _carEngine.StartAccelerate();
 
             _isCruising = value;
         } 
@@ -45,8 +47,11 @@ public class CarDriverAI : MonoBehaviour
 
     private void Awake() 
     {
-        _carDriver = GetComponent<CarEngine>();
-        _carDriver.SetValues(_carSettings);
+        _wheels = GetComponent<Wheels>();
+
+        _carEngine = GetComponent<CarEngine>();
+        _carEngine.SetValues(_carSettings);
+        _carEngine.Subscribe(_wheels);
 
         _haveFinished = false;
         _onFinalNode = false;
@@ -86,7 +91,7 @@ public class CarDriverAI : MonoBehaviour
         }
 
         HandleStuckSafety();
-        _carDriver.SetInputs(_forwardAmount, _turnAmount);
+        _carEngine.SetInputs(_forwardAmount, _turnAmount);
     }
 
     private void SetAmounts(float distanceToTarget)
@@ -107,7 +112,7 @@ public class CarDriverAI : MonoBehaviour
             _forwardAmount = 1f;
         }
 
-        if (distanceToTarget < _driverSettings.StoppingDistance && _carDriver.Speed > _driverSettings.StoppingSpeedLimit)
+        if (distanceToTarget < _driverSettings.StoppingDistance && _carEngine.Speed > _driverSettings.StoppingSpeedLimit)
         {
             // Within stopping distance and moving forward
             _forwardAmount = -1f;
@@ -143,7 +148,7 @@ public class CarDriverAI : MonoBehaviour
             return;
         }
 
-        if (_carDriver.Speed > _driverSettings.StoppingSpeedLimitFinal)
+        if (_carEngine.Speed > _driverSettings.StoppingSpeedLimitFinal)
         {
             // Hit the brakes!
             _forwardAmount = -1f;
@@ -160,7 +165,7 @@ public class CarDriverAI : MonoBehaviour
         while (moveTime > 0)
         {
             SetAmounts(distanceToTarget);
-            _carDriver.StopSlowly();
+            _carEngine.StopSlowly();
 
             moveTime -= Time.deltaTime;
             await Task.Yield();
@@ -169,7 +174,7 @@ public class CarDriverAI : MonoBehaviour
             {
                 _turnAmount = 0;
                 _forwardAmount = 0;
-                _carDriver.StopCompletely();
+                _carEngine.StopCompletely();
             }
         }
     }
@@ -219,7 +224,6 @@ public class CarDriverAI : MonoBehaviour
 
     public void Finish(Transform finalTarget)
     {
-        $"FINISHED".Log(StringConsoleLog.Color.Red);
         SetTarget(finalTarget);
         _haveFinished = true;
     }

@@ -6150,7 +6150,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &11400020
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6163,7 +6163,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ea65b38d485c374caa584a03f1de571, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_CarDriveType: 0
+  _vehicleSettings: {fileID: 0}
   m_WheelColliders:
   - {fileID: 14600004}
   - {fileID: 14600006}
@@ -6180,18 +6180,6 @@ MonoBehaviour:
   - {fileID: 11400014}
   - {fileID: 11400012}
   m_CentreOfMassOffset: {x: 0, y: 0, z: 0}
-  m_MaximumSteerAngle: 45
-  m_SteerHelper: 0.774
-  m_TractionControl: 1
-  m_FullTorqueOverAllWheels: 2000
-  m_ReverseTorque: 150
-  m_MaxHandbrakeTorque: 100000000
-  m_Downforce: 100
-  m_SpeedType: 1
-  m_Topspeed: 140
-  m_RevRangeBoundary: 1
-  m_SlipLimit: 0.4
-  m_BrakeTorque: 20000
 --- !u!114 &11400022
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6204,22 +6192,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d963df58504b69045b8d0d746ba6f777, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_CautiousSpeedFactor: 0.5
-  m_CautiousMaxAngle: 180
-  m_CautiousMaxDistance: 100
-  m_CautiousAngularVelocityFactor: 45
-  m_SteerSensitivity: 0.01
-  m_AccelSensitivity: 1
-  m_BrakeSensitivity: 1
-  m_LateralWanderDistance: 5
-  m_LateralWanderSpeed: 0.2
-  m_AccelWanderAmount: 0.1
-  m_AccelWanderSpeed: 0.1
-  m_BrakeCondition: 2
-  m_Driving: 1
-  m_Target: {fileID: 400060}
-  m_StopWhenTargetReached: 0
-  m_ReachTargetThreshold: 2
+  _driverSettings: {fileID: 0}
+  _target: {fileID: 0}
+  _stopWhenTargetReached: 0
+  _isDriving: 0
+  PlayerDriving: 0
+  DesiredSpeed: 0
 --- !u!114 &11400024
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6252,8 +6230,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9db865986f75ee44eba89ace4646af65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_WaitTime: 2
-  m_VelocityThreshold: 1
+  _waitTime: 3
+  _velocityThreshold: 1
+  _checkPeriod: 1
 --- !u!114 &11400026
 MonoBehaviour:
   m_ObjectHideFlags: 0

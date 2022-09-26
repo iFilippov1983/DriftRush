@@ -1,8 +1,10 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace RaceManager.Waypoints
 {
-    public class WaypointTrack : MonoBehaviour
+    public class WaypointTrack : MonoBehaviour, IObservable<Vector3>, IDisposable
     {
         public WaypointList waypointList = new WaypointList();
         public float editorVisualisationSubsteps = 100;
@@ -13,6 +15,8 @@ namespace RaceManager.Waypoints
         protected int _numPoints;
         protected Vector3[] _points;
         protected float[] _distances;
+        protected int _prevPointIndex;
+
         //this being here will save GC allocs
         //catmull-rom spline point numbers
         protected int p0n;
@@ -27,6 +31,8 @@ namespace RaceManager.Waypoints
         protected Vector3 P1;
         protected Vector3 P2;
         protected Vector3 P3;
+
+        private List<IObserver<Vector3>> _observers = new List<IObserver<Vector3>>();
 
         public float Length { get; protected set; }
         public Transform[] Waypoints
@@ -66,6 +72,13 @@ namespace RaceManager.Waypoints
             while (_distances[point] < dist)
             {
                 ++point;
+                
+            }
+
+            if (_prevPointIndex != point)
+            { 
+                _prevPointIndex = point;
+                NotifyObservers(_points[point]);
             }
 
 
@@ -194,6 +207,23 @@ namespace RaceManager.Waypoints
                     }
                 }
             }
+        }
+
+        private void NotifyObservers(Vector3 vector)
+        {
+            foreach (var observer in _observers)
+                observer.OnNext(vector);
+        }
+
+        public IDisposable Subscribe(IObserver<Vector3> observer)
+        {
+            _observers.Add(observer);
+            return this;
+        }
+
+        public void Dispose()
+        {
+            _observers.Clear();
         }
     }
 }

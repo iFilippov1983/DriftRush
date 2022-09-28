@@ -44,7 +44,11 @@ namespace RaceManager.Vehicles
             if (PlayerDriving)
                 DesiredSpeed = _carController.CruiseSpeed;
             else
+            {
                 DesiredSpeed = _carController.MaxSpeed * Random.Range(_driverSettings.CruiseSpeedThresholdMin, _driverSettings.CruiseSpeedThresholdMax);
+                Debug.Log($"{gameObject.name} speed: {DesiredSpeed}");
+            }
+                
         }
 
         private void FixedUpdate()
@@ -140,7 +144,7 @@ namespace RaceManager.Vehicles
                                                   : _driverSettings.AccelSensitivity;
 
                 // decide the actual amount of accel/brake input to achieve desired speed.
-                float accel = Mathf.Clamp((_currentSpeed - _carController.CurrentSpeed)*accelBrakeSensitivity, -1, 1);
+                float accel = Mathf.Clamp((_currentSpeed - _carController.CurrentSpeed) * accelBrakeSensitivity, -1, 1);
 
                 // add acceleration 'wander', which also prevents AI from seeming too uniform and robotic in their driving
                 // i.e. increasing the accel wander amount can introduce jostling and bumps between AI cars in a race

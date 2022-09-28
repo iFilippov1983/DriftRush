@@ -42,10 +42,10 @@ namespace RaceManager.Vehicles.Effects
         }
 
 
-        public void EmitTyreSmoke()
+        public void EmitTyreSmoke(int count)
         {
-            skidParticles.transform.position = transform.position - transform.up*m_WheelCollider.radius;
-            skidParticles.Emit(1);
+            skidParticles.transform.position = transform.position - transform.up * m_WheelCollider.radius;
+            skidParticles.Emit(count);
             if (!skidding)
             {
                 StartCoroutine(StartSkidTrail());
@@ -76,7 +76,8 @@ namespace RaceManager.Vehicles.Effects
                 yield return null;
             }
             m_SkidTrail.parent = transform;
-            m_SkidTrail.localPosition = -Vector3.up*m_WheelCollider.radius;
+            m_SkidTrail.localPosition = -Vector3.up * m_WheelCollider.radius;
+
         }
 
 
@@ -89,6 +90,11 @@ namespace RaceManager.Vehicles.Effects
             skidding = false;
             m_SkidTrail.parent = skidTrailsDetachedParent;
             Destroy(m_SkidTrail.gameObject, 10);
+        }
+
+        private void OnDestroy()
+        {
+            StopAllCoroutines();
         }
     }
 }

@@ -11,7 +11,7 @@ namespace RaceManager.Vehicles
         [SerializeField] private WheelCollider[] m_WheelColliders = new WheelCollider[4];
         [SerializeField] private GameObject[] m_WheelMeshes = new GameObject[4];
         [SerializeField] private WheelEffects[] m_WheelEffects = new WheelEffects[4];
-        [SerializeField] private Vector3 m_CentreOfMassOffset;
+        [SerializeField] private Vector3 _ñentreOfMassOffset;
 
         private Quaternion[] m_WheelMeshLocalRotations;
         private Vector3 m_Prevpos, m_Pos;
@@ -26,7 +26,7 @@ namespace RaceManager.Vehicles
         public bool Skidding { get; private set; }
         public float BrakeInput { get; private set; }
         public float CurrentSteerAngle => m_SteerAngle;
-        public float CurrentSpeed => m_Rigidbody.velocity.magnitude * 2.23693629f;
+        public float CurrentSpeed => m_Rigidbody.velocity.magnitude * 3.6f;// 2.23693629f;
         public float MaxSpeed => _vehicleSettings.SpeedTop;
         public float CruiseSpeed => _vehicleSettings.SpeedCruise;
         public float Revs { get; private set; }
@@ -40,7 +40,7 @@ namespace RaceManager.Vehicles
             {
                 m_WheelMeshLocalRotations[i] = m_WheelMeshes[i].transform.localRotation;
             }
-            m_WheelColliders[0].attachedRigidbody.centerOfMass = m_CentreOfMassOffset;
+            m_WheelColliders[0].attachedRigidbody.centerOfMass = _ñentreOfMassOffset;
 
             _vehicleSettings.MaxHandbrakeTorque = float.MaxValue;
 
@@ -128,7 +128,7 @@ namespace RaceManager.Vehicles
 
             SteerHelper();
             ApplyDrive(accel, footbrake);
-            CapSpeed();
+            //CapSpeed();
 
             //Set the handbrake.
             //Assuming that wheels 2 and 3 are the rear wheels.
@@ -145,6 +145,7 @@ namespace RaceManager.Vehicles
 
             AddDownForce();
             CheckForWheelSpin();
+            CheckSlip();
             TractionControl();
         }
 
@@ -256,7 +257,7 @@ namespace RaceManager.Vehicles
                 // is the tire slipping above the given threshhold
                 if (Mathf.Abs(wheelHit.forwardSlip) >= _vehicleSettings.SlipLimit || Mathf.Abs(wheelHit.sidewaysSlip) >= _vehicleSettings.SlipLimit)
                 {
-                    m_WheelEffects[i].EmitTyreSmoke();
+                    m_WheelEffects[i].EmitTyreSmoke(1);
 
                     // avoiding all four tires screeching at the same time
                     // if they do it can lead to some strange audio artefacts
@@ -273,6 +274,34 @@ namespace RaceManager.Vehicles
                     m_WheelEffects[i].StopAudio();
                 }
                 // end the trail generation
+                m_WheelEffects[i].EndSkidTrail();
+            }
+        }
+
+        private void CheckSlip()
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                Vector3 steeringDir = m_WheelColliders[i].transform.right;
+                Vector3 tireWorldVel = m_Rigidbody.GetPointVelocity(m_WheelColliders[i].transform.position);
+                float steeringVel = Vector3.Dot(steeringDir, tireWorldVel);
+
+                if (steeringVel > _vehicleSettings.SlipLimit)
+                {
+                    m_WheelEffects[i].EmitTyreSmoke(2);
+
+                    if (!AnySkidSoundPlaying())
+                    {
+                        m_WheelEffects[i].PlayAudio();
+                    }
+                    continue;
+                }
+
+                if (m_WheelEffects[i].PlayingAudio)
+                {
+                    m_WheelEffects[i].StopAudio();
+                }
+
                 m_WheelEffects[i].EndSkidTrail();
             }
         }

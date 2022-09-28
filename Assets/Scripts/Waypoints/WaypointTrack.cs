@@ -1,21 +1,22 @@
-﻿using System;
+﻿using RaceManager.Tools;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace RaceManager.Waypoints
 {
-    public class WaypointTrack : MonoBehaviour, IObservable<Vector3>, IDisposable
+    public class WaypointTrack : MonoBehaviour
     {
         public WaypointList waypointList = new WaypointList();
         public float editorVisualisationSubsteps = 100;
 
         [SerializeField] protected bool _smoothRoute = true;
         [SerializeField] protected Color _drawColor = Color.yellow;
+        [SerializeField, Range(0.1f, 2f)] private float _nodeSphereSize = 0.25f;
         protected Color _altColor;
         protected int _numPoints;
         protected Vector3[] _points;
         protected float[] _distances;
-        protected int _prevPointIndex;
 
         //this being here will save GC allocs
         //catmull-rom spline point numbers
@@ -32,7 +33,8 @@ namespace RaceManager.Waypoints
         protected Vector3 P2;
         protected Vector3 P3;
 
-        private List<IObserver<Vector3>> _observers = new List<IObserver<Vector3>>();
+        private GameObject _waypointPrefab;
+        private List<Waypoint> _waypoints;
 
         public float Length { get; protected set; }
         public Transform[] Waypoints
@@ -47,6 +49,40 @@ namespace RaceManager.Waypoints
                 CachePositionsAndDistances();
             }
             _numPoints = Waypoints.Length;
+        }
+
+        private void Start()
+        {
+            SetWaypoints();
+        }
+
+        private void SetWaypoints()
+        {
+            if (_distances.Length > 0)
+            {
+                _waypoints = new List<Waypoint>();
+                _waypointPrefab = ResourcesLoader.LoadPrefab(ResourcePath.WaypointPrefab);
+                for (int i = 0; i < _distances.Length; i++)
+                {
+                    RoutePoint point = GetRoutePoint(_distances[i]);
+                    GameObject go = Instantiate(_waypointPrefab, point.position, Quaternion.LookRotation(point.direction));
+                    go.transform.SetParent(transform, false);
+                    var wp = go.GetComponent<Waypoint>();
+                    wp.ID = i;
+                    _waypoints.Add(wp);
+                }
+
+                for (int i = 0; i < _waypoints.Count; i++)
+                {
+                    foreach (var wp in _waypoints)
+                    {
+                        if (_waypoints[i].ID == wp.ID)
+                            continue;
+                        _waypoints[i].Subscribe(wp);
+                    }
+                }
+                
+            }
         }
 
         public RoutePoint GetRoutePoint(float dist)
@@ -72,13 +108,6 @@ namespace RaceManager.Waypoints
             while (_distances[point] < dist)
             {
                 ++point;
-                
-            }
-
-            if (_prevPointIndex != point)
-            { 
-                _prevPointIndex = point;
-                NotifyObservers(_points[point]);
             }
 
 
@@ -206,24 +235,11 @@ namespace RaceManager.Waypoints
                         prev = next;
                     }
                 }
+
+                Gizmos.color = Color.black;
+                foreach (var waypoint in Waypoints)
+                    Gizmos.DrawSphere(waypoint.transform.position, _nodeSphereSize);
             }
-        }
-
-        private void NotifyObservers(Vector3 vector)
-        {
-            foreach (var observer in _observers)
-                observer.OnNext(vector);
-        }
-
-        public IDisposable Subscribe(IObserver<Vector3> observer)
-        {
-            _observers.Add(observer);
-            return this;
-        }
-
-        public void Dispose()
-        {
-            _observers.Clear();
         }
     }
 }

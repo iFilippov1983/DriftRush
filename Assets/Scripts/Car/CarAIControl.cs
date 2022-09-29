@@ -1,5 +1,7 @@
 using Sirenix.OdinInspector;
 using System;
+using System.Linq;
+using System.Text;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -7,8 +9,11 @@ using Random = UnityEngine.Random;
 namespace RaceManager.Vehicles
 {
     [RequireComponent(typeof (CarController))]
-    public class CarAIControl : MonoBehaviour
+    public class CarAIControl : CarAI
     {
+        [ShowInInspector, ReadOnly]
+        private string _id;
+
         [SerializeField] private AIDriverSettings _driverSettings;
         [SerializeField] private Transform _target;                                              // 'target' the target object to aim for.
         [SerializeField] private bool _stopWhenTargetReached;                                    // should we stop driving when we reach the target?
@@ -37,6 +42,8 @@ namespace RaceManager.Vehicles
             _randomPerlin = Random.value * 100;
 
             _rigidbody = GetComponent<Rigidbody>();
+
+            _id = MakeId();
         }
 
         private void Start()
@@ -62,7 +69,7 @@ namespace RaceManager.Vehicles
             else
             {
                 Vector3 fwd = transform.forward;
-                if (_rigidbody.velocity.magnitude > _carController.MaxSpeed*0.1f)
+                if (_rigidbody.velocity.magnitude > _carController.MaxSpeed * 0.1f)
                 {
                     fwd = _rigidbody.velocity;
                 }
@@ -206,14 +213,34 @@ namespace RaceManager.Vehicles
         public void SetTarget(Transform target)
         {
             _target = target;
-            _isDriving = true;
         }
 
-        public void StopCar()
+        public override void StopEngine()
         {
             _target = null;
             _isDriving = false;
             $"{gameObject.name} FINISHED".Log(StringConsoleLog.Color.Yellow);
+        }
+
+        public override void StartEngine()
+        {
+            _isDriving = true;
+        }
+
+        public override string GetID() => _id;
+
+        private string MakeId()
+        {
+            StringBuilder builder = new StringBuilder();
+            Enumerable
+               .Range(65, 26)
+                .Select(e => ((char)e).ToString())
+                .Concat(Enumerable.Range(97, 26).Select(e => ((char)e).ToString()))
+                .Concat(Enumerable.Range(0, 10).Select(e => e.ToString()))
+                .OrderBy(e => Guid.NewGuid())
+                .Take(11)
+                .ToList().ForEach(e => builder.Append(e));
+            return builder.ToString();
         }
     }
 }

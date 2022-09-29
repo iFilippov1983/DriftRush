@@ -26,13 +26,12 @@ namespace RaceManager.Vehicles
         public bool Skidding { get; private set; }
         public float BrakeInput { get; private set; }
         public float CurrentSteerAngle => m_SteerAngle;
-        public float CurrentSpeed => m_Rigidbody.velocity.magnitude * 3.6f;// 2.23693629f;
+        public float CurrentSpeed => m_Rigidbody.velocity.magnitude * 3.6f;//convertion to KPH // * 2.23693629f//convertion to MPH
         public float MaxSpeed => _vehicleSettings.SpeedTop;
         public float CruiseSpeed => _vehicleSettings.SpeedCruise;
         public float Revs { get; private set; }
         public float AccelInput { get; private set; }
 
-        // Use this for initialization
         private void Start()
         {
             m_WheelMeshLocalRotations = new Quaternion[4];
@@ -48,60 +47,7 @@ namespace RaceManager.Vehicles
             m_CurrentTorque = _vehicleSettings.FullTorqueOverAllWheels - (_vehicleSettings.TractionControl * _vehicleSettings.FullTorqueOverAllWheels);
         }
 
-
-        private void GearChanging()
-        {
-            float f = Mathf.Abs(CurrentSpeed/MaxSpeed);
-            float upgearlimit = (1/(float) VehicleSettings.NoOfGears)*(m_GearNum + 1);
-            float downgearlimit = (1/(float)VehicleSettings.NoOfGears) *m_GearNum;
-
-            if (m_GearNum > 0 && f < downgearlimit)
-            {
-                m_GearNum--;
-            }
-
-            if (f > upgearlimit && (m_GearNum < (VehicleSettings.NoOfGears - 1)))
-            {
-                m_GearNum++;
-            }
-        }
-
-
-        // simple function to add a curved bias towards 1 for a value in the 0-1 range
-        private static float CurveFactor(float factor)
-        {
-            return 1 - (1 - factor)*(1 - factor);
-        }
-
-
-        // unclamped version of Lerp, to allow value to exceed the from-to range
-        private static float ULerp(float from, float to, float value)
-        {
-            return (1.0f - value)*from + value*to;
-        }
-
-
-        private void CalculateGearFactor()
-        {
-            float f = (1/(float)VehicleSettings.NoOfGears);
-            // gear factor is a normalised representation of the current speed within the current gear's range of speeds.
-            // We smooth towards the 'target' gear factor, so that revs don't instantly snap up or down when changing gear.
-            var targetGearFactor = Mathf.InverseLerp(f*m_GearNum, f*(m_GearNum + 1), Mathf.Abs(CurrentSpeed/MaxSpeed));
-            m_GearFactor = Mathf.Lerp(m_GearFactor, targetGearFactor, Time.deltaTime*5f);
-        }
-
-
-        private void CalculateRevs()
-        {
-            // calculate engine revs (for display / sound)
-            // (this is done in retrospect - revs are not used in force/power calculations)
-            CalculateGearFactor();
-            var gearNumFactor = m_GearNum / (float)VehicleSettings.NoOfGears;
-            var revsRangeMin = ULerp(0f, _vehicleSettings.RevRangeBoundary, CurveFactor(gearNumFactor));
-            var revsRangeMax = ULerp(_vehicleSettings.RevRangeBoundary, 1f, gearNumFactor);
-            Revs = ULerp(revsRangeMin, revsRangeMax, m_GearFactor);
-        }
-
+        public void SetVehicleSettings(VehicleSettings vehicleSettings) => _vehicleSettings = vehicleSettings;
 
         public void Move(float steering, float accel, float footbrake, float handbrake)
         {
@@ -117,7 +63,7 @@ namespace RaceManager.Vehicles
             //clamp input values
             steering = Mathf.Clamp(steering, -1, 1);
             AccelInput = accel = Mathf.Clamp(accel, 0, 1);
-            BrakeInput = footbrake = -1*Mathf.Clamp(footbrake, -1, 0);
+            BrakeInput = footbrake = -1 * Mathf.Clamp(footbrake, -1, 0);
             handbrake = Mathf.Clamp(handbrake, 0, 1);
 
             //Set the steer on the front wheels.
@@ -149,6 +95,54 @@ namespace RaceManager.Vehicles
             TractionControl();
         }
 
+        private void GearChanging()
+        {
+            float f = Mathf.Abs(CurrentSpeed/MaxSpeed);
+            float upgearlimit = (1/(float) VehicleSettings.NoOfGears)*(m_GearNum + 1);
+            float downgearlimit = (1/(float)VehicleSettings.NoOfGears) *m_GearNum;
+
+            if (m_GearNum > 0 && f < downgearlimit)
+            {
+                m_GearNum--;
+            }
+
+            if (f > upgearlimit && (m_GearNum < (VehicleSettings.NoOfGears - 1)))
+            {
+                m_GearNum++;
+            }
+        }
+
+        // simple function to add a curved bias towards 1 for a value in the 0-1 range
+        private static float CurveFactor(float factor)
+        {
+            return 1 - (1 - factor)*(1 - factor);
+        }
+
+        // unclamped version of Lerp, to allow value to exceed the from-to range
+        private static float ULerp(float from, float to, float value)
+        {
+            return (1.0f - value)*from + value*to;
+        }
+
+        private void CalculateGearFactor()
+        {
+            float f = (1/(float)VehicleSettings.NoOfGears);
+            // gear factor is a normalised representation of the current speed within the current gear's range of speeds.
+            // We smooth towards the 'target' gear factor, so that revs don't instantly snap up or down when changing gear.
+            var targetGearFactor = Mathf.InverseLerp(f*m_GearNum, f*(m_GearNum + 1), Mathf.Abs(CurrentSpeed/MaxSpeed));
+            m_GearFactor = Mathf.Lerp(m_GearFactor, targetGearFactor, Time.deltaTime*5f);
+        }
+
+        private void CalculateRevs()
+        {
+            // calculate engine revs (for display / sound)
+            // (this is done in retrospect - revs are not used in force/power calculations)
+            CalculateGearFactor();
+            var gearNumFactor = m_GearNum / (float)VehicleSettings.NoOfGears;
+            var revsRangeMin = ULerp(0f, _vehicleSettings.RevRangeBoundary, CurveFactor(gearNumFactor));
+            var revsRangeMax = ULerp(_vehicleSettings.RevRangeBoundary, 1f, gearNumFactor);
+            Revs = ULerp(revsRangeMin, revsRangeMax, m_GearFactor);
+        }
 
         private void CapSpeed()
         {
@@ -169,7 +163,6 @@ namespace RaceManager.Vehicles
                     break;
             }
         }
-
 
         private void ApplyDrive(float accel, float footbrake)
         {
@@ -211,7 +204,6 @@ namespace RaceManager.Vehicles
             }
         }
 
-
         private void SteerHelper()
         {
             for (int i = 0; i < 4; i++)
@@ -232,14 +224,12 @@ namespace RaceManager.Vehicles
             m_OldRotation = transform.eulerAngles.y;
         }
 
-
         // this is used to add more grip in relation to speed
         private void AddDownForce()
         {
             m_WheelColliders[0].attachedRigidbody.AddForce
                 (-transform.up * _vehicleSettings.Downforce * m_WheelColliders[0].attachedRigidbody.velocity.magnitude);
         }
-
 
         // checks if the wheels are spinning and is so does three things
         // 1) emits particles
@@ -277,7 +267,6 @@ namespace RaceManager.Vehicles
                 m_WheelEffects[i].EndSkidTrail();
             }
         }
-
         private void CheckSlip()
         {
             for (int i = 0; i < 4; i++)
@@ -340,7 +329,6 @@ namespace RaceManager.Vehicles
             }
         }
 
-
         private void AdjustTorque(float forwardSlip)
         {
             if (forwardSlip >= _vehicleSettings.SlipLimit && m_CurrentTorque >= 0)
@@ -356,7 +344,6 @@ namespace RaceManager.Vehicles
                 }
             }
         }
-
 
         private bool AnySkidSoundPlaying()
         {

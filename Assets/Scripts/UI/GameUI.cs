@@ -3,19 +3,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameUI : MonoBehaviour
+namespace RaceManager.UI
 {
-    [SerializeField] private SpeedIndicatorView _speedIndicatorView;
-    [SerializeField] private SpeedIndicatorView _speedIndicatorView_Opponent;
-    [SerializeField] private CarController _carController;
-    [SerializeField] private CarController _carOpponent;
-
-    private void OnGUI()
+    public class GameUI : MonoBehaviour
     {
-        int value = Mathf.RoundToInt(_carController.CurrentSpeed);
-        _speedIndicatorView.SpeedValueText.text = value.ToString();
+        [SerializeField] private SpeedIndicatorView _speedIndicatorView;
+        [SerializeField] private SpeedIndicatorView _speedIndicatorView_Opponent;
+        [SerializeField] private CarController _carController;
+        [SerializeField] private CarController _carOpponent;
 
-        value = Mathf.RoundToInt(_carOpponent.CurrentSpeed);
-        _speedIndicatorView_Opponent.SpeedValueText.text = value.ToString();
+        private void OnGUI()
+        {
+            int value = Mathf.RoundToInt(_carController.CurrentSpeed);
+            _speedIndicatorView.SpeedValueText.text = value.ToString();
+
+            value = Mathf.RoundToInt(_carOpponent.CurrentSpeed);
+            _speedIndicatorView_Opponent.SpeedValueText.text = value.ToString();
+        }
     }
 }
+

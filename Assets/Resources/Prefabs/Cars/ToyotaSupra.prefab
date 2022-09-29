@@ -48,7 +48,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 100010}
-  m_Material: {fileID: 13400000, guid: 7d8b50be7c62bca45a4da2fd3f95e903, type: 2}
+  m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -6103,6 +6103,7 @@ GameObject:
   m_Component:
   - component: {fileID: 400064}
   - component: {fileID: 5400000}
+  - component: {fileID: 5973060109778225258}
   - component: {fileID: 11400020}
   - component: {fileID: 11400022}
   - component: {fileID: 11400024}
@@ -6151,6 +6152,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 1
+--- !u!65 &5973060109778225258
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100064}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.350892, y: 1.8511298, z: 4.726945}
+  m_Center: {x: -0.100272655, y: 0.4255649, z: -0.03745544}
 --- !u!114 &11400020
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6179,7 +6193,7 @@ MonoBehaviour:
   - {fileID: 11400018}
   - {fileID: 11400014}
   - {fileID: 11400012}
-  m_CentreOfMassOffset: {x: 0, y: 0, z: 0}
+  "_\u0441entreOfMassOffset": {x: 0, y: 0, z: 0}
 --- !u!114 &11400022
 MonoBehaviour:
   m_ObjectHideFlags: 0

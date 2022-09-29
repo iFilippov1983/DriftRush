@@ -1,5 +1,4 @@
-﻿#pragma warning disable 649
-namespace RaceManager.Race
+﻿namespace RaceManager.Root
 {
     public enum RaceEventType
     { 
@@ -7,6 +6,7 @@ namespace RaceManager.Race
         START,
         RESTART,
         PAUSE,
+        UNPAUSE,
         STOP,
         FINISH,
         QUIT

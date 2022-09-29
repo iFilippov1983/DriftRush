@@ -1,54 +1,58 @@
 ﻿using System.Threading.Tasks;
 using UnityEngine;
 
-public class Pointer : MonoBehaviour
+namespace RaceManager.UI
 {
-    [SerializeField] private Animation _animation;
-    [SerializeField] private AnimationClip _clipAppear;
-    [SerializeField] private AnimationClip _clipDisappear;
-    [SerializeField] private AnimationClip _clipIdle;
-    [SerializeField] private GameObject _pointer;
-
-
-    private Transform _transform;
-
-    private void Start()
+    public class Pointer : MonoBehaviour
     {
-        _transform = transform;
-        _pointer.gameObject.SetActive(false);
-    }
+        [SerializeField] private Animation _animation;
+        [SerializeField] private AnimationClip _clipAppear;
+        [SerializeField] private AnimationClip _clipDisappear;
+        [SerializeField] private AnimationClip _clipIdle;
+        [SerializeField] private GameObject _pointer;
 
-    private void Update()
-    {
-        if (Input.GetMouseButtonDown(0))
+
+        private Transform _transform;
+
+        private void Start()
         {
-            Appear();
+            _transform = transform;
+            _pointer.gameObject.SetActive(false);
         }
 
-        if (Input.GetMouseButtonUp(0))
+        private void Update()
         {
-            Disappear();
+            if (Input.GetMouseButtonDown(0))
+            {
+                Appear();
+            }
+
+            if (Input.GetMouseButtonUp(0))
+            {
+                Disappear();
+            }
+
+            if (gameObject.activeSelf)
+            {
+                _transform.position = Camera.main.ScreenToViewportPoint(Input.mousePosition);
+                _animation.Play(_clipIdle.name);
+            }
+
         }
 
-        if (gameObject.activeSelf)
+        private void Appear()
         {
-            _transform.position = Camera.main.ScreenToViewportPoint(Input.mousePosition);
-            _animation.Play(_clipIdle.name);
+            _pointer.gameObject.SetActive(true);
+            _animation.Play(_clipAppear.name);
         }
-            
-    }
 
-    private void Appear()
-    {
-        _pointer.gameObject.SetActive(true);
-        _animation.Play(_clipAppear.name);
-    }
-
-    private async void Disappear()
-    {
-        _animation.Play(_clipDisappear.name);
-        while(_animation.isPlaying)
-            await Task.Yield();
-        _pointer.gameObject.SetActive(false);
+        private async void Disappear()
+        {
+            _animation.Play(_clipDisappear.name);
+            while (_animation.isPlaying)
+                await Task.Yield();
+            _pointer.gameObject.SetActive(false);
+        }
     }
 }
+

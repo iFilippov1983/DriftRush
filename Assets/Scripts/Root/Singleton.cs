@@ -9,37 +9,40 @@ using UnityEngine;
 using UnityEngine.Events;
 
 
-public class Singleton<T> : MonoBehaviour where T : Component
+namespace RaceManager.Root
 {
-    private static T _instance;
-
-    public static T Instance
+    public class Singleton<T> : MonoBehaviour where T : Component
     {
-        get
+        private static T _instance;
+
+        public static T Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = FindObjectOfType<T>();
+                    if (_instance == null)
+                    {
+                        GameObject go = new GameObject(string.Concat("[", typeof(T), "]"));
+                        _instance = go.AddComponent<T>();
+                    }
+                }
+                return _instance;
+            }
+        }
+
+        private void Awake()
         {
             if (_instance == null)
             {
-                _instance = FindObjectOfType<T>();
-                if (_instance == null)
-                {
-                    GameObject go = new GameObject(string.Concat("[", typeof(T), "]"));
-                    _instance = go.AddComponent<T>();
-                }
+                _instance = this as T;
+                DontDestroyOnLoad(gameObject);
             }
-            return _instance;
-        }
-    }
-
-    private void Awake()
-    {
-        if (_instance == null)
-        {
-            _instance = this as T;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
+            else
+            {
+                Destroy(gameObject);
+            }
         }
     }
 }

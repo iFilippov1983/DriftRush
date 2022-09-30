@@ -7,44 +7,54 @@ namespace RaceManager.Vehicles
 {
     public class CarController : MonoBehaviour
     {
+        private const float Downforce = 100f;
+        private const float BrakeTorque = 20000f;
+        private const float ReverseTorque = 200;
+        private const float MaxHandbrakeTorque = float.MaxValue;
+        private const int NoOfGears = 5;
+        private const float RevRangeBoundary = 1f;
+        private const float TractionCtrl = 0f; //(0-1) 0 is no traction control, 1 is full interference
+        private const float SlipLimit = 0.1f;
+
         [SerializeField] private VehicleSettings _vehicleSettings;
         [SerializeField] private WheelCollider[] m_WheelColliders = new WheelCollider[4];
         [SerializeField] private GameObject[] m_WheelMeshes = new GameObject[4];
         [SerializeField] private WheelEffects[] m_WheelEffects = new WheelEffects[4];
         [SerializeField] private Vector3 _ñentreOfMassOffset;
 
-        private Quaternion[] m_WheelMeshLocalRotations;
-        private Vector3 m_Prevpos, m_Pos;
-        private float m_SteerAngle;
-        private int m_GearNum;
-        private float m_GearFactor;
-        private float m_OldRotation;
-        private float m_CurrentTorque;
-        private Rigidbody m_Rigidbody;
-        private const float k_ReversingThreshold = 0.01f;
+        private CarDriveType _carDriveType = CarDriveType.FourWheelDrive;
+        //private SpeedType _speedType = SpeedType.KPH;
+
+        private Quaternion[] _wheelMeshLocalRotations;
+        private float _steerAngle;
+        private int _gearNum;
+        private float _gearFactor;
+        private float _oldRotation;
+        private float _currentTorque;
+        private Rigidbody _rigidbody;
 
         public bool Skidding { get; private set; }
         public float BrakeInput { get; private set; }
-        public float CurrentSteerAngle => m_SteerAngle;
-        public float CurrentSpeed => m_Rigidbody.velocity.magnitude * 3.6f;//convertion to KPH // * 2.23693629f//convertion to MPH
-        public float MaxSpeed => _vehicleSettings.SpeedTop;
-        public float CruiseSpeed => _vehicleSettings.SpeedCruise;
+        public float CurrentSteerAngle => _steerAngle;
+        public float CurrentSpeed => _rigidbody.velocity.magnitude * 3.6f;//convertion to KPH // * 2.23693629f//convertion to MPH
+        public float MaxSpeed => _vehicleSettings.MaxSpeed;
+        public float Acceleration => _vehicleSettings.AccelerationFactor;
         public float Revs { get; private set; }
         public float AccelInput { get; private set; }
 
         private void Start()
         {
-            m_WheelMeshLocalRotations = new Quaternion[4];
+            _wheelMeshLocalRotations = new Quaternion[4];
             for (int i = 0; i < 4; i++)
             {
-                m_WheelMeshLocalRotations[i] = m_WheelMeshes[i].transform.localRotation;
+                _wheelMeshLocalRotations[i] = m_WheelMeshes[i].transform.localRotation;
             }
             m_WheelColliders[0].attachedRigidbody.centerOfMass = _ñentreOfMassOffset;
 
-            _vehicleSettings.MaxHandbrakeTorque = float.MaxValue;
+            //MaxHandbrakeTorque = float.MaxValue;
 
-            m_Rigidbody = GetComponent<Rigidbody>();
-            m_CurrentTorque = _vehicleSettings.FullTorqueOverAllWheels - (_vehicleSettings.TractionControl * _vehicleSettings.FullTorqueOverAllWheels);
+            _rigidbody = GetComponent<Rigidbody>();
+            _currentTorque = _vehicleSettings.FullTorqueOverAllWheels - (TractionCtrl * _vehicleSettings.FullTorqueOverAllWheels);
         }
 
         public void SetVehicleSettings(VehicleSettings vehicleSettings) => _vehicleSettings = vehicleSettings;
@@ -68,9 +78,9 @@ namespace RaceManager.Vehicles
 
             //Set the steer on the front wheels.
             //Assuming that wheels 0 and 1 are the front wheels.
-            m_SteerAngle = steering * _vehicleSettings.MaximumSteerAngle;
-            m_WheelColliders[0].steerAngle = m_SteerAngle;
-            m_WheelColliders[1].steerAngle = m_SteerAngle;
+            _steerAngle = steering * _vehicleSettings.MaximumSteerAngle;
+            m_WheelColliders[0].steerAngle = _steerAngle;
+            m_WheelColliders[1].steerAngle = _steerAngle;
 
             SteerHelper();
             ApplyDrive(accel, footbrake);
@@ -80,7 +90,7 @@ namespace RaceManager.Vehicles
             //Assuming that wheels 2 and 3 are the rear wheels.
             if (handbrake > 0f)
             {
-                var hbTorque = handbrake * _vehicleSettings.MaxHandbrakeTorque;
+                var hbTorque = handbrake * MaxHandbrakeTorque;
                 m_WheelColliders[2].brakeTorque = hbTorque;
                 m_WheelColliders[3].brakeTorque = hbTorque;
             }
@@ -98,17 +108,17 @@ namespace RaceManager.Vehicles
         private void GearChanging()
         {
             float f = Mathf.Abs(CurrentSpeed/MaxSpeed);
-            float upgearlimit = (1/(float) VehicleSettings.NoOfGears)*(m_GearNum + 1);
-            float downgearlimit = (1/(float)VehicleSettings.NoOfGears) *m_GearNum;
+            float upgearlimit = (1/(float) NoOfGears)*(_gearNum + 1);
+            float downgearlimit = (1/(float)NoOfGears) *_gearNum;
 
-            if (m_GearNum > 0 && f < downgearlimit)
+            if (_gearNum > 0 && f < downgearlimit)
             {
-                m_GearNum--;
+                _gearNum--;
             }
 
-            if (f > upgearlimit && (m_GearNum < (VehicleSettings.NoOfGears - 1)))
+            if (f > upgearlimit && (_gearNum < (NoOfGears - 1)))
             {
-                m_GearNum++;
+                _gearNum++;
             }
         }
 
@@ -126,11 +136,11 @@ namespace RaceManager.Vehicles
 
         private void CalculateGearFactor()
         {
-            float f = (1/(float)VehicleSettings.NoOfGears);
+            float f = (1/(float)NoOfGears);
             // gear factor is a normalised representation of the current speed within the current gear's range of speeds.
             // We smooth towards the 'target' gear factor, so that revs don't instantly snap up or down when changing gear.
-            var targetGearFactor = Mathf.InverseLerp(f*m_GearNum, f*(m_GearNum + 1), Mathf.Abs(CurrentSpeed/MaxSpeed));
-            m_GearFactor = Mathf.Lerp(m_GearFactor, targetGearFactor, Time.deltaTime*5f);
+            var targetGearFactor = Mathf.InverseLerp(f*_gearNum, f*(_gearNum + 1), Mathf.Abs(CurrentSpeed/MaxSpeed));
+            _gearFactor = Mathf.Lerp(_gearFactor, targetGearFactor, Time.deltaTime*5f);
         }
 
         private void CalculateRevs()
@@ -138,40 +148,40 @@ namespace RaceManager.Vehicles
             // calculate engine revs (for display / sound)
             // (this is done in retrospect - revs are not used in force/power calculations)
             CalculateGearFactor();
-            var gearNumFactor = m_GearNum / (float)VehicleSettings.NoOfGears;
-            var revsRangeMin = ULerp(0f, _vehicleSettings.RevRangeBoundary, CurveFactor(gearNumFactor));
-            var revsRangeMax = ULerp(_vehicleSettings.RevRangeBoundary, 1f, gearNumFactor);
-            Revs = ULerp(revsRangeMin, revsRangeMax, m_GearFactor);
+            var gearNumFactor = _gearNum / (float)NoOfGears;
+            var revsRangeMin = ULerp(0f, RevRangeBoundary, CurveFactor(gearNumFactor));
+            var revsRangeMax = ULerp(RevRangeBoundary, 1f, gearNumFactor);
+            Revs = ULerp(revsRangeMin, revsRangeMax, _gearFactor);
         }
 
-        private void CapSpeed()
-        {
-            float speed = m_Rigidbody.velocity.magnitude;
-            switch (_vehicleSettings.SpeedType)
-            {
-                case SpeedType.MPH:
+        //private void CapSpeed()
+        //{
+        //    float speed = m_Rigidbody.velocity.magnitude;
+        //    switch (_vehicleSettings.SpeedType)
+        //    {
+        //        case SpeedType.MPH:
 
-                    speed *= 2.23693629f;
-                    if (speed > _vehicleSettings.SpeedTop)
-                        m_Rigidbody.velocity = (_vehicleSettings.SpeedTop / 2.23693629f) * m_Rigidbody.velocity.normalized;
-                    break;
+        //            speed *= 2.23693629f;
+        //            if (speed > _vehicleSettings.SpeedTop)
+        //                m_Rigidbody.velocity = (_vehicleSettings.SpeedTop / 2.23693629f) * m_Rigidbody.velocity.normalized;
+        //            break;
 
-                case SpeedType.KPH:
-                    speed *= 3.6f;
-                    if (speed > _vehicleSettings.SpeedTop)
-                        m_Rigidbody.velocity = (_vehicleSettings.SpeedTop / 3.6f) * m_Rigidbody.velocity.normalized;
-                    break;
-            }
-        }
+        //        case SpeedType.KPH:
+        //            speed *= 3.6f;
+        //            if (speed > _vehicleSettings.SpeedTop)
+        //                m_Rigidbody.velocity = (_vehicleSettings.SpeedTop / 3.6f) * m_Rigidbody.velocity.normalized;
+        //            break;
+        //    }
+        //}
 
         private void ApplyDrive(float accel, float footbrake)
         {
 
             float thrustTorque;
-            switch (_vehicleSettings.CarDriveType)
+            switch (_carDriveType)
             {
                 case CarDriveType.FourWheelDrive:
-                    thrustTorque = accel * (m_CurrentTorque / 4f);
+                    thrustTorque = accel * (_currentTorque / 4f);
                     for (int i = 0; i < 4; i++)
                     {
                         m_WheelColliders[i].motorTorque = thrustTorque;
@@ -179,12 +189,12 @@ namespace RaceManager.Vehicles
                     break;
 
                 case CarDriveType.FrontWheelDrive:
-                    thrustTorque = accel * (m_CurrentTorque / 2f);
+                    thrustTorque = accel * (_currentTorque / 2f);
                     m_WheelColliders[0].motorTorque = m_WheelColliders[1].motorTorque = thrustTorque;
                     break;
 
                 case CarDriveType.RearWheelDrive:
-                    thrustTorque = accel * (m_CurrentTorque / 2f);
+                    thrustTorque = accel * (_currentTorque / 2f);
                     m_WheelColliders[2].motorTorque = m_WheelColliders[3].motorTorque = thrustTorque;
                     break;
 
@@ -192,14 +202,14 @@ namespace RaceManager.Vehicles
 
             for (int i = 0; i < 4; i++)
             {
-                if (CurrentSpeed > 5 && Vector3.Angle(transform.forward, m_Rigidbody.velocity) < 50f)
+                if (CurrentSpeed > 5 && Vector3.Angle(transform.forward, _rigidbody.velocity) < 50f)
                 {
-                    m_WheelColliders[i].brakeTorque = _vehicleSettings.BrakeTorque * footbrake;
+                    m_WheelColliders[i].brakeTorque = BrakeTorque * footbrake;
                 }
                 else if (footbrake > 0)
                 {
                     m_WheelColliders[i].brakeTorque = 0f;
-                    m_WheelColliders[i].motorTorque = -_vehicleSettings.ReverseTorque * footbrake;
+                    m_WheelColliders[i].motorTorque = -ReverseTorque * footbrake;
                 }
             }
         }
@@ -215,20 +225,20 @@ namespace RaceManager.Vehicles
             }
 
             // this if is needed to avoid gimbal lock problems that will make the car suddenly shift direction
-            if (Mathf.Abs(m_OldRotation - transform.eulerAngles.y) < 10f)
+            if (Mathf.Abs(_oldRotation - transform.eulerAngles.y) < 10f)
             {
-                var turnadjust = (transform.eulerAngles.y - m_OldRotation) * _vehicleSettings.SteerHelper;
+                var turnadjust = (transform.eulerAngles.y - _oldRotation) * _vehicleSettings.SteerHelper;
                 Quaternion velRotation = Quaternion.AngleAxis(turnadjust, Vector3.up);
-                m_Rigidbody.velocity = velRotation * m_Rigidbody.velocity;
+                _rigidbody.velocity = velRotation * _rigidbody.velocity;
             }
-            m_OldRotation = transform.eulerAngles.y;
+            _oldRotation = transform.eulerAngles.y;
         }
 
         // this is used to add more grip in relation to speed
         private void AddDownForce()
         {
             m_WheelColliders[0].attachedRigidbody.AddForce
-                (-transform.up * _vehicleSettings.Downforce * m_WheelColliders[0].attachedRigidbody.velocity.magnitude);
+                (-transform.up * Downforce * m_WheelColliders[0].attachedRigidbody.velocity.magnitude);
         }
 
         // checks if the wheels are spinning and is so does three things
@@ -245,7 +255,7 @@ namespace RaceManager.Vehicles
                 m_WheelColliders[i].GetGroundHit(out wheelHit);
 
                 // is the tire slipping above the given threshhold
-                if (Mathf.Abs(wheelHit.forwardSlip) >= _vehicleSettings.SlipLimit || Mathf.Abs(wheelHit.sidewaysSlip) >= _vehicleSettings.SlipLimit)
+                if (Mathf.Abs(wheelHit.forwardSlip) >= SlipLimit || Mathf.Abs(wheelHit.sidewaysSlip) >= SlipLimit)
                 {
                     m_WheelEffects[i].EmitTyreSmoke(1);
 
@@ -272,12 +282,12 @@ namespace RaceManager.Vehicles
             for (int i = 0; i < 4; i++)
             {
                 Vector3 steeringDir = m_WheelColliders[i].transform.right;
-                Vector3 tireWorldVel = m_Rigidbody.GetPointVelocity(m_WheelColliders[i].transform.position);
+                Vector3 tireWorldVel = _rigidbody.GetPointVelocity(m_WheelColliders[i].transform.position);
                 float steeringVel = Vector3.Dot(steeringDir, tireWorldVel);
 
-                if (steeringVel > _vehicleSettings.SlipLimit)
+                if (steeringVel > SlipLimit)
                 {
-                    m_WheelEffects[i].EmitTyreSmoke(2);
+                    m_WheelEffects[i].EmitTyreSmoke(1);
 
                     if (!AnySkidSoundPlaying())
                     {
@@ -299,7 +309,7 @@ namespace RaceManager.Vehicles
         private void TractionControl()
         {
             WheelHit wheelHit;
-            switch (_vehicleSettings.CarDriveType)
+            switch (_carDriveType)
             {
                 case CarDriveType.FourWheelDrive:
                     // loop through all wheels
@@ -331,16 +341,16 @@ namespace RaceManager.Vehicles
 
         private void AdjustTorque(float forwardSlip)
         {
-            if (forwardSlip >= _vehicleSettings.SlipLimit && m_CurrentTorque >= 0)
+            if (forwardSlip >= SlipLimit && _currentTorque >= 0)
             {
-                m_CurrentTorque -= 10 * _vehicleSettings.TractionControl;
+                _currentTorque -= 10 * TractionCtrl;
             }
             else
             {
-                m_CurrentTorque += 10 * _vehicleSettings.TractionControl;
-                if (m_CurrentTorque > _vehicleSettings.FullTorqueOverAllWheels)
+                _currentTorque += 10 * TractionCtrl;
+                if (_currentTorque > _vehicleSettings.FullTorqueOverAllWheels)
                 {
-                    m_CurrentTorque = _vehicleSettings.FullTorqueOverAllWheels;
+                    _currentTorque = _vehicleSettings.FullTorqueOverAllWheels;
                 }
             }
         }

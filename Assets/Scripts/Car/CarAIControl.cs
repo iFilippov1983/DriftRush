@@ -11,19 +11,36 @@ namespace RaceManager.Vehicles
     [RequireComponent(typeof (CarController))]
     public class CarAIControl : CarAI
     {
+        // "wandering" is used to give the cars a more human, less robotic feel. They can waver slightly
+        // in speed and direction while driving towards their target.
+        private const float CautiousMaxDistance = 100f;                   // distance at which distance-based cautiousness begins
+        private const float CautiousAngularVelocityFactor = 90f;          // how cautious the AI should be when considering its own current angular velocity (i.e. easing off acceleration if spinning!)
+        private const float CautiousSpeedFactor = 1f;                     // (0-1)Percentage of max speed to use when being maximally cautious
+        private const float CautiousMaxAngle = 180f;                      // angle of approaching corner to treat as warranting maximum caution
+        private const float SteerSensitivity = 0.01f;                     // (0-1)How sensitively the AI uses steering input to turn to the desired direction
+        private const float BrakeSensitivity = 1f;                        // (0-1)How sensitively the AI uses the brake to reach the current desired speed
+        private const float AccelSensitivity = 1f;                        //(0-1)How sensitively the AI uses the accelerator to reach the current desired speed
+        private const float AccelWanderSpeed = 0.1f;                      // (0-1)How fast the cars acceleration wandering will fluctuate
+        private const float LateralWanderDistance = 5f;                   // how far the car will wander laterally towards its target
+        private const float LateralWanderSpeed = 0.2f;                    // (0-1)How fast the lateral wandering will fluctuate
+        private const float ReachTargetThreshold = 2;                     // proximity to target to consider we 'reached' it, and stop driving.
+        private BrakeCondition BrakeCond = BrakeCondition.NeverBrake;     // what should the AI consider when accelerating/braking?
+
         [ShowInInspector, ReadOnly]
         private string _id;
 
         [SerializeField] private AIDriverSettings _driverSettings;
-        [SerializeField] private Transform _target;                                              // 'target' the target object to aim for.
-        [SerializeField] private bool _stopWhenTargetReached;                                    // should we stop driving when we reach the target?
-        [SerializeField] private bool _isDriving;                                                // whether the AI is currently actively driving or stopped.
+        [SerializeField] private Transform _target;                        // 'target' the target object to aim for.
+        
+        [SerializeField] private bool _isDriving;                          // whether the AI is currently actively driving or stopped.
 
+        private bool _stopWhenTargetReached;     // should we stop driving when we reach the target?
         private float _randomPerlin;             // A random value for the car to base its wander on (so that AI cars don't all wander in the same pattern)
         private CarController _carController;    // Reference to actual car controller we are controlling
         private float _avoidOtherCarTime;        // time until which to avoid the car we recently collided with
         private float _avoidOtherCarSlowdown;    // how much to slow down due to colliding with another car, whilst avoiding
         private float _avoidPathOffset;          // direction (-1 or 1) in which to offset path to avoid other car, whilst avoiding
+        private float _accelWanderAmount = 1f;   //(0.001-1)How much the cars acceleration will wander
         private float _currentSpeed;
         private Rigidbody _rigidbody;
 
@@ -32,6 +49,7 @@ namespace RaceManager.Vehicles
         public bool PlayerDriving = false;
         [ReadOnly]
         public float DesiredSpeed;
+        public float CruiseSpeed => _driverSettings.CruiseSpeed;
 
         private void Awake()
         {
@@ -49,10 +67,10 @@ namespace RaceManager.Vehicles
         private void Start()
         {
             if (PlayerDriving)
-                DesiredSpeed = _carController.CruiseSpeed;
+                DesiredSpeed = _driverSettings.CruiseSpeed;
             else
             {
-                DesiredSpeed = _carController.MaxSpeed * Random.Range(_driverSettings.CruiseSpeedThresholdMin, _driverSettings.CruiseSpeedThresholdMax);
+                DesiredSpeed = _carController.MaxSpeed * Random.Range(_driverSettings.CruiseSpeedPercentMin, _driverSettings.CruiseSpeedPercentMax);
                 Debug.Log($"{gameObject.name} speed: {DesiredSpeed}");
             }
                 
@@ -77,7 +95,7 @@ namespace RaceManager.Vehicles
                 _currentSpeed = DesiredSpeed;
 
                 // now it's time to decide if we should be slowing down...
-                switch (_driverSettings.BrakeCondition)
+                switch (BrakeCond)
                 {
                     case BrakeCondition.TargetDirectionDifference:
                         {
@@ -87,14 +105,14 @@ namespace RaceManager.Vehicles
                             float approachingCornerAngle = Vector3.Angle(_target.forward, fwd);
 
                             // also consider the current amount we're turning, multiplied up and then compared in the same way as an upcoming corner angle
-                            float spinningAngle = _rigidbody.angularVelocity.magnitude * _driverSettings.CautiousAngularVelocityFactor;
+                            float spinningAngle = _rigidbody.angularVelocity.magnitude * CautiousAngularVelocityFactor;
 
                             // if it's different to our current angle, we need to be cautious (i.e. slow down) a certain amount
                             float cautiousnessRequired =
-                                Mathf.InverseLerp(0, _driverSettings.CautiousMaxAngle, Mathf.Max(spinningAngle, approachingCornerAngle));
+                                Mathf.InverseLerp(0, CautiousMaxAngle, Mathf.Max(spinningAngle, approachingCornerAngle));
 
                             _currentSpeed = 
-                                Mathf.Lerp(_carController.MaxSpeed, _carController.MaxSpeed * _driverSettings.CautiousSpeedFactor, cautiousnessRequired);
+                                Mathf.Lerp(_carController.MaxSpeed, _carController.MaxSpeed * CautiousSpeedFactor, cautiousnessRequired);
                             break;
                         }
 
@@ -105,16 +123,16 @@ namespace RaceManager.Vehicles
 
                             // check out the distance to target
                             Vector3 delta = _target.position - transform.position;
-                            float distanceCautiousFactor = Mathf.InverseLerp(_driverSettings.CautiousMaxDistance, 0, delta.magnitude);
+                            float distanceCautiousFactor = Mathf.InverseLerp(CautiousMaxDistance, 0, delta.magnitude);
 
                             // also consider the current amount we're turning, multiplied up and then compared in the same way as an upcoming corner angle
-                            float spinningAngle = _rigidbody.angularVelocity.magnitude * _driverSettings.CautiousAngularVelocityFactor;
+                            float spinningAngle = _rigidbody.angularVelocity.magnitude * CautiousAngularVelocityFactor;
 
                             // if it's different to our current angle, we need to be cautious (i.e. slow down) a certain amount
                             float cautiousnessRequired = Mathf.Max(
-                                Mathf.InverseLerp(0, _driverSettings.CautiousMaxAngle, spinningAngle), distanceCautiousFactor);
+                                Mathf.InverseLerp(0, CautiousMaxAngle, spinningAngle), distanceCautiousFactor);
                             _currentSpeed =
-                                Mathf.Lerp(_carController.MaxSpeed, _carController.MaxSpeed * _driverSettings.CautiousSpeedFactor, cautiousnessRequired);
+                                Mathf.Lerp(_carController.MaxSpeed, _carController.MaxSpeed * CautiousSpeedFactor, cautiousnessRequired);
                             break;
                         }
 
@@ -141,22 +159,22 @@ namespace RaceManager.Vehicles
                     // no need for evasive action, we can just wander across the path-to-target in a random way,
                     // which can help prevent AI from seeming too uniform and robotic in their driving
                     offsetTargetPos += _target.right*
-                                       (Mathf.PerlinNoise(Time.time*_driverSettings.LateralWanderSpeed, _randomPerlin)*2 - 1)*
-                                       _driverSettings.LateralWanderDistance;
+                                       (Mathf.PerlinNoise(Time.time * LateralWanderSpeed, _randomPerlin) * 2 - 1)*
+                                       LateralWanderDistance;
                 }
 
                 // use different sensitivity depending on whether accelerating or braking:
                 float accelBrakeSensitivity = (_currentSpeed < _carController.CurrentSpeed)
-                                                  ? _driverSettings.BrakeSensitivity
-                                                  : _driverSettings.AccelSensitivity;
+                                                  ? BrakeSensitivity
+                                                  : AccelSensitivity;
 
                 // decide the actual amount of accel/brake input to achieve desired speed.
                 float accel = Mathf.Clamp((_currentSpeed - _carController.CurrentSpeed) * accelBrakeSensitivity, -1, 1);
 
                 // add acceleration 'wander', which also prevents AI from seeming too uniform and robotic in their driving
                 // i.e. increasing the accel wander amount can introduce jostling and bumps between AI cars in a race
-                accel *= (1 - _driverSettings.AccelWanderAmount) +
-                         (Mathf.PerlinNoise(Time.time * _driverSettings.AccelWanderSpeed, _randomPerlin) * _driverSettings.AccelWanderAmount);
+                accel *= (1 - _accelWanderAmount) +
+                         (Mathf.PerlinNoise(Time.time * AccelWanderSpeed, _randomPerlin) * _accelWanderAmount);
 
                 // calculate the local-relative position of the target, to steer towards
                 Vector3 localTarget = transform.InverseTransformPoint(offsetTargetPos);
@@ -165,13 +183,13 @@ namespace RaceManager.Vehicles
                 float targetAngle = Mathf.Atan2(localTarget.x, localTarget.z)*Mathf.Rad2Deg;
 
                 // get the amount of steering needed to aim the car towards the target
-                float steer = Mathf.Clamp(targetAngle * _driverSettings.SteerSensitivity, -1, 1) * Mathf.Sign(_carController.CurrentSpeed);
+                float steer = Mathf.Clamp(targetAngle * SteerSensitivity, -1, 1) * Mathf.Sign(_carController.CurrentSpeed);
 
                 // feed input to the car controller.
                 _carController.Move(steer, accel, accel, 0f);
 
                 // if appropriate, stop driving when we're close enough to the target.
-                if (_stopWhenTargetReached && localTarget.magnitude < _driverSettings.ReachTargetThreshold)
+                if (_stopWhenTargetReached && localTarget.magnitude < ReachTargetThreshold)
                 {
                     _isDriving = false;
                 }
@@ -193,21 +211,27 @@ namespace RaceManager.Vehicles
                     if (Vector3.Angle(transform.forward, otherAI.transform.position - transform.position) < 90)
                     {
                         // the other ai is in front, so it is only good manners that we ought to brake...
-                        _avoidOtherCarSlowdown = 0.5f;
+                        _avoidOtherCarSlowdown = 1.5f;//0.5f;
                     }
                     else
                     {
                         // we're in front! ain't slowing down for anybody...
-                        _avoidOtherCarSlowdown = 1;
+                        _avoidOtherCarSlowdown = 1f;
                     }
 
                     // both cars should take evasive action by driving along an offset from the path centre,
                     // away from the other car
                     var otherCarLocalDelta = transform.InverseTransformPoint(otherAI.transform.position);
                     float otherCarAngle = Mathf.Atan2(otherCarLocalDelta.x, otherCarLocalDelta.z);
-                    _avoidPathOffset = _driverSettings.LateralWanderDistance * -Mathf.Sign(otherCarAngle);
+                    _avoidPathOffset = LateralWanderDistance * -Mathf.Sign(otherCarAngle);
                 }
             }
+        }
+
+        public void SetAccelAmount(float value)
+        {
+            _accelWanderAmount = value;
+            Debug.Log($"{value}");
         }
 
         public void SetTarget(Transform target)

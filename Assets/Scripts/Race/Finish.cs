@@ -1,4 +1,3 @@
-using RaceManager.Root;
 using RaceManager.Tools;
 using RaceManager.Vehicles;
 using System.Collections.Generic;
@@ -41,7 +40,7 @@ namespace RaceManager.Race
             //}
 
             if (other.gameObject.tag == Literal.Tag_Player)
-                RaceEventsHub.Instance.Notify(RaceEventType.FINISH);
+                RaceEventsHub.Notify(RaceEventType.FINISH);
         }
 
         private void OnDestroy()

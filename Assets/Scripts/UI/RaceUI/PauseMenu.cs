@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using RaceManager.Tools;
 using RaceManager.Root;
+using RaceManager.Race;
 
 namespace RaceManager.UI
 {
@@ -56,7 +57,7 @@ namespace RaceManager.UI
         {
             _pauseMenuView.gameObject.SetActive(true);
             Time.timeScale = 0f;
-            RaceEventsHub.Instance.Notify(RaceEventType.PAUSE);
+            RaceEventsHub.Notify(RaceEventType.PAUSE);
             _gameIsPaused = true;
         }
 
@@ -64,7 +65,7 @@ namespace RaceManager.UI
         {
             _pauseMenuView.gameObject.SetActive(false);
             Time.timeScale = 1f;
-            RaceEventsHub.Instance.Notify(RaceEventType.UNPAUSE);
+            RaceEventsHub.Notify(RaceEventType.UNPAUSE);
             _gameIsPaused = false;
         }
 

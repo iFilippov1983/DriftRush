@@ -12,18 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf5e8d15e6462bd47b763feabea90b1e, type: 3}
   m_Name: AIDriverSettings_Player
   m_EditorClassIdentifier: 
-  CautiousSpeedFactor: 1
-  CautiousMaxAngle: 180
-  CautiousMaxDistance: 100
-  CautiousAngularVelocityFactor: 90
-  SteerSensitivity: 0.01
-  AccelSensitivity: 1
-  BrakeSensitivity: 10
-  LateralWanderDistance: 5
-  LateralWanderSpeed: 0.2
-  AccelWanderAmount: 0
-  AccelWanderSpeed: 0.1
-  BrakeCondition: 0
-  ReachTargetThreshold: 2
-  CruiseSpeedThresholdMax: 1
-  CruiseSpeedThresholdMin: 1
+  CruiseSpeedPercentMax: 0.8
+  CruiseSpeedPercentMin: 0.7
+  CruiseSpeed: 20

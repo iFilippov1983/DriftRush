@@ -38,7 +38,7 @@ namespace RaceManager.Vehicles
 
         private void Cruise()
         {
-            _carAIControl.DesiredSpeed = _carController.CruiseSpeed;
+            _carAIControl.DesiredSpeed = _carAIControl.CruiseSpeed;
         }
     }
 }

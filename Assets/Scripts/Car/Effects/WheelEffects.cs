@@ -44,6 +44,7 @@ namespace RaceManager.Vehicles.Effects
 
         public void EmitTyreSmoke(int count)
         {
+            StopAllCoroutines();//?
             skidParticles.transform.position = transform.position - transform.up * m_WheelCollider.radius;
             skidParticles.Emit(count);
             if (!skidding)

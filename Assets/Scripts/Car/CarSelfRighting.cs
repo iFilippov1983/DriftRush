@@ -58,8 +58,7 @@ namespace RaceManager.Vehicles
                 $"Returned to position {LastOkPoint.position}".Log(StringConsoleLog.Color.Green);
             }
 
-            int randOffset = Random.Range(-1, 2);
-            transform.position += Vector3.left * randOffset;
+            transform.position += Vector3.back;
             transform.position += Vector3.up;
             
             _stuckTimer = 0;

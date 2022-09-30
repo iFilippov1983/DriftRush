@@ -1,4 +1,4 @@
-﻿namespace RaceManager.Root
+﻿namespace RaceManager.Race
 {
     public enum RaceEventType
     { 

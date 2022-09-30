@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace RaceManager.Root
+namespace RaceManager.Race
 {
-    public class RaceEventsHub : Singleton<RaceEventsHub>
+    public static class RaceEventsHub //: Singleton<RaceEventsHub>
     {
         private static readonly Dictionary<RaceEventType, UnityEvent> _events = new Dictionary<RaceEventType, UnityEvent>();
 
-        public void Subscribe(RaceEventType eventType, UnityAction listener)
+        public static void Subscribe(RaceEventType eventType, UnityAction listener)
         {
             UnityEvent thisEvent;
             if (_events.TryGetValue(eventType, out thisEvent))
@@ -24,7 +24,7 @@ namespace RaceManager.Root
             } 
         }
 
-        public void Unsunscribe(RaceEventType eventType, UnityAction listener)
+        public static void Unsunscribe(RaceEventType eventType, UnityAction listener)
         {
             UnityEvent thisEvent;
             if (_events.TryGetValue(eventType, out thisEvent))
@@ -33,7 +33,7 @@ namespace RaceManager.Root
             }
         }
 
-        public void Notify(RaceEventType eventType)
+        public static void Notify(RaceEventType eventType)
         {
             UnityEvent thisEvent;
             if (_events.TryGetValue(eventType, out thisEvent))

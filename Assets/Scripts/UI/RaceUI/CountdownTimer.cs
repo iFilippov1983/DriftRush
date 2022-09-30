@@ -1,4 +1,5 @@
-﻿using RaceManager.Root;
+﻿using RaceManager.Race;
+using RaceManager.Root;
 using System.Collections;
 using UnityEngine;
 
@@ -7,17 +8,17 @@ namespace RaceManager.UI
     public class CountdownTimer : MonoBehaviour
     {
         [SerializeField] private float _countdownDuration;
-        [SerializeField] private CountdownTimer _countdownTimer;
+        [SerializeField] private CountdownTimerView _countdownTimerView;
         private float _currentTime;
 
         private void OnEnable()
         {
-            RaceEventsHub.Instance.Subscribe(RaceEventType.COUNTDOWN, StartTimer);
+            RaceEventsHub.Subscribe(RaceEventType.COUNTDOWN, StartTimer);
         }
 
         private void OnDisable()
         {
-            RaceEventsHub.Instance.Unsunscribe(RaceEventType.COUNTDOWN, StartTimer);
+            RaceEventsHub.Unsunscribe(RaceEventType.COUNTDOWN, StartTimer);
         }
 
         private void StartTimer() => StartCoroutine(Countdown());
@@ -27,11 +28,12 @@ namespace RaceManager.UI
             _currentTime = _countdownDuration;
             while (_currentTime > 0)
             {
+                _countdownTimerView.Show(Mathf.RoundToInt(_currentTime));
                 yield return new WaitForSeconds(1f);
                 _currentTime--;
             }
 
-            RaceEventsHub.Instance.Notify(RaceEventType.START);
+            RaceEventsHub.Notify(RaceEventType.START);
         }
 
         private void OnDestroy()

@@ -1,4 +1,4 @@
-using RaceManager.Vehicles;
+using RaceManager.Cars;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,7 +21,9 @@ namespace RaceManager.UI
         {
             int speed = Mathf.RoundToInt(_currentSpeed);
             _speedIndicatorView.SpeedValueText.text = speed.ToString();
+
             _positionIndicatorView.PositionText.text = _currentPosition.ToString();
+
             _raceProgressBarView.ProgressImage.fillAmount = _trackProgress;
         }
 

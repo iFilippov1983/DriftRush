@@ -1,4 +1,4 @@
-﻿namespace RaceManager.Vehicles
+﻿namespace RaceManager.Cars
 {
     public class DriverProfile
     {

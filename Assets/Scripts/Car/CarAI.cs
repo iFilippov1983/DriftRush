@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace RaceManager.Vehicles
+namespace RaceManager.Cars
 {
     public abstract class CarAI : MonoBehaviour
     {

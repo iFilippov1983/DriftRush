@@ -7,17 +7,17 @@ namespace RaceManager.UI
     {
         [SerializeField] private TMP_Text _countdownText;
         private Animation _animation;
+        private AudioSource _audioSource;
+
+        public TMP_Text CountdownText => _countdownText;
+        public Animation Animation => _animation;
+        public AudioSource AudioSource => _audioSource;
+
 
         private void Awake()
         {
             _animation = GetComponent<Animation>();
-        }
-
-        public void Show(int seconds)
-        {
-            _countdownText.text = seconds.ToString();
-            if (_animation != null)
-                _animation.Play();
+            _audioSource = GetComponent<AudioSource>();
         }
     }
 }

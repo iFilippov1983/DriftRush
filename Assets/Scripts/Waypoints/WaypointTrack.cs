@@ -9,6 +9,7 @@ namespace RaceManager.Waypoints
     {
         public WaypointList waypointList = new WaypointList();
         public float editorVisualisationSubsteps = 100;
+        public float minDistanceToReachWaypoint = 5f;
 
         [SerializeField] protected bool _smoothRoute = true;
         [SerializeField] protected Color _drawColor = Color.yellow;
@@ -42,6 +43,8 @@ namespace RaceManager.Waypoints
             get { return waypointList.items; }
         }
 
+        public List<Waypoint> WaypointsList => _waypoints;
+
         private void Awake()
         {
             if (Waypoints.Length > 1)
@@ -70,6 +73,8 @@ namespace RaceManager.Waypoints
                     var wp = go.GetComponent<Waypoint>();
                     wp.ID = i;
                     _waypoints.Add(wp);
+                    if(i != 0)
+                        _waypoints[i-1].NextWaypoint = wp;
                 }
 
                 for (int i = 0; i < _waypoints.Count; i++)
@@ -81,7 +86,6 @@ namespace RaceManager.Waypoints
                         _waypoints[i].Subscribe(wp);
                     }
                 }
-                
             }
         }
 

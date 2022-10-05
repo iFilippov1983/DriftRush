@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using RaceManager.Tools;
 using RaceManager.Root;
 using RaceManager.Race;
+using UnityEngine.Events;
 
 namespace RaceManager.UI
 {
@@ -72,13 +73,13 @@ namespace RaceManager.UI
         private void LoadMenu()
         {
             Time.timeScale = 1f;
-            SceneManager.LoadScene(Literal.Scene_Menu);
+            SceneManager.LoadScene(SceneName.Scene_Menu);
         }
 
         private void Restart()
         {
             Time.timeScale = 1f;
-            SceneManager.LoadScene(Literal.Scene_Game);
+            SceneManager.LoadScene(SceneName.Scene_Game);
         }
     }
 }

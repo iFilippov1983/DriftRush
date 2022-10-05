@@ -1,8 +1,9 @@
-﻿using RaceManager.Vehicles;
+﻿using RaceManager.Cars;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
+using Sirenix.OdinInspector;
 
 namespace RaceManager.Waypoints
 {
@@ -10,6 +11,8 @@ namespace RaceManager.Waypoints
     public class Waypoint : MonoBehaviour, IObservable<int>, IObserver<int>
     {
         public int ID;
+        [ReadOnly]
+        public Waypoint NextWaypoint;
 
         private Dictionary<int, CarSelfRighting> _selfRightings = new Dictionary<int, CarSelfRighting>();
         private List<IObserver<int>> _observers = new List<IObserver<int>>();
@@ -18,27 +21,29 @@ namespace RaceManager.Waypoints
         {
             CarSelfRighting csr;
             csr = other.GetComponentInParent<CarSelfRighting>();
+
+            if (csr == null)
+                return;
+
             int id = csr.gameObject.GetInstanceID();
 
-            if (csr != null)
+            //Made in purpose to avoid multiple tiggering
+            bool contains = _selfRightings.ContainsKey(id);
+            if (!contains)
             {
-                //Made in purpose to avoid multiple tiggering
-                bool contains = _selfRightings.ContainsKey(id);
-                if (!contains)
+                _selfRightings.Add(id, csr);
+                NotifyObservers(id);
+
+                if (_selfRightings.Count <= 1)
                 {
-                    _selfRightings.Add(id, csr);
-                    NotifyObservers(id);
-
-                    if (_selfRightings.Count <= 1)
-                    {
-                        csr.LastOkPoint = transform;
-                        //Debug.Log($"<color=blue>{gameObject.name} set new respawn point {transform.position} to {csr.gameObject.name}</color>");
-                        return;
-                    }
-
-                    SetPointsWithOffset(other);
+                    csr.LastOkPoint = transform;
+                    //Debug.Log($"<color=blue>{gameObject.name} set new respawn point {transform.position} to {csr.gameObject.name}</color>");
+                    return;
                 }
+
+                SetPointsWithOffset(other);
             }
+            
         }
 
         private void SetPointsWithOffset(Collider collider)

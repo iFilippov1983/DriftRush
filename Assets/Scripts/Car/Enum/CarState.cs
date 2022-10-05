@@ -1,9 +1,10 @@
-﻿namespace RaceManager.Vehicles
+﻿namespace RaceManager.Cars
 {
     public enum CarState
     {
-        onTrack,
-        isStuck,
-        gotHit
+        OnTrack,
+        Stuck,
+        Finished,
+        GotHit
     }
 }

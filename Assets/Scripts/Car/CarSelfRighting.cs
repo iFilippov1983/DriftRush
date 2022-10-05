@@ -1,23 +1,25 @@
 using Sirenix.OdinInspector;
-using System;
-using System.Collections;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
-namespace RaceManager.Vehicles
+namespace RaceManager.Cars
 {
-    [RequireComponent(typeof(CarAIControl))]
     public class CarSelfRighting : MonoBehaviour
     {
         // Automatically put the car the right way up, if it has come to rest upside-down of stuck.
         [SerializeField] private float _waitTime = 2f;            // time to wait before self righting
-        [SerializeField] private float _velocityThreshold = 1f;   // the velocity below which the car is considered stationary for self-righting
+        [SerializeField] private float _velocityThreshold = 0.5f;   // the velocity below which the car is considered stationary for self-righting
         private float _stuckTimer;
 
         private CarAIControl _carAI;
         private Rigidbody _rigidbody;
         [ReadOnly]
         public Transform LastOkPoint;
+
+        //public void Initialize(CarAIControl carAI, Rigidbody carRigidbody)
+        //{ 
+        //    _carAI = carAI;
+        //    _rigidbody = carRigidbody;
+        //}
 
         private void Start()
         {
@@ -53,14 +55,13 @@ namespace RaceManager.Vehicles
         {
             if (LastOkPoint != null)
             {
+                _carAI.StopEngine();
                 transform.position = LastOkPoint.position;
+                //transform.position += Vector3.up / 4f;
                 transform.rotation = LastOkPoint.rotation;
                 $"Returned to position {LastOkPoint.position}".Log(StringConsoleLog.Color.Green);
+                _carAI.StartEngine();
             }
-
-            transform.position += Vector3.back;
-            transform.position += Vector3.up;
-            
             _stuckTimer = 0;
         }
     }

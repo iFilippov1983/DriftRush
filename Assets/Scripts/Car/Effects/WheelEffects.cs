@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace RaceManager.Vehicles.Effects
+namespace RaceManager.Cars.Effects
 {
     [RequireComponent(typeof (AudioSource))]
     public class WheelEffects : MonoBehaviour

@@ -1,27 +1,30 @@
 using System;
 using UnityEngine;
 
-namespace RaceManager.Vehicles.Effects
+namespace RaceManager.Cars.Effects
 {
     // this script is specific to the supplied Sample Assets car, which has mudguards over the front wheels
     // which have to turn with the wheels when steering is applied.
 
     public class Mudguard : MonoBehaviour
     {
-        public CarController carController; // car controller to get the steering angle
+        //public CarController carController; // car controller to get the steering angle
 
-        private Quaternion m_OriginalRotation;
-
+        private Quaternion _originalRotation;
+        private float _currentSteerAngle;
 
         private void Start()
         {
-            m_OriginalRotation = transform.localRotation;
+            _originalRotation = transform.localRotation;
         }
 
 
         private void Update()
         {
-            transform.localRotation = m_OriginalRotation*Quaternion.Euler(0, carController.CurrentSteerAngle, 0);
+            //transform.localRotation = _originalRotation*Quaternion.Euler(0, carController.CurrentSteerAngle, 0);
+            transform.localRotation = _originalRotation * Quaternion.Euler(0, _currentSteerAngle, 0);
         }
+
+        public void UpdateSteerAngle(float value) => _currentSteerAngle = value;
     }
 }

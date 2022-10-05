@@ -2,6 +2,7 @@
 using RaceManager.Root;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace RaceManager.UI
 {
@@ -10,6 +11,11 @@ namespace RaceManager.UI
         [SerializeField] private float _countdownDuration;
         [SerializeField] private CountdownTimerView _countdownTimerView;
         private float _currentTime;
+
+        private void Awake()
+        {
+            _countdownTimerView.gameObject.SetActive(false);
+        }
 
         private void OnEnable()
         {
@@ -25,15 +31,27 @@ namespace RaceManager.UI
 
         private IEnumerator Countdown()
         {
+            _countdownTimerView.gameObject.SetActive(true);
+
             _currentTime = _countdownDuration;
             while (_currentTime > 0)
             {
-                _countdownTimerView.Show(Mathf.RoundToInt(_currentTime));
+                Show(Mathf.RoundToInt(_currentTime));
                 yield return new WaitForSeconds(1f);
                 _currentTime--;
             }
 
+            _countdownTimerView.gameObject.SetActive(false);
             RaceEventsHub.Notify(RaceEventType.START);
+        }
+
+        private void Show(int seconds)
+        { 
+            _countdownTimerView.CountdownText.text = seconds.ToString();
+            if(_countdownTimerView.Animation != null)
+                _countdownTimerView.Animation.Play();
+            if(_countdownTimerView.AudioSource != null)
+                _countdownTimerView.AudioSource.Play();
         }
 
         private void OnDestroy()

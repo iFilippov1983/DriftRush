@@ -1,7 +1,8 @@
 using RaceManager.Tools;
-using RaceManager.Vehicles;
+using RaceManager.Cars;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace RaceManager.Race
 {
@@ -39,7 +40,7 @@ namespace RaceManager.Race
             //    }
             //}
 
-            if (other.gameObject.tag == Literal.Tag_Player)
+            if (other.gameObject.tag == Tag.Player)
                 RaceEventsHub.Notify(RaceEventType.FINISH);
         }
 

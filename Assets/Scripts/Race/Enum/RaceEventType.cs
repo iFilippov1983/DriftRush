@@ -7,7 +7,6 @@
         RESTART,
         PAUSE,
         UNPAUSE,
-        STOP,
         FINISH,
         QUIT
     }

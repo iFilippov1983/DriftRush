@@ -687,7 +687,6 @@ GameObject:
   - component: {fileID: 400018}
   - component: {fileID: 3300022}
   - component: {fileID: 2300022}
-  - component: {fileID: 11400004}
   - component: {fileID: 11400000}
   m_Layer: 0
   m_Name: SkyCarMudGuardFrontRight
@@ -759,23 +758,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &11400004
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 100016}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74a642099ac43774f961f2aa1573d295, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _carRB: {fileID: 5400000}
-  _springForce: 2
-  _springDamper: 0.5
-  _suspentionRestLength: 0.25
-  _suspentionTargets: []
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -788,7 +770,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 459cec5b068041e44a60a6e3b6abb0eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  carController: {fileID: 11400020}
 --- !u!1 &100018
 GameObject:
   m_ObjectHideFlags: 0
@@ -800,7 +781,6 @@ GameObject:
   - component: {fileID: 400020}
   - component: {fileID: 3300008}
   - component: {fileID: 2300008}
-  - component: {fileID: 11400006}
   - component: {fileID: 11400002}
   m_Layer: 0
   m_Name: SkyCarMudGuardFrontLeft
@@ -872,23 +852,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &11400006
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 100018}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74a642099ac43774f961f2aa1573d295, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _carRB: {fileID: 5400000}
-  _springForce: 2
-  _springDamper: 0.5
-  _suspentionRestLength: 0.25
-  _suspentionTargets: []
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -901,7 +864,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 459cec5b068041e44a60a6e3b6abb0eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  carController: {fileID: 11400020}
 --- !u!1 &100020
 GameObject:
   m_ObjectHideFlags: 0
@@ -1159,7 +1121,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fffafd711dc1dbc478a49705cfe1ce3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  car: {fileID: 11400020}
 --- !u!1 &100026
 GameObject:
   m_ObjectHideFlags: 0
@@ -7197,7 +7158,6 @@ GameObject:
   m_Component:
   - component: {fileID: 400064}
   - component: {fileID: 5400000}
-  - component: {fileID: 11400020}
   - component: {fileID: 11400022}
   - component: {fileID: 11400024}
   - component: {fileID: 11400026}
@@ -7244,47 +7204,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &11400020
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 100064}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ea65b38d485c374caa584a03f1de571, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_CarDriveType: 2
-  m_WheelColliders:
-  - {fileID: 14600004}
-  - {fileID: 14600006}
-  - {fileID: 14600002}
-  - {fileID: 14600000}
-  m_WheelMeshes:
-  - {fileID: 100004}
-  - {fileID: 100006}
-  - {fileID: 100000}
-  - {fileID: 100002}
-  m_WheelEffects:
-  - {fileID: 11400016}
-  - {fileID: 11400018}
-  - {fileID: 11400014}
-  - {fileID: 11400012}
-  m_CentreOfMassOffset: {x: 0, y: 0, z: 0}
-  m_MaximumSteerAngle: 25
-  m_SteerHelper: 0.774
-  m_TractionControl: 1
-  m_FullTorqueOverAllWheels: 2000
-  m_ReverseTorque: 150
-  m_MaxHandbrakeTorque: 100000000
-  m_Downforce: 100
-  m_SpeedType: 0
-  m_Topspeed: 140
-  m_RevRangeBoundary: 1
-  m_SlipLimit: 0.4
-  m_BrakeTorque: 20000
 --- !u!114 &11400022
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7297,22 +7216,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d963df58504b69045b8d0d746ba6f777, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_CautiousSpeedFactor: 0.5
-  m_CautiousMaxAngle: 180
-  m_CautiousMaxDistance: 100
-  m_CautiousAngularVelocityFactor: 30
-  m_SteerSensitivity: 0.01
-  m_AccelSensitivity: 1
-  m_BrakeSensitivity: 1
-  m_LateralWanderDistance: 3
-  m_LateralWanderSpeed: 0.2
-  m_AccelWanderAmount: 0.1
-  m_AccelWanderSpeed: 0.1
-  m_BrakeCondition: 2
-  m_Driving: 1
-  m_Target: {fileID: 400060}
-  m_StopWhenTargetReached: 0
-  m_ReachTargetThreshold: 2
+  _driverSettings: {fileID: 0}
+  _target: {fileID: 0}
+  _isDriving: 0
+  PlayerDriving: 0
+  DesiredSpeed: 0
 --- !u!114 &11400024
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7325,13 +7233,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5cb22d331ef7d64796f917c6a455a32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  track: {fileID: 0}
-  lookAheadForTargetOffset: 15
-  lookAheadForTargetFactor: 0.1
-  lookAheadForSpeedOffset: 20
-  lookAheadForSpeedFactor: 0.5
-  progressStyle: 0
-  pointToPointThreshold: 0.2
+  _track: {fileID: 0}
+  _lookAheadForTargetOffset: 5
+  _lookAheadForTargetFactor: 0.1
+  _lookAheadForSpeedOffset: 10
+  _lookAheadForSpeedFactor: 0.2
+  _progressStyle: 0
+  _pointToPointThreshold: 4
   target: {fileID: 400060}
 --- !u!114 &11400026
 MonoBehaviour:

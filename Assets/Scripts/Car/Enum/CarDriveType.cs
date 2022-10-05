@@ -1,5 +1,5 @@
 ﻿#pragma warning disable 649
-namespace RaceManager.Vehicles
+namespace RaceManager.Cars
 {
     public enum CarDriveType
     {

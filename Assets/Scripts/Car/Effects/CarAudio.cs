@@ -2,9 +2,8 @@ using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace RaceManager.Vehicles.Effects
+namespace RaceManager.Cars.Effects
 {
-    [RequireComponent(typeof (CarController))]
     public class CarAudio : MonoBehaviour
     {
         // This script reads some of the car's current properties and plays sounds accordingly.
@@ -47,13 +46,21 @@ namespace RaceManager.Vehicles.Effects
         private AudioSource m_HighAccel; // Source for the high acceleration sounds
         private AudioSource m_HighDecel; // Source for the high deceleration sounds
         private bool m_StartedSound; // flag for knowing if we have started sounds
-        private CarController m_CarController; // Reference to car we are controlling
+        //private CarController m_CarController; // Reference to car we are controlling
 
+        private float _revs;
+        private float _accelInput;
+
+        public void UpdateValues(float revs, float accelInput)
+        { 
+            _revs = revs;
+            _accelInput = accelInput;
+        }
 
         private void StartSound()
         {
             // get the carcontroller ( this will not be null as we have require component)
-            m_CarController = GetComponent<CarController>();
+            //m_CarController = GetComponent<CarController>();
 
             // setup the simple audio source
             m_HighAccel = SetUpEngineAudioSource(highAccelClip);
@@ -82,8 +89,6 @@ namespace RaceManager.Vehicles.Effects
             m_StartedSound = false;
         }
 
-
-        // Update is called once per frame
         private void Update()
         {
             // get the distance to main camera
@@ -104,7 +109,8 @@ namespace RaceManager.Vehicles.Effects
             if (m_StartedSound)
             {
                 // The pitch is interpolated between the min and max values, according to the car's revs.
-                float pitch = ULerp(lowPitchMin, lowPitchMax, m_CarController.Revs);
+                //float pitch = ULerp(lowPitchMin, lowPitchMax, m_CarController.Revs);
+                float pitch = ULerp(lowPitchMin, lowPitchMax, _revs);
 
                 // clamp to minimum pitch (note, not clamped to max for high revs while burning out)
                 pitch = Mathf.Min(lowPitchMax, pitch);
@@ -127,11 +133,13 @@ namespace RaceManager.Vehicles.Effects
                     m_HighDecel.pitch = pitch*highPitchMultiplier*pitchMultiplier;
 
                     // get values for fading the sounds based on the acceleration
-                    float accFade = Mathf.Abs(m_CarController.AccelInput);
+                    //float accFade = Mathf.Abs(m_CarController.AccelInput);
+                    float accFade = Mathf.Abs(_accelInput);
                     float decFade = 1 - accFade;
 
                     // get the high fade value based on the cars revs
-                    float highFade = Mathf.InverseLerp(0.2f, 0.8f, m_CarController.Revs);
+                    //float highFade = Mathf.InverseLerp(0.2f, 0.8f, m_CarController.Revs);
+                    float highFade = Mathf.InverseLerp(0.2f, 0.8f, _revs);
                     float lowFade = 1 - highFade;
 
                     // adjust the values to be more realistic

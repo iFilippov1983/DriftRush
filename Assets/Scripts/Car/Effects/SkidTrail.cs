@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 
 #pragma warning disable 649
-namespace RaceManager.Vehicles.Effects
+namespace RaceManager.Cars.Effects
 {
     public class SkidTrail : MonoBehaviour
     {

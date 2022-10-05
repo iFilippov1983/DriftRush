@@ -14,15 +14,28 @@ namespace RaceManager.SoftObjects
                 |           |
                 D --------- C
         */
+
+        /*
+            tD ---------tC
+            |           |
+            |   tA ---------tB
+            |   |       |   |
+            |   |       |   |
+            bD--|------ bC  |
+                |           |
+                bA --------- bB
+        */
         [Header("Bones")]
-        public GameObject A = null;
-        public GameObject B = null;
-        public GameObject C = null;
-        public GameObject D = null;
-        public GameObject E = null;
-        public GameObject F = null;
-        public GameObject G = null;
-        public GameObject H = null;
+        public GameObject tA = null;
+        public GameObject tB = null;
+        public GameObject tC = null;
+        public GameObject tD = null;
+
+        public GameObject bA = null;
+        public GameObject bB = null;
+        public GameObject bC = null;
+        public GameObject bD = null;
+
         [Header("Spring Joint Settings")]
         [Tooltip("Strength of spring")]
         public float Spring = 100f;
@@ -39,38 +52,39 @@ namespace RaceManager.SoftObjects
         {
             Softbody.Init(Shape, ColliderSize, RigidbodyMass, Spring, Damper, RigidbodyConstraints.None, PrefabLine, ViewLines);
 
-            Softbody.AddCollider(ref A);
-            Softbody.AddCollider(ref B);
-            Softbody.AddCollider(ref C);
-            Softbody.AddCollider(ref D);
-            Softbody.AddCollider(ref E);
-            Softbody.AddCollider(ref F);
-            Softbody.AddCollider(ref G);
-            Softbody.AddCollider(ref H);
+            Softbody.AddCollider(ref tA);
+            Softbody.AddCollider(ref tB);
+            Softbody.AddCollider(ref tC);
+            Softbody.AddCollider(ref tD);
+            
+            Softbody.AddCollider(ref bA);
+            Softbody.AddCollider(ref bB);
+            Softbody.AddCollider(ref bC);
+            Softbody.AddCollider(ref bD);
 
             //down
-            Softbody.AddSpring(ref A, ref D);
-            Softbody.AddSpring(ref B, ref C);
-            Softbody.AddSpring(ref F, ref G);
-            Softbody.AddSpring(ref E, ref H);
+            Softbody.AddSpring(ref tA, ref bA);
+            Softbody.AddSpring(ref tB, ref bB);
+            Softbody.AddSpring(ref tC, ref bC);
+            Softbody.AddSpring(ref tD, ref bD);
 
             //across
-            Softbody.AddSpring(ref A, ref G);
-            Softbody.AddSpring(ref B, ref H);
-            Softbody.AddSpring(ref F, ref D);
-            Softbody.AddSpring(ref E, ref C);
+            Softbody.AddSpring(ref tA, ref bC);
+            Softbody.AddSpring(ref tB, ref bD);
+            Softbody.AddSpring(ref tC, ref bA);
+            Softbody.AddSpring(ref tD, ref bB);
 
             //top
-            Softbody.AddSpring(ref A, ref B);
-            Softbody.AddSpring(ref B, ref F);
-            Softbody.AddSpring(ref F, ref E);
-            Softbody.AddSpring(ref E, ref A);
+            Softbody.AddSpring(ref tA, ref tB);
+            Softbody.AddSpring(ref tB, ref tC);
+            Softbody.AddSpring(ref tC, ref tD);
+            Softbody.AddSpring(ref tD, ref tA);
 
             //bottom
-            Softbody.AddSpring(ref D, ref C);
-            Softbody.AddSpring(ref C, ref G);
-            Softbody.AddSpring(ref G, ref H);
-            Softbody.AddSpring(ref H, ref D);
+            Softbody.AddSpring(ref bA, ref bB);
+            Softbody.AddSpring(ref bB, ref bC);
+            Softbody.AddSpring(ref bC, ref bD);
+            Softbody.AddSpring(ref bD, ref bA);
         }
     }
 }

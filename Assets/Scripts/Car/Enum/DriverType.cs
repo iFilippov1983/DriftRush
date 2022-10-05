@@ -1,4 +1,4 @@
-﻿namespace RaceManager.Root
+﻿namespace RaceManager.Cars
 {
     public enum DriverType
     { 

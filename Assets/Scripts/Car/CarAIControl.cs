@@ -8,15 +8,16 @@ namespace RaceManager.Cars
 {
     public class CarAIControl : MonoBehaviour
     {
-        private const float SteerSensitivity = 0.01f;                     //(0-1)How sensitively the AI uses steering input to turn to the desired direction
-        private const float BrakeSensitivity = 1f;                        //(0-1)How sensitively the AI uses the brake to reach the current desired speed
-        private const float AccelSensitivity = 1f;                        //(0-1)How sensitively the AI uses the accelerator to reach the current desired speed
+        private const float SteerSensitivity = 1f;           //(0-1)How sensitively the AI uses steering input to turn to the desired direction
+        private const float BrakeSensitivity = 1f;              //(0-1)How sensitively the AI uses the brake to reach the current desired speed
+        private const float AccelSensitivity = 1f;              //(0-1)How sensitively the AI uses the accelerator to reach the current desired speed
+        private const float CriticalSteeAngle = 45f;            //If angle to target is grater then this value car turns as much as possible
 
         //[SerializeField]
         private DriverSettings _driverSettings;
-        [SerializeField] private Transform _target;                        // 'target' the target object to aim for.
+        [SerializeField] private Transform _target;             // 'target' the target object to aim for.
         [SerializeField] private bool _isAvoidingCars = true;
-        [SerializeField] private bool _isDriving = false;                          // whether the AI is currently actively driving or stopped.
+        [SerializeField] private bool _isDriving = false;       // whether the AI is currently actively driving or stopped.
 
         private CarController _carController; 
         private SphereCollider _sphereCollider;
@@ -24,9 +25,19 @@ namespace RaceManager.Cars
         private float _spherecastRadius;
         private Vector3 _avoidanceVectorLerped;
 
-        private const float SpherecastMaxDistance = 20f; //12
-        private const float DesireToGetTheWaypoint = 6f; //6
-        private const float AvoidanceLerpFactor = 1f;
+        private float _randomPerlin;
+        private float _avoidOtherCarTime;
+        private float _avoidOtherCarFactor;
+        private float _avoidPathOffset;
+
+        private float _castMaxDistance = 10f; //12
+        private float _desireToGetTheWaypoint = 6f; //6
+        private float _avoidanceLerpFactor = 1f; //1
+
+        private float _accelerationWanderAmount = 0.01f;
+        private float _accelerationWanderSpeed = 1f;
+        private float _lateralWanderDistance = 1f;
+        private float _lateralWanderSpeed = 1f;
 
         public bool isDriving => _isDriving;
         [ReadOnly]
@@ -60,6 +71,7 @@ namespace RaceManager.Cars
             _sphereCollider = GetComponent<SphereCollider>();
             _spherecastRadius = _sphereCollider.radius;
 
+            _randomPerlin = Random.value * 100;
 
             if (PlayerDriving)
                 DesiredSpeed = _driverSettings.CruiseSpeed;
@@ -76,46 +88,165 @@ namespace RaceManager.Cars
             HandbrakeIfNeeded();
         }
 
-        private void MoveCar()
+        private void OnCollisionStay(Collision collision)
         {
-            if (!_isDriving)
+            if (collision.rigidbody != null)
+            { 
+                var otherAI = collision.rigidbody.GetComponent<CarAIControl>();
+                if (otherAI != null)
+                {
+                    HandleCarsJam(otherAI);
+                }
+            }
+        }
+
+        private void HandleCarsJam(CarAIControl otherAI)
+        {
+            // we'll take evasive action for 1 second
+            _avoidOtherCarTime = Time.time + 1;
+
+            float contactAngle = Vector3.Angle(transform.forward, otherAI.transform.position - transform.position);
+            // but who's in front?...
+            if (contactAngle < 90)
             {
-                _carController.Move(0, 0, 0f, 0f);
+                // the other ai is in front, so it is only good manners that we ought to brake...
+                _avoidOtherCarFactor = 1.5f;
+            }
+            else if (contactAngle > 90 && contactAngle < 135)
+            {
+                _avoidOtherCarFactor = 2f;
             }
             else
             {
+                // we're in front! ain't slowing down for anybody...
+                _avoidOtherCarFactor = 1;
+            }
+
+            // both cars should take evasive action by driving along an offset from the path centre,
+            // away from the other car
+            var otherCarLocalDelta = transform.InverseTransformPoint(otherAI.transform.position);
+            float otherCarAngle = Mathf.Atan2(otherCarLocalDelta.x, otherCarLocalDelta.z);
+            _avoidPathOffset = _lateralWanderDistance * -Mathf.Sign(otherCarAngle);
+        }
+
+        private void MoveCar()
+        {
+            if(isDriving)
+            {
                 _currentSpeed = DesiredSpeed;
-                float accelBrakeSensitivity = (_currentSpeed < _carController.CurrentSpeed)
-                                                  ? BrakeSensitivity
-                                                  : AccelSensitivity;
+                float accel = CalculateAcceleration();
+                float steer = CalculateSteering();
 
-                // decide the actual amount of accel/brake input to achieve desired speed.
-                float accel = Mathf.Clamp((_currentSpeed - _carController.CurrentSpeed) * accelBrakeSensitivity, -1, 1);
+                #region another variants
+                //float accelBrakeSensitivity = (_currentSpeed < _carController.CurrentSpeed)
+                //                                  ? BrakeSensitivity
+                //                                  : AccelSensitivity;
 
-                // calculate the local-relative position of the target, to steer towards
-                Vector3 localTarget = transform.InverseTransformPoint(_target.position);
-                Vector3 vectorToTarget = _target.position - transform.position;
-                vectorToTarget.Normalize();
+                //// decide the actual amount of accel/brake input to achieve desired speed.
+                //float accel = Mathf.Clamp((_currentSpeed - _carController.CurrentSpeed) * accelBrakeSensitivity, -1, 1);
 
-                // work out the local angle towards the target
-                float targetAngle;
-                if (_isAvoidingCars)
-                {
-                    AvoidAICars(vectorToTarget, out vectorToTarget);
-                    targetAngle = Vector3.SignedAngle(transform.forward, vectorToTarget, transform.up);
-                    //targetAngle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.z) * Mathf.Rad2Deg;
-                }
-                else
-                {
-                    targetAngle = Mathf.Atan2(localTarget.x, localTarget.z) * Mathf.Rad2Deg;
-                }
+                ////acceleration and way aline wander for more realistic AI behaviour
+                ////accel *= (1 - _accelerationWanderAmount) +
+                ////         (Mathf.PerlinNoise(Time.time * _accelerationWanderSpeed, _randomPerlin) * _accelerationWanderAmount);
+                ////Vector3 position = MakeWanderPositionOffsetFromTarget();
 
-                // get the amount of steering needed to aim the car towards the target
-                float steer = Mathf.Clamp(targetAngle * SteerSensitivity, -1, 1) * Mathf.Sign(_carController.CurrentSpeed);
+                //// calculate the local-relative position of the target, to steer towards
+                //Vector3 localTarget = transform.InverseTransformPoint(_target.position);
+                ////Vector3 localTarget = transform.InverseTransformPoint(position);
+                //Vector3 vectorToTarget = _target.position - transform.position;
+                ////Vector3 vectorToTarget = localTarget - transform.position;
+                //vectorToTarget.Normalize();
+
+                //// work out the local angle towards the target
+                //float targetAngle;
+                //if (_isAvoidingCars)
+                //{
+                //    AvoidAICars(vectorToTarget, out vectorToTarget);
+                //    //AvoidAICars(localTarget, out localTarget);
+                //    targetAngle = Vector3.SignedAngle(transform.forward, vectorToTarget, transform.up);
+                //    //targetAngle = Vector3.SignedAngle(transform.forward, localTarget, transform.up);
+                //    //targetAngle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.z) * Mathf.Rad2Deg;
+                //    //targetAngle = Mathf.Atan2(localTarget.y, localTarget.z) * Mathf.Rad2Deg;
+                //}
+                //else
+                //{
+                //    targetAngle = Mathf.Atan2(localTarget.x, localTarget.z) * Mathf.Rad2Deg;
+                //}
+
+                //// get the amount of steering needed to aim the car towards the target
+                ////float steer = Mathf.Clamp(targetAngle * SteerSensitivity, -1, 1) * Mathf.Sign(_carController.CurrentSpeed);
+                //float steer = targetAngle / CriticalSteeAngle;
+                #endregion
 
                 // feed input to the car controller.
                 _carController.Move(steer, accel, accel, 0f);
             }
+            else
+            {
+                _carController.Move(0, 0, 0f, 0f);
+            }
+        }
+
+        private float CalculateAcceleration()
+        {
+            float accelBrakeSensitivity = (_currentSpeed < _carController.CurrentSpeed)
+                                                      ? BrakeSensitivity
+                                                      : AccelSensitivity;
+
+            // decide the actual amount of accel/brake input to achieve desired speed.
+            float accel = Mathf.Clamp((_currentSpeed - _carController.CurrentSpeed) * accelBrakeSensitivity, -1, 1);
+
+            //acceleration and way aline wander for more realistic AI behaviour
+            //accel *= (1 - _accelerationWanderAmount) +
+            //         (Mathf.PerlinNoise(Time.time * _accelerationWanderSpeed, _randomPerlin) * _accelerationWanderAmount);
+            //Vector3 position = MakeWanderPositionOffsetFromTarget();
+
+            return accel;
+        }
+
+        private float CalculateSteering()
+        {
+            Vector3 vectorToTarget = _target.position - transform.position;
+            vectorToTarget.Normalize();
+
+            if (_isAvoidingCars)
+                AvoidAICars(vectorToTarget, out vectorToTarget);
+
+            float targetAngle = Vector3.SignedAngle(transform.forward, vectorToTarget, transform.up);
+            // get the amount of steering needed to aim the car towards the target
+            
+            float steer = targetAngle / CriticalSteeAngle;
+            //steer = Mathf.Clamp(steer, -1f, 1f);
+            steer = Mathf.Clamp(steer * SteerSensitivity, -1f, 1f) * Mathf.Sign(_carController.CurrentSpeed);
+            return steer;
+        }
+
+        private Vector3 MakeWanderPositionOffsetFromTarget()
+        {
+            if (_target == null)
+                return transform.position;
+
+            Vector3 offsetTargetPos = _target.position;
+
+            // if are we currently taking evasive action to prevent being stuck against another car:
+            if (Time.time < _avoidOtherCarTime)
+            {
+                // slow down if necessary (if we were behind the other car when collision occured)
+                DesiredSpeed *= _avoidOtherCarFactor;
+
+                // and veer towards the side of our path-to-target that is away from the other car
+                offsetTargetPos += _target.right * _avoidPathOffset;
+            }
+            else
+            {
+                // no need for evasive action, we can just wander across the path-to-target in a random way,
+                // which can help prevent AI from seeming too uniform and robotic in their driving
+                offsetTargetPos += _target.right *
+                                   (Mathf.PerlinNoise(Time.time * _lateralWanderSpeed, _randomPerlin) * 2 - 1) *
+                                   _lateralWanderDistance;
+            }
+
+            return offsetTargetPos;
         }
 
         private void HandbrakeIfNeeded()
@@ -132,14 +263,14 @@ namespace RaceManager.Cars
             _sphereCollider.enabled = false;
 
             RaycastHit raycastHit;
-            Physics.SphereCast(transform.position + transform.forward * 0.5f, _spherecastRadius, transform.forward, out raycastHit, SpherecastMaxDistance, 1 << LayerMask.NameToLayer(Layer.Car));
+            Physics.SphereCast(transform.position + transform.forward * 0.5f, _spherecastRadius, transform.forward, out raycastHit, _castMaxDistance, 1 << LayerMask.NameToLayer(Layer.Car));
 
             _sphereCollider.enabled = true;
 
             if (raycastHit.collider != null)
             {
-                Debug.DrawRay(transform.position, transform.forward * SpherecastMaxDistance, Color.red);
-
+                Debug.DrawRay(transform.position, transform.forward * _castMaxDistance, Color.red);
+                
                 position = raycastHit.collider.transform.position;
                 otherCarRightVector = raycastHit.collider.transform.right;
 
@@ -147,7 +278,7 @@ namespace RaceManager.Cars
             }
             else
             {
-                Debug.DrawRay(transform.position, transform.forward * SpherecastMaxDistance, Color.black);
+                Debug.DrawRay(transform.position, transform.forward * _castMaxDistance, Color.black);
             }
 
             position = Vector3.zero;
@@ -165,28 +296,31 @@ namespace RaceManager.Cars
                 float distanceTotarget = (_target.position - transform.position).magnitude;
 
                 //As we get closer to waypoint the desire to reach the waypoint increases
-                float driveToTargetInfluence = DesireToGetTheWaypoint / distanceTotarget;
+                float driveToTargetInfluence = _desireToGetTheWaypoint / distanceTotarget;// / _carController.CurrentSpeed;
                 //Ensure that we  limit the value to between 30% and 100%
                 driveToTargetInfluence = Mathf.Clamp(driveToTargetInfluence, 0.3f, 1f);
 
                 float avoidanceInfluence = 1f - driveToTargetInfluence;
 
-                _avoidanceVectorLerped = Vector3.Lerp(_avoidanceVectorLerped, avoidanceVector, Time.fixedDeltaTime * AvoidanceLerpFactor);
+                _avoidanceVectorLerped = Vector3.Lerp(_avoidanceVectorLerped, avoidanceVector, Time.fixedDeltaTime * _avoidanceLerpFactor / _carController.CurrentSpeed);
 
                 newVectorToTarget = vectorToTarget * driveToTargetInfluence + _avoidanceVectorLerped * avoidanceInfluence;
                 newVectorToTarget.Normalize();
 
-                Debug.DrawRay(transform.position, avoidanceVector * SpherecastMaxDistance, Color.green);
-                Debug.DrawRay(transform.position, newVectorToTarget * SpherecastMaxDistance, Color.yellow);
+                Debug.DrawRay(transform.position, avoidanceVector * _castMaxDistance, Color.green);
+                Debug.DrawRay(transform.position, newVectorToTarget * _castMaxDistance, Color.yellow);
                 return;
             }
 
             newVectorToTarget = vectorToTarget;
         }
 
+        public void StopDriving() => _isDriving = false;
+
         public void StopEngine()
         {
             _isDriving = false;
+            _target = null;
         }
 
         public void StartEngine()

@@ -11,7 +11,7 @@ namespace RaceManager.Waypoints
             _points = new Vector3[Waypoints.Length + 1];
             _distances = new float[Waypoints.Length + 1];
 
-            float accumulateDistance = 0;
+            _accumulateDistance = 0;
             for (int i = 0; i < _points.Length; ++i)
             {
                 var t1 = Waypoints[(i) % Waypoints.Length];
@@ -21,8 +21,8 @@ namespace RaceManager.Waypoints
                     Vector3 p1 = t1.position;
                     Vector3 p2 = t2.position;
                     _points[i] = Waypoints[i % Waypoints.Length].position;
-                    _distances[i] = accumulateDistance;
-                    accumulateDistance += (p1 - p2).magnitude;
+                    _distances[i] = _accumulateDistance;
+                    _accumulateDistance += (p1 - p2).magnitude;
                 }
             }
         }

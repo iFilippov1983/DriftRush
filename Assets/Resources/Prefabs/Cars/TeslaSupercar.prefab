@@ -625,7 +625,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 100044}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.879, y: 0.57, z: -1.533}
+  m_LocalPosition: {x: -0.879, y: 0.52, z: -1.533}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400038}
@@ -5427,7 +5427,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 100050}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.86, y: 0.571, z: -1.522}
+  m_LocalPosition: {x: 0.86, y: 0.52, z: -1.522}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400038}
@@ -5488,7 +5488,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 100052}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.856, y: 0.541, z: 1.481}
+  m_LocalPosition: {x: -0.856, y: 0.52, z: 1.481}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400038}
@@ -5549,7 +5549,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 100058}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.861, y: 0.545, z: 1.471}
+  m_LocalPosition: {x: 0.861, y: 0.52, z: 1.471}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400038}
@@ -5703,7 +5703,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 2.3
+  m_Radius: 2.2
   m_Center: {x: 0, y: 0.67618585, z: -0.057828188}
 --- !u!54 &5400000
 Rigidbody:
@@ -5718,7 +5718,7 @@ Rigidbody:
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 1
 --- !u!114 &-3449491190090466693
@@ -5772,6 +5772,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ea65b38d485c374caa584a03f1de571, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SkidThreshold: 2
 --- !u!114 &5898364148287627597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5799,7 +5800,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5cb22d331ef7d64796f917c6a455a32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _track: {fileID: 0}
   _lookAheadForTargetOffset: 5
   _lookAheadForTargetFactor: 0.1
   _lookAheadForSpeedOffset: 10

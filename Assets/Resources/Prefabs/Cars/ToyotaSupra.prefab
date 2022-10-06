@@ -646,7 +646,7 @@ WheelCollider:
     targetPosition: 0.1
   m_SuspensionDistance: 0.2
   m_ForceAppPointDistance: 0
-  m_Mass: 100
+  m_Mass: 20
   m_WheelDampingRate: 0.25
   m_ForwardFriction:
     m_ExtremumSlip: 0.4
@@ -5448,7 +5448,7 @@ WheelCollider:
     targetPosition: 0.1
   m_SuspensionDistance: 0.2
   m_ForceAppPointDistance: 0
-  m_Mass: 100
+  m_Mass: 20
   m_WheelDampingRate: 0.25
   m_ForwardFriction:
     m_ExtremumSlip: 0.4
@@ -5509,7 +5509,7 @@ WheelCollider:
     targetPosition: 0.1
   m_SuspensionDistance: 0.2
   m_ForceAppPointDistance: 0
-  m_Mass: 100
+  m_Mass: 20
   m_WheelDampingRate: 0.25
   m_ForwardFriction:
     m_ExtremumSlip: 0.4
@@ -5570,7 +5570,7 @@ WheelCollider:
     targetPosition: 0.1
   m_SuspensionDistance: 0.2
   m_ForceAppPointDistance: 0
-  m_Mass: 100
+  m_Mass: 20
   m_WheelDampingRate: 0.25
   m_ForwardFriction:
     m_ExtremumSlip: 0.4
@@ -5703,7 +5703,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 2.3
+  m_Radius: 2.2
   m_Center: {x: 0, y: 0.67618585, z: -0.057828188}
 --- !u!54 &5400000
 Rigidbody:
@@ -5720,7 +5720,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &-3187373859503454853
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5772,6 +5772,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ea65b38d485c374caa584a03f1de571, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SkidThreshold: 2
 --- !u!114 &5771189298829052170
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5799,11 +5800,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5cb22d331ef7d64796f917c6a455a32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _track: {fileID: 0}
-  _lookAheadForTargetOffset: 10
+  _lookAheadForTargetOffset: 20
   _lookAheadForTargetFactor: 0.1
-  _lookAheadForSpeedOffset: 10
-  _lookAheadForSpeedFactor: 0.2
+  _lookAheadForSpeedOffset: 20
+  _lookAheadForSpeedFactor: 0.1
   _target: {fileID: 400060}
 --- !u!114 &1072461986952435859
 MonoBehaviour:

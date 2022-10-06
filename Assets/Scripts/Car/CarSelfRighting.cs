@@ -5,9 +5,9 @@ namespace RaceManager.Cars
 {
     public class CarSelfRighting : MonoBehaviour
     {
-        // Automatically put the car the right way up, if it has come to rest upside-down of stuck.
-        [SerializeField] private float _waitTime = 2f;            // time to wait before self righting
-        [SerializeField] private float _velocityThreshold = 0.5f;   // the velocity below which the car is considered stationary for self-righting
+        // Automatically put the car the right way up, if it has come to rest upside-down or stuck.
+        [SerializeField] private float _waitTime = 2f;              // time to wait before self righting
+        [SerializeField] private float _velocityThreshold = 0.7f;   // the velocity below which the car is considered stationary for self-righting
         private float _stuckTimer;
 
         private CarAIControl _carAI;
@@ -55,7 +55,7 @@ namespace RaceManager.Cars
         {
             if (LastOkPoint != null)
             {
-                _carAI.StopEngine();
+                _carAI.StopDriving();
                 transform.position = LastOkPoint.position;
                 //transform.position += Vector3.up / 4f;
                 transform.rotation = LastOkPoint.rotation;

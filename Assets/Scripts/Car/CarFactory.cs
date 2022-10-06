@@ -23,7 +23,7 @@ namespace RaceManager.Cars
             _spawnPoint = spawnPoint;
         }
 
-        public GameObject InitCar(out CarController carController, out CarAIControl carAIControl, out WaypointProgressTracker waypointTracker)
+        public GameObject InitCar(out CarController carController, out CarAIControl carAIControl, out WaypointProgressTracker waypointTracker, out DriverProfile driverProfile)
         {
             string requiredName = _driverSettings.CurrentCarName;
             var prefab = _carsDepot.Cars.Find(x => x.Name == requiredName).Prefab;
@@ -37,6 +37,9 @@ namespace RaceManager.Cars
                 car.WheelColliders[i].enabled = true;
             }
 
+            driverProfile = new DriverProfile();
+            driverProfile.CarState.Value = CarState.OnTrack;
+
             carController = go.GetComponent<CarController>();
             carController.Initialize(_carSettings);
 
@@ -44,7 +47,7 @@ namespace RaceManager.Cars
             carAIControl.Initialize(_driverSettings);
 
             waypointTracker = go.GetComponent<WaypointProgressTracker>();
-            waypointTracker.Initialize(_waypointTrack);
+            waypointTracker.Initialize(_waypointTrack, driverProfile);
 
             if (_driverType == DriverType.Player)
             {

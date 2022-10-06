@@ -16,15 +16,18 @@ namespace RaceManager.Cars
         [InfoBox("First two wheels must be Front wheels")]
         [SerializeField] private WheelCollider[] _wheelColliders = new WheelCollider[4];
         [SerializeField] private GameObject[] _wheelMeshes = new GameObject[4];
+        private CarSelfRighting _carSelfRighting;
 
         public string ID => _id;
         public WheelCollider[] WheelColliders => _wheelColliders;
         public GameObject[] WheelMeshes => _wheelMeshes;
+        public CarSelfRighting CarSelfRighting => _carSelfRighting;
 
 
         private void OnEnable()
         {
             _id = MakeId();
+            _carSelfRighting = GetComponent<CarSelfRighting>();
         }
 
         private string MakeId()

@@ -32,6 +32,8 @@ namespace RaceManager.UI
         private IEnumerator Countdown()
         {
             _countdownTimerView.gameObject.SetActive(true);
+            _countdownTimerView.CountdownText.gameObject.SetActive(true);
+            _countdownTimerView.StartText.gameObject.SetActive(false);
 
             _currentTime = _countdownDuration;
             while (_currentTime > 0)
@@ -40,9 +42,13 @@ namespace RaceManager.UI
                 yield return new WaitForSeconds(1f);
                 _currentTime--;
             }
+            _countdownTimerView.CountdownText.gameObject.SetActive(false);
+            _countdownTimerView.StartText.gameObject.SetActive(true);
+            RaceEventsHub.BroadcastNotification(RaceEventType.START);
+
+            yield return new WaitForSeconds(1f);
 
             _countdownTimerView.gameObject.SetActive(false);
-            RaceEventsHub.Notify(RaceEventType.START);
         }
 
         private void Show(int seconds)

@@ -9,7 +9,6 @@ using UnityEngine.Events;
 
 namespace RaceManager.Cars
 {
-    [RequireComponent(typeof(CarController), typeof(CarAIControl), typeof(WaypointProgressTracker))]
     public class Driver : MonoBehaviour, IObservable<DriverProfile>
     {
         public DriverType DriverType;
@@ -28,10 +27,12 @@ namespace RaceManager.Cars
         {
             DriverType = type;
             CarFactory carFactory = new CarFactory(type, carSettings, driverSettings, carsDepot, waypointTrack, transform);
-            _carObject = carFactory.InitCar(out _carController, out _carAIControl, out _waypointProgressTracker);
+            _carObject = carFactory.InitCar(out _carController, out _carAIControl, out _waypointProgressTracker, out _profile);
             //transform.SetParent(_carObject.transform, false);
 
-            _profile = new DriverProfile();
+            _profile.CarState.Value = CarState.OnTrack;
+            _profile.CarState.SubscribeOnChange(OnCarStateChange);
+
             _observerssList = new List<IObserver<DriverProfile>>();
         }
 
@@ -47,6 +48,11 @@ namespace RaceManager.Cars
             RaceEventsHub.Unsunscribe(RaceEventType.FINISH, StopRace);
         }
 
+        private void OnDestroy()
+        {
+            _profile.CarState.UnSubscribeOnChange(OnCarStateChange);
+        }
+
         private void Update()
         {
             UpdateProfile();
@@ -56,18 +62,45 @@ namespace RaceManager.Cars
         { 
             _profile.CarCurrentSpeed = _carController.CurrentSpeed;
             _profile.TrackProgress = _waypointProgressTracker.Progress;
+            _profile.PositionInRace = _waypointProgressTracker.CarPosition;
             NotifyObservers();
         }
 
+        private void OnCarStateChange(CarState carState)
+        {
+            switch (carState)
+            {
+                case CarState.InShed:
+                    break;
+                case CarState.OnTrack:
+                    break;
+                case CarState.Stuck:
+                    break;
+                case CarState.Finished:
+                    StopRace();
+                    break;
+                case CarState.GotHit:
+                    break;
+            }
+        }
 
         private void StartRace()
         {
             _carAIControl.StartEngine();
+            NotifyObservers();
         }
 
         private void StopRace()
         {
             _carAIControl.StopEngine();
+
+            if (DriverType == DriverType.Player)
+            {
+                RaceEventsHub.Unsunscribe(RaceEventType.FINISH, StopRace);
+                RaceEventsHub.BroadcastNotification(RaceEventType.FINISH);
+            }
+                
+            $"{gameObject.name} FINISHED".Log(StringConsoleLog.Color.Yellow);
         }
 
         private void NotifyObservers()
@@ -76,6 +109,8 @@ namespace RaceManager.Cars
                 o.OnNext(_profile);
         }
 
+        public void SetPositionInRace(int position) => _profile.PositionInRace = position;
+
         public IDisposable Subscribe(IObserver<DriverProfile> observer)
         {
             _observerssList.Add(observer);
@@ -83,5 +118,3 @@ namespace RaceManager.Cars
         }
     }
 }
-
-

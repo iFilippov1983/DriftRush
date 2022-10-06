@@ -1,4 +1,5 @@
 ﻿using RaceManager.Tools;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,10 +15,12 @@ namespace RaceManager.Waypoints
         [SerializeField] protected bool _smoothRoute = true;
         [SerializeField] protected Color _drawColor = Color.yellow;
         [SerializeField, Range(0.1f, 2f)] private float _nodeSphereSize = 0.25f;
+        [SerializeField, ReadOnly] private int _lapsToComplete = 1; 
         protected Color _altColor;
         protected int _numPoints;
         protected Vector3[] _points;
         protected float[] _distances;
+        protected float _accumulateDistance;
 
         //this being here will save GC allocs
         //catmull-rom spline point numbers
@@ -38,12 +41,12 @@ namespace RaceManager.Waypoints
         private List<Waypoint> _waypoints;
 
         public float Length { get; protected set; }
-        public Transform[] Waypoints
-        {
-            get { return waypointList.items; }
-        }
-
+        public Transform[] Waypoints => waypointList.items;
         public List<Waypoint> WaypointsList => _waypoints;
+        public float AccumulateDistance => _accumulateDistance;
+        public Transform CurrentTargetWaypoint => waypointList.items[p2n];
+        public Transform PreviouseTargetWaypoint => waypointList.items[p1n];
+        public int LapsToComplete => _lapsToComplete;
 
         private void Awake()
         {
@@ -70,9 +73,14 @@ namespace RaceManager.Waypoints
                     RoutePoint point = GetRoutePoint(_distances[i]);
                     GameObject go = Instantiate(_waypointPrefab, point.position, Quaternion.LookRotation(point.direction));
                     go.transform.SetParent(transform, false);
+
                     var wp = go.GetComponent<Waypoint>();
-                    wp.ID = i;
+                    wp.Number = i;
                     _waypoints.Add(wp);
+
+                    if(i == _distances.Length - 2)
+                        wp.isFinishLine = true;
+
                     if(i != 0)
                         _waypoints[i-1].NextWaypoint = wp;
                 }
@@ -81,7 +89,7 @@ namespace RaceManager.Waypoints
                 {
                     foreach (var wp in _waypoints)
                     {
-                        if (_waypoints[i].ID == wp.ID)
+                        if (_waypoints[i].Number == wp.Number)
                             continue;
                         _waypoints[i].Subscribe(wp);
                     }
@@ -173,7 +181,7 @@ namespace RaceManager.Waypoints
             _points = new Vector3[Waypoints.Length];
             _distances = new float[Waypoints.Length];
 
-            float accumulateDistance = 0;
+            _accumulateDistance = 0;
             for (int i = 0; i < _points.Length; ++i)
             {
                 Transform t1 = Waypoints[i];
@@ -188,8 +196,8 @@ namespace RaceManager.Waypoints
                     Vector3 p1 = t1.position;
                     Vector3 p2 = t2.position;
                     _points[i] = Waypoints[i].position;
-                    _distances[i] = accumulateDistance;
-                    accumulateDistance += (p1 - p2).magnitude;
+                    _distances[i] = _accumulateDistance;
+                    _accumulateDistance += (p1 - p2).magnitude;
                 }
             }
         }

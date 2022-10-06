@@ -33,7 +33,7 @@ namespace RaceManager.Race
             }
         }
 
-        public static void Notify(RaceEventType eventType)
+        public static void BroadcastNotification(RaceEventType eventType)
         {
             UnityEvent thisEvent;
             if (_events.TryGetValue(eventType, out thisEvent))

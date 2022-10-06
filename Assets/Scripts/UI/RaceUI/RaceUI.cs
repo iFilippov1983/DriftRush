@@ -17,11 +17,13 @@ namespace RaceManager.UI
         private float _trackProgress;
         private int _currentPosition;
 
-        private void OnGUI()
+        private void Update()
         {
             int speed = Mathf.RoundToInt(_currentSpeed);
             _speedIndicatorView.SpeedValueText.text = speed.ToString();
 
+            bool isActive = _currentPosition > 0 ? true : false;
+            _positionIndicatorView.PositionText.gameObject.SetActive(isActive);
             _positionIndicatorView.PositionText.text = _currentPosition.ToString();
 
             _raceProgressBarView.ProgressImage.fillAmount = _trackProgress;

@@ -8,85 +8,79 @@ using Sirenix.OdinInspector;
 namespace RaceManager.Waypoints
 {
     [RequireComponent(typeof(BoxCollider))]
-    public class Waypoint : MonoBehaviour, IObservable<int>, IObserver<int>
+    public class Waypoint : MonoBehaviour, IObservable<string>, IObserver<string>
     {
-        public int ID;
+        public int Number;
+        public bool isFinishLine = false;
         [ReadOnly]
         public Waypoint NextWaypoint;
 
-        private Dictionary<int, CarSelfRighting> _selfRightings = new Dictionary<int, CarSelfRighting>();
-        private List<IObserver<int>> _observers = new List<IObserver<int>>();
+        private const int NumberOfCarsOnTrack = 6;
+
+        [SerializeField]
+        private RespawnPoint[] _respawnPoints = new RespawnPoint[NumberOfCarsOnTrack];
+        private List<string> _carIDs = new List<string>();
+        private List<IObserver<string>> _observers = new List<IObserver<string>>();
 
         private void OnTriggerEnter(Collider other)
         {
-            CarSelfRighting csr;
-            csr = other.GetComponentInParent<CarSelfRighting>();
+            Car car;
+            car = other.GetComponentInParent<Car>();
 
-            if (csr == null)
+            if (car == null)
                 return;
 
-            int id = csr.gameObject.GetInstanceID();
-
-            //Made in purpose to avoid multiple tiggering
-            bool contains = _selfRightings.ContainsKey(id);
-            if (!contains)
-            {
-                _selfRightings.Add(id, csr);
-                NotifyObservers(id);
-
-                if (_selfRightings.Count <= 1)
-                {
-                    csr.LastOkPoint = transform;
-                    //Debug.Log($"<color=blue>{gameObject.name} set new respawn point {transform.position} to {csr.gameObject.name}</color>");
-                    return;
-                }
-
-                SetPointsWithOffset(other);
-            }
-            
+            SetRespawnPosition(other, car);
         }
 
-        private void SetPointsWithOffset(Collider collider)
+        private void SetRespawnPosition(Collider other, Car car)
         {
-            Vector3 initialPos = this.transform.position;
-            Transform transform = this.transform;
-
-            float singleOffsetValue = collider.bounds.size.x;
-            Vector3 newPos = transform.position;
-            newPos.x -= singleOffsetValue / 2 * (_selfRightings.Count - 1);
-            foreach (var pair in _selfRightings)
+            string id = car.ID;
+            //Made in purpose to avoid multiple triggering
+            bool contains = _carIDs.Contains(id);
+            
+            if (!contains)
             {
-                transform.position = newPos;
-                pair.Value.LastOkPoint = transform;
-                //Debug.Log($"<color=yellow>{gameObject.name} set new respawn point {transform.position} to {pair.Value.gameObject.name}</color>");
-                newPos.x += singleOffsetValue;
-            }
+                _carIDs.Add(id);
+                NotifyObservers(id);
 
-            transform.position = initialPos;
+                for (int i = 0; i < _respawnPoints.Length; i++)
+                {
+                    if (_respawnPoints[i].IsOccupied) continue;
+                    _respawnPoints[i].AttachCar(car);
+                    car.CarSelfRighting.LastOkPoint = _respawnPoints[i].transform;
+                    return;
+                }
+            }
         }
 
         private void OnDestroy()
         {
-            _selfRightings.Clear();
+            _carIDs.Clear();
+            _observers.Clear();
         }
 
-        private void NotifyObservers(int idValue)
+        private void NotifyObservers(string id)
         { 
             foreach (var observer in _observers)
-                observer.OnNext(idValue);
+                observer.OnNext(id);
         }
 
-        public IDisposable Subscribe(IObserver<int> observer)
+        public IDisposable Subscribe(IObserver<string> observer)
         {
             _observers.Add(observer);
             return Disposable.Empty;
         }
 
-        public void OnNext(int value)
+        public void OnNext(string id)
         {
-            if (_selfRightings.ContainsKey(value))
-            { 
-                _selfRightings.Remove(value);
+            for (int i = 0; i < _respawnPoints.Length; i++)
+            {
+                if (_respawnPoints[i].CarId.Equals(id))
+                {
+                    _respawnPoints[i].DetachCar();
+                    _carIDs.Remove(id);
+                } 
             }
         }
 

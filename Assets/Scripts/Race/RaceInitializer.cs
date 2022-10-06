@@ -13,7 +13,6 @@ namespace RaceManager.Race
 {
     public class RaceInitializer : Singleton<RaceInitializer>
     {
-        [SerializeField] private WaypointTrack _waypointTrack;
         [SerializeField] private CarsDepot _carsDepot;
         [Space]
         [SerializeField] private DriverSettings _playerDriverSettings;
@@ -25,7 +24,7 @@ namespace RaceManager.Race
         [SerializeField] private RaceUI _raceUI;
         [SerializeField] private CinemachineVirtualCamera _followCam;
         [SerializeField] private RaceLevelView _level;
-
+        private WaypointTrack _waypointTrack;
         private StartPoint[] _startPoints;
         private List<Driver> _driversList;
 
@@ -36,12 +35,13 @@ namespace RaceManager.Race
         private void Awake()
         {
             _startPoints = _level.StartPoints;
+            _waypointTrack = _level.WaypointTrack;
         }
 
         private void Start()
         {
             InitDrivers();
-            RaceHandler.Instance.Setup(Drivers.Find(d => d.DriverType == DriverType.Player));
+            RaceHandler.Instance.StartHandle();
         }
 
         private void Update()
@@ -50,7 +50,7 @@ namespace RaceManager.Race
                 return;
 
             _raceStarted = true;
-            RaceEventsHub.Notify(RaceEventType.COUNTDOWN);
+            RaceEventsHub.BroadcastNotification(RaceEventType.COUNTDOWN);
         }
 
         private void InitDrivers()
@@ -78,6 +78,7 @@ namespace RaceManager.Race
                     driverGo.name += $"_{i + 1}";
                 }
 
+                driver.SetPositionInRace(i + 1);
                 driverGo.transform.SetParent(parent.transform, false);
                 _driversList.Add(driver);
             }

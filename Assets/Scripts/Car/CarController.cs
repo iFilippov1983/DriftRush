@@ -39,7 +39,7 @@ namespace RaceManager.Cars
             get
             {
                 float factor = SpeedType == SpeedType.KPH ? 3.6f : 2.23693629f;
-                float speed = _carRb.velocity.magnitude * factor;
+                float speed = _carRb.velocity.magnitude;// * factor;
                 return speed;
             }
         }
@@ -98,7 +98,7 @@ namespace RaceManager.Cars
         public void StartMove()
         {
             _currentTorque = _carSettings.FullTorqueOverAllWheels - (TractionCtrl * _carSettings.FullTorqueOverAllWheels);
-            Move(0f, 1f, 0f, 0f);
+            Move(0f, 2f, 0f, 0f);
         }
 
         public bool AreTiresScreeching(out float lateralVelocity, out bool isBraking)

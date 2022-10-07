@@ -5704,7 +5704,7 @@ SphereCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 2.2
-  m_Center: {x: 0, y: 0.67618585, z: -0.057828188}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &5400000
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5743,6 +5743,7 @@ MonoBehaviour:
   - {fileID: 2632380980581022271}
   - {fileID: 28546958344495739}
   - {fileID: 7964335086105675319}
+  _rbCenterOfMass: {x: 0, y: -1.2, z: 0}
 --- !u!114 &8130441704892026965
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5756,8 +5757,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _target: {fileID: 400060}
-  _isAvoidingCars: 1
   _isDriving: 0
+  _isAvoidingCars: 1
+  _castMaxDistance: 12
+  _desireToGetTheWaypoint: 3
+  _avoidanceLerpFactor: 1
   PlayerDriving: 0
   DesiredSpeed: 0
 --- !u!114 &7463281487724718956
@@ -5772,7 +5776,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ea65b38d485c374caa584a03f1de571, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SkidThreshold: 2
+  _skidThreshold: 2
 --- !u!114 &5898364148287627597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5785,7 +5789,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9db865986f75ee44eba89ace4646af65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _waitTime: 2
+  _waitTimeStuck: 2
+  _waitTimeFlipOrFly: 2
   _velocityThreshold: 0.5
   LastOkPoint: {fileID: 0}
 --- !u!114 &9157124407385116014
@@ -5800,10 +5805,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5cb22d331ef7d64796f917c6a455a32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _lookAheadForTargetOffset: 5
+  _lookAheadForTargetOffset: 20
   _lookAheadForTargetFactor: 0.1
-  _lookAheadForSpeedOffset: 10
-  _lookAheadForSpeedFactor: 0.2
+  _lookAheadForSpeedOffset: 20
+  _lookAheadForSpeedFactor: 0.1
   _target: {fileID: 400060}
 --- !u!114 &1523802306629258647
 MonoBehaviour:
@@ -10842,7 +10847,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 9147305537544015028, guid: 1f7236e0b6984134a9d61a499ba9eab4,
     type: 2}
-  m_audioClip: {fileID: 8300000, guid: bd9566abdbf08834281bfb4ea8b92a5d, type: 3}
+  m_audioClip: {fileID: 8300000, guid: fcb05c9b514ed7448a8860eeb66e4d83, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1

@@ -8,6 +8,7 @@ namespace RaceManager.Waypoints
 {
     public class WaypointTrack : MonoBehaviour
     {
+        public bool MainTrack;
         public WaypointList waypointList = new WaypointList();
         public float editorVisualisationSubsteps = 100;
         public float minDistanceToReachWaypoint = 5f;
@@ -64,6 +65,9 @@ namespace RaceManager.Waypoints
 
         private void SetWaypoints()
         {
+            if (!MainTrack)
+                return;
+
             if (_distances.Length > 0)
             {
                 _waypoints = new List<Waypoint>();

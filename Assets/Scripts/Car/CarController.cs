@@ -7,12 +7,17 @@ namespace RaceManager.Cars
 {
     public class CarController : MonoBehaviour
     {
+        private const float KPHFactor = 3.6f;
+        private const float MPHFactor = 2.23693629f;
+
         private const float Downforce = 100f;
         private const float BrakeTorque = 20000f;
         private const float ReverseTorque = 200;
         private const float MaxHandbrakeTorque = float.MaxValue;
         private const float TractionCtrl = 0f; //(0-1) 0 is no traction control, 1 is full interference
-        [SerializeField] private float SkidThreshold = 2f;//0.2
+        [SerializeField] private float _skidThreshold = 2f;//0.2
+
+        private SpeedType _speedType = SpeedType.KPH;
 
         private Car _car;
         //[SerializeField] 
@@ -29,20 +34,17 @@ namespace RaceManager.Cars
         private float _currentTorque;
         private float _velocityVsForward;
 
+        private bool _isInNormalPosition = true;
+        private Vector3 _normalPosition;
+        private Quaternion _normalRotation;
+
         public SpeedType SpeedType { get; set; } = SpeedType.KPH;
-        public float BrakeInput { get; private set; }
-        public float MaxSpeed => _carSettings.MaxSpeed;
         public float AccelInput { get; private set; }
-        public float CurrentSpeed
-        {
-            //3.6f - convertion to KPH // 2.23693629f - convertion to MPH
-            get
-            {
-                float factor = SpeedType == SpeedType.KPH ? 3.6f : 2.23693629f;
-                float speed = _carRb.velocity.magnitude;// * factor;
-                return speed;
-            }
-        }
+        public float BrakeInput { get; private set; }
+        public float MaxVelocityMagnitude => _carSettings.MaxRBVelocityMagnitude;
+        public float VelocityMagnitude => _carRb.velocity.magnitude;
+        public void SetSpeedType(SpeedType speedType) => _speedType = speedType;
+
 
         //private void OnEnable()
         //{
@@ -69,8 +71,10 @@ namespace RaceManager.Cars
             _wheelMeshes = _car.WheelMeshes;
 
             SetWheelMeshesRotation();
-            _wheelColliders[0].attachedRigidbody.centerOfMass = _ñenterOfMassOffset;
+            //_wheelColliders[0].attachedRigidbody.centerOfMass = _ñenterOfMassOffset;
             _currentTorque = _carSettings.FullTorqueOverAllWheels - (TractionCtrl * _carSettings.FullTorqueOverAllWheels);
+
+            _carRb.centerOfMass = _car.CenterOfMass;
         }
 
         public void Move(float steering, float accel, float footbrake, float handbrake)
@@ -89,7 +93,7 @@ namespace RaceManager.Cars
             SteerHelper();
             ApplyDrive(accel, footbrake);
             KillOrthogonalVelocity();
-            //CapSpeed();
+            CapSpeed();
             HandBrake(handbrake);
             AddDownForce();
             TractionControl();
@@ -112,7 +116,7 @@ namespace RaceManager.Cars
                 return true;
             }
 
-            if (Mathf.Abs(lateralVelocity) > SkidThreshold)
+            if (Mathf.Abs(lateralVelocity) > _skidThreshold)
                 return true;
 
             return false;
@@ -137,25 +141,28 @@ namespace RaceManager.Cars
 
         private void ApplyDrive(float accel, float footbrake)
         {
-
-            //float thrustTorque;
-            float thrustTorque = accel * (_currentTorque / 4f);
+            //float thrustTorque;                                //to prevent wheels block
+            float thrustTorque = accel * (_currentTorque / 4f) + 0.0001f;
             for (int i = 0; i < _wheelColliders.Length; i++)
             {
                 _wheelColliders[i].motorTorque = thrustTorque;
             }
 
+            if (footbrake <= 0)
+                return;
             for (int i = 0; i < _wheelColliders.Length; i++)
             {
-                if (CurrentSpeed > 5 && Vector3.Angle(_carRb.transform.forward, _carRb.velocity) < 50f)
-                {
-                    _wheelColliders[i].brakeTorque = BrakeTorque * footbrake;
-                }
-                else if (footbrake > 0)
-                {
-                    _wheelColliders[i].brakeTorque = 0f;
-                    _wheelColliders[i].motorTorque = -ReverseTorque * footbrake;
-                }
+                //if (CurrentSpeed > 5 && Vector3.Angle(_carRb.transform.forward, _carRb.velocity) < 50f)
+                //{
+                //    _wheelColliders[i].brakeTorque = BrakeTorque * footbrake;
+                //}
+                //else if (footbrake > 0)
+                //{
+                //    _wheelColliders[i].brakeTorque = 0f;
+                //    _wheelColliders[i].motorTorque = -ReverseTorque * footbrake;
+                //}
+                _wheelColliders[i].brakeTorque = 0f;
+                _wheelColliders[i].motorTorque = -ReverseTorque * footbrake;
             }
         }
 
@@ -183,7 +190,7 @@ namespace RaceManager.Cars
         private void TractionControl()
         {
             WheelHit wheelHit;
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < _wheelColliders.Length; i++)
             {
                 _wheelColliders[i].GetGroundHit(out wheelHit);
 
@@ -193,7 +200,7 @@ namespace RaceManager.Cars
 
         private void AdjustTorque(float forwardSlip)
         {
-            if (forwardSlip >= SkidThreshold && _currentTorque >= 0)
+            if (forwardSlip >= _skidThreshold && _currentTorque >= 0)
             {
                 _currentTorque -= 10 * TractionCtrl;
             }
@@ -242,27 +249,27 @@ namespace RaceManager.Cars
             => _wheelColliders[0].attachedRigidbody.AddForce(-_carRb.transform.up * Downforce * _wheelColliders[0].attachedRigidbody.velocity.magnitude);
         private float GetLateralVelocity() 
             => Vector3.Dot(transform.right, _carRb.velocity);
-        public float GetVelocityMagnitude() 
-            => _carRb.velocity.magnitude;
+        
 
-        //private void CapSpeed()
-        //{
-        //    float speed = m_Rigidbody.velocity.magnitude;
-        //    switch (_vehicleSettings.SpeedType)
-        //    {
-        //        case SpeedType.MPH:
+        private void CapSpeed()
+        {
+            float speed = _carRb.velocity.magnitude;
 
-        //            speed *= 2.23693629f;
-        //            if (speed > _vehicleSettings.SpeedTop)
-        //                m_Rigidbody.velocity = (_vehicleSettings.SpeedTop / 2.23693629f) * m_Rigidbody.velocity.normalized;
-        //            break;
+            switch (_speedType)
+            {
+                case SpeedType.MPH:
 
-        //        case SpeedType.KPH:
-        //            speed *= 3.6f;
-        //            if (speed > _vehicleSettings.SpeedTop)
-        //                m_Rigidbody.velocity = (_vehicleSettings.SpeedTop / 3.6f) * m_Rigidbody.velocity.normalized;
-        //            break;
-        //    }
-        //}
+                    speed *= MPHFactor;
+                    if (speed > _carSettings.MaxSpeed)
+                        _carRb.velocity = (_carSettings.MaxSpeed / MPHFactor) * _carRb.velocity.normalized;
+                    break;
+
+                case SpeedType.KPH:
+                    speed *= KPHFactor;
+                    if (speed > _carSettings.MaxSpeed)
+                        _carRb.velocity = (_carSettings.MaxSpeed / KPHFactor) * _carRb.velocity.normalized;
+                    break;
+            }
+        }
     }
 }

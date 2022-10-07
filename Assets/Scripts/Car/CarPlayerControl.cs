@@ -4,8 +4,9 @@ namespace RaceManager.Cars
 {
     public class CarPlayerControl : MonoBehaviour
     {
+        private CarSettings _carSettings;
         private CarAIControl _carAIControl;
-        private CarController _carController;
+        //private CarController _carController;
 
         //private void Awake()
         //{
@@ -14,11 +15,14 @@ namespace RaceManager.Cars
         //    _carAIControl.PlayerDriving = true;
         //}
 
-        public void Initialize(CarController carController, CarAIControl carAI)
+        public void Initialize(CarAIControl carAI, CarSettings carSettings)
         {
-            _carController = carController;
+            //_carController = carController;
+            _carSettings = carSettings;
             _carAIControl = carAI;
             _carAIControl.PlayerDriving = true;
+            _carAIControl.DesiredSpeed = _carSettings.CruiseRBVelocityMagnitude;
+            _carAIControl.StopAvoiding();
         }
 
         private void Update()
@@ -31,12 +35,12 @@ namespace RaceManager.Cars
 
         private void Accelerate()
         {
-            _carAIControl.DesiredSpeed = _carController.MaxSpeed;
+            _carAIControl.DesiredSpeed = _carSettings.MaxRBVelocityMagnitude;
         }
 
         private void Cruise()
         {
-            _carAIControl.DesiredSpeed = _carAIControl.CruiseSpeed;
+            _carAIControl.DesiredSpeed = _carSettings.CruiseRBVelocityMagnitude;
         }
     }
 }

@@ -4,14 +4,13 @@ using RaceManager.Cars;
 public class PlayerInputHandler : MonoBehaviour
 {
     [SerializeField] private CarSettings _carSettings;
-    [SerializeField] private DriverSettings _driverSettings;
     private CarMovementController _carController;
     private Vector3 _inputVector;
 
     private void Awake()
     {
         _carController = GetComponent<CarMovementController>();
-        _carController.maxSpeed = _driverSettings.CruiseSpeed;
+        _carController.maxSpeed = _carSettings.CruiseSpeed;
     }
 
     private void Update()
@@ -33,6 +32,6 @@ public class PlayerInputHandler : MonoBehaviour
 
     private void Cruise()
     {
-        _carController.maxSpeed = _driverSettings.CruiseSpeed;
+        _carController.maxSpeed = _carSettings.CruiseSpeed;
     }
 }

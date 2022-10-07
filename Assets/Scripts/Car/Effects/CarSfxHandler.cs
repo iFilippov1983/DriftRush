@@ -16,7 +16,7 @@ namespace RaceManager.Cars.Effects
         private const float PitchLerpFactor = 1.5f;
         private const float PitchScreechingLerpFactor = 10f;
         private const float PitchScreechingAbsFactor = 0.1f;
-        private const float HitVolumeFactor = 0.1f;
+        private const float HitVolumeFactor = 1f;
         private const float HitMinPitch = 0.95f;
         private const float HitMaxPitch = 1.05f;
 
@@ -50,7 +50,7 @@ namespace RaceManager.Cars.Effects
 
         private void UpdateEngineSFX()
         {
-            float velocityMagnitude = _carController.GetVelocityMagnitude();
+            float velocityMagnitude = _carController.VelocityMagnitude;
             float desiredEngineVolume = velocityMagnitude * VelocityMagnitudeFactor;
             desiredEngineVolume = Mathf.Clamp(desiredEngineVolume, MinVolume, MaxVolume);
             engineAS.volume = Mathf.Lerp(engineAS.volume, desiredEngineVolume, Time.deltaTime * VolumeLerpFactor);

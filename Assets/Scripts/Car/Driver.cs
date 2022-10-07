@@ -22,11 +22,12 @@ namespace RaceManager.Cars
 
         public DriverProfile Profile => _profile;
         public GameObject CarObject => _carObject;
+        public Transform TargetToFollow => _carAIControl.Target;
 
-        public void Initialize(DriverType type, CarSettings carSettings , DriverSettings driverSettings, CarsDepot carsDepot, WaypointTrack waypointTrack)
+        public void Initialize(DriverType type, CarSettings carSettings, CarsDepot carsDepot, WaypointTrack waypointTrack)
         {
             DriverType = type;
-            CarFactory carFactory = new CarFactory(type, carSettings, driverSettings, carsDepot, waypointTrack, transform);
+            CarFactory carFactory = new CarFactory(type, carSettings, carsDepot, waypointTrack, transform);
             _carObject = carFactory.InitCar(out _carController, out _carAIControl, out _waypointProgressTracker, out _profile);
             //transform.SetParent(_carObject.transform, false);
 
@@ -60,7 +61,7 @@ namespace RaceManager.Cars
 
         private void UpdateProfile()
         { 
-            _profile.CarCurrentSpeed = _carController.CurrentSpeed;
+            _profile.CarCurrentSpeed = _carController.VelocityMagnitude;
             _profile.TrackProgress = _waypointProgressTracker.Progress;
             _profile.PositionInRace = _waypointProgressTracker.CarPosition;
             NotifyObservers();

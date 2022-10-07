@@ -15,16 +15,16 @@ namespace RaceManager.Race
     {
         [SerializeField] private CarsDepot _carsDepot;
         [Space]
-        [SerializeField] private DriverSettings _playerDriverSettings;
         [SerializeField] private CarSettings _playerCarSettings;
         [Space]
-        [SerializeField] private DriverSettings _opponentDriverSettings;
         [SerializeField] private CarSettings _opponentCarSettings;
         [Space]
         [SerializeField] private RaceUI _raceUI;
         [SerializeField] private CinemachineVirtualCamera _followCam;
         [SerializeField] private RaceLevelView _level;
-        private WaypointTrack _waypointTrack;
+        private WaypointTrack _waypointTrackMain;
+        private WaypointTrack _waypointTrackEven;
+        private WaypointTrack _waypointTrackOdd;
         private StartPoint[] _startPoints;
         private List<Driver> _driversList;
 
@@ -35,7 +35,9 @@ namespace RaceManager.Race
         private void Awake()
         {
             _startPoints = _level.StartPoints;
-            _waypointTrack = _level.WaypointTrack;
+            _waypointTrackMain = _level.WaypointTrackMain;
+            _waypointTrackEven = _level.WaypointTrackEven;  
+            _waypointTrackOdd = _level.WaypointTrackOdd;
         }
 
         private void Start()
@@ -67,14 +69,17 @@ namespace RaceManager.Race
                 var driver = driverGo.GetComponent<Driver>();
                 if (_startPoints[i].Type == DriverType.Player)
                 {
-                    driver.Initialize(_startPoints[i].Type, _playerCarSettings, _playerDriverSettings, _carsDepot, _waypointTrack);
+                    driver.Initialize(_startPoints[i].Type, _playerCarSettings, _carsDepot, _waypointTrackMain);
                     _followCam.LookAt = driver.CarObject.transform;
                     _followCam.Follow = driver.CarObject.transform;
+                    //_followCam.LookAt = driver.TargetToFollow;
+                    //_followCam.Follow = driver.TargetToFollow;
                     driver.Subscribe(_raceUI);
                 }
                 else
                 {
-                    driver.Initialize(_startPoints[i].Type, _opponentCarSettings, _opponentDriverSettings, _carsDepot, _waypointTrack);
+                    WaypointTrack track = (i % 2) == 0 ? _waypointTrackEven : _waypointTrackOdd;
+                    driver.Initialize(_startPoints[i].Type, _opponentCarSettings, _carsDepot, track);
                     driverGo.name += $"_{i + 1}";
                 }
 

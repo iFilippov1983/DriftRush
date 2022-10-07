@@ -12,8 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1505ec008436df3468287f516bcb4c88, type: 3}
   m_Name: CarSettings_Default
   m_EditorClassIdentifier: 
+  CarProfile: {fileID: 11400000, guid: efbc9fefae1f8d4439e9632182a68f9f, type: 2}
+  SpeedType: 1
   MaxSpeed: 100
+  MaxRBVelocityMagnitude: 27.777779
+  CruiseSpeedPercentMax: 0.8
+  CruiseSpeedPercentMin: 0.7
+  CruiseSpeed: 20
+  CruiseRBVelocityMagnitude: 5.555556
   FullTorqueOverAllWheels: 2000
   SteerHelper: 0.7
+  DriftFactor: 0.99
   MaximumSteerAngle: 35
   Durability: 100

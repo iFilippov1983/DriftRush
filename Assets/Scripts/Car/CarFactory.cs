@@ -8,16 +8,14 @@ namespace RaceManager.Cars
     {
         private readonly DriverType _driverType;
         private readonly CarSettings _carSettings;
-        private readonly DriverSettings _driverSettings;
         private readonly CarsDepot _carsDepot;
         private readonly WaypointTrack _waypointTrack;
         private readonly Transform _spawnPoint;
 
-        public CarFactory(DriverType driverType, CarSettings carSettings, DriverSettings driverSettings, CarsDepot carsDepot, WaypointTrack waypointTrack, Transform spawnPoint)
+        public CarFactory(DriverType driverType, CarSettings carSettings, CarsDepot carsDepot, WaypointTrack waypointTrack, Transform spawnPoint)
         {
             _driverType = driverType;
             _carSettings = carSettings;
-            _driverSettings = driverSettings;
             _carsDepot = carsDepot;
             _waypointTrack = waypointTrack;
             _spawnPoint = spawnPoint;
@@ -25,7 +23,7 @@ namespace RaceManager.Cars
 
         public GameObject InitCar(out CarController carController, out CarAIControl carAIControl, out WaypointProgressTracker waypointTracker, out DriverProfile driverProfile)
         {
-            string requiredName = _driverSettings.CurrentCarName;
+            string requiredName = _carSettings.CarProfile.Name;
             var prefab = _carsDepot.Cars.Find(x => x.Name == requiredName).Prefab;
 
             var go = Object.Instantiate(prefab, _spawnPoint.position, _spawnPoint.rotation);
@@ -44,7 +42,7 @@ namespace RaceManager.Cars
             carController.Initialize(_carSettings);
 
             carAIControl = go.GetComponent<CarAIControl>();
-            carAIControl.Initialize(_driverSettings);
+            carAIControl.Initialize(_carSettings);
 
             waypointTracker = go.GetComponent<WaypointProgressTracker>();
             waypointTracker.Initialize(_waypointTrack, driverProfile);
@@ -52,7 +50,7 @@ namespace RaceManager.Cars
             if (_driverType == DriverType.Player)
             {
                 var playerContrrol = go.AddComponent<CarPlayerControl>();
-                playerContrrol.Initialize(carController, carAIControl);
+                playerContrrol.Initialize(carAIControl, _carSettings);
             }
 
             return go;

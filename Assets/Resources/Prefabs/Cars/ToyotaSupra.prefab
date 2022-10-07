@@ -5704,7 +5704,7 @@ SphereCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 2.2
-  m_Center: {x: 0, y: 0.67618585, z: -0.057828188}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &5400000
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5718,7 +5718,7 @@ Rigidbody:
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 1
+  m_Interpolate: 2
   m_Constraints: 0
   m_CollisionDetection: 1
 --- !u!114 &-3187373859503454853
@@ -5743,6 +5743,7 @@ MonoBehaviour:
   - {fileID: 2237927332018007879}
   - {fileID: 8589660106198715025}
   - {fileID: 4425235747692572033}
+  _rbCenterOfMass: {x: 0, y: -1.2, z: 0}
 --- !u!114 &440431584366938135
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5756,8 +5757,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _target: {fileID: 400060}
-  _isAvoidingCars: 1
   _isDriving: 0
+  _isAvoidingCars: 1
+  _castMaxDistance: 12
+  _desireToGetTheWaypoint: 3
+  _avoidanceLerpFactor: 1
   PlayerDriving: 0
   DesiredSpeed: 0
 --- !u!114 &1607304382814161917
@@ -5772,7 +5776,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ea65b38d485c374caa584a03f1de571, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SkidThreshold: 2
+  _skidThreshold: 2
 --- !u!114 &5771189298829052170
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5785,7 +5789,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9db865986f75ee44eba89ace4646af65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _waitTime: 2
+  _waitTimeStuck: 2
+  _waitTimeFlipOrFly: 2
   _velocityThreshold: 0.5
   LastOkPoint: {fileID: 0}
 --- !u!114 &8904519223896049435
@@ -40910,7 +40915,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 9147305537544015028, guid: 1f7236e0b6984134a9d61a499ba9eab4,
     type: 2}
-  m_audioClip: {fileID: 8300000, guid: bd9566abdbf08834281bfb4ea8b92a5d, type: 3}
+  m_audioClip: {fileID: 8300000, guid: fcb05c9b514ed7448a8860eeb66e4d83, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1

@@ -1,3 +1,4 @@
+using RaceManager.Tools;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections;
@@ -7,11 +8,10 @@ namespace RaceManager.Cars
 {
     public class CarSelfRighting : MonoBehaviour
     {
-        private const float GroundingForce = 5000f;
+        private const float GroundingForce = 50000f;
 
         // Automatically put the car the right way up, if it has come to rest upside-down or stuck.
-        [SerializeField] private float _waitTimeStuck = 2f;              // time to wait before self righting
-        [SerializeField] private float _waitTimeFlipOrFly = 2f;
+        [SerializeField] private float _waitTimeStuck = 1f;              // time to wait before self righting
         [SerializeField] private float _velocityThreshold = 0.7f;   // the velocity below which the car is considered stationary for self-righting
         private float _stuckTimer;
 
@@ -20,8 +20,6 @@ namespace RaceManager.Cars
         private WheelCollider[] _wheelColliders;
         [ReadOnly]
         public Transform LastOkPoint;
-
-        private bool _isInNormalPosition;
 
         //public void Initialize(CarAIControl carAI, Rigidbody carRigidbody)
         //{ 
@@ -50,6 +48,14 @@ namespace RaceManager.Cars
             GroundingControl();
         }
 
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (collision.gameObject.layer == LayerMask.NameToLayer(Layer.OffTrack))
+            {
+                RightCar();
+            }
+        }
+
         private void OnDestroy()
         {
             StopAllCoroutines();
@@ -74,16 +80,14 @@ namespace RaceManager.Cars
             }
         }
 
-        private void RightCar()
+        public void RightCar()
         {
             if (LastOkPoint != null)
             {
                 _carAI.StopDriving();
                 transform.position = LastOkPoint.position;
-                //transform.position += Vector3.up / 4f;
                 transform.rotation = LastOkPoint.rotation;
-                $"Returned to position {LastOkPoint.position}".Log(StringConsoleLog.Color.Green);
-                _isInNormalPosition = true;
+                //$"Returned to position {LastOkPoint.position}".Log(StringConsoleLog.Color.Green);
                 _carAI.StartEngine();
             }
             _stuckTimer = 0;
@@ -97,7 +101,7 @@ namespace RaceManager.Cars
                 if (_wheelColliders[i].isGrounded == false)
                 {
                     _wheelColliders[i].attachedRigidbody.AddForceAtPosition(Vector3.down * GroundingForce, _wheelColliders[i].transform.position, ForceMode.Force);
-                    Debug.Log($"Force added to: {_wheelColliders[i].name}");
+                    //Debug.Log($"Force added to: {_wheelColliders[i].name}");
                 }
             }
         }

@@ -8,10 +8,10 @@ namespace RaceManager.Cars
 {
     public class CarAIControl : MonoBehaviour
     {
-        private const float SteerSensitivity = 1f;           //(0-1)How sensitively the AI uses steering input to turn to the desired direction
+        private const float SteerSensitivity = 1f;              //(0-1)How sensitively the AI uses steering input to turn to the desired direction
         private const float BrakeSensitivity = 1f;              //(0-1)How sensitively the AI uses the brake to reach the current desired speed
         private const float AccelSensitivity = 1f;              //(0-1)How sensitively the AI uses the accelerator to reach the current desired speed
-        private const float CriticalSteeAngle = 45f;            //If angle to target is grater then this value car turns as much as possible
+                  //If angle to target is grater then this value car turns as much as possible
 
         //[SerializeField]
         private CarSettings _carSettings;
@@ -35,6 +35,7 @@ namespace RaceManager.Cars
         [SerializeField] private float _desireToGetTheWaypoint = 3f; //6
         [SerializeField] private float _avoidanceLerpFactor = 1f; //1
 
+        private float _criticalSteeAngle = 45f;
         private float _accelerationWanderAmount = 0.01f;
         private float _accelerationWanderSpeed = 1f;
         private float _lateralWanderDistance = 0.5f;
@@ -70,6 +71,7 @@ namespace RaceManager.Cars
         public void Initialize(CarSettings carSettings)
         {
             _carSettings = carSettings;
+            _criticalSteeAngle = _carSettings.MaximumSteerAngle;
             _carController = GetComponent<CarController>();
             _sphereCollider = GetComponent<SphereCollider>();
             _spherecastRadius = _sphereCollider.radius * 0.5f;
@@ -135,7 +137,6 @@ namespace RaceManager.Cars
                 //float steer = targetAngle / CriticalSteeAngle;
                 #endregion
 
-                // feed input to the car controller.
                 _carController.Move(steer, accel, accel, 0f);
             }
             else
@@ -162,7 +163,9 @@ namespace RaceManager.Cars
 
         private float CalculateSteering()
         {
-            
+            if (_target == null)
+                return 0;
+
             Vector3 vectorToTarget = _target.position - transform.position;
             vectorToTarget.Normalize();
 
@@ -173,8 +176,33 @@ namespace RaceManager.Cars
             //vectorToTarget = Vector3.Lerp(vectorToTarget, position, _avoidanceLerpFactor * Time.fixedDeltaTime);
 
             float targetAngle = Vector3.SignedAngle(transform.forward, vectorToTarget, transform.up);
+            float steer = targetAngle / _criticalSteeAngle;
 
-            float steer = targetAngle / CriticalSteeAngle;
+            //steer = Mathf.Clamp(steer, -1f, 1f);
+            steer = Mathf.Clamp(steer * SteerSensitivity, -1f, 1f) * Mathf.Sign(_carController.VelocityMagnitude);
+            return steer;
+        }
+
+        private float CalculateSteering(out Vector3 vectorToTarget)
+        {
+            if (_target == null)
+            {
+                vectorToTarget = Vector3.zero;
+                return 0;
+            }
+                
+
+            vectorToTarget = _target.position - transform.position;
+            vectorToTarget.Normalize();
+
+            if (_isAvoidingCars)
+                AvoidAICars(vectorToTarget, out vectorToTarget);
+
+            //Vector3 position = MakeWanderPositionOffsetFromTarget();
+            //vectorToTarget = Vector3.Lerp(vectorToTarget, position, _avoidanceLerpFactor * Time.fixedDeltaTime);
+
+            float targetAngle = Vector3.SignedAngle(transform.forward, vectorToTarget, transform.up);
+            float steer = targetAngle / _criticalSteeAngle;
 
             //steer = Mathf.Clamp(steer, -1f, 1f);
             steer = Mathf.Clamp(steer * SteerSensitivity, -1f, 1f) * Mathf.Sign(_carController.VelocityMagnitude);
@@ -213,7 +241,6 @@ namespace RaceManager.Cars
         {
             if (_target == null)
             {
-                // Car should not be moving, use handbrake to stop
                 _carController.Move(0, 0, -1f, 1f);
             }
         }
@@ -303,7 +330,7 @@ namespace RaceManager.Cars
 
         private void PushOpponent(Collision collision)
         {
-            Debug.Log("Push");
+            //Debug.Log("Push");
             Vector3 contactPoint = collision.GetContact(0).point;
             Vector3 direction = collision.rigidbody.transform.position - transform.position;
             direction.Normalize();
@@ -350,6 +377,17 @@ namespace RaceManager.Cars
         {
             _isDriving = true;
             _carController.StartMove();
+        }
+
+        private void OnGUI()
+        {
+            GUI.color = Color.green;
+            if(PlayerDriving)
+                GUI.Label
+                    (
+                    new Rect(10, 50, 150, 100), 
+                    $"Lateral velocity: {Mathf.RoundToInt(Vector3.Dot(transform.right, _carController.Velocity))}"
+                    );
         }
     }
 }

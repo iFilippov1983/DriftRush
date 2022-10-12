@@ -31,9 +31,14 @@ namespace RaceManager.Cars
 
         [Title("Mobility")]
         [Range(0, 1)]
-        public float SteerHelper = 0.7f;    // 0 is raw physics , 1 the car will grip in the direction it is facing
+        public float SteerHelper = 0.5f;        // 0 is raw physics , 1 the car will grip in the direction it is facing
+        public float SteerHelperRange = 3f;
+        [Range(0, 1), Tooltip("0 means no grip, 1 full grip, >1 extra drift")]
+        public float FrontWheelsGripFactor = 0f;  
+        [Range(0, 1), Tooltip("0 means no grip, 1 full grip, >1 extra drift")]
+        public float BackWheelsGripFactor = 0f;   
         [Range(0, 1)]
-        public float DriftFactor = 0.99f;   // 0 cannot drift at all 1 can drift anytime physics allowed
+        public float DriftFactor = 0.99f;       // 0 cannot drift at all 1 can drift anytime physics allowed
         public float MaximumSteerAngle = 35f;
 
         [Title("Durability")]

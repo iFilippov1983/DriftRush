@@ -4,6 +4,7 @@ namespace RaceManager.Cars.Effects
 {
     public class WheelParticleHandler : MonoBehaviour
     {
+        [SerializeField] private WheelCollider _attachedWheelCollider;
         private const float EmissionLerpSpeed = 5f;
         private const float BrakeEmissionAmount = 300f;
         private const float SkidEmissionAmountFactor = 5f;
@@ -28,7 +29,10 @@ namespace RaceManager.Cars.Effects
             _emissionRate = Mathf.Lerp(_emissionRate, 0, Time.deltaTime * EmissionLerpSpeed);
             _emissionModule.rateOverTime = _emissionRate;
 
-            if (_carController.AreTiresScreeching(out float lateralVelocity, out bool isBraking))
+            WheelHit wheelhit;
+            _attachedWheelCollider.GetGroundHit(out wheelhit);
+
+            if (_carController.AreTiresScreeching(out float lateralVelocity, out bool isBraking) && wheelhit.normal != Vector3.zero)
             {
                 if (isBraking)
                     _emissionRate = BrakeEmissionAmount;

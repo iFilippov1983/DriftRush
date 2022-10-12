@@ -7,6 +7,7 @@ namespace RaceManager.Cars.Effects
 {
     public class WheelTrailRendererHandler : MonoBehaviour
     {
+        [SerializeField] private WheelCollider _attachedWheelCollider;
         private CarController _carController;
         private TrailRenderer _trailRenderer;
 
@@ -19,7 +20,10 @@ namespace RaceManager.Cars.Effects
 
         private void Update()
         {
-            if (_carController.AreTiresScreeching(out float lateralVelocity, out bool isBraking))
+            WheelHit wheelhit;
+            _attachedWheelCollider.GetGroundHit(out wheelhit);
+
+            if (_carController.AreTiresScreeching(out float lateralVelocity, out bool isBraking) && wheelhit.normal != Vector3.zero)
                 _trailRenderer.emitting = true;
             else
                 _trailRenderer.emitting = false;

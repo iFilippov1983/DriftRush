@@ -75,6 +75,8 @@ namespace RaceManager.Race
                     //_followCam.LookAt = driver.TargetToFollow;
                     //_followCam.Follow = driver.TargetToFollow;
                     driver.Subscribe(_raceUI);
+                    //temp
+                    _raceUI.Init(() => driver.CarObject.GetComponent<CarSelfRighting>().RightCar());
                 }
                 else
                 {

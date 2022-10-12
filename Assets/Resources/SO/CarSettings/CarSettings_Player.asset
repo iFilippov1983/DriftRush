@@ -20,8 +20,11 @@ MonoBehaviour:
   CruiseSpeedPercentMin: 0.7
   CruiseSpeed: 20
   CruiseRBVelocityMagnitude: 5.555556
-  FullTorqueOverAllWheels: 2000
+  FullTorqueOverAllWheels: 20000
   SteerHelper: 1
-  DriftFactor: 1
-  MaximumSteerAngle: 35
-  Durability: 100
+  SteerHelperRange: 1.5
+  FrontWheelsGripFactor: 0
+  BackWheelsGripFactor: 0
+  DriftFactor: 0.908
+  MaximumSteerAngle: 45
+  Durability: 150

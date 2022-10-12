@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace RaceManager.UI
 {
@@ -16,10 +17,16 @@ namespace RaceManager.UI
         [SerializeField] private PositionIndicatorView _positionIndicatorView;
         [SerializeField] private SpeedIndicatorView _speedIndicatorView;
         [SerializeField] private RaceProgressBarView _raceProgressBarView;
+        [SerializeField] private RespawnCarButtonView _respawnCarButton;
 
         private float _currentSpeed;
         private float _trackProgress;
         private int _currentPosition;
+
+        public void Init(UnityAction actionForRespawnButton)
+        { 
+            _respawnCarButton.AddListener(actionForRespawnButton);
+        }
 
         private void Update()
         {

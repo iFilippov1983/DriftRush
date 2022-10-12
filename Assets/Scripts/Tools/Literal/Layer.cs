@@ -4,5 +4,6 @@
     {
         public const string Car = "Car";
         public const string Obstacle = "Obstacle";
+        public const string OffTrack = "OffTrack";
     }
 }

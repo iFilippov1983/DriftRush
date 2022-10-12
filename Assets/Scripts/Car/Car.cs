@@ -19,6 +19,9 @@ namespace RaceManager.Cars
         [SerializeField] private Vector3 _rbCenterOfMass;
         private CarSelfRighting _carSelfRighting;
 
+        public Transform groundTrigger;
+        public LayerMask wheelCollidables;
+
         public string ID => _id;
         public WheelCollider[] WheelColliders => _wheelColliders;
         public GameObject[] WheelMeshes => _wheelMeshes;
@@ -45,6 +48,11 @@ namespace RaceManager.Cars
                 .Take(11)
                 .ToList().ForEach(e => builder.Append(e));
             return builder.ToString();
+        }
+
+        public bool WheelsGrounded()
+        {
+            return Physics.OverlapBox(groundTrigger.position, groundTrigger.localScale / 2, Quaternion.identity, wheelCollidables).Length > 0;
         }
     }
 }

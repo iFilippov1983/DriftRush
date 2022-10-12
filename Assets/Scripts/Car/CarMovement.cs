@@ -1,20 +1,18 @@
-using RaceManager.Cars.Effects;
-using Sirenix.OdinInspector;
-using System;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 #pragma warning disable 649
 namespace RaceManager.Cars
 {
-    public class CarController : MonoBehaviour
+    public class CarMovement : MonoBehaviour
     {
         private const float KPHFactor = 3.6f;
         private const float MPHFactor = 2.23693629f;
 
         private const float Downforce = 300f; //100
-        
+        private const float BrakeTorque = 20000f;
         private const float MaxHandbrakeTorque = float.MaxValue;
-        
+        private const float RotationDifferenceThreshold = 5f;//10
         private const float TractionCtrl = 0f; //(0-1) 0 is no traction control, 1 is full interference
         [SerializeField] private float _skidThreshold = 2f;//0.2
 
@@ -33,9 +31,7 @@ namespace RaceManager.Cars
         private float _oldRotation;
         private float _currentTorque;
         private float _velocityVsForward;
-        private float _brakeTorque = 20000f;
-        private float _reverseTorque = 20000f;//200
-        private float _rotationDifferenceThreshold = 1f;//10
+        private float ReverseTorque = 20000;//200
 
         public SpeedType SpeedType { get; set; } = SpeedType.KPH;
         public float AccelInput { get; private set; }
@@ -73,9 +69,7 @@ namespace RaceManager.Cars
 
             SetWheelMeshesRotation();
             _currentTorque = _carSettings.FullTorqueOverAllWheels - (TractionCtrl * _carSettings.FullTorqueOverAllWheels);
-            _brakeTorque = _carSettings.FullTorqueOverAllWheels / 2;
-            _reverseTorque = _carSettings.FullTorqueOverAllWheels / 10;
-            _rotationDifferenceThreshold = _carSettings.SteerHelperRange;
+            ReverseTorque = _carSettings.FullTorqueOverAllWheels / 4;
 
             _carRb.centerOfMass = _car.CenterOfMass;
         }
@@ -89,31 +83,17 @@ namespace RaceManager.Cars
             BrakeInput = footbrake = -1 * Mathf.Clamp(footbrake, -1, 0);
             handbrake = Mathf.Clamp(handbrake, 0, 1);
 
-            // If rear wheels on ground
-            if (_car.WheelsGrounded())
-            {
-                _carRb.angularVelocity += -transform.up * GetSteeringAngularAcceleration() * Time.fixedDeltaTime;
-            }
-
             SetWheelsMeshesPositions();
             SetSteerOnFrontWheels(steering);
             SteerHelper();
             ApplyDrive(accel, footbrake);
-            KillOrthogonalVelocity();
-            //WheelsDriftControl();
             CapSpeed();
             HandBrake(handbrake);
-            //AddDownForce();
+            AddDownForce();
             TractionControl();
 
-           //AddDrift();
 
             _velocityVsForward = Vector3.Dot(transform.forward, _carRb.velocity);
-        }
-
-        private float GetSteeringAngularAcceleration()
-        {
-            return AccelInput * _carSettings.MaximumSteerAngle * Mathf.PI / 100;
         }
 
         public void StartMove()
@@ -158,33 +138,28 @@ namespace RaceManager.Cars
 
         private void ApplyDrive(float accel, float footbrake)
         {
-                                                                 //to prevent wheels block
+            //to prevent wheels block
             float thrustTorque = accel * (_currentTorque / 4f) + 0.0001f;
             for (int i = 0; i < _wheelColliders.Length; i++)
             {
                 _wheelColliders[i].motorTorque = thrustTorque;
             }
 
-            if (footbrake < 0)
+            if (footbrake <= 0)
                 return;
             for (int i = 0; i < _wheelColliders.Length; i++)
             {
-                if (VelocityMagnitude > _carSettings.CruiseRBVelocityMagnitude && Vector3.Angle(_carRb.transform.forward, _carRb.velocity) < _carSettings.MaximumSteerAngle)
-                {
-                    _wheelColliders[i].brakeTorque = _brakeTorque * footbrake;
-                }
-                else if (footbrake > 0)
-                {
-                    _wheelColliders[i].brakeTorque = 0f;
-                    _wheelColliders[i].motorTorque = -_reverseTorque * footbrake;
-                }
-                else
-                {
-                    _wheelColliders[i].brakeTorque = 0;
-                }
-
-                //_wheelColliders[i].brakeTorque = 0f;
-                //_wheelColliders[i].motorTorque = -_reverseTorque * footbrake;
+                //if (CurrentSpeed > 5 && Vector3.Angle(_carRb.transform.forward, _carRb.velocity) < 50f)
+                //{
+                //    _wheelColliders[i].brakeTorque = BrakeTorque * footbrake;
+                //}
+                //else if (footbrake > 0)
+                //{
+                //    _wheelColliders[i].brakeTorque = 0f;
+                //    _wheelColliders[i].motorTorque = -ReverseTorque * footbrake;
+                //}
+                _wheelColliders[i].brakeTorque = 0f;
+                _wheelColliders[i].motorTorque = -ReverseTorque * footbrake;
             }
         }
 
@@ -199,7 +174,7 @@ namespace RaceManager.Cars
             }
 
             // this if is needed to avoid gimbal lock problems that will make the car suddenly shift direction
-            if (Mathf.Abs(_oldRotation - _carRb.transform.eulerAngles.y) < _rotationDifferenceThreshold)
+            if (Mathf.Abs(_oldRotation - _carRb.transform.eulerAngles.y) < RotationDifferenceThreshold)
             {
                 var turnadjust = (_carRb.transform.eulerAngles.y - _oldRotation) * _carSettings.SteerHelper;
                 Quaternion velRotation = Quaternion.AngleAxis(turnadjust, Vector3.up);
@@ -250,58 +225,6 @@ namespace RaceManager.Cars
             }
         }
 
-        private void WheelsDriftControl()
-        {
-            for (int i = 0; i < _wheelColliders.Length; i++)
-            {
-                Transform tireTransform = _wheelColliders[i].transform;
-                float tireMass = _wheelColliders[i].mass;
-                float gripFactor = i < 2
-                    ? _carSettings.FrontWheelsGripFactor
-                    : _carSettings.BackWheelsGripFactor;
-
-                if (_wheelColliders[i].isGrounded)
-                {
-                    Vector3 steeringDirection = tireTransform.right;
-                    Vector3 tireWorldVelocity = _carRb.GetPointVelocity(tireTransform.position);
-                    float steeringVelocity = Vector3.Dot(steeringDirection, tireWorldVelocity);
-                    float desiredVelChange = -steeringVelocity * gripFactor;
-                    float desiredAcceleration = desiredVelChange / Time.fixedDeltaTime;
-
-                    Vector3 force = steeringDirection * tireMass * desiredAcceleration;
-
-                    _carRb.AddForceAtPosition(force, tireTransform.position);
-                    //if (gripFactor == 0 && steeringVelocity > _skidThreshold)
-                    //{
-                    //    AddDriftOnRareWheels();
-                    //}
-                }
-            }
-        }
-
-        private void KillOrthogonalVelocity()
-        {
-            float forwardVelocityDot = Vector3.Dot(_carRb.velocity, transform.forward);
-            Vector3 forwardVelocity = transform.forward * forwardVelocityDot;
-
-            float rightVelocityDot = Vector3.Dot(_carRb.velocity, transform.right);
-            Vector3 rightVelocity = transform.right * rightVelocityDot;
-
-            _carRb.velocity = forwardVelocity + rightVelocity * _carSettings.DriftFactor;
-        }
-
-        private void AddDrift(Vector3 forcePos)
-        {
-            float driftForce = Vector3.Dot(_carRb.GetRelativePointVelocity(Vector3.left), _carRb.velocity) * 2f;
-            Vector3 relativeForce = Vector3.right * driftForce;
-            _carRb.AddForceAtPosition(_carRb.GetRelativePointVelocity(relativeForce), forcePos);
-        }
-
-        private void AddDriftOnRareWheels()
-        {
-            AddDrift(_wheelColliders[2].transform.position);
-            AddDrift(_wheelColliders[3].transform.position);
-        }
 
         private void HandBrake(float handbrake)
         {
@@ -315,11 +238,11 @@ namespace RaceManager.Cars
         }
 
         // this is used to add more grip in relation to speed
-        private void AddDownForce() 
+        private void AddDownForce()
             => _wheelColliders[0].attachedRigidbody.AddForce(-_carRb.transform.up * Downforce * _wheelColliders[0].attachedRigidbody.velocity.magnitude);
-        private float GetLateralVelocity() 
+        private float GetLateralVelocity()
             => Vector3.Dot(transform.right, _carRb.velocity);
-        
+
 
         private void CapSpeed()
         {
@@ -343,3 +266,4 @@ namespace RaceManager.Cars
         }
     }
 }
+

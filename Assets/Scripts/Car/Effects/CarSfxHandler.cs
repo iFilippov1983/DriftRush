@@ -1,3 +1,4 @@
+using RaceManager.Tools;
 using UnityEngine;
 using UnityEngine.Audio;
 using Random = UnityEngine.Random;
@@ -28,12 +29,14 @@ namespace RaceManager.Cars.Effects
         public AudioSource carHitAS;
 
         private CarController _carController;
+        private Car _thisCar;
         private float _desiredEnginePitch = 0.5f;
         private float _tireScreechPitch = 0.5f;
 
         private void Awake()
         {
             _carController = GetComponentInParent<CarController>();
+            _thisCar = GetComponentInParent<Car>();
         }
 
         private void Start()
@@ -80,14 +83,24 @@ namespace RaceManager.Cars.Effects
 
         private void OnCollisionEnter(Collision collision)
         {
-            float relativeVelocity = collision.relativeVelocity.magnitude;
-            float volume = relativeVelocity * HitVolumeFactor;
+            bool isCar = collision.gameObject.layer == LayerMask.NameToLayer(Layer.Car);
+            bool isObstacle = collision.gameObject.layer != LayerMask.NameToLayer(Layer.Obstacle);
+            bool hasCarComponent = collision.gameObject.TryGetComponent(out Car car);
+            bool notSelf = false;
+            if (hasCarComponent)
+                notSelf = car.ID != _thisCar.ID;
 
-            carHitAS.pitch = Random.Range(HitMinPitch, HitMaxPitch);
-            carHitAS.volume = volume;
+            if ((isCar && notSelf) || isObstacle)
+            {
+                float relativeVelocity = collision.relativeVelocity.magnitude;
+                float volume = relativeVelocity * HitVolumeFactor;
 
-            if (!carHitAS.isPlaying)
-                carHitAS.Play();
+                carHitAS.pitch = Random.Range(HitMinPitch, HitMaxPitch);
+                carHitAS.volume = volume;
+
+                if (!carHitAS.isPlaying)
+                    carHitAS.Play();
+            }
         }
     }
 }

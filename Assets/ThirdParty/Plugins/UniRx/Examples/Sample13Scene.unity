@@ -235,7 +235,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000030517578, y: -864}
+  m_AnchoredPosition: {x: 0, y: -864}
   m_SizeDelta: {x: 0, y: 744}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &80191141
@@ -274,6 +274,7 @@ GameObject:
   m_Component:
   - component: {fileID: 300470761}
   - component: {fileID: 300470762}
+  - component: {fileID: 300470763}
   m_Layer: 0
   m_Name: ToDoScene
   m_TagString: Untagged
@@ -314,6 +315,20 @@ MonoBehaviour:
   ClearButton: {fileID: 2136645853}
   TodoList: {fileID: 80191139}
   SampleItemPrefab: {fileID: 182208, guid: 173222196f3e1f0448b383f260df7d44, type: 3}
+--- !u!114 &300470763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 300470760}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f27418def2ae7c34582fded3d64f393f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  keyList: e90000007a000000c7010000a50200006f000000c604000064000000c80000004e00000081000000
+  valueList: 59010000c8010000370200007b0000001403000059010000ea0000005d010000bc0100009a020000
 --- !u!1 &448872075
 GameObject:
   m_ObjectHideFlags: 0

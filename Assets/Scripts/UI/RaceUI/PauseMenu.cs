@@ -79,7 +79,7 @@ namespace RaceManager.UI
         private void Restart()
         {
             Time.timeScale = 1f;
-            SceneManager.LoadScene(SceneName.Scene_Game);
+            SceneManager.LoadScene(SceneName.Scene_Race);
         }
     }
 }

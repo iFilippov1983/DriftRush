@@ -4,13 +4,13 @@ namespace RaceManager.Cars
 {
     public class CarPlayerControl : MonoBehaviour
     {
+        [SerializeField]
         private CarSettings _carSettings;
         private CarAIControl _carAIControl;
         //private CarController _carController;
 
         //private void Awake()
         //{
-        //    _carController = GetComponent<CarController>();
         //    _carAIControl = GetComponent<CarAIControl>();
         //    _carAIControl.PlayerDriving = true;
         //}

@@ -1,18 +1,20 @@
 ﻿using RaceManager.Tools;
+using System;
+using UniRx;
 
 namespace RaceManager.Cars
 {
     public class DriverProfile
     {
-        public readonly SubscriptionProperty<CarState> CarState;
-
         public float CarCurrentSpeed;
         public float TrackProgress;
         public int PositionInRace;
 
+        public ReactiveProperty<CarState> CarState;
+
         public DriverProfile()
         {
-            CarState = new SubscriptionProperty<CarState>();
+            CarState = new ReactiveProperty<CarState>();
         }
     }
 }

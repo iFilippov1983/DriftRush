@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UniRx;
+using UniRx.Triggers;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -18,7 +19,7 @@ namespace RaceManager.Cars
         private CarAIControl _carAIControl;
         private CarController _carController;
         private WaypointProgressTracker _waypointProgressTracker;
-        private List<IObserver<DriverProfile>> _observerssList;
+        private List<IObserver<DriverProfile>> _observersList;
 
         public DriverProfile Profile => _profile;
         public GameObject CarObject => _carObject;
@@ -32,9 +33,9 @@ namespace RaceManager.Cars
             //transform.SetParent(_carObject.transform, false);
 
             _profile.CarState.Value = CarState.OnTrack;
-            _profile.CarState.SubscribeOnChange(OnCarStateChange);
+            _profile.CarState.Subscribe(s => OnCarStateChange(s));
 
-            _observerssList = new List<IObserver<DriverProfile>>();
+            _observersList = new List<IObserver<DriverProfile>>();
         }
 
         private void OnEnable()
@@ -49,10 +50,10 @@ namespace RaceManager.Cars
             RaceEventsHub.Unsunscribe(RaceEventType.FINISH, StopRace);
         }
 
-        private void OnDestroy()
-        {
-            _profile.CarState.UnSubscribeOnChange(OnCarStateChange);
-        }
+        //private void OnDestroy()
+        //{
+        //    _profile.CarState.UnSubscribeOnChange(OnCarStateChange);
+        //}
 
         private void Update()
         {
@@ -60,7 +61,7 @@ namespace RaceManager.Cars
         }
 
         private void UpdateProfile()
-        { 
+        {
             _profile.CarCurrentSpeed = _carController.VelocityMagnitude;
             _profile.TrackProgress = _waypointProgressTracker.Progress;
             _profile.PositionInRace = _waypointProgressTracker.CarPosition;
@@ -100,21 +101,19 @@ namespace RaceManager.Cars
                 RaceEventsHub.Unsunscribe(RaceEventType.FINISH, StopRace);
                 RaceEventsHub.BroadcastNotification(RaceEventType.FINISH);
             }
-                
+
             $"{gameObject.name} FINISHED".Log(StringConsoleLog.Color.Yellow);
         }
 
         private void NotifyObservers()
         {
-            foreach (var o in _observerssList)
+            foreach (var o in _observersList)
                 o.OnNext(_profile);
         }
 
-        public void SetPositionInRace(int position) => _profile.PositionInRace = position;
-
         public IDisposable Subscribe(IObserver<DriverProfile> observer)
         {
-            _observerssList.Add(observer);
+            _observersList.Add(observer);
             return Disposable.Empty;
         }
     }

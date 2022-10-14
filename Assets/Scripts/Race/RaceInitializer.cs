@@ -32,11 +32,11 @@ namespace RaceManager.Race
 
         public List<Driver> Drivers => _driversList;
 
-        private void Awake()
+        protected override void AwakeSingleton()
         {
             _startPoints = _level.StartPoints;
             _waypointTrackMain = _level.WaypointTrackMain;
-            _waypointTrackEven = _level.WaypointTrackEven;  
+            _waypointTrackEven = _level.WaypointTrackEven;
             _waypointTrackOdd = _level.WaypointTrackOdd;
         }
 
@@ -75,8 +75,7 @@ namespace RaceManager.Race
                     //_followCam.LookAt = driver.TargetToFollow;
                     //_followCam.Follow = driver.TargetToFollow;
                     driver.Subscribe(_raceUI);
-                    //temp
-                    _raceUI.Init(() => driver.CarObject.GetComponent<CarSelfRighting>().RightCar());
+                    _raceUI.Init(driver.Profile, () => driver.CarObject.GetComponent<CarSelfRighting>().RightCar());
                 }
                 else
                 {
@@ -85,7 +84,7 @@ namespace RaceManager.Race
                     driverGo.name += $"_{i + 1}";
                 }
 
-                driver.SetPositionInRace(i + 1);
+                //driver.SetPositionInRace(i + 1);
                 driverGo.transform.SetParent(parent.transform, false);
                 _driversList.Add(driver);
             }

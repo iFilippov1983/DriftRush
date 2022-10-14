@@ -71,7 +71,17 @@ namespace RaceManager.Waypoints
         private void Update()
         {
             TrackWaypoints();
+            //UpdateValues();
         }
+
+        //private void UpdateValues()
+        //{
+        //    //var value = _driverProfile.Content.Value;
+        //    //value.TrackProgress = Progress;
+        //    //value.PositionInRace = CarPosition;
+        //    _driverProfile.Content.Value.SetContent(null, Progress, CarPosition);
+        //    //_driverProfile.Content.SetValueAndForceNotify(value);
+        //}
 
         private void TrackWaypoints()
         {

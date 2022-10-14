@@ -14,29 +14,42 @@ namespace RaceManager.UI
         private const float MPHFactor = 2.23693629f;
 
         [SerializeField] private SpeedType _speedType = SpeedType.KPH;
-        [SerializeField] private PositionIndicatorView _positionIndicatorView;
-        [SerializeField] private SpeedIndicatorView _speedIndicatorView;
-        [SerializeField] private RaceProgressBarView _raceProgressBarView;
-        [SerializeField] private RespawnCarButtonView _respawnCarButton;
+        [SerializeField] private RaceUIView _inRaceUI;
+        [SerializeField] private FinishUIView _finishUI;
+        //private DriverProfile _profile;
 
         private float _currentSpeed;
         private float _trackProgress;
         private int _currentPosition;
 
-        public void Init(UnityAction actionForRespawnButton)
-        { 
-            _respawnCarButton.AddListener(actionForRespawnButton);
+        private bool _isRaceFinished;
+
+        public void Init(DriverProfile profile, UnityAction actionForRespawnButton)
+        {
+            //_profile = profile;
+            profile.CarState.Subscribe(playerCarState => ChangeViewDependingOn(playerCarState));
+            _inRaceUI.RespawnCarButton.AddListener(actionForRespawnButton);
         }
+
+        //private void SetValues(DriverProfile driverProfile)
+        //{
+        //    _currentSpeed = driverProfile.CarCurrentSpeed;
+        //    _trackProgress = driverProfile.TrackProgress;
+        //    _currentPosition = driverProfile.PositionInRace;
+        //}
 
         private void Update()
         {
-            ShowSpeed();
+            if (_isRaceFinished)
+            {
 
-            bool isActive = _currentPosition > 0 ? true : false;
-            _positionIndicatorView.PositionText.gameObject.SetActive(isActive);
-            _positionIndicatorView.PositionText.text = _currentPosition.ToString();
-
-            _raceProgressBarView.ProgressImage.fillAmount = _trackProgress;
+            }
+            else
+            {
+                ShowSpeed();
+                HandlePositionIndication();
+                HandleProgressBar();
+            }
         }
 
         private void ShowSpeed()
@@ -45,9 +58,49 @@ namespace RaceManager.UI
             _currentSpeed *= factor;
             int speed = Mathf.RoundToInt(_currentSpeed);
 
-            _speedIndicatorView.SpeedValueText.text = speed.ToString();
+            _inRaceUI.SpeedIndicator.SpeedValueText.text = speed.ToString();
         }
 
+        private void HandlePositionIndication()
+        {
+            bool isActive = _currentPosition > 0 ? true : false;
+            _inRaceUI.PositionIndicator.PositionText.gameObject.SetActive(isActive);
+            _inRaceUI.PositionIndicator.PositionText.text = _currentPosition.ToString();
+        }
+
+        private void HandleProgressBar()
+        {
+            _inRaceUI.RaceProgressBar.ProgressImage.fillAmount = _trackProgress;
+        }
+
+        private void ChangeViewDependingOn(CarState playerCarState)
+        {
+            switch (playerCarState)
+            {
+                case CarState.InShed:
+                    break;
+                case CarState.OnTrack:
+                    ShowRaceUI();
+                    break;
+                case CarState.Stuck:
+                    break;
+                case CarState.Finished:
+                    ShowFinishUI();
+                    break;
+                case CarState.GotHit:
+                    break;
+            }
+        }
+
+        private void ShowRaceUI()
+        {
+            _isRaceFinished = false;
+        }
+
+        private void ShowFinishUI()
+        {
+            _isRaceFinished = true;
+        }
 
         public void OnNext(DriverProfile profile)
         {
@@ -60,4 +113,3 @@ namespace RaceManager.UI
         public void OnError(Exception error) => throw error;
     }
 }
-

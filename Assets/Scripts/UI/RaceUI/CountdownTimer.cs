@@ -46,7 +46,7 @@ namespace RaceManager.UI
             _countdownTimerView.StartText.gameObject.SetActive(true);
             RaceEventsHub.BroadcastNotification(RaceEventType.START);
 
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(1.5f);
 
             _countdownTimerView.gameObject.SetActive(false);
         }

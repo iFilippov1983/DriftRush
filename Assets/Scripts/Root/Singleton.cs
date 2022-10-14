@@ -1,17 +1,14 @@
 using RaceManager.Race;
 using RaceManager.Cars;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UniRx;
 using UnityEngine;
 using UnityEngine.Events;
 
-
 namespace RaceManager.Root
 {
-    public class Singleton<T> : MonoBehaviour where T : Component
+    public abstract class Singleton<T> : MonoBehaviour where T : Component
     {
         private static T _instance;
 
@@ -38,12 +35,15 @@ namespace RaceManager.Root
             {
                 _instance = this as T;
                 DontDestroyOnLoad(gameObject);
+                AwakeSingleton();
             }
             else
             {
                 Destroy(gameObject);
             }
         }
+
+        protected virtual void AwakeSingleton() { }
     }
 }
 

@@ -1,5 +1,6 @@
 using RaceManager.Tools;
 using Sirenix.OdinInspector;
+using UniRx.Triggers;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -13,8 +14,9 @@ namespace RaceManager.Cars
         private const float AccelSensitivity = 1f;              //(0-1)How sensitively the AI uses the accelerator to reach the current desired speed
                   //If angle to target is grater then this value car turns as much as possible
 
-        //[SerializeField]
+        [SerializeField]
         private CarSettings _carSettings;
+        //private DriverProfile _profile;
         [SerializeField] private Transform _target;             // 'target' the target object to aim for.
         [SerializeField] private bool _isDriving = false;       // whether the AI is currently actively driving or stopped.
 
@@ -52,17 +54,17 @@ namespace RaceManager.Cars
 
         //private void OnEnable()
         //{
-        //    _carController = GetComponent<CarController>();
+        //    //_carController = GetComponent<CarController>();
         //    _sphereCollider = GetComponent<SphereCollider>();
         //    _spherecastRadius = _sphereCollider.radius;
 
-        //    if (PlayerDriving)
-        //        DesiredSpeed = _driverSettings.CruiseSpeed;
-        //    else
-        //    {
-        //        DesiredSpeed = _carController.MaxSpeed * Random.Range(_driverSettings.CruiseSpeedPercentMin, _driverSettings.CruiseSpeedPercentMax);
-        //        Debug.Log($"{gameObject.name} speed: {DesiredSpeed}");
-        //    }
+        //    //if (PlayerDriving)
+        //    //    DesiredSpeed = _carSettings.CruiseSpeed;
+        //    //else
+        //    //{
+        //    //    DesiredSpeed = _carController.MaxVelocityMagnitude * Random.Range(_carSettings.CruiseSpeedPercentMin, _carSettings.CruiseSpeedPercentMax);
+        //    //    Debug.Log($"{gameObject.name} speed: {DesiredSpeed}");
+        //    //}
 
 
         //    StartEngine();
@@ -70,6 +72,7 @@ namespace RaceManager.Cars
 
         public void Initialize(CarSettings carSettings)
         {
+            //_profile = profile;
             _carSettings = carSettings;
             _criticalSteeAngle = _carSettings.MaximumSteerAngle;
             _carController = GetComponent<CarController>();
@@ -86,6 +89,7 @@ namespace RaceManager.Cars
         {
             MoveCar();
             HandbrakeIfNeeded();
+            //UpdateProfile();
         }
 
         private void MoveCar()
@@ -244,6 +248,13 @@ namespace RaceManager.Cars
                 _carController.Move(0, 0, -1f, 1f);
             }
         }
+
+        //private void UpdateProfile()
+        //{
+        //    var value = _profile.Content.Value;
+        //    value.CarCurrentSpeed = _carController.VelocityMagnitude;
+        //    _profile.Content.SetValueAndForceNotify(value);
+        //}
 
         private bool IsCarInFrontOfAICar(out Vector3 position, out Vector3 otherCarRightVector)
         {

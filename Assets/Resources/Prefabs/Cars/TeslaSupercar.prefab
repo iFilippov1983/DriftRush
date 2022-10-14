@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3300028}
   - component: {fileID: 6500004}
   - component: {fileID: 2300028}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: ColliderBottom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -107,7 +107,7 @@ GameObject:
   - component: {fileID: 3300018}
   - component: {fileID: 6500002}
   - component: {fileID: 2300018}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: ColliderFront
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -199,7 +199,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 400032}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: Particles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -230,7 +230,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 400034}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: Helpers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -266,7 +266,7 @@ GameObject:
   - component: {fileID: 3300012}
   - component: {fileID: 6500000}
   - component: {fileID: 2300012}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: ColliderBody
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -358,7 +358,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 400036}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: Lights
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -390,7 +390,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 400038}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: WheelHubs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -425,7 +425,7 @@ GameObject:
   m_Component:
   - component: {fileID: 400042}
   - component: {fileID: 10800002}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: HeadlighRightSpot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -518,7 +518,7 @@ GameObject:
   m_Component:
   - component: {fileID: 400044}
   - component: {fileID: 10800000}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: HeadlightLeftSpot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -611,7 +611,7 @@ GameObject:
   m_Component:
   - component: {fileID: 400046}
   - component: {fileID: 14600000}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: WheelHubRearLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -671,7 +671,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 400048}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: Colliders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -706,7 +706,7 @@ GameObject:
   - component: {fileID: 400050}
   - component: {fileID: 19800000}
   - component: {fileID: 19900000}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: ParticleBurnoutSmoke
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5413,7 +5413,7 @@ GameObject:
   m_Component:
   - component: {fileID: 400052}
   - component: {fileID: 14600002}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: WheelHubRearRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5474,7 +5474,7 @@ GameObject:
   m_Component:
   - component: {fileID: 400054}
   - component: {fileID: 14600006}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: WheelHubFrontLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5535,7 +5535,7 @@ GameObject:
   m_Component:
   - component: {fileID: 400056}
   - component: {fileID: 14600004}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: WheelHubFrontRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5595,7 +5595,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 400060}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: WaypointTargetObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5625,7 +5625,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 400062}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: CameraFocusPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5664,7 +5664,7 @@ GameObject:
   - component: {fileID: 3496506298170564824}
   - component: {fileID: 9157124407385116014}
   - component: {fileID: 1523802306629258647}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: TeslaSupercar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5749,7 +5749,7 @@ MonoBehaviour:
   groundTrigger: {fileID: 4570013244169472456}
   wheelCollidables:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 512
 --- !u!114 &8130441704892026965
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5762,6 +5762,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d963df58504b69045b8d0d746ba6f777, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _carSettings: {fileID: 0}
   _target: {fileID: 400060}
   _isDriving: 0
   _isAvoidingCars: 1
@@ -5857,7 +5858,7 @@ GameObject:
   - component: {fileID: 3530048556027760347}
   - component: {fileID: 281553864568887306}
   - component: {fileID: 1174522376911588986}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: Wheel_BR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5936,7 +5937,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5161881645034346558}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SmokeParticles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5974,7 +5975,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4423076783138748939}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SkidTrails
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6011,7 +6012,7 @@ GameObject:
   - component: {fileID: 1870152367605109005}
   - component: {fileID: 1728036394219408638}
   - component: {fileID: 3418210625371263626}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SmokeParticleFLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10799,7 +10800,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -49957183
-  m_SortingLayer: -2
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_RenderMode: 0
   m_SortMode: 0
@@ -10836,7 +10837,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1978953900103352776}
   - component: {fileID: 1930600731981438895}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: CarHitSFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10965,7 +10966,7 @@ GameObject:
   - component: {fileID: 2611159019193763386}
   - component: {fileID: 6211937306925250635}
   - component: {fileID: 1939889322374331707}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: Main_shpe.005
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11046,7 +11047,7 @@ GameObject:
   - component: {fileID: 1296458415449112817}
   - component: {fileID: 3400287912337231651}
   - component: {fileID: 6102577744839382090}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: Main_shpe.013
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11126,7 +11127,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4570013244169472456}
   - component: {fileID: 5086086049176632124}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: TrackTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11171,7 +11172,7 @@ GameObject:
   - component: {fileID: 1698739484568788229}
   - component: {fileID: 89402992491532450}
   - component: {fileID: 1486950022627172866}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: Wheel_FL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11250,7 +11251,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1705698601359204032}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: SFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11286,7 +11287,7 @@ GameObject:
   - component: {fileID: 2250046263668110416}
   - component: {fileID: 3386057689463036448}
   - component: {fileID: 6319925819078380236}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SmokeParticleFRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16074,7 +16075,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -49957183
-  m_SortingLayer: -2
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_RenderMode: 0
   m_SortMode: 0
@@ -16113,7 +16114,7 @@ GameObject:
   - component: {fileID: 7780361426307014519}
   - component: {fileID: 5309760680275091408}
   - component: {fileID: 1505926889801321835}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SmokeParticleBLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20901,7 +20902,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -49957183
-  m_SortingLayer: -2
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_RenderMode: 0
   m_SortMode: 0
@@ -20939,7 +20940,7 @@ GameObject:
   - component: {fileID: 4429249506129580752}
   - component: {fileID: 8535137829832803932}
   - component: {fileID: 3292851822210543709}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: Main_shpe.008
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21020,7 +21021,7 @@ GameObject:
   - component: {fileID: 8005340840902891027}
   - component: {fileID: 1328537915689474482}
   - component: {fileID: 1549413533210545028}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: Main_shpe.009
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21102,7 +21103,7 @@ GameObject:
   - component: {fileID: 3069640162802832948}
   - component: {fileID: 2646864233319017450}
   - component: {fileID: 6384527388641669034}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ParticleBurnoutSmoke (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25794,7 +25795,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1007473549
-  m_SortingLayer: -1
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_RenderMode: 4
   m_SortMode: 1
@@ -25831,7 +25832,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5575051764839498626}
   - component: {fileID: 9073569159620375917}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: CarEngineSFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25961,7 +25962,7 @@ GameObject:
   - component: {fileID: 1177093748380498693}
   - component: {fileID: 5723364594568467146}
   - component: {fileID: 9044431831039089794}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ParticleBurnoutSmoke
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30653,7 +30654,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1007473549
-  m_SortingLayer: -1
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_RenderMode: 4
   m_SortMode: 1
@@ -30690,7 +30691,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1680387582943539438}
   - component: {fileID: 1454628137993560713}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: CarScreechSFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30820,7 +30821,7 @@ GameObject:
   - component: {fileID: 5508181425868477733}
   - component: {fileID: 8535690732411155751}
   - component: {fileID: 6445758916935826101}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SmokeParticleBRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -35608,7 +35609,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -49957183
-  m_SortingLayer: -2
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_RenderMode: 0
   m_SortMode: 0
@@ -35646,7 +35647,7 @@ GameObject:
   - component: {fileID: 3142699179707810464}
   - component: {fileID: 271062809080710395}
   - component: {fileID: 5440002750297830546}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: Main_shpe.012
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -35728,7 +35729,7 @@ GameObject:
   - component: {fileID: 6653760500681293233}
   - component: {fileID: 7094862717362284217}
   - component: {fileID: 2986268491743681607}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ParticleBurnoutSmoke (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40420,7 +40421,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1007473549
-  m_SortingLayer: -1
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_RenderMode: 4
   m_SortMode: 1
@@ -40458,7 +40459,7 @@ GameObject:
   - component: {fileID: 2717829157447874042}
   - component: {fileID: 7942601584645993343}
   - component: {fileID: 6277998533179734500}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: Main_shpe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40537,7 +40538,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7607326214345816700}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: Newtesla
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40581,7 +40582,7 @@ GameObject:
   - component: {fileID: 3322507626371897362}
   - component: {fileID: 1262382378100870359}
   - component: {fileID: 6444688763312295220}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: Main_shpe.007
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40662,7 +40663,7 @@ GameObject:
   - component: {fileID: 6323601792930401203}
   - component: {fileID: 2640813426298832814}
   - component: {fileID: 8090924623521283407}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: Wheel_FR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40743,7 +40744,7 @@ GameObject:
   - component: {fileID: 1511795706003409998}
   - component: {fileID: 7508682080719958729}
   - component: {fileID: 9178617170337449602}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: Wheel_BL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40825,7 +40826,7 @@ GameObject:
   - component: {fileID: 519153524657799393}
   - component: {fileID: 4760758134092189601}
   - component: {fileID: 174328836832977376}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ParticleBurnoutSmoke (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45517,7 +45518,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1007473549
-  m_SortingLayer: -1
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_RenderMode: 4
   m_SortMode: 1
@@ -45555,7 +45556,7 @@ GameObject:
   - component: {fileID: 2004067338496918079}
   - component: {fileID: 3882039386030492347}
   - component: {fileID: 9104626084190997634}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: Main_shpe.011
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45636,6 +45637,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: WheelSckidTrail_BL
+      objectReference: {fileID: 0}
+    - target: {fileID: 2602381700249603944, guid: 4298c579503bfe1478c22a1fe9863161,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 2602381700249603945, guid: 4298c579503bfe1478c22a1fe9863161,
         type: 3}
@@ -45718,6 +45724,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: WheelSckidTrail_BR
       objectReference: {fileID: 0}
+    - target: {fileID: 2602381700249603944, guid: 4298c579503bfe1478c22a1fe9863161,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 2602381700249603945, guid: 4298c579503bfe1478c22a1fe9863161,
         type: 3}
       propertyPath: m_RootOrder
@@ -45799,6 +45810,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: WheelSckidTrail_FL
       objectReference: {fileID: 0}
+    - target: {fileID: 2602381700249603944, guid: 4298c579503bfe1478c22a1fe9863161,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 2602381700249603945, guid: 4298c579503bfe1478c22a1fe9863161,
         type: 3}
       propertyPath: m_RootOrder
@@ -45879,6 +45895,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: WheelSckidTrail_FR
+      objectReference: {fileID: 0}
+    - target: {fileID: 2602381700249603944, guid: 4298c579503bfe1478c22a1fe9863161,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 2602381700249603945, guid: 4298c579503bfe1478c22a1fe9863161,
         type: 3}

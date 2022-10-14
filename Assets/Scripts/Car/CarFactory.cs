@@ -1,4 +1,5 @@
-﻿using RaceManager.Tools;
+﻿using RaceManager.Root;
+using RaceManager.Tools;
 using RaceManager.Waypoints;
 using UnityEngine;
 
@@ -36,7 +37,6 @@ namespace RaceManager.Cars
             }
 
             driverProfile = new DriverProfile();
-            driverProfile.CarState.Value = CarState.OnTrack;
 
             carController = go.GetComponent<CarController>();
             carController.Initialize(_carSettings);

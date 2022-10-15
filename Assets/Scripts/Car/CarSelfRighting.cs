@@ -3,6 +3,7 @@ using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using UnityEngine;
+using PG_Physics.Wheel;
 
 namespace RaceManager.Cars
 {
@@ -12,12 +13,12 @@ namespace RaceManager.Cars
 
         // Automatically put the car the right way up, if it has come to rest upside-down or stuck.
         [SerializeField] private float _waitTimeStuck = 1f;              // time to wait before self righting
-        [SerializeField] private float _velocityThreshold = 0.7f;   // the velocity below which the car is considered stationary for self-righting
+        [SerializeField] private float _velocityThreshold = 0.5f;   // the velocity below which the car is considered stationary for self-righting
         private float _stuckTimer;
 
-        private CarAIControl _carAI;
+        private CarAI _carAI;
         private Rigidbody _rigidbody;
-        private WheelCollider[] _wheelColliders;
+        private Wheel[] _wheels;
         [ReadOnly]
         public Transform LastOkPoint;
 
@@ -27,15 +28,15 @@ namespace RaceManager.Cars
         //    _rigidbody = carRigidbody;
         //}
 
-        private void Start()
+        private void OnEnable()
         {
-            _carAI = GetComponent<CarAIControl>();
+            _carAI = GetComponent<CarAI>();
             _rigidbody = GetComponent<Rigidbody>();
         }
 
-        internal void Setup(WheelCollider[] wheelColliders)
+        internal void Setup(Wheel[] wheels)
         {
-            _wheelColliders = wheelColliders;
+            _wheels = wheels;
         }
 
         private void Update()
@@ -45,7 +46,7 @@ namespace RaceManager.Cars
 
         private void FixedUpdate()
         {
-            GroundingControl();
+            //GroundingControl();
         }
 
         private void OnCollisionEnter(Collision collision)
@@ -96,11 +97,11 @@ namespace RaceManager.Cars
 
         private void GroundingControl()
         {
-            for (int i = 0; i < _wheelColliders.Length; i++)
+            for (int i = 0; i < _wheels.Length; i++)
             {
-                if (_wheelColliders[i].isGrounded == false)
+                if (_wheels[i].WheelCollider.isGrounded == false)
                 {
-                    _wheelColliders[i].attachedRigidbody.AddForceAtPosition(Vector3.down * GroundingForce, _wheelColliders[i].transform.position, ForceMode.Force);
+                    _wheels[i].WheelCollider.attachedRigidbody.AddForceAtPosition(Vector3.down * GroundingForce, _wheels[i].WheelCollider.transform.position, ForceMode.Force);
                     //Debug.Log($"Force added to: {_wheelColliders[i].name}");
                 }
             }
@@ -109,9 +110,9 @@ namespace RaceManager.Cars
         private bool CarIsFlipedOrFlying()
         {
             bool allWheelsOnGround = false;
-            for (int i = 0; i < _wheelColliders.Length; i++)
+            for (int i = 0; i < _wheels.Length; i++)
             {
-                if (_wheelColliders[i].isGrounded) allWheelsOnGround = true;
+                if (_wheels[i].WheelCollider.isGrounded) allWheelsOnGround = true;
             }
 
             return allWheelsOnGround;

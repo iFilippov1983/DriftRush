@@ -16,21 +16,21 @@ namespace RaceManager.Race
         private Driver _playerDriver;
         private List<Driver> _drivers;
 
-        private List<WaypointProgressTracker> _waypointsTrackers;
+        private List<WaypointsTracker> _waypointsTrackers;
 
         public void StartHandle()
         {
             _drivers = RaceInitializer.Instance.Drivers;
             _playerDriver = _drivers.Find(d => d.DriverType == DriverType.Player);
 
-            WaypointProgressTracker[] waypointsTrackesArray = FindObjectsOfType<WaypointProgressTracker>();
-            _waypointsTrackers = new List<WaypointProgressTracker>(waypointsTrackesArray);
+            WaypointsTracker[] waypointsTrackesArray = FindObjectsOfType<WaypointsTracker>();
+            _waypointsTrackers = new List<WaypointsTracker>(waypointsTrackesArray);
 
-            foreach (WaypointProgressTracker tracker in _waypointsTrackers)
+            foreach (WaypointsTracker tracker in _waypointsTrackers)
                 tracker.OnPassedWaypoint += OnPassedWaypoint;
         }
 
-        private void OnPassedWaypoint(WaypointProgressTracker waypointTracker)
+        private void OnPassedWaypoint(WaypointsTracker waypointTracker)
         {
             _waypointsTrackers = _waypointsTrackers
                 .OrderByDescending(t => t.NumberOfWaypointsPassed)
@@ -43,7 +43,7 @@ namespace RaceManager.Race
 
         private void OnDestroy()
         {
-            foreach (WaypointProgressTracker tracker in _waypointsTrackers)
+            foreach (WaypointsTracker tracker in _waypointsTrackers)
                 tracker.OnPassedWaypoint -= OnPassedWaypoint;
         }
     }

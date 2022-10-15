@@ -13,13 +13,12 @@ namespace RaceManager.Cars
         private const float AccelSensitivity = 1f;              //(0-1)How sensitively the AI uses the accelerator to reach the current desired speed
                                                                 //If angle to target is grater then this value car turns as much as possible
 
-        [SerializeField]
-        private CarSettings _carSettings;
-        //private DriverProfile _profile;
+        [SerializeField, ReadOnly]
+        private CarConfig _carConfig;
         [SerializeField] private Transform _target;             // 'target' the target object to aim for.
         [SerializeField] private bool _isDriving = false;       // whether the AI is currently actively driving or stopped.
 
-        private CarControllerMain _carController;
+        private Car _car;
         private SphereCollider _sphereCollider;
         private float _currentSpeed;
         private float _spherecastRadius;
@@ -47,56 +46,58 @@ namespace RaceManager.Cars
         public bool PlayerDriving = false;
         [ReadOnly]
         public float DesiredSpeed;
-        public float CruiseSpeed => _carSettings.CruiseSpeed;
         public void StopAvoiding() => _isAvoidingCars = false;
         public Transform Target => _target;
 
         private void Start()
         {
-            _carController = GetComponent<CarControllerMain>();
+            _car = GetComponent<Car>();
             _sphereCollider = GetComponent<SphereCollider>();
             _spherecastRadius = _sphereCollider.radius;
+            _spherecastRadius = _sphereCollider.radius * 0.5f;
+            _randomPerlin = Random.value * 100;
 
-            DesiredSpeed = _carController.GetCarConfig.CruiseSpeed;
-            if (PlayerDriving)
-                DesiredSpeed = _carController.GetCarConfig.CruiseSpeed;
-            else
-            {
-                DesiredSpeed = _carController.GetCarConfig.MaxSpeed * Random.Range(_carSettings.CruiseSpeedPercentMin, _carSettings.CruiseSpeedPercentMax);
-                Debug.Log($"{gameObject.name} speed: {DesiredSpeed}");
-            }
-
-
-            StartEngine();
+            //if (PlayerDriving)
+            //    DesiredSpeed = _car.CarConfig.CruiseSpeed;
+            //else
+            //{
+            //    DesiredSpeed = _car.CarConfig.MaxSpeed * Random.Range(_carConfig.CruiseSpeedPercentMin, _carConfig.CruiseSpeedPercentMax);
+            //    Debug.Log($"{gameObject.name} speed: {DesiredSpeed}");
+            //}
+            //StartEngine();
         }
 
-        //public void Initialize(CarSettings carSettings)
-        //{
-        //    //_profile = profile;
-        //    _carSettings = carSettings;
-        //    _criticalSteeAngle = _carSettings.MaximumSteerAngle;
-        //    _carController = GetComponent<CarControllerMain>();
-        //    _sphereCollider = GetComponent<SphereCollider>();
-        //    _spherecastRadius = _sphereCollider.radius * 0.5f;
+        public void Initialize(CarConfig carConfig)
+        {
+            //_profile = profile;
+            _carConfig = carConfig;
+            _criticalSteeAngle = _carConfig.MaxSteerAngle;
+            //_car = GetComponent<Car>();
+            //_sphereCollider = GetComponent<SphereCollider>();
+            //_spherecastRadius = _sphereCollider.radius * 0.5f;
 
-        //    _randomPerlin = Random.value * 100;
+            //_randomPerlin = Random.value * 100;
 
-        //    DesiredSpeed = _carController.MaxVelocityMagnitude * Random.Range(_carSettings.CruiseSpeedPercentMin, _carSettings.CruiseSpeedPercentMax);
-        //    //Debug.Log($"{gameObject.name} speed: {DesiredSpeed}");
-        //}
+            if (PlayerDriving)
+                DesiredSpeed = _car.CarConfig.CruiseSpeed;
+            else
+            {
+                DesiredSpeed = _car.CarConfig.MaxSpeed * Random.Range(_carConfig.CruiseSpeedPercentMin, _carConfig.CruiseSpeedPercentMax);
+                Debug.Log($"{gameObject.name} speed: {DesiredSpeed}");
+            }
+            StartEngine();
+        }
 
         private void Update()
         {
             MoveCar();
             HandbrakeIfNeeded();
-        }
 
-        //private void FixedUpdate()
-        //{
-        //    MoveCar();
-        //    HandbrakeIfNeeded();
-        //    //UpdateProfile();
-        //}
+            if (PlayerDriving)
+            {
+                _car.DebugSelf();
+            }
+        }
 
         private void MoveCar()
         {
@@ -106,63 +107,22 @@ namespace RaceManager.Cars
                 float accel = CalculateAcceleration();
                 float steer = CalculateSteering();
 
-                #region another variants
-                //float accelBrakeSensitivity = (_currentSpeed < _carController.CurrentSpeed)
-                //                                  ? BrakeSensitivity
-                //                                  : AccelSensitivity;
-
-                //// decide the actual amount of accel/brake input to achieve desired speed.
-                //float accel = Mathf.Clamp((_currentSpeed - _carController.CurrentSpeed) * accelBrakeSensitivity, -1, 1);
-
-                ////acceleration and way aline wander for more realistic AI behaviour
-                ////accel *= (1 - _accelerationWanderAmount) +
-                ////         (Mathf.PerlinNoise(Time.time * _accelerationWanderSpeed, _randomPerlin) * _accelerationWanderAmount);
-                ////Vector3 position = MakeWanderPositionOffsetFromTarget();
-
-                //// calculate the local-relative position of the target, to steer towards
-                //Vector3 localTarget = transform.InverseTransformPoint(_target.position);
-                ////Vector3 localTarget = transform.InverseTransformPoint(position);
-                //Vector3 vectorToTarget = _target.position - transform.position;
-                ////Vector3 vectorToTarget = localTarget - transform.position;
-                //vectorToTarget.Normalize();
-
-                //// work out the local angle towards the target
-                //float targetAngle;
-                //if (_isAvoidingCars)
-                //{
-                //    AvoidAICars(vectorToTarget, out vectorToTarget);
-                //    //AvoidAICars(localTarget, out localTarget);
-                //    targetAngle = Vector3.SignedAngle(transform.forward, vectorToTarget, transform.up);
-                //    //targetAngle = Vector3.SignedAngle(transform.forward, localTarget, transform.up);
-                //    //targetAngle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.z) * Mathf.Rad2Deg;
-                //    //targetAngle = Mathf.Atan2(localTarget.y, localTarget.z) * Mathf.Rad2Deg;
-                //}
-                //else
-                //{
-                //    targetAngle = Mathf.Atan2(localTarget.x, localTarget.z) * Mathf.Rad2Deg;
-                //}
-
-                //// get the amount of steering needed to aim the car towards the target
-                ////float steer = Mathf.Clamp(targetAngle * SteerSensitivity, -1, 1) * Mathf.Sign(_carController.CurrentSpeed);
-                //float steer = targetAngle / CriticalSteeAngle;
-                #endregion
-
-                _carController.UpdateControls(steer, accel, false);
+                _car.UpdateControls(steer, accel, false);
             }
             else
             {
-                _carController.UpdateControls(0, 0, true);
+                _car.UpdateControls(0, 0, true);
             }
         }
 
         private float CalculateAcceleration()
         {
-            float accelBrakeSensitivity = (_currentSpeed < _carController.VelocityMagnitude)
+            float accelBrakeSensitivity = (_currentSpeed < _car.VelocityMagnitude)
                                                       ? BrakeSensitivity
                                                       : AccelSensitivity;
 
             // decide the actual amount of accel/brake input to achieve desired speed.
-            float accel = Mathf.Clamp((_currentSpeed - _carController.VelocityMagnitude) * accelBrakeSensitivity, -1, 1);
+            float accel = Mathf.Clamp((_currentSpeed - _car.VelocityMagnitude) * accelBrakeSensitivity, -1, 1);
 
             //acceleration and way aline wander for more realistic AI behaviour
             accel *= (1 - _accelerationWanderAmount) +
@@ -189,33 +149,7 @@ namespace RaceManager.Cars
             float steer = targetAngle / _criticalSteeAngle;
 
             //steer = Mathf.Clamp(steer, -1f, 1f);
-            steer = Mathf.Clamp(steer * SteerSensitivity, -1f, 1f) * Mathf.Sign(_carController.VelocityMagnitude);
-            return steer;
-        }
-
-        private float CalculateSteering(out Vector3 vectorToTarget)
-        {
-            if (_target == null)
-            {
-                vectorToTarget = Vector3.zero;
-                return 0;
-            }
-
-
-            vectorToTarget = _target.position - transform.position;
-            vectorToTarget.Normalize();
-
-            if (_isAvoidingCars)
-                AvoidAICars(vectorToTarget, out vectorToTarget);
-
-            //Vector3 position = MakeWanderPositionOffsetFromTarget();
-            //vectorToTarget = Vector3.Lerp(vectorToTarget, position, _avoidanceLerpFactor * Time.fixedDeltaTime);
-
-            float targetAngle = Vector3.SignedAngle(transform.forward, vectorToTarget, transform.up);
-            float steer = targetAngle / _criticalSteeAngle;
-
-            //steer = Mathf.Clamp(steer, -1f, 1f);
-            steer = Mathf.Clamp(steer * SteerSensitivity, -1f, 1f) * Mathf.Sign(_carController.VelocityMagnitude);
+            steer = Mathf.Clamp(steer * SteerSensitivity, -1f, 1f) * Mathf.Sign(_car.VelocityMagnitude);
             return steer;
         }
 
@@ -251,16 +185,9 @@ namespace RaceManager.Cars
         {
             if (_target == null)
             {
-                _carController.UpdateControls(0, 0, true);
+                _car.UpdateControls(0, 0, true);
             }
         }
-
-        //private void UpdateProfile()
-        //{
-        //    var value = _profile.Content.Value;
-        //    value.CarCurrentSpeed = _carController.VelocityMagnitude;
-        //    _profile.Content.SetValueAndForceNotify(value);
-        //}
 
         private bool IsCarInFrontOfAICar(out Vector3 position, out Vector3 otherCarRightVector)
         {
@@ -313,7 +240,7 @@ namespace RaceManager.Cars
 
                 float avoidanceInfluence = 1f - driveToTargetInfluence;
 
-                _avoidanceVectorLerped = Vector3.Lerp(_avoidanceVectorLerped, avoidanceVector, Time.fixedDeltaTime * _avoidanceLerpFactor / _carController.VelocityMagnitude);
+                _avoidanceVectorLerped = Vector3.Lerp(_avoidanceVectorLerped, avoidanceVector, Time.fixedDeltaTime * _avoidanceLerpFactor / _car.VelocityMagnitude);
 
                 newVectorToTarget = vectorToTarget * driveToTargetInfluence + _avoidanceVectorLerped * avoidanceInfluence;
                 newVectorToTarget.Normalize();
@@ -351,7 +278,7 @@ namespace RaceManager.Cars
             Vector3 contactPoint = collision.GetContact(0).point;
             Vector3 direction = collision.rigidbody.transform.position - transform.position;
             direction.Normalize();
-            Vector3 force = direction * _carSettings.Durability * _carController.VelocityMagnitude;
+            Vector3 force = direction * _carConfig.Durability * _car.VelocityMagnitude;
             force.y = 0f;
 
             collision.rigidbody.AddForceAtPosition(force, contactPoint, ForceMode.Impulse);
@@ -393,18 +320,6 @@ namespace RaceManager.Cars
         public void StartEngine()
         {
             _isDriving = true;
-            //_carController.StartMove();
-        }
-
-        private void OnGUI()
-        {
-            GUI.color = Color.green;
-            if (PlayerDriving)
-                GUI.Label
-                    (
-                    new Rect(10, 50, 150, 100),
-                    $"Lateral velocity: {Mathf.RoundToInt(Vector3.Dot(transform.right, _carController.Velocity))}"
-                    );
         }
     }
 }

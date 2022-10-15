@@ -16,20 +16,20 @@ namespace RaceManager.Cars
 
         private DriverProfile _profile;
         private GameObject _carObject;
-        private CarAIControl _carAIControl;
-        private CarController _carController;
-        private WaypointProgressTracker _waypointProgressTracker;
+        private CarAI _carAI;
+        private Car _car;
+        private WaypointsTracker _waypointsTracker;
         private List<IObserver<DriverProfile>> _observersList;
 
         public DriverProfile Profile => _profile;
         public GameObject CarObject => _carObject;
-        public Transform TargetToFollow => _carAIControl.Target;
+        public Transform TargetToFollow => _carAI.Target;
 
-        public void Initialize(DriverType type, CarSettings carSettings, CarsDepot carsDepot, WaypointTrack waypointTrack)
+        public void Initialize(DriverType type, CarConfig carConfig, CarsDepot carsDepot, WaypointTrack waypointTrack)
         {
             DriverType = type;
-            CarFactory carFactory = new CarFactory(type, carSettings, carsDepot, waypointTrack, transform);
-            _carObject = carFactory.InitCar(out _carController, out _carAIControl, out _waypointProgressTracker, out _profile);
+            CarFactory carFactory = new CarFactory(type, carConfig, carsDepot, waypointTrack, transform);
+            _carObject = carFactory.InitCar(out _car, out _carAI, out _waypointsTracker, out _profile);
             //transform.SetParent(_carObject.transform, false);
 
             _profile.CarState.Value = CarState.OnTrack;
@@ -62,9 +62,9 @@ namespace RaceManager.Cars
 
         private void UpdateProfile()
         {
-            _profile.CarCurrentSpeed = _carController.VelocityMagnitude;
-            _profile.TrackProgress = _waypointProgressTracker.Progress;
-            _profile.PositionInRace = _waypointProgressTracker.CarPosition;
+            _profile.CarCurrentSpeed = _car.VelocityMagnitude;
+            _profile.TrackProgress = _waypointsTracker.Progress;
+            _profile.PositionInRace = _waypointsTracker.CarPosition;
             NotifyObservers();
         }
 
@@ -88,13 +88,13 @@ namespace RaceManager.Cars
 
         private void StartRace()
         {
-            _carAIControl.StartEngine();
+            _carAI.StartEngine();
             NotifyObservers();
         }
 
         private void StopRace()
         {
-            _carAIControl.StopEngine();
+            _carAI.StopEngine();
 
             if (DriverType == DriverType.Player)
             {

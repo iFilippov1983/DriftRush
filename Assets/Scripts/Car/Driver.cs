@@ -23,7 +23,11 @@ namespace RaceManager.Cars
 
         public DriverProfile Profile => _profile;
         public GameObject CarObject => _carObject;
+<<<<<<< Updated upstream
         public Transform TargetToFollow => _carAIControl.Target;
+=======
+        //public Transform TargetToFollow => _carAI.Target;
+>>>>>>> Stashed changes
 
         public void Initialize(DriverType type, CarSettings carSettings, CarsDepot carsDepot, WaypointTrack waypointTrack)
         {
@@ -62,9 +66,15 @@ namespace RaceManager.Cars
 
         private void UpdateProfile()
         {
+<<<<<<< Updated upstream
             _profile.CarCurrentSpeed = _carController.VelocityMagnitude;
             _profile.TrackProgress = _waypointProgressTracker.Progress;
             _profile.PositionInRace = _waypointProgressTracker.CarPosition;
+=======
+            //_profile.CarCurrentSpeed = _car.VelocityMagnitude;
+            _profile.TrackProgress = _waypointsTracker.Progress;
+            _profile.PositionInRace = _waypointsTracker.CarPosition;
+>>>>>>> Stashed changes
             NotifyObservers();
         }
 

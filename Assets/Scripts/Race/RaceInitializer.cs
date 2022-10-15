@@ -15,9 +15,15 @@ namespace RaceManager.Race
     {
         [SerializeField] private CarsDepot _carsDepot;
         [Space]
+<<<<<<< Updated upstream
         [SerializeField] private CarSettings _playerCarSettings;
         [Space]
         [SerializeField] private CarSettings _opponentCarSettings;
+=======
+        [SerializeField] private CarConfigScriptable _playerCarConfigScriptable;
+        [Space]
+        [SerializeField] private CarConfigScriptable _opponentCarConfigScriptable;
+>>>>>>> Stashed changes
         [Space]
         [SerializeField] private RaceUI _raceUI;
         [SerializeField] private CinemachineVirtualCamera _followCam;
@@ -69,7 +75,11 @@ namespace RaceManager.Race
                 var driver = driverGo.GetComponent<Driver>();
                 if (_startPoints[i].Type == DriverType.Player)
                 {
+<<<<<<< Updated upstream
                     driver.Initialize(_startPoints[i].Type, _playerCarSettings, _carsDepot, _waypointTrackMain);
+=======
+                    driver.Initialize(_startPoints[i].Type, _playerCarConfigScriptable.CarConfig, _carsDepot, _waypointTrackMain);
+>>>>>>> Stashed changes
                     _followCam.LookAt = driver.CarObject.transform;
                     _followCam.Follow = driver.CarObject.transform;
                     //_followCam.LookAt = driver.TargetToFollow;
@@ -80,7 +90,11 @@ namespace RaceManager.Race
                 else
                 {
                     WaypointTrack track = (i % 2) == 0 ? _waypointTrackEven : _waypointTrackOdd;
+<<<<<<< Updated upstream
                     driver.Initialize(_startPoints[i].Type, _opponentCarSettings, _carsDepot, track);
+=======
+                    driver.Initialize(_startPoints[i].Type, _opponentCarConfigScriptable.CarConfig, _carsDepot, track);
+>>>>>>> Stashed changes
                     driverGo.name += $"_{i + 1}";
                 }
 

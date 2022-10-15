@@ -39,6 +39,7 @@ namespace RaceManager.Waypoints
 
         public Action<WaypointsTracker> OnPassedWaypoint;
 
+<<<<<<< Updated upstream:Assets/ThirdParty/ACC_Lite/Scripts/Game/GamePlay/WaypointsTracker.cs
         private void Start()
         {
             // You can manually create a transform and assign it to this component *and* the AI,
@@ -50,6 +51,19 @@ namespace RaceManager.Waypoints
             _progressDistance = 0;
             _lapsToComplete = _waypointTrack.LapsToComplete;
         }
+=======
+        //private void Start()
+        //{
+        //    // You can manually create a transform and assign it to this component *and* the AI,
+        //    // then this component will update it, and the AI can read it.
+        //    if (_target == null)
+        //    {
+        //        _target = new GameObject(name + " Waypoint Target").transform;
+        //    }
+        //    _progressDistance = 0;
+        //    _lapsToComplete = _waypointTrack.LapsToComplete;
+        //}
+>>>>>>> Stashed changes:Assets/Scripts/Waypoints/WaypointsTracker.cs
 
         //public void Initialize(WaypointTrack waypointTrack, DriverProfile driverProfile)
         //{
@@ -57,12 +71,20 @@ namespace RaceManager.Waypoints
         //    _driverProfile = driverProfile;
         //    _lapsToComplete = _waypointTrack.LapsToComplete;
 
+<<<<<<< Updated upstream:Assets/ThirdParty/ACC_Lite/Scripts/Game/GamePlay/WaypointsTracker.cs
         //    if (_target == null)
         //    {
         //        _target = new GameObject(name + " Waypoint Target").transform;
         //    }
         //    _progressDistance = 0;
         //}
+=======
+            if (_target == null)
+            {
+                _target = new GameObject(name + " Waypoint Target").transform;
+            }
+        }
+>>>>>>> Stashed changes:Assets/Scripts/Waypoints/WaypointsTracker.cs
 
         //public void SetInRacePosition(int position) => _carPosition = position;
 

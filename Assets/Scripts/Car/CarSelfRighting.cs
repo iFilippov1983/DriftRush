@@ -31,6 +31,8 @@ namespace RaceManager.Cars
         {
             _carAI = GetComponent<CarAIControl>();
             _rigidbody = GetComponent<Rigidbody>();
+
+            _wheels = GetComponent<Car>().Wheels;
         }
 
         internal void Setup(WheelCollider[] wheelColliders)

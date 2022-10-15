@@ -865,6 +865,12 @@ Transform:
   m_Father: {fileID: 68057970}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!198 &314789903 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 8042060132909517162, guid: a7b003c620494574d926153eda55f4ff,
+    type: 3}
+  m_PrefabInstance: {fileID: 1672919174}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &331678623
 GameObject:
   m_ObjectHideFlags: 0
@@ -1754,6 +1760,12 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 6329158148709259305, guid: de354f082d6ad034ea277958efa2fc8b, type: 3}
+--- !u!198 &881253295 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 8042060132909517162, guid: a7b003c620494574d926153eda55f4ff,
+    type: 3}
+  m_PrefabInstance: {fileID: 1535553827}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &907710437
 GameObject:
   m_ObjectHideFlags: 0
@@ -2737,12 +2749,52 @@ PrefabInstance:
       propertyPath: _waypointTrack
       value: 
       objectReference: {fileID: 68057969}
+    - target: {fileID: 6948333402832068683, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: _lookAheadForSpeedOffset
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 7505162130020240956, guid: a7b003c620494574d926153eda55f4ff,
         type: 3}
       propertyPath: _carSettings
       value: 
       objectReference: {fileID: 11400000, guid: 83ef4e6dd5a25dc43b41331401b20d14,
         type: 2}
+    - target: {fileID: 7505162130020240956, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: _carConfig.HelpSteerPower
+      value: 0.323
+      objectReference: {fileID: 0}
+    - target: {fileID: 7505162130020240956, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: _carConfig.MaxMotorTorque
+      value: 800
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840648144696977412, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: _carConfig.DriveType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840648144696977412, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: _carConfig.HelpSteerPower
+      value: 0.335
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840648144696977412, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: _carConfig.MaxMotorTorque
+      value: 800
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840648144696977412, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: BackFireParticles.Array.data[0]
+      value: 
+      objectReference: {fileID: 881253295}
+    - target: {fileID: 7840648144696977412, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: _carConfig.SteerAngleChangeSpeed
+      value: 80
+      objectReference: {fileID: 0}
     - target: {fileID: 7840648144696977412, guid: a7b003c620494574d926153eda55f4ff,
         type: 3}
       propertyPath: RearLeftWheel.SlipForGenerateParticle
@@ -2913,12 +2965,52 @@ PrefabInstance:
       propertyPath: _waypointTrack
       value: 
       objectReference: {fileID: 68057969}
+    - target: {fileID: 6948333402832068683, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: _lookAheadForSpeedOffset
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 7505162130020240956, guid: a7b003c620494574d926153eda55f4ff,
         type: 3}
       propertyPath: _carSettings
       value: 
       objectReference: {fileID: 11400000, guid: 83ef4e6dd5a25dc43b41331401b20d14,
         type: 2}
+    - target: {fileID: 7505162130020240956, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: _carConfig.HelpSteerPower
+      value: 0.323
+      objectReference: {fileID: 0}
+    - target: {fileID: 7505162130020240956, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: _carConfig.MaxMotorTorque
+      value: 800
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840648144696977412, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: _carConfig.DriveType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840648144696977412, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: _carConfig.HelpSteerPower
+      value: 0.335
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840648144696977412, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: _carConfig.MaxMotorTorque
+      value: 800
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840648144696977412, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: BackFireParticles.Array.data[0]
+      value: 
+      objectReference: {fileID: 314789903}
+    - target: {fileID: 7840648144696977412, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: _carConfig.SteerAngleChangeSpeed
+      value: 80
+      objectReference: {fileID: 0}
     - target: {fileID: 7840648144696977412, guid: a7b003c620494574d926153eda55f4ff,
         type: 3}
       propertyPath: RearLeftWheel.SlipForGenerateParticle
@@ -3657,6 +3749,12 @@ MonoBehaviour:
   m_CameraActivatedEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!198 &1898011966 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 8042060132909517162, guid: a7b003c620494574d926153eda55f4ff,
+    type: 3}
+  m_PrefabInstance: {fileID: 3643873278324096423}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1903676951
 GameObject:
   m_ObjectHideFlags: 0
@@ -3980,9 +4078,34 @@ PrefabInstance:
       propertyPath: _waypointTrack
       value: 
       objectReference: {fileID: 68057969}
+    - target: {fileID: 6948333402832068683, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: _lookAheadForSpeedOffset
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 7505162130020240956, guid: a7b003c620494574d926153eda55f4ff,
         type: 3}
       propertyPath: _isAvoidingCars
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7505162130020240956, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: _carConfig.Durability
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 7505162130020240956, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: _carConfig.HelpSteerPower
+      value: 0.323
+      objectReference: {fileID: 0}
+    - target: {fileID: 7505162130020240956, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: _carConfig.MaxMotorTorque
+      value: 800
+      objectReference: {fileID: 0}
+    - target: {fileID: 7505162130020240956, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: _carConfig.EnableSteerAngleMultiplier
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7840648144696977412, guid: a7b003c620494574d926153eda55f4ff,
@@ -3992,8 +4115,43 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7840648144696977412, guid: a7b003c620494574d926153eda55f4ff,
         type: 3}
+      propertyPath: _carConfig.DriveType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840648144696977412, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: _carConfig.Durability
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840648144696977412, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
       propertyPath: CarConfig.MaxMotorTorque
       value: 800
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840648144696977412, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: _carConfig.HelpSteerPower
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840648144696977412, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: _carConfig.MaxMotorTorque
+      value: 800
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840648144696977412, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: BackFireParticles.Array.data[0]
+      value: 
+      objectReference: {fileID: 1898011966}
+    - target: {fileID: 7840648144696977412, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: _carConfig.MinSpeedForSteerHelp
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840648144696977412, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: _carConfig.SteerAngleChangeSpeed
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 7840648144696977412, guid: a7b003c620494574d926153eda55f4ff,
         type: 3}
@@ -4101,4 +4259,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f56caa12e61e944ea27df2c4500ff8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _carSettings: {fileID: 11400000, guid: 932e2910a0b69bc49aac7206a6ce9cf0, type: 2}
+--- !u!81 &6903883489669755838
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6903883489669755827}
+  m_Enabled: 1

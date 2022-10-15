@@ -47,7 +47,7 @@ public class CarStateUI :MonoBehaviour
 
 	void UpdateGamePanel ()
 	{
-		SpeedText.text = SelectedCar.SpeedInHour.ToString ("000");
+		SpeedText.text = SelectedCar.SpeedInDesiredUnits.ToString ("000");
 		CurrentGearText.text = SelectedCar.CurrentGear.ToString ();
 	}
 }

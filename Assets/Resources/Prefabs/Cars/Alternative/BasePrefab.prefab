@@ -5533,7 +5533,60 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31bd4bfcd7be41745af8b2e1e7bb2e68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< Updated upstream:Assets/Resources/Prefabs/Cars/Alternative/BasePrefab.prefab
   _carSettings: {fileID: 11400000, guid: 932e2910a0b69bc49aac7206a6ce9cf0, type: 2}
+=======
+  _carConfig:
+    CarProfile: {fileID: 0}
+    MaxSteerAngle: 42
+    DriveType: 2
+    AutomaticGearBox: 1
+    MaxMotorTorque: 150
+    MotorTorqueFromRpmCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    MaxRPM: 7000
+    MinRPM: 700
+    CutOffRPM: 6800
+    CutOffOffsetRPM: 500
+    CutOffTime: 0.1
+    ProbabilityBackfire: 0.2
+    RpmToNextGear: 6500
+    RpmToPrevGear: 4500
+    MaxForwardSlipToBlockChangeGear: 0.5
+    RpmEngineToRpmWheelsLerpSpeed: 15
+    GearsRatio:
+    - 3.38
+    - 2.36
+    - 1.67
+    - 1
+    MainRatio: 3.56
+    ReversGearRatio: 4
+    MaxBrakeTorque: 2000
+    EnableSteerAngleMultiplier: 1
+    MinSteerAngleMultiplier: 0.05
+    MaxSteerAngleMultiplier: 1
+    MaxSpeedForMinAngleMultiplier: 250
+    SteerAngleChangeSpeed: 60
+    MinSpeedForSteerHelp: 20
+    HelpSteerPower: 0
+    OppositeAngularVelocityHelpPower: 0.1
+    PositiveAngularVelocityHelpPower: 0.1
+    MaxAngularVelocityHelpAngle: 45
+    AngularVelocityInMaxAngle: 0.5
+    AngularVelocityInMinAngle: 2
+    SpeedType: 1
+    MaxSpeed: 200
+    MaxRBVelocityMagnitude: 20
+    CruiseSpeed: 20
+    CruiseRBVelocityMagnitude: 2
+    CruiseSpeedPercentMin: 0.7
+    CruiseSpeedPercentMax: 0.8
+    Durability: 50
+>>>>>>> Stashed changes:Assets/Resources/Prefabs/Cars/_BasePrefabNew.prefab
   _target: {fileID: 3643873277590708756}
   _isDriving: 1
   _isAvoidingCars: 1
@@ -5576,12 +5629,20 @@ MonoBehaviour:
     TrailOffset: {x: -0.1, y: 0.05, z: 0}
   COM: {fileID: 7875330837019206152}
   BackFireParticles:
+<<<<<<< Updated upstream:Assets/Resources/Prefabs/Cars/Alternative/BasePrefab.prefab
   - {fileID: 8042060132909517162}
   CarConfig:
     MaxSteerAngle: 42
     DriveType: 0
     MaxSpeed: 200
     CruiseSpeed: 20
+=======
+  - {fileID: 0}
+  _carConfig:
+    CarProfile: {fileID: 0}
+    MaxSteerAngle: 42
+    DriveType: 2
+>>>>>>> Stashed changes:Assets/Resources/Prefabs/Cars/_BasePrefabNew.prefab
     AutomaticGearBox: 1
     MaxMotorTorque: 800
     MotorTorqueFromRpmCurve:
@@ -5589,11 +5650,16 @@ MonoBehaviour:
       m_Curve:
       - serializedVersion: 3
         time: 0
+<<<<<<< Updated upstream:Assets/Resources/Prefabs/Cars/Alternative/BasePrefab.prefab
         value: 0.2999878
+=======
+        value: 0.3
+>>>>>>> Stashed changes:Assets/Resources/Prefabs/Cars/_BasePrefabNew.prefab
         inSlope: 0
         outSlope: 0
         tangentMode: 0
         weightedMode: 0
+<<<<<<< Updated upstream:Assets/Resources/Prefabs/Cars/Alternative/BasePrefab.prefab
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
@@ -5608,31 +5674,65 @@ MonoBehaviour:
       - serializedVersion: 3
         time: 6.4
         value: 0.9999995
+=======
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 3.54
+        value: 0.869
+        inSlope: 0.16353174
+        outSlope: 0.16353174
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.3991297
+        outWeight: 0
+      - serializedVersion: 3
+        time: 6.4
+        value: 1
+>>>>>>> Stashed changes:Assets/Resources/Prefabs/Cars/_BasePrefabNew.prefab
         inSlope: 0
         outSlope: 0
         tangentMode: 0
         weightedMode: 0
+<<<<<<< Updated upstream:Assets/Resources/Prefabs/Cars/Alternative/BasePrefab.prefab
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 8
         value: 0.19966671
+=======
+        inWeight: 0
+        outWeight: 1
+      - serializedVersion: 3
+        time: 8
+        value: 0.2
+>>>>>>> Stashed changes:Assets/Resources/Prefabs/Cars/_BasePrefabNew.prefab
         inSlope: 0
         outSlope: 0
         tangentMode: 0
         weightedMode: 0
+<<<<<<< Updated upstream:Assets/Resources/Prefabs/Cars/Alternative/BasePrefab.prefab
         inWeight: 0.33333334
         outWeight: 0.33333334
+=======
+        inWeight: 0
+        outWeight: 0
+>>>>>>> Stashed changes:Assets/Resources/Prefabs/Cars/_BasePrefabNew.prefab
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     MaxRPM: 7000
     MinRPM: 700
+<<<<<<< Updated upstream:Assets/Resources/Prefabs/Cars/Alternative/BasePrefab.prefab
     CutOffRPM: 6600
+=======
+    CutOffRPM: 6800
+>>>>>>> Stashed changes:Assets/Resources/Prefabs/Cars/_BasePrefabNew.prefab
     CutOffOffsetRPM: 500
     CutOffTime: 0.1
     ProbabilityBackfire: 0.2
     RpmToNextGear: 6500
+<<<<<<< Updated upstream:Assets/Resources/Prefabs/Cars/Alternative/BasePrefab.prefab
     RpmToPrevGear: 3500
     MaxForwardSlipToBlockChangeGear: 0.25
     RpmEngineToRpmWheelsLerpSpeed: 15
@@ -5641,6 +5741,15 @@ MonoBehaviour:
     - 2.36
     - 1.67
     - 1.312
+=======
+    RpmToPrevGear: 4500
+    MaxForwardSlipToBlockChangeGear: 0.5
+    RpmEngineToRpmWheelsLerpSpeed: 15
+    GearsRatio:
+    - 3.38
+    - 2.36
+    - 1.67
+>>>>>>> Stashed changes:Assets/Resources/Prefabs/Cars/_BasePrefabNew.prefab
     - 1
     MainRatio: 3.56
     ReversGearRatio: 4
@@ -5651,12 +5760,29 @@ MonoBehaviour:
     MaxSpeedForMinAngleMultiplier: 250
     SteerAngleChangeSpeed: 60
     MinSpeedForSteerHelp: 20
+<<<<<<< Updated upstream:Assets/Resources/Prefabs/Cars/Alternative/BasePrefab.prefab
     HelpSteerPower: 0.2
     OppositeAngularVelocityHelpPower: 0.05
     PositiveAngularVelocityHelpPower: 0
     MaxAngularVelocityHelpAngle: 45
     AngularVelucityInMaxAngle: 0.5
     AngularVelucityInMinAngle: 2
+=======
+    HelpSteerPower: 0
+    OppositeAngularVelocityHelpPower: 0.1
+    PositiveAngularVelocityHelpPower: 0.1
+    MaxAngularVelocityHelpAngle: 45
+    AngularVelocityInMaxAngle: 0.5
+    AngularVelocityInMinAngle: 2
+    SpeedType: 1
+    MaxSpeed: 200
+    MaxRBVelocityMagnitude: 20
+    CruiseSpeed: 20
+    CruiseRBVelocityMagnitude: 2
+    CruiseSpeedPercentMin: 0.7
+    CruiseSpeedPercentMax: 0.8
+    Durability: 50
+>>>>>>> Stashed changes:Assets/Resources/Prefabs/Cars/_BasePrefabNew.prefab
 --- !u!114 &6948333402832068683
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5675,6 +5801,21 @@ MonoBehaviour:
   _lookAheadForSpeedOffset: 20
   _lookAheadForSpeedFactor: 0.1
   _target: {fileID: 3643873277590708756}
+<<<<<<< Updated upstream:Assets/Resources/Prefabs/Cars/Alternative/BasePrefab.prefab
+=======
+--- !u!114 &2672541007519654001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7880778198000635412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9db865986f75ee44eba89ace4646af65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+>>>>>>> Stashed changes:Assets/Resources/Prefabs/Cars/_BasePrefabNew.prefab
 --- !u!114 &7840153474070958272
 MonoBehaviour:
   m_ObjectHideFlags: 0

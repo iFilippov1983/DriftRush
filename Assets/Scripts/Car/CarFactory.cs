@@ -29,6 +29,7 @@ namespace RaceManager.Cars
 
             var go = Object.Instantiate(prefab, _spawnPoint.position, _spawnPoint.rotation);
             go.tag = _driverType.ToString();
+            
 
             Car car = go.GetComponent<Car>();
             for (int i = 0; i < car.WheelColliders.Length; i++)
@@ -41,16 +42,25 @@ namespace RaceManager.Cars
             carController = go.GetComponent<CarController>();
             carController.Initialize(_carSettings);
 
+<<<<<<< Updated upstream
             carAIControl = go.GetComponent<CarAIControl>();
             carAIControl.Initialize(_carSettings);
+=======
+            carAI = go.GetComponent<CarAI>();
+>>>>>>> Stashed changes
 
             waypointTracker = go.GetComponent<WaypointProgressTracker>();
             waypointTracker.Initialize(_waypointTrack, driverProfile);
 
             if (_driverType == DriverType.Player)
             {
+<<<<<<< Updated upstream
                 var playerContrrol = go.AddComponent<CarPlayerControl>();
                 playerContrrol.Initialize(carAIControl, _carSettings);
+=======
+                var playerContrrol = go.AddComponent<PlayerControl>();
+                go.AddComponent<AudioListener>();
+>>>>>>> Stashed changes
             }
 
             return go;

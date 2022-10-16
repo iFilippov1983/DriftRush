@@ -6,9 +6,8 @@ namespace RaceManager.Cars
     /// <summary>
     /// For easy initialization and change of parameters in the future. TODO Add tuning.
     /// </summary>
-    //[System.Serializable]
-	[CreateAssetMenu(menuName = "Configs/CarConfig", fileName = "CarConfig_Name", order = 1)]
-	public class CarConfig : ScriptableObject
+    [System.Serializable]
+    public class CarConfig
 	{
 		private const float KPHFactor = 3.6f;
 		private const float MPHFactor = 2.23693629f;
@@ -80,8 +79,8 @@ namespace RaceManager.Cars
 		public float OppositeAngularVelocityHelpPower = 0.05f;   //The power of the helper to turn the rigidbody in the direction of the control turn.
 		public float PositiveAngularVelocityHelpPower = 0f;   //The power of the helper to positive turn the rigidbody in the direction of the control turn.
 		public float MaxAngularVelocityHelpAngle = 45f;               //The angle at which the assistant works 100%.
-		public float AngularVelucityInMaxAngle = 0.5f;                 //Min angular velucity, reached at max drift angles.
-		public float AngularVelucityInMinAngle = 2f;                 //Max angular velucity, reached at min drift angles.
+		public float AngularVelocityInMaxAngle = 0.5f;                 //Min angular velocity, reached at max drift angles.
+		public float AngularVelocityInMinAngle = 2f;                 //Max angular velocity, reached at min drift angles.
 
 		[OnInspectorGUI]
 		public void RecalculateVelocities()

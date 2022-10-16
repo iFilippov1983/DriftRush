@@ -5532,7 +5532,56 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31bd4bfcd7be41745af8b2e1e7bb2e68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _carConfig: {fileID: 0}
+  _carConfig:
+    CarProfile: {fileID: 0}
+    SpeedType: 1
+    MaxSpeed: 200
+    MaxRBVelocityMagnitude: 20
+    CruiseSpeed: 20
+    CruiseRBVelocityMagnitude: 2
+    CruiseSpeedPercentMin: 0.7
+    CruiseSpeedPercentMax: 0.8
+    MaxMotorTorque: 800
+    HelpSteerPower: 0.2
+    MaxSteerAngle: 42
+    Durability: 50
+    DriveType: 0
+    AutomaticGearBox: 1
+    MotorTorqueFromRpmCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    MaxRPM: 7000
+    MinRPM: 700
+    CutOffRPM: 6800
+    CutOffOffsetRPM: 500
+    CutOffTime: 0.1
+    ProbabilityBackfire: 0.2
+    RpmToNextGear: 6500
+    RpmToPrevGear: 4500
+    MaxForwardSlipToBlockChangeGear: 0.25
+    RpmEngineToRpmWheelsLerpSpeed: 15
+    GearsRatio:
+    - 3.38
+    - 2.36
+    - 1.67
+    - 1
+    MainRatio: 3.56
+    ReversGearRatio: 4
+    MaxBrakeTorque: 2000
+    EnableSteerAngleMultiplier: 1
+    MinSteerAngleMultiplier: 0.05
+    MaxSteerAngleMultiplier: 1
+    MaxSpeedForMinAngleMultiplier: 250
+    SteerAngleChangeSpeed: 60
+    MinSpeedForSteerHelp: 20
+    OppositeAngularVelocityHelpPower: 0.05
+    PositiveAngularVelocityHelpPower: 0
+    MaxAngularVelocityHelpAngle: 45
+    AngularVelocityInMaxAngle: 0.5
+    AngularVelocityInMinAngle: 2
   _target: {fileID: 3643873277590708756}
   _isDriving: 0
   _isAvoidingCars: 1
@@ -5553,29 +5602,114 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b5e71ace82184d409819aa47af74854, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _frontLeftWheel:
-    WheelCollider: {fileID: 8021491962794878516}
-    WheelView: {fileID: 7878102637726409176}
-    SlipForGenerateParticle: 0.2
-    TrailOffset: {x: 0, y: -0.2, z: 0}
-  _frontRightWheel:
-    WheelCollider: {fileID: 8021687935178480580}
-    WheelView: {fileID: 7875611640171047958}
-    SlipForGenerateParticle: 0.2
-    TrailOffset: {x: 0, y: -0.2, z: 0}
-  _rearLeftWheel:
-    WheelCollider: {fileID: 8021971220770076928}
-    WheelView: {fileID: 7878025339093233764}
-    SlipForGenerateParticle: 0.2
-    TrailOffset: {x: 0, y: -0.2, z: 0}
-  _rearRightWheel:
-    WheelCollider: {fileID: 8021698394765830114}
-    WheelView: {fileID: 7875374632307656022}
-    SlipForGenerateParticle: 0.2
-    TrailOffset: {x: 0, y: -0.2, z: 0}
-  _com: {fileID: 7875330837019206152}
-  _backFireParticles:
-  - {fileID: 8042060132909517162}
+  FrontLeftWheel:
+    WheelCollider: {fileID: 0}
+    WheelView: {fileID: 0}
+    SlipForGenerateParticle: 0
+    TrailOffset: {x: 0, y: 0, z: 0}
+  FrontRightWheel:
+    WheelCollider: {fileID: 0}
+    WheelView: {fileID: 0}
+    SlipForGenerateParticle: 0
+    TrailOffset: {x: 0, y: 0, z: 0}
+  RearLeftWheel:
+    WheelCollider: {fileID: 0}
+    WheelView: {fileID: 0}
+    SlipForGenerateParticle: 0
+    TrailOffset: {x: 0, y: 0, z: 0}
+  RearRightWheel:
+    WheelCollider: {fileID: 0}
+    WheelView: {fileID: 0}
+    SlipForGenerateParticle: 0
+    TrailOffset: {x: 0, y: 0, z: 0}
+  COM: {fileID: 0}
+  BackFireParticles: []
+  _carConfig:
+    CarProfile: {fileID: 0}
+    SpeedType: 1
+    MaxSpeed: 200
+    MaxRBVelocityMagnitude: 55.555557
+    CruiseSpeed: 20
+    CruiseRBVelocityMagnitude: 5.555556
+    CruiseSpeedPercentMin: 0.7
+    CruiseSpeedPercentMax: 0.8
+    MaxMotorTorque: 800
+    HelpSteerPower: 0.2
+    MaxSteerAngle: 42
+    Durability: 50
+    DriveType: 0
+    AutomaticGearBox: 1
+    MotorTorqueFromRpmCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0.3
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 3.54
+        value: 0.869
+        inSlope: 0.060227267
+        outSlope: 0.060227267
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.61538464
+      - serializedVersion: 3
+        time: 6.4
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 8
+        value: 0.2
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    MaxRPM: 7000
+    MinRPM: 700
+    CutOffRPM: 6800
+    CutOffOffsetRPM: 500
+    CutOffTime: 0.1
+    ProbabilityBackfire: 0.2
+    RpmToNextGear: 6500
+    RpmToPrevGear: 4500
+    MaxForwardSlipToBlockChangeGear: 0.25
+    RpmEngineToRpmWheelsLerpSpeed: 15
+    GearsRatio:
+    - 3.38
+    - 2.36
+    - 1.67
+    - 1
+    MainRatio: 3.56
+    ReversGearRatio: 4
+    MaxBrakeTorque: 2000
+    EnableSteerAngleMultiplier: 1
+    MinSteerAngleMultiplier: 0.05
+    MaxSteerAngleMultiplier: 1
+    MaxSpeedForMinAngleMultiplier: 250
+    SteerAngleChangeSpeed: 60
+    MinSpeedForSteerHelp: 20
+    OppositeAngularVelocityHelpPower: 0.05
+    PositiveAngularVelocityHelpPower: 0
+    MaxAngularVelocityHelpAngle: 45
+    AngularVelocityInMaxAngle: 0.5
+    AngularVelocityInMinAngle: 2
 --- !u!114 &6948333402832068683
 MonoBehaviour:
   m_ObjectHideFlags: 0

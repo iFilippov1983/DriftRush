@@ -3997,6 +3997,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7840648144696977412, guid: a7b003c620494574d926153eda55f4ff,
         type: 3}
+      propertyPath: _carConfig.MaxRBVelocityMagnitude
+      value: 55.555557
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840648144696977412, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: _carConfig.CruiseRBVelocityMagnitude
+      value: 5.555556
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840648144696977412, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
       propertyPath: RearLeftWheel.SlipForGenerateParticle
       value: 0.2
       objectReference: {fileID: 0}
@@ -4014,6 +4024,91 @@ PrefabInstance:
         type: 3}
       propertyPath: FrontRightWheel.SlipForGenerateParticle
       value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840648144696977412, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: _carConfig.MotorTorqueFromRpmCurve.m_Curve.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840648144696977412, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: _carConfig.MotorTorqueFromRpmCurve.m_Curve.Array.data[0].time
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840648144696977412, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: _carConfig.MotorTorqueFromRpmCurve.m_Curve.Array.data[1].time
+      value: 3.54
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840648144696977412, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: _carConfig.MotorTorqueFromRpmCurve.m_Curve.Array.data[2].time
+      value: 6.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840648144696977412, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: _carConfig.MotorTorqueFromRpmCurve.m_Curve.Array.data[3].time
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840648144696977412, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: _carConfig.MotorTorqueFromRpmCurve.m_Curve.Array.data[0].value
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840648144696977412, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: _carConfig.MotorTorqueFromRpmCurve.m_Curve.Array.data[1].value
+      value: 0.869
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840648144696977412, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: _carConfig.MotorTorqueFromRpmCurve.m_Curve.Array.data[2].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840648144696977412, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: _carConfig.MotorTorqueFromRpmCurve.m_Curve.Array.data[3].value
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840648144696977412, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: _carConfig.MotorTorqueFromRpmCurve.m_Curve.Array.data[1].inSlope
+      value: 0.060227267
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840648144696977412, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: _carConfig.MotorTorqueFromRpmCurve.m_Curve.Array.data[0].inWeight
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840648144696977412, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: _carConfig.MotorTorqueFromRpmCurve.m_Curve.Array.data[1].inWeight
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840648144696977412, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: _carConfig.MotorTorqueFromRpmCurve.m_Curve.Array.data[1].outSlope
+      value: 0.060227267
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840648144696977412, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: _carConfig.MotorTorqueFromRpmCurve.m_Curve.Array.data[0].outWeight
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840648144696977412, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: _carConfig.MotorTorqueFromRpmCurve.m_Curve.Array.data[1].outWeight
+      value: 0.61538464
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840648144696977412, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: _carConfig.MotorTorqueFromRpmCurve.m_Curve.Array.data[0].tangentMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840648144696977412, guid: a7b003c620494574d926153eda55f4ff,
+        type: 3}
+      propertyPath: _carConfig.MotorTorqueFromRpmCurve.m_Curve.Array.data[1].tangentMode
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7878384805958699896, guid: a7b003c620494574d926153eda55f4ff,
         type: 3}
@@ -4089,6 +4184,14 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 3643873278324096423}
   m_PrefabAsset: {fileID: 0}
+--- !u!81 &6903883489669755828
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6903883489669755827}
+  m_Enabled: 1
 --- !u!114 &6903883489669755830
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4101,4 +4204,53 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f56caa12e61e944ea27df2c4500ff8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _carSettings: {fileID: 11400000, guid: 932e2910a0b69bc49aac7206a6ce9cf0, type: 2}
+  _carConfig:
+    CarProfile: {fileID: 0}
+    SpeedType: 1
+    MaxSpeed: 200
+    MaxRBVelocityMagnitude: 55.555557
+    CruiseSpeed: 20
+    CruiseRBVelocityMagnitude: 5.555556
+    CruiseSpeedPercentMin: 0.7
+    CruiseSpeedPercentMax: 0.8
+    MaxMotorTorque: 800
+    HelpSteerPower: 0.2
+    MaxSteerAngle: 42
+    Durability: 50
+    DriveType: 0
+    AutomaticGearBox: 1
+    MotorTorqueFromRpmCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    MaxRPM: 7000
+    MinRPM: 700
+    CutOffRPM: 6800
+    CutOffOffsetRPM: 500
+    CutOffTime: 0.1
+    ProbabilityBackfire: 0.2
+    RpmToNextGear: 6500
+    RpmToPrevGear: 4500
+    MaxForwardSlipToBlockChangeGear: 0.25
+    RpmEngineToRpmWheelsLerpSpeed: 15
+    GearsRatio:
+    - 3.38
+    - 2.36
+    - 1.67
+    - 1
+    MainRatio: 3.56
+    ReversGearRatio: 4
+    MaxBrakeTorque: 2000
+    EnableSteerAngleMultiplier: 1
+    MinSteerAngleMultiplier: 0.05
+    MaxSteerAngleMultiplier: 1
+    MaxSpeedForMinAngleMultiplier: 250
+    SteerAngleChangeSpeed: 60
+    MinSpeedForSteerHelp: 20
+    OppositeAngularVelocityHelpPower: 0.05
+    PositiveAngularVelocityHelpPower: 0
+    MaxAngularVelocityHelpAngle: 45
+    AngularVelocityInMaxAngle: 0.5
+    AngularVelocityInMinAngle: 2

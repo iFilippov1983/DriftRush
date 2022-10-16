@@ -1,11 +1,11 @@
 using RaceManager.Tools;
 using RaceManager.Waypoints;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+/// <summary>
+/// Legacy
+/// </summary>
 namespace RaceManager.Alt
 {
     public class CarAIHandler : MonoBehaviour

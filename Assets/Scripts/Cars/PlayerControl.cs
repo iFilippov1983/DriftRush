@@ -14,6 +14,7 @@ namespace RaceManager.Cars
             _car = GetComponent<Car>();
             _carAI = GetComponent<CarAI>();
             _carAI.PlayerDriving = true;
+            _carAI.StopAvoiding();
         }
 
         //public void Initialize(CarAI carAI, CarConfig carConfig)

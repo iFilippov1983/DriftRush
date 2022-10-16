@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using RaceManager.Tools;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace RaceManager.Cars
@@ -9,21 +10,36 @@ namespace RaceManager.Cars
     [System.Serializable]
     public class CarConfig
 	{
-		private const float KPHFactor = 3.6f;
-		private const float MPHFactor = 2.23693629f;
-
 		public CarProfile CarProfile;
-
+		[Header("Main settings")]
 		[Title("Speed")]
 		public SpeedType SpeedType = SpeedType.KPH;
 		public float MaxSpeed = 200;
-		[ReadOnly]
-		public float MaxRBVelocityMagnitude => CalculateVelocity(MaxSpeed);
+		
+		[ShowInInspector, ReadOnly]
+		public float MaxSpeedVelocityMagnitude
+		{
+			get
+			{
+				float value = 0f;
+				switch (SpeedType)
+				{
+					case SpeedType.MPH:
+						value = MaxSpeed / C.MPHFactor;
+						break;
+					case SpeedType.KPH:
+						value = MaxSpeed / C.KPHFactor;
+						break;
+				}
+
+				return value;
+			}
+		}
+
 		[Space]
 		[Tooltip("Cruise Speed Settings (for Player)")]
 		public float CruiseSpeed = 20f;
-		[ReadOnly]
-		public float CruiseRBVelocityMagnitude => CalculateVelocity(CruiseSpeed);
+		
 		[Tooltip("Represents percentage range of Max Speed AI will use")]
 		[Range(0.01f, 1f)]
 		public float CruiseSpeedPercentMin = 0.7f;
@@ -61,7 +77,7 @@ namespace RaceManager.Cars
 		public float MaxForwardSlipToBlockChangeGear = 0.25f;    //Maximum rear wheel slip for shifting gearbox.
 		public float RpmEngineToRpmWheelsLerpSpeed = 15;        //Lerp Speed change of RPM.
 		public float[] GearsRatio =
-			{3.38f, 2.36f, 1.67f, 1f };                              //Forward gears ratio.
+			{3.38f, 2.36f, 1.67f, 1.312f, 1f };                              //Forward gears ratio.
 		public float MainRatio = 3.56f;
 		public float ReversGearRatio = 4;                           //Reverse gear ratio.
 
@@ -82,15 +98,20 @@ namespace RaceManager.Cars
 		public float AngularVelocityInMaxAngle = 0.5f;                 //Min angular velocity, reached at max drift angles.
 		public float AngularVelocityInMinAngle = 2f;                 //Max angular velocity, reached at min drift angles.
 
+		[ReadOnly, ShowInInspector]
+		public float MaxRBVelocityMagnitude => CalculateVelocity(MaxSpeed);
+		[ReadOnly, ShowInInspector]
+		public float CruiseRBVelocityMagnitude => CalculateVelocity(CruiseSpeed);
+
 		public float CalculateVelocity(float value)
 		{
 			switch (SpeedType)
 			{
 				case SpeedType.MPH:
-					value /=  MPHFactor;
+					value /=  C.MPHFactor;
 					break;
 				case SpeedType.KPH:
-					value /= KPHFactor;
+					value /= C.KPHFactor;
 					break;
 			}
 

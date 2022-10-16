@@ -1,24 +1,14 @@
-﻿using UnityEngine;
-
-/// <summary> 
-/// Fast access to settings.
-/// B - Balance.
-/// </summary>
-public static class B
+﻿namespace RaceManager.Tools
 {
-	public static float SpeedInHourMultiplier { get { return C.KPHMult; } }
-
+	/// <summary> 
+	/// Constants used in game
+	/// C - Constants
+	/// </summary>
+	/// 
+	public static class C
+	{
+		public const float MPHFactor = 2.23693629f;
+		public const float KPHFactor = 3.6f;
+	}
 }
 
-/// <summary> 
-/// Constants used in game
-/// C - Constants
-/// </summary>
-/// 
-public static class C
-{
-	//CarParams constants
-	public const float MPHMult = 2.23693629f;
-	public const float KPHMult = 3.6f;
-
-}

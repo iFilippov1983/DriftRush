@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using RaceManager.Tools;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -52,7 +53,7 @@ namespace RaceManager.Cars
 
         #endregion //Properties of car parameters
 
-        #region Properties of drif Settings
+        #region Properties of drift Settings
 
         bool EnableSteerAngleMultiplier { get { return _carConfig.EnableSteerAngleMultiplier; } }
         float MinSteerAngleMultiplier { get { return _carConfig.MinSteerAngleMultiplier; } }
@@ -67,7 +68,7 @@ namespace RaceManager.Cars
         float AngularVelucityInMaxAngle { get { return _carConfig.AngularVelocityInMaxAngle; } }
         float AngularVelucityInMinAngle { get { return _carConfig.AngularVelocityInMinAngle; } }
 
-        #endregion //Properties of drif Settings
+        #endregion //Properties of drift Settings
 
         public string ID => _id;
         public CarConfig CarConfig => _carConfig;
@@ -93,7 +94,7 @@ namespace RaceManager.Cars
         public float CurrentMaxSlip { get; private set; }                       //Max slip of all wheels.
         public int CurrentMaxSlipWheelIndex { get; private set; }               //Max slip wheel index.
         public float CurrentSpeed { get; private set; }                         //Speed, magnitude of velocity.
-        public float SpeedInDesiredUnits => CurrentSpeed = _carConfig.SpeedType == SpeedType.KPH ? CurrentSpeed * C.KPHMult : CurrentSpeed * C.MPHMult;
+        public float SpeedInDesiredUnits => _carConfig.SpeedType == SpeedType.KPH ? CurrentSpeed * C.KPHFactor : CurrentSpeed * C.MPHFactor;
         public int CarDirection { get { return CurrentSpeed < 1 ? 0 : (VelocityAngle < 90 && VelocityAngle > -90 ? 1 : -1); } }
 
         float CurrentSteerAngle;
@@ -238,7 +239,6 @@ namespace RaceManager.Cars
 
         private void FixedUpdate()
         {
-
             CurrentSpeed = RB.velocity.magnitude;
 
             UpdateSteerAngleLogic();
@@ -494,8 +494,6 @@ namespace RaceManager.Cars
                     CurrentGear = 0;
                 }
             }
-
-            //TODO manual gearbox logic.
         }
         void PlayBackfireWithProbability()
         {

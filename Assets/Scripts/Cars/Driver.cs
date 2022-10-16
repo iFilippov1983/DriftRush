@@ -1,12 +1,9 @@
 using RaceManager.Race;
 using RaceManager.Waypoints;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UniRx;
-using UniRx.Triggers;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace RaceManager.Cars
 {

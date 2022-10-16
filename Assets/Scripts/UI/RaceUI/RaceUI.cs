@@ -10,10 +10,10 @@ namespace RaceManager.UI
 {
     public class RaceUI : MonoBehaviour, IObserver<DriverProfile>
     {
-        private const float KPHFactor = 3.6f;
-        private const float MPHFactor = 2.23693629f;
+        //private const float KPHFactor = 3.6f;
+        //private const float MPHFactor = 2.23693629f;
 
-        [SerializeField] private SpeedType _speedType = SpeedType.KPH;
+        //[SerializeField] private SpeedType _speedType = SpeedType.KPH;
         [SerializeField] private RaceUIView _inRaceUI;
         [SerializeField] private FinishUIView _finishUI;
         //private DriverProfile _profile;

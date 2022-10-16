@@ -1,28 +1,13 @@
-﻿using RaceManager.Cars.Effects;
-using Sirenix.OdinInspector;
+﻿using Sirenix.OdinInspector;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
 
-#pragma warning disable 649
 namespace RaceManager.Cars
 {
-<<<<<<< Updated upstream
-    public class Car : MonoBehaviour
-    {
-        [ShowInInspector, ReadOnly]
-        private string _id;
-
-        [InfoBox("First two wheels must be Front wheels")]
-        [SerializeField] private WheelCollider[] _wheelColliders = new WheelCollider[4];
-        [SerializeField] private GameObject[] _wheelMeshes = new GameObject[4];
-        [SerializeField] private Vector3 _rbCenterOfMass;
-        private CarSelfRighting _carSelfRighting;
-
-        public Transform groundTrigger;
-        public LayerMask wheelCollidables;
-=======
     /// <summary>
     /// Main car controller
     /// </summary>
@@ -33,22 +18,21 @@ namespace RaceManager.Cars
         [ShowInInspector, ReadOnly]
         private string _id;
 
-        [SerializeField] private Wheel FrontLeftWheel;
-        [SerializeField] private Wheel FrontRightWheel;
-        [SerializeField] private Wheel RearLeftWheel;
-        [SerializeField] private Wheel RearRightWheel;
-        [SerializeField] private Transform COM;
-        [SerializeField] private List<ParticleSystem> BackFireParticles = new List<ParticleSystem>();
+        [SerializeField] Wheel FrontLeftWheel;
+        [SerializeField] Wheel FrontRightWheel;
+        [SerializeField] Wheel RearLeftWheel;
+        [SerializeField] Wheel RearRightWheel;
+        [SerializeField] Transform COM;
+        [SerializeField] List<ParticleSystem> BackFireParticles = new List<ParticleSystem>();
 
         [SerializeField] private CarConfig _carConfig;
         private CarSelfRighting _carSelfRighting;
-        private DriverProfile _driverProfile;
 
         #region Properties of car parameters
 
-        private float MaxMotorTorque;
-        private float MaxSteerAngle => _carConfig.MaxSteerAngle;
-        private DriveType DriveType => _carConfig.DriveType; 
+        float MaxMotorTorque;
+        float MaxSteerAngle { get { return _carConfig.MaxSteerAngle; } }
+        DriveType DriveType { get { return _carConfig.DriveType; } }
         bool AutomaticGearBox { get { return _carConfig.AutomaticGearBox; } }
         AnimationCurve MotorTorqueFromRpmCurve { get { return _carConfig.MotorTorqueFromRpmCurve; } }
         float MaxRPM { get { return _carConfig.MaxRPM; } }
@@ -84,27 +68,14 @@ namespace RaceManager.Cars
 
         #endregion //Properties of drif Settings
 
+        public string ID => _id;
         public CarConfig CarConfig => _carConfig;
         public CarSelfRighting CarSelfRighting => _carSelfRighting;
         public Wheel[] Wheels { get; private set; }                                     //All wheels, public link.			
-        public System.Action BackFireAction;                                            //Backfire invoked when cut off (You can add a invoke when changing gears).
->>>>>>> Stashed changes
+        public Action BackFireAction;                                            //Backfire invoked when cut off (You can add a invoke when changing gears).
 
         float[] AllGearsRatio;                                                           //All gears (Reverce, neutral and all forward).
-        public string ID => _id;
-<<<<<<< Updated upstream
-        public WheelCollider[] WheelColliders => _wheelColliders;
-        public GameObject[] WheelMeshes => _wheelMeshes;
-        public CarSelfRighting CarSelfRighting => _carSelfRighting;
-        public Vector3 CenterOfMass => _rbCenterOfMass;
 
-
-        private void OnEnable()
-        {
-            _id = MakeId();
-            _carSelfRighting = GetComponent<CarSelfRighting>();
-            _carSelfRighting.Setup(_wheelColliders);
-=======
         Rigidbody _RB;
         public Rigidbody RB
         {
@@ -121,10 +92,7 @@ namespace RaceManager.Cars
         public float CurrentMaxSlip { get; private set; }                       //Max slip of all wheels.
         public int CurrentMaxSlipWheelIndex { get; private set; }               //Max slip wheel index.
         public float CurrentSpeed { get; private set; }                         //Speed, magnitude of velocity.
-        public float SpeedInDesiredUnits => 
-            CurrentSpeed = CarConfig.SpeedType == SpeedType.KPH 
-            ? CurrentSpeed * C.KPHMult 
-            : CurrentSpeed * C.MPHMult;
+        public float SpeedInHour { get { return CurrentSpeed * C.KPHMult; } }
         public int CarDirection { get { return CurrentSpeed < 1 ? 0 : (VelocityAngle < 90 && VelocityAngle > -90 ? 1 : -1); } }
 
         float CurrentSteerAngle;
@@ -137,68 +105,15 @@ namespace RaceManager.Cars
         int FirstDriveWheel;
         int LastDriveWheel;
 
-        public void SetConfig(CarConfig carConfig)
+        private void SetConfig(CarConfig carConfig)
         {
             _carConfig = carConfig;
         }
 
-        //private void Awake()
-        //{
-        //    _id = MakeId();
-        //    _carSelfRighting = GetComponent<CarSelfRighting>();
-        //    RB.centerOfMass = COM.localPosition;
-
-        //    //Copy wheels in public property
-        //    Wheels = new Wheel[4] {
-        //    FrontLeftWheel,
-        //    FrontRightWheel,
-        //    RearLeftWheel,
-        //    RearRightWheel
-        //    };
-
-        //    //Set drive wheel.
-        //    switch (DriveType)
-        //    {
-        //        case DriveType.AWD:
-        //            FirstDriveWheel = 0;
-        //            LastDriveWheel = 3;
-        //            break;
-        //        case DriveType.FWD:
-        //            FirstDriveWheel = 0;
-        //            LastDriveWheel = 1;
-        //            break;
-        //        case DriveType.RWD:
-        //            FirstDriveWheel = 2;
-        //            LastDriveWheel = 3;
-        //            break;
-        //    }
-
-        //    //Divide the motor torque by the count of driving wheels
-        //    MaxMotorTorque = _carConfig.MaxMotorTorque / (LastDriveWheel - FirstDriveWheel + 1);
-
-
-        //    //Calculated gears ratio with main ratio
-        //    AllGearsRatio = new float[GearsRatio.Length + 2];
-        //    AllGearsRatio[0] = ReversGearRatio * MainRatio;
-        //    AllGearsRatio[1] = 0;
-        //    for (int i = 0; i < GearsRatio.Length; i++)
-        //    {
-        //        AllGearsRatio[i + 2] = GearsRatio[i] * MainRatio;
-        //    }
-
-        //    foreach (var particles in BackFireParticles)
-        //    {
-        //        BackFireAction += () => particles.Emit(2);
-        //    }
-        //}
-
-        public void Initialize(CarConfig carConfig, DriverProfile driverProfile)
-        { 
-            _carConfig = carConfig;
-            _driverProfile = driverProfile;
-
-            _id = MakeId();
+        private void Awake()
+        {
             _carSelfRighting = GetComponent<CarSelfRighting>();
+            _id = MakeId();
             RB.centerOfMass = COM.localPosition;
 
             //Copy wheels in public property
@@ -207,7 +122,7 @@ namespace RaceManager.Cars
             FrontRightWheel,
             RearLeftWheel,
             RearRightWheel
-            };
+        };
 
             //Set drive wheel.
             switch (DriveType)
@@ -257,7 +172,7 @@ namespace RaceManager.Cars
 
             if (EnableSteerAngleMultiplier)
             {
-                targetSteerAngle *= Mathf.Clamp(1 - SpeedInDesiredUnits / MaxSpeedForMinAngleMultiplier, MinSteerAngleMultiplier, MaxSteerAngleMultiplier);
+                targetSteerAngle *= Mathf.Clamp(1 - SpeedInHour / MaxSpeedForMinAngleMultiplier, MinSteerAngleMultiplier, MaxSteerAngleMultiplier);
             }
 
             CurrentSteerAngle = Mathf.MoveTowards(CurrentSteerAngle, targetSteerAngle, Time.deltaTime * SteerAngleChangeSpeed);
@@ -322,7 +237,7 @@ namespace RaceManager.Cars
         /// </summary>
         void UpdateSteerAngleLogic()
         {
-            var needHelp = SpeedInDesiredUnits > MinSpeedForSteerHelp && CarDirection > 0;
+            var needHelp = SpeedInHour > MinSpeedForSteerHelp && CarDirection > 0;
             float targetAngle = 0;
             VelocityAngle = -Vector3.SignedAngle(RB.velocity, transform.TransformDirection(Vector3.forward), Vector3.up);
 
@@ -570,12 +485,7 @@ namespace RaceManager.Cars
             Gizmos.DrawWireSphere(velocity, 0.2f);
 
             Gizmos.color = Color.white;
->>>>>>> Stashed changes
         }
-
-
-        //[ShowInInspector, ReadOnly]
-        //private string _id;
 
         //[SerializeField] private Wheel _frontLeftWheel;
         //[SerializeField] private Wheel _frontRightWheel;
@@ -585,7 +495,7 @@ namespace RaceManager.Cars
         //[SerializeField] private List<ParticleSystem> _backFireParticles = new List<ParticleSystem>();
 
         //private Rigidbody _rB;
-        //[SerializeField]
+        ////[SerializeField]
         //private CarConfig _carConfig;
         //private DriverProfile _driverProfile;
 
@@ -1127,11 +1037,6 @@ namespace RaceManager.Cars
                 .Take(11)
                 .ToList().ForEach(e => builder.Append(e));
             return builder.ToString();
-        }
-
-        public bool WheelsGrounded()
-        {
-            return Physics.OverlapBox(groundTrigger.position, groundTrigger.localScale / 2, Quaternion.identity, wheelCollidables).Length > 0;
         }
     }
 }

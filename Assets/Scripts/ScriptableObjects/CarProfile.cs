@@ -3,7 +3,7 @@
 #pragma warning disable 649
 namespace RaceManager.Cars
 {
-    [CreateAssetMenu(menuName = "Cars/CarProfile", fileName = "CarProfile_Name")]
+    [CreateAssetMenu(menuName = "Cars/CarProfile", fileName = "CarProfile_Name", order = 1)]
     public class CarProfile : ScriptableObject
     {
         public string Name;

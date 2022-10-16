@@ -62,7 +62,7 @@ namespace RaceManager.Cars
 
         private void UpdateProfile()
         {
-            _profile.CarCurrentSpeed = _car.CurrentSpeed;
+            _profile.CarCurrentSpeed = _car.SpeedInDesiredUnits;
             _profile.TrackProgress = _waypointsTracker.Progress;
             _profile.PositionInRace = _waypointsTracker.CarPosition;
             NotifyObservers();

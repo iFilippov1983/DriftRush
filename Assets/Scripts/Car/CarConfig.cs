@@ -74,8 +74,8 @@ namespace RaceManager.Cars
 		public float MaxSteerAngleMultiplier = 1f;          //Max steer angle multiplayer to limit understeer at high speeds.
 		public float MaxSpeedForMinAngleMultiplier = 250;       //The maximum speed at which there will be a minimum steering angle multiplier.
 		[Space]
-		public float SteerAngleChangeSpeed = 60f;                     //Wheel turn speed.
-		public float MinSpeedForSteerHelp = 20f;                      //Min speed at which helpers are enabled.
+		public float SteerAngleChangeSpeed = 100f;                     //Wheel turn speed.
+		public float MinSpeedForSteerHelp = 1f;                      //Min speed at which helpers are enabled.
 		public float OppositeAngularVelocityHelpPower = 0.05f;   //The power of the helper to turn the rigidbody in the direction of the control turn.
 		public float PositiveAngularVelocityHelpPower = 0f;   //The power of the helper to positive turn the rigidbody in the direction of the control turn.
 		public float MaxAngularVelocityHelpAngle = 45f;               //The angle at which the assistant works 100%.

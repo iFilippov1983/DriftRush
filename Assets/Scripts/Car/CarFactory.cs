@@ -36,6 +36,7 @@ namespace RaceManager.Cars
             car.Initialize(_carConfig);
 
             carAI = go.GetComponent<CarAI>();
+            carAI.Initialize();
 
             waypointsTracker = go.GetComponent<WaypointsTracker>();
             waypointsTracker.Initialize(_waypointTrack, driverProfile);

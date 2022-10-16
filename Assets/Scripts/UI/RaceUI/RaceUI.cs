@@ -54,8 +54,8 @@ namespace RaceManager.UI
 
         private void ShowSpeed()
         {
-            float factor = _speedType == SpeedType.KPH ? KPHFactor : MPHFactor;
-            _currentSpeed *= factor;
+            //float factor = _speedType == SpeedType.KPH ? KPHFactor : MPHFactor;
+            //_currentSpeed *= factor;
             int speed = Mathf.RoundToInt(_currentSpeed);
 
             _inRaceUI.SpeedIndicator.SpeedValueText.text = speed.ToString();

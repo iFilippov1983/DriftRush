@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CarConfigSO_Player
   m_EditorClassIdentifier: 
   _carConfig:
-    CarProfile: {fileID: 0}
+    CarProfile: {fileID: 11400000, guid: efbc9fefae1f8d4439e9632182a68f9f, type: 2}
     SpeedType: 1
     MaxSpeed: 200
     CruiseSpeed: 20
@@ -27,7 +27,43 @@ MonoBehaviour:
     AutomaticGearBox: 1
     MotorTorqueFromRpmCurve:
       serializedVersion: 2
-      m_Curve: []
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0.3
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 3.54
+        value: 0.869
+        inSlope: 0.060227267
+        outSlope: 0.060227267
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.61538464
+      - serializedVersion: 3
+        time: 6.4
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 8
+        value: 0.2
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -36,7 +72,7 @@ MonoBehaviour:
     CutOffRPM: 6800
     CutOffOffsetRPM: 500
     CutOffTime: 0.1
-    ProbabilityBackfire: 0.2
+    ProbabilityBackfire: 0.1
     RpmToNextGear: 6500
     RpmToPrevGear: 4500
     MaxForwardSlipToBlockChangeGear: 0.25
@@ -50,11 +86,11 @@ MonoBehaviour:
     ReversGearRatio: 4
     MaxBrakeTorque: 2000
     EnableSteerAngleMultiplier: 1
-    MinSteerAngleMultiplier: 0.05
+    MinSteerAngleMultiplier: 0.3
     MaxSteerAngleMultiplier: 1
     MaxSpeedForMinAngleMultiplier: 250
-    SteerAngleChangeSpeed: 60
-    MinSpeedForSteerHelp: 20
+    SteerAngleChangeSpeed: 80
+    MinSpeedForSteerHelp: 1
     OppositeAngularVelocityHelpPower: 0.05
     PositiveAngularVelocityHelpPower: 0
     MaxAngularVelocityHelpAngle: 45

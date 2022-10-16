@@ -77,16 +77,16 @@ namespace RaceManager.Cars
 
         float[] AllGearsRatio;                                                           //All gears (Reverce, neutral and all forward).
 
-        Rigidbody _RB;
+        Rigidbody _rB;
         public Rigidbody RB
         {
             get
             {
-                if (!_RB)
+                if (!_rB)
                 {
-                    _RB = GetComponent<Rigidbody>();
+                    _rB = GetComponent<Rigidbody>();
                 }
-                return _RB;
+                return _rB;
             }
         }
 

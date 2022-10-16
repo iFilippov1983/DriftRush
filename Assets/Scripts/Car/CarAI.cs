@@ -32,7 +32,7 @@ namespace RaceManager.Cars
         [Title("Avoidance settings")]
         [SerializeField] private bool _isAvoidingCars = true;
         [SerializeField] private float _castMaxDistance = 12f; //12
-        [SerializeField] private float _desireToGetTheWaypoint = 3f; //6
+        [SerializeField] private float _desireToGetTheWaypoint = 6f; //6
         [SerializeField] private float _avoidanceLerpFactor = 1f; //1
 
         private float _criticalSteeAngle = 45f;
@@ -49,13 +49,34 @@ namespace RaceManager.Cars
         public void StopAvoiding() => _isAvoidingCars = false;
         public Transform Target => _target;
 
-        private void Start()
+        //private void Start()
+        //{
+        //    _car = GetComponent<Car>();
+        //    _sphereCollider = GetComponent<SphereCollider>();
+        //    _spherecastRadius = _sphereCollider.radius;
+        //    _spherecastRadius = _sphereCollider.radius * 0.5f;
+        //    _randomPerlin = Random.value * 100;
+
+        //    _criticalSteeAngle = _car.CarConfig.MaxSteerAngle;
+
+        //    if (PlayerDriving)
+        //        DesiredSpeed = _car.CarConfig.CruiseSpeed;
+        //    else
+        //    {
+        //        DesiredSpeed = _car.CarConfig.MaxSpeed * Random.Range(_car.CarConfig.CruiseSpeedPercentMin, _car.CarConfig.CruiseSpeedPercentMax);
+        //        Debug.Log($"{gameObject.name} speed: {DesiredSpeed}");
+        //    }
+        //}
+
+        public void Initialize()
         {
             _car = GetComponent<Car>();
             _sphereCollider = GetComponent<SphereCollider>();
             _spherecastRadius = _sphereCollider.radius;
             _spherecastRadius = _sphereCollider.radius * 0.5f;
             _randomPerlin = Random.value * 100;
+
+            _criticalSteeAngle = _car.CarConfig.MaxSteerAngle;
 
             if (PlayerDriving)
                 DesiredSpeed = _car.CarConfig.CruiseSpeed;
@@ -64,29 +85,7 @@ namespace RaceManager.Cars
                 DesiredSpeed = _car.CarConfig.MaxSpeed * Random.Range(_car.CarConfig.CruiseSpeedPercentMin, _car.CarConfig.CruiseSpeedPercentMax);
                 //Debug.Log($"{gameObject.name} speed: {DesiredSpeed}");
             }
-            StartEngine();
         }
-
-        //public void Initialize(CarConfig carConfig)
-        //{
-        //    //_profile = profile;
-        //    _carConfig = carConfig;
-        //    _criticalSteeAngle = _carConfig.MaxSteerAngle;
-        //    //_car = GetComponent<Car>();
-        //    //_sphereCollider = GetComponent<SphereCollider>();
-        //    //_spherecastRadius = _sphereCollider.radius * 0.5f;
-
-        //    //_randomPerlin = Random.value * 100;
-
-        //    if (PlayerDriving)
-        //        DesiredSpeed = _car.CarConfig.CruiseSpeed;
-        //    else
-        //    {
-        //        DesiredSpeed = _car.CarConfig.MaxSpeed * Random.Range(_carConfig.CruiseSpeedPercentMin, _carConfig.CruiseSpeedPercentMax);
-        //        Debug.Log($"{gameObject.name} speed: {DesiredSpeed}");
-        //    }
-        //    StartEngine();
-        //}
 
         private void Update()
         {

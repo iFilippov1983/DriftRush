@@ -15,9 +15,9 @@ namespace RaceManager.Race
     {
         [SerializeField] private CarsDepot _carsDepot;
         [Space]
-        [SerializeField] private CarConfig _playerCarConfig;
+        [SerializeField] private CarConfigScriptable _playerCarConfigSO;
         [Space]
-        [SerializeField] private CarConfig _opponentCarConfig;
+        [SerializeField] private CarConfigScriptable _opponentCarConfigSO;
         [Space]
         [SerializeField] private RaceUI _raceUI;
         [SerializeField] private CinemachineVirtualCamera _followCam;
@@ -69,7 +69,7 @@ namespace RaceManager.Race
                 var driver = driverGo.GetComponent<Driver>();
                 if (_startPoints[i].Type == DriverType.Player)
                 {
-                    driver.Initialize(_startPoints[i].Type, _playerCarConfig, _carsDepot, _waypointTrackMain);
+                    driver.Initialize(_startPoints[i].Type, _playerCarConfigSO.CarConfig, _carsDepot, _waypointTrackMain);
                     _followCam.LookAt = driver.CarObject.transform;
                     _followCam.Follow = driver.CarObject.transform;
                     //_followCam.LookAt = driver.TargetToFollow;
@@ -80,7 +80,7 @@ namespace RaceManager.Race
                 else
                 {
                     WaypointTrack track = (i % 2) == 0 ? _waypointTrackEven : _waypointTrackOdd;
-                    driver.Initialize(_startPoints[i].Type, _opponentCarConfig, _carsDepot, track);
+                    driver.Initialize(_startPoints[i].Type, _opponentCarConfigSO.CarConfig, _carsDepot, track);
                     driverGo.name += $"_{i + 1}";
                 }
 

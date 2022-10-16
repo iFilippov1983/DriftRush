@@ -33,10 +33,9 @@ namespace RaceManager.Cars
             driverProfile = new DriverProfile();
 
             car = go.GetComponent<Car>();
-            //car.Initialize(_carConfig, driverProfile);
+            car.Initialize(_carConfig);
 
             carAI = go.GetComponent<CarAI>();
-            //carAI.Initialize(_carConfig);
 
             waypointsTracker = go.GetComponent<WaypointsTracker>();
             waypointsTracker.Initialize(_waypointTrack, driverProfile);
@@ -44,8 +43,6 @@ namespace RaceManager.Cars
             if (_driverType == DriverType.Player)
             {
                 var playerContrrol = go.AddComponent<PlayerControl>();
-                //playerContrrol.Initialize(carAI, _carConfig);
-
                 go.AddComponent<AudioListener>();
             }
 

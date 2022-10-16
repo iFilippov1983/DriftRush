@@ -45,7 +45,7 @@ namespace RaceManager.Cars
 				Angle = 0;
 			}
 
-			Angle *= Mathf.Clamp01(Car.SpeedInHour / MaxTiltOnSpeed);
+			Angle *= Mathf.Clamp01(Car.SpeedInDesiredUnits / MaxTiltOnSpeed);
 			Angle = Mathf.Clamp(Angle, -MaxAngle, MaxAngle);
 			Body.localRotation = Quaternion.AngleAxis(Angle, Vector3.forward);
 		}

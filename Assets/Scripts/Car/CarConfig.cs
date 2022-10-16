@@ -18,12 +18,12 @@ namespace RaceManager.Cars
 		public SpeedType SpeedType = SpeedType.KPH;
 		public float MaxSpeed = 200;
 		[ReadOnly]
-		public float MaxRBVelocityMagnitude = 20f;
+		public float MaxRBVelocityMagnitude => CalculateVelocity(MaxSpeed);
 		[Space]
 		[Tooltip("Cruise Speed Settings (for Player)")]
 		public float CruiseSpeed = 20f;
 		[ReadOnly]
-		public float CruiseRBVelocityMagnitude = 2f;
+		public float CruiseRBVelocityMagnitude => CalculateVelocity(CruiseSpeed);
 		[Tooltip("Represents percentage range of Max Speed AI will use")]
 		[Range(0.01f, 1f)]
 		public float CruiseSpeedPercentMin = 0.7f;
@@ -82,20 +82,19 @@ namespace RaceManager.Cars
 		public float AngularVelocityInMaxAngle = 0.5f;                 //Min angular velocity, reached at max drift angles.
 		public float AngularVelocityInMinAngle = 2f;                 //Max angular velocity, reached at min drift angles.
 
-		[OnInspectorGUI]
-		public void RecalculateVelocities()
+		public float CalculateVelocity(float value)
 		{
 			switch (SpeedType)
 			{
 				case SpeedType.MPH:
-					MaxRBVelocityMagnitude = MaxSpeed / MPHFactor;
-					CruiseRBVelocityMagnitude = CruiseSpeed / MPHFactor;
+					value /=  MPHFactor;
 					break;
 				case SpeedType.KPH:
-					MaxRBVelocityMagnitude = MaxSpeed / KPHFactor;
-					CruiseRBVelocityMagnitude = CruiseSpeed / KPHFactor;
+					value /= KPHFactor;
 					break;
 			}
+
+			return value;
 		}
 	}
 }

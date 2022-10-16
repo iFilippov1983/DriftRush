@@ -25,7 +25,8 @@ namespace RaceManager.Cars
         [SerializeField] Transform COM;
         [SerializeField] List<ParticleSystem> BackFireParticles = new List<ParticleSystem>();
 
-        [SerializeField] private CarConfig _carConfig;
+        [SerializeField] 
+        private CarConfig _carConfig;
         private CarSelfRighting _carSelfRighting;
 
         #region Properties of car parameters
@@ -92,7 +93,7 @@ namespace RaceManager.Cars
         public float CurrentMaxSlip { get; private set; }                       //Max slip of all wheels.
         public int CurrentMaxSlipWheelIndex { get; private set; }               //Max slip wheel index.
         public float CurrentSpeed { get; private set; }                         //Speed, magnitude of velocity.
-        public float SpeedInHour { get { return CurrentSpeed * C.KPHMult; } }
+        public float SpeedInDesiredUnits => CurrentSpeed = _carConfig.SpeedType == SpeedType.KPH ? CurrentSpeed * C.KPHMult : CurrentSpeed * C.MPHMult;
         public int CarDirection { get { return CurrentSpeed < 1 ? 0 : (VelocityAngle < 90 && VelocityAngle > -90 ? 1 : -1); } }
 
         float CurrentSteerAngle;
@@ -105,13 +106,59 @@ namespace RaceManager.Cars
         int FirstDriveWheel;
         int LastDriveWheel;
 
-        private void SetConfig(CarConfig carConfig)
+//        private void Awake()
+//        {
+//            _carSelfRighting = GetComponent<CarSelfRighting>();
+//            _id = MakeId();
+//            RB.centerOfMass = COM.localPosition;
+
+//            Copy wheels in public property
+//            Wheels = new Wheel[4] {
+//            FrontLeftWheel,
+//            FrontRightWheel,
+//            RearLeftWheel,
+//            RearRightWheel
+//        };
+
+//        Set drive wheel.
+//            switch (DriveType)
+//            {
+//                case DriveType.AWD:
+//                    FirstDriveWheel = 0;
+//                    LastDriveWheel = 3;
+//                    break;
+//                case DriveType.FWD:
+//                    FirstDriveWheel = 0;
+//                    LastDriveWheel = 1;
+//                    break;
+//                case DriveType.RWD:
+//                    FirstDriveWheel = 2;
+//                    LastDriveWheel = 3;
+//                    break;
+//            }
+
+//    Divide the motor torque by the count of driving wheels
+//            MaxMotorTorque = _carConfig.MaxMotorTorque / (LastDriveWheel - FirstDriveWheel + 1);
+
+
+//            Calculated gears ratio with main ratio
+//            AllGearsRatio = new float[GearsRatio.Length + 2];
+//            AllGearsRatio[0] = ReversGearRatio* MainRatio;
+//    AllGearsRatio[1] = 0;
+//            for (int i = 0; i<GearsRatio.Length; i++)
+//            {
+//                AllGearsRatio[i + 2] = GearsRatio[i] * MainRatio;
+//}
+
+//foreach (var particles in BackFireParticles)
+//{
+//    BackFireAction += () => particles.Emit(2);
+//}
+//        }
+
+        public void Initialize(CarConfig carConfig)
         {
             _carConfig = carConfig;
-        }
-
-        private void Awake()
-        {
             _carSelfRighting = GetComponent<CarSelfRighting>();
             _id = MakeId();
             RB.centerOfMass = COM.localPosition;
@@ -122,7 +169,7 @@ namespace RaceManager.Cars
             FrontRightWheel,
             RearLeftWheel,
             RearRightWheel
-        };
+            };
 
             //Set drive wheel.
             switch (DriveType)
@@ -172,7 +219,7 @@ namespace RaceManager.Cars
 
             if (EnableSteerAngleMultiplier)
             {
-                targetSteerAngle *= Mathf.Clamp(1 - SpeedInHour / MaxSpeedForMinAngleMultiplier, MinSteerAngleMultiplier, MaxSteerAngleMultiplier);
+                targetSteerAngle *= Mathf.Clamp(1 - SpeedInDesiredUnits / MaxSpeedForMinAngleMultiplier, MinSteerAngleMultiplier, MaxSteerAngleMultiplier);
             }
 
             CurrentSteerAngle = Mathf.MoveTowards(CurrentSteerAngle, targetSteerAngle, Time.deltaTime * SteerAngleChangeSpeed);
@@ -237,7 +284,7 @@ namespace RaceManager.Cars
         /// </summary>
         void UpdateSteerAngleLogic()
         {
-            var needHelp = SpeedInHour > MinSpeedForSteerHelp && CarDirection > 0;
+            var needHelp = SpeedInDesiredUnits > MinSpeedForSteerHelp && CarDirection > 0;
             float targetAngle = 0;
             VelocityAngle = -Vector3.SignedAngle(RB.velocity, transform.TransformDirection(Vector3.forward), Vector3.up);
 

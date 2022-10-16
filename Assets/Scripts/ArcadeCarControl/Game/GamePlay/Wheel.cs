@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using PG_Physics.Wheel;
+using RaceManager.Cars.Effects;
 
 namespace RaceManager.Cars
 {
@@ -78,7 +79,7 @@ namespace RaceManager.Cars
 			if (WheelCollider.isGrounded && CurrentMaxSlip > SlipForGenerateParticle)
 			{
 				//Emit particle.
-				var particles = FXController.GetAspahaltParticles;
+				var particles = FXController.AspahaltParticles;
 				var point = WheelCollider.transform.position;
 				point.y = Hit.point.y;
 				particles.transform.position = point;

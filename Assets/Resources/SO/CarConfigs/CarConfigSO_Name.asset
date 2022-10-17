@@ -10,25 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: abb594599507c5d43a05595f8d881a21, type: 3}
-  m_Name: CarConfigSO_Player
+  m_Name: CarConfigSO_Name
   m_EditorClassIdentifier: 
   _carConfig:
-    CarProfile: {fileID: 11400000, guid: efbc9fefae1f8d4439e9632182a68f9f, type: 2}
+    CarProfile: {fileID: 0}
     SpeedType: 1
     DriveType: 0
     MaxSpeed: 200
     CruiseSpeed: 20
     CruiseSpeedPercentMin: 0.7
     CruiseSpeedPercentMax: 0.8
-    MaxRPM: 7000
+    MaxMotorTorque: 800
     HelpSteerPower: 0.2
     MaxSteerAngle: 42
     Durability: 50
-    MaxMotorTorque: 800
-    ProbabilityBackfire: 0.1
-    MaxBrakeTorque: 2000
-    MaxForwardSlipToBlockChangeGear: 0.1
-    RpmEngineToRpmWheelsLerpSpeed: 15
     AutomaticGearBox: 1
     MotorTorqueFromRpmCurve:
       serializedVersion: 2
@@ -40,17 +35,17 @@ MonoBehaviour:
         outSlope: 0
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
+        inWeight: 0
+        outWeight: 0
       - serializedVersion: 3
         time: 3.54
         value: 0.869
-        inSlope: 0.0939955
-        outSlope: 0.0939955
+        inSlope: 0.1
+        outSlope: 0.1
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0.5056497
-        outWeight: 0.61538464
+        inWeight: 0
+        outWeight: 0
       - serializedVersion: 3
         time: 6.4
         value: 1
@@ -72,6 +67,16 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
+    MaxRPM: 7000
+    MinRPM: 700
+    CutOffRPM: 6800
+    CutOffOffsetRPM: 500
+    CutOffTime: 0.1
+    ProbabilityBackfire: 0.1
+    RpmToNextGear: 6500
+    RpmToPrevGear: 4500
+    MaxForwardSlipToBlockChangeGear: 0.25
+    RpmEngineToRpmWheelsLerpSpeed: 15
     GearsRatio:
     - 3.38
     - 2.36
@@ -80,17 +85,15 @@ MonoBehaviour:
     - 1
     MainRatio: 3.56
     ReversGearRatio: 4
-    RpmToNextGear: 6800
-    RpmToPrevGear: 4500
+    MaxBrakeTorque: 2000
     EnableSteerAngleMultiplier: 1
-    MinSteerAngleMultiplier: 0.3
+    MinSteerAngleMultiplier: 0.05
     MaxSteerAngleMultiplier: 1
     MaxSpeedForMinAngleMultiplier: 250
-    SteerAngleChangeSpeed: 80
+    SteerAngleChangeSpeed: 100
     MinSpeedForSteerHelp: 1
     OppositeAngularVelocityHelpPower: 0.05
     PositiveAngularVelocityHelpPower: 0
     MaxAngularVelocityHelpAngle: 45
     AngularVelocityInMaxAngle: 0.5
     AngularVelocityInMinAngle: 2
-    CutOffTime: 0.1

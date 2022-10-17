@@ -1,5 +1,7 @@
 using RaceManager.Cars;
+using RaceManager.Race;
 using RaceManager.Tools;
+using Sirenix.OdinInspector;
 using System;
 using UnityEngine;
 
@@ -8,7 +10,7 @@ namespace RaceManager.Waypoints
     public class WaypointsTracker : MonoBehaviour
     {
         private DriverProfile _driverProfile;
-        [SerializeField]
+        [SerializeField, ReadOnly]
         private WaypointTrack _waypointTrack;                  // A reference to the waypoint-based route we should follow
         [SerializeField] private float _lookAheadForTargetOffset = 15;   // The offset ahead along the route that the we will aim for
         [SerializeField] private float _lookAheadForTargetFactor = .1f; // A multiplier adding distance ahead along the route to aim for, based on current speed
@@ -24,8 +26,7 @@ namespace RaceManager.Waypoints
 
         private bool _raceFinished;
 
-        //[ShowInInspector, ReadOnly]
-        [SerializeField]
+        [SerializeField, ReadOnly]
         private Transform _target;
         private float _progressDistance;    // The progress round the route, used in smooth mode.
         private Vector3 _lastPosition;      // Used to calculate current speed (since we may not have a rigidbody component)
@@ -98,8 +99,8 @@ namespace RaceManager.Waypoints
 
         private void OnTriggerEnter(Collider other)
         {
-            if (_raceFinished)
-                return;
+            //if (_raceFinished)
+            //    return;
 
             if (other.CompareTag(Tag.Waypoint))
             {
@@ -118,9 +119,13 @@ namespace RaceManager.Waypoints
 
                         if (_lapsCompleted >= _lapsToComplete)
                         {
-                            _raceFinished = true;
+                            //_raceFinished = true;
                             _driverProfile.CarState.Value = CarState.Finished;
+                   
                         }
+
+                        if (_driverProfile.DriverType == DriverType.Player)
+                            RaceEventsHub.BroadcastNotification(RaceEventType.FINISH);
                     }
 
                     OnPassedWaypoint?.Invoke(this);

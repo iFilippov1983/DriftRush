@@ -11,16 +11,16 @@ using RaceManager.Waypoints;
 
 namespace RaceManager.Race
 {
-    internal class RaceHandler : Singleton<RaceHandler>
+    internal class RaceHandler : MonoBehaviour
     {
         private Driver _playerDriver;
         private List<Driver> _drivers;
 
         private List<WaypointsTracker> _waypointsTrackers;
 
-        public void StartHandle()
+        public void StartHandle(List<Driver> drivers)
         {
-            _drivers = RaceInitializer.Instance.Drivers;
+            _drivers = drivers;
             _playerDriver = _drivers.Find(d => d.DriverType == DriverType.Player);
 
             WaypointsTracker[] waypointsTrackesArray = FindObjectsOfType<WaypointsTracker>();
@@ -41,10 +41,10 @@ namespace RaceManager.Race
             waypointTracker.SetInRacePosition(carPosition);
         }
 
-        private void OnDestroy()
-        {
-            foreach (WaypointsTracker tracker in _waypointsTrackers)
-                tracker.OnPassedWaypoint -= OnPassedWaypoint;
-        }
+        //private void OnDestroy()
+        //{
+        //    foreach (WaypointsTracker tracker in _waypointsTrackers)
+        //        tracker.OnPassedWaypoint -= OnPassedWaypoint;
+        //}
     }
 }

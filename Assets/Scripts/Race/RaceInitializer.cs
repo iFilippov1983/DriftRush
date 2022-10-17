@@ -8,20 +8,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using RaceManager.Waypoints;
 using RaceManager.UI;
+using Sirenix.OdinInspector;
 
 namespace RaceManager.Race
 {
-    public class RaceInitializer : Singleton<RaceInitializer>
+    public class RaceInitializer : MonoBehaviour
     {
         [SerializeField] private CarsDepot _carsDepot;
         [Space]
         [SerializeField] private CarConfigScriptable _playerCarConfigSO;
         [Space]
-        [SerializeField] private CarConfigScriptable _opponentCarConfigSO;
+        [SerializeField] private List<CarConfigScriptable> _opponentsConfigSoList;
         [Space]
-        [SerializeField] private RaceUI _raceUI;
-        [SerializeField] private CinemachineVirtualCamera _followCam;
-        [SerializeField] private RaceLevelView _level;
+        [SerializeField, ReadOnly] private RaceUI _raceUI;
+        [SerializeField, ReadOnly] private CinemachineVirtualCamera _followCam;
+        [SerializeField, ReadOnly] private RaceLevelView _level;
+        [SerializeField, ReadOnly] private RaceHandler _raceHandler;
+
+        private CarConfigScriptable _opponentCarConfigSO;
         private WaypointTrack _waypointTrackMain;
         private WaypointTrack _waypointTrackEven;
         private WaypointTrack _waypointTrackOdd;
@@ -32,18 +36,24 @@ namespace RaceManager.Race
 
         public List<Driver> Drivers => _driversList;
 
-        protected override void AwakeSingleton()
+        private void Awake()
         {
+            _raceHandler = FindObjectOfType<RaceHandler>();
+            _raceUI = FindObjectOfType<RaceUI>();
+            _followCam = FindObjectOfType<CinemachineFollowCamView>().Camera;
+            _level = FindObjectOfType<RaceLevelView>();
             _startPoints = _level.StartPoints;
             _waypointTrackMain = _level.WaypointTrackMain;
             _waypointTrackEven = _level.WaypointTrackEven;
             _waypointTrackOdd = _level.WaypointTrackOdd;
+
+           
         }
 
         private void Start()
         {
             InitDrivers();
-            RaceHandler.Instance.StartHandle();
+            _raceHandler.StartHandle(Drivers);
         }
 
         private void Update()
@@ -57,6 +67,7 @@ namespace RaceManager.Race
 
         private void InitDrivers()
         {
+            _raceStarted = false;
             _driversList = new List<Driver>();
             GameObject driverPrefab = ResourcesLoader.LoadPrefab(ResourcePath.DriverPrefab);
             GameObject parent = new GameObject("[Drivers]");
@@ -80,6 +91,7 @@ namespace RaceManager.Race
                 else
                 {
                     WaypointTrack track = (i % 2) == 0 ? _waypointTrackEven : _waypointTrackOdd;
+                    _opponentCarConfigSO = GetOpponentsConfig();
                     driver.Initialize(_startPoints[i].Type, _opponentCarConfigSO.CarConfig, _carsDepot, track);
                     driverGo.name += $"_{i + 1}";
                 }
@@ -88,6 +100,11 @@ namespace RaceManager.Race
                 driverGo.transform.SetParent(parent.transform, false);
                 _driversList.Add(driver);
             }
+        }
+
+        private CarConfigScriptable GetOpponentsConfig()
+        {
+            return _opponentsConfigSoList[UnityEngine.Random.Range(0, _opponentsConfigSoList.Count)];
         }
     }
 }

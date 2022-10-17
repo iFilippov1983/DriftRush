@@ -1016,7 +1016,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &348416444
 Transform:
   m_ObjectHideFlags: 0
@@ -3776,18 +3776,6 @@ MonoBehaviour:
   m_FirstSelected: {fileID: 0}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
---- !u!114 &1094920402 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5204178790627015205, guid: a10f954699395a64683ef95133bbfdb0,
-    type: 3}
-  m_PrefabInstance: {fileID: 956234192}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c411497dd794b94e87d1d590beac820, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1106569737
 GameObject:
   m_ObjectHideFlags: 0
@@ -5909,7 +5897,6 @@ GameObject:
   - component: {fileID: 1938199604}
   - component: {fileID: 1938199603}
   - component: {fileID: 1938199602}
-  - component: {fileID: 1938199605}
   m_Layer: 0
   m_Name: '[Root]'
   m_TagString: Untagged
@@ -5943,11 +5930,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _carsDepot: {fileID: 11400000, guid: d7530e18444d4cb429bf15b4d12e6caf, type: 2}
   _playerCarConfigSO: {fileID: 11400000, guid: 2d92e0464e0f4c646a4b681a472c39ba, type: 2}
-  _opponentCarConfigSO: {fileID: 11400000, guid: 3eefe949608bf674d82815b28b787aa4,
-    type: 2}
-  _raceUI: {fileID: 1094920402}
-  _followCam: {fileID: 2102497040}
-  _level: {fileID: 891621480}
+  _opponentsConfigSoList:
+  - {fileID: 11400000, guid: 3eefe949608bf674d82815b28b787aa4, type: 2}
+  _raceUI: {fileID: 0}
+  _followCam: {fileID: 0}
+  _level: {fileID: 0}
 --- !u!4 &1938199604
 Transform:
   m_ObjectHideFlags: 0
@@ -5963,21 +5950,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1938199605
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1938199601}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d3b356ff59f59394292ccca3928ad25e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  AsphaltSmokeParticles: {fileID: 2105490839266744443}
-  TrailRef: {fileID: 2210795307114340131}
-  TrailsHolder: {fileID: 2303267889695597291}
 --- !u!1 &2000852204
 GameObject:
   m_ObjectHideFlags: 0
@@ -6386,6 +6358,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2102497039}
   - component: {fileID: 2102497040}
+  - component: {fileID: 2102497041}
   m_Layer: 0
   m_Name: CM FollowCam
   m_TagString: Untagged
@@ -6443,6 +6416,18 @@ MonoBehaviour:
         m_Calls: []
   m_LegacyBlendHint: 0
   m_ComponentOwner: {fileID: 200609025}
+--- !u!114 &2102497041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2102497038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 267b2be0402f6834eb770c107436f2a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2103312250
 GameObject:
   m_ObjectHideFlags: 0

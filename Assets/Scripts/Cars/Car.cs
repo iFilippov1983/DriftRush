@@ -65,8 +65,8 @@ namespace RaceManager.Cars
         float OppositeAngularVelocityHelpPower { get { return _carConfig.OppositeAngularVelocityHelpPower; } }
         float PositiveAngularVelocityHelpPower { get { return _carConfig.PositiveAngularVelocityHelpPower; } }
         float MaxAngularVelocityHelpAngle { get { return _carConfig.MaxAngularVelocityHelpAngle; } }
-        float AngularVelucityInMaxAngle { get { return _carConfig.AngularVelocityInMaxAngle; } }
-        float AngularVelucityInMinAngle { get { return _carConfig.AngularVelocityInMinAngle; } }
+        float AngularVelocityInMaxAngle { get { return _carConfig.AngularVelocityInMaxAngle; } }
+        float AngularVelocityInMinAngle { get { return _carConfig.AngularVelocityInMinAngle; } }
 
         #endregion //Properties of drift Settings
 
@@ -307,7 +307,7 @@ namespace RaceManager.Cars
                 var absAngle = Mathf.Abs(VelocityAngle);
 
                 //Get current procent help angle.
-                float currentAngularProcent = absAngle / MaxAngularVelocityHelpAngle;
+                float currentAngularPercent = absAngle / MaxAngularVelocityHelpAngle;
 
                 var currAngle = RB.angularVelocity;
 
@@ -315,17 +315,17 @@ namespace RaceManager.Cars
                 {
                     //Turn to the side opposite to the angle. To change the angular velocity.
                     var angularVelocityMagnitudeHelp = OppositeAngularVelocityHelpPower * CurrentSteerAngle * Time.fixedDeltaTime;
-                    currAngle.y += angularVelocityMagnitudeHelp * currentAngularProcent;
+                    currAngle.y += angularVelocityMagnitudeHelp * currentAngularPercent;
                 }
                 else if (!Mathf.Approximately(CurrentSteerAngle, 0))
                 {
                     //Turn to the side positive to the angle. To change the angular velocity.
                     var angularVelocityMagnitudeHelp = PositiveAngularVelocityHelpPower * CurrentSteerAngle * Time.fixedDeltaTime;
-                    currAngle.y += angularVelocityMagnitudeHelp * (1 - currentAngularProcent);
+                    currAngle.y += angularVelocityMagnitudeHelp * (1 - currentAngularPercent);
                 }
 
                 //Clamp and apply of angular velocity.
-                var maxMagnitude = ((AngularVelucityInMaxAngle - AngularVelucityInMinAngle) * currentAngularProcent) + AngularVelucityInMinAngle;
+                var maxMagnitude = ((AngularVelocityInMaxAngle - AngularVelocityInMinAngle) * currentAngularPercent) + AngularVelocityInMinAngle;
                 currAngle.y = Mathf.Clamp(currAngle.y, -maxMagnitude, maxMagnitude);
                 RB.angularVelocity = currAngle;
             }

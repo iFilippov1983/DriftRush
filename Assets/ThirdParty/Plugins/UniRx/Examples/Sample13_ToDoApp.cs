@@ -6,6 +6,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.EventSystems;
+using System;
+using UniRx.Triggers;
+
+
 
 namespace UniRx.Examples
 {
@@ -18,6 +22,9 @@ namespace UniRx.Examples
         public Button ClearButton;
         public GameObject TodoList;
 
+        private float _fireRate = 2f;
+        private DateTimeOffset _lastFired;
+
         // prefab:)
         public GameObject SampleItemPrefab;
 
@@ -25,6 +32,17 @@ namespace UniRx.Examples
 
         void Start()
         {
+            this.UpdateAsObservable()
+                .Where(_ => Input.GetKeyUp(KeyCode.Q))
+                .Timestamp()
+                .Where(t => t.Timestamp > _lastFired.AddSeconds(_fireRate))
+                .Subscribe(t =>
+                {
+                    Debug.Log("Q pressed");
+                    _lastFired = t.Timestamp;
+                });
+
+
             // merge Button click and push enter key on input field.
             var submit = Observable.Merge(
                 AddButton.OnClickAsObservable().Select(_ => ToDoInput.text),

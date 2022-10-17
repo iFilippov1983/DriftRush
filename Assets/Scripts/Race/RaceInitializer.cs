@@ -15,9 +15,9 @@ namespace RaceManager.Race
     {
         [SerializeField] private CarsDepot _carsDepot;
         [Space]
-        [SerializeField] private CarSettings _playerCarSettings;
+        [SerializeField] private CarConfigScriptable _playerCarConfigSO;
         [Space]
-        [SerializeField] private CarSettings _opponentCarSettings;
+        [SerializeField] private CarConfigScriptable _opponentCarConfigSO;
         [Space]
         [SerializeField] private RaceUI _raceUI;
         [SerializeField] private CinemachineVirtualCamera _followCam;
@@ -32,11 +32,11 @@ namespace RaceManager.Race
 
         public List<Driver> Drivers => _driversList;
 
-        private void Awake()
+        protected override void AwakeSingleton()
         {
             _startPoints = _level.StartPoints;
             _waypointTrackMain = _level.WaypointTrackMain;
-            _waypointTrackEven = _level.WaypointTrackEven;  
+            _waypointTrackEven = _level.WaypointTrackEven;
             _waypointTrackOdd = _level.WaypointTrackOdd;
         }
 
@@ -69,23 +69,22 @@ namespace RaceManager.Race
                 var driver = driverGo.GetComponent<Driver>();
                 if (_startPoints[i].Type == DriverType.Player)
                 {
-                    driver.Initialize(_startPoints[i].Type, _playerCarSettings, _carsDepot, _waypointTrackMain);
+                    driver.Initialize(_startPoints[i].Type, _playerCarConfigSO.CarConfig, _carsDepot, _waypointTrackMain);
                     _followCam.LookAt = driver.CarObject.transform;
                     _followCam.Follow = driver.CarObject.transform;
                     //_followCam.LookAt = driver.TargetToFollow;
                     //_followCam.Follow = driver.TargetToFollow;
                     driver.Subscribe(_raceUI);
-                    //temp
-                    _raceUI.Init(() => driver.CarObject.GetComponent<CarSelfRighting>().RightCar());
+                    _raceUI.Init(driver.Profile, () => driver.CarObject.GetComponent<CarSelfRighting>().RightCar());
                 }
                 else
                 {
                     WaypointTrack track = (i % 2) == 0 ? _waypointTrackEven : _waypointTrackOdd;
-                    driver.Initialize(_startPoints[i].Type, _opponentCarSettings, _carsDepot, track);
+                    driver.Initialize(_startPoints[i].Type, _opponentCarConfigSO.CarConfig, _carsDepot, track);
                     driverGo.name += $"_{i + 1}";
                 }
 
-                driver.SetPositionInRace(i + 1);
+                //driver.SetPositionInRace(i + 1);
                 driverGo.transform.SetParent(parent.transform, false);
                 _driversList.Add(driver);
             }

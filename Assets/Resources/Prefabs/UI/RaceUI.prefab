@@ -1969,6 +1969,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7964324634277812796}
+  - component: {fileID: 3467023672177659737}
   m_Layer: 5
   m_Name: TopPanel
   m_TagString: Untagged
@@ -1997,6 +1998,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &3467023672177659737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4280790340758058670}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f009f1861ef71244ca85c4c9beee1917, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4672088443466299861
 GameObject:
   m_ObjectHideFlags: 0
@@ -2775,7 +2788,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c411497dd794b94e87d1d590beac820, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speedType: 0
   _inRaceUI: {fileID: 22915638091341782}
   _finishUI: {fileID: 8363785059092896353}
 --- !u!114 &8780725459726073514
@@ -3444,6 +3456,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6663817235914564175}
+  - component: {fileID: 2118367356519074001}
   m_Layer: 5
   m_Name: ExtraRewardProgressPanel
   m_TagString: Untagged
@@ -3473,6 +3486,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2118367356519074001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6359359554433665777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c891a759113c8d54397a87d2f2f8e11a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6442102221090209587
 GameObject:
   m_ObjectHideFlags: 0
@@ -4582,8 +4607,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5527139157016475304}
+  - component: {fileID: 6355558931399398582}
   m_Layer: 5
-  m_Name: FinisPanel
+  m_Name: FinishPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4614,6 +4640,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &6355558931399398582
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7681656765740137937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31c8b113d3bba0b4c9f4fff9232687b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7843947049406243029
 GameObject:
   m_ObjectHideFlags: 0
@@ -4666,14 +4704,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _backPanel: {fileID: 5084435116851201408}
+  _topPanel: {fileID: 3467023672177659737}
   _moneyAmount: {fileID: 8662264375567376825}
   _gemsAmount: {fileID: 8861721846072103189}
+  _finishPanel: {fileID: 6355558931399398582}
   _positionText: {fileID: 7103998761110022672}
   _rewardMoneyAmountText: {fileID: 2120185761953861679}
   _rewardCupsAmountText: {fileID: 6461321837026932939}
   _okButtonFinish: {fileID: 8224129818832681301}
+  _extraRewardPanel: {fileID: 2118367356519074001}
   _fillUpImage: {fileID: 4862891841355559448}
-  _backImage: {fileID: 7879085237288894090}
   _persentageProgressText: {fileID: 2366047273885375362}
   _okButtonExtraReward: {fileID: 5641984791395029826}
 --- !u!1 &7859943790636371566

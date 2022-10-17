@@ -9,18 +9,12 @@ namespace RaceManager.Cars
     public class CarAI : MonoBehaviour
     {
         private const float SteerSensitivity = 1f;              //(0-1)How sensitively the AI uses steering input to turn to the desired direction
-        private const float BrakeSensitivity = 1f;              //(0-1)How sensitively the AI uses the brake to reach the current desired speed
-        private const float AccelSensitivity = 1f;              //(0-1)How sensitively the AI uses the accelerator to reach the current desired speed
-                                                                //If angle to target is grater then this value car turns as much as possible
 
-        //[SerializeField, ReadOnly]
-        //private CarConfig _carConfig;
         [SerializeField] private Transform _target;             // 'target' the target object to aim for.
         [SerializeField] private bool _isDriving = false;       // whether the AI is currently actively driving or stopped.
 
         private Car _car;
         private SphereCollider _sphereCollider;
-        private float _currentSpeed;
         private float _spherecastRadius;
         private Vector3 _avoidanceVectorLerped;
 
@@ -44,7 +38,6 @@ namespace RaceManager.Cars
         private bool _playerDriving = false;
 
         public bool isDriving => _isDriving;
-
         [ReadOnly]
         public bool PlayerDriving
         { 
@@ -59,11 +52,11 @@ namespace RaceManager.Cars
                 //Debug.Log($"{gameObject.name} speed: {DesiredSpeed}");
             }
         }
-
         [ReadOnly]
         public float DesiredSpeed;
-        public void StopAvoiding() => _isAvoidingCars = false;
         public Transform Target => _target;
+
+        public void StopAvoiding() => _isAvoidingCars = false;
 
         //private void Start()
         //{
@@ -88,7 +81,6 @@ namespace RaceManager.Cars
         {
             _car = GetComponent<Car>();
             _sphereCollider = GetComponent<SphereCollider>();
-            _spherecastRadius = _sphereCollider.radius;
             _spherecastRadius = _sphereCollider.radius * 0.5f;
             _randomPerlin = Random.value * 100;
 

@@ -1,6 +1,4 @@
-﻿using RaceManager.Tools;
-using System;
-using UniRx;
+﻿using UniRx;
 
 namespace RaceManager.Cars
 {

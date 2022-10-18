@@ -80,6 +80,7 @@ namespace RaceManager.Waypoints
                 {
                     _respawnPoints[i].DetachCar();
                     _carIDs.Remove(id);
+                    break;
                 } 
             }
         }

@@ -7,6 +7,9 @@ using UnityEngine;
 
 namespace RaceManager.Cars
 {
+    /// <summary>
+    /// Initializes a car and handles it
+    /// </summary>
     public class Driver : MonoBehaviour, IObservable<DriverProfile>
     {
         public DriverType DriverType;

@@ -30,7 +30,7 @@ namespace RaceManager.Cars
             var go = Object.Instantiate(prefab, _spawnPoint.position, _spawnPoint.rotation);
             go.tag = _driverType.ToString();
 
-            driverProfile = new DriverProfile();
+            driverProfile = new DriverProfile(_driverType);
 
             car = go.GetComponent<Car>();
             car.Initialize(_carConfig);

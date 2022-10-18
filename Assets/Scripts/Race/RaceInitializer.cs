@@ -20,10 +20,11 @@ namespace RaceManager.Race
         [Space]
         [SerializeField] private List<CarConfigScriptable> _opponentsConfigSoList;
         [Space]
-        [SerializeField, ReadOnly] private RaceUI _raceUI;
-        [SerializeField, ReadOnly] private CinemachineVirtualCamera _followCam;
+        [SerializeField] private RaceUI _raceUI;
+        [SerializeField] private CinemachineVirtualCamera _followCam;
+        [SerializeField] private RaceHandler _raceHandler;
         [SerializeField, ReadOnly] private RaceLevelView _level;
-        [SerializeField, ReadOnly] private RaceHandler _raceHandler;
+        
 
         private CarConfigScriptable _opponentCarConfigSO;
         private WaypointTrack _waypointTrackMain;
@@ -38,16 +39,12 @@ namespace RaceManager.Race
 
         private void Awake()
         {
-            _raceHandler = FindObjectOfType<RaceHandler>();
-            _raceUI = FindObjectOfType<RaceUI>();
-            _followCam = FindObjectOfType<CinemachineFollowCamView>().Camera;
-            _level = FindObjectOfType<RaceLevelView>();
+            _level = GetLevel();
+
             _startPoints = _level.StartPoints;
             _waypointTrackMain = _level.WaypointTrackMain;
             _waypointTrackEven = _level.WaypointTrackEven;
             _waypointTrackOdd = _level.WaypointTrackOdd;
-
-           
         }
 
         private void Start()
@@ -102,8 +99,17 @@ namespace RaceManager.Race
             }
         }
 
+        private RaceLevelView GetLevel()
+        {
+            //TODO: Make level load depending on Player's progress level
+
+            return FindObjectOfType<RaceLevelView>();
+        }
+
         private CarConfigScriptable GetOpponentsConfig()
         {
+            //TODO: make settings generation depending on Player's progress level
+
             return _opponentsConfigSoList[UnityEngine.Random.Range(0, _opponentsConfigSoList.Count)];
         }
     }

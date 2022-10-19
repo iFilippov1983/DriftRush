@@ -1,4 +1,5 @@
-﻿using RaceManager.Root;
+﻿using RaceManager.Cameras;
+using RaceManager.Root;
 using RaceManager.Tools;
 using RaceManager.Waypoints;
 using UnityEngine;
@@ -43,7 +44,7 @@ namespace RaceManager.Cars
 
             if (_driverType == DriverType.Player)
             {
-                var playerContrrol = go.AddComponent<PlayerControl>();
+                go.AddComponent<PlayerControl>();
                 go.AddComponent<AudioListener>();
             }
 

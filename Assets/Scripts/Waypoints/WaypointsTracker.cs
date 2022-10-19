@@ -14,7 +14,7 @@ namespace RaceManager.Waypoints
         private WaypointTrack _waypointTrack;                  // A reference to the waypoint-based route we should follow
         [SerializeField] private float _lookAheadForTargetOffset = 15;   // The offset ahead along the route that the we will aim for
         [SerializeField] private float _lookAheadForTargetFactor = .1f; // A multiplier adding distance ahead along the route to aim for, based on current speed
-        [SerializeField] private float _lookAheadForSpeedOffset = 20;   // The offset ahead only the route for speed adjustments (applied as the rotation of the waypoint target transform)
+        [SerializeField] private float _lookAheadForSpeedOffset = 15;   // The offset ahead only the route for speed adjustments (applied as the rotation of the waypoint target transform)
         [SerializeField] private float _lookAheadForSpeedFactor = .1f;  // A multiplier adding distance ahead along the route for speed adjustments
 
         private int _passedWaypointNumber = 0;
@@ -121,11 +121,7 @@ namespace RaceManager.Waypoints
                         {
                             //_raceFinished = true;
                             _driverProfile.CarState.Value = CarState.Finished;
-                   
                         }
-
-                        if (_driverProfile.DriverType == DriverType.Player)
-                            RaceEventsHub.BroadcastNotification(RaceEventType.FINISH);
                     }
 
                     OnPassedWaypoint?.Invoke(this);

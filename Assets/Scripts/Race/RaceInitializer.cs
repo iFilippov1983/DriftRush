@@ -9,6 +9,7 @@ using UnityEngine;
 using RaceManager.Waypoints;
 using RaceManager.UI;
 using Sirenix.OdinInspector;
+using RaceManager.Cameras;
 
 namespace RaceManager.Race
 {
@@ -21,7 +22,7 @@ namespace RaceManager.Race
         [SerializeField] private List<CarConfigScriptable> _opponentsConfigSoList;
         [Space]
         [SerializeField] private RaceUI _raceUI;
-        [SerializeField] private CinemachineVirtualCamera _followCam;
+        [SerializeField] private RaceCamerasHandler _camerasHandler;
         [SerializeField] private RaceHandler _raceHandler;
         [SerializeField, ReadOnly] private RaceLevelView _level;
         
@@ -78,11 +79,11 @@ namespace RaceManager.Race
                 if (_startPoints[i].Type == DriverType.Player)
                 {
                     driver.Initialize(_startPoints[i].Type, _playerCarConfigSO.CarConfig, _carsDepot, _waypointTrackMain);
-                    _followCam.LookAt = driver.CarObject.transform;
-                    _followCam.Follow = driver.CarObject.transform;
-                    //_followCam.LookAt = driver.TargetToFollow;
-                    //_followCam.Follow = driver.TargetToFollow;
+
+                    _camerasHandler.InitializeCamerasWhith(driver.CarObject.transform, driver.CarTargetToFollow);
+
                     driver.Subscribe(_raceUI);
+
                     _raceUI.Init(driver.Profile, () => driver.CarObject.GetComponent<CarSelfRighting>().RightCar());
                 }
                 else

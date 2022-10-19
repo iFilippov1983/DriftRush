@@ -6761,15 +6761,31 @@ MonoBehaviour:
   _carConfig:
     CarProfile: {fileID: 0}
     SpeedType: 1
+    DriveType: 0
     MaxSpeed: 200
     CruiseSpeed: 20
-    CruiseSpeedPercentMin: 0.7
     CruiseSpeedPercentMax: 0.8
-    MaxMotorTorque: 800
-    HelpSteerPower: 0.2
+    CruiseSpeedPercentMin: 0.7
+    RPMToNextGearPercet: 0.95
     MaxSteerAngle: 42
+    HelpSteerPower: 0.2
+    MaxAngularVelocityHelpAngle: 45
+    SteerAngleChangeSpeed: 60
     Durability: 50
-    DriveType: 0
+    MaxMotorTorque: 800
+    ProbabilityBackfire: 0.2
+    MaxBrakeTorque: 2000
+    MaxForwardSlipToBlockChangeGear: 0.25
+    RpmEngineToRpmWheelsLerpSpeed: 15
+    EnableSteerAngleMultiplier: 1
+    MinSteerAngleMultiplier: 0.05
+    MaxSteerAngleMultiplier: 1
+    MaxSpeedForMinAngleMultiplier: 250
+    MinSpeedForSteerHelp: 20
+    OppositeAngularVelocityHelpPower: 0.05
+    PositiveAngularVelocityHelpPower: 0
+    AngularVelocityInMaxAngle: 0.5
+    AngularVelocityInMinAngle: 2
     AutomaticGearBox: 1
     MotorTorqueFromRpmCurve:
       serializedVersion: 2
@@ -6813,16 +6829,6 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    MaxRPM: 7000
-    MinRPM: 700
-    CutOffRPM: 6800
-    CutOffOffsetRPM: 500
-    CutOffTime: 0.1
-    ProbabilityBackfire: 0.2
-    RpmToNextGear: 6500
-    RpmToPrevGear: 4500
-    MaxForwardSlipToBlockChangeGear: 0.25
-    RpmEngineToRpmWheelsLerpSpeed: 15
     GearsRatio:
     - 3.38
     - 2.36
@@ -6830,18 +6836,8 @@ MonoBehaviour:
     - 1
     MainRatio: 3.56
     ReversGearRatio: 4
-    MaxBrakeTorque: 2000
-    EnableSteerAngleMultiplier: 1
-    MinSteerAngleMultiplier: 0.05
-    MaxSteerAngleMultiplier: 1
-    MaxSpeedForMinAngleMultiplier: 250
-    SteerAngleChangeSpeed: 60
-    MinSpeedForSteerHelp: 20
-    OppositeAngularVelocityHelpPower: 0.05
-    PositiveAngularVelocityHelpPower: 0
-    MaxAngularVelocityHelpAngle: 45
-    AngularVelocityInMaxAngle: 0.5
-    AngularVelocityInMinAngle: 2
+    MaxRPM: 7000
+    CutOffTime: 0.1
 --- !u!114 &6948333402832068683
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6855,9 +6851,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _waypointTrack: {fileID: 0}
-  _lookAheadForTargetOffset: 15
+  _lookAheadForTargetOffset: 10
   _lookAheadForTargetFactor: 0.1
-  _lookAheadForSpeedOffset: 20
+  _lookAheadForSpeedOffset: 10
   _lookAheadForSpeedFactor: 0.1
   _target: {fileID: 3643873277590708756}
 --- !u!114 &2672541007519654001

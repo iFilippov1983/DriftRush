@@ -12,7 +12,7 @@ namespace RaceManager.Root
         [SerializeField] private ChestProgressPanel _chestProgress;
         [SerializeField] private CupsProgressPanel _cupsProgress;
         [SerializeField] private CurrencyAmountPanel _currencyAmount;
-        [SerializeField] private TuningPanel _tunungPanel;
+        [SerializeField] private TuningPanel _tuningPanel;
 
         private void Start()
         {

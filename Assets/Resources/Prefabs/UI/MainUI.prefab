@@ -511,7 +511,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 120, y: -135.99998}
+  m_AnchoredPosition: {x: 120, y: -89.999954}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &5655804763009523990
@@ -1218,6 +1218,7 @@ MonoBehaviour:
   _chestProgress: {fileID: 4026383136483229202}
   _cupsProgress: {fileID: 4034423466394427944}
   _currencyAmount: {fileID: 8937490094745293447}
+  _tuningPanel: {fileID: 5683002162305658233}
 --- !u!1 &919296511817161877
 GameObject:
   m_ObjectHideFlags: 0
@@ -3934,7 +3935,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -340, y: -135.99998}
+  m_AnchoredPosition: {x: -340, y: -89.999954}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &420673408601022956
@@ -6639,7 +6640,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -110, y: -135.99998}
+  m_AnchoredPosition: {x: -110, y: -89.999954}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &5423837436460450793
@@ -7362,7 +7363,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 350, y: -136}
+  m_AnchoredPosition: {x: 350, y: -90}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &3147963963967658625
@@ -9269,7 +9270,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0.0001, y: 151}
-  m_SizeDelta: {x: 1240, y: 120}
+  m_SizeDelta: {x: 1440, y: 120}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2120405261454012934
 CanvasRenderer:
@@ -10355,7 +10356,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -286.86475}
-  m_SizeDelta: {x: 1242, y: 744.8064}
+  m_SizeDelta: {x: 1440, y: 745}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6298437800482164833
 CanvasRenderer:
@@ -11946,6 +11947,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 935739825154639316}
+  - component: {fileID: 5683002162305658233}
   m_Layer: 5
   m_Name: TuningPanel
   m_TagString: Untagged
@@ -11976,6 +11978,23 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &5683002162305658233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7676285953348412682}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56028cffea3a3f84299f1c6ac054400c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tuneStatsButton: {fileID: 4619534041388740049}
+  _tuneWheelsViewButton: {fileID: 8418291872062147046}
+  _tuneCarViewButton: {fileID: 6733478775381904171}
+  _carNameText: {fileID: 4160813880940567388}
+  _carStatsProgressText: {fileID: 555864635885691250}
 --- !u!1 &7737069488926068833
 GameObject:
   m_ObjectHideFlags: 0

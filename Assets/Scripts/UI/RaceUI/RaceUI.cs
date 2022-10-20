@@ -2,6 +2,7 @@ using RaceManager.Cars;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UniRx;
 using UnityEngine;
 using UnityEngine.Events;
@@ -20,6 +21,9 @@ namespace RaceManager.UI
 
         private bool _isRaceFinished;
 
+        //temp
+        private string _currentLevel = "1";
+
         public void Init(DriverProfile profile, UnityAction actionForRespawnButton)
         {
             profile.CarState.Subscribe(playerCarState => ChangeViewDependingOn(playerCarState));
@@ -29,16 +33,46 @@ namespace RaceManager.UI
             _finishUI.OkButtonExtraReward.onClick.AddListener(FinalizeRace);
 
             _inRaceUI.gameObject.SetActive(true);
+            _inRaceUI.RaceProgressBar.LevelText.text = "LEVEL " + _currentLevel; //TODO: give value
             _inRaceUI.RespawnCarButton.AddListener(actionForRespawnButton);
         }
 
         private void Update()
         {
-            if (!_isRaceFinished)
+            if (_isRaceFinished)
+                return;
+
+            ShowSpeed();
+            HandlePositionIndication();
+            HandleProgressBar();
+
+            if (Input.GetMouseButtonDown(0))
             {
-                ShowSpeed();
-                HandlePositionIndication();
-                HandleProgressBar();
+                StopAllCoroutines();
+                StartCoroutine(HandleAccelerationRepresentation(true));
+            }
+
+            if (Input.GetMouseButtonUp(0))
+            {
+                StopAllCoroutines();
+                StartCoroutine(HandleAccelerationRepresentation(false));
+            }
+        }
+
+        private IEnumerator HandleAccelerationRepresentation(bool isAccelerating)
+        {
+            int lerpToValue = isAccelerating ? 1 : 0;
+            while (!Mathf.Approximately(_inRaceUI.SpeedIndicator.AccelerationIntenseImage.fillAmount, lerpToValue))
+            {
+                _inRaceUI.SpeedIndicator.AccelerationIntenseImage.fillAmount = 
+                    Mathf.Lerp
+                    (
+                        _inRaceUI.SpeedIndicator.AccelerationIntenseImage.fillAmount, 
+                        lerpToValue, 
+                        Time.deltaTime
+                    );
+
+                yield return null;
             }
         }
 

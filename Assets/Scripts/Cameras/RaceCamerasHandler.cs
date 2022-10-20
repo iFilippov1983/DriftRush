@@ -25,8 +25,8 @@ namespace RaceManager.Cameras
             //_followGroupCamera.TargetGroup.AddMember(carTransform, 1f, 0f);
             //_followGroupCamera.TargetGroup.AddMember(followTarget, 1f, 0f);
             //_followGroupCamera.SetTargetGroup();
-            _followCamera.LookAt = followTarget;
-            _followCamera.Follow = followTarget;
+            _followCamera.LookAt = carTransform;
+            _followCamera.Follow = carTransform;
 
             _startCamera.LookAt = carTransform;
             _finishCamera.LookAt = carTransform;
@@ -41,14 +41,14 @@ namespace RaceManager.Cameras
             _finishCamera.Priority = MajorPriority;
 
             _startCamera.Priority = MinorPriority;
-            _followGroupCamera.Camera.Priority = MinorPriority;
+            //_followGroupCamera.Camera.Priority = MinorPriority;
             _followCamera.Priority = MinorPriority;
         }
 
         private void SetFollowCamera()
         {
-            //_followCamera.Priority = MajorPriority;
-            _followGroupCamera.Camera.Priority = MajorPriority;
+            _followCamera.Priority = MajorPriority;
+            //_followGroupCamera.Camera.Priority = MajorPriority;
 
             _finishCamera.Priority = MinorPriority;
             _startCamera.Priority = MinorPriority;
@@ -59,7 +59,7 @@ namespace RaceManager.Cameras
             _startCamera.Priority = MajorPriority;
 
             _followCamera.Priority = MinorPriority;
-            _followGroupCamera.Camera.Priority = MinorPriority;
+            //_followGroupCamera.Camera.Priority = MinorPriority;
             _finishCamera.Priority = MinorPriority;
         }
 

@@ -1,3 +1,4 @@
+using RaceManager.Cameras;
 using RaceManager.Race;
 using RaceManager.Waypoints;
 using System;
@@ -23,14 +24,13 @@ namespace RaceManager.Cars
 
         public DriverProfile Profile => _profile;
         public GameObject CarObject => _carObject;
-        public Transform TargetToFollow => _carAI.Target;
+        public Transform CarTargetToFollow => _carAI.Target;
 
         public void Initialize(DriverType type, CarConfig carConfig, CarsDepot carsDepot, WaypointTrack waypointTrack)
         {
             DriverType = type;
             CarFactory carFactory = new CarFactory(type, carConfig, carsDepot, waypointTrack, transform);
             _carObject = carFactory.InitCar(out _car, out _carAI, out _waypointsTracker, out _profile);
-            //transform.SetParent(_carObject.transform, false);
 
             _profile.CarState.Value = CarState.OnTrack;
             _profile.CarState.Subscribe(s => OnCarStateChange(s));

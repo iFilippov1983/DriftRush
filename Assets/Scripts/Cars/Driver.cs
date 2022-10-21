@@ -25,6 +25,7 @@ namespace RaceManager.Cars
         public DriverProfile Profile => _profile;
         public GameObject CarObject => _carObject;
         public Transform CarTargetToFollow => _carAI.Target;
+        public WaypointsTracker WaypointsTracker => _waypointsTracker;
 
         public void Initialize(DriverType type, CarConfig carConfig, CarsDepot carsDepot, WaypointTrack waypointTrack)
         {

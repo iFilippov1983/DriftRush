@@ -6,9 +6,9 @@ using UnityEngine;
 namespace RaceManager.Cars.Effects
 {
 	/// <summary>
-	/// FX and sounds effects.
+	/// Cars vFX and sFX handler.
 	/// </summary>
-	public class FXController : Singleton<FXController>
+	public class CarFXController : Singleton<CarFXController>
 	{
 
 		[Header("Particles settings")]
@@ -18,7 +18,7 @@ namespace RaceManager.Cars.Effects
 		[SerializeField] TrailRenderer TrailRef;                    //Trail ref, The lifetime of the tracks is configured in it.
 		[SerializeField] Transform TrailsHolder;                    //Parent for copy of TrailRef.
 
-		protected override void AwakeSingleton()
+		public void Awake()
 		{
 			//Hide ref objects.
 			TrailRef.gameObject.SetActive(false);

@@ -1,12 +1,9 @@
 using RaceManager.Cars;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using UniRx;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.SceneManagement;
 
 namespace RaceManager.UI
 {

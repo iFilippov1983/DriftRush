@@ -14,6 +14,8 @@ namespace RaceManager
             RaceScene = 2,
         }
 
+        public static Action OnLoadingComplete;
+
         private static AsyncOperation _loadingAsyncOperation;
         private static Action<MonoBehaviour> OnLoaderCallback;
 
@@ -33,6 +35,8 @@ namespace RaceManager
             _loadingAsyncOperation = SceneManager.LoadSceneAsync(scene.ToString());
             while (!_loadingAsyncOperation.isDone)
                 yield return null;
+
+            OnLoadingComplete?.Invoke();
         }
 
         public static float GetLoadingProgress()

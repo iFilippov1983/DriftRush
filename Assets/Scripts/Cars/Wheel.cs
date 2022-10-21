@@ -43,7 +43,7 @@ namespace RaceManager.Cars
 			}
 		}
 
-		FXController FXController { get { return FXController.Instance; } }
+		CarFXController FXController { get { return CarFXController.Instance; } }
 		Vector3 HitPoint;
 
 		const int SmoothValuesCount = 3;

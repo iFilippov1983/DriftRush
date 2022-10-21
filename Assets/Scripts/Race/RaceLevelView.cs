@@ -1,4 +1,5 @@
 ﻿using RaceManager.Waypoints;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,10 +11,17 @@ namespace RaceManager.Race
         [SerializeField] private WaypointTrack _waypointTrackMain;
         [SerializeField] private WaypointTrack _waypointTrackEven;
         [SerializeField] private WaypointTrack _waypointTrackOdd;
+        [Space]
+        [SerializeField] private Transform _followCamInitialPoint;
+        [SerializeField] private Transform _startCamInitialPoint;
+        [SerializeField] private Transform _finishCamInitialPoint;
 
         public StartPoint[] StartPoints => _startPoints;
         public WaypointTrack WaypointTrackMain => _waypointTrackMain;
         public WaypointTrack WaypointTrackEven => _waypointTrackEven;
         public WaypointTrack WaypointTrackOdd => _waypointTrackOdd;
+        public Vector3 FollowCamInitialPosition => _followCamInitialPoint.position;
+        public Vector3 StartCamInitialPosition => _startCamInitialPoint.position;
+        public Vector3 FinishCamInitialPosition => _finishCamInitialPoint.position;
     }
 }

@@ -13,14 +13,6 @@ namespace RaceManager.Tools
         public const string Level_0_test = "Prefabs/Levels/Level_0_test";
         public const string Level_1_test = "Prefabs/Levels/Level_1_test";
 
-        //public static string GetSingletonPathFromType(Type type)
-        //{ 
-        //    if(type.Name.Equals(nameof(FXController)))
-        //        return FXControllerPrefab;
-
-        //    return string.Empty;
-        //}
-
         //public static string ItemConfigsSource(FeatureType.Item itemType)
         //{
         //    string path = itemType switch

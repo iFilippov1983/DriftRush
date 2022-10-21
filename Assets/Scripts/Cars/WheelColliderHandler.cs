@@ -1,17 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace PG_Physics.Wheel
+namespace RaceManager.Cars
 {
 
 	[RequireComponent (typeof (WheelCollider))]
-	public class PG_WheelCollider :MonoBehaviour
+	public class WheelColliderHandler :MonoBehaviour
 	{
-		[SerializeField, FullField] PG_WheelColliderConfig WheelConfig;
+		[SerializeField, FullField] WheelColliderConfig WheelConfig;
 
 		[SerializeField, HideInInspector] WheelCollider m_WheelCollider;
 		[SerializeField, HideInInspector] Rigidbody m_RB;
+
+		public WheelColliderConfig Config { get => WheelConfig; set { WheelConfig = value; } }
 
 		public WheelCollider WheelCollider
 		{
@@ -54,7 +54,7 @@ namespace PG_Physics.Wheel
 			UpdateConfig (WheelConfig);
 		}
 
-		public void UpdateConfig (PG_WheelColliderConfig newConfig)
+		public void UpdateConfig (WheelColliderConfig newConfig)
 		{
 			if (RB == null)
 			{
@@ -111,7 +111,7 @@ namespace PG_Physics.Wheel
 			var forwardFriction = (WheelCollider.forwardFriction.extremumValue - minExtremumValue) / (maxExtremumValue - minExtremumValue);
 			var sidewaysFriction = (WheelCollider.sidewaysFriction.extremumValue - minExtremumValue) / (maxExtremumValue - minExtremumValue);
 
-			WheelConfig = new PG_WheelColliderConfig ();
+			WheelConfig = new WheelColliderConfig ();
 			WheelConfig.Mass = WheelCollider.mass;
 			WheelConfig.Radius = WheelCollider.radius;
 			WheelConfig.WheelDampingRate = WheelCollider.wheelDampingRate;
@@ -147,7 +147,7 @@ namespace PG_Physics.Wheel
 	}
 
 	[System.Serializable]
-	public struct PG_WheelColliderConfig
+	public struct WheelColliderConfig
 	{
 		[SerializeField] bool IsFoldout;
 		public bool IsFullConfig;

@@ -25,8 +25,8 @@ namespace RaceManager.Cars
 
         public GameObject InitCar(out Car car, out CarAI carAI, out WaypointsTracker waypointsTracker, out DriverProfile driverProfile)
         {
-            string requiredName = _carConfig.CarProfile.Name;
-            var prefab = _carsDepot.Cars.Find(x => x.Name == requiredName).Prefab;
+            var requiredName = _carConfig.CarName;
+            var prefab = _carsDepot.Cars.Find(x => x.CarName == requiredName).Prefab;
 
             var go = Object.Instantiate(prefab, _spawnPoint.position, _spawnPoint.rotation);
             go.tag = _driverType.ToString();

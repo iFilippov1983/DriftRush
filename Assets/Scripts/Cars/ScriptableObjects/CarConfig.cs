@@ -4,10 +4,11 @@ using UnityEngine;
 
 namespace RaceManager.Cars
 {
-	[System.Serializable]
-	public class CarConfig
+	//[System.Serializable]
+	[CreateAssetMenu(menuName = "Cars/CarConfig", fileName = "CarNameConfig_Default", order = 1)]
+    public class CarConfig : ScriptableObject
 	{
-		public CarProfile CarProfile;
+		public CarName CarName;
 
 		[Header("MAIN SETTINGS")]
 

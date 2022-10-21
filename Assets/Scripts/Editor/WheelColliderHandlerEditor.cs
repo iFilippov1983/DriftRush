@@ -1,12 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
 
-namespace PG_Physics.Wheel {
+namespace RaceManager.Cars
+{
 
-	[CustomEditor (typeof (PG_WheelCollider)), CanEditMultipleObjects]
-	public class PG_WheelColliderEditor :Editor
+	[CustomEditor (typeof (WheelColliderHandler)), CanEditMultipleObjects]
+	public class WheelColliderHandlerEditor :Editor
 	{
 		public override void OnInspectorGUI ()
 		{
@@ -19,7 +18,7 @@ namespace PG_Physics.Wheel {
 			{
 				for (int i = 0; i < targets.Length; i++)
 				{
-					(targets[i] as PG_WheelCollider).UpdateConfig ();
+					(targets[i] as WheelColliderHandler).UpdateConfig ();
 				}
 			}
 		}
@@ -28,7 +27,7 @@ namespace PG_Physics.Wheel {
 		{
 			for (int i = 0; i < targets.Length; i++) 
 			{
-				if ((targets[i] as PG_WheelCollider).CheckFirstEnable())
+				if ((targets[i] as WheelColliderHandler).CheckFirstEnable())
 				{
 					serializedObject.SetIsDifferentCacheDirty ();
 					serializedObject.Update ();
@@ -43,7 +42,7 @@ namespace PG_Physics.Wheel {
 		protected override bool IsFullProperty { get { return true; } }
 	}
 
-	[CustomPropertyDrawer (typeof (PG_WheelColliderConfig))]
+	[CustomPropertyDrawer (typeof (WheelColliderConfig))]
 	public class PG_WheelColliderConfigDrawer :PropertyDrawer
 	{
 		protected virtual bool IsFullProperty { get { return false; } }

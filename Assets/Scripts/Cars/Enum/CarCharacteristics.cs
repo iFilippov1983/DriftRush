@@ -8,7 +8,7 @@ namespace RaceManager.Cars
         None = 0,
         Speed = 1,
         Mobility = 2,
-        Durability =3,
+        Durability = 3,
         Acceleration = 4,
     }
 }

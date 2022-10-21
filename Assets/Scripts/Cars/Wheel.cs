@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using PG_Physics.Wheel;
 using RaceManager.Cars.Effects;
+using Sirenix.OdinInspector;
 
 namespace RaceManager.Cars
 {
@@ -14,7 +14,9 @@ namespace RaceManager.Cars
 	{
 		public WheelCollider WheelCollider;
 		public Transform WheelView;
+		[ReadOnly]
 		public float SlipForGenerateParticle;
+		[ReadOnly]
 		public Vector3 TrailOffset;
 
 		public float CurrentMaxSlip { get { return Mathf.Max(CurrentForwardSleep, CurrentSidewaysSleep); } }
@@ -25,18 +27,21 @@ namespace RaceManager.Cars
 		WheelHit Hit;
 		TrailRenderer Trail;
 
-		PG_WheelCollider m_PGWC;
-		public PG_WheelCollider PG_WheelCollider
+		WheelColliderHandler m_PGWC;
+
+		public WheelColliderHandler WheelColliderHandler => m_PGWC;
+
+		public WheelColliderHandler PG_WheelCollider
 		{
 			get
 			{
 				if (m_PGWC == null)
 				{
-					m_PGWC = WheelCollider.GetComponent<PG_WheelCollider>();
+					m_PGWC = WheelCollider.GetComponent<WheelColliderHandler>();
 				}
 				if (m_PGWC == null)
 				{
-					m_PGWC = WheelCollider.gameObject.AddComponent<PG_WheelCollider>();
+					m_PGWC = WheelCollider.gameObject.AddComponent<WheelColliderHandler>();
 					m_PGWC.CheckFirstEnable();
 				}
 				return m_PGWC;
@@ -112,7 +117,7 @@ namespace RaceManager.Cars
 			WheelView.rotation = quat;
 		}
 
-		public void UpdateFrictionConfig(PG_WheelColliderConfig config)
+		public void UpdateFrictionConfig(WheelColliderConfig config)
 		{
 			PG_WheelCollider.UpdateConfig(config);
 		}

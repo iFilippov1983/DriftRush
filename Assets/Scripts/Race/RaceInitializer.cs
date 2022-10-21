@@ -18,15 +18,15 @@ namespace RaceManager.Race
     {
         [SerializeField] private CarsDepot _carsDepot;
         [Space]
-        [SerializeField] private CarConfigScriptable _playerCarConfigSO;
+        [SerializeField] private CarConfig _playerCarConfig;
         [Space]
-        [SerializeField] private List<CarConfigScriptable> _opponentsConfigSoList;
+        [SerializeField] private List<CarConfig> _opponentsCarConfigs;
         private RaceUI _raceUI;
         private RaceCamerasHandler _camerasHandler;
         private InRacePositionsHandler _positionsHandler;
         private RaceLevelView _level;
         
-        private CarConfigScriptable _opponentCarConfigSO;
+        private CarConfig _opponentCarConfig;
         private WaypointTrack _waypointTrackMain;
         private WaypointTrack _waypointTrackEven;
         private WaypointTrack _waypointTrackOdd;
@@ -93,7 +93,7 @@ namespace RaceManager.Race
                 var driver = driverGo.GetComponent<Driver>();
                 if (_startPoints[i].Type == DriverType.Player)
                 {
-                    driver.Initialize(_startPoints[i].Type, _playerCarConfigSO.CarConfig, _carsDepot, _waypointTrackMain);
+                    driver.Initialize(_startPoints[i].Type, _playerCarConfig, _carsDepot, _waypointTrackMain);
 
                     _camerasHandler.FollowAndLookAt(driver.CarObject.transform, driver.CarTargetToFollow);
 
@@ -104,8 +104,8 @@ namespace RaceManager.Race
                 else
                 {
                     WaypointTrack track = (i % 2) == 0 ? _waypointTrackEven : _waypointTrackOdd;
-                    _opponentCarConfigSO = GetOpponentsConfig();
-                    driver.Initialize(_startPoints[i].Type, _opponentCarConfigSO.CarConfig, _carsDepot, track);
+                    _opponentCarConfig = GetOpponentsProfile();
+                    driver.Initialize(_startPoints[i].Type, _opponentCarConfig, _carsDepot, track);
                     driverGo.name += $"_{i + 1}";
                 }
 
@@ -123,11 +123,11 @@ namespace RaceManager.Race
             return FindObjectOfType<RaceLevelView>();
         }
 
-        private CarConfigScriptable GetOpponentsConfig()
+        private CarConfig GetOpponentsProfile()
         {
             //TODO: make settings generation depending on Player's progress level
 
-            return _opponentsConfigSoList[UnityEngine.Random.Range(0, _opponentsConfigSoList.Count)];
+            return _opponentsCarConfigs[UnityEngine.Random.Range(0, _opponentsCarConfigs.Count)];
         }
     }
 }

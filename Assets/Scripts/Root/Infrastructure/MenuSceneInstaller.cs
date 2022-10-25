@@ -12,10 +12,11 @@ namespace RaceManager.Infrastructure
 
         public override void InstallBindings()
         {
+            Bind(Singleton<ResolverService>.Instance);
+
             Bind(mainUI);
+
+            Bind<SaveManager>();
         }
-
-
-       
     }
 }

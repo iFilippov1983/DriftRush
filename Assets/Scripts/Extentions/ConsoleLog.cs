@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public static class StringConsoleLog
+public static class ConsoleLog
 {
     public static void Log(this string str, UnityEngine.Object context = null)
         => Debug.Log(str, context);

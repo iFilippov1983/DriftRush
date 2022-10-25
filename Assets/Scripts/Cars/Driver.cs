@@ -103,7 +103,7 @@ namespace RaceManager.Cars
                 RaceEventsHub.BroadcastNotification(RaceEventType.FINISH);
             }
 
-            $"{gameObject.name} FINISHED".Log(StringConsoleLog.Color.Yellow);
+            $"{gameObject.name} FINISHED".Log(ConsoleLog.Color.Yellow);
         }
 
         private void NotifyObservers()

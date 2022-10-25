@@ -21,7 +21,7 @@ namespace RaceManager.Root
             }
         }
 
-        public IEnumerable<T> Resolve<T>() where T : class
+        public IEnumerable<T> ResolveAll<T>() where T : class
         {
             map.TryGetValue(typeof(T), out var list);
             return list?.Cast<T>() ?? Enumerable.Empty<T>();

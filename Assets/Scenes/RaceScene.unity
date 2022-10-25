@@ -147,7 +147,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 138996099}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 59.897587, y: -5.441808, z: 184.68082}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 956234194}
@@ -922,7 +922,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1093272376}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -73.19995, y: -4.8529887, z: -186.62573}
+  m_LocalPosition: {x: -13.302364, y: -10.294797, z: -1.9449158}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 138996100}
@@ -1169,7 +1169,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1328898759}
-  m_LocalRotation: {x: 0.16245976, y: 0.688191, z: -0.16245978, w: 0.68819094}
+  m_LocalRotation: {x: 0.16245982, y: 0.688191, z: -0.16245985, w: 0.68819094}
   m_LocalPosition: {x: -212.31, y: 10.35, z: 179.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1414,12 +1414,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _carsDepot: {fileID: 11400000, guid: d7530e18444d4cb429bf15b4d12e6caf, type: 2}
-  _playerCarConfigSO: {fileID: 11400000, guid: 2d92e0464e0f4c646a4b681a472c39ba, type: 2}
-  _opponentsConfigSoList:
-  - {fileID: 11400000, guid: 3eefe949608bf674d82815b28b787aa4, type: 2}
-  - {fileID: 11400000, guid: ce93ab6d25da763458632cf92df595ff, type: 2}
-  - {fileID: 11400000, guid: 1f13f37a923c31345996c138c722f612, type: 2}
-  - {fileID: 11400000, guid: 2ab76980dcd2fdd419b949845eaf44d5, type: 2}
+  _playerCarProfile: {fileID: 11400000, guid: efbc9fefae1f8d4439e9632182a68f9f, type: 2}
+  _opponentsCarProfiles:
+  - {fileID: 11400000, guid: efbc9fefae1f8d4439e9632182a68f9f, type: 2}
 --- !u!4 &1938199604
 Transform:
   m_ObjectHideFlags: 0

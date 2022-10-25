@@ -12,11 +12,11 @@ namespace RaceManager.Cars.Effects
 	{
 
 		[Header("Particles settings")]
-		[SerializeField] ParticleSystem AsphaltSmokeParticles;      //Asphalt smoke (Gray).
+		[SerializeField] ParticleSystem AsphaltSmokeParticles;      
 
 		[Header("Trail settings")]
-		[SerializeField] TrailRenderer TrailRef;                    //Trail ref, The lifetime of the tracks is configured in it.
-		[SerializeField] Transform TrailsHolder;                    //Parent for copy of TrailRef.
+		[SerializeField] TrailRenderer TrailRef;                    
+		[SerializeField] Transform TrailsHolder;                    
 
 		public void Awake()
 		{

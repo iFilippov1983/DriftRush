@@ -10,8 +10,6 @@ namespace RaceManager.Alt
         private const float KPHFactor = 3.6f;
         private const float MPHFactor = 2.23693629f;
 
-        public CarProfile CarProfile;
-
         [Title("Max Speed Settings")]
         public SpeedType SpeedType = SpeedType.KPH;
         public float MaxSpeed = 200f;

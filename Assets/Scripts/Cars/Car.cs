@@ -19,15 +19,21 @@ namespace RaceManager.Cars
         [ShowInInspector, ReadOnly]
         private string _id;
 
+        [ShowInInspector, ReadOnly, FoldoutGroup("Default effects settings")] 
+        private const float SlipFoorGenerateParticles = 0.2f;
+        [ShowInInspector, ReadOnly, FoldoutGroup("Default effects settings")]
+        private readonly Vector3 TrailOffsetLeft = new Vector3(0.1f, 0.05f, 0f);
+        [ShowInInspector, ReadOnly, FoldoutGroup("Default effects settings")]
+        private readonly Vector3 TrailOffsetRight = new Vector3(-0.1f, 0.05f, 0f);
+
         [SerializeField] Wheel FrontLeftWheel;
         [SerializeField] Wheel FrontRightWheel;
         [SerializeField] Wheel RearLeftWheel;
         [SerializeField] Wheel RearRightWheel;
         [SerializeField] Transform COM;
         [SerializeField] List<ParticleSystem> BackFireParticles = new List<ParticleSystem>();
+        [SerializeField] private CarConfig _carConfig;
 
-        [SerializeField] 
-        private CarConfig _carConfig;
         private CarSelfRighting _carSelfRighting;
 
         #region Properties of car parameters
@@ -73,12 +79,31 @@ namespace RaceManager.Cars
         public string ID => _id;
         public CarConfig CarConfig => _carConfig;
         public CarSelfRighting CarSelfRighting => _carSelfRighting;
-        public Wheel[] Wheels { get; private set; }                                     //All wheels, public link.			
-        public Action BackFireAction;                                            //Backfire invoked when cut off (You can add a invoke when changing gears).
+                                             			
+        public Action BackFireAction; //Backfire invoked when cut off (You can add a invoke when changing gears).
 
-        float[] AllGearsRatio;                                                           //All gears (Reverce, neutral and all forward).
+        float[] AllGearsRatio; //All gears (Reverce, neutral and all forward).
 
         Rigidbody _rB;
+
+        private Wheel[] _wheels;
+        
+        public Wheel[] Wheels 
+        { 
+            get
+            {
+                if (_wheels == null)
+                    InitWheels();
+
+                return _wheels;
+            }
+
+            private set
+            {
+                _wheels = value;
+            }
+        }
+
         public Rigidbody RB
         {
             get
@@ -107,55 +132,55 @@ namespace RaceManager.Cars
         int FirstDriveWheel;
         int LastDriveWheel;
 
-//        private void Awake()
-//        {
-//            _carSelfRighting = GetComponent<CarSelfRighting>();
-//            _id = MakeId();
-//            RB.centerOfMass = COM.localPosition;
+        //        private void Awake()
+        //        {
+        //            _carSelfRighting = GetComponent<CarSelfRighting>();
+        //            _id = MakeId();
+        //            RB.centerOfMass = COM.localPosition;
 
-//            Copy wheels in public property
-//            Wheels = new Wheel[4] {
-//            FrontLeftWheel,
-//            FrontRightWheel,
-//            RearLeftWheel,
-//            RearRightWheel
-//        };
+        //            Copy wheels in public property
+        //            Wheels = new Wheel[4] {
+        //            FrontLeftWheel,
+        //            FrontRightWheel,
+        //            RearLeftWheel,
+        //            RearRightWheel
+        //        };
 
-//        Set drive wheel.
-//            switch (DriveType)
-//            {
-//                case DriveType.AWD:
-//                    FirstDriveWheel = 0;
-//                    LastDriveWheel = 3;
-//                    break;
-//                case DriveType.FWD:
-//                    FirstDriveWheel = 0;
-//                    LastDriveWheel = 1;
-//                    break;
-//                case DriveType.RWD:
-//                    FirstDriveWheel = 2;
-//                    LastDriveWheel = 3;
-//                    break;
-//            }
+        //        Set drive wheel.
+        //            switch (DriveType)
+        //            {
+        //                case DriveType.AWD:
+        //                    FirstDriveWheel = 0;
+        //                    LastDriveWheel = 3;
+        //                    break;
+        //                case DriveType.FWD:
+        //                    FirstDriveWheel = 0;
+        //                    LastDriveWheel = 1;
+        //                    break;
+        //                case DriveType.RWD:
+        //                    FirstDriveWheel = 2;
+        //                    LastDriveWheel = 3;
+        //                    break;
+        //            }
 
-//    Divide the motor torque by the count of driving wheels
-//            MaxMotorTorque = _carConfig.MaxMotorTorque / (LastDriveWheel - FirstDriveWheel + 1);
+        //    Divide the motor torque by the count of driving wheels
+        //            MaxMotorTorque = _carConfig.MaxMotorTorque / (LastDriveWheel - FirstDriveWheel + 1);
 
 
-//            Calculated gears ratio with main ratio
-//            AllGearsRatio = new float[GearsRatio.Length + 2];
-//            AllGearsRatio[0] = ReversGearRatio* MainRatio;
-//    AllGearsRatio[1] = 0;
-//            for (int i = 0; i<GearsRatio.Length; i++)
-//            {
-//                AllGearsRatio[i + 2] = GearsRatio[i] * MainRatio;
-//}
+        //            Calculated gears ratio with main ratio
+        //            AllGearsRatio = new float[GearsRatio.Length + 2];
+        //            AllGearsRatio[0] = ReversGearRatio* MainRatio;
+        //    AllGearsRatio[1] = 0;
+        //            for (int i = 0; i<GearsRatio.Length; i++)
+        //            {
+        //                AllGearsRatio[i + 2] = GearsRatio[i] * MainRatio;
+        //}
 
-//foreach (var particles in BackFireParticles)
-//{
-//    BackFireAction += () => particles.Emit(2);
-//}
-//        }
+        //foreach (var particles in BackFireParticles)
+        //{
+        //    BackFireAction += () => particles.Emit(2);
+        //}
+        //        }
 
         public void Initialize(CarConfig carConfig)
         {
@@ -164,13 +189,8 @@ namespace RaceManager.Cars
             _id = MakeId();
             RB.centerOfMass = COM.localPosition;
 
-            //Copy wheels in public property
-            Wheels = new Wheel[4] {
-            FrontLeftWheel,
-            FrontRightWheel,
-            RearLeftWheel,
-            RearRightWheel
-            };
+            if (_wheels == null)
+                InitWheels();
 
             //Set drive wheel.
             switch (DriveType)
@@ -206,6 +226,26 @@ namespace RaceManager.Cars
             {
                 BackFireAction += () => particles.Emit(2);
             }
+        }
+
+        private void InitWheels()
+        {
+            FrontLeftWheel.SlipForGenerateParticle = SlipFoorGenerateParticles;
+            FrontRightWheel.SlipForGenerateParticle = SlipFoorGenerateParticles;
+            RearLeftWheel.SlipForGenerateParticle = SlipFoorGenerateParticles;
+            RearRightWheel.SlipForGenerateParticle = SlipFoorGenerateParticles;
+
+            FrontLeftWheel.TrailOffset = TrailOffsetLeft;
+            FrontRightWheel.TrailOffset = TrailOffsetRight;
+            RearLeftWheel.TrailOffset = TrailOffsetLeft;
+            RearRightWheel.TrailOffset = TrailOffsetRight;
+
+            _wheels = new Wheel[4] {
+            FrontLeftWheel,
+            FrontRightWheel,
+            RearLeftWheel,
+            RearRightWheel
+            };
         }
 
         /// <summary>

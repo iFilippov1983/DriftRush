@@ -9,7 +9,6 @@ namespace RaceManager.Race
         
         public RaceLevelView RaceLevel => _raceLevelView;
 
-
         //TODO: take loading instructions
         public RaceLevelInitializer()
         {

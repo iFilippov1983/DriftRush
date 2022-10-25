@@ -1,4 +1,3 @@
-using RaceManager.Cameras;
 using RaceManager.Race;
 using RaceManager.Waypoints;
 using System;
@@ -19,6 +18,7 @@ namespace RaceManager.Cars
         private GameObject _carObject;
         private CarAI _carAI;
         private Car _car;
+        private CarVisual _carVisual;
         private WaypointsTracker _waypointsTracker;
         private List<IObserver<DriverProfile>> _observersList;
 
@@ -27,11 +27,11 @@ namespace RaceManager.Cars
         public Transform CarTargetToFollow => _carAI.Target;
         public WaypointsTracker WaypointsTracker => _waypointsTracker;
 
-        public void Initialize(DriverType type, CarConfig carConfig, CarsDepot carsDepot, WaypointTrack waypointTrack)
+        public void Initialize(DriverType type, CarProfile carProfile, CarsDepot carsDepot, WaypointTrack waypointTrack)
         {
             DriverType = type;
-            CarFactory carFactory = new CarFactory(type, carConfig, carsDepot, waypointTrack, transform);
-            _carObject = carFactory.InitCar(out _car, out _carAI, out _waypointsTracker, out _profile);
+            CarFactory carFactory = new CarFactory(type, carProfile, carsDepot, waypointTrack, transform);
+            _carObject = carFactory.InitCar(out _car, out _carVisual, out _carAI, out _waypointsTracker, out _profile);
 
             _profile.CarState.Value = CarState.OnTrack;
             _profile.CarState.Subscribe(s => OnCarStateChange(s));

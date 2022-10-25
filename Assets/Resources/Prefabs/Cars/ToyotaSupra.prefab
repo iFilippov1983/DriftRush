@@ -1577,7 +1577,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7879401291928358492}
   m_LocalRotation: {x: -1, y: -0, z: -0, w: 0.00000037252897}
-  m_LocalPosition: {x: -0.607, y: 0.379, z: -2.537}
+  m_LocalPosition: {x: -0.607, y: 0.379, z: -2.342}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7878402621752400320}
@@ -6772,6 +6772,158 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0425594d3fe24854db198dda3b731432, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _carConfigVisualContainer: {fileID: 11400000, guid: f7d8b3d90e777ba40a736dd0bfe62288,
+    type: 2}
+  _carConfigVisual:
+    _carName: 0
+    _carBody: {fileID: 8750308444248201149}
+    _partConfigs:
+    - PartType: 0
+      PartConfigs:
+      - _partsSetType: 0
+        _parts:
+        - PartLevel: 0
+          Parts:
+          - _partType: 0
+            _wheelRadius: 0.3
+            _wheelScale: {x: 0.8, y: 0.8, z: 0.8}
+            _suspentionHeight: 0
+            _partObject: {fileID: 8902754393710770797}
+          - _partType: 0
+            _wheelRadius: 0.3
+            _wheelScale: {x: 0.8, y: 0.8, z: 0.8}
+            _suspentionHeight: 0
+            _partObject: {fileID: 3544205151522072613}
+          - _partType: 0
+            _wheelRadius: 0.3
+            _wheelScale: {x: 0.8, y: 0.8, z: 0.8}
+            _suspentionHeight: 0
+            _partObject: {fileID: 6479484186115504299}
+          - _partType: 0
+            _wheelRadius: 0.3
+            _wheelScale: {x: 0.8, y: 0.8, z: 0.8}
+            _suspentionHeight: 0
+            _partObject: {fileID: 1420536749207986107}
+        - PartLevel: 1
+          Parts:
+          - _partType: 0
+            _wheelRadius: 0.35
+            _wheelScale: {x: 1, y: 1, z: 1}
+            _suspentionHeight: 0
+            _partObject: {fileID: 8902754393710770797}
+          - _partType: 0
+            _wheelRadius: 0.35
+            _wheelScale: {x: 1, y: 1, z: 1}
+            _suspentionHeight: 0
+            _partObject: {fileID: 3544205151522072613}
+          - _partType: 0
+            _wheelRadius: 0.35
+            _wheelScale: {x: 1, y: 1, z: 1}
+            _suspentionHeight: 0
+            _partObject: {fileID: 6479484186115504299}
+          - _partType: 0
+            _wheelRadius: 0.35
+            _wheelScale: {x: 1, y: 1, z: 1}
+            _suspentionHeight: 0
+            _partObject: {fileID: 1420536749207986107}
+        isAvailable: 1
+    - PartType: 1
+      PartConfigs:
+      - _partsSetType: 0
+        _parts:
+        - PartLevel: 0
+          Parts:
+          - _partType: 1
+            _wheelRadius: 0
+            _wheelScale: {x: 0, y: 0, z: 0}
+            _suspentionHeight: 0.22
+            _partObject: {fileID: 0}
+          - _partType: 1
+            _wheelRadius: 0
+            _wheelScale: {x: 0, y: 0, z: 0}
+            _suspentionHeight: 0.22
+            _partObject: {fileID: 0}
+          - _partType: 1
+            _wheelRadius: 0
+            _wheelScale: {x: 0, y: 0, z: 0}
+            _suspentionHeight: 0.22
+            _partObject: {fileID: 0}
+          - _partType: 1
+            _wheelRadius: 0
+            _wheelScale: {x: 0, y: 0, z: 0}
+            _suspentionHeight: 0.22
+            _partObject: {fileID: 0}
+        - PartLevel: 1
+          Parts:
+          - _partType: 1
+            _wheelRadius: 0
+            _wheelScale: {x: 0, y: 0, z: 0}
+            _suspentionHeight: 0.15
+            _partObject: {fileID: 0}
+          - _partType: 1
+            _wheelRadius: 0
+            _wheelScale: {x: 0, y: 0, z: 0}
+            _suspentionHeight: 0.15
+            _partObject: {fileID: 0}
+          - _partType: 1
+            _wheelRadius: 0
+            _wheelScale: {x: 0, y: 0, z: 0}
+            _suspentionHeight: 0.15
+            _partObject: {fileID: 0}
+          - _partType: 1
+            _wheelRadius: 0
+            _wheelScale: {x: 0, y: 0, z: 0}
+            _suspentionHeight: 0.15
+            _partObject: {fileID: 0}
+        isAvailable: 1
+    - PartType: 2
+      PartConfigs:
+      - _partsSetType: 0
+        _parts:
+        - PartLevel: 0
+          Parts:
+          - _partType: 2
+            _wheelRadius: 0
+            _wheelScale: {x: 0, y: 0, z: 0}
+            _suspentionHeight: 0
+            _partObject: {fileID: 0}
+          - _partType: 2
+            _wheelRadius: 0
+            _wheelScale: {x: 0, y: 0, z: 0}
+            _suspentionHeight: 0
+            _partObject: {fileID: 0}
+        - PartLevel: 1
+          Parts:
+          - _partType: 2
+            _wheelRadius: 0
+            _wheelScale: {x: 0, y: 0, z: 0}
+            _suspentionHeight: 0
+            _partObject: {fileID: 8691817988061383853}
+          - _partType: 2
+            _wheelRadius: 0
+            _wheelScale: {x: 0, y: 0, z: 0}
+            _suspentionHeight: 0
+            _partObject: {fileID: 4630865535197386371}
+        isAvailable: 1
+    - PartType: 3
+      PartConfigs:
+      - _partsSetType: 0
+        _parts:
+        - PartLevel: 0
+          Parts:
+          - _partType: 3
+            _wheelRadius: 0
+            _wheelScale: {x: 0, y: 0, z: 0}
+            _suspentionHeight: 0
+            _partObject: {fileID: 0}
+        - PartLevel: 1
+          Parts:
+          - _partType: 3
+            _wheelRadius: 0
+            _wheelScale: {x: 0, y: 0, z: 0}
+            _suspentionHeight: 0
+            _partObject: {fileID: 5087905006135737327}
+        isAvailable: 1
 --- !u!114 &6948333402832068683
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7559,10 +7711,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d19b6862a6086fc48855bb77c7852257, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bumperFront: {fileID: 8691817988061383853}
-  bumperBack: {fileID: 4630865535197386371}
-  spoiler: {fileID: 5087905006135737327}
-  _materials:
+  _defaultMaterials:
   - {fileID: 2100000, guid: b9ad1dcfcf7c4e842b8d14efda7407eb, type: 2}
   _allMeshRenderers:
   - {fileID: 4645678701126571986}

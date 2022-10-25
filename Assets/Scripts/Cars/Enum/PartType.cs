@@ -7,7 +7,7 @@ namespace RaceManager.Cars
     { 
         Wheel = 0,
         Suspention = 1,
-        Engine = 2,
-        Bumper = 3,
+        Bumper = 2,
+        BodyKit = 3,
     }
 }

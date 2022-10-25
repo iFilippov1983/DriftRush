@@ -1,6 +1,8 @@
-﻿namespace RaceManager.Cars
+﻿using System;
+
+namespace RaceManager.Cars
 {
-    [System.Serializable]
+    [Serializable]
     public enum CarName
     { 
         ToyotaSupra = 0,

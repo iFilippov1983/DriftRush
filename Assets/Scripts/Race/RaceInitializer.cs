@@ -18,15 +18,15 @@ namespace RaceManager.Race
     {
         [SerializeField] private CarsDepot _carsDepot;
         [Space]
-        [SerializeField] private CarConfig _playerCarConfig;
+        [SerializeField] private CarProfile _playerCarProfile;
         [Space]
-        [SerializeField] private List<CarConfig> _opponentsCarConfigs;
+        [SerializeField] private List<CarProfile> _opponentsCarProfiles;
         private RaceUI _raceUI;
         private RaceCamerasHandler _camerasHandler;
         private InRacePositionsHandler _positionsHandler;
         private RaceLevelView _level;
         
-        private CarConfig _opponentCarConfig;
+        private CarProfile _opponentCarProfile;
         private WaypointTrack _waypointTrackMain;
         private WaypointTrack _waypointTrackEven;
         private WaypointTrack _waypointTrackOdd;
@@ -57,7 +57,7 @@ namespace RaceManager.Race
             InitCameras();
             InitDrivers();
 
-            _positionsHandler.StartHandle(_driversList, _waypointsTrackersList);
+            _positionsHandler.StartHandling(_driversList, _waypointsTrackersList);
         }
 
         private void Update()
@@ -93,7 +93,7 @@ namespace RaceManager.Race
                 var driver = driverGo.GetComponent<Driver>();
                 if (_startPoints[i].Type == DriverType.Player)
                 {
-                    driver.Initialize(_startPoints[i].Type, _playerCarConfig, _carsDepot, _waypointTrackMain);
+                    driver.Initialize(_startPoints[i].Type, _playerCarProfile, _carsDepot, _waypointTrackMain);
 
                     _camerasHandler.FollowAndLookAt(driver.CarObject.transform, driver.CarTargetToFollow);
 
@@ -104,8 +104,8 @@ namespace RaceManager.Race
                 else
                 {
                     WaypointTrack track = (i % 2) == 0 ? _waypointTrackEven : _waypointTrackOdd;
-                    _opponentCarConfig = GetOpponentsProfile();
-                    driver.Initialize(_startPoints[i].Type, _opponentCarConfig, _carsDepot, track);
+                    _opponentCarProfile = GetOpponentsProfile();
+                    driver.Initialize(_startPoints[i].Type, _opponentCarProfile, _carsDepot, track);
                     driverGo.name += $"_{i + 1}";
                 }
 
@@ -116,18 +116,11 @@ namespace RaceManager.Race
             }
         }
 
-        private RaceLevelView GetLevel()
-        {
-            //TODO: Make level load depending on Player's progress level
-
-            return FindObjectOfType<RaceLevelView>();
-        }
-
-        private CarConfig GetOpponentsProfile()
+        private CarProfile GetOpponentsProfile()
         {
             //TODO: make settings generation depending on Player's progress level
 
-            return _opponentsCarConfigs[UnityEngine.Random.Range(0, _opponentsCarConfigs.Count)];
+            return _opponentsCarProfiles[UnityEngine.Random.Range(0, _opponentsCarProfiles.Count)];
         }
     }
 }

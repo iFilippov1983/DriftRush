@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using RaceManager.Tools;
+using UnityEngine;
 
 #pragma warning disable 649
 namespace RaceManager.Cars
@@ -8,14 +9,42 @@ namespace RaceManager.Cars
     {
         public CarName CarName;
         public CarRarity Rarity;
-        
+        public bool isAvailable;
         public CarConfig CarConfig;
-        public CarConfigVisual CarConfigVisual;
+        public CarVisualContainer CarVisualContainer;
 
-        [SerializeField] private GameObject _prefab;
-
+        private GameObject _prefab;
         private Car _car;
+        private CarVisual _carVisual;
 
-        public GameObject Prefab => _prefab;
+        public GameObject Prefab
+        {
+            get
+            {
+                if (_prefab == null)
+                    _prefab = ResourcesLoader.LoadPrefab(ResourcePath.CarPrefabsFolder + CarName.ToString());
+                return _prefab;
+            }
+        }
+
+        public Car Car
+        {
+            get
+            {
+                if (_car == null)
+                    _car = Prefab.GetComponent<Car>();
+                return _car;
+            }
+        }
+
+        public CarVisual CarVisual
+        {
+            get
+            {
+                if (_carVisual == null)
+                    _carVisual = Prefab.GetComponent<CarVisual>();
+                return _carVisual;
+            }
+        }
     }
 }

@@ -50,5 +50,4 @@ namespace RaceManager.Cars
 			Body.localRotation = Quaternion.AngleAxis(Angle, Vector3.forward);
 		}
 	}
-
 }

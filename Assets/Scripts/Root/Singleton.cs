@@ -1,14 +1,11 @@
-using RaceManager.Race;
-using RaceManager.Cars;
-using System.Collections;
-using System.Linq;
-using UniRx;
+using Sirenix.OdinInspector;
+using System;
 using UnityEngine;
-using UnityEngine.Events;
+using Zenject;
 
 namespace RaceManager.Root
 {
-    public abstract class Singleton<T> : MonoBehaviour where T : Component
+    public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     {
         private static T _instance;
 
@@ -16,34 +13,29 @@ namespace RaceManager.Root
         {
             get
             {
-                if (_instance == null)
-                {
-                    _instance = FindObjectOfType<T>();
-                    if (_instance == null)
-                    {
-                        GameObject go = new GameObject(string.Concat("[", typeof(T), "]"));
-                        _instance = go.AddComponent<T>();
-                    }
-                }
+                if (_instance == null) _instance = FindObjectOfType<T>();
+                if (_instance == null) Debug.LogError("Singleton of type : " + typeof(T).Name + " not found on scene");
                 return _instance;
             }
         }
 
-        private void Awake()
+        /// <summary>
+        /// Use this function to cache instance and destroy duplicate objects.
+        /// Also use DontDestroyOnLoad if "persistent" is not set to false
+        /// </summary>
+        protected virtual void InitializeSingleton(bool persistent = true)
         {
             if (_instance == null)
             {
-                _instance = this as T;
-                DontDestroyOnLoad(gameObject);
-                AwakeSingleton();
+                _instance = (T)Convert.ChangeType(this, typeof(T));
+                if (persistent) DontDestroyOnLoad(_instance);
             }
             else
             {
-                Destroy(gameObject);
+                Debug.LogWarning($"Another instance of Singleton<{typeof(T).Name}> detected on GO {name}. Destroyed", gameObject);
+                Destroy(this);
             }
         }
-
-        protected virtual void AwakeSingleton() { }
     }
 }
 

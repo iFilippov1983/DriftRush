@@ -2,8 +2,13 @@ namespace RaceManager.Tools
 {
     internal static class ResourcePath
     {
+        public const string CarPrefabsFolder = "Prefabs/Cars/";
         public const string WaypointPrefab = "Prefabs/Waypoint";
         public const string DriverPrefab = "Prefabs/Driver";
+        public const string FXControllerPrefab = "Prefabs/FXController";
+
+        public const string Level_0_test = "Prefabs/Levels/Level_0_test";
+        public const string Level_1_test = "Prefabs/Levels/Level_1_test";
 
         //public static string ItemConfigsSource(FeatureType.Item itemType)
         //{

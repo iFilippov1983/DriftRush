@@ -8,7 +8,7 @@ using UnityEngine;
 /// Move and rotation camera controller
 /// </summary>
 
-public class CameraController : RaceManager.Root.Singleton<CameraController>
+public class CameraController : RaceManager.Root.SingletonPersistant<CameraController>
 {
 
 	[SerializeField] KeyCode SetCameraKey = KeyCode.C;                              //Set next camore on PC hotkey.
@@ -39,14 +39,14 @@ public class CameraController : RaceManager.Root.Singleton<CameraController>
 		}
 	}
 
-	protected override void AwakeSingleton ()
+	protected override void AwakeSingleton()
 	{
-		CamerasPreset.ForEach (c => c.CameraHolder.SetActive (false));
-		UpdateActiveCamera ();
+		CamerasPreset.ForEach(c => c.CameraHolder.SetActive(false));
+		UpdateActiveCamera();
 
 		if (NextCameraButton)
 		{
-			NextCameraButton.onClick.AddListener (SetNextCamera);
+			NextCameraButton.onClick.AddListener(SetNextCamera);
 		}
 	}
 

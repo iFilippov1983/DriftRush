@@ -1,6 +1,8 @@
-﻿#pragma warning disable 649
+﻿using System;
+
 namespace RaceManager.Cars
 {
+    [Serializable]
     public enum CarRarity
     { 
         Common,

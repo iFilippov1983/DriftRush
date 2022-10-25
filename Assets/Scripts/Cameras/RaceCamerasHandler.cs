@@ -1,12 +1,13 @@
 using Cinemachine;
 using RaceManager.Race;
+using RaceManager.Root;
 using RaceManager.Waypoints;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace RaceManager.Cameras
 {
-    public class RaceCamerasHandler : MonoBehaviour
+    public class RaceCamerasHandler : Singleton<RaceCamerasHandler>
     {
         private const int MajorPriority = 10;
         private const int MinorPriority = 0;
@@ -19,7 +20,11 @@ namespace RaceManager.Cameras
         [SerializeField] private CinemachineSmoothPath _path;
         [SerializeField] private CinemachineDollyCart _cart;
 
-        public void InitializeCamerasWhith(Transform carTransform, Transform followTarget)
+        public Transform FollowCam => _followCamera.transform;
+        public Transform FinishCam => _finishCamera.transform;
+        public Transform StartCam => _startCamera.transform;
+
+        public void FollowAndLookAt(Transform carTransform, Transform followTarget)
         {
             //_followGroupCamera.TargetGroup.m_Targets = new CinemachineTargetGroup.Target[0];
             //_followGroupCamera.TargetGroup.AddMember(carTransform, 1f, 0f);

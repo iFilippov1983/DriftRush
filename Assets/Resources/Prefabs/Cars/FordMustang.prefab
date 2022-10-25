@@ -5611,6 +5611,7 @@ GameObject:
   - component: {fileID: 7880778198000635408}
   - component: {fileID: 7505162130020240956}
   - component: {fileID: 7840648144696977412}
+  - component: {fileID: 2567260765746246522}
   - component: {fileID: 6948333402832068683}
   - component: {fileID: 2672541007519654001}
   - component: {fileID: 7840153474070958272}
@@ -5734,88 +5735,21 @@ MonoBehaviour:
     SlipForGenerateParticle: 0.3
     TrailOffset: {x: -0.1, y: 0.05, z: 0}
   COM: {fileID: 7875330837019206152}
-  BackFireParticles: []
-  _carConfig:
-    CarProfile: {fileID: 0}
-    SpeedType: 1
-    DriveType: 0
-    MaxSpeed: 200
-    CruiseSpeed: 20
-    CruiseSpeedPercentMax: 0.8
-    CruiseSpeedPercentMin: 0.7
-    RPMToNextGearPercet: 0.95
-    MaxSteerAngle: 42
-    HelpSteerPower: 0.2
-    MaxAngularVelocityHelpAngle: 45
-    SteerAngleChangeSpeed: 60
-    Durability: 50
-    MaxMotorTorque: 800
-    ProbabilityBackfire: 0.2
-    MaxBrakeTorque: 2000
-    MaxForwardSlipToBlockChangeGear: 0.25
-    RpmEngineToRpmWheelsLerpSpeed: 15
-    EnableSteerAngleMultiplier: 1
-    MinSteerAngleMultiplier: 0.05
-    MaxSteerAngleMultiplier: 1
-    MaxSpeedForMinAngleMultiplier: 250
-    MinSpeedForSteerHelp: 1
-    OppositeAngularVelocityHelpPower: 0.05
-    PositiveAngularVelocityHelpPower: 0
-    AngularVelocityInMaxAngle: 0.5
-    AngularVelocityInMinAngle: 2
-    AutomaticGearBox: 1
-    MotorTorqueFromRpmCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0.3
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 3.54
-        value: 0.869
-        inSlope: 0.060227267
-        outSlope: 0.060227267
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.61538464
-      - serializedVersion: 3
-        time: 6.4
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 8
-        value: 0.2
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    GearsRatio:
-    - 3.38
-    - 2.36
-    - 1.67
-    - 1.312
-    - 1
-    MainRatio: 3.56
-    ReversGearRatio: 4
-    MaxRPM: 7000
-    CutOffTime: 0.1
+  BackFireParticles:
+  - {fileID: 8042060132909517162}
+  _carConfig: {fileID: 11400000, guid: 2ae7d37bf4a19064392be0fa89b2d3c4, type: 2}
+--- !u!114 &2567260765746246522
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7880778198000635412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0425594d3fe24854db198dda3b731432, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &6948333402832068683
 MonoBehaviour:
   m_ObjectHideFlags: 0

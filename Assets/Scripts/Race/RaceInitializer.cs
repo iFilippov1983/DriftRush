@@ -10,6 +10,7 @@ using RaceManager.Waypoints;
 using RaceManager.UI;
 using Sirenix.OdinInspector;
 using RaceManager.Cameras;
+using Zenject;
 
 namespace RaceManager.Race
 {
@@ -17,30 +18,33 @@ namespace RaceManager.Race
     {
         [SerializeField] private CarsDepot _carsDepot;
         [Space]
-        [SerializeField] private CarConfigScriptable _playerCarConfigSO;
+        [SerializeField] private CarProfile _playerCarProfile;
         [Space]
-        [SerializeField] private List<CarConfigScriptable> _opponentsConfigSoList;
-        [Space]
-        [SerializeField] private RaceUI _raceUI;
-        [SerializeField] private RaceCamerasHandler _camerasHandler;
-        [SerializeField] private RaceHandler _raceHandler;
-        [SerializeField, ReadOnly] private RaceLevelView _level;
+        [SerializeField] private List<CarProfile> _opponentsCarProfiles;
+        private RaceUI _raceUI;
+        private RaceCamerasHandler _camerasHandler;
+        private InRacePositionsHandler _positionsHandler;
+        private RaceLevelView _level;
         
-
-        private CarConfigScriptable _opponentCarConfigSO;
+        private CarProfile _opponentCarProfile;
         private WaypointTrack _waypointTrackMain;
         private WaypointTrack _waypointTrackEven;
         private WaypointTrack _waypointTrackOdd;
         private StartPoint[] _startPoints;
         private List<Driver> _driversList;
+        private List<WaypointsTracker> _waypointsTrackersList;
 
         private bool _raceStarted;
 
         public List<Driver> Drivers => _driversList;
 
-        private void Awake()
+        [Inject]
+        private void Construct(RaceLevelInitializer levelInitializer, InRacePositionsHandler positionsHandler, RaceUI raceUI)
         {
-            _level = GetLevel();
+            _camerasHandler = Singleton<RaceCamerasHandler>.Instance;
+            _positionsHandler = positionsHandler;
+            _raceUI = raceUI;
+            _level = levelInitializer.RaceLevel;
 
             _startPoints = _level.StartPoints;
             _waypointTrackMain = _level.WaypointTrackMain;
@@ -50,8 +54,10 @@ namespace RaceManager.Race
 
         private void Start()
         {
+            InitCameras();
             InitDrivers();
-            _raceHandler.StartHandle(Drivers);
+
+            _positionsHandler.StartHandling(_driversList, _waypointsTrackersList);
         }
 
         private void Update()
@@ -63,10 +69,19 @@ namespace RaceManager.Race
             RaceEventsHub.BroadcastNotification(RaceEventType.COUNTDOWN);
         }
 
+        private void InitCameras()
+        {
+            _camerasHandler.FollowCam.position = _level.FollowCamInitialPosition;
+            _camerasHandler.StartCam.position = _level.StartCamInitialPosition;
+            _camerasHandler.FinishCam.position = _level.FinishCamInitialPosition;
+        }
+
         private void InitDrivers()
         {
             _raceStarted = false;
             _driversList = new List<Driver>();
+            _waypointsTrackersList = new List<WaypointsTracker>();
+
             GameObject driverPrefab = ResourcesLoader.LoadPrefab(ResourcePath.DriverPrefab);
             GameObject parent = new GameObject("[Drivers]");
 
@@ -78,9 +93,9 @@ namespace RaceManager.Race
                 var driver = driverGo.GetComponent<Driver>();
                 if (_startPoints[i].Type == DriverType.Player)
                 {
-                    driver.Initialize(_startPoints[i].Type, _playerCarConfigSO.CarConfig, _carsDepot, _waypointTrackMain);
+                    driver.Initialize(_startPoints[i].Type, _playerCarProfile, _carsDepot, _waypointTrackMain);
 
-                    _camerasHandler.InitializeCamerasWhith(driver.CarObject.transform, driver.CarTargetToFollow);
+                    _camerasHandler.FollowAndLookAt(driver.CarObject.transform, driver.CarTargetToFollow);
 
                     driver.Subscribe(_raceUI);
 
@@ -89,29 +104,23 @@ namespace RaceManager.Race
                 else
                 {
                     WaypointTrack track = (i % 2) == 0 ? _waypointTrackEven : _waypointTrackOdd;
-                    _opponentCarConfigSO = GetOpponentsConfig();
-                    driver.Initialize(_startPoints[i].Type, _opponentCarConfigSO.CarConfig, _carsDepot, track);
+                    _opponentCarProfile = GetOpponentsProfile();
+                    driver.Initialize(_startPoints[i].Type, _opponentCarProfile, _carsDepot, track);
                     driverGo.name += $"_{i + 1}";
                 }
 
                 //driver.SetPositionInRace(i + 1);
                 driverGo.transform.SetParent(parent.transform, false);
                 _driversList.Add(driver);
+                _waypointsTrackersList.Add(driver.WaypointsTracker);
             }
         }
 
-        private RaceLevelView GetLevel()
-        {
-            //TODO: Make level load depending on Player's progress level
-
-            return FindObjectOfType<RaceLevelView>();
-        }
-
-        private CarConfigScriptable GetOpponentsConfig()
+        private CarProfile GetOpponentsProfile()
         {
             //TODO: make settings generation depending on Player's progress level
 
-            return _opponentsConfigSoList[UnityEngine.Random.Range(0, _opponentsConfigSoList.Count)];
+            return _opponentsCarProfiles[UnityEngine.Random.Range(0, _opponentsCarProfiles.Count)];
         }
     }
 }

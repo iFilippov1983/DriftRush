@@ -1,4 +1,7 @@
+using System;
 using UnityEngine;
+using Object = UnityEngine.Object;
+
 
 namespace RaceManager.Tools
 {
@@ -17,6 +20,14 @@ namespace RaceManager.Tools
 
             var c = LoadPrefab(path).GetComponent<T>();
             return Object.Instantiate(c, parent, worldCoordinates);
+        }
+    }
+
+    public class SaveManager : IDisposable
+    {
+        public void Dispose()
+        {
+            throw new NotImplementedException();
         }
     }
 }

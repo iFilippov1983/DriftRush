@@ -1,8 +1,6 @@
 ﻿using RaceManager.Race;
-using RaceManager.Root;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace RaceManager.UI
 {

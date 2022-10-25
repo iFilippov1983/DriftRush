@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using RaceManager.Cars.Effects;
 using Sirenix.OdinInspector;
+using RaceManager.Root;
 
 namespace RaceManager.Cars
 {
@@ -48,7 +49,7 @@ namespace RaceManager.Cars
 			}
 		}
 
-		CarFXController FXController { get { return CarFXController.Instance; } }
+		CarFXController FXController { get { return Singleton<CarFXController>.Instance; } }
 		Vector3 HitPoint;
 
 		const int SmoothValuesCount = 3;

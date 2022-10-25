@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace RaceManager.Cameras
 {
-    public class RaceCamerasHandler : Singleton<RaceCamerasHandler>
+    public class RaceCamerasHandler : MonoBehaviour
     {
         private const int MajorPriority = 10;
         private const int MinorPriority = 0;

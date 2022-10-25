@@ -8,7 +8,7 @@ namespace RaceManager.Cars.Effects
 	/// <summary>
 	/// Cars vFX and sFX handler.
 	/// </summary>
-	public class CarFXController : Singleton<CarFXController>
+	public class CarFXController : MonoBehaviour
 	{
 
 		[Header("Particles settings")]

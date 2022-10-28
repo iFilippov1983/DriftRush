@@ -36,9 +36,9 @@ namespace RaceManager.Cameras
             _startCamera.LookAt = carTransform;
             _finishCamera.LookAt = carTransform;
 
-            RaceEventsHub.Subscribe(RaceEventType.COUNTDOWN, SetStartCamera);
-            RaceEventsHub.Subscribe(RaceEventType.START, SetFollowCamera);
-            RaceEventsHub.Subscribe(RaceEventType.FINISH, SetFinishCamera);
+            EventsHub<RaceEvent>.Subscribe(RaceEvent.COUNTDOWN, SetStartCamera);
+            EventsHub<RaceEvent>.Subscribe(RaceEvent.START, SetFollowCamera);
+            EventsHub<RaceEvent>.Subscribe(RaceEvent.FINISH, SetFinishCamera);
         }
 
         private void SetFinishCamera()
@@ -80,9 +80,9 @@ namespace RaceManager.Cameras
 
         private void OnDestroy()
         {
-            RaceEventsHub.Unsunscribe(RaceEventType.COUNTDOWN, SetStartCamera);
-            RaceEventsHub.Unsunscribe(RaceEventType.START, SetFollowCamera);
-            RaceEventsHub.Unsunscribe(RaceEventType.FINISH, SetFinishCamera);
+            EventsHub<RaceEvent>.Unsunscribe(RaceEvent.COUNTDOWN, SetStartCamera);
+            EventsHub<RaceEvent>.Unsunscribe(RaceEvent.START, SetFollowCamera);
+            EventsHub<RaceEvent>.Unsunscribe(RaceEvent.FINISH, SetFinishCamera);
         }
     }
 }

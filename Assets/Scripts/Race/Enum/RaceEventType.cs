@@ -1,6 +1,6 @@
 ﻿namespace RaceManager.Race
 {
-    public enum RaceEventType
+    public enum RaceEvent
     { 
         COUNTDOWN,
         START,

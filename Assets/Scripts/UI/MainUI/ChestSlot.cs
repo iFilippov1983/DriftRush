@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System;
 using UnityEngine;
 
-namespace RaceManager.Root
+namespace RaceManager.UI
 {
     [Serializable]
     public class ChestSlot : MonoBehaviour

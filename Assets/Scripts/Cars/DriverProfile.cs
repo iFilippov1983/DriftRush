@@ -1,4 +1,5 @@
-﻿using UniRx;
+﻿using RaceManager.Root;
+using UniRx;
 
 namespace RaceManager.Cars
 {
@@ -7,7 +8,7 @@ namespace RaceManager.Cars
         public DriverType DriverType;
         public float CarCurrentSpeed;
         public float TrackProgress;
-        public int PositionInRace;
+        public PlayerProfile.PositionInRace PositionInRace;
 
         public ReactiveProperty<CarState> CarState;
 

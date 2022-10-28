@@ -8,7 +8,8 @@ namespace RaceManager.Cars
     [Serializable]
     public class PartConfig
 	{
-        [SerializeField] private PartsSetType _partsSetType;
+        [SerializeField] 
+        private PartsSetType _partsSetType;
 
         [SerializeField]
 		private List<PartsList> _parts;
@@ -49,7 +50,7 @@ namespace RaceManager.Cars
             {
                 if (part.Object != null)
                 {
-                    part.Object.SetActive(active);
+                    part.isActive = active;
                     part.Object.transform.localScale = part.Property.Scale;
                 }
             }
@@ -65,6 +66,4 @@ namespace RaceManager.Cars
             public List<Part> Parts;
         }
     }
-
-    
 }

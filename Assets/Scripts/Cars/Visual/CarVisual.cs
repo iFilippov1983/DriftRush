@@ -6,8 +6,7 @@ namespace RaceManager.Cars
 {
     public class CarVisual : MonoBehaviour
     {
-        [SerializeField]
-        private CarVisualContainer _carVisualContainer;
+        public CarVisualContainer CarVisualContainer;
         [SerializeField] 
         private CarConfigVisual _carConfigVisual;
 
@@ -16,17 +15,21 @@ namespace RaceManager.Cars
         private PartConfig _currentBodyKitsPartConfig;
         private PartConfig _currentBumpersPartConfig;
 
-        public CarVisualContainer CarVisualContainer => _carVisualContainer;
+        //public CarVisualContainer CarVisualContainer 
+        //{   get
+        //    {
+        //        return _carVisualContainer;
+        //    }
+        //    set { _carVisualContainer = value; } 
+        //}
 
-        public void ApplyVisual(CarVisualContainer carVisualContainer)
+        public void ApplyVisual()
         { 
-            _carVisualContainer = carVisualContainer;
-
-            SetBodyMaterials(_carVisualContainer.CurrentMaterialsSetType);
-            SetPartsVisual(PartType.Wheel, _carVisualContainer.CurrentWheelsSetType, _carVisualContainer.CurrentWheelsLevel);
-            SetPartsVisual(PartType.Suspention, PartsSetType.Default, _carVisualContainer.CurrentSuspentionLevel);
-            SetPartsVisual(PartType.Bumper, PartsSetType.Default, _carVisualContainer.CurrentBumpersLevel);
-            SetPartsVisual(PartType.BodyKit, PartsSetType.Default, _carVisualContainer.CurrentBodyKitsLevel);
+            SetBodyMaterials(CarVisualContainer.CarName, CarVisualContainer.CurrentMaterialsSetType);
+            SetPartsVisual(PartType.Wheel, CarVisualContainer.CurrentWheelsSetType, CarVisualContainer.CurrentWheelsLevel);
+            SetPartsVisual(PartType.Suspention, PartsSetType.Default, CarVisualContainer.CurrentSuspentionLevel);
+            SetPartsVisual(PartType.Bumper, PartsSetType.Default, CarVisualContainer.CurrentBumpersLevel);
+            SetPartsVisual(PartType.BodyKit, PartsSetType.Default, CarVisualContainer.CurrentBodyKitsLevel);
         }
 
         public float GetCurrentWheelsRadius() =>
@@ -35,11 +38,11 @@ namespace RaceManager.Cars
         public float GetCurrentSuspentionHeight() =>
             _currentSuspentionPartConfig.CurrentProperties.Value;
 
-        public void SetBodyMaterials(PartsSetType partsSetType)
+        public void SetBodyMaterials(CarName carName, PartsSetType partsSetType)
         {
-            _carVisualContainer.CurrentMaterialsSetType = partsSetType;
-            var materials = _carVisualContainer.CurrentMaterials;
-            _carConfigVisual.CarBody.SetMaterials(materials.ToArray());
+            CarVisualContainer.CurrentMaterialsSetType = partsSetType;
+            var material = CarVisualContainer.MaterialsContainer.GetMaterialTypeOf(carName, partsSetType);
+            _carConfigVisual.CarBody.SetMaterial(material);
         }
             
 
@@ -65,19 +68,19 @@ namespace RaceManager.Cars
             {
                 case PartType.Wheel:
                     _currentWheelsPartConfig = partConfig;
-                    _carVisualContainer.CurrentWheelsLevel = partLevel;
+                    CarVisualContainer.CurrentWheelsLevel = partLevel;
                     break;
                 case PartType.Suspention:
                     _currentSuspentionPartConfig = partConfig;
-                    _carVisualContainer.CurrentSuspentionLevel = partLevel;
+                    CarVisualContainer.CurrentSuspentionLevel = partLevel;
                     break;
                 case PartType.Bumper:
                     _currentBumpersPartConfig = partConfig;
-                    _carVisualContainer.CurrentBumpersLevel = partLevel;
+                    CarVisualContainer.CurrentBumpersLevel = partLevel;
                     break;
                 case PartType.BodyKit:
                     _currentBodyKitsPartConfig = partConfig;
-                    _carVisualContainer.CurrentBodyKitsLevel = partLevel;
+                    CarVisualContainer.CurrentBodyKitsLevel = partLevel;
                     break;
             }
         }

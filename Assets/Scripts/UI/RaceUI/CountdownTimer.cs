@@ -1,4 +1,5 @@
 ﻿using RaceManager.Race;
+using RaceManager.Root;
 using System.Collections;
 using UnityEngine;
 
@@ -17,12 +18,12 @@ namespace RaceManager.UI
 
         private void OnEnable()
         {
-            RaceEventsHub.Subscribe(RaceEventType.COUNTDOWN, StartTimer);
+            EventsHub<RaceEvent>.Subscribe(RaceEvent.COUNTDOWN, StartTimer);
         }
 
         private void OnDisable()
         {
-            RaceEventsHub.Unsunscribe(RaceEventType.COUNTDOWN, StartTimer);
+            EventsHub<RaceEvent>.Unsunscribe(RaceEvent.COUNTDOWN, StartTimer);
         }
 
         private void StartTimer() => StartCoroutine(Countdown());
@@ -42,7 +43,7 @@ namespace RaceManager.UI
             }
             _countdownTimerView.CountdownText.gameObject.SetActive(false);
             _countdownTimerView.StartText.gameObject.SetActive(true);
-            RaceEventsHub.BroadcastNotification(RaceEventType.START);
+            EventsHub<RaceEvent>.BroadcastNotification(RaceEvent.START);
 
             yield return new WaitForSeconds(1.5f);
 

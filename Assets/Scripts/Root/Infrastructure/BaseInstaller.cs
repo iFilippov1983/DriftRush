@@ -1,4 +1,8 @@
-﻿using RaceManager.Root;
+﻿using RaceManager.Cameras;
+using RaceManager.Cars.Effects;
+using RaceManager.Race;
+using RaceManager.Root;
+using RaceManager.UI;
 using Zenject;
 
 namespace RaceManager.Infrastructure
@@ -7,10 +11,14 @@ namespace RaceManager.Infrastructure
     {
         protected void Bind<T>(T instance) where T : class
         {
-            Container.BindInterfacesAndSelfTo<T>().FromInstance(instance).OnInstantiated<T>((ctx, obj) =>
-            {
-                Singleton<ResolverService>.Instance.Add(obj);
-            });
+            Container.BindInterfacesAndSelfTo<T>().FromInstance(instance);
+            Singleton<Resolver>.Instance.Add(instance);
+
+            //Container.BindInterfacesAndSelfTo<T>().FromInstance(instance).OnInstantiated<T>((ctx, obj) =>
+            //{
+            //    Singleton<Resolver>.Instance.Add(obj);
+            //});
+
             Container.QueueForInject(instance);
         }
 
@@ -18,7 +26,7 @@ namespace RaceManager.Infrastructure
         {
             Container.BindInterfacesAndSelfTo<T>().AsSingle().OnInstantiated<T>((ctx, obj) =>
             {
-                Singleton<ResolverService>.Instance.Add(obj);
+                Singleton<Resolver>.Instance.Add(obj);
             });
         }
     }

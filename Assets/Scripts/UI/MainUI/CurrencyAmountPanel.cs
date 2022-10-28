@@ -1,7 +1,7 @@
 ﻿using TMPro;
 using UnityEngine;
 
-namespace RaceManager.Root
+namespace RaceManager.UI
 {
     public class CurrencyAmountPanel : MonoBehaviour
     {

@@ -11,22 +11,22 @@ using RaceManager.UI;
 using Sirenix.OdinInspector;
 using RaceManager.Cameras;
 using Zenject;
+using RaceManager.Infrastructure;
 
 namespace RaceManager.Race
 {
     public class RaceInitializer : MonoBehaviour
     {
-        [SerializeField] private CarsDepot _carsDepot;
-        [Space]
-        [SerializeField] private CarProfile _playerCarProfile;
-        [Space]
-        [SerializeField] private List<CarProfile> _opponentsCarProfiles;
+        [SerializeField] private MaterialsContainer _materialsContainer;
+        [SerializeField] private CarsDepot _opponentsCarsDepot;
+
+        private CarsDepot _playerCarsDepot;
+        private PlayerProfile _playerProfile;
         private RaceUI _raceUI;
-        private RaceCamerasHandler _camerasHandler;
+        private RaceCamerasHandler _camerasHandler; 
         private InRacePositionsHandler _positionsHandler;
         private RaceLevelView _level;
-        
-        private CarProfile _opponentCarProfile;
+
         private WaypointTrack _waypointTrackMain;
         private WaypointTrack _waypointTrackEven;
         private WaypointTrack _waypointTrackOdd;
@@ -39,9 +39,12 @@ namespace RaceManager.Race
         public List<Driver> Drivers => _driversList;
 
         [Inject]
-        private void Construct(RaceLevelInitializer levelInitializer, InRacePositionsHandler positionsHandler, RaceUI raceUI)
+        private void Construct(RaceLevelInitializer levelInitializer, InRacePositionsHandler positionsHandler, RaceUI raceUI, CarsDepot playerCarsDepot, PlayerProfile playerProfile)
         {
             _camerasHandler = Singleton<RaceCamerasHandler>.Instance;
+            
+            _playerCarsDepot = playerCarsDepot;
+            _playerProfile = playerProfile;
             _positionsHandler = positionsHandler;
             _raceUI = raceUI;
             _level = levelInitializer.RaceLevel;
@@ -66,7 +69,7 @@ namespace RaceManager.Race
                 return;
 
             _raceStarted = true;
-            RaceEventsHub.BroadcastNotification(RaceEventType.COUNTDOWN);
+            EventsHub<RaceEvent>.BroadcastNotification(RaceEvent.COUNTDOWN);
         }
 
         private void InitCameras()
@@ -87,13 +90,13 @@ namespace RaceManager.Race
 
             for (int i = 0; i < _startPoints.Length; i++)
             {
-                var driverGo = Instantiate(driverPrefab, _startPoints[i].transform.position, _startPoints[i].transform.rotation);//, parent.transform);
+                var driverGo = Instantiate(driverPrefab, _startPoints[i].transform.position, _startPoints[i].transform.rotation);
                 driverGo.name = $"{_startPoints[i].Type} driver";
 
                 var driver = driverGo.GetComponent<Driver>();
                 if (_startPoints[i].Type == DriverType.Player)
                 {
-                    driver.Initialize(_startPoints[i].Type, _playerCarProfile, _carsDepot, _waypointTrackMain);
+                    driver.Initialize(_startPoints[i].Type, _playerCarsDepot, _waypointTrackMain, _materialsContainer, _playerProfile);
 
                     _camerasHandler.FollowAndLookAt(driver.CarObject.transform, driver.CarTargetToFollow);
 
@@ -104,8 +107,7 @@ namespace RaceManager.Race
                 else
                 {
                     WaypointTrack track = (i % 2) == 0 ? _waypointTrackEven : _waypointTrackOdd;
-                    _opponentCarProfile = GetOpponentsProfile();
-                    driver.Initialize(_startPoints[i].Type, _opponentCarProfile, _carsDepot, track);
+                    driver.Initialize(_startPoints[i].Type, _opponentsCarsDepot, track, _materialsContainer);
                     driverGo.name += $"_{i + 1}";
                 }
 
@@ -114,13 +116,6 @@ namespace RaceManager.Race
                 _driversList.Add(driver);
                 _waypointsTrackersList.Add(driver.WaypointsTracker);
             }
-        }
-
-        private CarProfile GetOpponentsProfile()
-        {
-            //TODO: make settings generation depending on Player's progress level
-
-            return _opponentsCarProfiles[UnityEngine.Random.Range(0, _opponentsCarProfiles.Count)];
         }
     }
 }

@@ -395,7 +395,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1938199604}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &329386184
 MonoBehaviour:
@@ -410,6 +410,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _raceUI: {fileID: 956234193}
+  _playerCarDepot: {fileID: 11400000, guid: d7530e18444d4cb429bf15b4d12e6caf, type: 2}
 --- !u!1 &497530277
 GameObject:
   m_ObjectHideFlags: 0
@@ -1169,7 +1170,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1328898759}
-  m_LocalRotation: {x: 0.16245984, y: 0.68819094, z: -0.16245985, w: 0.68819106}
+  m_LocalRotation: {x: 0.16245976, y: 0.688191, z: -0.16245976, w: 0.688191}
   m_LocalPosition: {x: -212.31, y: 10.35, z: 179.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1206,7 +1207,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1938199604}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1351370805
 MonoBehaviour:
@@ -1220,10 +1221,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0c05aae5a3891045bdf9d7e06152a4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _carsDepot: {fileID: 11400000, guid: d7530e18444d4cb429bf15b4d12e6caf, type: 2}
-  _playerCarProfile: {fileID: 11400000, guid: efbc9fefae1f8d4439e9632182a68f9f, type: 2}
-  _opponentsCarProfiles:
-  - {fileID: 11400000, guid: efbc9fefae1f8d4439e9632182a68f9f, type: 2}
+  _materialsContainer: {fileID: 11400000, guid: f732a8b0777ef0e40b2503a7df0aadbf,
+    type: 2}
+  _opponentsCarsDepot: {fileID: 11400000, guid: cde466645b9a54942a470d50c6c75128,
+    type: 2}
 --- !u!1 &1431465921
 GameObject:
   m_ObjectHideFlags: 0
@@ -1441,6 +1442,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1938199604}
   - component: {fileID: 1938199602}
+  - component: {fileID: 1938199603}
   m_Layer: 0
   m_Name: '[Root]'
   m_TagString: Untagged
@@ -1460,6 +1462,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63a80d248583540489e354d3b76492fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1938199603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1938199601}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a425837c6714bdb4e9214c3b0d69008f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerProfile:
+    lastInRacePosition: 0
+    currency:
+      Money: 0
+      Gems: 0
+      Cups: 0
 --- !u!4 &1938199604
 Transform:
   m_ObjectHideFlags: 0
@@ -1471,8 +1491,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1351370804}
   - {fileID: 329386183}
+  - {fileID: 1351370804}
   - {fileID: 2144523876}
   - {fileID: 191312287}
   m_Father: {fileID: 0}

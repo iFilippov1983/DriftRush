@@ -1,4 +1,6 @@
 using RaceManager.Cars;
+using RaceManager.Race;
+using RaceManager.Root;
 using System;
 using System.Collections;
 using UniRx;
@@ -143,6 +145,7 @@ namespace RaceManager.UI
 
         private void FinalizeRace()
         {
+            EventsHub<RaceEvent>.BroadcastNotification(RaceEvent.QUIT);
             Loader.Load(Loader.Scene.MenuScene);
         }
 
@@ -166,7 +169,7 @@ namespace RaceManager.UI
         {
             _currentSpeed = profile.CarCurrentSpeed;
             _trackProgress = profile.TrackProgress;
-            _currentPosition = profile.PositionInRace;
+            _currentPosition = (int)profile.PositionInRace;
         }
 
         public void OnCompleted() => throw new NotImplementedException();

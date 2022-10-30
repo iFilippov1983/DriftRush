@@ -117,7 +117,7 @@ namespace RaceManager.Cars
             //TODO: make settings generation depending on Player's progress level
             
             CarProfile carProfile = _carsDepot.Cars[Random.Range(0, _carsDepot.Cars.Count)];
-            carProfile.CarVisualContainer.CurrentMaterialsSetType = (PartsSetType)Random.Range(0, 2);
+            carProfile.CarVisualContainer.CurrentMaterialsSetType = (MaterialSetType)Random.Range(0, 2);
 
 
             return carProfile;

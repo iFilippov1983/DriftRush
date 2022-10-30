@@ -15,7 +15,7 @@ namespace RaceManager.Cars
         public CarName CarName;
 
         [FoldoutGroup("Materials Settings")]
-        public PartsSetType CurrentMaterialsSetType;
+        public MaterialSetType CurrentMaterialsSetType;
 
         [ReadOnly]
         [FoldoutGroup("Materials Settings")]
@@ -23,7 +23,9 @@ namespace RaceManager.Cars
 
         [FoldoutGroup("Materials Settings")]
         [DictionaryDrawerSettings(KeyLabel = "Car", ValueLabel = "Sets")]
-        public Dictionary<CarName, Dictionary<PartsSetType, bool>> AvailableCarMaterials = new Dictionary<CarName, Dictionary<PartsSetType, bool>>();
+        public Dictionary<CarName, Dictionary<MaterialSetType, bool>> AvailableCarMaterials = new Dictionary<CarName, Dictionary<MaterialSetType, bool>>();
+
+        public Material GetCurrentMaterial() => MaterialsContainer.GetMaterialTypeOf(CarName, CurrentMaterialsSetType);
 
         public void SetMaterialsContainer(MaterialsContainer container)
         {
@@ -59,7 +61,7 @@ namespace RaceManager.Cars
         //};
 
         [FoldoutGroup("Wheels Settings")]
-        public PartsSetType CurrentWheelsSetType;
+        public WheelsSetType CurrentWheelsSetType;
 
         [FoldoutGroup("Wheels Settings")]
         public PartLevel CurrentWheelsLevel;

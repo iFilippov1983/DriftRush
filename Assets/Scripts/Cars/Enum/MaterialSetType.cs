@@ -3,7 +3,7 @@
 namespace RaceManager.Cars
 {
     [Serializable]
-    public enum PartsSetType
+    public enum MaterialSetType
     { 
         Default = 0,
         Military = 1,

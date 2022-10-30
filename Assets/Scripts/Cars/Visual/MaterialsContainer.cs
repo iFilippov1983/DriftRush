@@ -19,10 +19,10 @@ namespace RaceManager.Cars
         public List<MaterialHolder> GetHoldersFor(CarName carName) => 
             MaterialHolders[carName];
 
-        public Material GetMaterialTypeOf(CarName carName, PartsSetType partsSetType) =>
+        public Material GetMaterialTypeOf(CarName carName, MaterialSetType partsSetType) =>
             MaterialHolders[carName].Find(h => h.PartsSetType == partsSetType).Material;
 
-        public bool TryGetMaterial(CarName carName, PartsSetType partsSetType, out Material material)
+        public bool TryGetMaterial(CarName carName, MaterialSetType partsSetType, out Material material)
         {
             var holder = MaterialHolders[carName].Find(h => h.PartsSetType == partsSetType);
 
@@ -42,7 +42,7 @@ namespace RaceManager.Cars
         public class MaterialHolder
         {
             public bool isAvailable;
-            public PartsSetType PartsSetType;
+            public MaterialSetType PartsSetType;
             public MaterialName MaterialName;
 
             [SerializeField]

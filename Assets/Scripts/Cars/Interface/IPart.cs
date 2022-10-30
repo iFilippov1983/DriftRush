@@ -6,15 +6,19 @@ namespace RaceManager.Cars
     public interface IPart
     {
         PartType Type { get; }
-        GameObject Object { get; }
-        PartProperty Property { get; }
+        bool IsActive { get; set; }
     }
 
     [Serializable]
-    public struct PartProperty
+    public struct WheelProperty
     {
-        public string Name;
-        public float Value;
-        public Vector3 Scale;
+        public float WheelRadius;
+        public Vector3 WheelScale;
+    }
+
+    [Serializable]
+    public struct SuspentionProperty
+    {
+        public float SuspentionHeight;
     }
 }

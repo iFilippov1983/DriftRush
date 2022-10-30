@@ -7,58 +7,30 @@ using UnityEngine;
 namespace RaceManager.Cars
 {
     [Serializable]
-    public class Part : IPart
+    public class WheelPart : IPart
     {
-        [SerializeField] private PartType _partType;
+        [SerializeField] private WheelColliderHandler _wheelHandler;
+        [SerializeField] private GameObject _wheelGameObject;
+        [SerializeField] private WheelProperty _wheelProperty;
+        [ShowInInspector, ReadOnly]
+        private bool _isActive;
 
-        [SerializeField]
-        [ShowIf("_partType", PartType.Wheel)]
-        private float _wheelRadius;
-        [SerializeField]
-        [ShowIf("_partType", PartType.Wheel)]
-        private Vector3 _wheelScale;
+        public PartType Type => PartType.Wheel;
+        public WheelProperty Property => _wheelProperty;
 
-        [SerializeField]
-        [ShowIf("_partType", PartType.Suspention)]
-        private float _suspentionHeight;
-
-        [SerializeField]
-        [HideIf("_partType", PartType.Suspention)]
-        private GameObject _partObject;
-
-        public bool isActive;
-        public PartType Type => _partType;
-        public GameObject Object => _partObject;
-        
-        public PartProperty Property
+        public bool IsActive
         {
-            get
-            {
-                switch (_partType)
+            get => _isActive;
+            set
+            { 
+                _isActive = value;
+
+                if (_isActive)
                 {
-                    case PartType.Wheel:
-                        return new PartProperty()
-                        {
-                            Name = nameof(_wheelRadius),
-                            Value = _wheelRadius,
-                            Scale = _wheelScale                           
-                        };
-                    case PartType.Suspention:
-                        return new PartProperty() 
-                        { 
-                            Name = nameof(_suspentionHeight), 
-                            Value = _suspentionHeight,
-                            Scale = Vector3.one
-                        };
-                    case PartType.Bumper:
-                    case PartType.BodyKit:
-                    default:
-                        return new PartProperty()
-                        {
-                            Name = string.Empty,
-                            Value = 0,
-                            Scale = Vector3.one
-                        };
+                    _wheelGameObject.transform.localScale = _wheelProperty.WheelScale;
+                    var config = _wheelHandler.Config;
+                    config.Radius = _wheelProperty.WheelRadius;
+                    _wheelHandler.UpdateConfig(config);
                 }
             }
         }
@@ -81,5 +53,70 @@ namespace RaceManager.Cars
 
         //    _id = builder.ToString();
         //}
+    }
+
+    [Serializable]
+    public class SuspentionPart : IPart
+    {
+        [SerializeField] private WheelColliderHandler _wheelHandler;
+        [SerializeField] private SuspentionProperty _suspentionProperty;
+        private bool _isActive;
+
+        public PartType Type => PartType.Suspention;
+        public SuspentionProperty SuspentionProperty => _suspentionProperty;
+
+        public bool IsActive
+        { 
+            get => _isActive;
+            set
+            {
+                _isActive = value;
+
+                if (_isActive)
+                {
+                    var config = _wheelHandler.Config;
+                    config.SuspensionDistance = _suspentionProperty.SuspentionHeight;
+                    _wheelHandler.UpdateConfig(config);
+                }
+            }
+        }
+    }
+
+    [Serializable]
+    public class BumperPart : IPart
+    {
+        [SerializeField] private GameObject _bumperObject;
+        private bool _isActive;
+
+        public PartType Type => PartType.Bumper;
+
+        public bool IsActive
+        {
+            get => _isActive;
+            set
+            {
+                _isActive = value;
+                _bumperObject.gameObject.SetActive(_isActive);
+            }
+        }
+    }
+
+    [Serializable]
+    public class BodyKitPart : IPart
+    {
+        [SerializeField] private GameObject _bodyKitObject;
+        private bool _isActive;
+
+        public PartType Type => PartType.BodyKit;
+
+        public bool IsActive
+        {
+            get => _isActive;
+            set
+            {
+                _isActive = value;
+                _bodyKitObject.gameObject.SetActive(_isActive);
+            }
+        }
     }
 }

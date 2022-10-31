@@ -33,6 +33,7 @@ namespace RaceManager.Cars
         [SerializeField] Transform COM;
         [SerializeField] List<ParticleSystem> BackFireParticles = new List<ParticleSystem>();
         [SerializeField] private CarConfig _carConfig;
+        [SerializeField] private GameObject _effectsChild;
 
         private CarSelfRighting _carSelfRighting;
 
@@ -79,7 +80,8 @@ namespace RaceManager.Cars
         public string ID => _id;
         public CarConfig CarConfig => _carConfig;
         public CarSelfRighting CarSelfRighting => _carSelfRighting;
-                                             			
+        public GameObject EffectsChild => _effectsChild;   
+        
         public Action BackFireAction; //Backfire invoked when cut off (You can add a invoke when changing gears).
 
         float[] AllGearsRatio; //All gears (Reverce, neutral and all forward).

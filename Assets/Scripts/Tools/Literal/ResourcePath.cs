@@ -3,6 +3,7 @@ namespace RaceManager.Tools
     internal static class ResourcePath
     {
         public const string CarPrefabsFolder = "Prefabs/Cars/";
+        public const string MaterialsPrefabsFolder = "Prefabs/Mat/";
         public const string WaypointPrefab = "Prefabs/Waypoint";
         public const string DriverPrefab = "Prefabs/Driver";
         public const string FXControllerPrefab = "Prefabs/FXController";

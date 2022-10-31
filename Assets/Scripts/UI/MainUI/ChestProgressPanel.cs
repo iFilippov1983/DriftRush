@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace RaceManager.Root
+namespace RaceManager.UI
 {
     public class ChestProgressPanel : MonoBehaviour
     {

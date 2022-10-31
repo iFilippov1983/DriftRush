@@ -6760,6 +6760,7 @@ MonoBehaviour:
   BackFireParticles:
   - {fileID: 8042060132909517162}
   _carConfig: {fileID: 11400000, guid: 2ae7d37bf4a19064392be0fa89b2d3c4, type: 2}
+  _effectsChild: {fileID: 7881238219054167782}
 --- !u!114 &573874173157922327
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6772,8 +6773,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0425594d3fe24854db198dda3b731432, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _carConfigVisualContainer: {fileID: 11400000, guid: f7d8b3d90e777ba40a736dd0bfe62288,
-    type: 2}
+  CarVisualContainer: {fileID: 11400000, guid: df049d8b89db88146a25ef45dbe5e1ad, type: 2}
   _carConfigVisual:
     _carName: 0
     _carBody: {fileID: 8750308444248201149}
@@ -6788,44 +6788,66 @@ MonoBehaviour:
             _wheelRadius: 0.3
             _wheelScale: {x: 0.8, y: 0.8, z: 0.8}
             _suspentionHeight: 0
-            _partObject: {fileID: 8902754393710770797}
+            _partObject: {fileID: 7880925834030134688}
           - _partType: 0
             _wheelRadius: 0.3
             _wheelScale: {x: 0.8, y: 0.8, z: 0.8}
             _suspentionHeight: 0
-            _partObject: {fileID: 3544205151522072613}
+            _partObject: {fileID: 7881185879874710562}
           - _partType: 0
             _wheelRadius: 0.3
             _wheelScale: {x: 0.8, y: 0.8, z: 0.8}
             _suspentionHeight: 0
-            _partObject: {fileID: 6479484186115504299}
+            _partObject: {fileID: 7879373085372071040}
           - _partType: 0
             _wheelRadius: 0.3
             _wheelScale: {x: 0.8, y: 0.8, z: 0.8}
             _suspentionHeight: 0
-            _partObject: {fileID: 1420536749207986107}
+            _partObject: {fileID: 7880963006320055208}
         - PartLevel: 1
           Parts:
           - _partType: 0
             _wheelRadius: 0.35
             _wheelScale: {x: 1, y: 1, z: 1}
             _suspentionHeight: 0
-            _partObject: {fileID: 8902754393710770797}
+            _partObject: {fileID: 7880925834030134688}
           - _partType: 0
             _wheelRadius: 0.35
             _wheelScale: {x: 1, y: 1, z: 1}
             _suspentionHeight: 0
-            _partObject: {fileID: 3544205151522072613}
+            _partObject: {fileID: 7881185879874710562}
           - _partType: 0
             _wheelRadius: 0.35
             _wheelScale: {x: 1, y: 1, z: 1}
             _suspentionHeight: 0
-            _partObject: {fileID: 6479484186115504299}
+            _partObject: {fileID: 7879373085372071040}
           - _partType: 0
             _wheelRadius: 0.35
             _wheelScale: {x: 1, y: 1, z: 1}
             _suspentionHeight: 0
-            _partObject: {fileID: 1420536749207986107}
+            _partObject: {fileID: 7880963006320055208}
+        - PartLevel: 2
+          Parts:
+          - _partType: 0
+            _wheelRadius: 0.36
+            _wheelScale: {x: 1.1, y: 1.1, z: 1.1}
+            _suspentionHeight: 0
+            _partObject: {fileID: 7880925834030134688}
+          - _partType: 0
+            _wheelRadius: 0.36
+            _wheelScale: {x: 1.1, y: 1.1, z: 1.1}
+            _suspentionHeight: 0
+            _partObject: {fileID: 7881185879874710562}
+          - _partType: 0
+            _wheelRadius: 0.36
+            _wheelScale: {x: 1.1, y: 1.1, z: 1.1}
+            _suspentionHeight: 0
+            _partObject: {fileID: 7879373085372071040}
+          - _partType: 0
+            _wheelRadius: 0.36
+            _wheelScale: {x: 1.1, y: 1.1, z: 1.1}
+            _suspentionHeight: 0
+            _partObject: {fileID: 7880963006320055208}
         isAvailable: 1
     - PartType: 1
       PartConfigs:
@@ -7711,8 +7733,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d19b6862a6086fc48855bb77c7852257, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _defaultMaterials:
-  - {fileID: 2100000, guid: b9ad1dcfcf7c4e842b8d14efda7407eb, type: 2}
+  _defaultMaterial: {fileID: 2100000, guid: b9ad1dcfcf7c4e842b8d14efda7407eb, type: 2}
   _allMeshRenderers:
   - {fileID: 4645678701126571986}
   - {fileID: 7274490317145861398}

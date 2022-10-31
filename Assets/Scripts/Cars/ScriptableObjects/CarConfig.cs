@@ -1,10 +1,11 @@
 ﻿using RaceManager.Tools;
 using Sirenix.OdinInspector;
+using System;
 using UnityEngine;
 
 namespace RaceManager.Cars
 {
-	//[System.Serializable]
+	[Serializable]
 	[CreateAssetMenu(menuName = "Cars/CarConfig", fileName = "CarNameConfig_Default", order = 1)]
     public class CarConfig : SerializedScriptableObject
 	{

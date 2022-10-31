@@ -11,23 +11,24 @@ using SaveData = System.Collections.Generic.Dictionary<string, Newtonsoft.Json.L
 namespace RaceManager.Root
 {
     [Serializable]
-    public class SaveManager : IDisposable
+    public class SaveManager
     {
+        public const string FileName = "save.data";
+
         private readonly List<Type> _registeredTypes = new List<Type>();
         private readonly List<Action<SaveData>> _saveActions = new List<Action<SaveData>>();
         private readonly List<Action<SaveData>> _loadActions = new List<Action<SaveData>>();
         private readonly string _savePath;
 
-        private IDisposable _savesDisposable;
-
-        [ShowInInspector] 
+        [ShowInInspector]
+        [DictionaryDrawerSettings(KeyLabel = "Key", ValueLabel = "Data")]
         public Dictionary<string, string> _lastSave = new Dictionary<string, string>();
 
-        public static string SavePath => Path.Combine(Application.persistentDataPath, "save.data");
+        //public string SavePath = Path.Combine(Application.persistentDataPath, FileName);  // string.Concat(Application.persistentDataPath, FileName); // Path.Combine(Application.persistentDataPath, FileName);
 
         public SaveManager()
         {
-            _savePath = SavePath;
+            //_savePath = Path.Combine(Application.persistentDataPath, FileName); //SavePath;
         }
 
 #if UNITY_EDITOR
@@ -35,7 +36,7 @@ namespace RaceManager.Root
 #endif
         public static void RemoveSave()
         {
-            var path = SavePath;
+            var path = Path.Combine(Application.persistentDataPath, FileName);// SavePath;
             if (File.Exists(path))
             {
                 File.Delete(path);
@@ -95,17 +96,20 @@ namespace RaceManager.Root
             }
 
             string json = JsonConvert.SerializeObject(data, settings);
+            string path = Path.Combine(Application.persistentDataPath, FileName);
 
-            File.WriteAllText(_savePath, json);
+            File.WriteAllText(path, json);
 
-            $"Data SAVED: {_savePath}".Log(ConsoleLog.Color.Green);
+            $"Data SAVED: {path}".Log(ConsoleLog.Color.Green);
         }
 
         public void Load(bool ignoreMissing = true)
         {
-            $"Load from: {_savePath}".Log(ConsoleLog.Color.Blue);
+            string path = Path.Combine(Application.persistentDataPath, FileName);
+            bool fileExists = File.Exists(path);
+            $"Load from: {path}; File exists: {fileExists}".Log(ConsoleLog.Color.Green);
 
-            if (!File.Exists(_savePath))
+            if (!fileExists)
             {
                 if (ignoreMissing)
                 {
@@ -113,11 +117,11 @@ namespace RaceManager.Root
                 }
                 else
                 {
-                    throw new FileNotFoundException($"Missing save file at {_savePath}", _savePath);
+                    throw new FileNotFoundException($"Missing save file at {path}", path);
                 }
             }
 
-            string loadedJson = File.ReadAllText(_savePath);
+            string loadedJson = File.ReadAllText(path);
             var data = JsonConvert.DeserializeObject<SaveData>(loadedJson);
 
             _lastSave = new Dictionary<string, string>();
@@ -129,11 +133,6 @@ namespace RaceManager.Root
             {
                 loadAction(data);
             }
-        }
-
-        public void Dispose()
-        {
-            _savesDisposable.Dispose();
         }
     }
 }

@@ -22,12 +22,4 @@ namespace RaceManager.Tools
             return Object.Instantiate(c, parent, worldCoordinates);
         }
     }
-
-    public class SaveManager : IDisposable
-    {
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
-    }
 }

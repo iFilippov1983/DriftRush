@@ -1,24 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static RaceManager.Cars.CarVisualContainer;
 
 namespace RaceManager.Cars
 {
     [Serializable]
     public class CarBody : MonoBehaviour
     {
-        [SerializeField] private Material[] _defaultMaterials;
+        [SerializeField] private Material _defaultMaterial;
         [SerializeField] private List<MeshRenderer> _allMeshRenderers;
 
-        public void SetMaterials(params Material[] materials)
+        public void SetMaterial(Material material)
         {
+            if (material == null)
+                SetToDefaultMaterial();
+
             foreach (var m in _allMeshRenderers)
-                m.materials = materials;
+                m.material = material;
         }
 
-        public void SetToDefaultMaterials()
+        public void SetToDefaultMaterial()
         {
-            SetMaterials(_defaultMaterials);
+            SetMaterial(_defaultMaterial);
         }
     }
 }

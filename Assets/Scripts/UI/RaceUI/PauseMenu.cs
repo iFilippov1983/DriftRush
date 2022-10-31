@@ -58,7 +58,7 @@ namespace RaceManager.UI
         {
             _pauseMenuView.gameObject.SetActive(true);
             Time.timeScale = 0f;
-            RaceEventsHub.BroadcastNotification(RaceEventType.PAUSE);
+            EventsHub<RaceEvent>.BroadcastNotification(RaceEvent.PAUSE);
             _gameIsPaused = true;
         }
 
@@ -66,7 +66,7 @@ namespace RaceManager.UI
         {
             _pauseMenuView.gameObject.SetActive(false);
             Time.timeScale = 1f;
-            RaceEventsHub.BroadcastNotification(RaceEventType.UNPAUSE);
+            EventsHub<RaceEvent>.BroadcastNotification(RaceEvent.UNPAUSE);
             _gameIsPaused = false;
         }
 

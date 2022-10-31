@@ -12,30 +12,27 @@ namespace RaceManager.Cars
     public class MaterialsContainer : SerializedScriptableObject
     {
         [SerializeField]
-        [FoldoutGroup("Materials Settings")]
-        [DictionaryDrawerSettings(KeyLabel = "Set Type", ValueLabel = "Materials")]
-        private Dictionary<CarName, List<MaterialHolder>> MaterialHolders = new Dictionary<CarName, List<MaterialHolder>>();
+        private List<CarMaterial> CarMaterials = new List<CarMaterial>();
 
-        public List<MaterialHolder> GetHoldersFor(CarName carName) => 
-            MaterialHolders[carName];
-
-        public Material GetMaterialTypeOf(CarName carName, MaterialSetType partsSetType) =>
-            MaterialHolders[carName].Find(h => h.PartsSetType == partsSetType).Material;
-
-        public bool TryGetMaterial(CarName carName, MaterialSetType partsSetType, out Material material)
+        public Material GetMaterialTypeOf(CarName carName, MaterialSetType partsSetType)
         {
-            var holder = MaterialHolders[carName].Find(h => h.PartsSetType == partsSetType);
+            var carMat = CarMaterials.Find(c => c.carName == carName);
+            var holder = carMat.materialHolders.Find(mat => mat.PartsSetType == partsSetType);
+            return holder.Material;
+        }
 
-            if (holder != null && holder.isAvailable)
-            {
-                material = holder.Material;
-                return true;
-            }
-            else
-            {
-                material = null;
-                return false;
-            }
+        //public void SetMaterialsAccessibility(CarName carName, MaterialSetType materialSetType)
+        //{
+        //    CarMaterials.Find(c => c.carName == carName)
+        //        .materialHolders.Find(mat => mat.PartsSetType == materialSetType)
+        //        .isAvailable = true;
+        //}
+
+        [Serializable]
+        public class CarMaterial
+        { 
+            public CarName carName;
+            public List<MaterialHolder> materialHolders = new List<MaterialHolder>();
         }
 
         [Serializable]

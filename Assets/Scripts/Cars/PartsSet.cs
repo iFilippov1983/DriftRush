@@ -13,9 +13,7 @@ namespace RaceManager.Cars
         public bool isAvailable;
 
         public PartLevel CurrentPartsLevel => _currentPartsLevel;
-
         public List<PartsList<T>> AllParts() => _parts;
-        //public abstract void SetPartsLevel(PartLevel partLevel);
 
         public void SetPartsLevel(PartLevel partLevel)
         {
@@ -56,6 +54,14 @@ namespace RaceManager.Cars
 
         public WheelsSetType WheelsSetType => _wheelsSetType;
 
+        public void Install() => ToggleActivity(true);
+        public void UnInstall() => ToggleActivity(false);
+
+        private void ToggleActivity(bool active)
+        {
+            for (int i = 0; i < _wheelMeshes.Length; i++)
+                _wheelMeshes[i].SetActive(active);
+        }
     }
 
     [Serializable]

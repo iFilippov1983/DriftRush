@@ -15,96 +15,20 @@ MonoBehaviour:
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
-    ReferencedUnityObjects:
-    - {fileID: 2100000, guid: b9ad1dcfcf7c4e842b8d14efda7407eb, type: 2}
-    - {fileID: 2100000, guid: 5113a830c37725b4e8daf37de33df83e, type: 2}
+    ReferencedUnityObjects: []
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes:
-    - Name: MaterialHolders
-      Entry: 7
-      Data: 0|System.Collections.Generic.Dictionary`2[[RaceManager.Cars.CarName,
-        Assembly-CSharp],[System.Collections.Generic.List`1[[RaceManager.Cars.MaterialsContainer+MaterialHolder,
-        Assembly-CSharp]], mscorlib]], mscorlib
-    - Name: comparer
-      Entry: 7
-      Data: 1|System.Collections.Generic.EnumEqualityComparer`1[[RaceManager.Cars.CarName,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 12
-      Data: 1
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 3
-      Data: 0
-    - Name: $v
-      Entry: 7
-      Data: 2|System.Collections.Generic.List`1[[RaceManager.Cars.MaterialsContainer+MaterialHolder,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 2
-    - Name: 
-      Entry: 7
-      Data: 3|RaceManager.Cars.MaterialsContainer+MaterialHolder, Assembly-CSharp
-    - Name: isAvailable
-      Entry: 5
-      Data: false
-    - Name: PartsSetType
-      Entry: 3
-      Data: 0
-    - Name: MaterialName
-      Entry: 3
-      Data: 0
-    - Name: _material
-      Entry: 10
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 4|RaceManager.Cars.MaterialsContainer+MaterialHolder, Assembly-CSharp
-    - Name: isAvailable
-      Entry: 5
-      Data: false
-    - Name: PartsSetType
-      Entry: 3
-      Data: 1
-    - Name: MaterialName
-      Entry: 3
-      Data: 0
-    - Name: _material
-      Entry: 10
-      Data: 1
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
+    SerializationNodes: []
+  CarMaterials:
+  - carName: 0
+    materialHolders:
+    - isAvailable: 1
+      PartsSetType: 0
+      MaterialName: 0
+      _material: {fileID: 2100000, guid: b9ad1dcfcf7c4e842b8d14efda7407eb, type: 2}
+    - isAvailable: 1
+      PartsSetType: 1
+      MaterialName: 1
+      _material: {fileID: 2100000, guid: 5113a830c37725b4e8daf37de33df83e, type: 2}

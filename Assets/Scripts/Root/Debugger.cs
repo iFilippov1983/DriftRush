@@ -2,6 +2,7 @@
 using RaceManager.Race;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
+using UniRx;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Zenject;
@@ -30,7 +31,7 @@ namespace RaceManager.Root
         }
 
         [Button]
-        [ShowIf("IsRaceScene")]
+        [ShowIf("IsRaceScene", true)]
         public void FinishRace()
         {
             var drivers = FindObjectsOfType<Driver>();
@@ -47,5 +48,15 @@ namespace RaceManager.Root
 
         [Button]
         public void DeleteSave() => SaveManager.RemoveSave();
+
+        [Button]
+        public void PrintSave()
+        {
+            foreach (var pair in saveManager._lastSave)
+            {
+                $"Key: {pair.Key}".Log(ConsoleLog.Color.Red);
+                $"Value: {pair.Value}".Log(ConsoleLog.Color.Yellow);
+            }
+        }
     }
 }

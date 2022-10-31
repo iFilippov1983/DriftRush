@@ -7,10 +7,7 @@ namespace RaceManager.Cars
 {
     public class CarVisual : MonoBehaviour
     {
-        public CarVisualContainer CarVisualContainer;
-        //[SerializeField] 
-        //private CarConfigVisual _carConfigVisual;
-
+        public CarConfigVisual CarConfigVisual;
 
         [SerializeField] private CarName _carName;
         [SerializeField] private CarBody _carBody;
@@ -18,56 +15,24 @@ namespace RaceManager.Cars
         [SerializeField] private SuspentionSet _suspentionSet = new SuspentionSet();
         [SerializeField] private BumperSet _bumpersSet = new BumperSet();
         [SerializeField] private BodyKitSet _bodyKitsSet = new BodyKitSet();
-        //[SerializeField] private List<ConfigsList> _partConfigs;  
 
         public CarBody CarBody => _carBody;
         public CarName CarName => _carName;
 
-
-        //public CarVisualContainer CarVisualContainer
-        //{
-        //    get
-        //    {
-        //        return _carVisualContainer;
-        //    }
-        //    set { _carVisualContainer = value; }
-        //}
-
         public void ApplyVisual()
         { 
-            SetBodyMaterials(CarVisualContainer.CarName, CarVisualContainer.CurrentMaterialsSetType);
-            SetPartsVisual(PartType.Wheel, CarVisualContainer.CurrentWheelsLevel, CarVisualContainer.CurrentWheelsSetType);
-            SetPartsVisual(PartType.Suspention, CarVisualContainer.CurrentSuspentionLevel);
-            SetPartsVisual(PartType.Bumper, CarVisualContainer.CurrentBumpersLevel);
-            SetPartsVisual(PartType.BodyKit,  CarVisualContainer.CurrentBodyKitsLevel);
+            SetBodyMaterials(CarConfigVisual.CurrentMaterialsSetType);
+            SetPartsVisual(PartType.Wheel, CarConfigVisual.CurrentWheelsLevel, CarConfigVisual.CurrentWheelsSetType);
+            SetPartsVisual(PartType.Suspention, CarConfigVisual.CurrentSuspentionLevel);
+            SetPartsVisual(PartType.Bumper, CarConfigVisual.CurrentBumpersLevel);
+            SetPartsVisual(PartType.BodyKit,  CarConfigVisual.CurrentBodyKitsLevel);
         }
 
-        //public float GetCurrentWheelsRadius() =>
-        //    _currentWheelsPartSet.CurrentProperties.Value;
-
-        //public float GetCurrentSuspentionHeight() =>
-        //    _currentSuspentionPartSet.CurrentProperties.Value;
-
-        public void SetBodyMaterials(CarName carName, MaterialSetType materialsSetType)
+        public void SetBodyMaterials(MaterialSetType materialsSetType)
         {
-            CarVisualContainer.CurrentMaterialsSetType = materialsSetType;
-            //var material = CarVisualContainer.MaterialsContainer.GetMaterialTypeOf(carName, materialsSetType);
-            //_carConfigVisual.CarBody.SetMaterial(material);
-            CarBody.SetMaterial(CarVisualContainer.GetCurrentMaterial());
+            CarConfigVisual.CurrentMaterialsSetType = materialsSetType;
+            CarBody.SetMaterial(CarConfigVisual.GetCurrentMaterial());
         }
-            
-
-        //public void SetPartsSetAvailability(PartType partType, MaterialSetType partsSetType, bool isAvailable)
-        //{
-        //    PartsSet partConfig = _carConfigVisual.GetPartConfig(partType, partsSetType);
-        //    if (partConfig != null)
-        //    { 
-        //        partConfig.isAvailable = isAvailable;
-        //    }
-        //}
-
-        //public bool PartSetIsAvailable(PartType partType, MaterialSetType partsSetType) =>
-        //    _carConfigVisual.GetPartConfig(partType, partsSetType).isAvailable;
 
         [Button]
         public void SetPartsVisual(PartType partType, PartLevel partLevel, WheelsSetType wheelsSetType = WheelsSetType.Default)
@@ -77,19 +42,19 @@ namespace RaceManager.Cars
                 case PartType.Wheel:
                     var set = _wheelsSets.Find(s => s.WheelsSetType == wheelsSetType);
                     set.SetPartsLevel(partLevel);
-                    CarVisualContainer.CurrentWheelsLevel = partLevel;
+                    CarConfigVisual.CurrentWheelsLevel = partLevel;
                     break;
                 case PartType.Suspention:
                     _suspentionSet.SetPartsLevel(partLevel);
-                    CarVisualContainer.CurrentSuspentionLevel = partLevel;
+                    CarConfigVisual.CurrentSuspentionLevel = partLevel;
                     break;
                 case PartType.Bumper:
                     _bumpersSet.SetPartsLevel(partLevel);
-                    CarVisualContainer.CurrentBumpersLevel = partLevel;
+                    CarConfigVisual.CurrentBumpersLevel = partLevel;
                     break;
                 case PartType.BodyKit:
                     _bodyKitsSet.SetPartsLevel(partLevel);
-                    CarVisualContainer.CurrentBodyKitsLevel = partLevel;
+                    CarConfigVisual.CurrentBodyKitsLevel = partLevel;
                     break;
             }
         }

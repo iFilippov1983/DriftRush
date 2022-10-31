@@ -8,13 +8,13 @@ using UnityEngine;
 namespace RaceManager.Cars
 {
     [Serializable]
-    [CreateAssetMenu(menuName = "Cars/CarProfile", fileName = "CarProfile", order = 1)]
-    public class CarProfile : ScriptableObject
+    //[CreateAssetMenu(menuName = "Cars/CarProfile", fileName = "CarProfile", order = 1)]
+    public class CarProfile //: ScriptableObject
     {
         public CarName CarName;
         public Characteristics CarCharacteristics;
         public CarConfig CarConfig;
-        public CarVisualContainer CarVisualContainer;
+        public CarConfigVisual CarConfigVisual;
 
         private GameObject _prefab;
         private Car _car;

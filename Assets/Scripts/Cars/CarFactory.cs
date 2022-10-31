@@ -54,8 +54,8 @@ namespace RaceManager.Cars
             driverProfile = new DriverProfile(_driverType);
 
             carVisual = go.GetComponent<CarVisual>();
-            carVisual.CarVisualContainer = _carProfile.CarVisualContainer;
-            carVisual.CarVisualContainer.SetMaterialsContainer(_materialsContainer);
+            carVisual.CarConfigVisual = _carProfile.CarConfigVisual;
+            carVisual.CarConfigVisual.SetMaterials(_materialsContainer);
             carVisual.ApplyVisual();
             
 
@@ -84,8 +84,8 @@ namespace RaceManager.Cars
             var go = Object.Instantiate(prefab, _spawnPoint.position, _spawnPoint.rotation, _spawnPoint);
 
             carVisual = go.GetComponent<CarVisual>();
-            carVisual.CarVisualContainer = _carProfile.CarVisualContainer;
-            carVisual.CarVisualContainer.SetMaterialsContainer(_materialsContainer);
+            carVisual.CarConfigVisual = _carProfile.CarConfigVisual;
+            carVisual.CarConfigVisual.SetMaterials(_materialsContainer);
             carVisual.ApplyVisual();
 
             var car = go.GetComponent<Car>();
@@ -117,7 +117,7 @@ namespace RaceManager.Cars
             //TODO: make settings generation depending on Player's progress level
             
             CarProfile carProfile = _carsDepot.Cars[Random.Range(0, _carsDepot.Cars.Count)];
-            carProfile.CarVisualContainer.CurrentMaterialsSetType = (MaterialSetType)Random.Range(0, 2);
+            carProfile.CarConfigVisual.CurrentMaterialsSetType = (MaterialSetType)Random.Range(0, 2);
 
 
             return carProfile;

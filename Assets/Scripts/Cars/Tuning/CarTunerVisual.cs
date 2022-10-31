@@ -7,7 +7,7 @@ namespace RaceManager.Cars
     public class CarTunerVisual : IDisposable
     {
         private CarsDepot _playerCarDepot;
-        private CarVisualContainer _visualContainer;
+        private CarConfigVisual _carConfigVisual;
         private SaveManager _saveManager;
 
         public Action OnCurrentCarChanged;
@@ -19,7 +19,7 @@ namespace RaceManager.Cars
         public CarTunerVisual(CarsDepot playerCarDepot, SaveManager saveManager)
         {
             _playerCarDepot = playerCarDepot;
-            _visualContainer = _playerCarDepot.CurrentCarProfile.CarVisualContainer;
+            _carConfigVisual = _playerCarDepot.CurrentCarProfile.CarConfigVisual;
             _saveManager = saveManager;
 
             OnCurrentCarChanged += ChangeVisualContainer;
@@ -31,7 +31,7 @@ namespace RaceManager.Cars
 
         }
 
-        private void ChangeVisualContainer() => _visualContainer = _playerCarDepot.CurrentCarProfile.CarVisualContainer;
+        private void ChangeVisualContainer() => _carConfigVisual = _playerCarDepot.CurrentCarProfile.CarConfigVisual;
 
         public void Dispose()
         {

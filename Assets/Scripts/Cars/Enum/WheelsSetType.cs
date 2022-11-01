@@ -3,7 +3,7 @@
     public enum WheelsSetType
     {
         Default = 0,
-        Military = 1,
-        Sexy = 2,
+        Five = 1,
+        Future = 2,
     }
 }

@@ -34,10 +34,13 @@ namespace RaceManager.UI
 
         private bool _inMainMenu = true;
 
-        public IObservable<float> OnSpeedValueChange;
-        public IObservable<float> OnMobilityValueChange;
-        public IObservable<float> OnDurabilityValueChange;
-        public IObservable<float> OnAccelerationValueChange;
+        public Action OnMenuViewChange;
+        public Action OnCarProfileChange;
+
+        public IObservable<float> OnSpeedValueChange => _tuningPanel.SpeedSlider.OnValueChangedAsObservable();
+        public IObservable<float> OnMobilityValueChange => _tuningPanel.MobilitySlider.OnValueChangedAsObservable();
+        public IObservable<float> OnDurabilityValueChange => _tuningPanel.DurabilitySlider.OnValueChangedAsObservable();
+        public IObservable<float> OnAccelerationValueChange => _tuningPanel.AccelerationSlider.OnValueChangedAsObservable();
 
         [Inject]
         private void Construct(SaveManager saveManager, CarsDepot playerCarDepot, Podium podium)
@@ -46,16 +49,25 @@ namespace RaceManager.UI
             _playerCarDepot = playerCarDepot;
             _podium = podium;
 
-            OnSpeedValueChange = _tuningPanel.SpeedSlider.OnValueChangedAsObservable();
-            OnMobilityValueChange = _tuningPanel.MobilitySlider.OnValueChangedAsObservable();
-            OnDurabilityValueChange = _tuningPanel.DurabilitySlider.OnValueChangedAsObservable();
-            OnAccelerationValueChange = _tuningPanel.AccelerationSlider.OnValueChangedAsObservable();
+            //OnSpeedValueChange = _tuningPanel.SpeedSlider.OnValueChangedAsObservable();
+            //OnMobilityValueChange = _tuningPanel.MobilitySlider.OnValueChangedAsObservable();
+            //OnDurabilityValueChange = _tuningPanel.DurabilitySlider.OnValueChangedAsObservable();
+            //OnAccelerationValueChange = _tuningPanel.AccelerationSlider.OnValueChangedAsObservable();
+
+            OnCarProfileChange += UpdateTuningPanelValues;
         }
 
         private void Start()
         {
             OpenMainMenu(_inMainMenu);
-            UpdateSlidersValues();
+            InitializeUIElements();
+        }
+
+        private void InitializeUIElements()
+        {
+            _currentCarProfile = _playerCarDepot.CurrentCarProfile;
+
+            UpdateTuningPanelValues();
             RegisterButtonsListeners();
         }
 
@@ -72,6 +84,8 @@ namespace RaceManager.UI
             _chestSlotsRect.SetActive(active);
             _chestProgress.SetActive(active);
             _cupsProgress.SetActive(active);
+
+            _podium.ChestObject.SetActive(active);
         }
 
         private void ToggleTuningPanel()
@@ -80,13 +94,17 @@ namespace RaceManager.UI
             OpenMainMenu(_inMainMenu);
             _bottomPanel.SetActive(true);
             _tuningPanel.SetActive(!_inMainMenu);
+            _worldSpaceUI.SetActive(!_inMainMenu);
 
-            _tuningPanel.OpenStatsValuesPanel();
+            OnMenuViewChange?.Invoke();
         }
 
-        private void UpdateSlidersValues()
+        private void UpdateTuningPanelValues()
         {
             _currentCarProfile = _playerCarDepot.CurrentCarProfile;
+
+            InitializeSlidersMinMaxValues();
+
             var c = _currentCarProfile.CarCharacteristics;
             _tuningPanel.UpdateAllSlidersValues
                 (
@@ -104,6 +122,15 @@ namespace RaceManager.UI
                 );
         }
 
+        private void InitializeSlidersMinMaxValues()
+        {
+            var c = _currentCarProfile.CarCharacteristics;
+            _tuningPanel.SetBorderValueToSlider(CarCharacteristicsType.Speed, c.MinSpeedFactor, c.MaxSpeedFactor);
+            _tuningPanel.SetBorderValueToSlider(CarCharacteristicsType.Mobility, c.MinMobilityFactor, c.MaxMobilityFactor);
+            _tuningPanel.SetBorderValueToSlider(CarCharacteristicsType.Durability, c.MinDurabilityFactor, c.MaxDurabilityFactor);
+            _tuningPanel.SetBorderValueToSlider(CarCharacteristicsType.Acceleration, c.MinAccelerationFactor, c.MaxAccelerationFactor);
+        }
+
         private void RegisterButtonsListeners()
         {
             _startButton.onClick.AddListener(StartRace);
@@ -111,6 +138,11 @@ namespace RaceManager.UI
             _bottomPanel.TuneButton.onClick.AddListener(ToggleTuningPanel);
 
             _tuningPanel.RegisterButtonsListeners();
+        }
+
+        private void OnDestroy()
+        {
+            OnCarProfileChange -= UpdateTuningPanelValues;
         }
     }
 }

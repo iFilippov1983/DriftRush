@@ -8,18 +8,29 @@ namespace RaceManager.Cars
     [Serializable]
     public abstract class PartsSet<T> where T : IPart
 	{
-        [SerializeField] protected List<PartsList<T>> _parts;
+        [ShowInInspector, ReadOnly]
         protected PartLevel _currentPartsLevel;
+        protected PartLevel _previousePartsLevel;
         public bool isAvailable;
+        [SerializeField] protected List<PartsList<T>> _parts;
+
 
         public PartLevel CurrentPartsLevel => _currentPartsLevel;
         public List<PartsList<T>> AllParts() => _parts;
 
         public void SetPartsLevel(PartLevel partLevel)
         {
+            if(partLevel == _currentPartsLevel)
+                return;
+
+            _previousePartsLevel = _currentPartsLevel;
             _currentPartsLevel = partLevel;
-            foreach (var pl in _parts)
-                pl.Activate(pl.PartLevel == partLevel);
+
+            var previouse = _parts.Find(l => l.PartLevel == _previousePartsLevel);
+            previouse.Activate(false);
+
+            var current = _parts.Find(l => l.PartLevel == _currentPartsLevel);
+            current.Activate(true);
         }
 
         [Serializable]
@@ -36,7 +47,10 @@ namespace RaceManager.Cars
             public void Activate(bool isActive)
             {
                 foreach (var part in Parts)
-                    part.IsActive = isActive;
+                {
+                    if (part != null)
+                        part.IsActive = isActive;
+                }
             }
         }
     }

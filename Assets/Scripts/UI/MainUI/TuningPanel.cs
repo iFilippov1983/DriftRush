@@ -39,6 +39,16 @@ namespace RaceManager.UI
         public TMP_Text CarNameText => _carNameText;
         public TMP_Text CarStatsProgressText => _carStatsProgressText;
 
+        private void OnEnable()
+        {
+            OpenStatsValuesPanel();
+        }
+
+        private void OnDisable()
+        {
+            DeactivateAllPanels();
+        }
+
         public void RegisterButtonsListeners()
         {
             TuneStatsButton.onClick.AddListener(OpenStatsValuesPanel);
@@ -46,43 +56,46 @@ namespace RaceManager.UI
             TuneCarViewButton.onClick.AddListener(OpenTuneCarViewPanel);
         }
 
-        public void SetBorderValueToSlider(CarCharacteristics characteristics, int minValue, int maxValue)
+        public void SetBorderValueToSlider(CarCharacteristicsType characteristics, int minValue, int maxValue)
         {
+            Debug.Log($"BORDER => {characteristics} - min {minValue} - max {maxValue}");
             switch (characteristics)
             {
-                case CarCharacteristics.Speed:
+                case CarCharacteristicsType.Speed:
                     SpeedSlider.minValue = minValue;
                     SpeedSlider.maxValue = maxValue;
                     break;
-                case CarCharacteristics.Mobility:
+                case CarCharacteristicsType.Mobility:
                     MobilitySlider.minValue = minValue;
                     MobilitySlider.maxValue = maxValue;
                     break;
-                case CarCharacteristics.Durability:
+                case CarCharacteristicsType.Durability:
                     DurabilitySlider.minValue = minValue;
                     DurabilitySlider.maxValue = maxValue;
                     break;
-                case CarCharacteristics.Acceleration:
+                case CarCharacteristicsType.Acceleration:
                     AccelerationSlider.minValue = minValue;
                     AccelerationSlider.maxValue = maxValue;
                     break;
             }
         }
 
-        public void SetValueToSlider(CarCharacteristics characteristics, int value)
+        public void SetValueToSlider(CarCharacteristicsType characteristics, int value)
         {
+            Debug.Log($"VALUE => {characteristics} = {value}");
+
             switch (characteristics)
             {
-                case CarCharacteristics.Speed:
+                case CarCharacteristicsType.Speed:
                     SpeedSlider.value = value;
                     break;
-                case CarCharacteristics.Mobility:
+                case CarCharacteristicsType.Mobility:
                     MobilitySlider.value = value;
                     break;
-                case CarCharacteristics.Durability:
+                case CarCharacteristicsType.Durability:
                     DurabilitySlider.value = value;
                     break;
-                case CarCharacteristics.Acceleration:
+                case CarCharacteristicsType.Acceleration:
                     AccelerationSlider.value = value;
                     break;
             }
@@ -104,23 +117,36 @@ namespace RaceManager.UI
 
         public void OpenStatsValuesPanel()
         {
-            StatsValuesPanel.SetActive(true);
+            bool isActive = StatsValuesPanel.gameObject.activeSelf;
+            isActive = !isActive;
+            StatsValuesPanel.SetActive(isActive);
             TuneWheelsViewPanel.SetActive(false);
             TuneCarViewPanel.SetActive(false);
         }
 
         public void OpenTuneWheelsViewPanel()
         {
+            bool isActive = TuneWheelsViewPanel.gameObject.activeSelf;
+            isActive = !isActive;
             StatsValuesPanel.SetActive(false);
-            TuneWheelsViewPanel.SetActive(true);
+            TuneWheelsViewPanel.SetActive(isActive);
             TuneCarViewPanel.SetActive(false);
         }
 
         public void OpenTuneCarViewPanel()
         {
+            bool isActive = TuneCarViewPanel.gameObject.activeSelf;
+            isActive = !isActive;
             StatsValuesPanel.SetActive(false);
             TuneWheelsViewPanel.SetActive(false);
-            TuneCarViewPanel.SetActive(true);
+            TuneCarViewPanel.SetActive(isActive);
+        }
+
+        public void DeactivateAllPanels()
+        {
+            StatsValuesPanel.SetActive(false);
+            TuneWheelsViewPanel.SetActive(false);
+            TuneCarViewPanel.SetActive(false);
         }
     }
 }

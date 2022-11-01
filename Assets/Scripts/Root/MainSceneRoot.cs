@@ -1,4 +1,6 @@
+using RaceManager.Cameras;
 using RaceManager.Cars;
+using RaceManager.Shed;
 using RaceManager.UI;
 using System;
 using System.Threading.Tasks;
@@ -11,29 +13,32 @@ namespace RaceManager.Root
     public class MainSceneRoot : MonoBehaviour
     {
         private SaveManager _saveManager;
-        private CarTunerVisual _carTunerVisual;
         private MainUI _mainUI;
+        private MenuCamerasHandler _menuCamerasHandler;
+        private Podium _podium;
 
         [Inject]
-        private void Construct(SaveManager saveManager, CarTunerVisual carTunerVisual, MainUI mainUI)
+        private void Construct(SaveManager saveManager, MainUI mainUI, Podium podium)
         {
+            _menuCamerasHandler = Singleton<MenuCamerasHandler>.Instance;
+
             _saveManager = saveManager;
-            _carTunerVisual = carTunerVisual;
             _mainUI = mainUI;
+            _podium = podium;
         }
 
         public void Run()
         {
             RegisterSavebles();
             LoadFromSave();
+            InitCameras();
         }
 
-        private void InitializeTuners()
+        private void InitCameras()
         {
-            _mainUI.OnSpeedValueChange
-                .Subscribe(_carTunerVisual.OnSpeedValueChanged)
-                .AddTo(this);
+            _menuCamerasHandler.LookAt(_podium.CarPlace);
 
+            _mainUI.OnMenuViewChange += _menuCamerasHandler.ToggleCamPriorities;
         }
 
         private void RegisterSavebles()
@@ -57,6 +62,8 @@ namespace RaceManager.Root
             var disposeables = Singleton<Resolver>.Instance.ResolveAll<IDisposable>();
             foreach (var d in disposeables)
                 d.Dispose();
+
+            _mainUI.OnMenuViewChange -= _menuCamerasHandler.ToggleCamPriorities;
         }
 
         private void OnDestroy()

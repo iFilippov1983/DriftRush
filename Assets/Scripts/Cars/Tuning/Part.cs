@@ -60,6 +60,7 @@ namespace RaceManager.Cars
     {
         [SerializeField] private WheelColliderHandler _wheelHandler;
         [SerializeField] private SuspentionProperty _suspentionProperty;
+        [ShowInInspector, ReadOnly]
         private bool _isActive;
 
         public PartType Type => PartType.Suspention;
@@ -86,6 +87,7 @@ namespace RaceManager.Cars
     public class BumperPart : IPart
     {
         [SerializeField] private GameObject _bumperObject;
+        [ShowInInspector, ReadOnly]
         private bool _isActive;
 
         public PartType Type => PartType.Bumper;
@@ -96,7 +98,8 @@ namespace RaceManager.Cars
             set
             {
                 _isActive = value;
-                _bumperObject.gameObject.SetActive(_isActive);
+                if(_bumperObject != null)
+                    _bumperObject.gameObject.SetActive(_isActive);
             }
         }
     }
@@ -105,6 +108,7 @@ namespace RaceManager.Cars
     public class BodyKitPart : IPart
     {
         [SerializeField] private GameObject _bodyKitObject;
+        [ShowInInspector, ReadOnly]
         private bool _isActive;
 
         public PartType Type => PartType.BodyKit;
@@ -115,7 +119,8 @@ namespace RaceManager.Cars
             set
             {
                 _isActive = value;
-                _bodyKitObject.gameObject.SetActive(_isActive);
+                if(_bodyKitObject != null)
+                    _bodyKitObject.gameObject.SetActive(_isActive);
             }
         }
     }

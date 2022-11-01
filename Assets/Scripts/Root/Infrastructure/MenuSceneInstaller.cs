@@ -30,7 +30,6 @@ namespace RaceManager.Infrastructure
             Bind<SaveManager>();
             Bind<PlayerProfile>();
             Bind<CarTuner>();
-            Bind<CarTunerVisual>();
         }
 
         public override void Start()

@@ -8,8 +8,7 @@ using UnityEngine;
 namespace RaceManager.Cars
 {
     [Serializable]
-    //[CreateAssetMenu(menuName = "Cars/CarProfile", fileName = "CarProfile", order = 1)]
-    public class CarProfile //: ScriptableObject
+    public class CarProfile
     {
         public CarName CarName;
         public Characteristics CarCharacteristics;
@@ -17,8 +16,6 @@ namespace RaceManager.Cars
         public CarConfigVisual CarConfigVisual;
 
         private GameObject _prefab;
-        private Car _car;
-        private CarVisual _carVisual;
 
         [JsonIgnore]
         public GameObject Prefab
@@ -28,28 +25,6 @@ namespace RaceManager.Cars
                 if (_prefab == null)
                     _prefab = ResourcesLoader.LoadPrefab(ResourcePath.CarPrefabsFolder + CarName.ToString());
                 return _prefab;
-            }
-        }
-
-        [JsonIgnore]
-        public Car Car
-        {
-            get
-            {
-                if (_car == null)
-                    _car = Prefab.GetComponent<Car>();
-                return _car;
-            }
-        }
-
-        [JsonIgnore]
-        public CarVisual CarVisual
-        {
-            get
-            {
-                if (_carVisual == null)
-                    _carVisual = Prefab.GetComponent<CarVisual>();
-                return _carVisual;
             }
         }
 

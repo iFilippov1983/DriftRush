@@ -40,9 +40,7 @@ namespace RaceManager.Cars
             switch (partType)
             {
                 case PartType.Wheel:
-                    var set = _wheelsSets.Find(s => s.WheelsSetType == wheelsSetType);
-                    set.SetPartsLevel(partLevel);
-                    CarConfigVisual.CurrentWheelsLevel = partLevel;
+                    HandleWheelTune(partLevel, wheelsSetType);
                     break;
                 case PartType.Suspention:
                     _suspentionSet.SetPartsLevel(partLevel);
@@ -59,5 +57,22 @@ namespace RaceManager.Cars
             }
         }
 
+        private void HandleWheelTune(PartLevel partLevel, WheelsSetType wheelsSetType = WheelsSetType.Default)
+        {
+            $"Handling wheel tune: Level {partLevel}; Type: {wheelsSetType}".Log(ConsoleLog.Color.Yellow);
+
+            var set = _wheelsSets.Find(s => s.WheelsSetType == wheelsSetType);
+
+            if (wheelsSetType != CarConfigVisual.CurrentWheelsSetType)
+            {
+                var previousSet = _wheelsSets.Find(s => s.WheelsSetType == CarConfigVisual.CurrentWheelsSetType);
+                previousSet.UnInstall();
+                set.Install();
+            }
+
+            set.SetPartsLevel(partLevel);
+            CarConfigVisual.CurrentWheelsSetType = wheelsSetType;
+            CarConfigVisual.CurrentWheelsLevel = partLevel;
+        }
     }
 }

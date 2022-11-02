@@ -50,23 +50,37 @@ namespace RaceManager.Shed
             _mainUI.OnSpeedValueChange
                 .Subscribe((v) =>
                 {
-                    $"On next({v})".Log(ConsoleLog.Color.Yellow);
+                    $"Speed - On next({v})".Log(ConsoleLog.Color.Yellow);
                     _carTuner.OnCharacteristicValueChanged?.Invoke(CarCharacteristicsType.Speed, v);
                     _saveManager.Save();
                 });
-                //.AddTo(this);
 
             _mainUI.OnMobilityValueChange
-                .Subscribe((v) => { _carTuner.OnCharacteristicValueChanged?.Invoke(CarCharacteristicsType.Mobility, v); })
-                .AddTo(this);
+                .Subscribe((v) =>
+                {
+                    $"Mobility - On next({v})".Log(ConsoleLog.Color.Yellow);
+                    _carTuner.OnCharacteristicValueChanged?.Invoke(CarCharacteristicsType.Mobility, v);
+                    _saveManager.Save();
+                });
+
 
             _mainUI.OnDurabilityValueChange
-                .Subscribe((v) => { _carTuner.OnCharacteristicValueChanged?.Invoke(CarCharacteristicsType.Durability, v); })
-                .AddTo(this);
+                .Subscribe((v) => 
+                {
+                    $"Durability - On next({v})".Log(ConsoleLog.Color.Yellow);
+                    _carTuner.OnCharacteristicValueChanged?.Invoke(CarCharacteristicsType.Durability, v);
+                    _saveManager.Save();
+                });
+
 
             _mainUI.OnAccelerationValueChange
-                .Subscribe((v) => { _carTuner.OnCharacteristicValueChanged?.Invoke(CarCharacteristicsType.Acceleration, v); })
-                .AddTo(this);
+                .Subscribe((v) => 
+                {
+                    $"Acceleration - On next({v})".Log(ConsoleLog.Color.Yellow);
+                    _carTuner.OnCharacteristicValueChanged?.Invoke(CarCharacteristicsType.Acceleration, v);
+                    _saveManager.Save();
+                });
+                
         }
     }
 }

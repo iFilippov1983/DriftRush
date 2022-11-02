@@ -14,7 +14,7 @@ namespace RaceManager.Cars
 
         private CarsDepot _playerCarDepot;
         private CarProfile _carProfile;
-        private CarConfigVisual _carConfigVisual;
+        //private CarConfigVisual _carConfigVisual;
         private CarVisual _carVisual;
 
 
@@ -25,7 +25,7 @@ namespace RaceManager.Cars
         {
             _playerCarDepot = playerCarDepot;
             _carProfile = _playerCarDepot.CurrentCarProfile;
-            _carConfigVisual = _carProfile.CarConfigVisual;
+            //_carConfigVisual = _carProfile.CarConfigVisual;
 
 
 
@@ -33,7 +33,10 @@ namespace RaceManager.Cars
             OnCharacteristicValueChanged += ChangeVisuals;
         }
 
-        public void SetCarVisualToTune(CarVisual carVisual) => _carVisual = carVisual;
+        public void SetCarVisualToTune(CarVisual carVisual)
+        {
+            _carVisual = carVisual;
+        }
 
         private void ChangeVisuals(CarCharacteristicsType characteristics, float value)
         {
@@ -43,8 +46,10 @@ namespace RaceManager.Cars
                     TuneSpeed(value);
                     break;
                 case CarCharacteristicsType.Mobility:
+                    TuneMobility(value);
                     break;
                 case CarCharacteristicsType.Durability:
+                    TuneDurability(value);
                     break;
                 case CarCharacteristicsType.Acceleration:
                     break;
@@ -57,8 +62,52 @@ namespace RaceManager.Cars
             _carProfile.CarCharacteristics.CurrentSpeedFactor = newValue;
             PartLevel level = GetPartLevel(CarCharacteristicsType.Speed);
 
-            _carConfigVisual.CurrentWheelsLevel = level;
-            _carVisual.SetPartsVisual(PartType.Wheel, _carConfigVisual.CurrentWheelsLevel, _carConfigVisual.CurrentWheelsSetType);
+            var carConfigVisual = _carProfile.CarConfigVisual;
+            carConfigVisual.CurrentWheelsLevel = level;
+            _carVisual.SetPartsVisual(PartType.Wheel, carConfigVisual.CurrentWheelsLevel, carConfigVisual.CurrentWheelsSetType);
+            //_carConfigVisual.CurrentWheelsLevel = level;
+            //_carVisual.SetPartsVisual(PartType.Wheel, _carConfigVisual.CurrentWheelsLevel, _carConfigVisual.CurrentWheelsSetType);
+
+            _playerCarDepot.UpdateProfile(_carProfile);
+        }
+
+        private void TuneMobility(float value)
+        { 
+            int newValue = Mathf.RoundToInt(value);
+            _carProfile.CarCharacteristics.CurrentMobilityFactor = newValue;
+            PartLevel level = GetPartLevel(CarCharacteristicsType.Mobility);
+
+            var carConfigVisual = _carProfile.CarConfigVisual;
+            carConfigVisual.CurrentSuspentionLevel = level;
+            _carVisual.SetPartsVisual(PartType.Suspention, carConfigVisual.CurrentSuspentionLevel);
+
+            _playerCarDepot.UpdateProfile(_carProfile);
+        }
+
+        private void TuneDurability(float value)
+        {
+            int newValue = Mathf.RoundToInt(value);
+            _carProfile.CarCharacteristics.CurrentDurabilityFactor = newValue;
+            PartLevel level = GetPartLevel(CarCharacteristicsType.Durability);
+
+            var carConfigVisual = _carProfile.CarConfigVisual;
+            carConfigVisual.CurrentSuspentionLevel = level;
+            _carVisual.SetPartsVisual(PartType.Bumper, carConfigVisual.CurrentBumpersLevel);
+
+            _playerCarDepot.UpdateProfile(_carProfile);
+        }
+
+        private void TuneAcceleration(float value)
+        {
+            int newValue = Mathf.RoundToInt(value);
+            _carProfile.CarCharacteristics.CurrentMobilityFactor = newValue;
+            PartLevel level = GetPartLevel(CarCharacteristicsType.Mobility);
+
+            var carConfigVisual = _carProfile.CarConfigVisual;
+            carConfigVisual.CurrentSuspentionLevel = level;
+            _carVisual.SetPartsVisual(PartType.Suspention, carConfigVisual.CurrentSuspentionLevel);
+
+            _playerCarDepot.UpdateProfile(_carProfile);
         }
 
         private PartLevel GetPartLevel(CarCharacteristicsType characteristics)
@@ -91,7 +140,7 @@ namespace RaceManager.Cars
         private void ChangeCar()
         {
             _carProfile = _playerCarDepot.CurrentCarProfile;
-            _carConfigVisual = _carProfile.CarConfigVisual;
+            //_carConfigVisual = _carProfile.CarConfigVisual;
         }
 
         public void Dispose()

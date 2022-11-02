@@ -48,7 +48,7 @@ namespace RaceManager.Cars
 
             [Title("Durability")]
             [ReadOnly]
-            public int MinDurabilityFactor = 1;
+            public int MinDurabilityFactor = 1;  
             public int MaxDurabilityFactor;
             public int CurrentDurabilityFactor;
 

@@ -2,6 +2,7 @@
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
+using UniRx;
 using UnityEngine;
 
 #pragma warning disable 649
@@ -13,9 +14,17 @@ namespace RaceManager.Cars
     {
         public DriverType DriverType;
         public CarName CurrentCarName;
-        public List<CarProfile> Cars;
+        public List<CarProfile> CarProfiles;
 
-        public CarProfile CurrentCarProfile => Cars.Find(c => c.CarName == CurrentCarName);
+        public CarProfile CurrentCarProfile => CarProfiles.Find(c => c.CarName == CurrentCarName);
+
+        public void UpdateProfile(CarProfile newCP)
+        {
+            CarProfile currentCP = CarProfiles.Find(c => c.CarName == newCP.CarName);
+            CarProfiles.Remove(currentCP);
+            CarProfiles.Add(newCP);
+        }
+
         public Type DataType() => typeof(SaveData);
 
         public void Load(object saveObject)
@@ -23,7 +32,7 @@ namespace RaceManager.Cars
             SaveData data = (SaveData)saveObject;
             DriverType = data.driverType;
             CurrentCarName = data.currentCarName;
-            Cars = data.cars;
+            CarProfiles = data.carProfiles;
         }
 
         public object Save()
@@ -31,16 +40,16 @@ namespace RaceManager.Cars
             SaveData saveData = new SaveData();
             saveData.driverType = DriverType;
             saveData.currentCarName = CurrentCarName;
-            saveData.cars = Cars;
+            saveData.carProfiles = CarProfiles;
 
             return saveData;
         }
 
         public class SaveData
         {
-            public DriverType driverType;
-            public CarName currentCarName;
-            public List<CarProfile> cars;
+            public DriverType driverType = DriverType.Player;
+            public CarName currentCarName = CarName.ToyotaSupra;
+            public List<CarProfile> carProfiles = new List<CarProfile>();
         }
     }
 }

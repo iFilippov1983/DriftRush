@@ -6,8 +6,7 @@ using UnityEngine;
 namespace RaceManager.Cars
 {
 	[Serializable]
-	//[CreateAssetMenu(menuName = "Cars/CarConfig", fileName = "CarNameConfig_Default", order = 1)]
-    public class CarConfig //: SerializedScriptableObject
+    public class CarConfig 
 	{
 		public CarName CarName;
 

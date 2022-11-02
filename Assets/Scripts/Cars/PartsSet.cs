@@ -20,8 +20,8 @@ namespace RaceManager.Cars
 
         public void SetPartsLevel(PartLevel partLevel)
         {
-            if(partLevel == _currentPartsLevel)
-                return;
+            //if(partLevel == _currentPartsLevel)
+            //    return;
 
             _previousePartsLevel = _currentPartsLevel;
             _currentPartsLevel = partLevel;

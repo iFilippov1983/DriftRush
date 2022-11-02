@@ -37,7 +37,7 @@ namespace RaceManager.UI
         public Action OnMenuViewChange;
         public Action OnCarProfileChange;
 
-        public IObservable<float> OnSpeedValueChange => _tuningPanel.SpeedSlider.OnValueChangedAsObservable();
+        public IObservable<float> OnSpeedValueChange => _tuningPanel.SpeedSlider.onValueChanged.AsObservable();
         public IObservable<float> OnMobilityValueChange => _tuningPanel.MobilitySlider.OnValueChangedAsObservable();
         public IObservable<float> OnDurabilityValueChange => _tuningPanel.DurabilitySlider.OnValueChangedAsObservable();
         public IObservable<float> OnAccelerationValueChange => _tuningPanel.AccelerationSlider.OnValueChangedAsObservable();
@@ -48,11 +48,6 @@ namespace RaceManager.UI
             _saveManager = saveManager;
             _playerCarDepot = playerCarDepot;
             _podium = podium;
-
-            //OnSpeedValueChange = _tuningPanel.SpeedSlider.OnValueChangedAsObservable();
-            //OnMobilityValueChange = _tuningPanel.MobilitySlider.OnValueChangedAsObservable();
-            //OnDurabilityValueChange = _tuningPanel.DurabilitySlider.OnValueChangedAsObservable();
-            //OnAccelerationValueChange = _tuningPanel.AccelerationSlider.OnValueChangedAsObservable();
 
             OnCarProfileChange += UpdateTuningPanelValues;
         }

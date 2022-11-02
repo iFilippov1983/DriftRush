@@ -7,8 +7,6 @@ namespace RaceManager.Cars
 {
     public class CarVisual : MonoBehaviour
     {
-        public CarConfigVisual CarConfigVisual;
-
         [SerializeField] private CarName _carName;
         [SerializeField] private CarBody _carBody;
         [SerializeField] private List<WheelsSet> _wheelsSets = new List<WheelsSet>();
@@ -16,22 +14,35 @@ namespace RaceManager.Cars
         [SerializeField] private BumperSet _bumpersSet = new BumperSet();
         [SerializeField] private BodyKitSet _bodyKitsSet = new BodyKitSet();
 
+        private CarConfigVisual _carConfigVisual;
+
         public CarBody CarBody => _carBody;
         public CarName CarName => _carName;
 
-        public void ApplyVisual()
+        public void Initialize(CarConfigVisual carConfigVisual)
         { 
-            SetBodyMaterials(CarConfigVisual.CurrentMaterialsSetType);
-            SetPartsVisual(PartType.Wheel, CarConfigVisual.CurrentWheelsLevel, CarConfigVisual.CurrentWheelsSetType);
-            SetPartsVisual(PartType.Suspention, CarConfigVisual.CurrentSuspentionLevel);
-            SetPartsVisual(PartType.Bumper, CarConfigVisual.CurrentBumpersLevel);
-            SetPartsVisual(PartType.BodyKit,  CarConfigVisual.CurrentBodyKitsLevel);
+            _carConfigVisual = carConfigVisual;
+            ApplyVisual();
+        }
+
+        public void SetMaterialsContainer(MaterialsContainer materialsContainer) 
+            => _carConfigVisual.SetMaterials(materialsContainer);
+
+        private void ApplyVisual()
+        {
+            Debug.Log($"Initial Apply => Mat type: {_carConfigVisual.CurrentMaterialsSetType}; Wheels level: {_carConfigVisual.CurrentWheelsLevel};");
+
+            SetBodyMaterials(_carConfigVisual.CurrentMaterialsSetType);
+            SetPartsVisual(PartType.Wheel, _carConfigVisual.CurrentWheelsLevel, _carConfigVisual.CurrentWheelsSetType);
+            SetPartsVisual(PartType.Suspention, _carConfigVisual.CurrentSuspentionLevel);
+            SetPartsVisual(PartType.Bumper, _carConfigVisual.CurrentBumpersLevel);
+            SetPartsVisual(PartType.BodyKit,  _carConfigVisual.CurrentBodyKitsLevel);
         }
 
         public void SetBodyMaterials(MaterialSetType materialsSetType)
         {
-            CarConfigVisual.CurrentMaterialsSetType = materialsSetType;
-            CarBody.SetMaterial(CarConfigVisual.GetCurrentMaterial());
+            _carConfigVisual.CurrentMaterialsSetType = materialsSetType;
+            CarBody.SetMaterial(_carConfigVisual.GetCurrentMaterial());
         }
 
         [Button]
@@ -43,36 +54,57 @@ namespace RaceManager.Cars
                     HandleWheelTune(partLevel, wheelsSetType);
                     break;
                 case PartType.Suspention:
-                    _suspentionSet.SetPartsLevel(partLevel);
-                    CarConfigVisual.CurrentSuspentionLevel = partLevel;
+                    HandleSuspentionTune(partLevel);
                     break;
                 case PartType.Bumper:
-                    _bumpersSet.SetPartsLevel(partLevel);
-                    CarConfigVisual.CurrentBumpersLevel = partLevel;
+                    HandleBumpersTune(partLevel);
                     break;
                 case PartType.BodyKit:
-                    _bodyKitsSet.SetPartsLevel(partLevel);
-                    CarConfigVisual.CurrentBodyKitsLevel = partLevel;
+                    HandleBodyKitsTune(partLevel);
                     break;
             }
         }
 
         private void HandleWheelTune(PartLevel partLevel, WheelsSetType wheelsSetType = WheelsSetType.Default)
         {
-            $"Handling wheel tune: Level {partLevel}; Type: {wheelsSetType}".Log(ConsoleLog.Color.Yellow);
+            $"Handling WHEEL tune: Level {partLevel}; Type: {wheelsSetType}".Log(ConsoleLog.Color.Yellow);
 
             var set = _wheelsSets.Find(s => s.WheelsSetType == wheelsSetType);
 
-            if (wheelsSetType != CarConfigVisual.CurrentWheelsSetType)
+            if (wheelsSetType != _carConfigVisual.CurrentWheelsSetType)
             {
-                var previousSet = _wheelsSets.Find(s => s.WheelsSetType == CarConfigVisual.CurrentWheelsSetType);
+                var previousSet = _wheelsSets.Find(s => s.WheelsSetType == _carConfigVisual.CurrentWheelsSetType);
                 previousSet.UnInstall();
                 set.Install();
             }
 
             set.SetPartsLevel(partLevel);
-            CarConfigVisual.CurrentWheelsSetType = wheelsSetType;
-            CarConfigVisual.CurrentWheelsLevel = partLevel;
+            _carConfigVisual.CurrentWheelsSetType = wheelsSetType;
+            _carConfigVisual.CurrentWheelsLevel = partLevel;
+        }
+
+        private void HandleSuspentionTune(PartLevel partLevel)
+        {
+            $"Handling SUSPENTION tune: Level {partLevel};".Log(ConsoleLog.Color.Yellow);
+
+            _suspentionSet.SetPartsLevel(partLevel);
+            _carConfigVisual.CurrentSuspentionLevel = partLevel;
+        }
+
+        private void HandleBumpersTune(PartLevel partLevel)
+        {
+            $"Handling BUMPERS tune: Level {partLevel};".Log(ConsoleLog.Color.Yellow);
+
+            _bumpersSet.SetPartsLevel(partLevel);
+            _carConfigVisual.CurrentBumpersLevel = partLevel;
+        }
+
+        private void HandleBodyKitsTune(PartLevel partLevel)
+        {
+            $"Handling BODY KITS tune: Level {partLevel};".Log(ConsoleLog.Color.Yellow);
+
+            _bodyKitsSet.SetPartsLevel(partLevel);
+            _carConfigVisual.CurrentBodyKitsLevel = partLevel;
         }
     }
 }

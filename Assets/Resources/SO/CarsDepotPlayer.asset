@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DriverType: 0
   CurrentCarName: 0
-  Cars:
+  CarProfiles:
   - CarName: 0
     CarCharacteristics:
       Rarity: 0
@@ -24,7 +24,7 @@ MonoBehaviour:
       CurrentSpeedFactor: 60
       MinMobilityFactor: 1
       MaxMobilityFactor: 100
-      CurrentMobilityFactor: 50
+      CurrentMobilityFactor: 1
       MinDurabilityFactor: 1
       MaxDurabilityFactor: 80
       CurrentDurabilityFactor: 40
@@ -116,9 +116,9 @@ MonoBehaviour:
       DriverType: 0
       CarName: 0
       CurrentMaterialsSetType: 0
-      _availableMaterialSets: 0000000001000000
+      _availableMaterialSets: 00000000
       CurrentWheelsSetType: 0
-      CurrentWheelsLevel: 2
-      CurrentSuspentionLevel: 1
-      CurrentBumpersLevel: 1
-      CurrentBodyKitsLevel: 1
+      CurrentWheelsLevel: 1
+      CurrentSuspentionLevel: 0
+      CurrentBumpersLevel: 0
+      CurrentBodyKitsLevel: 0

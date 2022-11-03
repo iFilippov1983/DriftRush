@@ -38,9 +38,12 @@ namespace RaceManager.UI
         public Action OnCarProfileChange;
 
         public IObservable<float> OnSpeedValueChange => _tuningPanel.SpeedSlider.onValueChanged.AsObservable();
-        public IObservable<float> OnMobilityValueChange => _tuningPanel.MobilitySlider.OnValueChangedAsObservable();
-        public IObservable<float> OnDurabilityValueChange => _tuningPanel.DurabilitySlider.OnValueChangedAsObservable();
-        public IObservable<float> OnAccelerationValueChange => _tuningPanel.AccelerationSlider.OnValueChangedAsObservable();
+        public IObservable<float> OnMobilityValueChange => _tuningPanel.MobilitySlider.onValueChanged.AsObservable();
+        public IObservable<float> OnDurabilityValueChange => _tuningPanel.DurabilitySlider.onValueChanged.AsObservable();
+        public IObservable<float> OnAccelerationValueChange => _tuningPanel.AccelerationSlider.onValueChanged.AsObservable();
+
+        public IObserver<TuneData> OnCharValueLimit => Observer.Create((TuneData td) => SetTuningPanelValues(td));
+        public Action<int> OnTuneValuesChange => (int v) => _tuningPanel.UpdateCurrentInfoValues(v);
 
         [Inject]
         private void Construct(SaveManager saveManager, CarsDepot playerCarDepot, Podium podium)
@@ -106,24 +109,32 @@ namespace RaceManager.UI
                 c.CurrentSpeedFactor, 
                 c.CurrentMobilityFactor, 
                 c.CurrentDurabilityFactor, 
-                c.CurrentAccelerationFactor
+                c.CurrentAccelerationFactor,
+                c.AvailableFactorsToUse
                 );
 
             _tuningPanel.UpdateCarStatsProgress
                 (
                 _currentCarProfile.CarName.ToString(), 
                 _currentCarProfile.CarCharacteristics.CurrentFactorsProgress, 
-                _currentCarProfile.CarCharacteristics.FactorsTotal
+                _currentCarProfile.CarCharacteristics.FactorsMaxTotal
                 );
         }
+
+        private void SetTuningPanelValues(TuneData td)
+        {
+            _tuningPanel.SetValueToSlider(td.cType, td.value);
+            _tuningPanel.UpdateCurrentInfoValues(td.available);
+        }
+            
 
         private void InitializeSlidersMinMaxValues()
         {
             var c = _currentCarProfile.CarCharacteristics;
-            _tuningPanel.SetBorderValueToSlider(CarCharacteristicsType.Speed, c.MinSpeedFactor, c.MaxSpeedFactor);
-            _tuningPanel.SetBorderValueToSlider(CarCharacteristicsType.Mobility, c.MinMobilityFactor, c.MaxMobilityFactor);
-            _tuningPanel.SetBorderValueToSlider(CarCharacteristicsType.Durability, c.MinDurabilityFactor, c.MaxDurabilityFactor);
-            _tuningPanel.SetBorderValueToSlider(CarCharacteristicsType.Acceleration, c.MinAccelerationFactor, c.MaxAccelerationFactor);
+            _tuningPanel.SetBorderValues(CarCharacteristicsType.Speed, c.MinSpeedFactor, c.MaxSpeedFactor);
+            _tuningPanel.SetBorderValues(CarCharacteristicsType.Mobility, c.MinMobilityFactor, c.MaxMobilityFactor);
+            _tuningPanel.SetBorderValues(CarCharacteristicsType.Durability, c.MinDurabilityFactor, c.MaxDurabilityFactor);
+            _tuningPanel.SetBorderValues(CarCharacteristicsType.Acceleration, c.MinAccelerationFactor, c.MaxAccelerationFactor);
         }
 
         private void RegisterButtonsListeners()

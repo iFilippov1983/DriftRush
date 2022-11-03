@@ -16,7 +16,7 @@ namespace RaceManager.Cars
         public CarName CarName;
 
         [FoldoutGroup("Materials Settings")]
-        public MaterialSetType CurrentMaterialsSetType;
+        public MaterialSetType CurrentMaterialsSetType = MaterialSetType.Default;
 
         [SerializeField]
         [JsonProperty]
@@ -24,19 +24,19 @@ namespace RaceManager.Cars
         private List<MaterialSetType> _availableMaterialSets = new List<MaterialSetType>();
 
         [FoldoutGroup("Wheels Settings")]
-        public WheelsSetType CurrentWheelsSetType;
+        public WheelsSetType CurrentWheelsSetType = WheelsSetType.Default;
 
         [FoldoutGroup("Wheels Settings")]
-        public PartLevel CurrentWheelsLevel;
+        public PartLevel CurrentWheelsLevel = PartLevel.First;
 
         [FoldoutGroup("Suspention Settings")]
-        public PartLevel CurrentSuspentionLevel;
+        public PartLevel CurrentSuspentionLevel = PartLevel.First;
 
         [FoldoutGroup("Bumpers Settings")]
-        public PartLevel CurrentBumpersLevel;
+        public PartLevel CurrentBumpersLevel = PartLevel.First;
 
         [FoldoutGroup("Body Kits Settings")]
-        public PartLevel CurrentBodyKitsLevel;
+        public PartLevel CurrentBodyKitsLevel = PartLevel.First;
 
         public Material GetCurrentMaterial() => _materials[CurrentMaterialsSetType];
 

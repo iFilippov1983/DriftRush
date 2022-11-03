@@ -1965,7 +1965,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6818908627988101141
 Transform:
   m_ObjectHideFlags: 0
@@ -2585,6 +2585,7 @@ Transform:
   - {fileID: 667477956608820989}
   - {fileID: 4289725020166052502}
   - {fileID: 8206290092437686017}
+  - {fileID: 4328977363249560141}
   m_Father: {fileID: 7878384805958699896}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3035,7 +3036,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1291625946763377405
 Transform:
   m_ObjectHideFlags: 0
@@ -8679,16 +8680,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0425594d3fe24854db198dda3b731432, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CarConfigVisual:
-    DriverType: 0
-    CarName: 0
-    CurrentMaterialsSetType: 0
-    _availableMaterialSets: 
-    CurrentWheelsSetType: 0
-    CurrentWheelsLevel: 1
-    CurrentSuspentionLevel: 1
-    CurrentBumpersLevel: 1
-    CurrentBodyKitsLevel: 1
   _carName: 0
   _carBody: {fileID: 8193191297794247595}
   _wheelsSets:
@@ -8891,16 +8882,16 @@ MonoBehaviour:
       Parts:
       - _wheelHandler: {fileID: 7840174887550465978}
         _suspentionProperty:
-          SuspentionHeight: 0.2
+          SuspentionHeight: 0.22
       - _wheelHandler: {fileID: 7839971029740495578}
         _suspentionProperty:
-          SuspentionHeight: 0.2
+          SuspentionHeight: 0.22
       - _wheelHandler: {fileID: 7836996256954062096}
         _suspentionProperty:
-          SuspentionHeight: 0.2
+          SuspentionHeight: 0.22
       - _wheelHandler: {fileID: 7839753183079772920}
         _suspentionProperty:
-          SuspentionHeight: 0.2
+          SuspentionHeight: 0.22
     - PartLevel: 1
       Parts:
       - _wheelHandler: {fileID: 7840174887550465978}
@@ -8948,25 +8939,25 @@ MonoBehaviour:
     _parts:
     - PartLevel: 0
       Parts:
-      - _bumperObject: {fileID: 0}
+      - _bumperObject: {fileID: 9021762606955541352}
     - PartLevel: 1
       Parts:
       - _bumperObject: {fileID: 6613906910778822759}
       - _bumperObject: {fileID: 4201243545731631360}
     - PartLevel: 2
       Parts:
-      - _bumperObject: {fileID: 0}
-      - _bumperObject: {fileID: 0}
+      - _bumperObject: {fileID: 6613906910778822759}
+      - _bumperObject: {fileID: 4201243545731631360}
     - PartLevel: 3
       Parts:
-      - _bumperObject: {fileID: 0}
-      - _bumperObject: {fileID: 0}
+      - _bumperObject: {fileID: 6613906910778822759}
+      - _bumperObject: {fileID: 4201243545731631360}
   _bodyKitsSet:
     isAvailable: 1
     _parts:
     - PartLevel: 0
       Parts:
-      - _bodyKitObject: {fileID: 0}
+      - _bodyKitObject: {fileID: 9021762606955541352}
     - PartLevel: 1
       Parts:
       - _bodyKitObject: {fileID: 9153657397013961197}
@@ -10098,6 +10089,36 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &9021762606955541352
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4328977363249560141}
+  m_Layer: 0
+  m_Name: empty
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4328977363249560141
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9021762606955541352}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5131199767539800333}
+  m_RootOrder: 38
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9153657397013961197
 GameObject:
   m_ObjectHideFlags: 0
@@ -10115,7 +10136,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7853455770118910507
 Transform:
   m_ObjectHideFlags: 0

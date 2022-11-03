@@ -100,14 +100,15 @@ namespace RaceManager.Root
 
             File.WriteAllText(path, json);
 
-            $"Data SAVED: {path}".Log(ConsoleLog.Color.Green);
+            //$"Data SAVED: {path}".Log(ConsoleLog.Color.Green);
         }
 
         public void Load(bool ignoreMissing = true)
         {
             string path = Path.Combine(Application.persistentDataPath, FileName);
             bool fileExists = File.Exists(path);
-            $"Load from: {path}; File exists: {fileExists}".Log(ConsoleLog.Color.Green);
+
+            $"Load from => {path}; File exists => {fileExists}".Log(ConsoleLog.Color.Green);
 
             if (!fileExists)
             {

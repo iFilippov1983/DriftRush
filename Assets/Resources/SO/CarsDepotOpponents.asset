@@ -26,28 +26,28 @@ MonoBehaviour:
       CurrentSpeedFactor: 60
       MinMobilityFactor: 1
       MaxMobilityFactor: 100
-      CurrentMobilityFactor: 50
+      CurrentMobilityFactor: 39
       MinDurabilityFactor: 1
       MaxDurabilityFactor: 80
-      CurrentDurabilityFactor: 40
+      CurrentDurabilityFactor: 63
       MinAccelerationFactor: 1
       MaxAccelerationFactor: 100
-      CurrentAccelerationFactor: 50
+      CurrentAccelerationFactor: 38
     CarConfig:
       CarName: 0
       SpeedType: 1
-      DriveType: 0
-      MaxSpeed: 200
-      CruiseSpeed: 20
-      CruiseSpeedPercentMax: 0.8
-      CruiseSpeedPercentMin: 0.7
-      RPMToNextGearPercet: 0.9
-      MaxSteerAngle: 42
-      HelpSteerPower: 0.2
-      MaxAngularVelocityHelpAngle: 45
-      SteerAngleChangeSpeed: 100
-      Durability: 50
-      MaxMotorTorque: 800
+      DriveType: 2
+      MaxSpeed: 160
+      CruiseSpeed: 40
+      CruiseSpeedPercentMax: 0.7
+      CruiseSpeedPercentMin: 0.6
+      RPMToNextGearPercet: 0.5
+      MaxSteerAngle: 70
+      HelpSteerPower: 0.8
+      MaxAngularVelocityHelpAngle: 90
+      SteerAngleChangeSpeed: 240
+      Durability: 20
+      MaxMotorTorque: 600
       ProbabilityBackfire: 0.1
       MaxBrakeTorque: 2000
       MaxForwardSlipToBlockChangeGear: 0.25
@@ -57,8 +57,8 @@ MonoBehaviour:
       MaxSteerAngleMultiplier: 1
       MaxSpeedForMinAngleMultiplier: 250
       MinSpeedForSteerHelp: 1
-      OppositeAngularVelocityHelpPower: 0.05
-      PositiveAngularVelocityHelpPower: 0
+      OppositeAngularVelocityHelpPower: 0.2
+      PositiveAngularVelocityHelpPower: -0.1
       AngularVelocityInMaxAngle: 0.5
       AngularVelocityInMinAngle: 2
       AutomaticGearBox: 1
@@ -122,5 +122,5 @@ MonoBehaviour:
       CurrentWheelsSetType: 0
       CurrentWheelsLevel: 1
       CurrentSuspentionLevel: 1
-      CurrentBumpersLevel: 1
+      CurrentBumpersLevel: 3
       CurrentBodyKitsLevel: 1

@@ -12,6 +12,7 @@ namespace RaceManager.Waypoints
     {
         public int Number;
         public bool isFinishLine = false;
+        public bool isCheckpoint = false;
         [ReadOnly]
         public Waypoint NextWaypoint;
 
@@ -24,16 +25,18 @@ namespace RaceManager.Waypoints
 
         private void OnTriggerEnter(Collider other)
         {
-            Car car;
-            car = other.GetComponentInParent<Car>();
+            Car car = other.GetComponentInParent<Car>();
 
             if (car == null)
                 return;
 
-            SetRespawnPosition(other, car);
+            SetRespawnPosition(car);
+
+            if (isCheckpoint)
+                SetCheckpointPoisition(car);
         }
 
-        private void SetRespawnPosition(Collider other, Car car)
+        private void SetRespawnPosition(Car car)
         {
             string id = car.ID;
             //Made in purpose to avoid multiple triggering
@@ -52,6 +55,11 @@ namespace RaceManager.Waypoints
                     return;
                 }
             }
+        }
+
+        private void SetCheckpointPoisition(Car car)
+        {
+            car.CarSelfRighting.LastCheckpoint = transform;
         }
 
         private void OnDestroy()

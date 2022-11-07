@@ -15,7 +15,7 @@ using RaceManager.Infrastructure;
 
 namespace RaceManager.Race
 {
-    public class RaceInitializer : MonoBehaviour
+    public class RaceInitializer : MonoBehaviour, Root.IInitializable
     {
         [SerializeField] private MaterialsContainer _materialsContainer;
         [SerializeField] private CarsDepot _opponentsCarsDepot;
@@ -25,6 +25,7 @@ namespace RaceManager.Race
         private RaceUI _raceUI;
         private RaceCamerasHandler _camerasHandler; 
         private InRacePositionsHandler _positionsHandler;
+        private RaceLevelInitializer _raceLevelInitializer;
         private RaceLevelView _level;
 
         private WaypointTrack _waypointTrackMain;
@@ -47,20 +48,36 @@ namespace RaceManager.Race
             _playerProfile = playerProfile;
             _positionsHandler = positionsHandler;
             _raceUI = raceUI;
-            _level = levelInitializer.RaceLevel;
+            _raceLevelInitializer = levelInitializer;
+            //_level = levelInitializer.RaceLevel;
+
+            //_startPoints = _level.StartPoints;
+            //_waypointTrackMain = _level.WaypointTrackMain;
+            //_waypointTrackEven = _level.WaypointTrackEven;
+            //_waypointTrackOdd = _level.WaypointTrackOdd;
+        }
+
+        public void Initialize()
+        {
+            _level = _raceLevelInitializer.RaceLevel;
 
             _startPoints = _level.StartPoints;
             _waypointTrackMain = _level.WaypointTrackMain;
             _waypointTrackEven = _level.WaypointTrackEven;
             _waypointTrackOdd = _level.WaypointTrackOdd;
-        }
 
-        private void Start()
-        {
             InitCameras();
             InitDrivers();
 
             _positionsHandler.StartHandling(_driversList, _waypointsTrackersList);
+        }
+
+        private void Start()
+        {
+            //InitCameras();
+            //InitDrivers();
+
+            //_positionsHandler.StartHandling(_driversList, _waypointsTrackersList);
         }
 
         private void Update()
@@ -102,7 +119,16 @@ namespace RaceManager.Race
 
                     driver.Subscribe(_raceUI);
 
-                    _raceUI.Init(driver.Profile, () => driver.CarObject.GetComponent<CarSelfRighting>().RightCar());
+                    var selfRighting = driver.CarObject.GetComponent<CarSelfRighting>();
+                    var tracker = driver.CarObject.GetComponent<WaypointsTracker>();
+
+                    void GetToCheckpoint() 
+                    {
+                        selfRighting.GetToCheckpoint();
+                        tracker.ResetTargetToCashedValues();
+                    }
+
+                    _raceUI.Init(driver.Profile, () => selfRighting.RightCar(), GetToCheckpoint);
                 }
                 else
                 {

@@ -10,13 +10,14 @@ namespace RaceManager.Root
     {
         public PositionInRace lastInRacePosition;
         public Currency currency;
-
+        public string nextLevelPrefabToLoad;
         
 
         public class SaveData
         {
             public PositionInRace LastInRacePosition;
             public Currency Currency;
+            public string NextLevelPrefabToLoad;
         }
 
         public Type DataType() => typeof(SaveData);
@@ -26,6 +27,7 @@ namespace RaceManager.Root
             SaveData saveData = (SaveData)data;
             lastInRacePosition = saveData.LastInRacePosition;
             currency = saveData.Currency;
+            nextLevelPrefabToLoad = saveData.NextLevelPrefabToLoad;
         }
 
         public object Save()
@@ -33,7 +35,8 @@ namespace RaceManager.Root
             return new SaveData
             {
                 LastInRacePosition = lastInRacePosition,
-                Currency = currency
+                Currency = currency,
+                NextLevelPrefabToLoad = nextLevelPrefabToLoad
             };
         }
 

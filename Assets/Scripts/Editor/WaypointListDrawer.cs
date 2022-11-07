@@ -143,6 +143,18 @@ namespace RaceManager.Waypoints
             }
             y += lineHeight + spacing;
 
+            var addDebudWaypointComponent = new Rect(x, y, inspectorWidth, lineHeight);
+            if (GUI.Button(addDebudWaypointComponent, "Add DebugWaypoint component to all"))
+            {
+                var track = property.FindPropertyRelative("track").objectReferenceValue as WaypointTrack;
+                foreach (Transform child in track.waypointList.items)
+                {
+                    if(child.GetComponents<DebugWaypoint>() == null)
+                        child.gameObject.AddComponent<DebugWaypoint>();
+                }
+            }
+            y += lineHeight + spacing;
+
             // Set indent back to what it was
             EditorGUI.indentLevel = indent;
             EditorGUI.EndProperty();

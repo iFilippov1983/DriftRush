@@ -1,5 +1,6 @@
 ﻿using RaceManager.Cars;
 using RaceManager.Race;
+using RaceManager.Tools;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UniRx;
@@ -17,6 +18,7 @@ namespace RaceManager.Root
         public SaveManager saveManager;
         [ReadOnly]
         public PlayerProfile playerProfile;
+        public LevelName nextLevelToPlay;
 
         [Inject]
         private void Construct(SaveManager saveManager, PlayerProfile playerProfile)
@@ -37,11 +39,25 @@ namespace RaceManager.Root
             var drivers = FindObjectsOfType<Driver>();
             var list = new List<Driver>(drivers);
             var playerDriver = list.Find(d => d.DriverType == DriverType.Player);
-            playerDriver.StopRace();
-        } 
+            playerDriver.Profile.CarState.Value = CarState.Finished;
+        }
 
         [Button]
-        public void Load() => saveManager.Load();
+        public void SetLevelPrefab()
+        { 
+            var level = ResourcesLoader.LoadPrefab(string.Concat(ResourcePath.LevelsPrefabsFolder, nextLevelToPlay.ToString()));
+
+            if (level != null)
+            {
+                $"Next level to play: {nextLevelToPlay}".Log(ConsoleLog.Color.Yellow);
+                playerProfile.nextLevelPrefabToLoad = nextLevelToPlay.ToString();
+                saveManager.Save();
+            }
+            else
+            { 
+                $"Prefab whith name {nextLevelToPlay} was not found!".Log(ConsoleLog.Color.Red);
+            }
+        }
 
         [Button]
         public void Save() => saveManager.Save();
@@ -49,14 +65,5 @@ namespace RaceManager.Root
         [Button]
         public void DeleteSave() => SaveManager.RemoveSave();
 
-        [Button]
-        public void PrintSave()
-        {
-            foreach (var pair in saveManager._lastSave)
-            {
-                $"Key: {pair.Key}".Log(ConsoleLog.Color.Red);
-                $"Value: {pair.Value}".Log(ConsoleLog.Color.Yellow);
-            }
-        }
     }
 }

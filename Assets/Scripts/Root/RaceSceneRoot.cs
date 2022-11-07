@@ -23,6 +23,7 @@ namespace RaceManager.Root
         {
             RegisterSavebles();
             LoadFromSave();
+            InvokeInitializables();
         }
 
         private void HandleSceneQuit()
@@ -40,7 +41,21 @@ namespace RaceManager.Root
             }
             catch (Exception e)
             {
-                $"Need to fix: {e}".Log(ConsoleLog.Color.Red);
+                $"[Saveables] Need to fix: {e}".Log(ConsoleLog.Color.Red);
+            }
+        }
+
+        private void InvokeInitializables()
+        {
+            try
+            {
+                var initializables = Singleton<Resolver>.Instance.ResolveAll<IInitializable>();
+                foreach (var i in initializables)
+                    i.Initialize();
+            }
+            catch (Exception e)
+            {
+                $"[Initializables] Need to fix: {e}".Log(ConsoleLog.Color.Red);
             }
         }
 

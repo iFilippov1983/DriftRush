@@ -1,12 +1,14 @@
 using RaceManager.Cars;
 using RaceManager.Root;
 using RaceManager.Shed;
+using RaceManager.Tools;
 using System;
 using System.Collections.Generic;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Zenject;
 
@@ -34,6 +36,10 @@ namespace RaceManager.UI
         private CarProfile _currentCarProfile;
         private Podium _podium;
 
+        private GraphicRaycaster _graphicRaycaster;
+        private PointerEventData _clickData;
+        private List<RaycastResult> _raycastResults;
+
         private bool _inMainMenu = true;
 
         public Action OnMenuViewChange;
@@ -54,15 +60,47 @@ namespace RaceManager.UI
             _playerCarDepot = playerCarDepot;
             _podium = podium;
 
-            
-
             OnCarProfileChange += UpdateTuningPanelValues;
         }
 
         private void Start()
         {
+            _graphicRaycaster = GetComponent<GraphicRaycaster>();
+            _clickData = new PointerEventData(EventSystem.current);
+            _raycastResults = new List<RaycastResult>();
+
             OpenMainMenu(_inMainMenu);
             InitializeUIElements();
+        }
+
+        private void Update()
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                GetUIElementClicked();
+            }
+        }
+
+        private void GetUIElementClicked()
+        { 
+            _clickData.position = Input.mousePosition;
+            _raycastResults.Clear();
+            _graphicRaycaster.Raycast(_clickData, _raycastResults);
+            bool backPanelClicked = false;
+            bool otherElementClicked = false;
+
+            foreach (var element in _raycastResults)
+            { 
+                if(element.gameObject.tag.Equals(Tag.BackPanel))
+                    backPanelClicked = true;
+                else
+                    otherElementClicked = true;
+            }
+
+            if (backPanelClicked && !otherElementClicked)
+            {
+                ToggleTuningPanel();
+            }
         }
 
         private void InitializeUIElements()

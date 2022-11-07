@@ -1,4 +1,4 @@
-﻿using Grpc.Core;
+﻿//using Grpc.Core;
 using RaceManager.Cars;
 using RaceManager.Tools;
 using System;
@@ -8,7 +8,7 @@ using UniRx.Triggers;
 using UniRx.Operators;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.PlayerSettings;
+//using static UnityEditor.PlayerSettings;
 
 namespace RaceManager.UI
 {

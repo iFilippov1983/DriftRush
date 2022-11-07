@@ -20,6 +20,8 @@ namespace RaceManager.Cars
         private Wheel[] _wheels;
         [ReadOnly]
         public Transform LastOkPoint;
+        [ReadOnly]
+        public Transform LastCheckpoint;
 
         //public void Initialize(CarAIControl carAI, Rigidbody carRigidbody)
         //{ 
@@ -95,6 +97,16 @@ namespace RaceManager.Cars
             _stuckTimer = 0;
         }
 
+        public void GetToCheckpoint()
+        {
+            if (LastCheckpoint != null)
+            {
+                _carAI.StopDriving();
+                transform.position = LastCheckpoint.position;
+                transform.rotation = LastCheckpoint.rotation;
+                _carAI.StartEngine();
+            }
+        }
 
         private void GroundingControl()
         {

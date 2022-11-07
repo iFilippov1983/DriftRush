@@ -23,7 +23,7 @@ namespace RaceManager.UI
         //temp
         private string _currentLevel = "1";
 
-        public void Init(DriverProfile profile, UnityAction actionForRespawnButton)
+        public void Init(DriverProfile profile, UnityAction actionForRespawnButton, UnityAction actionForGetToCheckpointButton)
         {
             profile.CarState.Subscribe(playerCarState => ChangeViewDependingOn(playerCarState));
 
@@ -33,7 +33,9 @@ namespace RaceManager.UI
 
             _inRaceUI.gameObject.SetActive(true);
             _inRaceUI.RaceProgressBar.LevelText.text = "LEVEL " + _currentLevel; //TODO: give value
+
             _inRaceUI.RespawnCarButton.AddListener(actionForRespawnButton);
+            _inRaceUI.GetToCheckpointButton.AddListener(actionForGetToCheckpointButton);
         }
 
         private void Update()

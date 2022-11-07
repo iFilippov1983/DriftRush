@@ -32,6 +32,9 @@ namespace RaceManager.Waypoints
         private Vector3 _lastPosition;      // Used to calculate current speed (since we may not have a rigidbody component)
         private float _speed;               // current speed of this object (calculated from delta since last frame)
 
+        private float _cashedDistance;
+        private Vector3 _cashedPosition;
+
         public RoutePoint ProgressPoint { get; private set; }
         public float Progress => _progressDistance / _waypointTrack.AccumulateDistance;
         public int CarPosition => _carPosition;
@@ -66,6 +69,12 @@ namespace RaceManager.Waypoints
         }
 
         public void SetInRacePosition(int position) => _carPosition = position;
+
+        public void ResetTargetToCashedValues()
+        {
+            _lastPosition = _cashedPosition;
+            _progressDistance = _cashedDistance;
+        }
 
         private void Update()
         {
@@ -125,6 +134,12 @@ namespace RaceManager.Waypoints
                     }
 
                     OnPassedWaypoint?.Invoke(this);
+                }
+
+                if (waypoint.isCheckpoint)
+                { 
+                    _cashedDistance = _progressDistance;
+                    _cashedPosition = _lastPosition;
                 }
             }
         }

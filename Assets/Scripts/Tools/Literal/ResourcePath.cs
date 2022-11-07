@@ -4,13 +4,14 @@ namespace RaceManager.Tools
     {
         public const string CarPrefabsFolder = "Prefabs/Cars/";
         public const string MaterialsPrefabsFolder = "Prefabs/Mat/";
+        public const string LevelsPrefabsFolder = "Prefabs/Levels/";
+
         public const string MaterialsContainer = "SO/MaterialsContainer";
         public const string WaypointPrefab = "Prefabs/Waypoint";
         public const string DriverPrefab = "Prefabs/Driver";
         public const string FXControllerPrefab = "Prefabs/FXController";
 
         public const string Level_0_test = "Prefabs/Levels/Level_0_test";
-        public const string Level_1_test = "Prefabs/Levels/Level_1_test";
 
         //public static string ItemConfigsSource(FeatureType.Item itemType)
         //{

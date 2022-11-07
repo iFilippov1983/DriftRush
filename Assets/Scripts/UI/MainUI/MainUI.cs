@@ -1,11 +1,14 @@
 using RaceManager.Cars;
 using RaceManager.Root;
 using RaceManager.Shed;
+using RaceManager.Tools;
 using System;
 using System.Collections.Generic;
 using UniRx;
+using UniRx.Triggers;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Zenject;
 
@@ -23,6 +26,7 @@ namespace RaceManager.UI
         [SerializeField] private CurrencyAmountPanel _currencyAmount;
         [SerializeField] private TuningPanel _tuningPanel;
         [SerializeField] private BottomPanelView _bottomPanel;
+        [SerializeField] private BackPanel _backPanel;
         [Space]
         [SerializeField] private RectTransform _chestSlotsRect;
         [SerializeField] private List<ChestSlot> _chestSlots;
@@ -31,6 +35,10 @@ namespace RaceManager.UI
         private CarsDepot _playerCarDepot;
         private CarProfile _currentCarProfile;
         private Podium _podium;
+
+        private GraphicRaycaster _graphicRaycaster;
+        private PointerEventData _clickData;
+        private List<RaycastResult> _raycastResults;
 
         private bool _inMainMenu = true;
 
@@ -57,8 +65,42 @@ namespace RaceManager.UI
 
         private void Start()
         {
+            _graphicRaycaster = GetComponent<GraphicRaycaster>();
+            _clickData = new PointerEventData(EventSystem.current);
+            _raycastResults = new List<RaycastResult>();
+
             OpenMainMenu(_inMainMenu);
             InitializeUIElements();
+        }
+
+        private void Update()
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                GetUIElementClicked();
+            }
+        }
+
+        private void GetUIElementClicked()
+        { 
+            _clickData.position = Input.mousePosition;
+            _raycastResults.Clear();
+            _graphicRaycaster.Raycast(_clickData, _raycastResults);
+            bool backPanelClicked = false;
+            bool otherElementClicked = false;
+
+            foreach (var element in _raycastResults)
+            { 
+                if(element.gameObject.tag.Equals(Tag.BackPanel))
+                    backPanelClicked = true;
+                else
+                    otherElementClicked = true;
+            }
+
+            if (backPanelClicked && !otherElementClicked)
+            {
+                ToggleTuningPanel();
+            }
         }
 
         private void InitializeUIElements()
@@ -95,6 +137,12 @@ namespace RaceManager.UI
             _worldSpaceUI.SetActive(!_inMainMenu);
 
             OnMenuViewChange?.Invoke();
+        }
+
+        private void ToggleTuningPanel(bool toggle)
+        {
+            if (toggle)
+                ToggleTuningPanel();
         }
 
         private void UpdateTuningPanelValues()

@@ -37,6 +37,8 @@ namespace RaceManager.Cars
             [JsonProperty]
             [SerializeField]
             private int _factorsMaxTotal;
+            [JsonProperty]
+            private int _availableFactorsToUse;
 
             public int CurrentFactorsProgress;
 

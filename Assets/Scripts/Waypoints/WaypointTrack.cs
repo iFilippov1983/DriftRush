@@ -86,6 +86,10 @@ namespace RaceManager.Waypoints
 
                     if(i != 0)
                         _waypoints[i-1].NextWaypoint = wp;
+
+                    var debugWp = Waypoints[i].GetComponent<DebugWaypoint>();
+                    if (debugWp != null && debugWp.isCheckpoint)
+                        wp.isCheckpoint = true;
                 }
 
                 for (int i = 0; i < _waypoints.Count; i++)

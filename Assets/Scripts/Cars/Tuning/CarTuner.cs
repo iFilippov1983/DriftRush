@@ -173,7 +173,7 @@ namespace RaceManager.Cars
         {
             var characteristics = _carProfile.CarCharacteristics;
 
-            int maxDif = _carProfile.CarCharacteristics.AvailableFactorsToUse;
+            
 
             int currentFactor = cType switch
             {
@@ -184,12 +184,13 @@ namespace RaceManager.Cars
                 _ => 0
             };
 
-            int newValue;
-            bool canSet = CanSetValue(currentFactor, Mathf.RoundToInt(value), maxDif, out newValue);
+            //int newValue;
+            int available = _carProfile.CarCharacteristics.AvailableFactorsToUse;
+            bool canSet = CanSetValue(currentFactor, Mathf.RoundToInt(value), available, out int newValue);
 
             if (!canSet)
             {
-                int available = _carProfile.CarCharacteristics.AvailableFactorsToUse;
+                //int available = _carProfile.CarCharacteristics.AvailableFactorsToUse;
                 OnCharValueLimit?.Invoke(new TuneData { cType = cType, value = newValue, available = available }) ;
             }
 
@@ -228,11 +229,11 @@ namespace RaceManager.Cars
             _carVisual.SetPartsVisual(d.Item1, d.Item2, wst);
         }
 
-        private bool CanSetValue(int oldValue, int newValue, int maxDif, out int outValue)
+        private bool CanSetValue(int oldValue, int newValue, int maxDifference, out int outValue)
         {
-            if (newValue - oldValue > maxDif)
+            if (newValue - oldValue > maxDifference)
             {
-                outValue = oldValue + maxDif;
+                outValue = oldValue + maxDifference;
                 return false;
             }
             

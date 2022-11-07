@@ -4,6 +4,7 @@ using RaceManager.Shed;
 using System;
 using System.Collections.Generic;
 using UniRx;
+using UniRx.Triggers;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -23,6 +24,7 @@ namespace RaceManager.UI
         [SerializeField] private CurrencyAmountPanel _currencyAmount;
         [SerializeField] private TuningPanel _tuningPanel;
         [SerializeField] private BottomPanelView _bottomPanel;
+        [SerializeField] private BackPanel _backPanel;
         [Space]
         [SerializeField] private RectTransform _chestSlotsRect;
         [SerializeField] private List<ChestSlot> _chestSlots;
@@ -51,6 +53,8 @@ namespace RaceManager.UI
             _saveManager = saveManager;
             _playerCarDepot = playerCarDepot;
             _podium = podium;
+
+            
 
             OnCarProfileChange += UpdateTuningPanelValues;
         }
@@ -95,6 +99,12 @@ namespace RaceManager.UI
             _worldSpaceUI.SetActive(!_inMainMenu);
 
             OnMenuViewChange?.Invoke();
+        }
+
+        private void ToggleTuningPanel(bool toggle)
+        {
+            if (toggle)
+                ToggleTuningPanel();
         }
 
         private void UpdateTuningPanelValues()

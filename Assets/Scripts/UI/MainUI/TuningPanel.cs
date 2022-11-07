@@ -1,8 +1,14 @@
-﻿using RaceManager.Cars;
+﻿using Grpc.Core;
+using RaceManager.Cars;
+using RaceManager.Tools;
+using System;
 using TMPro;
+using UniRx;
+using UniRx.Triggers;
+using UniRx.Operators;
 using UnityEngine;
 using UnityEngine.UI;
-using static Sirenix.OdinInspector.Editor.Internal.FastDeepCopier;
+using static UnityEditor.PlayerSettings;
 
 namespace RaceManager.UI
 {
@@ -42,10 +48,33 @@ namespace RaceManager.UI
         public Slider DurabilitySlider => _durabilitySlider;
         public Slider AccelerationSlider => _accelerationSlider;
 
+        public static Camera _mainCam;
+
+        //public IObservable<bool> OnMouseClick = Observable.Create((IObserver<bool> observer) => 
+        //{
+        //    if(_mainCam == null)
+        //        _mainCam = Camera.main;
+
+        //    Vector3 pos = Camera.main.ViewportToScreenPoint(Input.mousePosition);
+        //    bool rayHit = Physics.Raycast(pos, _mainCam.transform.rotation.eulerAngles, 1000f, LayerMask.NameToLayer(Layer.UI_Close));
+        //    observer.OnNext(rayHit);
+
+        //    Debug.Log($"Pos: {pos}; Hit: {rayHit};");
+
+        //    return Disposable.Empty;
+        //})
+        //    .Where(b => Input.GetMouseButtonDown(0));
+
 
         private void OnEnable()
         {
             OpenStatsValuesPanel();
+            //OnMouseClick.Subscribe(b => CheckClick(b));
+        }
+
+        private void CheckClick(bool isOutsidePanel)
+        { 
+        
         }
 
         private void OnDisable()

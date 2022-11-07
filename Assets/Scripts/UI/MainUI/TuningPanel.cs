@@ -8,7 +8,6 @@ using UniRx.Triggers;
 using UniRx.Operators;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.PlayerSettings;
 
 namespace RaceManager.UI
 {
@@ -50,31 +49,9 @@ namespace RaceManager.UI
 
         public static Camera _mainCam;
 
-        //public IObservable<bool> OnMouseClick = Observable.Create((IObserver<bool> observer) => 
-        //{
-        //    if(_mainCam == null)
-        //        _mainCam = Camera.main;
-
-        //    Vector3 pos = Camera.main.ViewportToScreenPoint(Input.mousePosition);
-        //    bool rayHit = Physics.Raycast(pos, _mainCam.transform.rotation.eulerAngles, 1000f, LayerMask.NameToLayer(Layer.UI_Close));
-        //    observer.OnNext(rayHit);
-
-        //    Debug.Log($"Pos: {pos}; Hit: {rayHit};");
-
-        //    return Disposable.Empty;
-        //})
-        //    .Where(b => Input.GetMouseButtonDown(0));
-
-
         private void OnEnable()
         {
             OpenStatsValuesPanel();
-            //OnMouseClick.Subscribe(b => CheckClick(b));
-        }
-
-        private void CheckClick(bool isOutsidePanel)
-        { 
-        
         }
 
         private void OnDisable()
@@ -119,15 +96,6 @@ namespace RaceManager.UI
 
         public void SetValueToSlider(CarCharacteristicsType characteristics, int sliderValue)
         {
-            //Debug.Log($"VALUE => {characteristics} = {value}");
-            //_ = characteristics switch
-            //{
-            //    CarCharacteristicsType.Speed => SpeedSlider.value = sliderValue,
-            //    CarCharacteristicsType.Mobility => MobilitySlider.value = sliderValue,
-            //    CarCharacteristicsType.Durability => DurabilitySlider.value = sliderValue,
-            //    CarCharacteristicsType.Acceleration => AccelerationSlider.value = sliderValue,
-            //    _ => throw new System.NotImplementedException(),
-            //};
             switch (characteristics)
             {
                 case CarCharacteristicsType.Speed:
@@ -160,16 +128,16 @@ namespace RaceManager.UI
         }
 
         public void UpdateAllSlidersValues(int speed, int mobility, int durability, int acceleration, int fatorsAvailable)
-        { 
+        {
             SpeedSlider.value = speed;
             MobilitySlider.value = mobility;
             DurabilitySlider.value = durability;
             AccelerationSlider.value = acceleration;
 
-            _speedPointsText.text = speed.ToString();
-            _mobilityPointsText.text = mobility.ToString();
-            _durabilityPointsText.text = durability.ToString();
-            _accelerationPointsText.text = acceleration.ToString();
+            //_speedPointsText.text = speed.ToString();
+            //_mobilityPointsText.text = mobility.ToString();
+            //_durabilityPointsText.text = durability.ToString();
+            //_accelerationPointsText.text = acceleration.ToString();
 
             UpdateCurrentInfoValues(fatorsAvailable);
         }

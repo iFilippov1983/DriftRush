@@ -14,7 +14,7 @@ using Zenject;
 
 namespace RaceManager.UI
 {
-    public class MainUI : MonoBehaviour
+    public class MainUI : MonoBehaviour, Root.IInitializable
     {
         [SerializeField] private WorldSpaceUI _worldSpaceUI;
         [Space]
@@ -63,6 +63,14 @@ namespace RaceManager.UI
             OnCarProfileChange += UpdateTuningPanelValues;
         }
 
+        public void Initialize()
+        {
+            _currentCarProfile = _playerCarDepot.CurrentCarProfile;
+
+            UpdateTuningPanelValues();
+            RegisterButtonsListeners();
+        }
+
         private void Start()
         {
             _graphicRaycaster = GetComponent<GraphicRaycaster>();
@@ -70,7 +78,7 @@ namespace RaceManager.UI
             _raycastResults = new List<RaycastResult>();
 
             OpenMainMenu(_inMainMenu);
-            InitializeUIElements();
+            //InitializeUIElements();
         }
 
         private void Update()
@@ -82,7 +90,10 @@ namespace RaceManager.UI
         }
 
         private void GetUIElementClicked()
-        { 
+        {
+            if (_inMainMenu)
+                return;
+
             _clickData.position = Input.mousePosition;
             _raycastResults.Clear();
             _graphicRaycaster.Raycast(_clickData, _raycastResults);
@@ -103,13 +114,13 @@ namespace RaceManager.UI
             }
         }
 
-        private void InitializeUIElements()
-        {
-            _currentCarProfile = _playerCarDepot.CurrentCarProfile;
+        //private void InitializeUIElements()
+        //{
+        //    _currentCarProfile = _playerCarDepot.CurrentCarProfile;
 
-            UpdateTuningPanelValues();
-            RegisterButtonsListeners();
-        }
+        //    UpdateTuningPanelValues();
+        //    RegisterButtonsListeners();
+        //}
 
         private void StartRace()
         {
@@ -137,12 +148,6 @@ namespace RaceManager.UI
             _worldSpaceUI.SetActive(!_inMainMenu);
 
             OnMenuViewChange?.Invoke();
-        }
-
-        private void ToggleTuningPanel(bool toggle)
-        {
-            if (toggle)
-                ToggleTuningPanel();
         }
 
         private void UpdateTuningPanelValues()

@@ -20,19 +20,16 @@ namespace RaceManager.UI
 
         private bool _isRaceFinished;
 
-        //temp
-        private string _currentLevel = "1";
-
-        public void Init(DriverProfile profile, UnityAction actionForRespawnButton, UnityAction actionForGetToCheckpointButton)
+        public void Init(DriverProfile driverProfile, PlayerProfile playerProfile, UnityAction actionForRespawnButton, UnityAction actionForGetToCheckpointButton)
         {
-            profile.CarState.Subscribe(playerCarState => ChangeViewDependingOn(playerCarState));
+            driverProfile.CarState.Subscribe(playerCarState => ChangeViewDependingOn(playerCarState));
 
             _finishUI.gameObject.SetActive(false);
             _finishUI.OkButtonFinish.onClick.AddListener(ShowExtraRewardPanel);
             _finishUI.OkButtonExtraReward.onClick.AddListener(FinalizeRace);
 
             _inRaceUI.gameObject.SetActive(true);
-            _inRaceUI.RaceProgressBar.LevelText.text = "LEVEL " + _currentLevel; //TODO: give value
+            _inRaceUI.RaceProgressBar.LevelText.text = "LEVEL " + (int)playerProfile.nextLevelPrefabToLoad;
 
             _inRaceUI.RespawnCarButton.AddListener(actionForRespawnButton);
             _inRaceUI.GetToCheckpointButton.AddListener(actionForGetToCheckpointButton);

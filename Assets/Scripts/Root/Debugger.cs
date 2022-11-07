@@ -39,7 +39,7 @@ namespace RaceManager.Root
             var drivers = FindObjectsOfType<Driver>();
             var list = new List<Driver>(drivers);
             var playerDriver = list.Find(d => d.DriverType == DriverType.Player);
-            playerDriver.Profile.CarState.Value = CarState.Finished;
+            playerDriver.DriverProfile.CarState.Value = CarState.Finished;
         }
 
         [Button]
@@ -50,12 +50,12 @@ namespace RaceManager.Root
             if (level != null)
             {
                 $"Next level to play: {nextLevelToPlay}".Log(ConsoleLog.Color.Yellow);
-                playerProfile.nextLevelPrefabToLoad = nextLevelToPlay.ToString();
+                playerProfile.nextLevelPrefabToLoad = nextLevelToPlay;
                 saveManager.Save();
             }
             else
             { 
-                $"Prefab whith name {nextLevelToPlay} was not found!".Log(ConsoleLog.Color.Red);
+                $"Prefab whith name '{nextLevelToPlay}' was not found!".Log(ConsoleLog.Color.Red);
             }
         }
 

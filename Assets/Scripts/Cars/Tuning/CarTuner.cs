@@ -15,7 +15,6 @@ namespace RaceManager.Cars
         private CarProfile _carProfile;
         private CarVisual _carVisual;
 
-
         public Action OnCurrentCarChanged;
         public Func<CarCharacteristicsType, float, int> OnCharacteristicValueChanged;
         public UnityEvent<TuneData> OnCharValueLimit = new UnityEvent<TuneData>();
@@ -172,8 +171,6 @@ namespace RaceManager.Cars
         private void TuneVisual(CarCharacteristicsType cType, float value)
         {
             var characteristics = _carProfile.CarCharacteristics;
-
-            
 
             int currentFactor = cType switch
             {

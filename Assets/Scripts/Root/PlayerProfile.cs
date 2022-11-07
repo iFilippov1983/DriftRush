@@ -1,4 +1,5 @@
 ﻿using RaceManager.Cars;
+using RaceManager.Race;
 using Sirenix.Utilities;
 using System;
 using System.Collections.Generic;
@@ -10,14 +11,13 @@ namespace RaceManager.Root
     {
         public PositionInRace lastInRacePosition;
         public Currency currency;
-        public string nextLevelPrefabToLoad;
+        public LevelName nextLevelPrefabToLoad = LevelName.Level_0_test;
         
-
         public class SaveData
         {
             public PositionInRace LastInRacePosition;
             public Currency Currency;
-            public string NextLevelPrefabToLoad;
+            public LevelName NextLevelPrefabToLoad;
         }
 
         public Type DataType() => typeof(SaveData);

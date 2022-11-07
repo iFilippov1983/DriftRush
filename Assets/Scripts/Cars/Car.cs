@@ -20,7 +20,7 @@ namespace RaceManager.Cars
         private string _id;
 
         [ShowInInspector, ReadOnly, FoldoutGroup("Default effects settings")] 
-        private const float SlipFoorGenerateParticles = 0.2f;
+        private const float SlipFoorGenerateParticles = 0.3f;
         [ShowInInspector, ReadOnly, FoldoutGroup("Default effects settings")]
         private readonly Vector3 TrailOffsetLeft = new Vector3(0.1f, 0.05f, 0f);
         [ShowInInspector, ReadOnly, FoldoutGroup("Default effects settings")]

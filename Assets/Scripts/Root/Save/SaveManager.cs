@@ -135,6 +135,23 @@ namespace RaceManager.Root
                 loadAction(data);
             }
         }
+
+        public void UseOnlyForAOTCodeGeneration()
+        {
+            Load(true);
+
+            MockClass mock = new MockClass();
+            RegisterSavable(mock);
+
+            throw new InvalidOperationException("This method is used for AOT code generation only. Do not call it at runtime.");
+        }
+
+        private class MockClass : ISaveable
+        {
+            public Type DataType() => throw new NotImplementedException();
+            public void Load(object data) => throw new NotImplementedException();
+            public object Save() => throw new NotImplementedException();
+        }
     }
 }
 

@@ -22,6 +22,7 @@ namespace RaceManager.Infrastructure
         {
             Bind(Singleton<Resolver>.Instance);
             Bind(Singleton<MenuCamerasHandler>.Instance);
+            Bind(Singleton<ShedInitializer>.Instance);
 
             Bind(_mainUI);
             Bind(_podium);

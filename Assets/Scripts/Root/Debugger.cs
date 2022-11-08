@@ -44,8 +44,9 @@ namespace RaceManager.Root
 
         [Button]
         public void SetLevelPrefab()
-        { 
-            var level = ResourcesLoader.LoadPrefab(string.Concat(ResourcePath.LevelsPrefabsFolder, nextLevelToPlay.ToString()));
+        {
+            //var level = ResourcesLoader.LoadPrefab(string.Concat(ResourcePath.LevelsPrefabsFolder, nextLevelToPlay.ToString()));
+            var level = ResourcesLoader.LoadPrefab(nextLevelToPlay.ToString());
 
             if (level != null)
             {

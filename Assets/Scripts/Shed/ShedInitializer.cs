@@ -10,7 +10,7 @@ using Zenject;
 
 namespace RaceManager.Shed
 {
-    public class ShedInitializer : MonoBehaviour
+    public class ShedInitializer : MonoBehaviour, Root.IInitializable
     {
         [SerializeField] private MaterialsContainer _materialsContainer;
         private CarsDepot _playerCarDepot;
@@ -30,11 +30,17 @@ namespace RaceManager.Shed
             _saveManager = saveManager;
         }
 
-        void Start()
+        public void Initialize()
         {
             InitializeCar();
             InitializeTunerVisual();
         }
+
+        //void Start()
+        //{
+        //    InitializeCar();
+        //    InitializeTunerVisual();
+        //}
 
         private void InitializeCar()
         {

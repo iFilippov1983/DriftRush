@@ -27,12 +27,7 @@ namespace RaceManager.Root
 
         public SaveManager()
         {
-            AotHelper.EnsureType<SaveData>();
-            AotHelper.EnsureList<int>();
-            AotHelper.EnsureList<float>();
-            AotHelper.EnsureList<string>();
-            AotHelper.EnsureList<Action<SaveData>>();
-            AotHelper.EnsureDictionary<string, JObject>();
+
 
             _saveActions = new List<Action<SaveData>>();
             _loadActions = new List<Action<SaveData>>();

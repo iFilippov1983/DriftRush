@@ -18,8 +18,8 @@ namespace RaceManager.Race
                 if (_raceLevelView == null)
                 {
                     //string path = string.Concat(ResourcePath.LevelsPrefabsFolder, _playerProfile.nextLevelPrefabToLoad);
-                    string path = string.Concat(ResourcePath.LevelsPrefabsFolder, "Level_0_test");
-
+                    //string path = string.Concat(ResourcePath.LevelsPrefabsFolder, "Level_0_test");
+                    string path = _playerProfile.nextLevelPrefabToLoad.ToString();
                     Debug.Log("Prefab: " + _playerProfile.nextLevelPrefabToLoad);
 
                     _raceLevelView = InitializeLevel(path);

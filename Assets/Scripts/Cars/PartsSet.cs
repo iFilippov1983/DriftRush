@@ -9,7 +9,7 @@ namespace RaceManager.Cars
     public abstract class PartsSet<T> where T : IPart
 	{
         [ShowInInspector, ReadOnly]
-        protected PartLevel _currentPartsLevel;
+        protected PartLevel _currentPartsLevel = PartLevel.First;
         protected PartLevel _previousePartsLevel;
         public bool isAvailable;
         [SerializeField] protected List<PartsList<T>> _parts;

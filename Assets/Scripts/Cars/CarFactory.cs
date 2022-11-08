@@ -1,15 +1,8 @@
-﻿using Google.Protobuf.WellKnownTypes;
-using RaceManager.Alt;
-using RaceManager.Cameras;
-using RaceManager.Cars.Effects;
-using RaceManager.Root;
-using RaceManager.Tools;
+﻿using RaceManager.Cars.Effects;
 using RaceManager.Waypoints;
-using System;
 using UnityEngine;
-using Zenject;
-using Object = UnityEngine.Object;
-using Random = UnityEngine.Random;
+//using Object = UnityEngine.Object;
+//using Random = UnityEngine.Random;
 
 namespace RaceManager.Cars
 {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Utilities;
 using Sirenix.OdinInspector;
 using UniRx;
 using UnityEngine;
@@ -28,6 +29,14 @@ namespace RaceManager.Root
 
         public SaveManager()
         {
+            AotHelper.EnsureList<int>();
+            AotHelper.EnsureList<float>();
+            AotHelper.EnsureList<string>();
+            AotHelper.EnsureDictionary<string, JObject>();
+            AotHelper.EnsureList<Action<SaveData>>();
+
+            _saveActions = new List<Action<SaveData>>();
+            _loadActions = new List<Action<SaveData>>();
             //_savePath = Path.Combine(Application.persistentDataPath, FileName); //SavePath;
         }
 
@@ -123,7 +132,7 @@ namespace RaceManager.Root
             }
 
             string loadedJson = File.ReadAllText(path);
-            var data = JsonConvert.DeserializeObject<SaveData>(loadedJson);
+            SaveData data = JsonConvert.DeserializeObject<SaveData>(loadedJson);
 
             _lastSave = new Dictionary<string, string>();
 
@@ -136,22 +145,22 @@ namespace RaceManager.Root
             }
         }
 
-        public void UseOnlyForAOTCodeGeneration()
-        {
-            Load(true);
+        //public void UseOnlyForAOTCodeGeneration()
+        //{
+        //    Load(true);
 
-            MockClass mock = new MockClass();
-            RegisterSavable(mock);
+        //    MockClass mock = new MockClass();
+        //    RegisterSavable(mock);
 
-            throw new InvalidOperationException("This method is used for AOT code generation only. Do not call it at runtime.");
-        }
+        //    throw new InvalidOperationException("This method is used for AOT code generation only. Do not call it at runtime.");
+        //}
 
-        private class MockClass : ISaveable
-        {
-            public Type DataType() => throw new NotImplementedException();
-            public void Load(object data) => throw new NotImplementedException();
-            public object Save() => throw new NotImplementedException();
-        }
+        //private class MockClass : ISaveable
+        //{
+        //    public Type DataType() => throw new NotImplementedException();
+        //    public void Load(object data) => throw new NotImplementedException();
+        //    public object Save() => throw new NotImplementedException();
+        //}
     }
 }
 

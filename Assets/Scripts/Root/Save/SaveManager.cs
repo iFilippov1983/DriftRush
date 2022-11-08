@@ -25,19 +25,17 @@ namespace RaceManager.Root
         [DictionaryDrawerSettings(KeyLabel = "Key", ValueLabel = "Data")]
         public Dictionary<string, string> _lastSave = new Dictionary<string, string>();
 
-        //public string SavePath = Path.Combine(Application.persistentDataPath, FileName);  // string.Concat(Application.persistentDataPath, FileName); // Path.Combine(Application.persistentDataPath, FileName);
-
         public SaveManager()
         {
+            AotHelper.EnsureType<SaveData>();
             AotHelper.EnsureList<int>();
             AotHelper.EnsureList<float>();
             AotHelper.EnsureList<string>();
-            AotHelper.EnsureDictionary<string, JObject>();
             AotHelper.EnsureList<Action<SaveData>>();
+            AotHelper.EnsureDictionary<string, JObject>();
 
             _saveActions = new List<Action<SaveData>>();
             _loadActions = new List<Action<SaveData>>();
-            //_savePath = Path.Combine(Application.persistentDataPath, FileName); //SavePath;
         }
 
 #if UNITY_EDITOR
@@ -45,7 +43,7 @@ namespace RaceManager.Root
 #endif
         public static void RemoveSave()
         {
-            var path = Path.Combine(Application.persistentDataPath, FileName);// SavePath;
+            var path = Path.Combine(Application.persistentDataPath, FileName);
             if (File.Exists(path))
             {
                 File.Delete(path);
@@ -144,23 +142,6 @@ namespace RaceManager.Root
                 loadAction(data);
             }
         }
-
-        //public void UseOnlyForAOTCodeGeneration()
-        //{
-        //    Load(true);
-
-        //    MockClass mock = new MockClass();
-        //    RegisterSavable(mock);
-
-        //    throw new InvalidOperationException("This method is used for AOT code generation only. Do not call it at runtime.");
-        //}
-
-        //private class MockClass : ISaveable
-        //{
-        //    public Type DataType() => throw new NotImplementedException();
-        //    public void Load(object data) => throw new NotImplementedException();
-        //    public object Save() => throw new NotImplementedException();
-        //}
     }
 }
 

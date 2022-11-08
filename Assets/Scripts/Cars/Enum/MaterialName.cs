@@ -7,5 +7,7 @@
         Lighting_Supra = 2,
 
         Porche_992 = 100,
+
+        Ferrari_489 = 200,
     }
 }

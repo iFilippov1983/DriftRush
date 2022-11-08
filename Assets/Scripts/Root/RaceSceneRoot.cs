@@ -55,7 +55,7 @@ namespace RaceManager.Root
             }
             catch (Exception e)
             {
-                $"[Initializables] Need to fix: {e}".Log(ConsoleLog.Color.Red);
+                $"[Initializables] Need to fix: {e}".Log();
             }
         }
 

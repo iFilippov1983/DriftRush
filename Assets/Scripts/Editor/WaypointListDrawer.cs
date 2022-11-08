@@ -149,7 +149,7 @@ namespace RaceManager.Waypoints
                 var track = property.FindPropertyRelative("track").objectReferenceValue as WaypointTrack;
                 foreach (Transform child in track.waypointList.items)
                 {
-                    if(child.GetComponents<DebugWaypoint>() == null)
+                    if(child.GetComponent<DebugWaypoint>() == null)
                         child.gameObject.AddComponent<DebugWaypoint>();
                 }
             }

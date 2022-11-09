@@ -3,7 +3,7 @@
 namespace RaceManager.Cars
 {
     [Serializable]
-    public enum CarCharacteristicsType
+    public enum CharType
     { 
         Speed = 0,
         Mobility = 1,

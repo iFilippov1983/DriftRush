@@ -57,7 +57,7 @@ namespace RaceManager.Shed
                 .Subscribe((v) =>
                 {
                     //$"Speed - On next({v})".Log(ConsoleLog.Color.Yellow);
-                    int availables = (int)_carTuner.OnCharacteristicValueChanged?.Invoke(CarCharacteristicsType.Speed, v);
+                    int availables = (int)_carTuner.OnCharacteristicValueChanged?.Invoke(CharType.Speed, v);
                     _mainUI.OnTuneValuesChange?.Invoke(availables);
                     _saveManager.Save();
                 });
@@ -66,7 +66,7 @@ namespace RaceManager.Shed
                 .Subscribe((v) =>
                 {
                     //$"Mobility - On next({v})".Log(ConsoleLog.Color.Yellow);
-                    int availables = (int)_carTuner.OnCharacteristicValueChanged?.Invoke(CarCharacteristicsType.Mobility, v);
+                    int availables = (int)_carTuner.OnCharacteristicValueChanged?.Invoke(CharType.Mobility, v);
                     _mainUI.OnTuneValuesChange?.Invoke(availables);
                     _saveManager.Save();
                 });
@@ -76,7 +76,7 @@ namespace RaceManager.Shed
                 .Subscribe((v) => 
                 {
                     //$"Durability - On next({v})".Log(ConsoleLog.Color.Yellow);
-                    int availables = (int)_carTuner.OnCharacteristicValueChanged?.Invoke(CarCharacteristicsType.Durability, v);
+                    int availables = (int)_carTuner.OnCharacteristicValueChanged?.Invoke(CharType.Durability, v);
                     _mainUI.OnTuneValuesChange?.Invoke(availables);
                     _saveManager.Save();
                 });
@@ -86,7 +86,7 @@ namespace RaceManager.Shed
                 .Subscribe((v) => 
                 {
                     //$"Acceleration - On next({v})".Log(ConsoleLog.Color.Yellow);
-                    int availables = (int)_carTuner.OnCharacteristicValueChanged?.Invoke(CarCharacteristicsType.Acceleration, v);
+                    int availables = (int)_carTuner.OnCharacteristicValueChanged?.Invoke(CharType.Acceleration, v);
                     _mainUI.OnTuneValuesChange?.Invoke(availables);
                     _saveManager.Save();
                 });

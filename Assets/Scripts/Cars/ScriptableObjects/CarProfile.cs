@@ -70,7 +70,6 @@ namespace RaceManager.Cars
             [ReadOnly, ShowInInspector]
             public int AvailableFactorsToUse => CurrentFactorsProgress - CurrentSpeedFactor - CurrentMobilityFactor - CurrentDurabilityFactor - CurrentAccelerationFactor;
             public int FactorsMaxTotal => _factorsMaxTotal;
-
         }
     }
 }

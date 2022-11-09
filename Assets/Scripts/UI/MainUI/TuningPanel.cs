@@ -66,27 +66,27 @@ namespace RaceManager.UI
             _tuneCarViewButton.onClick.AddListener(OpenTuneCarViewPanel);
         }
 
-        public void SetBorderValues(CarCharacteristicsType characteristics, int minValue, int maxValue)
+        public void SetBorderValues(CharType characteristics, int minValue, int maxValue)
         {
             //Debug.Log($"BORDER => {characteristics} - min {minValue} - max {maxValue}");
             switch (characteristics)
             {
-                case CarCharacteristicsType.Speed:
+                case CharType.Speed:
                     SpeedSlider.minValue = minValue;
                     SpeedSlider.maxValue = maxValue;
                     _speedPointsMaxText.text = maxValue.ToString();
                     break;
-                case CarCharacteristicsType.Mobility:
+                case CharType.Mobility:
                     MobilitySlider.minValue = minValue;
                     MobilitySlider.maxValue = maxValue;
                     _mobilityPointsMaxText.text = maxValue.ToString();
                     break;
-                case CarCharacteristicsType.Durability:
+                case CharType.Durability:
                     DurabilitySlider.minValue = minValue;
                     DurabilitySlider.maxValue = maxValue;
                     _durabilityPointsMaxText.text = maxValue.ToString();
                     break;
-                case CarCharacteristicsType.Acceleration:
+                case CharType.Acceleration:
                     AccelerationSlider.minValue = minValue;
                     AccelerationSlider.maxValue = maxValue;
                     _accelerationPointsMaxText.text = maxValue.ToString();
@@ -94,23 +94,23 @@ namespace RaceManager.UI
             }
         }
 
-        public void SetValueToSlider(CarCharacteristicsType characteristics, int sliderValue)
+        public void SetValueToSlider(CharType characteristics, int sliderValue)
         {
             switch (characteristics)
             {
-                case CarCharacteristicsType.Speed:
+                case CharType.Speed:
                     SpeedSlider.value = sliderValue;
                     _speedPointsText.text = sliderValue.ToString();
                     break;
-                case CarCharacteristicsType.Mobility:
+                case CharType.Mobility:
                     MobilitySlider.value = sliderValue;
                     _mobilityPointsText.text = sliderValue.ToString();
                     break;
-                case CarCharacteristicsType.Durability:
+                case CharType.Durability:
                     DurabilitySlider.value = sliderValue;
                     _durabilityPointsText.text = sliderValue.ToString();
                     break;
-                case CarCharacteristicsType.Acceleration:
+                case CharType.Acceleration:
                     AccelerationSlider.value = sliderValue;
                     _accelerationPointsText.text = sliderValue.ToString();
                     break;

@@ -184,10 +184,10 @@ namespace RaceManager.UI
         private void InitializeSlidersMinMaxValues()
         {
             var c = _currentCarProfile.CarCharacteristics;
-            _tuningPanel.SetBorderValues(CarCharacteristicsType.Speed, c.MinSpeedFactor, c.MaxSpeedFactor);
-            _tuningPanel.SetBorderValues(CarCharacteristicsType.Mobility, c.MinMobilityFactor, c.MaxMobilityFactor);
-            _tuningPanel.SetBorderValues(CarCharacteristicsType.Durability, c.MinDurabilityFactor, c.MaxDurabilityFactor);
-            _tuningPanel.SetBorderValues(CarCharacteristicsType.Acceleration, c.MinAccelerationFactor, c.MaxAccelerationFactor);
+            _tuningPanel.SetBorderValues(CharType.Speed, c.MinSpeedFactor, c.MaxSpeedFactor);
+            _tuningPanel.SetBorderValues(CharType.Mobility, c.MinMobilityFactor, c.MaxMobilityFactor);
+            _tuningPanel.SetBorderValues(CharType.Durability, c.MinDurabilityFactor, c.MaxDurabilityFactor);
+            _tuningPanel.SetBorderValues(CharType.Acceleration, c.MinAccelerationFactor, c.MaxAccelerationFactor);
         }
 
         private void RegisterButtonsListeners()

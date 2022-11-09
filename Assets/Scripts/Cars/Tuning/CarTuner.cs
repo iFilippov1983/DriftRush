@@ -16,7 +16,7 @@ namespace RaceManager.Cars
         private CarVisual _carVisual;
 
         public Action OnCurrentCarChanged;
-        public Func<CarCharacteristicsType, float, int> OnCharacteristicValueChanged;
+        public Func<CharType, float, int> OnCharacteristicValueChanged;
         public UnityEvent<TuneData> OnCharValueLimit = new UnityEvent<TuneData>();
 
         public CarTuner(CarsDepot playerCarDepot)
@@ -33,25 +33,25 @@ namespace RaceManager.Cars
             _carVisual = carVisual;
         }
 
-        private int ChangeVisuals(CarCharacteristicsType characteristics, float value)
+        private int ChangeVisuals(CharType characteristics, float value)
         {
             switch (characteristics)
             {
-                case CarCharacteristicsType.Speed:
+                case CharType.Speed:
                     //TuneSpeed(value);
-                    TuneVisual(CarCharacteristicsType.Speed, value);
+                    TuneVisual(CharType.Speed, value);
                     break;
-                case CarCharacteristicsType.Mobility:
+                case CharType.Mobility:
                     //TuneMobility(value);
-                    TuneVisual(CarCharacteristicsType.Mobility, value);
+                    TuneVisual(CharType.Mobility, value);
                     break;
-                case CarCharacteristicsType.Durability:
+                case CharType.Durability:
                     //TuneDurability(value);
-                    TuneVisual(CarCharacteristicsType.Durability, value);
+                    TuneVisual(CharType.Durability, value);
                     break;
-                case CarCharacteristicsType.Acceleration:
+                case CharType.Acceleration:
                     //TuneAcceleration(value);
-                    TuneVisual(CarCharacteristicsType.Acceleration, value);
+                    TuneVisual(CharType.Acceleration, value);
                     break;
             }
 
@@ -168,16 +168,16 @@ namespace RaceManager.Cars
         //   // _playerCarDepot.UpdateProfile(_carProfile);
         //}
 
-        private void TuneVisual(CarCharacteristicsType cType, float value)
+        private void TuneVisual(CharType cType, float value)
         {
             var characteristics = _carProfile.CarCharacteristics;
 
             int currentFactor = cType switch
             {
-                CarCharacteristicsType.Speed => characteristics.CurrentSpeedFactor,
-                CarCharacteristicsType.Mobility => characteristics.CurrentMobilityFactor,
-                CarCharacteristicsType.Durability => characteristics.CurrentDurabilityFactor,
-                CarCharacteristicsType.Acceleration => characteristics.CurrentAccelerationFactor,
+                CharType.Speed => characteristics.CurrentSpeedFactor,
+                CharType.Mobility => characteristics.CurrentMobilityFactor,
+                CharType.Durability => characteristics.CurrentDurabilityFactor,
+                CharType.Acceleration => characteristics.CurrentAccelerationFactor,
                 _ => 0
             };
 
@@ -193,10 +193,10 @@ namespace RaceManager.Cars
 
             _ = cType switch
             {
-                CarCharacteristicsType.Speed => _carProfile.CarCharacteristics.CurrentSpeedFactor = newValue,
-                CarCharacteristicsType.Mobility => _carProfile.CarCharacteristics.CurrentMobilityFactor = newValue,
-                CarCharacteristicsType.Durability => _carProfile.CarCharacteristics.CurrentDurabilityFactor = newValue,
-                CarCharacteristicsType.Acceleration => _carProfile.CarCharacteristics.CurrentAccelerationFactor = newValue,
+                CharType.Speed => _carProfile.CarCharacteristics.CurrentSpeedFactor = newValue,
+                CharType.Mobility => _carProfile.CarCharacteristics.CurrentMobilityFactor = newValue,
+                CharType.Durability => _carProfile.CarCharacteristics.CurrentDurabilityFactor = newValue,
+                CharType.Acceleration => _carProfile.CarCharacteristics.CurrentAccelerationFactor = newValue,
                 _ => 0
             };
 
@@ -206,19 +206,19 @@ namespace RaceManager.Cars
 
             PartLevel currentLevel = cType switch
             {
-                CarCharacteristicsType.Speed => carConfigVisual.CurrentWheelsLevel = newLevel,
-                CarCharacteristicsType.Mobility => carConfigVisual.CurrentSuspentionLevel = newLevel,
-                CarCharacteristicsType.Durability => carConfigVisual.CurrentBumpersLevel = newLevel,
-                CarCharacteristicsType.Acceleration => carConfigVisual.CurrentBodyKitsLevel = newLevel,
+                CharType.Speed => carConfigVisual.CurrentWheelsLevel = newLevel,
+                CharType.Mobility => carConfigVisual.CurrentSuspentionLevel = newLevel,
+                CharType.Durability => carConfigVisual.CurrentBumpersLevel = newLevel,
+                CharType.Acceleration => carConfigVisual.CurrentBodyKitsLevel = newLevel,
                 _ => throw new NotImplementedException()
             };
 
             (PartType, PartLevel) d = cType switch
             {
-                CarCharacteristicsType.Speed => (PartType.Wheel, currentLevel),
-                CarCharacteristicsType.Mobility => (PartType.Suspention, currentLevel),
-                CarCharacteristicsType.Durability => (PartType.Bumper, currentLevel),
-                CarCharacteristicsType.Acceleration => (PartType.BodyKit, currentLevel),
+                CharType.Speed => (PartType.Wheel, currentLevel),
+                CharType.Mobility => (PartType.Suspention, currentLevel),
+                CharType.Durability => (PartType.Bumper, currentLevel),
+                CharType.Acceleration => (PartType.BodyKit, currentLevel),
                 _ => throw new NotImplementedException()
             };
 
@@ -238,15 +238,15 @@ namespace RaceManager.Cars
             return true;
         }
 
-        private PartLevel GetPartLevel(CarCharacteristicsType characteristics)
+        private PartLevel GetPartLevel(CharType characteristics)
         {
             var c = _carProfile.CarCharacteristics;
             int percentage = characteristics switch
             {
-                CarCharacteristicsType.Speed => Mathf.RoundToInt(c.CurrentSpeedFactor * 100 / c.MaxSpeedFactor),
-                CarCharacteristicsType.Mobility => Mathf.RoundToInt(c.CurrentMobilityFactor * 100 / c.MaxMobilityFactor),
-                CarCharacteristicsType.Durability => Mathf.RoundToInt(c.CurrentDurabilityFactor * 100 / c.MaxDurabilityFactor),
-                CarCharacteristicsType.Acceleration => Mathf.RoundToInt(c.CurrentAccelerationFactor * 100 / c.MaxAccelerationFactor),
+                CharType.Speed => Mathf.RoundToInt(c.CurrentSpeedFactor * 100 / c.MaxSpeedFactor),
+                CharType.Mobility => Mathf.RoundToInt(c.CurrentMobilityFactor * 100 / c.MaxMobilityFactor),
+                CharType.Durability => Mathf.RoundToInt(c.CurrentDurabilityFactor * 100 / c.MaxDurabilityFactor),
+                CharType.Acceleration => Mathf.RoundToInt(c.CurrentAccelerationFactor * 100 / c.MaxAccelerationFactor),
                 _ => throw new NotImplementedException(),
             };
 
@@ -283,7 +283,7 @@ namespace RaceManager.Cars
 
     public struct TuneData
     {
-        public CarCharacteristicsType cType;
+        public CharType cType;
         public int value;
         public int available;
     }

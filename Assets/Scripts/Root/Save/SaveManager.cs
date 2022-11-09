@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
@@ -27,7 +28,7 @@ namespace RaceManager.Root
 
         public SaveManager()
         {
-
+            Aot();
 
             _saveActions = new List<Action<SaveData>>();
             _loadActions = new List<Action<SaveData>>();
@@ -136,6 +137,41 @@ namespace RaceManager.Root
             {
                 loadAction(data);
             }
+        }
+
+
+
+        private bool s_alwaysFalse = DateTime.UtcNow.Year < 0;
+
+        public void Aot() => EnsureList<Action<SaveData>>();
+
+        private void Ensure(Action action)
+        {
+            if (IsFalse())
+            {
+                try
+                {
+                    action();
+                }
+                catch (Exception innerException)
+                {
+                    throw new InvalidOperationException("", innerException);
+                }
+            }
+        }
+
+        private void EnsureList<T>()
+        {
+            Ensure(delegate
+            {
+                List<T> list = new List<T>();
+                new HashSet<T>();
+            });
+        }
+
+        private bool IsFalse()
+        {
+            return s_alwaysFalse;
         }
     }
 }

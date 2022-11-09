@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Utilities;
 using Sirenix.OdinInspector;
 using UniRx;
 using UnityEngine;
@@ -24,11 +25,12 @@ namespace RaceManager.Root
         [DictionaryDrawerSettings(KeyLabel = "Key", ValueLabel = "Data")]
         public Dictionary<string, string> _lastSave = new Dictionary<string, string>();
 
-        //public string SavePath = Path.Combine(Application.persistentDataPath, FileName);  // string.Concat(Application.persistentDataPath, FileName); // Path.Combine(Application.persistentDataPath, FileName);
-
         public SaveManager()
         {
-            //_savePath = Path.Combine(Application.persistentDataPath, FileName); //SavePath;
+
+
+            _saveActions = new List<Action<SaveData>>();
+            _loadActions = new List<Action<SaveData>>();
         }
 
 #if UNITY_EDITOR
@@ -36,7 +38,7 @@ namespace RaceManager.Root
 #endif
         public static void RemoveSave()
         {
-            var path = Path.Combine(Application.persistentDataPath, FileName);// SavePath;
+            var path = Path.Combine(Application.persistentDataPath, FileName);
             if (File.Exists(path))
             {
                 File.Delete(path);
@@ -123,7 +125,7 @@ namespace RaceManager.Root
             }
 
             string loadedJson = File.ReadAllText(path);
-            var data = JsonConvert.DeserializeObject<SaveData>(loadedJson);
+            SaveData data = JsonConvert.DeserializeObject<SaveData>(loadedJson);
 
             _lastSave = new Dictionary<string, string>();
 

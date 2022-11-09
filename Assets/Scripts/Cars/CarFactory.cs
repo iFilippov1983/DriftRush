@@ -1,15 +1,8 @@
-﻿using Google.Protobuf.WellKnownTypes;
-using RaceManager.Alt;
-using RaceManager.Cameras;
-using RaceManager.Cars.Effects;
-using RaceManager.Root;
-using RaceManager.Tools;
+﻿using RaceManager.Cars.Effects;
 using RaceManager.Waypoints;
-using System;
 using UnityEngine;
-using Zenject;
-using Object = UnityEngine.Object;
-using Random = UnityEngine.Random;
+//using Object = UnityEngine.Object;
+//using Random = UnityEngine.Random;
 
 namespace RaceManager.Cars
 {
@@ -125,7 +118,7 @@ namespace RaceManager.Cars
             //TODO: make settings generation depending on Player's progress level
             
             CarProfile carProfile = _carsDepot.CarProfiles[Random.Range(0, _carsDepot.CarProfiles.Count)];
-            carProfile.CarConfigVisual.CurrentMaterialsSetType = (MaterialSetType)Random.Range(0, 2);
+            //carProfile.CarConfigVisual.CurrentMaterialsSetType = (MaterialSetType)Random.Range(0, 2);
 
 
             return carProfile;

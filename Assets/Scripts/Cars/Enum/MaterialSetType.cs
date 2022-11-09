@@ -7,5 +7,6 @@ namespace RaceManager.Cars
     { 
         Default = 0,
         Military = 1,
+        Lighting = 2,
     }
 }

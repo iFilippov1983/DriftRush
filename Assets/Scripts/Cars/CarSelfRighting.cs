@@ -1,18 +1,18 @@
 using RaceManager.Tools;
 using Sirenix.OdinInspector;
-using System;
-using System.Collections;
 using UnityEngine;
 
 namespace RaceManager.Cars
 {
+    /// <summary>
+    /// Automatically puts the car the right way up, if it has come to rest upside-down or stuck. (Can be also used in debug purposes)
+    /// </summary>
     public class CarSelfRighting : MonoBehaviour
     {
         private const float GroundingForce = 50000f;
 
-        // Automatically put the car the right way up, if it has come to rest upside-down or stuck.
-        [SerializeField] private float _waitTimeStuck = 1f;              // time to wait before self righting
-        [SerializeField] private float _velocityThreshold = 0.5f;   // the velocity below which the car is considered stationary for self-righting
+        [SerializeField] private float _waitTimeStuck = 1f;             // time to wait before self righting
+        [SerializeField] private float _velocityThreshold = 0.5f;       // the velocity below which the car is considered stationary for self-righting
         private float _stuckTimer;
 
         private CarAI _carAI;
@@ -23,11 +23,8 @@ namespace RaceManager.Cars
         [ReadOnly]
         public Transform LastCheckpoint;
 
-        //public void Initialize(CarAIControl carAI, Rigidbody carRigidbody)
-        //{ 
-        //    _carAI = carAI;
-        //    _rigidbody = carRigidbody;
-        //}
+        public void RightCar() => RespawnCar(LastOkPoint);
+        public void GetToCheckpoint() => RespawnCar(LastCheckpoint);
 
         private void OnEnable()
         {
@@ -37,20 +34,15 @@ namespace RaceManager.Cars
             _wheels = GetComponent<Car>().Wheels;
         }
 
-        internal void Setup(Wheel[] wheels)
-        {
-            _wheels = wheels;
-        }
-
         private void Update()
         {
             HandleSafety();
         }
 
-        private void FixedUpdate()
-        {
-            //GroundingControl();
-        }
+        //private void FixedUpdate()
+        //{
+        //    GroundingControl();
+        //}
 
         private void OnCollisionEnter(Collision collision)
         {
@@ -84,28 +76,16 @@ namespace RaceManager.Cars
             }
         }
 
-        public void RightCar()
+        private void RespawnCar(Transform positionToRespawnOn)
         {
-            if (LastOkPoint != null)
+            if (positionToRespawnOn != null)
             {
                 _carAI.StopDriving();
-                transform.position = LastOkPoint.position;
-                transform.rotation = LastOkPoint.rotation;
-                //$"Returned to position {LastOkPoint.position}".Log(StringConsoleLog.Color.Green);
+                transform.position = positionToRespawnOn.position;
+                transform.rotation = positionToRespawnOn.rotation;
                 _carAI.StartEngine();
             }
             _stuckTimer = 0;
-        }
-
-        public void GetToCheckpoint()
-        {
-            if (LastCheckpoint != null)
-            {
-                _carAI.StopDriving();
-                transform.position = LastCheckpoint.position;
-                transform.rotation = LastCheckpoint.rotation;
-                _carAI.StartEngine();
-            }
         }
 
         private void GroundingControl()

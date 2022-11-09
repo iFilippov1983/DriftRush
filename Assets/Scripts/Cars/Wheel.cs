@@ -30,9 +30,9 @@ namespace RaceManager.Cars
 
 		WheelColliderHandler m_PGWC;
 
-		public WheelColliderHandler WheelColliderHandler => m_PGWC;
+		public WheelColliderHandler WcHandler => m_PGWC;
 
-		public WheelColliderHandler PG_WheelCollider
+		public WheelColliderHandler WheelColliderHandler
 		{
 			get
 			{
@@ -120,7 +120,7 @@ namespace RaceManager.Cars
 
 		public void UpdateFrictionConfig(WheelColliderConfig config)
 		{
-			PG_WheelCollider.UpdateConfig(config);
+			WheelColliderHandler.UpdateConfig(config);
 		}
 	}
 }

@@ -9,8 +9,7 @@ namespace RaceManager.Cars
     [Serializable]
     public class WheelPart : IPart
     {
-        [SerializeField] private WheelColliderHandler _wheelHandler;
-        [SerializeField] private GameObject _wheelGameObject;
+        [SerializeField] private Wheel _wheel;
         [SerializeField] private WheelProperty _wheelProperty;
         [ShowInInspector, ReadOnly]
         private bool _isActive;
@@ -27,10 +26,11 @@ namespace RaceManager.Cars
 
                 if (_isActive)
                 {
-                    _wheelGameObject.transform.localScale = _wheelProperty.WheelScale;
-                    var config = _wheelHandler.Config;
+                    _wheel.WheelView.localScale = _wheelProperty.WheelScale;
+                    var config = _wheel.WheelColliderHandler.Config; 
                     config.Radius = _wheelProperty.WheelRadius;
-                    _wheelHandler.UpdateConfig(config);
+                    _wheel.WheelColliderHandler.Config = config;
+                    _wheel.WheelColliderHandler.UpdateConfig();
                 }
             }
         }
@@ -58,7 +58,7 @@ namespace RaceManager.Cars
     [Serializable]
     public class SuspentionPart : IPart
     {
-        [SerializeField] private WheelColliderHandler _wheelHandler;
+        [SerializeField] private Wheel _wheel;
         [SerializeField] private SuspentionProperty _suspentionProperty;
         [ShowInInspector, ReadOnly]
         private bool _isActive;
@@ -75,9 +75,10 @@ namespace RaceManager.Cars
 
                 if (_isActive)
                 {
-                    var config = _wheelHandler.Config;
+                    var config = _wheel.WheelColliderHandler.Config; 
                     config.SuspensionDistance = _suspentionProperty.SuspentionHeight;
-                    _wheelHandler.UpdateConfig(config);
+                    _wheel.WheelColliderHandler.Config = config;
+                    _wheel.WheelColliderHandler.UpdateConfig();
                 }
             }
         }

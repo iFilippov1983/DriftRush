@@ -4,5 +4,10 @@
     { 
         Toyota_Base = 0,
         Military_Supra = 1,
+        Lighting_Supra = 2,
+
+        Porche_992 = 100,
+
+        Ferrari_489 = 200,
     }
 }

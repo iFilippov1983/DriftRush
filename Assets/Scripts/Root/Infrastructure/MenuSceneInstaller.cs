@@ -1,9 +1,12 @@
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Utilities;
 using RaceManager.Cameras;
 using RaceManager.Cars;
 using RaceManager.Cars.Effects;
 using RaceManager.Root;
 using RaceManager.Shed;
 using RaceManager.UI;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,6 +25,7 @@ namespace RaceManager.Infrastructure
         {
             Bind(Singleton<Resolver>.Instance);
             Bind(Singleton<MenuCamerasHandler>.Instance);
+            Bind(Singleton<ShedInitializer>.Instance);
 
             Bind(_mainUI);
             Bind(_podium);

@@ -26,7 +26,8 @@ namespace RaceManager.Cars
         private MaterialsContainer _materialsContainer;
         private List<IObserver<DriverProfile>> _observersList;
 
-        public DriverProfile Profile => _driverProfile;
+        public DriverProfile DriverProfile => _driverProfile;
+        public PlayerProfile PlayerProfile => _playerProfile;
         public GameObject CarObject => _carObject;
         public Transform CarTargetToFollow => _carAI.Target;
         public WaypointsTracker WaypointsTracker => _waypointsTracker;

@@ -72,13 +72,13 @@ namespace RaceManager.Race
             _positionsHandler.StartHandling(_driversList, _waypointsTrackersList);
         }
 
-        private void Start()
-        {
-            //InitCameras();
-            //InitDrivers();
+        //private void Start()
+        //{
+        //    InitCameras();
+        //    InitDrivers();
 
-            //_positionsHandler.StartHandling(_driversList, _waypointsTrackersList);
-        }
+        //    _positionsHandler.StartHandling(_driversList, _waypointsTrackersList);
+        //}
 
         private void Update()
         {
@@ -128,7 +128,7 @@ namespace RaceManager.Race
                         tracker.ResetTargetToCashedValues();
                     }
 
-                    _raceUI.Init(driver.Profile, () => selfRighting.RightCar(), GetToCheckpoint);
+                    _raceUI.Init(driver.DriverProfile, driver.PlayerProfile, selfRighting.RightCar, GetToCheckpoint);
                 }
                 else
                 {

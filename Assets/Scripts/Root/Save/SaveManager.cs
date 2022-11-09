@@ -18,9 +18,9 @@ namespace RaceManager.Root
         public const string FileName = "save.data";
 
         private readonly List<Type> _registeredTypes = new List<Type>();
-        private readonly List<Action<SaveData>> _saveActions = new List<Action<SaveData>>();
-        private readonly List<Action<SaveData>> _loadActions = new List<Action<SaveData>>();
-        private readonly string _savePath;
+        private readonly List<Action<SaveData>> _saveActions;// = new List<Action<SaveData>>();
+        private readonly List<Action<SaveData>> _loadActions;// = new List<Action<SaveData>>();
+        //private readonly string _savePath;
 
         [ShowInInspector]
         [DictionaryDrawerSettings(KeyLabel = "Key", ValueLabel = "Data")]
@@ -28,10 +28,9 @@ namespace RaceManager.Root
 
         public SaveManager()
         {
-            Aot();
-
-            _saveActions = new List<Action<SaveData>>();
-            _loadActions = new List<Action<SaveData>>();
+            HashSet<Action<SaveData>> actions = new HashSet<Action<SaveData>>();
+            _saveActions = new List<Action<SaveData>>(actions);
+            _loadActions = new List<Action<SaveData>>(actions);
         }
 
 #if UNITY_EDITOR

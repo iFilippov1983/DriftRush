@@ -8,11 +8,13 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Utilities;
 using System;
 using SaveData = System.Collections.Generic.Dictionary<string, Newtonsoft.Json.Linq.JObject>;
+using Sirenix.Serialization;
 
 namespace RaceManager.Infrastructure
 {
     public class BootstrapInstaller : BaseInstaller
     {
+        Action<SaveData> aotAction;
 
         public override void InstallBindings()
         {
@@ -28,6 +30,8 @@ namespace RaceManager.Infrastructure
 
         private void AotEnsureObjects()
         {
+            AotHelper.Ensure(() => aotAction.Invoke(null));
+
             AotHelper.EnsureType<SaveData>();
             AotHelper.EnsureType<JObject>();
 

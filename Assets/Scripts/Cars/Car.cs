@@ -191,8 +191,9 @@ namespace RaceManager.Cars
             _id = MakeId();
             RB.centerOfMass = COM.localPosition;
 
-            if (_wheels == null)
-                InitWheels();
+            InitWheels();
+            //if (_wheels == null)
+            //    InitWheels();
 
             //Set drive wheel.
             switch (DriveType)

@@ -78,7 +78,7 @@ namespace RaceManager.Root
             //        _lastSave.Add(typeString, JsonConvert.SerializeObject(savable.Save()));
             //        d[typeString] = JObject.FromObject(savable.Save());
             //    });
-
+            //
             //_loadActions.Add(
             //    d =>
             //    {
@@ -145,6 +145,9 @@ namespace RaceManager.Root
             }
         }
 
+        /// <summary>
+        /// Needed only for correct AOT serialization
+        /// </summary>
         [Serializable]
         public class SaveAction
         {
@@ -162,13 +165,16 @@ namespace RaceManager.Root
             public Action<SaveData> Action =>
                 d =>
                 {
-                    if (!d.ContainsKey(_typeString))
+                    if (_lastSave.ContainsKey(_typeString))
                         return;
                     _lastSave.Add(_typeString, JsonConvert.SerializeObject(_savable.Save()));
                     d[_typeString] = JObject.FromObject(_savable.Save());
                 };
         }
 
+        /// <summary>
+        /// Needed only for correct AOT serialization
+        /// </summary>
         [Serializable]
         public class LoadAction
         {

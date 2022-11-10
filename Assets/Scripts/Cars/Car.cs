@@ -242,6 +242,30 @@ namespace RaceManager.Cars
             RearLeftWheel.TrailOffset = TrailOffsetLeft;
             RearRightWheel.TrailOffset = TrailOffsetRight;
 
+            var config = FrontLeftWheel.WheelColliderHandler.Config;
+            config.ForwardFriction = _carConfig.FWheelsForwardFriction;
+            config.SidewaysFriction = _carConfig.FWheelsSidewaysFriction;
+            FrontLeftWheel.WheelColliderHandler.Config = config;
+            FrontLeftWheel.WheelColliderHandler.UpdateConfig();
+
+            config = FrontRightWheel.WheelColliderHandler.Config;
+            config.ForwardFriction = _carConfig.FWheelsForwardFriction;
+            config.SidewaysFriction = _carConfig.FWheelsSidewaysFriction;
+            FrontRightWheel.WheelColliderHandler.Config = config;
+            FrontRightWheel.WheelColliderHandler.UpdateConfig();
+
+            config = RearLeftWheel.WheelColliderHandler.Config;
+            config.ForwardFriction = _carConfig.RWheelsForwardFriction;
+            config.SidewaysFriction = _carConfig.RWheelsSidewaysFriction;
+            RearLeftWheel.WheelColliderHandler.Config = config;
+            RearLeftWheel.WheelColliderHandler.UpdateConfig();
+
+            config = RearRightWheel.WheelColliderHandler.Config;
+            config.ForwardFriction = _carConfig.RWheelsForwardFriction;
+            config.SidewaysFriction = _carConfig.RWheelsSidewaysFriction;
+            RearRightWheel.WheelColliderHandler.Config = config;
+            RearRightWheel.WheelColliderHandler.UpdateConfig();
+
             _wheels = new Wheel[4] {
             FrontLeftWheel,
             FrontRightWheel,
@@ -251,7 +275,7 @@ namespace RaceManager.Cars
         }
 
         /// <summary>
-        /// Update controls of car, from user control (TODO AI control).
+        /// Update controls of car, from user/AI controler.
         /// </summary>
         /// <param name="horizontal">Turn direction</param>
         /// <param name="vertical">Acceleration</param>

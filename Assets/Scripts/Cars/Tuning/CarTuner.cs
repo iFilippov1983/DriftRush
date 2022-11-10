@@ -28,7 +28,7 @@ namespace RaceManager.Cars
             OnCharacteristicValueChanged += TuneCar;
         }
 
-        public void SetCarVisualToTune(CarVisual carVisual)
+        public void SetTuner(CarVisual carVisual)
         {
             _carVisual = carVisual;
         }
@@ -38,20 +38,20 @@ namespace RaceManager.Cars
             switch (characteristics)
             {
                 case CharacteristicType.Speed:
-                    //TuneSpeed(value);
                     TuneVisual(CharacteristicType.Speed, value);
+                    TuneSpeed(value);
                     break;
                 case CharacteristicType.Mobility:
-                    //TuneMobility(value);
                     TuneVisual(CharacteristicType.Mobility, value);
+                    TuneMobility(value);
                     break;
                 case CharacteristicType.Durability:
-                    //TuneDurability(value);
                     TuneVisual(CharacteristicType.Durability, value);
+                    TuneDurability(value);
                     break;
                 case CharacteristicType.Acceleration:
-                    //TuneAcceleration(value);
                     TuneVisual(CharacteristicType.Acceleration, value);
+                    TuneAcceleration(value);
                     break;
             }
 
@@ -60,9 +60,73 @@ namespace RaceManager.Cars
             return _carProfile.CarCharacteristics.AvailableFactorsToUse;
         }
 
-        private void TunePhysics()
+        private void TuneSpeed(float value)
+        {
+            CarProfile.Characteristics c = _carProfile.CarCharacteristics;
+            Speed s = _carProfile.Speed;
+
+            float newSpeedValue = CalculateValue(c.MaxSpeedFactor, c.MinSpeedFactor, s.Max, s.Min, value);
+            _carProfile.CarConfig.MaxSpeed = newSpeedValue;
+        }
+
+        private void TuneMobility(float value)
+        {
+            CarProfile.Characteristics c = _carProfile.CarCharacteristics;
+            Mobility m = _carProfile.Mobility;
+
+            float newForwardFriction_f = CalculateValue(c.MaxMobilityFactor, c.MinMobilityFactor, m.f_frictionForward_Max, m.f_frictionForward_Min, value);
+            _carProfile.CarConfig.FWheelsForwardFriction = newForwardFriction_f;
+
+            float newSidewaysFriction_f = CalculateValue(c.MaxMobilityFactor, c.MinMobilityFactor, m.f_frictionSideway_Max, m.f_frictionSideway_Min, value);
+            _carProfile.CarConfig.FWheelsSidewaysFriction = newSidewaysFriction_f;
+
+            float newForwardFriction_r = CalculateValue(c.MaxMobilityFactor, c.MinMobilityFactor, m.r_frictionForward_Max, m.r_frictionForward_Min, value);
+            _carProfile.CarConfig.RWheelsForwardFriction = newForwardFriction_r;
+
+            float newSidewaysFriction_r = CalculateValue(c.MaxMobilityFactor, c.MinMobilityFactor, m.r_frictionSideway_Max, m.r_frictionSideway_Min, value);
+            _carProfile.CarConfig.RWheelsSidewaysFriction = newSidewaysFriction_r;
+
+            float newMaxSteerAngle = CalculateValue(c.MaxMobilityFactor, c.MinMobilityFactor, m.steerAngle_Max, m.steerAngle_Min, value);
+            _carProfile.CarConfig.MaxSteerAngle = newMaxSteerAngle;
+
+            float newHelpSteerPower = CalculateValue(c.MaxMobilityFactor, c.MinMobilityFactor, m.helpSteerPower_Max, m.helpSteerPower_Min, value);
+            _carProfile.CarConfig.HelpSteerPower = newHelpSteerPower;
+
+            float newSteerAngleChangeSpeed = CalculateValue(c.MaxMobilityFactor, c.MinMobilityFactor, m.steerAngleChangeSpeed_Max, m.steerAngleChangeSpeed_Min, value);
+            _carProfile.CarConfig.SteerAngleChangeSpeed = newSteerAngleChangeSpeed;
+        }
+
+        private void TuneDurability(float value)
+        {
+            CarProfile.Characteristics c = _carProfile.CarCharacteristics;
+            Durability d = _carProfile.Durability;
+
+            float newDUrability = CalculateValue(c.MaxDurabilityFactor, c.MinDurabilityFactor, d.durabilityMax, d.durabilityMin, value);
+            _carProfile.CarConfig.Durability = newDUrability;
+        }
+
+        private void TuneAcceleration(float value)
+        {
+            CarProfile.Characteristics c = _carProfile.CarCharacteristics;
+            Acceleration a = _carProfile.Acceleration;
+
+            float newMaxTorque = CalculateValue(c.MaxAccelerationFactor, c.MinAccelerationFactor, a.torqueMax, a.torqueMin, value);
+            _carProfile.CarConfig.MaxMotorTorque = newMaxTorque;
+
+            float newBrakeTorque = CalculateValue(c.MaxAccelerationFactor, c.MinAccelerationFactor, a.brakeTorqueMax, a.brakeTorqueMin, value);
+            _carProfile.CarConfig.MaxBrakeTorque = newBrakeTorque;
+
+            float newRPMToNextGearPercent = CalculateValue(c.MaxAccelerationFactor, c.MinAccelerationFactor, a.rpmToNextGearMax, a.rpmToNextGearMin, value);
+            _carProfile.CarConfig.RPMToNextGearPercent = newRPMToNextGearPercent;
+        }
+
+        private float CalculateValue(int maxFactor, int minFactor, float maxProp, float minProp, float sliderValue)
         { 
-        
+            float koef = (float) minFactor / (float) maxFactor;
+            float charUnit = (maxProp - minProp) * koef;
+            float newValue = minProp + charUnit * sliderValue;
+
+            return newValue;
         }
 
         private void TuneVisual(CharacteristicType cType, float value)

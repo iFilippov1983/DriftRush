@@ -46,11 +46,11 @@ namespace RaceManager.Shed
         {
             CarFactory carFactory = new CarFactory(_playerCarDepot, _materialsContainer, _podium.CarPlace);
             carFactory.ConstructCarForShed(out _carVisual);
+            _carTuner.SetTuner(_carVisual);
         }
 
         private void InitializeTunerVisual()
         {
-            _carTuner.SetCarVisualToTune(_carVisual);
             _mainUI.OnCarProfileChange += _carTuner.OnCurrentCarChanged;
 
             _mainUI.OnSpeedValueChange

@@ -46,15 +46,8 @@ namespace RaceManager.Cars
 
             driverProfile = new DriverProfile(_driverType);
 
-            //_carProfile.CarConfigVisual.SetMaterials(_materialsContainer);
             carVisual = go.GetComponent<CarVisual>();
             carVisual.Initialize(_carProfile.CarConfigVisual, _materialsContainer);
-            //carVisual.CarProfile = _carProfile;
-            //carVisual.SetMaterialsContainer(_materialsContainer);
-            //carVisual.CarConfigVisual = _carProfile.CarConfigVisual;
-            //carVisual.CarConfigVisual.SetMaterials(_materialsContainer);
-            //carVisual.ApplyVisual();
-            
 
             car = go.GetComponent<Car>();
             car.Initialize(_carProfile.CarConfig);
@@ -80,14 +73,8 @@ namespace RaceManager.Cars
 
             var go = Object.Instantiate(prefab, _spawnPoint.position, _spawnPoint.rotation, _spawnPoint);
 
-            //_carProfile.CarConfigVisual.SetMaterials(_materialsContainer);
             carVisual = go.GetComponent<CarVisual>();
             carVisual.Initialize(_carProfile.CarConfigVisual, _materialsContainer);
-            //carVisual.CarProfile = _carProfile;
-            //carVisual.SetMaterialsContainer(_materialsContainer);
-            //carVisual.CarConfigVisual = _carProfile.CarConfigVisual;
-            //carVisual.CarConfigVisual.SetMaterials(_materialsContainer);
-            //carVisual.ApplyVisual();
 
             var car = go.GetComponent<Car>();
             car.EffectsChild.SetActive(false);

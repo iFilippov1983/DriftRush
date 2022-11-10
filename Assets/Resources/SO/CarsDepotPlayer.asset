@@ -16,6 +16,34 @@ MonoBehaviour:
   CurrentCarName: 0
   CarProfiles:
   - CarName: 4
+    Speed:
+      Max: 0
+      Min: 0
+    Mobility:
+      f_frictionForward_Max: 0
+      f_frictionForward_Min: 0
+      f_frictionSideway_Max: 0
+      f_frictionSideway_Min: 0
+      r_frictionForward_Max: 0
+      r_frictionForward_Min: 0
+      r_frictionSideway_Max: 0
+      r_frictionSideway_Min: 0
+      steerAngle_Max: 0
+      steerAngle_Min: 0
+      helpSteerPower_Max: 0
+      helpSteerPower_Min: 0
+      steerAngleSpeedChange_Max: 0
+      steerAngleSpeedChange_Min: 0
+    Acceleration:
+      torqueMax: 0
+      torqueMin: 0
+      brakeTorqueMax: 0
+      brakeTorqueMin: 0
+      rpmToNextGearMax: 0
+      rpmToNextGearMin: 0
+    Durability:
+      durabilityMax: 0
+      durabilityMin: 0
     CarCharacteristics:
       Rarity: 2
       isAvailable: 0
@@ -125,6 +153,34 @@ MonoBehaviour:
       CurrentBumpersLevel: 0
       CurrentBodyKitsLevel: 3
   - CarName: 2
+    Speed:
+      Max: 0
+      Min: 0
+    Mobility:
+      f_frictionForward_Max: 0
+      f_frictionForward_Min: 0
+      f_frictionSideway_Max: 0
+      f_frictionSideway_Min: 0
+      r_frictionForward_Max: 0
+      r_frictionForward_Min: 0
+      r_frictionSideway_Max: 0
+      r_frictionSideway_Min: 0
+      steerAngle_Max: 0
+      steerAngle_Min: 0
+      helpSteerPower_Max: 0
+      helpSteerPower_Min: 0
+      steerAngleSpeedChange_Max: 0
+      steerAngleSpeedChange_Min: 0
+    Acceleration:
+      torqueMax: 0
+      torqueMin: 0
+      brakeTorqueMax: 0
+      brakeTorqueMin: 0
+      rpmToNextGearMax: 0
+      rpmToNextGearMin: 0
+    Durability:
+      durabilityMax: 0
+      durabilityMin: 0
     CarCharacteristics:
       Rarity: 2
       isAvailable: 0
@@ -234,6 +290,34 @@ MonoBehaviour:
       CurrentBumpersLevel: 1
       CurrentBodyKitsLevel: 3
   - CarName: 0
+    Speed:
+      Max: 130
+      Min: 90
+    Mobility:
+      f_frictionForward_Max: 0
+      f_frictionForward_Min: 0
+      f_frictionSideway_Max: 0
+      f_frictionSideway_Min: 0
+      r_frictionForward_Max: 0
+      r_frictionForward_Min: 0
+      r_frictionSideway_Max: 0
+      r_frictionSideway_Min: 0
+      steerAngle_Max: 0
+      steerAngle_Min: 0
+      helpSteerPower_Max: 0
+      helpSteerPower_Min: 0
+      steerAngleSpeedChange_Max: 0
+      steerAngleSpeedChange_Min: 0
+    Acceleration:
+      torqueMax: 0
+      torqueMin: 0
+      brakeTorqueMax: 0
+      brakeTorqueMin: 0
+      rpmToNextGearMax: 0
+      rpmToNextGearMin: 0
+    Durability:
+      durabilityMax: 0
+      durabilityMin: 0
     CarCharacteristics:
       Rarity: 0
       isAvailable: 1
@@ -241,21 +325,21 @@ MonoBehaviour:
       CurrentFactorsProgress: 200
       MinSpeedFactor: 1
       MaxSpeedFactor: 120
-      CurrentSpeedFactor: 60
+      CurrentSpeedFactor: 88
       MinMobilityFactor: 1
       MaxMobilityFactor: 100
-      CurrentMobilityFactor: 50
+      CurrentMobilityFactor: 24
       MinDurabilityFactor: 1
       MaxDurabilityFactor: 80
-      CurrentDurabilityFactor: 40
+      CurrentDurabilityFactor: 59
       MinAccelerationFactor: 1
       MaxAccelerationFactor: 100
-      CurrentAccelerationFactor: 50
+      CurrentAccelerationFactor: 29
     CarConfig:
       CarName: 0
       SpeedType: 1
       DriveType: 2
-      MaxSpeed: 160
+      MaxSpeed: 119.333336
       CruiseSpeed: 20
       CruiseSpeedPercentMax: 0.8
       CruiseSpeedPercentMin: 0.7
@@ -338,7 +422,7 @@ MonoBehaviour:
       CurrentMaterialsSetType: 2
       _availableMaterialSets: 000000000100000002000000
       CurrentWheelsSetType: 0
-      CurrentWheelsLevel: 1
-      CurrentSuspentionLevel: 1
-      CurrentBumpersLevel: 1
+      CurrentWheelsLevel: 2
+      CurrentSuspentionLevel: 0
+      CurrentBumpersLevel: 2
       CurrentBodyKitsLevel: 1

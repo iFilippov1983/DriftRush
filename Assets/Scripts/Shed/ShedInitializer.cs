@@ -46,18 +46,18 @@ namespace RaceManager.Shed
         {
             CarFactory carFactory = new CarFactory(_playerCarDepot, _materialsContainer, _podium.CarPlace);
             carFactory.ConstructCarForShed(out _carVisual);
+            _carTuner.SetTuner(_carVisual);
         }
 
         private void InitializeTunerVisual()
         {
-            _carTuner.SetCarVisualToTune(_carVisual);
             _mainUI.OnCarProfileChange += _carTuner.OnCurrentCarChanged;
 
             _mainUI.OnSpeedValueChange
                 .Subscribe((v) =>
                 {
                     //$"Speed - On next({v})".Log(ConsoleLog.Color.Yellow);
-                    int availables = (int)_carTuner.OnCharacteristicValueChanged?.Invoke(CharType.Speed, v);
+                    int availables = (int)_carTuner.OnCharacteristicValueChanged?.Invoke(CharacteristicType.Speed, v);
                     _mainUI.OnTuneValuesChange?.Invoke(availables);
                     _saveManager.Save();
                 });
@@ -66,7 +66,7 @@ namespace RaceManager.Shed
                 .Subscribe((v) =>
                 {
                     //$"Mobility - On next({v})".Log(ConsoleLog.Color.Yellow);
-                    int availables = (int)_carTuner.OnCharacteristicValueChanged?.Invoke(CharType.Mobility, v);
+                    int availables = (int)_carTuner.OnCharacteristicValueChanged?.Invoke(CharacteristicType.Mobility, v);
                     _mainUI.OnTuneValuesChange?.Invoke(availables);
                     _saveManager.Save();
                 });
@@ -76,7 +76,7 @@ namespace RaceManager.Shed
                 .Subscribe((v) => 
                 {
                     //$"Durability - On next({v})".Log(ConsoleLog.Color.Yellow);
-                    int availables = (int)_carTuner.OnCharacteristicValueChanged?.Invoke(CharType.Durability, v);
+                    int availables = (int)_carTuner.OnCharacteristicValueChanged?.Invoke(CharacteristicType.Durability, v);
                     _mainUI.OnTuneValuesChange?.Invoke(availables);
                     _saveManager.Save();
                 });
@@ -86,7 +86,7 @@ namespace RaceManager.Shed
                 .Subscribe((v) => 
                 {
                     //$"Acceleration - On next({v})".Log(ConsoleLog.Color.Yellow);
-                    int availables = (int)_carTuner.OnCharacteristicValueChanged?.Invoke(CharType.Acceleration, v);
+                    int availables = (int)_carTuner.OnCharacteristicValueChanged?.Invoke(CharacteristicType.Acceleration, v);
                     _mainUI.OnTuneValuesChange?.Invoke(availables);
                     _saveManager.Save();
                 });

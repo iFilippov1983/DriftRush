@@ -17,6 +17,7 @@ namespace RaceManager.Cars
 		public DriveType DriveType = DriveType.AWD;
 		[Space]
 
+		//==========================================
 		[Title("Speed")]
 
 		public float MaxSpeed = 200;
@@ -33,13 +34,20 @@ namespace RaceManager.Cars
 		[Range(0.01f, 1f)]
 		public float CruiseSpeedPercentMin = 0.7f;
 
-		[Title("Acceleration")]
-
-		[Range(0.05f, CutOffRPMFactor - RPMTONextGearVsCutOffDif)]
-		[Tooltip("Higher the percentage faster a car accelerates")]
-		public float RPMToNextGearPercet = 0.9f;
-
+		//==========================================
 		[Title("Mobility")]
+
+		[Range(0f, 1f)]
+		public float FWheelsForwardFriction = 0.4f;
+
+		[Range(0f, 1f)]
+		public float FWheelsSidewaysFriction = 0.4f;
+
+		[Range(0f, 1f)]
+		public float RWheelsForwardFriction = 0.4f;
+
+		[Range(0f, 1f)]
+		public float RWheelsSidewaysFriction = 0.4f;
 
 		[Range(1f, 90f)]
 		public float MaxSteerAngle = 42;
@@ -48,31 +56,34 @@ namespace RaceManager.Cars
 		[Tooltip("The power of turning the wheels in the direction of the drift")]
 		public float HelpSteerPower = 0.2f; //The power of turning the wheels in the direction of the drift.
 
-		[Range(1f, 90f)]
-		[Tooltip("The angle at which the assistant works 100%")]
-		public float MaxAngularVelocityHelpAngle = 45f; //The angle at which the assistant works 100%.
-
 		public float SteerAngleChangeSpeed = 100f; //Wheel turn speed. Default = 60
 
-		[Title("Durability")]
+		//==========================================
+        [Title("Acceleration")]
+
+        public float MaxMotorTorque = 800; //Max motor torque engine (Without GearBox multiplier).
+
+        [Range(0.05f, CutOffRPMFactor - RPMTONextGearVsCutOffDif)]
+        [Tooltip("Higher the percentage faster a car accelerates")]
+        public float RPMToNextGearPercent = 0.9f;
+
+        public float MaxBrakeTorque = 2000;
+
+        //==========================================
+        [Title("Durability")]
 
 		[Tooltip("Defines how hard Player will push opponents")]
 		public float Durability = 50f;
 		[Space(20)]
 
-		[Header("SECONDARY SETTINGS")]
+        //==========================================
+        [Header("SECONDARY SETTINGS")]
 
 		[Title("Engine")]
-
-		public float MaxMotorTorque = 800; //Max motor torque engine (Without GearBox multiplier).
 
 		[Range(0, 1)]
 		[Tooltip("Probability backfire: 0 - off backfire, 1 always on backfire")]
 		public float ProbabilityBackfire = 0.1f; //Probability backfire: 0 - off backfire, 1 always on backfire. Default = 0.2f
-
-		[Title("Braking")]
-
-		public float MaxBrakeTorque = 2000;
 
 		[Title("Drift and Helper")]
 
@@ -97,7 +108,11 @@ namespace RaceManager.Cars
 		[Tooltip("Min speed at which helpers are enabled")]
 		public float MinSpeedForSteerHelp = 1f; //Min speed at which helpers are enabled. Default = 20
 
-		[Tooltip("The power of the helper to turn the rigidbody in the direction of the control turn")]
+        [Range(1f, 90f)]
+        [Tooltip("The angle at which the assistant works 100%")]
+        public float MaxAngularVelocityHelpAngle = 45f; //The angle at which the assistant works 100%.
+
+        [Tooltip("The power of the helper to turn the rigidbody in the direction of the control turn")]
 		public float OppositeAngularVelocityHelpPower = 0.05f; //The power of the helper to turn the rigidbody in the direction of the control turn.
 
 		[Tooltip("The power of the helper to positive turn the rigidbody in the direction of the control turn")]
@@ -122,7 +137,7 @@ namespace RaceManager.Cars
 		public float MinRPM => MaxRPM * MinMaxRPMFactor; //Default = 700
 
 		[ShowInInspector, ReadOnly]
-		public float RpmToNextGear => MaxRPM * RPMToNextGearPercet; //The speed at which there is an increase in gearbox. Default = 6500
+		public float RpmToNextGear => MaxRPM * RPMToNextGearPercent; //The speed at which there is an increase in gearbox. Default = 6500
 
 		[ShowInInspector, ReadOnly]
 		public float RpmToPrevGear => RpmToNextGear * PrevToNextGearFactor; //The speed at which there is an decrease in gearbox. Default = 4500
@@ -202,7 +217,7 @@ namespace RaceManager.Cars
 			CruiseSpeed = 20f;
 			CruiseSpeedPercentMax = 0.8f;
 			CruiseSpeedPercentMin = 0.7f;
-			RPMToNextGearPercet = 0.9f;
+			RPMToNextGearPercent = 0.9f;
 			MaxSteerAngle = 42;
 			HelpSteerPower = 0.2f;  //0.2
 			MaxAngularVelocityHelpAngle = 45f; //45

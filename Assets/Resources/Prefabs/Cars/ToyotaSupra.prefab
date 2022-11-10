@@ -5852,15 +5852,18 @@ MonoBehaviour:
     CruiseSpeed: 20
     CruiseSpeedPercentMax: 0.8
     CruiseSpeedPercentMin: 0.7
-    RPMToNextGearPercet: 0.9
+    FWheelsForwardFriction: 0.4
+    FWheelsSidewaysFriction: 0.4
+    RWheelsForwardFriction: 0.4
+    RWheelsSidewaysFriction: 0.4
     MaxSteerAngle: 42
     HelpSteerPower: 0.2
-    MaxAngularVelocityHelpAngle: 45
     SteerAngleChangeSpeed: 100
-    Durability: 50
     MaxMotorTorque: 800
-    ProbabilityBackfire: 0.1
+    RPMToNextGearPercent: 0.9
     MaxBrakeTorque: 2000
+    Durability: 50
+    ProbabilityBackfire: 0.1
     MaxForwardSlipToBlockChangeGear: 0.25
     RpmEngineToRpmWheelsLerpSpeed: 15
     EnableSteerAngleMultiplier: 1
@@ -5868,6 +5871,7 @@ MonoBehaviour:
     MaxSteerAngleMultiplier: 1
     MaxSpeedForMinAngleMultiplier: 250
     MinSpeedForSteerHelp: 1
+    MaxAngularVelocityHelpAngle: 45
     OppositeAngularVelocityHelpPower: 0.05
     PositiveAngularVelocityHelpPower: 0
     AngularVelocityInMaxAngle: 0.5
@@ -6672,9 +6676,9 @@ MonoBehaviour:
     Spring: 0.5833333
     Damper: 0.45
     TargetPoint: 0.5
-    ForwardFriction: 0.4
-    SidewaysFriction: 0.4
-  m_WheelCollider: {fileID: 0}
+    ForwardFriction: 0.49999997
+    SidewaysFriction: 0
+  m_WheelCollider: {fileID: 8021971220770076928}
   m_RB: {fileID: 0}
 --- !u!146 &8021971220770076928
 WheelCollider:

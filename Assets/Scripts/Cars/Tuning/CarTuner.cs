@@ -16,7 +16,7 @@ namespace RaceManager.Cars
         private CarVisual _carVisual;
 
         public Action OnCurrentCarChanged;
-        public Func<CharType, float, int> OnCharacteristicValueChanged;
+        public Func<CharacteristicType, float, int> OnCharacteristicValueChanged;
         public UnityEvent<TuneData> OnCharValueLimit = new UnityEvent<TuneData>();
 
         public CarTuner(CarsDepot playerCarDepot)
@@ -25,33 +25,33 @@ namespace RaceManager.Cars
             _carProfile = _playerCarDepot.CurrentCarProfile;
 
             OnCurrentCarChanged += ChangeCar;
-            OnCharacteristicValueChanged += ChangeVisuals;
+            OnCharacteristicValueChanged += TuneCar;
         }
 
-        public void SetCarVisualToTune(CarVisual carVisual)
+        public void SetTuner(CarVisual carVisual)
         {
             _carVisual = carVisual;
         }
 
-        private int ChangeVisuals(CharType characteristics, float value)
+        private int TuneCar(CharacteristicType characteristics, float value)
         {
             switch (characteristics)
             {
-                case CharType.Speed:
-                    //TuneSpeed(value);
-                    TuneVisual(CharType.Speed, value);
+                case CharacteristicType.Speed:
+                    TuneVisual(CharacteristicType.Speed, value);
+                    TuneSpeed(value);
                     break;
-                case CharType.Mobility:
-                    //TuneMobility(value);
-                    TuneVisual(CharType.Mobility, value);
+                case CharacteristicType.Mobility:
+                    TuneVisual(CharacteristicType.Mobility, value);
+                    TuneMobility(value);
                     break;
-                case CharType.Durability:
-                    //TuneDurability(value);
-                    TuneVisual(CharType.Durability, value);
+                case CharacteristicType.Durability:
+                    TuneVisual(CharacteristicType.Durability, value);
+                    TuneDurability(value);
                     break;
-                case CharType.Acceleration:
-                    //TuneAcceleration(value);
-                    TuneVisual(CharType.Acceleration, value);
+                case CharacteristicType.Acceleration:
+                    TuneVisual(CharacteristicType.Acceleration, value);
+                    TuneAcceleration(value);
                     break;
             }
 
@@ -60,124 +60,85 @@ namespace RaceManager.Cars
             return _carProfile.CarCharacteristics.AvailableFactorsToUse;
         }
 
-        //private void TuneSpeed(float value)
-        //{
-        //    int newValue;
-        //    bool canSet = CanSetValue
-        //        (
-        //        _carProfile.CarCharacteristics.CurrentSpeedFactor,
-        //        Mathf.RoundToInt(value),
-        //        _carProfile.CarCharacteristics.AvailableFactorsToUse,
-        //        out newValue
-        //        );
+        private void TuneSpeed(float value)
+        {
+            CarProfile.Characteristics c = _carProfile.CarCharacteristics;
+            Speed s = _carProfile.Speed;
 
-        //    if (!canSet)
-        //    {
-        //        OnCharacteristicValueLimit?.Invoke(CarCharacteristicsType.Speed, newValue);
-        //        Debug.Log($"Can't set value: {value}, new value => {newValue}");
-        //    }
+            float newSpeedValue = CalculateValue(c.MaxSpeedFactor, c.MinSpeedFactor, s.Max, s.Min, value);
+            _carProfile.CarConfig.MaxSpeed = newSpeedValue;
+        }
 
-        //    _carProfile.CarCharacteristics.CurrentSpeedFactor = newValue;
-        //    PartLevel level = GetPartLevel(CarCharacteristicsType.Speed);
+        private void TuneMobility(float value)
+        {
+            CarProfile.Characteristics c = _carProfile.CarCharacteristics;
+            Mobility m = _carProfile.Mobility;
 
-        //    var carConfigVisual = _carProfile.CarConfigVisual;
-        //    carConfigVisual.CurrentWheelsLevel = level;
-        //    _carVisual.SetPartsVisual(PartType.Wheel, carConfigVisual.CurrentWheelsLevel, carConfigVisual.CurrentWheelsSetType);
+            float newForwardFriction_f = CalculateValue(c.MaxMobilityFactor, c.MinMobilityFactor, m.f_frictionForward_Max, m.f_frictionForward_Min, value);
+            _carProfile.CarConfig.FWheelsForwardFriction = newForwardFriction_f;
 
-        //    //_playerCarDepot.UpdateProfile(_carProfile);
-        //}
+            float newSidewaysFriction_f = CalculateValue(c.MaxMobilityFactor, c.MinMobilityFactor, m.f_frictionSideway_Max, m.f_frictionSideway_Min, value);
+            _carProfile.CarConfig.FWheelsSidewaysFriction = newSidewaysFriction_f;
 
-        //private void TuneMobility(float value)
-        //{
-        //    int newValue;
-        //    bool canSet = CanSetValue
-        //        (
-        //        _carProfile.CarCharacteristics.CurrentMobilityFactor,
-        //        Mathf.RoundToInt(value),
-        //        _carProfile.CarCharacteristics.AvailableFactorsToUse,
-        //        out newValue
-        //        );
+            float newForwardFriction_r = CalculateValue(c.MaxMobilityFactor, c.MinMobilityFactor, m.r_frictionForward_Max, m.r_frictionForward_Min, value);
+            _carProfile.CarConfig.RWheelsForwardFriction = newForwardFriction_r;
 
-        //    if (!canSet)
-        //    {
-        //        OnCharacteristicValueLimit?.Invoke(CarCharacteristicsType.Mobility, newValue);
-        //        Debug.Log($"Can't set value: {value}, new value => {newValue}");
-        //    }
+            float newSidewaysFriction_r = CalculateValue(c.MaxMobilityFactor, c.MinMobilityFactor, m.r_frictionSideway_Max, m.r_frictionSideway_Min, value);
+            _carProfile.CarConfig.RWheelsSidewaysFriction = newSidewaysFriction_r;
 
-        //    _carProfile.CarCharacteristics.CurrentMobilityFactor = newValue;
-        //    PartLevel level = GetPartLevel(CarCharacteristicsType.Mobility);
+            float newMaxSteerAngle = CalculateValue(c.MaxMobilityFactor, c.MinMobilityFactor, m.steerAngle_Max, m.steerAngle_Min, value);
+            _carProfile.CarConfig.MaxSteerAngle = newMaxSteerAngle;
 
-        //    var carConfigVisual = _carProfile.CarConfigVisual;
-        //    carConfigVisual.CurrentSuspentionLevel = level;
-        //    _carVisual.SetPartsVisual(PartType.Suspention, carConfigVisual.CurrentSuspentionLevel);
+            float newHelpSteerPower = CalculateValue(c.MaxMobilityFactor, c.MinMobilityFactor, m.helpSteerPower_Max, m.helpSteerPower_Min, value);
+            _carProfile.CarConfig.HelpSteerPower = newHelpSteerPower;
 
-        //    //_playerCarDepot.UpdateProfile(_carProfile);
-        //}
+            float newSteerAngleChangeSpeed = CalculateValue(c.MaxMobilityFactor, c.MinMobilityFactor, m.steerAngleChangeSpeed_Max, m.steerAngleChangeSpeed_Min, value);
+            _carProfile.CarConfig.SteerAngleChangeSpeed = newSteerAngleChangeSpeed;
+        }
 
-        //private void TuneDurability(float value)
-        //{
-        //    int newValue;
-        //    bool canSet = CanSetValue
-        //        ( 
-        //        _carProfile.CarCharacteristics.CurrentDurabilityFactor,
-        //        Mathf.RoundToInt(value),
-        //        _carProfile.CarCharacteristics.AvailableFactorsToUse,
-        //        out newValue
-        //        );
+        private void TuneDurability(float value)
+        {
+            CarProfile.Characteristics c = _carProfile.CarCharacteristics;
+            Durability d = _carProfile.Durability;
 
-        //    if (!canSet)
-        //    {
-        //        OnCharacteristicValueLimit?.Invoke(CarCharacteristicsType.Durability, newValue);
-        //        Debug.Log($"Can't set value: {value}, new value => {newValue}");
-        //    }
+            float newDUrability = CalculateValue(c.MaxDurabilityFactor, c.MinDurabilityFactor, d.durabilityMax, d.durabilityMin, value);
+            _carProfile.CarConfig.Durability = newDUrability;
+        }
 
-        //    _carProfile.CarCharacteristics.CurrentDurabilityFactor = newValue;
-        //    PartLevel level = GetPartLevel(CarCharacteristicsType.Durability);
+        private void TuneAcceleration(float value)
+        {
+            CarProfile.Characteristics c = _carProfile.CarCharacteristics;
+            Acceleration a = _carProfile.Acceleration;
 
-        //    var carConfigVisual = _carProfile.CarConfigVisual;
-        //    carConfigVisual.CurrentBumpersLevel = level;
-        //    _carVisual.SetPartsVisual(PartType.Bumper, carConfigVisual.CurrentBumpersLevel);
+            float newMaxTorque = CalculateValue(c.MaxAccelerationFactor, c.MinAccelerationFactor, a.torqueMax, a.torqueMin, value);
+            _carProfile.CarConfig.MaxMotorTorque = newMaxTorque;
 
-        //    //_playerCarDepot.UpdateProfile(_carProfile);
-        //}
+            float newBrakeTorque = CalculateValue(c.MaxAccelerationFactor, c.MinAccelerationFactor, a.brakeTorqueMax, a.brakeTorqueMin, value);
+            _carProfile.CarConfig.MaxBrakeTorque = newBrakeTorque;
 
-        //private void TuneAcceleration(float value)
-        //{
-        //    int newValue;
-        //    bool canSet = CanSetValue
-        //        (
-        //        _carProfile.CarCharacteristics.CurrentAccelerationFactor,
-        //        Mathf.RoundToInt(value),
-        //        _carProfile.CarCharacteristics.AvailableFactorsToUse,
-        //        out newValue
-        //        );
+            float newRPMToNextGearPercent = CalculateValue(c.MaxAccelerationFactor, c.MinAccelerationFactor, a.rpmToNextGearMax, a.rpmToNextGearMin, value);
+            _carProfile.CarConfig.RPMToNextGearPercent = newRPMToNextGearPercent;
+        }
 
-        //    if (!canSet)
-        //    {
-        //        OnCharacteristicValueLimit?.Invoke(CarCharacteristicsType.Acceleration, newValue);
-        //        Debug.Log($"Can't set value: {value}, new value => {newValue}");
-        //    }
+        private float CalculateValue(int maxFactor, int minFactor, float maxProp, float minProp, float sliderValue)
+        { 
+            float koef = (float) minFactor / (float) maxFactor;
+            float charUnit = (maxProp - minProp) * koef;
+            float newValue = minProp + charUnit * sliderValue;
 
-        //    _carProfile.CarCharacteristics.CurrentAccelerationFactor = newValue;
-        //    PartLevel level = GetPartLevel(CarCharacteristicsType.Acceleration);
+            return newValue;
+        }
 
-        //    var carConfigVisual = _carProfile.CarConfigVisual;
-        //    carConfigVisual.CurrentBodyKitsLevel = level;
-        //    _carVisual.SetPartsVisual(PartType.BodyKit, carConfigVisual.CurrentBodyKitsLevel);
-
-        //   // _playerCarDepot.UpdateProfile(_carProfile);
-        //}
-
-        private void TuneVisual(CharType cType, float value)
+        private void TuneVisual(CharacteristicType cType, float value)
         {
             var characteristics = _carProfile.CarCharacteristics;
 
             int currentFactor = cType switch
             {
-                CharType.Speed => characteristics.CurrentSpeedFactor,
-                CharType.Mobility => characteristics.CurrentMobilityFactor,
-                CharType.Durability => characteristics.CurrentDurabilityFactor,
-                CharType.Acceleration => characteristics.CurrentAccelerationFactor,
+                CharacteristicType.Speed => characteristics.CurrentSpeedFactor,
+                CharacteristicType.Mobility => characteristics.CurrentMobilityFactor,
+                CharacteristicType.Durability => characteristics.CurrentDurabilityFactor,
+                CharacteristicType.Acceleration => characteristics.CurrentAccelerationFactor,
                 _ => 0
             };
 
@@ -193,10 +154,10 @@ namespace RaceManager.Cars
 
             _ = cType switch
             {
-                CharType.Speed => _carProfile.CarCharacteristics.CurrentSpeedFactor = newValue,
-                CharType.Mobility => _carProfile.CarCharacteristics.CurrentMobilityFactor = newValue,
-                CharType.Durability => _carProfile.CarCharacteristics.CurrentDurabilityFactor = newValue,
-                CharType.Acceleration => _carProfile.CarCharacteristics.CurrentAccelerationFactor = newValue,
+                CharacteristicType.Speed => _carProfile.CarCharacteristics.CurrentSpeedFactor = newValue,
+                CharacteristicType.Mobility => _carProfile.CarCharacteristics.CurrentMobilityFactor = newValue,
+                CharacteristicType.Durability => _carProfile.CarCharacteristics.CurrentDurabilityFactor = newValue,
+                CharacteristicType.Acceleration => _carProfile.CarCharacteristics.CurrentAccelerationFactor = newValue,
                 _ => 0
             };
 
@@ -206,19 +167,19 @@ namespace RaceManager.Cars
 
             PartLevel currentLevel = cType switch
             {
-                CharType.Speed => carConfigVisual.CurrentWheelsLevel = newLevel,
-                CharType.Mobility => carConfigVisual.CurrentSuspentionLevel = newLevel,
-                CharType.Durability => carConfigVisual.CurrentBumpersLevel = newLevel,
-                CharType.Acceleration => carConfigVisual.CurrentBodyKitsLevel = newLevel,
+                CharacteristicType.Speed => carConfigVisual.CurrentWheelsLevel = newLevel,
+                CharacteristicType.Mobility => carConfigVisual.CurrentSuspentionLevel = newLevel,
+                CharacteristicType.Durability => carConfigVisual.CurrentBumpersLevel = newLevel,
+                CharacteristicType.Acceleration => carConfigVisual.CurrentBodyKitsLevel = newLevel,
                 _ => throw new NotImplementedException()
             };
 
             (PartType, PartLevel) d = cType switch
             {
-                CharType.Speed => (PartType.Wheel, currentLevel),
-                CharType.Mobility => (PartType.Suspention, currentLevel),
-                CharType.Durability => (PartType.Bumper, currentLevel),
-                CharType.Acceleration => (PartType.BodyKit, currentLevel),
+                CharacteristicType.Speed => (PartType.Wheel, currentLevel),
+                CharacteristicType.Mobility => (PartType.Suspention, currentLevel),
+                CharacteristicType.Durability => (PartType.Bumper, currentLevel),
+                CharacteristicType.Acceleration => (PartType.BodyKit, currentLevel),
                 _ => throw new NotImplementedException()
             };
 
@@ -238,15 +199,15 @@ namespace RaceManager.Cars
             return true;
         }
 
-        private PartLevel GetPartLevel(CharType characteristics)
+        private PartLevel GetPartLevel(CharacteristicType characteristics)
         {
             var c = _carProfile.CarCharacteristics;
             int percentage = characteristics switch
             {
-                CharType.Speed => Mathf.RoundToInt(c.CurrentSpeedFactor * 100 / c.MaxSpeedFactor),
-                CharType.Mobility => Mathf.RoundToInt(c.CurrentMobilityFactor * 100 / c.MaxMobilityFactor),
-                CharType.Durability => Mathf.RoundToInt(c.CurrentDurabilityFactor * 100 / c.MaxDurabilityFactor),
-                CharType.Acceleration => Mathf.RoundToInt(c.CurrentAccelerationFactor * 100 / c.MaxAccelerationFactor),
+                CharacteristicType.Speed => Mathf.RoundToInt(c.CurrentSpeedFactor * 100 / c.MaxSpeedFactor),
+                CharacteristicType.Mobility => Mathf.RoundToInt(c.CurrentMobilityFactor * 100 / c.MaxMobilityFactor),
+                CharacteristicType.Durability => Mathf.RoundToInt(c.CurrentDurabilityFactor * 100 / c.MaxDurabilityFactor),
+                CharacteristicType.Acceleration => Mathf.RoundToInt(c.CurrentAccelerationFactor * 100 / c.MaxAccelerationFactor),
                 _ => throw new NotImplementedException(),
             };
 
@@ -274,7 +235,7 @@ namespace RaceManager.Cars
         public void Dispose()
         {
             OnCurrentCarChanged -= ChangeCar;
-            OnCharacteristicValueChanged -= ChangeVisuals;
+            OnCharacteristicValueChanged -= TuneCar;
         }
 
 
@@ -283,7 +244,7 @@ namespace RaceManager.Cars
 
     public struct TuneData
     {
-        public CharType cType;
+        public CharacteristicType cType;
         public int value;
         public int available;
     }

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Google.Protobuf;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Utilities;
@@ -17,9 +19,9 @@ namespace RaceManager.Root
         public const string FileName = "save.data";
 
         private readonly List<Type> _registeredTypes = new List<Type>();
-        private readonly List<Action<SaveData>> _saveActions = new List<Action<SaveData>>();
-        private readonly List<Action<SaveData>> _loadActions = new List<Action<SaveData>>();
-        private readonly string _savePath;
+        private readonly List<Action<SaveData>> _saveActions;// = new List<Action<SaveData>>();
+        private readonly List<Action<SaveData>> _loadActions;// = new List<Action<SaveData>>();
+        //private readonly string _savePath;
 
         [ShowInInspector]
         [DictionaryDrawerSettings(KeyLabel = "Key", ValueLabel = "Data")]
@@ -27,10 +29,9 @@ namespace RaceManager.Root
 
         public SaveManager()
         {
-
-
-            _saveActions = new List<Action<SaveData>>();
-            _loadActions = new List<Action<SaveData>>();
+            HashSet<Action<SaveData>> actions = new HashSet<Action<SaveData>>();
+            _saveActions = new List<Action<SaveData>>(actions);
+            _loadActions = new List<Action<SaveData>>(actions);
         }
 
 #if UNITY_EDITOR
@@ -65,21 +66,27 @@ namespace RaceManager.Root
                 throw new NullReferenceException("Type full name is somehow null");
             }
 
-            _saveActions.Add(
-                d =>
-                {
-                    _lastSave.Add(typeString, JsonConvert.SerializeObject(savable.Save()));
-                    d[typeString] = JObject.FromObject(savable.Save());
-                });
+            SaveAction saveAction = new SaveAction(typeString, savable, _lastSave);
+            _saveActions.Add(saveAction.Action);
 
-            _loadActions.Add(
-                d =>
-                {
-                    if (!d.ContainsKey(typeString))
-                        return;
-                    savable.Load(d[typeString].ToObject(savable.DataType()));
-                }
-            );
+            LoadAction loadAction = new LoadAction(typeString, savable);
+            _loadActions.Add(loadAction.Action);
+
+            //_saveActions.Add(
+            //    d =>
+            //    {
+            //        _lastSave.Add(typeString, JsonConvert.SerializeObject(savable.Save()));
+            //        d[typeString] = JObject.FromObject(savable.Save());
+            //    });
+            //
+            //_loadActions.Add(
+            //    d =>
+            //    {
+            //        if (!d.ContainsKey(typeString))
+            //            return;
+            //        savable.Load(d[typeString].ToObject(savable.DataType()));
+            //    }
+            //);
         }
 
         public void Save()
@@ -136,6 +143,57 @@ namespace RaceManager.Root
             {
                 loadAction(data);
             }
+        }
+
+        /// <summary>
+        /// Needed only for correct AOT serialization
+        /// </summary>
+        [Serializable]
+        public class SaveAction
+        {
+            private readonly string _typeString;
+            private readonly ISaveable _savable;
+            private readonly Dictionary<string, string> _lastSave;
+
+            public SaveAction(string typeString, ISaveable savable, Dictionary<string, string> lastSave)
+            {
+                _typeString = typeString;
+                _savable = savable;
+                _lastSave = lastSave;
+            }
+
+            public Action<SaveData> Action =>
+                d =>
+                {
+                    if (_lastSave.ContainsKey(_typeString))
+                        return;
+                    _lastSave.Add(_typeString, JsonConvert.SerializeObject(_savable.Save()));
+                    d[_typeString] = JObject.FromObject(_savable.Save());
+                };
+        }
+
+        /// <summary>
+        /// Needed only for correct AOT serialization
+        /// </summary>
+        [Serializable]
+        public class LoadAction
+        {
+            private readonly string _typeString;
+            private readonly ISaveable _savable;
+
+            public LoadAction(string typeString, ISaveable savable)
+            {
+                _typeString = typeString;
+                _savable = savable;
+            }
+
+            public Action<SaveData> Action =>
+                d =>
+                {
+                    if (!d.ContainsKey(_typeString))
+                        return;
+                    _savable.Load(d[_typeString].ToObject(_savable.DataType()));
+                };
         }
     }
 }

@@ -11,6 +11,10 @@ namespace RaceManager.Cars
     public class CarProfile
     {
         public CarName CarName;
+        public Speed Speed;
+        public Mobility Mobility;
+        public Acceleration Acceleration;
+        public Durability Durability;
         public Characteristics CarCharacteristics;
         public CarConfig CarConfig;
         public CarConfigVisual CarConfigVisual;

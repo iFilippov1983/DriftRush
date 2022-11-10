@@ -52,7 +52,7 @@ namespace RaceManager.Root
             }
             catch (Exception e)
             {
-                $"[Saveables] Need to fix: {e}".Log(ConsoleLog.Color.Red);
+                $"[Saveables] Need to fix: {e}".Error();
             }
         }
 
@@ -66,7 +66,7 @@ namespace RaceManager.Root
             }
             catch (Exception e)
             {
-                $"[Initializables] Need to fix: {e}".Log(ConsoleLog.Color.Red);
+                $"[Initializables] Need to fix: {e}".Error();
             }
         }
 

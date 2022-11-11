@@ -2,6 +2,7 @@
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace RaceManager.Waypoints
@@ -53,29 +54,24 @@ namespace RaceManager.Waypoints
         public int LapsToComplete => _lapsToComplete;
 
         [ShowInInspector]
+        [ToggleLeft]
         private bool _buildMode = false;
-
-        [ButtonGroup]
-        public bool BuildMode() => _buildMode = !_buildMode;
 
         [ButtonGroup]
         public void Build()
         {
             StopAllCoroutines();
+            _buildMode = true;
             StartCoroutine(BuildCoroutine());
         }
 
-        
-
         private IEnumerator BuildCoroutine()
         {
-            int couter = 10;
-
-            while (couter > 0 || _buildMode)
+            while (_buildMode)
             {
-                Debug.Log(couter);
+
+                    Debug.Log("Click");
                 yield return new WaitForEndOfFrame();
-                couter--;
             }
 
             Debug.Log("Done");

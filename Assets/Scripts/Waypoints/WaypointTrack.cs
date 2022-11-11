@@ -1,21 +1,26 @@
 ﻿using RaceManager.Tools;
 using Sirenix.OdinInspector;
+using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace RaceManager.Waypoints
 {
     public class WaypointTrack : MonoBehaviour
     {
-        public bool MainTrack;
-        public WaypointList waypointList = new WaypointList();
-        public float editorVisualisationSubsteps = 100;
-        public float minDistanceToReachWaypoint = 5f;
 
         [SerializeField] protected bool _smoothRoute = true;
         [SerializeField] protected Color _drawColor = Color.yellow;
         [SerializeField, Range(0.1f, 2f)] private float _nodeSphereSize = 0.25f;
-        [SerializeField, ReadOnly] private int _lapsToComplete = 1; 
+        [SerializeField, ReadOnly] private int _lapsToComplete = 1;
+
+        public float editorVisualisationSubsteps = 100;
+        public float minDistanceToReachWaypoint = 5f;
+
+        public bool MainTrack;
+        public WaypointList waypointList = new WaypointList();
+
         protected Color _altColor;
         protected int _numPoints;
         protected Vector3[] _points;
@@ -47,6 +52,30 @@ namespace RaceManager.Waypoints
         public Transform CurrentTargetWaypoint => waypointList.items[p2n];
         public Transform PreviouseTargetWaypoint => waypointList.items[p1n];
         public int LapsToComplete => _lapsToComplete;
+
+        [ShowInInspector]
+        [ToggleLeft]
+        private bool _buildMode = false;
+
+        [ButtonGroup]
+        public void Build()
+        {
+            StopAllCoroutines();
+            _buildMode = true;
+            StartCoroutine(BuildCoroutine());
+        }
+
+        private IEnumerator BuildCoroutine()
+        {
+            while (_buildMode)
+            {
+
+                    Debug.Log("Click");
+                yield return new WaitForEndOfFrame();
+            }
+
+            Debug.Log("Done");
+        }
 
         private void Awake()
         {

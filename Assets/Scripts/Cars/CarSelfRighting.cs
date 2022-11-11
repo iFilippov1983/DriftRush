@@ -24,7 +24,7 @@ namespace RaceManager.Cars
         public Transform LastCheckpoint;
 
         public void RightCar() => RespawnCar(LastOkPoint);
-        public void GetToCheckpoint() => RespawnCar(LastCheckpoint);
+        public void GetToCheckpoint() => RespawnCar(LastCheckpoint, true);
 
         private void OnEnable()
         {
@@ -38,11 +38,6 @@ namespace RaceManager.Cars
         {
             HandleSafety();
         }
-
-        //private void FixedUpdate()
-        //{
-        //    GroundingControl();
-        //}
 
         private void OnCollisionEnter(Collision collision)
         {
@@ -76,11 +71,13 @@ namespace RaceManager.Cars
             }
         }
 
-        private void RespawnCar(Transform positionToRespawnOn)
+        private void RespawnCar(Transform positionToRespawnOn, bool resetVelocity = false)
         {
             if (positionToRespawnOn != null)
             {
                 _carAI.StopDriving();
+                if(resetVelocity)
+                    _rigidbody.velocity = Vector3.zero;
                 transform.position = positionToRespawnOn.position;
                 transform.rotation = positionToRespawnOn.rotation;
                 _carAI.StartEngine();

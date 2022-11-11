@@ -13,7 +13,6 @@ namespace RaceManager.Waypoints
         private float lineHeight = 18;
         private float spacing = 4;
 
-
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             EditorGUI.BeginProperty(position, label, property);
@@ -159,7 +158,6 @@ namespace RaceManager.Waypoints
             }
             y += lineHeight + spacing;
 
-            // Set indent back to what it was
             EditorGUI.indentLevel = indent;
             EditorGUI.EndProperty();
         }

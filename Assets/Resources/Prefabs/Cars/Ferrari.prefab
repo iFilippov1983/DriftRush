@@ -5415,8 +5415,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d19b6862a6086fc48855bb77c7852257, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _defaultMaterial: {fileID: 2167254180413647475, guid: 2cebc499def755044959d6c477d6f287,
-    type: 3}
+  _defaultMaterial: {fileID: 2100000, guid: 8bfeccf1bf9805745838606535f4139c, type: 2}
   _allMeshRenderers:
   - {fileID: 7360355485479104970}
   - {fileID: 4331227765845700845}
@@ -10410,8 +10409,8 @@ MonoBehaviour:
     Spring: 0.5833333
     Damper: 0.45
     TargetPoint: 0.5
-    ForwardFriction: 0.5
-    SidewaysFriction: 0
+    ForwardFriction: 0.4
+    SidewaysFriction: 0.4
   m_WheelCollider: {fileID: 8021698394765830114}
   m_RB: {fileID: 7898175940926427510}
 --- !u!146 &8021698394765830114
@@ -10433,15 +10432,15 @@ WheelCollider:
   m_WheelDampingRate: 0.25
   m_ForwardFriction:
     m_ExtremumSlip: 0.4
-    m_ExtremumValue: 2.6
+    m_ExtremumValue: 2.22
     m_AsymptoteSlip: 0.6
-    m_AsymptoteValue: 2.325
+    m_AsymptoteValue: 1.99
     m_Stiffness: 1
   m_SidewaysFriction:
     m_ExtremumSlip: 0.4
-    m_ExtremumValue: 0.7
+    m_ExtremumValue: 2.22
     m_AsymptoteSlip: 0.6
-    m_AsymptoteValue: 0.65
+    m_AsymptoteValue: 1.99
     m_Stiffness: 1
   m_Enabled: 1
 --- !u!1 &7880266826441364036
@@ -10485,7 +10484,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: b89f593bb55d54d55bb70749276b3f2d, type: 3}
+  m_audioClip: {fileID: 8300000, guid: ced4e3907a9d9304793bd45172370dea, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.5
   m_Pitch: 1
@@ -10625,7 +10624,7 @@ GameObject:
   - component: {fileID: 7840153474070958272}
   - component: {fileID: 7840726670877482668}
   m_Layer: 8
-  m_Name: Ferrari_488
+  m_Name: Ferrari
   m_TagString: AI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10747,22 +10746,25 @@ MonoBehaviour:
   - {fileID: 8042060132909517162}
   - {fileID: 5894044915176394335}
   _carConfig:
-    CarName: 0
+    CarName: 2
     SpeedType: 1
     DriveType: 0
     MaxSpeed: 200
     CruiseSpeed: 20
     CruiseSpeedPercentMax: 0.8
     CruiseSpeedPercentMin: 0.7
-    RPMToNextGearPercet: 0.9
+    FWheelsForwardFriction: 0.4
+    FWheelsSidewaysFriction: 0.4
+    RWheelsForwardFriction: 0.4
+    RWheelsSidewaysFriction: 0.4
     MaxSteerAngle: 42
     HelpSteerPower: 0.2
-    MaxAngularVelocityHelpAngle: 45
     SteerAngleChangeSpeed: 100
-    Durability: 50
     MaxMotorTorque: 800
-    ProbabilityBackfire: 0.1
+    RPMToNextGearPercent: 0.9
     MaxBrakeTorque: 2000
+    Durability: 50
+    ProbabilityBackfire: 0.1
     MaxForwardSlipToBlockChangeGear: 0.25
     RpmEngineToRpmWheelsLerpSpeed: 15
     EnableSteerAngleMultiplier: 1
@@ -10770,6 +10772,7 @@ MonoBehaviour:
     MaxSteerAngleMultiplier: 1
     MaxSpeedForMinAngleMultiplier: 250
     MinSpeedForSteerHelp: 1
+    MaxAngularVelocityHelpAngle: 45
     OppositeAngularVelocityHelpPower: 0.05
     PositiveAngularVelocityHelpPower: 0
     AngularVelocityInMaxAngle: 0.5
@@ -10840,7 +10843,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0425594d3fe24854db198dda3b731432, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _carName: 0
+  _carName: 2
   _carBody: {fileID: 8193191297794247595}
   _wheelsSets:
   - isAvailable: 1
@@ -11574,8 +11577,8 @@ MonoBehaviour:
     Spring: 0.5833333
     Damper: 0.45
     TargetPoint: 0.5
-    ForwardFriction: 0.5
-    SidewaysFriction: 0
+    ForwardFriction: 0.4
+    SidewaysFriction: 0.4
   m_WheelCollider: {fileID: 8021971220770076928}
   m_RB: {fileID: 7898175940926427510}
 --- !u!146 &8021971220770076928
@@ -11597,15 +11600,15 @@ WheelCollider:
   m_WheelDampingRate: 0.25
   m_ForwardFriction:
     m_ExtremumSlip: 0.4
-    m_ExtremumValue: 2.6
+    m_ExtremumValue: 2.22
     m_AsymptoteSlip: 0.6
-    m_AsymptoteValue: 2.325
+    m_AsymptoteValue: 1.99
     m_Stiffness: 1
   m_SidewaysFriction:
     m_ExtremumSlip: 0.4
-    m_ExtremumValue: 0.7
+    m_ExtremumValue: 2.22
     m_AsymptoteSlip: 0.6
-    m_AsymptoteValue: 0.65
+    m_AsymptoteValue: 1.99
     m_Stiffness: 1
   m_Enabled: 1
 --- !u!1 &7881135080587160872
@@ -11649,7 +11652,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: c8192580a461946829f14462ca0acc32, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 7c9301870734e1a4ebe29586a865dbc4, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -12056,6 +12059,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8712391160205094757, guid: 2cebc499def755044959d6c477d6f287,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 8bfeccf1bf9805745838606535f4139c, type: 2}
     - target: {fileID: -8679921383154817045, guid: 2cebc499def755044959d6c477d6f287,
         type: 3}
       propertyPath: m_RootOrder
@@ -12126,6 +12134,21 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -6705768998543787376, guid: 2cebc499def755044959d6c477d6f287,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 8bfeccf1bf9805745838606535f4139c, type: 2}
+    - target: {fileID: -6543473549278175739, guid: 2cebc499def755044959d6c477d6f287,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 6f196ec15d351444aa613887827470d6, type: 2}
+    - target: {fileID: -6543473549278175739, guid: 2cebc499def755044959d6c477d6f287,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 6f196ec15d351444aa613887827470d6, type: 2}
     - target: {fileID: -5798782833227187854, guid: 2cebc499def755044959d6c477d6f287,
         type: 3}
       propertyPath: m_IsActive
@@ -12176,6 +12199,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -2502215695886173905, guid: 2cebc499def755044959d6c477d6f287,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 8bfeccf1bf9805745838606535f4139c, type: 2}
     - target: {fileID: -2436505068414764579, guid: 2cebc499def755044959d6c477d6f287,
         type: 3}
       propertyPath: m_IsActive
@@ -12316,43 +12344,23 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8286747003518187889, guid: 2cebc499def755044959d6c477d6f287,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8681702258649495219, guid: 2cebc499def755044959d6c477d6f287,
         type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8705161737229745079, guid: 2cebc499def755044959d6c477d6f287,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 8bfeccf1bf9805745838606535f4139c, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2cebc499def755044959d6c477d6f287, type: 3}
---- !u!1 &929073772145881528 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5202173664519207650, guid: 2cebc499def755044959d6c477d6f287,
-    type: 3}
-  m_PrefabInstance: {fileID: 4959992399610514266}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &7768138757956310519 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3393629195522416301, guid: 2cebc499def755044959d6c477d6f287,
-    type: 3}
-  m_PrefabInstance: {fileID: 4959992399610514266}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &4882518446498438081 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: -8712391160205094757, guid: 2cebc499def755044959d6c477d6f287,
-    type: 3}
-  m_PrefabInstance: {fileID: 4959992399610514266}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &4023155584652538411 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8286747003518187889, guid: 2cebc499def755044959d6c477d6f287,
-    type: 3}
-  m_PrefabInstance: {fileID: 4959992399610514266}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &4331227765845700845 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 8705161737229745079, guid: 2cebc499def755044959d6c477d6f287,
-    type: 3}
-  m_PrefabInstance: {fileID: 4959992399610514266}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &4175939064045322584 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -205330795119425022, guid: 2cebc499def755044959d6c477d6f287,
@@ -12371,21 +12379,39 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 4959992399610514266}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &361405424745454208 stripped
+--- !u!23 &4331227765845700845 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 8705161737229745079, guid: 2cebc499def755044959d6c477d6f287,
+    type: 3}
+  m_PrefabInstance: {fileID: 4959992399610514266}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4023155584652538411 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 4744144868244591066, guid: 2cebc499def755044959d6c477d6f287,
+  m_CorrespondingSourceObject: {fileID: 8286747003518187889, guid: 2cebc499def755044959d6c477d6f287,
     type: 3}
   m_PrefabInstance: {fileID: 4959992399610514266}
   m_PrefabAsset: {fileID: 0}
---- !u!23 &3409021263199404810 stripped
+--- !u!23 &4882518446498438081 stripped
 MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: -1469818313093871536, guid: 2cebc499def755044959d6c477d6f287,
+  m_CorrespondingSourceObject: {fileID: -8712391160205094757, guid: 2cebc499def755044959d6c477d6f287,
     type: 3}
   m_PrefabInstance: {fileID: 4959992399610514266}
   m_PrefabAsset: {fileID: 0}
---- !u!23 &1842876982927307381 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: -2502215695886173905, guid: 2cebc499def755044959d6c477d6f287,
+--- !u!1 &7768138757956310519 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3393629195522416301, guid: 2cebc499def755044959d6c477d6f287,
+    type: 3}
+  m_PrefabInstance: {fileID: 4959992399610514266}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4854836089641331889 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2cebc499def755044959d6c477d6f287,
+    type: 3}
+  m_PrefabInstance: {fileID: 4959992399610514266}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &929073772145881528 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5202173664519207650, guid: 2cebc499def755044959d6c477d6f287,
     type: 3}
   m_PrefabInstance: {fileID: 4959992399610514266}
   m_PrefabAsset: {fileID: 0}
@@ -12395,9 +12421,21 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 4959992399610514266}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &4854836089641331889 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2cebc499def755044959d6c477d6f287,
+--- !u!23 &1842876982927307381 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -2502215695886173905, guid: 2cebc499def755044959d6c477d6f287,
+    type: 3}
+  m_PrefabInstance: {fileID: 4959992399610514266}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &361405424745454208 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4744144868244591066, guid: 2cebc499def755044959d6c477d6f287,
+    type: 3}
+  m_PrefabInstance: {fileID: 4959992399610514266}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &3409021263199404810 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -1469818313093871536, guid: 2cebc499def755044959d6c477d6f287,
     type: 3}
   m_PrefabInstance: {fileID: 4959992399610514266}
   m_PrefabAsset: {fileID: 0}

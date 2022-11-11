@@ -7,10 +7,10 @@ namespace RaceManager.Cars
     { 
         ToyotaSupra = 0,
         FordMustang = 1,
-        Ferrari = 2,
-        NissanSilva = 3,
+        Ferrari488 = 2,
+        NissanSilvia = 3,
         Porche911 = 4,
-        TeslaSupercar = 5,
-        Dodge = 6,
+        TeslaRoadster = 5,
+        DodgeTRX = 6,
     }
 }

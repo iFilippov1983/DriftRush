@@ -16,7 +16,7 @@ namespace RaceManager.Infrastructure
     public class MenuSceneInstaller : BaseInstaller
     {
         [SerializeField] private MainUI _mainUI;
-        [SerializeField] private Podium _podium;
+        [SerializeField] private PodiumView _podium;
         [SerializeField] private CarsDepot _playerCarDepot;
         [SerializeField] private SpritesContainer _spritesContainer;
 
@@ -26,7 +26,7 @@ namespace RaceManager.Infrastructure
         {
             Bind(Singleton<Resolver>.Instance);
             Bind(Singleton<MenuCamerasHandler>.Instance);
-            Bind(Singleton<ShedInitializer>.Instance);
+            Bind(Singleton<ShedHandler>.Instance);
 
             Bind(_mainUI);
             Bind(_podium);

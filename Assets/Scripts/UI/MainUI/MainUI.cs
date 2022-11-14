@@ -35,7 +35,7 @@ namespace RaceManager.UI
         private SaveManager _saveManager;
         private CarsDepot _playerCarDepot;
         private CarProfile _currentCarProfile;
-        private Podium _podium;
+        private PodiumView _podium;
 
         private GraphicRaycaster _graphicRaycaster;
         private PointerEventData _clickData;
@@ -44,7 +44,7 @@ namespace RaceManager.UI
         private bool _inMainMenu = true;
 
         public Action<bool> OnMainMenuActivityChange;
-        public Action OnCarProfileChange;
+        public Action<CarName> OnCarProfileChange;
 
         public IObservable<float> OnSpeedValueChange => _tuningPanel.SpeedSlider.onValueChanged.AsObservable();
         public IObservable<float> OnMobilityValueChange => _tuningPanel.MobilitySlider.onValueChanged.AsObservable();
@@ -55,13 +55,13 @@ namespace RaceManager.UI
         public Action<int> OnTuneValuesChange => (int v) => _tuningPanel.UpdateCurrentInfoValues(v);
 
         [Inject]
-        private void Construct(SaveManager saveManager, CarsDepot playerCarDepot, Podium podium)
+        private void Construct(SaveManager saveManager, CarsDepot playerCarDepot, PodiumView podium)
         {
             _saveManager = saveManager;
             _playerCarDepot = playerCarDepot;
             _podium = podium;
 
-            OnCarProfileChange += UpdateTuningPanelValues;
+            //OnCarProfileChange += UpdateTuningPanelValues;
         }
 
         public void Initialize()
@@ -79,7 +79,7 @@ namespace RaceManager.UI
             _clickData = new PointerEventData(EventSystem.current);
             _raycastResults = new List<RaycastResult>();
 
-            ActivateMainMenu(_inMainMenu);
+            ActivateMainMenu(true);
             //InitializeUIElements();
         }
 
@@ -132,30 +132,34 @@ namespace RaceManager.UI
             _cupsProgress.SetActive(active);
 
             _podium.ChestObject.SetActive(active);
+
+            _inMainMenu = active;
+            OnMainMenuActivityChange?.Invoke(active);
         }
 
         private void ActivateTuningPanel(bool active)
         {
-            ActivateMainMenu(!active);
-            _bottomPanel.SetActive(true);
             _tuningPanel.SetActive(active);
             _worldSpaceUI.SetActive(active);
-            _bottomPanel.TuningPressedImage.SetActive(active);
 
-            OnMainMenuActivityChange?.Invoke(!active);
+            _bottomPanel.SetActive(active);
+            _bottomPanel.TuningPressedImage.SetActive(active);
         }
 
         private void ActivateCarsCollectionPanel(bool active)
         {
-            ActivateMainMenu(!active);
-            _bottomPanel.SetActive(true);
             _carsCollectionPanel.SetActive(active);
-            _bottomPanel.CarsCollectionPressedImage.SetActive(active);
 
-            OnMainMenuActivityChange?.Invoke(!active);
+            _bottomPanel.SetActive(active);
+            _bottomPanel.CarsCollectionPressedImage.SetActive(active);
         }
 
-        private void UpdateTuningPanelValues()
+        private void ActivateBottomPanel(bool active)
+        {
+            _bottomPanel.SetActive(active);
+        }
+
+        public void UpdateTuningPanelValues()
         {
             _currentCarProfile = _playerCarDepot.CurrentCarProfile;
 
@@ -192,13 +196,37 @@ namespace RaceManager.UI
                 _carsCollectionPanel.AddCollectionCard
                     (
                     profile.CarName,
-                    profile.CarCharacteristics.CurrentFactorsProgress,
-                    profile.CarCharacteristics.FactorsMaxTotal,
-                    profile.CarCharacteristics.isAvailable
+                    profile.Accessibility.CurrentPointsAmount,
+                    profile.Accessibility.PointsToAccess,
+                    profile.Accessibility.IsAvailable
                     );
             }
+
+            UpdateCarsCollectionInfo();
+
+            _carsCollectionPanel.OnUseCarButtonPressed += ChangeCar;
         }
 
+        public void UpdateCarsCollectionInfo()
+        {
+            _carsCollectionPanel.UpdateStatsProgress
+                (
+                _currentCarProfile.CarName.ToString(),
+                _currentCarProfile.CarCharacteristics.CurrentFactorsProgress,
+                _currentCarProfile.CarCharacteristics.FactorsMaxTotal
+                );
+        }
+
+        private void ChangeCar(CarName newCarName)
+        {
+            if (newCarName == _playerCarDepot.CurrentCarName)
+                return;
+
+            //_playercardepot.currentcarname = newcarname;
+            //_savemanager.save();
+
+            OnCarProfileChange?.Invoke(newCarName);
+        }
 
         private void InitializeSlidersMinMaxValues()
         {
@@ -213,18 +241,27 @@ namespace RaceManager.UI
         {
             _startButton.onClick.AddListener(StartRace);
 
-            _bottomPanel.TuneButton.onClick.AddListener(() => ActivateTuningPanel(!_tuningPanel.gameObject.activeSelf));
-            _bottomPanel.CarsCollectionButton.onClick.AddListener(() => ActivateCarsCollectionPanel(!_carsCollectionPanel.gameObject.activeSelf));
+            _bottomPanel.TuneButton.onClick.AddListener(() => ActivateCarsCollectionPanel(false));
+            _bottomPanel.TuneButton.onClick.AddListener(() => ActivateMainMenu(false));
+            _bottomPanel.TuneButton.onClick.AddListener(() => ActivateTuningPanel(true));
+
+            _bottomPanel.CarsCollectionButton.onClick.AddListener(() => ActivateTuningPanel(false));
+            _bottomPanel.CarsCollectionButton.onClick.AddListener(() => ActivateMainMenu(false));
+            _bottomPanel.CarsCollectionButton.onClick.AddListener(() => ActivateCarsCollectionPanel(true));
 
             _tuningPanel.RegisterButtonsListeners();
             _tuningPanel.CloseButton.onClick.AddListener(() => ActivateTuningPanel(false));
+            _tuningPanel.CloseButton.onClick.AddListener(() => ActivateMainMenu(true));
 
             _carsCollectionPanel.CloseButton.onClick.AddListener(() => ActivateCarsCollectionPanel(false));
+            _carsCollectionPanel.CloseButton.onClick.AddListener(() => ActivateMainMenu(true));
         }
 
         private void OnDestroy()
         {
-            OnCarProfileChange -= UpdateTuningPanelValues;
+            _carsCollectionPanel.OnUseCarButtonPressed -= ChangeCar;
+
+            //OnCarProfileChange -= UpdateTuningPanelValues;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using RaceManager.Cars;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,6 +26,8 @@ namespace RaceManager.UI
         public TMP_Text CarNameText => _carNameText;
 
         public Button UseCarButton => _useCarButton;
+
+        public CarName CashedCarName { get; set; }
     }
 }
 

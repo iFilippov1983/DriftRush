@@ -108,7 +108,8 @@ namespace RaceManager.Root
             foreach (SaveAction saveAction in _saveActions)
             {
                 var pair = saveAction.Action.Invoke(data);
-                _lastSave.Add(pair.Item1, pair.Item2);
+                if(!_lastSave.ContainsKey(pair.Item1))
+                    _lastSave.Add(pair.Item1, pair.Item2);
                 //Debug.Log($"Data keys: {data.Keys};\nSaveAction: {saveAction._typeString};\nISaveable: {saveAction._savable.GetType()}");
             }
             //foreach (Action<SaveData> saveAction in _saveActions)
@@ -121,9 +122,9 @@ namespace RaceManager.Root
 
             File.WriteAllText(path, json);
 
-            $"Data SAVED | SaveActions: {_saveActions.Count} | LoadActions: {_loadActions.Count} | Last save count: {_lastSave.Count}".Log(ConsoleLog.Color.Yellow);
-            foreach (var kv in _lastSave)
-                Debug.Log($"Key: {kv.Key}; Value: {kv.Value}".Colored(ConsoleLog.Color.Yellow));
+            //$"Data SAVED | SaveActions: {_saveActions.Count} | LoadActions: {_loadActions.Count} | Last save count: {_lastSave.Count}".Log(ConsoleLog.Color.Yellow);
+            //foreach (var kv in _lastSave)
+            //    Debug.Log($"Key: {kv.Key}; Value: {kv.Value}");
         }
 
         public void Load(bool ignoreMissing = true)
@@ -162,9 +163,9 @@ namespace RaceManager.Root
             //    loadAction(data);
             //}
 
-            $"Data LOADED | SaveActions: {_saveActions.Count} | LoadActions: {_loadActions.Count} | Last save count: {_lastSave.Count}".Log();
-            foreach (var kv in _lastSave)
-                Debug.Log($"Key: {kv.Key}; Value: {kv.Value}");
+            //$"Data LOADED | SaveActions: {_saveActions.Count} | LoadActions: {_loadActions.Count} | Last save count: {_lastSave.Count}".Log();
+            //foreach (var kv in _lastSave)
+            //    Debug.Log($"Key: {kv.Key}; Value: {kv.Value}");
         }
 
         //public class ActionsList
@@ -200,7 +201,13 @@ namespace RaceManager.Root
             private readonly ISaveable _savable;
             private readonly Dictionary<string, string> _lastSave;
 
-            //private Action<SaveData> _action;
+            private Action<SaveData> _action;
+
+            public SaveAction()
+            {
+                //_action = Delegate.CreateDelegate(typeof(SaveData), _action.Target, _action.Method).;
+                throw new NotImplementedException("Open empty constructor for SaveManeges is made just in purpose to solve AOT serialization problem! Don't use it."); 
+            }
 
             public SaveAction(string typeString, ISaveable savable, Dictionary<string, string> lastSave)
             {
@@ -218,7 +225,7 @@ namespace RaceManager.Root
                         _lastSave.Add(_typeString, JsonConvert.SerializeObject(_savable.Save()));
                     d[_typeString] = JObject.FromObject(_savable.Save());
 
-                    Debug.Log($"Last save SAVE: {_lastSave.Count}".Colored(ConsoleLog.Color.Green));
+                    //Debug.Log($"Last save SAVE: {_lastSave.Count}".Colored(ConsoleLog.Color.Green));
                     return (_typeString, _lastSave[_typeString]);
                 };
 
@@ -257,7 +264,7 @@ namespace RaceManager.Root
                         return;
                     _savable.Load(d[_typeString].ToObject(_savable.DataType()));
 
-                    Debug.Log($"LOAD: {d.Count}".Colored(ConsoleLog.Color.Green));
+                    //Debug.Log($"LOAD: {d.Count}".Colored(ConsoleLog.Color.Green));
                 };
 
             //private void Load(SaveData d)

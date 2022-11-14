@@ -25,6 +25,7 @@ namespace RaceManager.UI
         [SerializeField] private CupsProgressPanel _cupsProgress;
         [SerializeField] private CurrencyAmountPanel _currencyAmount;
         [SerializeField] private TuningPanel _tuningPanel;
+        [SerializeField] private CarsCollectionPanel _carsCollectionPanel;
         [SerializeField] private BottomPanelView _bottomPanel;
         [SerializeField] private BackPanel _backPanel;
         [Space]
@@ -42,7 +43,7 @@ namespace RaceManager.UI
 
         private bool _inMainMenu = true;
 
-        public Action OnMenuViewChange;
+        public Action<bool> OnMainMenuActivityChange;
         public Action OnCarProfileChange;
 
         public IObservable<float> OnSpeedValueChange => _tuningPanel.SpeedSlider.onValueChanged.AsObservable();
@@ -68,6 +69,7 @@ namespace RaceManager.UI
             _currentCarProfile = _playerCarDepot.CurrentCarProfile;
 
             UpdateTuningPanelValues();
+            InitializeCarsCollectionPanel();
             RegisterButtonsListeners();
         }
 
@@ -77,17 +79,17 @@ namespace RaceManager.UI
             _clickData = new PointerEventData(EventSystem.current);
             _raycastResults = new List<RaycastResult>();
 
-            OpenMainMenu(_inMainMenu);
+            ActivateMainMenu(_inMainMenu);
             //InitializeUIElements();
         }
 
-        private void Update()
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                GetUIElementClicked();
-            }
-        }
+        //private void Update()
+        //{
+        //    if (Input.GetMouseButtonDown(0))
+        //    {
+        //        GetUIElementClicked();
+        //    }
+        //}
 
         private void GetUIElementClicked()
         {
@@ -102,7 +104,7 @@ namespace RaceManager.UI
 
             foreach (var element in _raycastResults)
             { 
-                if(element.gameObject.tag.Equals(Tag.BackPanel))
+                if(element.gameObject.CompareTag(Tag.BackPanel))
                     backPanelClicked = true;
                 else
                     otherElementClicked = true;
@@ -110,17 +112,10 @@ namespace RaceManager.UI
 
             if (backPanelClicked && !otherElementClicked)
             {
-                ToggleTuningPanel();
+                ActivateTuningPanel(false);
+                ActivateCarsCollectionPanel(false);
             }
         }
-
-        //private void InitializeUIElements()
-        //{
-        //    _currentCarProfile = _playerCarDepot.CurrentCarProfile;
-
-        //    UpdateTuningPanelValues();
-        //    RegisterButtonsListeners();
-        //}
 
         private void StartRace()
         {
@@ -128,7 +123,7 @@ namespace RaceManager.UI
             Loader.Load(Loader.Scene.RaceScene);
         }
 
-        private void OpenMainMenu(bool active)
+        private void ActivateMainMenu(bool active)
         {
             _bottomPanel.SetActive(active);
             _startButton.SetActive(active);
@@ -139,15 +134,25 @@ namespace RaceManager.UI
             _podium.ChestObject.SetActive(active);
         }
 
-        private void ToggleTuningPanel()
+        private void ActivateTuningPanel(bool active)
         {
-            _inMainMenu = !_inMainMenu;
-            OpenMainMenu(_inMainMenu);
+            ActivateMainMenu(!active);
             _bottomPanel.SetActive(true);
-            _tuningPanel.SetActive(!_inMainMenu);
-            _worldSpaceUI.SetActive(!_inMainMenu);
+            _tuningPanel.SetActive(active);
+            _worldSpaceUI.SetActive(active);
+            _bottomPanel.TuningPressedImage.SetActive(active);
 
-            OnMenuViewChange?.Invoke();
+            OnMainMenuActivityChange?.Invoke(!active);
+        }
+
+        private void ActivateCarsCollectionPanel(bool active)
+        {
+            ActivateMainMenu(!active);
+            _bottomPanel.SetActive(true);
+            _carsCollectionPanel.SetActive(active);
+            _bottomPanel.CarsCollectionPressedImage.SetActive(active);
+
+            OnMainMenuActivityChange?.Invoke(!active);
         }
 
         private void UpdateTuningPanelValues()
@@ -179,7 +184,21 @@ namespace RaceManager.UI
             _tuningPanel.SetValueToSlider(td.cType, td.value);
             _tuningPanel.UpdateCurrentInfoValues(td.available);
         }
-            
+
+        private void InitializeCarsCollectionPanel()
+        {
+            foreach (var profile in _playerCarDepot.CarProfiles)
+            {
+                _carsCollectionPanel.AddCollectionCard
+                    (
+                    profile.CarName,
+                    profile.CarCharacteristics.CurrentFactorsProgress,
+                    profile.CarCharacteristics.FactorsMaxTotal,
+                    profile.CarCharacteristics.isAvailable
+                    );
+            }
+        }
+
 
         private void InitializeSlidersMinMaxValues()
         {
@@ -194,9 +213,13 @@ namespace RaceManager.UI
         {
             _startButton.onClick.AddListener(StartRace);
 
-            _bottomPanel.TuneButton.onClick.AddListener(ToggleTuningPanel);
+            _bottomPanel.TuneButton.onClick.AddListener(() => ActivateTuningPanel(!_tuningPanel.gameObject.activeSelf));
+            _bottomPanel.CarsCollectionButton.onClick.AddListener(() => ActivateCarsCollectionPanel(!_carsCollectionPanel.gameObject.activeSelf));
 
             _tuningPanel.RegisterButtonsListeners();
+            _tuningPanel.CloseButton.onClick.AddListener(() => ActivateTuningPanel(false));
+
+            _carsCollectionPanel.CloseButton.onClick.AddListener(() => ActivateCarsCollectionPanel(false));
         }
 
         private void OnDestroy()

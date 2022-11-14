@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using Zenject;
 
 public static class ConsoleLog
 {
@@ -20,6 +21,11 @@ public static class ConsoleLog
 
     public static void Throw(this string str)
         => throw new Exception(str);
+
+    public static string Colored(this string str, string color)
+    {
+        return $"<color={color}>{str}</color>";
+    }
 
     public class Color
     { 

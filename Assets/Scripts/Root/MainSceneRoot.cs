@@ -39,7 +39,7 @@ namespace RaceManager.Root
         {
             _menuCamerasHandler.LookAt(_podium.CarPlace);
 
-            _mainUI.OnMenuViewChange += _menuCamerasHandler.ToggleCamPriorities;
+            _mainUI.OnMainMenuActivityChange += _menuCamerasHandler.ToggleCamPriorities;
         }
 
         private void RegisterSavebles()
@@ -78,7 +78,7 @@ namespace RaceManager.Root
             foreach (var d in disposeables)
                 d.Dispose();
 
-            _mainUI.OnMenuViewChange -= _menuCamerasHandler.ToggleCamPriorities;
+            _mainUI.OnMainMenuActivityChange -= _menuCamerasHandler.ToggleCamPriorities;
         }
 
         private void OnDestroy()

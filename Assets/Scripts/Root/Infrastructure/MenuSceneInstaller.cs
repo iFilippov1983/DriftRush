@@ -18,6 +18,7 @@ namespace RaceManager.Infrastructure
         [SerializeField] private MainUI _mainUI;
         [SerializeField] private Podium _podium;
         [SerializeField] private CarsDepot _playerCarDepot;
+        [SerializeField] private SpritesContainer _spritesContainer;
 
         private MainSceneRoot _mainSceneRoot;
 
@@ -30,6 +31,7 @@ namespace RaceManager.Infrastructure
             Bind(_mainUI);
             Bind(_podium);
             Bind(_playerCarDepot);
+            Bind(_spritesContainer);
 
             Bind<SaveManager>();
             Bind<PlayerProfile>();

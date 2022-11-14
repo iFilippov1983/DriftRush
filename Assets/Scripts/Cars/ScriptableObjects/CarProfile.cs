@@ -3,6 +3,7 @@ using RaceManager.Tools;
 using Sirenix.OdinInspector;
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 #pragma warning disable 649
 namespace RaceManager.Cars

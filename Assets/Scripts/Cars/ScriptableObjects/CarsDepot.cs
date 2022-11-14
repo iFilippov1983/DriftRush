@@ -1,5 +1,6 @@
 ﻿using RaceManager.Root;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using System;
 using System.Collections.Generic;
 using UniRx;
@@ -23,6 +24,7 @@ namespace RaceManager.Cars
             CarProfile currentCP = CarProfiles.Find(c => c.CarName == newCP.CarName);
             CarProfiles.Remove(currentCP);
             CarProfiles.Add(newCP);
+            CarProfiles.Sort((a, b) => a.CarCharacteristics.Rarity.CompareTo(b.CarCharacteristics.Rarity));
         }
 
         public Type DataType() => typeof(SaveData);

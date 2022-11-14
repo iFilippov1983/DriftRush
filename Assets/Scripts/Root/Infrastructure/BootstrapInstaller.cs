@@ -11,6 +11,7 @@ using SaveData = System.Collections.Generic.Dictionary<string, Newtonsoft.Json.L
 using Sirenix.Serialization;
 using System.Threading.Tasks;
 using System.Globalization;
+using RaceManager.Root;
 
 namespace RaceManager.Infrastructure
 {
@@ -41,6 +42,9 @@ namespace RaceManager.Infrastructure
 
             AotHelper.EnsureType<SaveData>();
             AotHelper.EnsureType<JObject>();
+            AotHelper.EnsureType<SaveManager>();
+            AotHelper.EnsureType<SaveManager.SaveAction>();
+            //AotHelper.EnsureType<SaveManager.LoadAction>();
 
             AotHelper.EnsureList<int>();
             AotHelper.EnsureList<float>();

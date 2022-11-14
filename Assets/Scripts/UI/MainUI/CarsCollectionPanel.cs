@@ -38,7 +38,7 @@ namespace RaceManager.UI
             }
         }
 
-        public Action<string> OnUseCarButtonPressed;
+        public Action<CarName> OnUseCarButtonPressed;
 
         [Inject]
         private void Construct(SpritesContainer spritesContainer)
@@ -56,11 +56,12 @@ namespace RaceManager.UI
             card.ProgressImage.fillAmount = (float)progressCurrent / (float)progressTotal;
             card.ProgressCurrentText.text = progressCurrent.ToString();
             card.ProgressTotalText.text = progressTotal.ToString();
+            card.CashedCarName = carName;
             card.CarNameText.text = carName.ToString();
             card.LockedImage.SetActive(!isAvailable);
 
             card.UseCarButton.interactable = isAvailable;
-            card.UseCarButton.onClick.AddListener(() => OnUseCarButtonPressed?.Invoke(card.CarNameText.text));
+            card.UseCarButton.onClick.AddListener(() => OnUseCarButtonPressed?.Invoke(card.CashedCarName));
 
             _collectionCards.Add(card);
 
@@ -82,8 +83,14 @@ namespace RaceManager.UI
             }
             else
             {
-                Debug.LogError($"Collection card whith name {carName} was not found");
+                Debug.LogError($"Collection card whith Car name '{carName}' was not found");
             }
+        }
+
+        public void UpdateStatsProgress(string carName, int currentValue, int maxValue)
+        {
+            _carNameText.text = carName;
+            _carStatsProgressText.text = $"{currentValue}/{maxValue}";
         }
 
         private void OnDestroy()

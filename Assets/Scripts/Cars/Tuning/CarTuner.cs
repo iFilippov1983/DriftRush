@@ -24,7 +24,6 @@ namespace RaceManager.Cars
             _playerCarDepot = playerCarDepot;
             _carProfile = _playerCarDepot.CurrentCarProfile;
 
-            OnCurrentCarChanged += ChangeCar;
             OnCharacteristicValueChanged += TuneCar;
         }
 
@@ -226,15 +225,16 @@ namespace RaceManager.Cars
             return pLevel;
         }
 
-        private void ChangeCar()
+        public void ChangeCar()
         {
+            _playerCarDepot.UpdateProfile(_carProfile);
             _carProfile = _playerCarDepot.CurrentCarProfile;
-            //_carConfigVisual = _carProfile.CarConfigVisual;
+
+            OnCurrentCarChanged?.Invoke();
         }
 
         public void Dispose()
         {
-            OnCurrentCarChanged -= ChangeCar;
             OnCharacteristicValueChanged -= TuneCar;
         }
 

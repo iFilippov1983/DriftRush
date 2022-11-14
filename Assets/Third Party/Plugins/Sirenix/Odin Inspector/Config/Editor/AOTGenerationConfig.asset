@@ -16,13 +16,16 @@ MonoBehaviour:
   deleteDllAfterBuilds: 0
   AutomateForAllAOTPlatforms: 1
   automateForPlatforms: 09000000140000000d000000
-  lastScan: 638040179669527842
+  lastScan: 638040469573767742
   supportSerializedTypes:
   - TypeName: System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[Newtonsoft.Json.Linq.JObject,
       Newtonsoft.Json]], mscorlib
     IsCustom: 1
     Emit: 1
   - TypeName: Newtonsoft.Json.Linq.JObject, Newtonsoft.Json
+    IsCustom: 1
+    Emit: 1
+  - TypeName: RaceManager.Root.SaveManager, Assembly-CSharp
     IsCustom: 1
     Emit: 1
   - TypeName: RaceManager.Root.SaveManager+LoadAction, Assembly-CSharp

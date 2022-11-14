@@ -16,6 +16,9 @@ MonoBehaviour:
   CurrentCarName: 0
   CarProfiles:
   - CarName: 0
+    Accessibility:
+      _pointsToAccess: 100
+      _currentPointsAmount: 100
     Speed:
       Max: 0
       Min: 0
@@ -46,7 +49,6 @@ MonoBehaviour:
       durabilityMin: 0
     CarCharacteristics:
       Rarity: 0
-      isAvailable: 1
       _factorsMaxTotal: 400
       CurrentFactorsProgress: 200
       MinSpeedFactor: 1

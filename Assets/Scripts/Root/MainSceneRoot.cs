@@ -15,10 +15,10 @@ namespace RaceManager.Root
         private SaveManager _saveManager;
         private MainUI _mainUI;
         private MenuCamerasHandler _menuCamerasHandler;
-        private Podium _podium;
+        private PodiumView _podium;
 
         [Inject]
-        private void Construct(SaveManager saveManager, MainUI mainUI, Podium podium)
+        private void Construct(SaveManager saveManager, MainUI mainUI, PodiumView podium)
         {
             _menuCamerasHandler = Singleton<MenuCamerasHandler>.Instance;
 

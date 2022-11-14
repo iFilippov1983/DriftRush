@@ -12,6 +12,7 @@ namespace RaceManager.Cars
     public class CarProfile
     {
         public CarName CarName;
+        public AccessibilityProgress Accessibility;
         public Speed Speed;
         public Mobility Mobility;
         public Acceleration Acceleration;
@@ -34,16 +35,44 @@ namespace RaceManager.Cars
         }
 
         [Serializable]
+        public class AccessibilityProgress
+        {
+            [JsonProperty]
+            [SerializeField] private int _pointsToAccess = 100;
+            [JsonProperty]
+            [SerializeField] private int _currentPointsAmount = 0;
+
+            public int PointsToAccess => _pointsToAccess;
+            public int CurrentPointsAmount => _currentPointsAmount;
+
+            public void AddProgressPoints(int value)
+            { 
+                _currentPointsAmount += value;
+                if(_currentPointsAmount > _pointsToAccess)
+                    _currentPointsAmount = _pointsToAccess;
+            }
+
+            [ShowInInspector]
+            public bool IsAvailable
+            {
+                get => _currentPointsAmount == _pointsToAccess;
+                set 
+                { 
+                    if(value == true)
+                        _currentPointsAmount = _pointsToAccess;
+                }
+            }
+        }
+
+        [Serializable]
         public class Characteristics
         {
             public CarRarity Rarity;
-            public bool isAvailable;
+            //public bool isAvailable;
 
             [JsonProperty]
             [SerializeField]
             private int _factorsMaxTotal;
-            [JsonProperty]
-            private int _availableFactorsToUse;
 
             public int CurrentFactorsProgress;
 

@@ -16,6 +16,7 @@ namespace RaceManager.UI
         [SerializeField] private Button _tuneStatsButton;
         [SerializeField] private Button _tuneWheelsViewButton;
         [SerializeField] private Button _tuneCarViewButton;
+        [SerializeField] private Button _closePanelButton;
         [Space]
         [SerializeField] private RectTransform _statsValuesPanel;
         [SerializeField] private RectTransform _tuneWheelsViewPanel;
@@ -47,7 +48,7 @@ namespace RaceManager.UI
         public Slider DurabilitySlider => _durabilitySlider;
         public Slider AccelerationSlider => _accelerationSlider;
 
-        public static Camera _mainCam;
+        public Button CloseButton => _closePanelButton;
 
         private void OnEnable()
         {
@@ -64,6 +65,7 @@ namespace RaceManager.UI
             _tuneStatsButton.onClick.AddListener(OpenStatsValuesPanel);
             _tuneWheelsViewButton.onClick.AddListener(OpenTuneWheelsViewPanel);
             _tuneCarViewButton.onClick.AddListener(OpenTuneCarViewPanel);
+            _closePanelButton.onClick.AddListener(DeactivateAllPanels);
         }
 
         public void SetBorderValues(CharacteristicType characteristics, int minValue, int maxValue)

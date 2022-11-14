@@ -23,10 +23,10 @@ namespace RaceManager.Cameras
             _farCamera.LookAt = lookAtTransform;
         }
 
-        public void ToggleCamPriorities()
+        public void ToggleCamPriorities(bool isMainMenuActive)
         {
-            _closeCamera.Priority = _closeCamera.Priority == MajorPriority ? MinorPriority : MajorPriority;
-            _farCamera.Priority = _farCamera.Priority == MajorPriority ? MinorPriority : MajorPriority;
+            _closeCamera.Priority = isMainMenuActive ? MajorPriority : MinorPriority;
+            _farCamera.Priority = isMainMenuActive ? MinorPriority : MajorPriority;
         }
     }
 }

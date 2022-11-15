@@ -18,7 +18,6 @@ namespace RaceManager.Root
             EventsHub<RaceEvent>.Subscribe(RaceEvent.QUIT, HandleSceneQuit);
         }
 
-        
         public void Run()
         {
             RegisterSavebles();

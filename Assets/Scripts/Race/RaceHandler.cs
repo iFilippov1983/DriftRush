@@ -12,12 +12,15 @@ using Sirenix.OdinInspector;
 using RaceManager.Cameras;
 using Zenject;
 using RaceManager.Infrastructure;
+using RaceManager.Progress;
+using UniRx;
 
 namespace RaceManager.Race
 {
-    public class RaceInitializer : MonoBehaviour, Root.IInitializable
+    public class RaceHandler : MonoBehaviour, Root.IInitializable
     {
         [SerializeField] private MaterialsContainer _materialsContainer;
+        [SerializeField] private RaceRewardsScheme _rewardsScheme;
         [SerializeField] private CarsDepot _opponentsCarsDepot;
 
         private CarsDepot _playerCarsDepot;
@@ -49,12 +52,6 @@ namespace RaceManager.Race
             _positionsHandler = positionsHandler;
             _raceUI = raceUI;
             _raceLevelInitializer = levelInitializer;
-            //_level = levelInitializer.RaceLevel;
-
-            //_startPoints = _level.StartPoints;
-            //_waypointTrackMain = _level.WaypointTrackMain;
-            //_waypointTrackEven = _level.WaypointTrackEven;
-            //_waypointTrackOdd = _level.WaypointTrackOdd;
         }
 
         public void Initialize()
@@ -69,16 +66,8 @@ namespace RaceManager.Race
             InitCameras();
             InitDrivers();
 
-            _positionsHandler.StartHandling(_driversList, _waypointsTrackersList);
+            _positionsHandler.StartHandling(_waypointsTrackersList);
         }
-
-        //private void Start()
-        //{
-        //    InitCameras();
-        //    InitDrivers();
-
-        //    _positionsHandler.StartHandling(_driversList, _waypointsTrackersList);
-        //}
 
         private void Update()
         {
@@ -118,6 +107,7 @@ namespace RaceManager.Race
                     _camerasHandler.FollowAndLookAt(driver.CarObject.transform, driver.CarTargetToFollow);
 
                     driver.Subscribe(_raceUI);
+                    driver.DriverProfile.CarState.Subscribe(cs => HandlePlayerCarState(cs, driver));
 
                     var selfRighting = driver.CarObject.GetComponent<CarSelfRighting>();
                     var tracker = driver.CarObject.GetComponent<WaypointsTracker>();
@@ -128,7 +118,8 @@ namespace RaceManager.Race
                         tracker.ResetTargetToCashedValues();
                     }
 
-                    _raceUI.Init(driver.DriverProfile, driver.PlayerProfile, selfRighting.RightCar, GetToCheckpoint);
+                    
+                    _raceUI.Initialize(driver.PlayerProfile, selfRighting.RightCar, GetToCheckpoint);
                 }
                 else
                 {
@@ -137,11 +128,43 @@ namespace RaceManager.Race
                     driverGo.name += $"_{i + 1}";
                 }
 
-                //driver.SetPositionInRace(i + 1);
                 driverGo.transform.SetParent(parent.transform, false);
                 _driversList.Add(driver);
                 _waypointsTrackersList.Add(driver.WaypointsTracker);
             }
+        }
+
+        private IDisposable HandlePlayerCarState(CarState playerCarState, Driver playerDriver)
+        {
+            switch (playerCarState)
+            {
+                case CarState.Finished:
+                    GetReward(playerDriver.DriverProfile);
+                    break;
+                case CarState.InShed:
+                    break;
+                case CarState.OnTrack:
+                    break;
+                case CarState.Stuck:
+                    break;
+                case CarState.GotHit:
+                    break;
+            }
+
+            _raceUI.ChangeViewDependingOn(playerCarState);
+
+            return Disposable.Empty;
+        }
+
+        private void GetReward(DriverProfile driverProfile)
+        {
+            RaceReward reward = _rewardsScheme.RewardFor(driverProfile.PositionInRace);
+            _playerProfile.Currency.Money += reward.Money;
+            _playerProfile.Currency.Cups += reward.Cups;
+
+            _raceUI.SetFinishValues(reward.Money, reward.Cups, _playerProfile.Currency.Money, _playerProfile.Currency.Gems);
+
+            Debug.Log($"GOT REWARD - M:{reward.Money}; C:{reward.Cups} => NOW HAVE - M:{_playerProfile.Currency.Money}; C:{_playerProfile.Currency.Cups}");
         }
     }
 }

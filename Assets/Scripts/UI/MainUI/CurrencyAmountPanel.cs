@@ -9,7 +9,7 @@ namespace RaceManager.UI
         [SerializeField] private TMP_Text _gemsAmount;
 
         public TMP_Text MoneyAmount => _moneyAmount;
-        public TMP_Text GesmsAmount => _gemsAmount;
+        public TMP_Text GemsAmount => _gemsAmount;
     }
 }
 

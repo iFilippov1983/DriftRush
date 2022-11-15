@@ -46,10 +46,11 @@ namespace RaceManager.Shed
             _carTuner.SetTuner(_carVisual);
         }
 
-        private async void InitializeNewCar()
+        private void InitializeNewCar()
         {
-            _carDestroyer = new CarDestroyer(_carVisual.gameObject);
-            await Task.WhenAll(_carDestroyer.DestroyCar());
+            //_carDestroyer = new CarDestroyer(_carVisual.gameObject);
+            //await Task.WhenAll(_carDestroyer.DestroyCar());
+            Destroy(_carVisual.gameObject);
 
             CarFactory carFactory = new CarFactory(_playerCarDepot, _materialsContainer, _podium.RespawnCarPlace);
             carFactory.ConstructCarForShed(out _carVisual);
@@ -121,6 +122,9 @@ namespace RaceManager.Shed
             _carTuner.OnCurrentCarChanged -= InitializeNewCar;
         }
 
+        /// <summary>
+        /// Use it to visualize car destruction
+        /// </summary>
         private class CarDestroyer
         {
             private float _destructionSpeed = 0.075f;
@@ -146,7 +150,6 @@ namespace RaceManager.Shed
                 }
 
                 Destroy(_car);
-                //return true;
             }
         }
     }

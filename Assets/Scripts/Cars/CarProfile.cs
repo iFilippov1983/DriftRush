@@ -67,7 +67,7 @@ namespace RaceManager.Cars
         [Serializable]
         public class Characteristics
         {
-            public CarRarity Rarity;
+            public Rarity Rarity;
             //public bool isAvailable;
 
             [JsonProperty]

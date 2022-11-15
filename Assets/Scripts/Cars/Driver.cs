@@ -50,13 +50,13 @@ namespace RaceManager.Cars
         private void OnEnable()
         {
             EventsHub<RaceEvent>.Subscribe(RaceEvent.START, StartRace);
-            EventsHub<RaceEvent>.Subscribe(RaceEvent.FINISH, StopRace);
+            //EventsHub<RaceEvent>.Subscribe(RaceEvent.FINISH, StopRace);
         }
 
         private void OnDisable()
         {
             EventsHub<RaceEvent>.Unsunscribe(RaceEvent.START, StartRace);
-            EventsHub<RaceEvent>.Unsunscribe(RaceEvent.FINISH, StopRace);
+            //EventsHub<RaceEvent>.Unsunscribe(RaceEvent.FINISH, StopRace);
         }
 
         //private void OnDestroy()
@@ -73,7 +73,7 @@ namespace RaceManager.Cars
         {
             _driverProfile.CarCurrentSpeed = _car.SpeedInDesiredUnits;
             _driverProfile.TrackProgress = _waypointsTracker.Progress;
-            _driverProfile.PositionInRace = (PlayerProfile.PositionInRace)_waypointsTracker.CarPosition;
+            _driverProfile.PositionInRace = (PositionInRace)_waypointsTracker.CarPosition;
             NotifyObservers();
         }
 
@@ -107,8 +107,8 @@ namespace RaceManager.Cars
 
             if (DriverType == DriverType.Player)
             {
-                _playerProfile.lastInRacePosition = _driverProfile.PositionInRace;
-                EventsHub<RaceEvent>.Unsunscribe(RaceEvent.FINISH, StopRace);
+                _playerProfile.LastInRacePosition = _driverProfile.PositionInRace;
+                //EventsHub<RaceEvent>.Unsunscribe(RaceEvent.FINISH, StopRace);
                 EventsHub<RaceEvent>.BroadcastNotification(RaceEvent.FINISH);
             }
 

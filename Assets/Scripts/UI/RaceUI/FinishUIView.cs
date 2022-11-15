@@ -42,6 +42,16 @@ namespace RaceManager.UI
         public Image FillUpImage => _fillUpImage;
         public TMP_Text PersentageProgressText => _persentageProgressText;
         public Button OkButtonExtraReward => _okButtonExtraReward;
+
+        private void OnEnable()
+        {
+            _backPanel.SetActive(true);
+        }
+
+        private void OnDisable()
+        {
+            _backPanel.SetActive(false);
+        }
     }
 
 }

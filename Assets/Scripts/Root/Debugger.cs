@@ -51,7 +51,7 @@ namespace RaceManager.Root
             if (level != null)
             {
                 $"Next level to play: {nextLevelToPlay}".Log(ConsoleLog.Color.Yellow);
-                playerProfile.nextLevelPrefabToLoad = nextLevelToPlay;
+                playerProfile.NextLevelPrefabToLoad = nextLevelToPlay;
                 saveManager.Save();
             }
             else

@@ -7,11 +7,10 @@ using RaceManager.Cars.Effects;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Utilities;
 using System;
-using SaveData = System.Collections.Generic.Dictionary<string, Newtonsoft.Json.Linq.JObject>;
-using Sirenix.Serialization;
 using System.Threading.Tasks;
 using System.Globalization;
 using RaceManager.Root;
+using SaveData = System.Collections.Generic.Dictionary<string, Newtonsoft.Json.Linq.JObject>;
 
 namespace RaceManager.Infrastructure
 {
@@ -44,7 +43,7 @@ namespace RaceManager.Infrastructure
             AotHelper.EnsureType<JObject>();
             AotHelper.EnsureType<SaveManager>();
             AotHelper.EnsureType<SaveManager.SaveAction>();
-            //AotHelper.EnsureType<SaveManager.LoadAction>();
+            AotHelper.EnsureType<SaveManager.LoadAction>();
 
             AotHelper.EnsureList<int>();
             AotHelper.EnsureList<float>();

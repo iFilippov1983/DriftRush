@@ -1,9 +1,6 @@
 ﻿using RaceManager.Root;
-using Sirenix.OdinInspector;
-using Sirenix.Utilities;
 using System;
 using System.Collections.Generic;
-using UniRx;
 using UnityEngine;
 
 #pragma warning disable 649

@@ -3,7 +3,7 @@
 namespace RaceManager.Cars
 {
     [Serializable]
-    public enum CarRarity
+    public enum Rarity
     { 
         Common,
         Uncommon,

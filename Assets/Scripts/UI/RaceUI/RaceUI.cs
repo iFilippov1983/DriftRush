@@ -20,16 +20,14 @@ namespace RaceManager.UI
 
         private bool _isRaceFinished;
 
-        public void Init(DriverProfile driverProfile, PlayerProfile playerProfile, UnityAction actionForRespawnButton, UnityAction actionForGetToCheckpointButton)
+        public void Initialize(PlayerProfile playerProfile, UnityAction actionForRespawnButton, UnityAction actionForGetToCheckpointButton)
         {
-            driverProfile.CarState.Subscribe(playerCarState => ChangeViewDependingOn(playerCarState));
-
             _finishUI.gameObject.SetActive(false);
             _finishUI.OkButtonFinish.onClick.AddListener(ShowExtraRewardPanel);
             _finishUI.OkButtonExtraReward.onClick.AddListener(FinalizeRace);
 
             _inRaceUI.gameObject.SetActive(true);
-            _inRaceUI.RaceProgressBar.LevelText.text = "LEVEL " + (int)playerProfile.nextLevelPrefabToLoad;
+            _inRaceUI.RaceProgressBar.LevelText.text = "LEVEL " + (int)playerProfile.NextLevelPrefabToLoad;
 
             _inRaceUI.RespawnCarButton.AddListener(actionForRespawnButton);
             _inRaceUI.GetToCheckpointButton.AddListener(actionForGetToCheckpointButton);
@@ -93,7 +91,7 @@ namespace RaceManager.UI
             _inRaceUI.RaceProgressBar.ProgressImage.fillAmount = _trackProgress;
         }
 
-        private void ChangeViewDependingOn(CarState playerCarState)
+        public void ChangeViewDependingOn(CarState playerCarState)
         {
             switch (playerCarState)
             {
@@ -112,15 +110,15 @@ namespace RaceManager.UI
             }
         }
 
-        private void SetFinishValues()
+        public void SetFinishValues(int moneyReward, int cupsReward, int moneyTotal, int gemsTotal)
         {
-            _finishUI.MoneyAmount.text = "999";
-            _finishUI.GemsAmount.text = "999";
+            _finishUI.MoneyAmount.text = moneyTotal.ToString();
+            _finishUI.GemsAmount.text = gemsTotal.ToString();
 
             _finishUI.PositionText.text = GetPositionText();
 
-            _finishUI.RewardMoneyAmountText.text = "99";
-            _finishUI.RewardCupsAmountText.text = "99";
+            _finishUI.RewardMoneyAmountText.text = moneyReward.ToString();
+            _finishUI.RewardCupsAmountText.text = cupsReward.ToString();
 
             //animate?
             _finishUI.FillUpImage.fillAmount = 0.8f;
@@ -137,8 +135,6 @@ namespace RaceManager.UI
         {
             _isRaceFinished = true;
             _inRaceUI.gameObject.SetActive(false);
-
-            SetFinishValues();
             _finishUI.gameObject.SetActive(true);
         }
 
@@ -154,6 +150,8 @@ namespace RaceManager.UI
                 return string.Concat(_currentPosition, "st");
             else if (_currentPosition == 2 || _currentPosition == 3)
                 return string.Concat(_currentPosition, "d");
+            else if (_currentPosition == 0)
+                return "DNF";
             else
                 return string.Concat(_currentPosition, "th");
         }

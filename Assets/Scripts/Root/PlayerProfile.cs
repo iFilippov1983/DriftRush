@@ -1,23 +1,43 @@
-﻿using RaceManager.Cars;
+﻿using Newtonsoft.Json;
+using RaceManager.Progress;
 using RaceManager.Race;
-using Sirenix.Utilities;
 using System;
-using System.Collections.Generic;
+using UnityEditor;
 
 namespace RaceManager.Root
 {
     [Serializable]
     public class PlayerProfile : ISaveable
     {
-        public PositionInRace lastInRacePosition;
-        public Currency currency;
-        public LevelName nextLevelPrefabToLoad = LevelName.Level_0_test;
-        
+        private const int RacesCounterMax = 3;
+
+        public PositionInRace LastInRacePosition = PositionInRace.DNF;
+        public Currency Currency = new Currency();
+        public LevelName NextLevelPrefabToLoad = LevelName.Level_0_test;
+
+        [JsonProperty]
+        private int _racesCounter = 0;
+
+        [JsonProperty]
+        public int RacesCounter
+        {
+            get => _racesCounter;
+            private set 
+            { 
+                _racesCounter = value;
+                if(_racesCounter > RacesCounterMax)
+                    _racesCounter = 1;
+            }
+        }
+
+        public void CountRace() => RacesCounter++;
+
         public class SaveData
         {
-            public PositionInRace LastInRacePosition;
-            public Currency Currency;
-            public LevelName NextLevelPrefabToLoad;
+            public PositionInRace lastInRacePosition;
+            public Currency currency;
+            public LevelName nextLevelPrefabToLoad;
+            public int racesCounter;
         }
 
         public Type DataType() => typeof(SaveData);
@@ -25,48 +45,21 @@ namespace RaceManager.Root
         public void Load(object data)
         {
             SaveData saveData = (SaveData)data;
-            lastInRacePosition = saveData.LastInRacePosition;
-            currency = saveData.Currency;
-            nextLevelPrefabToLoad = saveData.NextLevelPrefabToLoad;
+            LastInRacePosition = saveData.lastInRacePosition;
+            Currency = saveData.currency;
+            NextLevelPrefabToLoad = saveData.nextLevelPrefabToLoad;
+            RacesCounter = saveData.racesCounter;
         }
 
         public object Save()
         {
             return new SaveData
             {
-                LastInRacePosition = lastInRacePosition,
-                Currency = currency,
-                NextLevelPrefabToLoad = nextLevelPrefabToLoad
+                lastInRacePosition = LastInRacePosition,
+                currency = Currency,
+                nextLevelPrefabToLoad = NextLevelPrefabToLoad,
+                racesCounter = RacesCounter
             };
-        }
-
-        [Serializable]
-        public struct Currency
-        {
-            public int Money;
-            public int Gems;
-            public int Cups;
-
-            public static Currency operator +(Currency a, Currency b)
-            {
-                return new Currency
-                {
-                    Money = a.Money + b.Money,
-                    Gems = a.Gems + b.Gems,
-                    Cups = a.Cups + b.Cups
-                };
-            }
-        }
-
-        public enum PositionInRace
-        { 
-            DNF = 0,
-            First = 1,
-            Second = 2,
-            Third = 3,
-            Fourth = 4,
-            Fifth = 5,
-            Sixth = 6,
         }
     }
 }

@@ -32,6 +32,7 @@ namespace RaceManager.UI
         [SerializeField] private RectTransform _chestSlotsRect;
         [SerializeField] private List<ChestSlot> _chestSlots;
 
+        private PlayerProfile _playerProfile;
         private SaveManager _saveManager;
         private CarsDepot _playerCarDepot;
         private CarProfile _currentCarProfile;
@@ -55,19 +56,19 @@ namespace RaceManager.UI
         public Action<int> OnTuneValuesChange => (int v) => _tuningPanel.UpdateCurrentInfoValues(v);
 
         [Inject]
-        private void Construct(SaveManager saveManager, CarsDepot playerCarDepot, PodiumView podium)
+        private void Construct(PlayerProfile playerProfile, SaveManager saveManager, CarsDepot playerCarDepot, PodiumView podium)
         {
+            _playerProfile = playerProfile;
             _saveManager = saveManager;
             _playerCarDepot = playerCarDepot;
             _podium = podium;
-
-            //OnCarProfileChange += UpdateTuningPanelValues;
         }
 
         public void Initialize()
         {
             _currentCarProfile = _playerCarDepot.CurrentCarProfile;
 
+            UpdateCurrencyAmountPanel();
             UpdateTuningPanelValues();
             InitializeCarsCollectionPanel();
             RegisterButtonsListeners();
@@ -80,7 +81,6 @@ namespace RaceManager.UI
             _raycastResults = new List<RaycastResult>();
 
             ActivateMainMenu(true);
-            //InitializeUIElements();
         }
 
         //private void Update()
@@ -154,11 +154,6 @@ namespace RaceManager.UI
             _bottomPanel.CarsCollectionPressedImage.SetActive(active);
         }
 
-        private void ActivateBottomPanel(bool active)
-        {
-            _bottomPanel.SetActive(active);
-        }
-
         public void UpdateTuningPanelValues()
         {
             _currentCarProfile = _playerCarDepot.CurrentCarProfile;
@@ -217,13 +212,16 @@ namespace RaceManager.UI
                 );
         }
 
+        private void UpdateCurrencyAmountPanel()
+        {
+            _currencyAmount.MoneyAmount.text = _playerProfile.Currency.Money.ToString();
+            _currencyAmount.GemsAmount.text = _playerProfile.Currency.Gems.ToString();
+        }
+
         private void ChangeCar(CarName newCarName)
         {
             if (newCarName == _playerCarDepot.CurrentCarName)
                 return;
-
-            //_playercardepot.currentcarname = newcarname;
-            //_savemanager.save();
 
             OnCarProfileChange?.Invoke(newCarName);
         }

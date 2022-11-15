@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.14508851, g: 0.65978503, b: 1.2837079, a: 1}
+  m_IndirectSpecularColor: {r: 0.14509445, g: 0.65978503, b: 1.2828575, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -712,7 +712,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 1
-  m_FollowOffset: {x: 10, y: 22, z: -25}
+  m_FollowOffset: {x: 0, y: 4.5, z: -8.4}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
@@ -733,7 +733,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4044717213e31446939f7bd49c896ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_TrackedObjectOffset: {x: 2, y: 6, z: 0}
+  m_TrackedObjectOffset: {x: 0, y: 1.7, z: 0}
   m_LookaheadTime: 0
   m_LookaheadSmoothing: 0
   m_LookaheadIgnoreY: 0
@@ -1170,7 +1170,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1328898759}
-  m_LocalRotation: {x: 0.09668144, y: 0.8828834, z: -0.20842049, w: 0.4095492}
+  m_LocalRotation: {x: 0.09668142, y: 0.8828834, z: -0.20842047, w: 0.40954915}
   m_LocalPosition: {x: -15.269382, y: 10, z: 12.916887}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1189,7 +1189,7 @@ GameObject:
   - component: {fileID: 1351370804}
   - component: {fileID: 1351370805}
   m_Layer: 0
-  m_Name: RaceInitializer
+  m_Name: RaceHandler
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1223,6 +1223,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _materialsContainer: {fileID: 11400000, guid: f732a8b0777ef0e40b2503a7df0aadbf,
     type: 2}
+  _rewardsScheme: {fileID: 11400000, guid: b3ee5958f1d40d64887f465f310f2905, type: 2}
   _opponentsCarsDepot: {fileID: 11400000, guid: cde466645b9a54942a470d50c6c75128,
     type: 2}
 --- !u!1 &1431465921
@@ -1475,12 +1476,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerProfile:
-    lastInRacePosition: 0
-    currency:
+    LastInRacePosition: 0
+    Currency:
       Money: 0
-      Gems: 0
       Cups: 0
-    nextLevelPrefabToLoad: 1
+      Gems: 0
+    NextLevelPrefabToLoad: 1
   nextLevelToPlay: 0
 --- !u!4 &1938199604
 Transform:

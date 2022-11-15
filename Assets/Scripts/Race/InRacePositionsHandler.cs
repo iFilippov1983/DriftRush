@@ -10,7 +10,7 @@ namespace RaceManager.Race
     {
         private List<WaypointsTracker> _waypointsTrackers;
 
-        public void StartHandling(List<Driver> drivers, List<WaypointsTracker> waypointsTrackers)
+        public void StartHandling(List<WaypointsTracker> waypointsTrackers)
         {
             _waypointsTrackers = waypointsTrackers;
 

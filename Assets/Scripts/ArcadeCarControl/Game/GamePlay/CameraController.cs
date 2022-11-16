@@ -7,10 +7,8 @@ using UnityEngine;
 /// <summary>
 /// Move and rotation camera controller
 /// </summary>
-
 public class CameraController : RaceManager.Root.SingletonPersistant<CameraController>
 {
-
 	[SerializeField] KeyCode SetCameraKey = KeyCode.C;                              //Set next camore on PC hotkey.
 	[SerializeField] UnityEngine.UI.Button NextCameraButton;
 	[SerializeField] List<CameraPreset> CamerasPreset = new List<CameraPreset>();   //Camera presets

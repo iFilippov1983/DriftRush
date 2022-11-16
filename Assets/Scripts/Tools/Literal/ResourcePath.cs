@@ -7,10 +7,13 @@ namespace RaceManager.Tools
         public const string LevelsPrefabsFolder = "Prefabs/Levels/";
 
         public const string MaterialsContainer = "SO/MaterialsContainer";
+
         public const string WaypointPrefab = "Prefabs/Waypoint";
         public const string DriverPrefab = "Prefabs/Driver";
-        public const string FXControllerPrefab = "Prefabs/FXController";
+        public const string LootboxPrefab = "Prefabs/Lootbox";
+        public const string FXControllerPrefab = "Prefabs/Effects/FXControllerRace";
         public const string CollectionCardPrefab = "Prefabs/UI/CollectionCard";
+        
 
         //public static string ItemConfigsSource(FeatureType.Item itemType)
         //{

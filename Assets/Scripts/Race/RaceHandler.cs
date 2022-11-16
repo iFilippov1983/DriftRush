@@ -159,9 +159,11 @@ namespace RaceManager.Race
         private void GetReward(DriverProfile driverProfile)
         {
             RaceReward reward = _rewardsScheme.RewardFor(driverProfile.PositionInRace);
-            _playerProfile.Currency.Money += reward.Money;
-            _playerProfile.Currency.Cups += reward.Cups;
+            reward.Reward(_playerProfile);
+            //_playerProfile.Currency.Money += reward.Money;
+            //_playerProfile.Currency.Cups += reward.Cups;
 
+            _playerProfile.CountRace();
             _raceUI.SetFinishValues(reward.Money, reward.Cups, _playerProfile.Currency.Money, _playerProfile.Currency.Gems);
 
             Debug.Log($"GOT REWARD - M:{reward.Money}; C:{reward.Cups} => NOW HAVE - M:{_playerProfile.Currency.Money}; C:{_playerProfile.Currency.Cups}");

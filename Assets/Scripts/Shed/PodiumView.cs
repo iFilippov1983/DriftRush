@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using RaceManager.Progress;
+using UnityEngine;
 
 namespace RaceManager.Shed
 {
@@ -8,6 +9,6 @@ namespace RaceManager.Shed
         public Transform CarPlace;
         public Transform ChestPlace;
         public Transform RespawnCarPlace;
-        public ChestObject ChestObject;
+        public LootboxObject ChestObject;
     }
 }

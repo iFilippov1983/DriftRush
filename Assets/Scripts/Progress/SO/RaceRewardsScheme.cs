@@ -16,13 +16,13 @@ namespace RaceManager.Progress
         [DictionaryDrawerSettings(KeyLabel = "Place", ValueLabel = "Reward")]
         private Dictionary<PositionInRace, RaceReward> _scheme = new Dictionary<PositionInRace, RaceReward>()
         {
-            { PositionInRace.First, new RaceReward() { Money = 100, Cups = 10 } },
-            { PositionInRace.Second, new RaceReward() { Money = 90, Cups = 8 } },
-            { PositionInRace.Third, new RaceReward() { Money = 80, Cups = 6 } },
-            { PositionInRace.Fourth, new RaceReward() { Money = 70, Cups = 4 } },
-            { PositionInRace.Fifth, new RaceReward() { Money = 60, Cups = 3 } },
-            { PositionInRace.Sixth, new RaceReward() { Money = 50, Cups = 2 } },
-            { PositionInRace.DNF, new RaceReward() { Money = 0, Cups = 0 } }
+            { PositionInRace.First, new RaceReward() },
+            { PositionInRace.Second, new RaceReward() },
+            { PositionInRace.Third, new RaceReward() },
+            { PositionInRace.Fourth, new RaceReward() },
+            { PositionInRace.Fifth, new RaceReward() },
+            { PositionInRace.Sixth, new RaceReward() },
+            { PositionInRace.DNF, new RaceReward() }
         };
 
         [SerializeField]
@@ -38,69 +38,44 @@ namespace RaceManager.Progress
 
         public RaceReward RewardFor(PositionInRace position) => _scheme[position];
 
-        public bool TryGetChanceConsequently(out Rarity rarity)
-        {
-            rarity = Rarity.Uncommon;
-            float probability = GetChestProbabilities[rarity];
-            if (Random.Range(0f, 100f) < probability)
-                return true;
-
-            rarity = Rarity.Rare;
-            probability = GetChestProbabilities[rarity];
-            if (Random.Range(0f, 100f) < probability)
-                return true;
-
-            rarity = Rarity.Epic;
-            probability = GetChestProbabilities[rarity];
-            if (Random.Range(0f, 100f) < probability)
-                return true;
-
-            rarity = Rarity.Legendary;
-            probability = GetChestProbabilities[rarity];
-            if (Random.Range(0f, 100f) < probability)
-                return true;
-
-            rarity = Rarity.Common;
-            return false;
-        }
-
-        public bool TryGetChance(out Rarity rarity)
+        public bool GetNotCommonLootbox(out Rarity rarity)
         {
             float pU = GetChestProbabilities[Rarity.Uncommon];
             float pR = GetChestProbabilities[Rarity.Rare];
             float pE = GetChestProbabilities[Rarity.Epic];
             float pL = GetChestProbabilities[Rarity.Legendary];
 
-            float value = Random.value * 100; //Random.Range(0f, 100f);
-            if (value <= pU)
+            float value = Random.Range(0f, 100f);
+
+            if (value <= pL)
             {
                 rarity = Rarity.Uncommon;
                 return true;
             }
-            else if (pU < value & value <= pU + pR)
+            else if (pL < value & value <= pL + pE)
             {
                 rarity = Rarity.Rare;
                 return true;
             }
-            else if (pU + pR < value && value <= pU + pR + pE)
+            else if (pL + pE < value && value <= pL + pE + pR)
             {
                 rarity = Rarity.Epic;
                 return true;
             }
-            else if (pU + pR + pE < value && value <= pU + pR + pE + pL)
+            else if (pL + pE + pR < value && value <= pL + pE + pR + pU)
             {
                 rarity = Rarity.Legendary;
                 return true;
             }
-
-            rarity = Rarity.Common;
-            return false;
+            else
+            {
+                rarity = Rarity.Common;
+                return false;
+            }
         }
 
         [ShowInInspector, ReadOnly]
         private int _counter = 0;
-        [SerializeField]
-        private bool _consequently = true;
 
         private int _yes = 0;
         private int _no = 0;
@@ -114,9 +89,7 @@ namespace RaceManager.Progress
         private void TestProbability()
         { 
             Rarity rarity;
-            bool haveGot = _consequently
-                ? TryGetChanceConsequently(out rarity)
-                : TryGetChance(out rarity);
+            bool haveGot = GetNotCommonLootbox(out rarity); 
             
             _counter++;
 

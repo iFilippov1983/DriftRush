@@ -149,7 +149,16 @@ namespace RaceManager.Progress
             Debug.Log($"U: {_uncommon} | R: {_rare} | E: {_epic} | L: {_legendary}");
         }
 
-            [Button]
+        [Button]
+        private void TestProbability100()
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                TestProbability();
+            }
+        }
+
+        [Button]
         private void ResetCounters()
         {
             _counter = 0;

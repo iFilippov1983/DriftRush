@@ -8,9 +8,9 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: lootbox_blue 1
-  m_Shader: {fileID: 4800000, guid: 8309d53748d4c1b44bb20df924b22ce9, type: 3}
-  m_ShaderKeywords: TCP2_MATCAP TCP2_REFLECTIONS_FRESNEL TCP2_RIM_LIGHTING_LIGHTMASK
-    TCP2_UV_NORMALS_FULL _EMISSION _METALLICGLOSSMAP _NORMALMAP
+  m_Shader: {fileID: 4800000, guid: 9eb6b902b08a05a4ba5673544f12912b, type: 3}
+  m_ShaderKeywords: TCP2_MATCAP TCP2_REFLECTIONS_FRESNEL TCP2_RIM_LIGHTING TCP2_RIM_LIGHTING_LIGHTMASK
+    TCP2_UV_NORMALS_FULL _METALLICGLOSSMAP _NORMALMAP
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -53,7 +53,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MatCapTex:
-        m_Texture: {fileID: 2800000, guid: 65282ed7102afc4489337b34cbf9bbd9, type: 3}
+        m_Texture: {fileID: 2800000, guid: 25f8197ce96046f478b2322e6b45c090, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -119,49 +119,49 @@ Material:
     - _RampBandsSmoothing: 0.1
     - _RampOffset: 0
     - _RampScale: 1
-    - _RampSmoothing: 0.205
-    - _RampThreshold: 0.425
+    - _RampSmoothing: 0.53
+    - _RampThreshold: 0.605
     - _RampType: 0
     - _ReceiveShadowsOff: 1
     - _ReflectionMapType: 0
     - _ReflectionSmoothness: 0.5
     - _RenderingMode: 0
-    - _RimMax: 1
-    - _RimMin: 0.5
+    - _RimMax: 0.42
+    - _RimMin: 0.87
     - _SingleIndirectColor: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SpecularMapType: 0
-    - _SpecularRoughness: 0.418
+    - _SpecularRoughness: 0.436
     - _SpecularToonSize: 0.25
     - _SpecularToonSmoothness: 0.05
     - _SpecularType: 0
     - _SrcBlend: 1
     - _UVSec: 0
     - _UseAlphaTest: 0
-    - _UseEmission: 1
+    - _UseEmission: 0
     - _UseFresnelReflections: 1
     - _UseMatCap: 1
     - _UseMatCapMask: 0
     - _UseMobileMode: 0
     - _UseNormalMap: 1
     - _UseOcclusion: 0
-    - _UseOutline: 1
+    - _UseOutline: 0
     - _UseReflections: 0
-    - _UseRim: 0
+    - _UseRim: 1
     - _UseRimLightMask: 1
     - _UseShadowTexture: 0
     - _UseSpecular: 0
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.2924528, g: 0.2924528, b: 0.2924528, a: 1}
+    - _BaseColor: {r: 0, g: 0.054581404, b: 1, a: 1}
     - _Color: {r: 0.2924528, g: 0.2924528, b: 0.2924528, a: 1}
-    - _EmissionColor: {r: 0, g: 0.026235959, b: 0.1981132, a: 1}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _HColor: {r: 1, g: 1, b: 1, a: 1}
-    - _MatCapColor: {r: 1, g: 1, b: 1, a: 1}
+    - _MatCapColor: {r: 0.32079923, g: 0.50450814, b: 0.8396226, a: 1}
     - _OutlineColor: {r: 0, g: 0.031523846, b: 0.29411766, a: 1}
     - _ReflectionColor: {r: 1, g: 1, b: 1, a: 1}
-    - _RimColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.5}
+    - _RimColor: {r: 0, g: 0.15686274, b: 1, a: 0.5}
     - _SColor: {r: 0.066037714, g: 0.066037714, b: 0.066037714, a: 1}
     - _SpecularColor: {r: 0.75, g: 0.75, b: 0.75, a: 1}
   m_BuildTextureStacks: []

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.14509445, g: 0.65978503, b: 1.2828575, a: 1}
+  m_IndirectSpecularColor: {r: 0.1396167, g: 0.65793467, b: 1.2871077, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1421,8 +1421,8 @@ MonoBehaviour:
   m_UpdateMethod: 2
   m_BlendUpdateMethod: 1
   m_DefaultBlend:
-    m_Style: 1
-    m_Time: 2
+    m_Style: 4
+    m_Time: 0.05
     m_CustomCurve:
       serializedVersion: 2
       m_Curve: []
@@ -1468,7 +1468,7 @@ Camera:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_RenderingPath: -1
+  m_RenderingPath: 3
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
@@ -1522,11 +1522,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerProfile:
+    _lootboxes: []
+    _availableLevels: 
     LastInRacePosition: 0
     Currency:
-      Money: 0
+      _money: 0
+      _cups: 0
+      _gems: 0
       Cups: 0
       Gems: 0
+      IncomeFactor: 1
     NextLevelPrefabToLoad: 1
   nextLevelToPlay: 0
 --- !u!4 &1938199604

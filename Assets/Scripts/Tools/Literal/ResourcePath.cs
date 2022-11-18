@@ -13,6 +13,7 @@ namespace RaceManager.Tools
         public const string LootboxPrefab = "Prefabs/Lootbox";
         public const string FXControllerPrefab = "Prefabs/Effects/FXControllerRace";
         public const string CollectionCardPrefab = "Prefabs/UI/CollectionCard";
+        public const string ProgressStepPrefab = "Prefabs/UI/ProgressStep";
         
 
         //public static string ItemConfigsSource(FeatureType.Item itemType)

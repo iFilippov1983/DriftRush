@@ -2,7 +2,8 @@
 {
     public enum RewardType
     { 
-        RaceReward = 0,
+        ProgressReward = 0,
+        RaceReward,
         Money,
         Cups,
         Gems,

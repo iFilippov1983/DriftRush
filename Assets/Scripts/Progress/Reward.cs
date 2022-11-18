@@ -2,10 +2,25 @@
 using RaceManager.Race;
 using RaceManager.Root;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace RaceManager.Progress
 {
+    [Serializable]
+    public class ProgressReward : IReward
+    {
+        [SerializeField] private List<IReward> _rewards = new List<IReward>();
+
+        public RewardType Type => RewardType.ProgressReward;
+
+        public void Reward(PlayerProfile playerProfile)
+        {
+            foreach (var reward in _rewards)
+                reward.Reward(playerProfile);
+        }
+    }
+
     [Serializable]
     public class RaceReward : IReward
     {
@@ -77,7 +92,7 @@ namespace RaceManager.Progress
     }
 
     [Serializable]
-    public class CarCardReward : IReward
+    public class CarCard : IReward
     {
         [SerializeField] private CarName _carName;
         [SerializeField] private int _cardsAmount;
@@ -85,7 +100,7 @@ namespace RaceManager.Progress
         public CarName CarName => _carName;
         public int CardsAmount => _cardsAmount;
 
-        public CarCardReward(CarName name, int amount)
+        public CarCard(CarName name, int amount)
         {
             _carName = name;
             _cardsAmount = amount;

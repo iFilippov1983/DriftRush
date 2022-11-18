@@ -1,6 +1,7 @@
 ﻿using RaceManager.Cameras;
 using RaceManager.Cars;
 using RaceManager.Cars.Effects;
+using RaceManager.Progress;
 using RaceManager.Race;
 using RaceManager.Root;
 using RaceManager.UI;
@@ -12,6 +13,9 @@ namespace RaceManager.Infrastructure
     {
         [SerializeField] private RaceUI _raceUI;
         [SerializeField] private CarsDepot _playerCarDepot;
+        [Space]
+        [SerializeField] private GameProgressScheme _gameProgressScheme;
+        [SerializeField] private RaceRewardsScheme _raceRewardsScheme;
 
         private RaceSceneRoot _raceSceneRoot;
 
@@ -24,6 +28,8 @@ namespace RaceManager.Infrastructure
 
             Bind(_raceUI);
             Bind(_playerCarDepot);
+            Bind(_gameProgressScheme);
+            Bind(_raceRewardsScheme);
 
             Bind<SaveManager>();
             Bind<PlayerProfile>();

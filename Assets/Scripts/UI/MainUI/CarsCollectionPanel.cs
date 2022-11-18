@@ -22,12 +22,11 @@ namespace RaceManager.UI
         [SerializeField] private RectTransform _collectionContentRect;
 
         private GameObject _collectionCardPrefab;
-        private SpritesContainer _spritesContainer;
+        private SpritesContainerCarCollection _spritesContainer;
+
         private List<CollectionCard> _collectionCards = new List<CollectionCard>();
 
-        public Button CloseButton => _closePanelButton;
-
-        public GameObject CollectionCardPrefab
+        private GameObject CollectionCardPrefab
         {
             get 
             {
@@ -38,10 +37,11 @@ namespace RaceManager.UI
             }
         }
 
+        public Button CloseButton => _closePanelButton;
         public Action<CarName> OnUseCarButtonPressed;
 
         [Inject]
-        private void Construct(SpritesContainer spritesContainer)
+        private void Construct(SpritesContainerCarCollection spritesContainer)
         { 
             _spritesContainer = spritesContainer;
         }

@@ -8,7 +8,7 @@ using UnityEngine;
 namespace RaceManager.Cars
 {
     [Serializable]
-    [CreateAssetMenu(menuName = "Cars/MaterialsContainer", fileName = "MaterialsContainer", order = 1)]
+    [CreateAssetMenu(menuName = "Containers/MaterialsContainer", fileName = "MaterialsContainer", order = 1)]
     public class MaterialsContainer : SerializedScriptableObject
     {
         [SerializeField]

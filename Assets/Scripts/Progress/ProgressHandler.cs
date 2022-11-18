@@ -6,17 +6,19 @@ namespace RaceManager.Progress
 {
     public class ProgressHandler : MonoBehaviour
     {
-        [SerializeField] private GameProgressScheme _gameProgressScheme;
-        [SerializeField] private RaceRewardsScheme _raceRewardsScheme;
+        private GameProgressScheme _gameProgressScheme;
+        private RaceRewardsScheme _raceRewardsScheme;
 
         private PlayerProfile _playerProfile;
         private SaveManager _saveManager;
 
         [Inject]
-        private void Construct(PlayerProfile playerProfile, SaveManager saveManager)
+        private void Construct(PlayerProfile playerProfile, SaveManager saveManager, GameProgressScheme gameProgressScheme, RaceRewardsScheme raceRewardsScheme)
         { 
             _playerProfile = playerProfile;
             _saveManager = saveManager;
+            _gameProgressScheme = gameProgressScheme;
+            _raceRewardsScheme = raceRewardsScheme;
         }
 
 

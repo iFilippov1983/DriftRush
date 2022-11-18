@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.14509445, g: 0.65978503, b: 1.2828575, a: 1}
+  m_IndirectSpecularColor: {r: 0.14508851, g: 0.65978503, b: 1.2837079, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -411,6 +411,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _raceUI: {fileID: 956234193}
   _playerCarDepot: {fileID: 11400000, guid: d7530e18444d4cb429bf15b4d12e6caf, type: 2}
+  _gameProgressScheme: {fileID: 11400000, guid: 6d536a2d406b1da42a89312821126091,
+    type: 2}
+  _raceRewardsScheme: {fileID: 11400000, guid: b3ee5958f1d40d64887f465f310f2905, type: 2}
 --- !u!1 &497530277
 GameObject:
   m_ObjectHideFlags: 0
@@ -521,9 +524,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc3dcdc5b7fc09b4588789a9f0d61c56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gameProgressScheme: {fileID: 11400000, guid: 6d536a2d406b1da42a89312821126091,
-    type: 2}
-  _raceRewardsScheme: {fileID: 11400000, guid: b3ee5958f1d40d64887f465f310f2905, type: 2}
 --- !u!1 &732609195
 GameObject:
   m_ObjectHideFlags: 3
@@ -1522,11 +1522,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerProfile:
+    _lootboxes: []
+    _availableLevels: 
     LastInRacePosition: 0
     Currency:
-      Money: 0
+      _money: 0
+      _cups: 0
+      _gems: 0
       Cups: 0
       Gems: 0
+      IncomeFactor: 1
     NextLevelPrefabToLoad: 1
   nextLevelToPlay: 0
 --- !u!4 &1938199604

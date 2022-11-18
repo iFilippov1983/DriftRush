@@ -24,7 +24,9 @@ namespace RaceManager.UI
         [SerializeField] private ChestProgressPanel _chestProgress;
         [SerializeField] private CupsProgressPanel _cupsProgress;
         [SerializeField] private CurrencyAmountPanel _currencyAmount;
+        [Space]
         [SerializeField] private TuningPanel _tuningPanel;
+        [SerializeField] private GameProgressPanel _gameProgressPanel;
         [SerializeField] private CarsCollectionPanel _carsCollectionPanel;
         [SerializeField] private BottomPanelView _bottomPanel;
         [SerializeField] private BackPanel _backPanel;

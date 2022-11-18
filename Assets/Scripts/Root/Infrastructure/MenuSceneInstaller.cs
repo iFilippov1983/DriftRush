@@ -3,6 +3,7 @@ using Newtonsoft.Json.Utilities;
 using RaceManager.Cameras;
 using RaceManager.Cars;
 using RaceManager.Cars.Effects;
+using RaceManager.Progress;
 using RaceManager.Root;
 using RaceManager.Shed;
 using RaceManager.UI;
@@ -17,8 +18,14 @@ namespace RaceManager.Infrastructure
     {
         [SerializeField] private MainUI _mainUI;
         [SerializeField] private PodiumView _podium;
+        [Space]
         [SerializeField] private CarsDepot _playerCarDepot;
-        [SerializeField] private SpritesContainer _spritesContainer;
+        [Space]
+        [SerializeField] private SpritesContainerCarCollection _spritesContainerCars;
+        [SerializeField] private SpritesContainerCarCards _spritesContainerCards;
+        [Space]
+        [SerializeField] private GameProgressScheme _gameProgressScheme;
+        [SerializeField] private RaceRewardsScheme _raceRewardsScheme;
 
         private MainSceneRoot _mainSceneRoot;
 
@@ -31,7 +38,10 @@ namespace RaceManager.Infrastructure
             Bind(_mainUI);
             Bind(_podium);
             Bind(_playerCarDepot);
-            Bind(_spritesContainer);
+            Bind(_spritesContainerCars);
+            Bind(_spritesContainerCards);
+            Bind(_gameProgressScheme);
+            Bind(_raceRewardsScheme);
 
             Bind<SaveManager>();
             Bind<PlayerProfile>();

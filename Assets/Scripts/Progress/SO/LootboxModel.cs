@@ -53,16 +53,16 @@ namespace RaceManager.Progress
 
             for (int i = 0; i < lostAmount; i++)
             {
-                CarCardReward cardReward = GetRandomCarCard();
+                CarCard cardReward = GetRandomCarCard();
                 list.Add(cardReward);
             }
 
             return list;
         }
 
-        private CarCardReward GetRandomCarCard()
+        private CarCard GetRandomCarCard()
         { 
-            CarCardReward cardReward;
+            CarCard cardReward;
 
             float pU = _probabilities[Rarity.Uncommon];
             float pR = _probabilities[Rarity.Rare];
@@ -99,7 +99,7 @@ namespace RaceManager.Progress
             name = list[Random.Range(0, list.Count)];
             int amount = Random.Range(_cardsAmountMin, _cardsAmountMax + 1);
 
-            cardReward = new CarCardReward(name, amount);
+            cardReward = new CarCard(name, amount);
             return cardReward;
         }
 
@@ -118,7 +118,7 @@ namespace RaceManager.Progress
         [Button]
         private void TestProbability()
         {
-            CarCardReward reward = GetRandomCarCard();
+            CarCard reward = GetRandomCarCard();
             Rarity rarity = Rarity.Common;
             foreach (var pair in _rarityScheme.Scheme)
             {

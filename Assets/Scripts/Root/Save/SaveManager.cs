@@ -79,9 +79,9 @@ namespace RaceManager.Root
             _lastSave.Clear();
             foreach (SaveAction saveAction in _saveActions)
             {
-                var pair = saveAction.Action.Invoke(data);
-                if(!_lastSave.ContainsKey(pair.Item1))
-                    _lastSave.Add(pair.Item1, pair.Item2);
+                var rd = saveAction.Action.Invoke(data);
+                if(!_lastSave.ContainsKey(rd.Type))
+                    _lastSave.Add(rd.Type, rd.Data);
             }
 
             string json = JsonConvert.SerializeObject(data, settings);
@@ -147,14 +147,14 @@ namespace RaceManager.Root
                 _lastSave = lastSave;
             }
 
-            public Func<SaveData, (string, string)> Action =>
+            public Func<SaveData, RepresentationData> Action =>
                 d =>
                 {
                     if (!_lastSave.ContainsKey(_typeString))
                         _lastSave.Add(_typeString, JsonConvert.SerializeObject(_savable.Save()));
                     d[_typeString] = JObject.FromObject(_savable.Save());
 
-                    return (_typeString, _lastSave[_typeString]);
+                    return new RepresentationData() { Type = _typeString, Data = _lastSave[_typeString] };
                 };
         }
 
@@ -185,6 +185,12 @@ namespace RaceManager.Root
                         return;
                     _savable.Load(d[_typeString].ToObject(_savable.DataType()));
                 };
+        }
+
+        public struct RepresentationData
+        {
+            public string Type;
+            public string Data;
         }
     }
 }

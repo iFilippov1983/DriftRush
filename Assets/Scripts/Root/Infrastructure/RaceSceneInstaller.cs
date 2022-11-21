@@ -25,6 +25,7 @@ namespace RaceManager.Infrastructure
             Bind(Singleton<RaceCamerasHandler>.Instance);
             Bind(Singleton<CarFXController>.Instance);
             Bind(Singleton<RaceHandler>.Instance);
+            Bind(Singleton<RewardsHandler>.Instance);
 
             Bind(_raceUI);
             Bind(_playerCarDepot);

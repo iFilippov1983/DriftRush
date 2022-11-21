@@ -25,11 +25,13 @@ namespace RaceManager.Race
 
         private CarsDepot _playerCarsDepot;
         private PlayerProfile _playerProfile;
+        private DriverProfile _playerDriverProfile;
         private RaceUI _raceUI;
         private RaceCamerasHandler _camerasHandler; 
         private InRacePositionsHandler _positionsHandler;
         private RaceLevelInitializer _raceLevelInitializer;
         private RaceLevelView _level;
+        private RewardsHandler _rewardsHandler;
 
         private WaypointTrack _waypointTrackMain;
         private WaypointTrack _waypointTrackEven;
@@ -43,7 +45,15 @@ namespace RaceManager.Race
         public List<Driver> Drivers => _driversList;
 
         [Inject]
-        private void Construct(RaceLevelInitializer levelInitializer, InRacePositionsHandler positionsHandler, RaceUI raceUI, CarsDepot playerCarsDepot, PlayerProfile playerProfile)
+        private void Construct
+            (
+            RaceLevelInitializer levelInitializer, 
+            RewardsHandler rewardsHandler, 
+            InRacePositionsHandler positionsHandler, 
+            RaceUI raceUI, 
+            CarsDepot playerCarsDepot, 
+            PlayerProfile playerProfile
+            )
         {
             _camerasHandler = Singleton<RaceCamerasHandler>.Instance;
             
@@ -52,6 +62,7 @@ namespace RaceManager.Race
             _positionsHandler = positionsHandler;
             _raceUI = raceUI;
             _raceLevelInitializer = levelInitializer;
+            _rewardsHandler = rewardsHandler;
         }
 
         public void Initialize()
@@ -118,7 +129,7 @@ namespace RaceManager.Race
                         tracker.ResetTargetToCashedValues();
                     }
 
-                    
+                    _playerDriverProfile = driver.DriverProfile;
                     _raceUI.Initialize(driver.PlayerProfile, selfRighting.RightCar, GetToCheckpoint);
                 }
                 else
@@ -139,7 +150,8 @@ namespace RaceManager.Race
             switch (playerCarState)
             {
                 case CarState.Finished:
-                    GetReward(playerDriver.DriverProfile);
+                    _rewardsHandler.RewardForRace(playerDriver.DriverProfile, out RaceRewardInfo info);
+                    _raceUI.SetFinishValues(info.RewardMoneyAmount, info.RewardCupsAmount, info.MoneyTotal, info.GemsTotal);
                     break;
                 case CarState.InShed:
                     break;
@@ -156,17 +168,12 @@ namespace RaceManager.Race
             return Disposable.Empty;
         }
 
-        private void GetReward(DriverProfile driverProfile)
+        public struct RaceRewardInfo
         {
-            RaceReward reward = _rewardsScheme.RewardFor(driverProfile.PositionInRace);
-            reward.Reward(_playerProfile);
-            //_playerProfile.Currency.Money += reward.Money;
-            //_playerProfile.Currency.Cups += reward.Cups;
-
-            _playerProfile.CountRace();
-            _raceUI.SetFinishValues(reward.Money, reward.Cups, _playerProfile.Currency.Money, _playerProfile.Currency.Gems);
-
-            Debug.Log($"GOT REWARD - M:{reward.Money}; C:{reward.Cups} => NOW HAVE - M:{_playerProfile.Currency.Money}; C:{_playerProfile.Currency.Cups}");
+            public int RewardMoneyAmount;
+            public int RewardCupsAmount;
+            public int MoneyTotal;
+            public int GemsTotal;
         }
     }
 }

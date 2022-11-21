@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace RaceManager.UI
 {
-    public class BottomPanelView : MonoBehaviour
+    public class BottomPanel : MonoBehaviour
     {
         [SerializeField] private Button _iapShopButton;
         [SerializeField] private Image _iapShopPressedImage;
@@ -13,7 +13,7 @@ namespace RaceManager.UI
         [SerializeField] private Button _carsCollectionButton;
         [SerializeField] private Image _carsCollectionPressedImage;
         [Space]
-        [SerializeField] private Button _cupsMapButton;
+        [SerializeField] private Button _mainMenuButton;
         [SerializeField] private Image _cupsMapPressedImage;
         [Space]
         [SerializeField] private Button _tuningButton;
@@ -24,7 +24,7 @@ namespace RaceManager.UI
 
         public Button IapShopButton => _iapShopButton;
         public Button CarsCollectionButton => _carsCollectionButton;
-        public Button CupsMapButton => _cupsMapButton;
+        public Button MainMenuButton => _mainMenuButton;
         public Button TuneButton => _tuningButton;
         public Button SoonButton => _soonButton;
 
@@ -40,7 +40,7 @@ namespace RaceManager.UI
 
             IapShopButton.onClick.AddListener(() => TogglePressedImageActivity(_iapShopPressedImage));
             CarsCollectionButton.onClick.AddListener(() => TogglePressedImageActivity(_carsCollectionPressedImage));
-            CupsMapButton.onClick.AddListener(() => TogglePressedImageActivity(_cupsMapPressedImage));
+            MainMenuButton.onClick.AddListener(() => TogglePressedImageActivity(_cupsMapPressedImage));
             TuneButton.onClick.AddListener(() => TogglePressedImageActivity(_tuningPressedImage));
         }
 

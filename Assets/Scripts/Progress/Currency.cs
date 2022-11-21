@@ -3,7 +3,6 @@ using RaceManager.Cars;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 namespace RaceManager.Progress
@@ -15,14 +14,6 @@ namespace RaceManager.Progress
         [SerializeField] 
         private int _money;
 
-        [JsonProperty]
-        [SerializeField] 
-        private int _cups;
-
-        [JsonProperty]
-        [SerializeField] 
-        private int _gems;
-
         public int Money
         { 
             get => _money;
@@ -33,6 +24,7 @@ namespace RaceManager.Progress
                     _money = (int)v;
             }
         }
+
         public int Cups;
         public int Gems;
         public float IncomeFactor = 1f;

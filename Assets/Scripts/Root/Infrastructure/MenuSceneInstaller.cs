@@ -23,6 +23,7 @@ namespace RaceManager.Infrastructure
         [Space]
         [SerializeField] private SpritesContainerCarCollection _spritesContainerCars;
         [SerializeField] private SpritesContainerCarCards _spritesContainerCards;
+        [SerializeField] private SpritesContainerRewards _spritesContainerRewards;
         [Space]
         [SerializeField] private GameProgressScheme _gameProgressScheme;
         [SerializeField] private RaceRewardsScheme _raceRewardsScheme;
@@ -34,12 +35,14 @@ namespace RaceManager.Infrastructure
             Bind(Singleton<Resolver>.Instance);
             Bind(Singleton<MenuCamerasHandler>.Instance);
             Bind(Singleton<ShedHandler>.Instance);
+            Bind(Singleton<RewardsHandler>.Instance);
 
             Bind(_mainUI);
             Bind(_podium);
             Bind(_playerCarDepot);
             Bind(_spritesContainerCars);
             Bind(_spritesContainerCards);
+            Bind(_spritesContainerRewards);
             Bind(_gameProgressScheme);
             Bind(_raceRewardsScheme);
 

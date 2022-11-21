@@ -13,6 +13,7 @@ namespace RaceManager.Root
     public class Debugger : MonoBehaviour
     {
         private bool IsRaceScene;
+        private bool IsMenuScene;
 
         [ReadOnly]
         public SaveManager saveManager;
@@ -30,6 +31,7 @@ namespace RaceManager.Root
         private void Awake()
         {
             IsRaceScene = SceneManager.GetActiveScene().name == Loader.Scene.RaceScene.ToString();
+            IsMenuScene = SceneManager.GetActiveScene().name == Loader.Scene.MenuScene.ToString();
         }
 
         [Button]
@@ -45,7 +47,6 @@ namespace RaceManager.Root
         [Button]
         public void SetLevelPrefab()
         {
-            //var level = ResourcesLoader.LoadPrefab(string.Concat(ResourcePath.LevelsPrefabsFolder, nextLevelToPlay.ToString()));
             var level = ResourcesLoader.LoadPrefab(nextLevelToPlay.ToString());
 
             if (level != null)
@@ -66,5 +67,12 @@ namespace RaceManager.Root
         [Button]
         public void DeleteSave() => SaveManager.RemoveSave();
 
+        [Button]
+        [ShowIf("IsMenuScene", true)]
+        public void SetCupsAmount(int amount)
+        {
+            playerProfile.Currency.Cups = amount;
+            saveManager.Save();
+        }
     }
 }

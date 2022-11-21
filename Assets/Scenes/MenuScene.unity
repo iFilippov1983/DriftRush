@@ -211,7 +211,7 @@ GameObject:
   - component: {fileID: 56941984}
   - component: {fileID: 56941985}
   m_Layer: 0
-  m_Name: ProgressHandler
+  m_Name: RewardsHandler
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -434,7 +434,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 314325354}
-  m_LocalRotation: {x: 0.26286158, y: 0.000000012747946, z: -0.0000000034730812, w: 0.96483356}
+  m_LocalRotation: {x: 0.26286155, y: 0.000000018705492, z: -0.000000005096169, w: 0.96483356}
   m_LocalPosition: {x: 0, y: 5.52, z: -15.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1155,6 +1155,8 @@ MonoBehaviour:
     type: 2}
   _spritesContainerCards: {fileID: 11400000, guid: 7a1a2da7cb05ee844b09404c049584d7,
     type: 2}
+  _spritesContainerRewards: {fileID: 11400000, guid: 0844653bf283a2f4daf4bf2b4726e92f,
+    type: 2}
   _gameProgressScheme: {fileID: 11400000, guid: 6d536a2d406b1da42a89312821126091,
     type: 2}
   _raceRewardsScheme: {fileID: 11400000, guid: b3ee5958f1d40d64887f465f310f2905, type: 2}
@@ -1182,7 +1184,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1057542198}
-  m_LocalRotation: {x: 0.32304412, y: -0.000000016283842, z: 0.0000000055584204, w: 0.94638395}
+  m_LocalRotation: {x: 0.32304412, y: 0.000000016283842, z: -0.0000000055584204, w: 0.94638395}
   m_LocalPosition: {x: -0, y: 8.7, z: -18.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1938,7 +1940,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1773434825}
-  m_LocalRotation: {x: 0.26286158, y: 0.000000012747946, z: -0.0000000034730812, w: 0.96483356}
+  m_LocalRotation: {x: 0.26286155, y: 0.000000018705492, z: -0.000000005096169, w: 0.96483356}
   m_LocalPosition: {x: 0, y: 5.52, z: -15.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -2620,11 +2622,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5137350490735150892, guid: 6a9b6a2ae2552d74cb122b47a1c78b53,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 3467.7656
       objectReference: {fileID: 0}
     - target: {fileID: 5245977973588616700, guid: 6a9b6a2ae2552d74cb122b47a1c78b53,
         type: 3}

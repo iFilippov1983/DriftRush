@@ -1,9 +1,9 @@
 ﻿using RaceManager.Cars;
 using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.XR;
 using Random = UnityEngine.Random;
 
 namespace RaceManager.Progress
@@ -12,10 +12,18 @@ namespace RaceManager.Progress
     [CreateAssetMenu(menuName = "Progress/LootboxModel", fileName = "LootboxModel", order = 1)]
     public class LootboxModel : SerializedScriptableObject
     {
+        private const float CommonFactor = 0.55f;
+        private const float UncommonFactor = 0.65f;
+        private const float RareFactor = 0.8f;
+        private const float EpicFactor = 0.9f;
+        private const float LegendaryFactor = 1f;
+
+
         [SerializeField] private Rarity _rarity;
         [SerializeField] private bool _isOpen;
         [SerializeField] private CarsRarityScheme _rarityScheme;
         [Space]
+        [Tooltip("How much gems costs to BUY this Lootbox")]
         [SerializeField] private int _price;
         [Title("Loot")]
         [SerializeField] private int _cardsAmountMax;
@@ -43,27 +51,78 @@ namespace RaceManager.Progress
 
         public Rarity Rarity => _rarity;
         public bool IsOpen => _isOpen;
+        public float Price => _price;
+        public float TimeToOpen => _hoursToOpen;
+        public float GemsToOpen => _gemsToOpen;
 
-        public List<IReward> Cards => GetRandomCardsList();
+        //public List<IReward> Cards => GetRandomCardsList();
 
+        [Button]
         private List<IReward> GetRandomCardsList()
         {
             List<IReward> list = new List<IReward>();
-            int lostAmount = Random.Range(_lotsAmountMin, _lotsAmountMax + 1);
+            int lotsAmount = Random.Range(_lotsAmountMin, _lotsAmountMax + 1);
+            int cardsAmount = Random.Range(_cardsAmountMin, _cardsAmountMax + 1);
+            float factor = GetFactor();
 
-            for (int i = 0; i < lostAmount; i++)
+            int[] amounts = GetAmounts(new int[lotsAmount], cardsAmount, factor);
+
+            for (int i = 0; i < lotsAmount; i++)
             {
-                CarCard cardReward = GetRandomCarCard();
+                CarName name = GetRandomCarName();
+
+                CarCard cardReward = new CarCard(name, amounts[i]);
                 list.Add(cardReward);
+
+                Debug.Log($"Name: {name}; Amount: {amounts[i]};");
             }
 
             return list;
         }
 
-        private CarCard GetRandomCarCard()
-        { 
-            CarCard cardReward;
+        private float GetFactor()
+        {
+            float factor = _rarity switch
+            {
+                Rarity.Common => CommonFactor,
+                Rarity.Uncommon => UncommonFactor,
+                Rarity.Rare => RareFactor,
+                Rarity.Epic => EpicFactor,
+                Rarity.Legendary => LegendaryFactor,
+                _ => throw new NotImplementedException(),
+            };
 
+            return factor;
+        }
+
+        private int[] GetAmounts(int[] array, int cardsTotal, float factor)
+        {
+            Debug.Log($"<color=red><i><b>Cards total: {cardsTotal}</b></i></color>");
+            int counter = array.Length;
+            int amount = 0;
+            for (int i = 0; i < array.Length; i++)
+            {
+                int amountPotential = cardsTotal / counter;
+
+                int min = Mathf.RoundToInt(amountPotential * factor);
+                amount = Random.Range(min, amountPotential + 1);
+
+                cardsTotal -= amount;
+                counter--;
+
+                array[i] = amount;
+            }
+
+            if (cardsTotal != 0)
+                array[array.Length - 1] = cardsTotal + amount;
+
+            int reverseIndex = Random.Range(0, array.Length);
+            Array.Reverse(array, reverseIndex, array.Length - reverseIndex);
+            return array;
+        }
+
+        private CarName GetRandomCarName()
+        { 
             float pU = _probabilities[Rarity.Uncommon];
             float pR = _probabilities[Rarity.Rare];
             float pE = _probabilities[Rarity.Epic];
@@ -97,17 +156,13 @@ namespace RaceManager.Progress
 
             list = _rarityScheme.Scheme[rarity];
             name = list[Random.Range(0, list.Count)];
-            int amount = Random.Range(_cardsAmountMin, _cardsAmountMax + 1);
 
-            cardReward = new CarCard(name, amount);
-            return cardReward;
+            return name;
         }
 
 
         [ShowInInspector, ReadOnly]
         private int _counter = 0;
-        [ShowInInspector]
-        private bool _showCarNameAndAmount;
 
         private int _common = 0;
         private int _uncommon = 0;
@@ -118,11 +173,11 @@ namespace RaceManager.Progress
         [Button]
         private void TestProbability()
         {
-            CarCard reward = GetRandomCarCard();
+            CarName name = GetRandomCarName();
             Rarity rarity = Rarity.Common;
             foreach (var pair in _rarityScheme.Scheme)
             {
-                if (pair.Value.Contains(reward.CarName))
+                if (pair.Value.Contains(name))
                     rarity = pair.Key;
             }
 
@@ -149,8 +204,6 @@ namespace RaceManager.Progress
 
             Debug.Log($"Chest rarity: {_rarity} | Card rarity: {rarity} | Atempts made: {_counter}");
             Debug.Log($"C: {_common}; U: {_uncommon} | R: {_rare} | E: {_epic} | L: {_legendary}");
-            if (_showCarNameAndAmount)
-                Debug.Log($"Reward => CarName: {reward.CarName}; Cards Amount: {reward.CardsAmount};");
         }
 
         [Button]

@@ -36,7 +36,7 @@ namespace RaceManager.Progress
             { Rarity.Legendary, 1f }
         };
 
-        public RaceReward RewardFor(PositionInRace position) => _scheme[position];
+        public RaceReward GetRewardFor(PositionInRace position) => _scheme[position];
 
         public bool GetNotCommonLootbox(out Rarity rarity)
         {

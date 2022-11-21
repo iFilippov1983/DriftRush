@@ -8,34 +8,21 @@ using UnityEngine;
 namespace RaceManager.Progress
 {
     [Serializable]
-    public class ProgressReward : IReward
-    {
-        [SerializeField] private List<IReward> _rewards = new List<IReward>();
-
-        public RewardType Type => RewardType.ProgressReward;
-
-        public void Reward(PlayerProfile playerProfile)
-        {
-            foreach (var reward in _rewards)
-                reward.Reward(playerProfile);
-        }
-    }
-
-    [Serializable]
     public class RaceReward : IReward
     {
         [SerializeField] private int _money;
         [SerializeField] private int _cups;
 
+        public bool IsReceived { get; set; }
         public int Money => _money;
         public int Cups => _cups;
-
         public RewardType Type => RewardType.RaceReward;
 
         public void Reward(PlayerProfile playerProfile)
         {
-            playerProfile.Currency.Money = Money;
-            playerProfile.Currency.Cups = Cups;
+            playerProfile.Currency.Money += Money;
+            playerProfile.Currency.Cups += Cups;
+            IsReceived = true;
         }
     }
 
@@ -44,11 +31,14 @@ namespace RaceManager.Progress
     {
         [SerializeField] private int _money;
 
+        public bool IsReceived { get; set; }
         public RewardType Type => RewardType.Money;
+        public int MoneyAmount => _money;
 
         public void Reward(PlayerProfile playerProfile)
         {
-            playerProfile.Currency.Money = _money;
+            playerProfile.Currency.Money += _money;
+            IsReceived = true;
         }
     }
 
@@ -57,11 +47,14 @@ namespace RaceManager.Progress
     {
         [SerializeField] private int _cups;
 
+        public bool IsReceived { get; set; }
         public RewardType Type => RewardType.Cups;
+        public int CupsAmount => _cups;
 
         public void Reward(PlayerProfile playerProfile)
         {
-            playerProfile.Currency.Cups = _cups;
+            playerProfile.Currency.Cups += _cups;
+            IsReceived = true;
         }
     }
 
@@ -70,24 +63,30 @@ namespace RaceManager.Progress
     {
         [SerializeField] private int _gems;
 
+        public bool IsReceived { get; set; }
         public RewardType Type => RewardType.Gems;
+        public int GemsAmount => _gems;
 
         public void Reward(PlayerProfile playerProfile)
         {
-            playerProfile.Currency.Gems = _gems;
+            playerProfile.Currency.Gems += _gems;
+            IsReceived = true;
         }
     }
 
     [Serializable]
     public class LootboxReward : IReward
     {
-        [SerializeField] private LootboxModel _lootbox;
+        [SerializeField] private Rarity _rarity;
 
+        public bool IsReceived { get; set; }
         public RewardType Type => RewardType.Lootbox;
+        public Rarity Rarity => _rarity;
 
         public void Reward(PlayerProfile playerProfile)
         {
-            playerProfile.AddLootbox(_lootbox);
+            playerProfile.AddLootbox(_rarity);
+            IsReceived = true;
         }
     }
 
@@ -97,20 +96,28 @@ namespace RaceManager.Progress
         [SerializeField] private CarName _carName;
         [SerializeField] private int _cardsAmount;
 
-        public CarName CarName => _carName;
-        public int CardsAmount => _cardsAmount;
+        public CarCard()
+        {
+            _carName = CarName.ToyotaSupra;
+            _cardsAmount = 0;
+        }
 
         public CarCard(CarName name, int amount)
         {
             _carName = name;
             _cardsAmount = amount;
+            IsReceived = true;
         }
 
+        public bool IsReceived { get; set; }
         public RewardType Type => RewardType.CarCard;
+        public CarName CarName => _carName;
+        public int CardsAmount => _cardsAmount;
 
         public void Reward(PlayerProfile playerProfile)
         {
             playerProfile.Currency.CarCards[_carName] += _cardsAmount;
+            IsReceived = true;
         }
     }
 
@@ -119,11 +126,14 @@ namespace RaceManager.Progress
     {
         [SerializeField] private LevelName _levelName;
 
+        public bool IsReceived { get; set; }
         public RewardType Type => RewardType.RaceMap;
+        public LevelName LevelName => _levelName;
 
         public void Reward(PlayerProfile playerProfile)
         {
             playerProfile.AddLevel(_levelName);
+            IsReceived = true;
         }
     }
 
@@ -133,11 +143,14 @@ namespace RaceManager.Progress
         [Tooltip("Percentage of income to add to income factor")]
         [SerializeField] private float _incomeBonusInPercents;
 
+        public bool IsReceived { get; set; }
         public RewardType Type => RewardType.IncomeBonus;
+        public float BonusValue => _incomeBonusInPercents;
 
         public void Reward(PlayerProfile playerProfile)
         {
             playerProfile.Currency.IncomeFactor += _incomeBonusInPercents / 100f;
+            IsReceived = true;
         }
     }
 }

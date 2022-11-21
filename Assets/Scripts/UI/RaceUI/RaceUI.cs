@@ -23,8 +23,9 @@ namespace RaceManager.UI
         public void Initialize(PlayerProfile playerProfile, UnityAction actionForRespawnButton, UnityAction actionForGetToCheckpointButton)
         {
             _finishUI.gameObject.SetActive(false);
-            _finishUI.OkButtonFinish.onClick.AddListener(ShowExtraRewardPanel);
-            _finishUI.OkButtonExtraReward.onClick.AddListener(FinalizeRace);
+            _finishUI.OkButtonFinish.onClick.AddListener(FinalizeRace);
+            //_finishUI.OkButtonFinish.onClick.AddListener(ShowExtraRewardPanel);
+            //_finishUI.OkButtonExtraReward.onClick.AddListener(FinalizeRace);
 
             _inRaceUI.gameObject.SetActive(true);
             _inRaceUI.RaceProgressBar.LevelText.text = "LEVEL " + (int)playerProfile.NextLevelPrefabToLoad;

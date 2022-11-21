@@ -11,13 +11,15 @@ namespace RaceManager.UI
         [SerializeField] private StepWindow _stepWindow;
         [SerializeField] private StepWindowBig _stepWindowBig;
         [Space]
-        [SerializeField] private CupsAmountSlider _cardsAmountSlider;
+        [SerializeField] private CupsAmountSlider _cupsAmountSlider;
+
+        public int GoalCupsAmount;
 
         public Image ConnectionLineImage => _connectionLineImage;
         public Button ClaimButton => _claimButton;
         public StepWindow StepWindow => _stepWindow;
         public StepWindowBig StepWindowBig => _stepWindowBig;
-        public CupsAmountSlider CardAmountSlider => _cardsAmountSlider;
+        public CupsAmountSlider CupsAmountSlider => _cupsAmountSlider;
     }
 }
 

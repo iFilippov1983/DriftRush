@@ -3,7 +3,6 @@ using RaceManager.Cars;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 namespace RaceManager.Progress
@@ -11,28 +10,7 @@ namespace RaceManager.Progress
     [Serializable]
     public class Currency
     {
-        [JsonProperty]
-        [SerializeField] 
-        private int _money;
-
-        [JsonProperty]
-        [SerializeField] 
-        private int _cups;
-
-        [JsonProperty]
-        [SerializeField] 
-        private int _gems;
-
-        public int Money
-        { 
-            get => _money;
-            set 
-            {
-                float v = value * IncomeFactor;
-                if(int.MaxValue > v && v > int.MinValue)
-                    _money = (int)v;
-            }
-        }
+        public int Money;
         public int Cups;
         public int Gems;
         public float IncomeFactor = 1f;

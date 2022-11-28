@@ -1,9 +1,11 @@
 ﻿using Newtonsoft.Json;
+using RaceManager.Cars;
 using RaceManager.Progress;
 using RaceManager.Race;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
-using UnityEditor;
+using System.Globalization;
 using UnityEngine;
 
 namespace RaceManager.Root
@@ -11,67 +13,126 @@ namespace RaceManager.Root
     [Serializable]
     public class PlayerProfile : ISaveable
     {
-        private const int RacesCounterMax = 3;
-        private const int LootboxesAmountMax = 4;
+        public const int VictoriesCounterMax = 3;
+        public const int LootboxesAmountMax = 4;
 
-        [JsonProperty]
-        [SerializeField]
-        private List<LootboxModel> _lootboxes = new List<LootboxModel>();
+        [JsonProperty, ShowInInspector, ReadOnly]
+        private int _victoriesCounter = 0;
 
-        [JsonProperty]
-        [SerializeField]
+        [JsonProperty, ShowInInspector, ReadOnly]
+        private DateTime _lastSaveTime = DateTime.UtcNow;
+
+        [JsonProperty, ShowInInspector, ReadOnly]
+        private Currency _currency = new Currency();
+
+        [JsonProperty, SerializeField]
+        private LevelName _nextLevelPrefabToLoad = LevelName.Level_0_test;
+
+        [JsonProperty, SerializeField]
+        private PositionInRace _lastInRacePosition = PositionInRace.DNF;
+
+        [JsonProperty, SerializeField]
+        private List<Lootbox> _lootboxes = new List<Lootbox>();
+
+        [JsonProperty, SerializeField]
         private List<LevelName> _availableLevels = new List<LevelName>();
 
-        public PositionInRace LastInRacePosition = PositionInRace.DNF;
-        public Currency Currency = new Currency();
-        public LevelName NextLevelPrefabToLoad = LevelName.Level_0_test;
-
         [JsonProperty]
-        private int _racesCounter = 0;
-        [JsonProperty]
-        private int _lootboxesCounter = 0;
+        public int VictoriesCounter => _victoriesCounter;
+        public int Money => _currency.Money;
+        public int Gems => _currency.Gems;
+        public int Cups => _currency.Cups;
+        public float IncomeFactor => _currency.IncomeFactor;
 
-        [JsonProperty]
-        public int RacesCounter
-        {
-            get => _racesCounter;
-            private set 
-            { 
-                _racesCounter = value;
-                if(_racesCounter > RacesCounterMax)
-                    _racesCounter = 1;
-            }
-        }
+        public DateTime LastSaveTime => _lastSaveTime;
+        public LevelName NextLevelPrefabToLoad => _nextLevelPrefabToLoad;
+        public PositionInRace LastInRacePosition => _lastInRacePosition;
 
-        public int LootboxesCounter { get => _lootboxesCounter; private set { _lootboxesCounter = value; }  }
         public bool CanGetLootbox => _lootboxes.Count < LootboxesAmountMax;
+        public bool WillGetLootboxForVictiories => VictoriesCounter == VictoriesCounterMax;
 
-        public void AddLevel(LevelName levelName) => _availableLevels.Add(levelName);
+        public void AddMoney(IProfiler profiler) => _currency.Money += profiler.Money;
+        public void AddCups(IProfiler profiler) => _currency.Cups += profiler.Cups;
+        public void AddGems(IProfiler profiler) => _currency.Gems += profiler.Gems;
+        public void AddLootbox(IProfiler profiler) => _lootboxes.Add(profiler.LootboxToAdd);
+        public void AddCards(IProfiler profiler) => _currency.CarCards[profiler.CarName] += profiler.CardsAmount;
+        public void AddLevel(IProfiler profiler) => _availableLevels.Add(profiler.LevelName);
 
-        public void CountRace() => RacesCounter++;
+        public void SubstractMoney(IProfiler profiler) => _currency.Money -= profiler.MoneyCost;
+        public void SubstractGems(IProfiler profiler) => _currency.Gems -= profiler.GemsCost;
 
-        public void AddLootbox(LootboxModel lootbox)
+        public void GiveLootboxesTo(IProfiler profiler) => profiler.SetLootboxList(_lootboxes);
+        public void TakeLooboxesFrom(IProfiler profiler) => _lootboxes = profiler.Lootboxes;
+
+        public void SetIcomeFactor(IProfiler profiler) => _currency.IncomeFactor = profiler.IncomeFactor;
+        public void SetNextLevelFrom(IProfiler profiler) => _nextLevelPrefabToLoad = profiler.LevelName;
+        public void SetLastInRacePosition(IProfiler profiler) => _lastInRacePosition = profiler.LastInRacePosition;
+        public void SetVictoryCounter(IProfiler profiler) => _victoriesCounter = profiler.VictoriesCounter;
+
+        public Type DataType() => typeof(SaveData);
+
+        public void Load(object data)
         {
-            if (CanGetLootbox)
+            SaveData saveData = (SaveData)data;
+
+            _lastInRacePosition = saveData.lastInRacePosition;
+            _currency = saveData.currency;
+            _nextLevelPrefabToLoad = saveData.nextLevelPrefabToLoad;
+            _victoriesCounter = saveData.racesCounter;
+
+            _lastSaveTime = ParseDateTime(saveData.lastSaveDateTimeString, DateTime.UtcNow);
+            _availableLevels = saveData.availableLevels;
+
+            foreach (var lootboxData in saveData.lootboxesData)
             {
+                Lootbox lootbox = new Lootbox(lootboxData.Id, lootboxData.Rarity, lootboxData.TimeToOpenLeft);
+                lootbox.OpenTimerActivated = lootboxData.OpenTimerActivated;
                 _lootboxes.Add(lootbox);
-                _lootboxesCounter++;
-            }  
+            }
         }
 
-        public List<LootboxModel> GetOpenLootboxes()
-        { 
-            var list = new List<LootboxModel>();
+        public object Save()
+        {
+            var lootboxesDataList = new List<LootboxData>();
+
             foreach (var lootbox in _lootboxes)
-            { 
-                if (lootbox.IsOpen)
-                {
-                    list.Add(lootbox);
-                    _lootboxesCounter--;
-                }
-                    
+            {
+                lootboxesDataList.Add
+                    (
+                        new LootboxData()
+                        {
+                            Id = lootbox.Id,
+                            Rarity = lootbox.LootboxModel.Rarity,
+                            TimeToOpenLeft = lootbox.TimeToOpenLeft,
+                            OpenTimerActivated = lootbox.OpenTimerActivated
+                        }
+                    );
             }
-            return list;
+
+            _lastSaveTime = DateTime.UtcNow;
+
+            return new SaveData
+            {
+                lastInRacePosition = LastInRacePosition,
+                currency = _currency,
+                nextLevelPrefabToLoad = NextLevelPrefabToLoad,
+                racesCounter = VictoriesCounter,
+                lastSaveDateTimeString = _lastSaveTime.ToString("u", CultureInfo.InvariantCulture),
+
+                availableLevels = _availableLevels,
+                lootboxesData = lootboxesDataList
+            };
+        }
+
+        private DateTime ParseDateTime(string loadedLastSaveTime, DateTime defaultValue)
+        {
+            if (loadedLastSaveTime != string.Empty)
+            {
+                DateTime result = DateTime.ParseExact(loadedLastSaveTime, "u", CultureInfo.InvariantCulture);
+                return result;
+            }
+            else
+                return defaultValue;
         }
 
         public class SaveData
@@ -80,38 +141,18 @@ namespace RaceManager.Root
             public Currency currency;
             public LevelName nextLevelPrefabToLoad;
             public int racesCounter;
+            public string lastSaveDateTimeString;
 
-            public List<LootboxModel> lootboxes;
             public List<LevelName> availableLevels;
+            public List<LootboxData> lootboxesData;
         }
 
-        public Type DataType() => typeof(SaveData);
-
-        public void Load(object data)
+        public class LootboxData
         {
-            SaveData saveData = (SaveData)data;
-            LastInRacePosition = saveData.lastInRacePosition;
-            Currency = saveData.currency;
-            NextLevelPrefabToLoad = saveData.nextLevelPrefabToLoad;
-            RacesCounter = saveData.racesCounter;
-            LootboxesCounter = saveData.lootboxes.Count;
-
-            _lootboxes = saveData.lootboxes;
-            _availableLevels = saveData.availableLevels;
-        }
-
-        public object Save()
-        {
-            return new SaveData
-            {
-                lastInRacePosition = LastInRacePosition,
-                currency = Currency,
-                nextLevelPrefabToLoad = NextLevelPrefabToLoad,
-                racesCounter = RacesCounter,
-
-                lootboxes = _lootboxes,
-                availableLevels = _availableLevels
-            };
+            public string Id;
+            public Rarity Rarity;
+            public float TimeToOpenLeft;
+            public bool OpenTimerActivated;
         }
     }
 }

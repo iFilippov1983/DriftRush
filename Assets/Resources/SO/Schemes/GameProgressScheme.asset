@@ -15,11 +15,7 @@ MonoBehaviour:
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
-    ReferencedUnityObjects:
-    - {fileID: 11400000, guid: 014640d0516cb2241ada05eb86087735, type: 2}
-    - {fileID: 11400000, guid: 3926ba1f1d631994a882b569cde1393a, type: 2}
-    - {fileID: 11400000, guid: 67f8b8058efffe842bfb61b7ffea8cbf, type: 2}
-    - {fileID: 11400000, guid: 0f85e4c88c116d84db884e22c2250319, type: 2}
+    ReferencedUnityObjects: []
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -49,6 +45,9 @@ MonoBehaviour:
       Entry: 7
       Data: 2|RaceManager.Progress.ProgressStep, Assembly-CSharp
     - Name: _needsBigPrefab
+      Entry: 5
+      Data: false
+    - Name: _isLast
       Entry: 5
       Data: false
     - Name: Rewards
@@ -91,6 +90,9 @@ MonoBehaviour:
     - Name: _needsBigPrefab
       Entry: 5
       Data: false
+    - Name: _isLast
+      Entry: 5
+      Data: false
     - Name: Rewards
       Entry: 7
       Data: 6|System.Collections.Generic.List`1[[RaceManager.Progress.IReward, Assembly-CSharp]],
@@ -131,6 +133,9 @@ MonoBehaviour:
     - Name: _needsBigPrefab
       Entry: 5
       Data: false
+    - Name: _isLast
+      Entry: 5
+      Data: false
     - Name: Rewards
       Entry: 7
       Data: 9|System.Collections.Generic.List`1[[RaceManager.Progress.IReward, Assembly-CSharp]],
@@ -141,8 +146,11 @@ MonoBehaviour:
     - Name: 
       Entry: 7
       Data: 10|RaceManager.Progress.LootboxReward, Assembly-CSharp
-    - Name: _lootbox
-      Entry: 10
+    - Name: _rarity
+      Entry: 3
+      Data: 0
+    - Name: _timeToOpen
+      Entry: 4
       Data: 0
     - Name: 
       Entry: 8
@@ -169,6 +177,9 @@ MonoBehaviour:
       Entry: 7
       Data: 11|RaceManager.Progress.ProgressStep, Assembly-CSharp
     - Name: _needsBigPrefab
+      Entry: 5
+      Data: false
+    - Name: _isLast
       Entry: 5
       Data: false
     - Name: Rewards
@@ -214,6 +225,9 @@ MonoBehaviour:
     - Name: _needsBigPrefab
       Entry: 5
       Data: true
+    - Name: _isLast
+      Entry: 5
+      Data: false
     - Name: Rewards
       Entry: 7
       Data: 15|System.Collections.Generic.List`1[[RaceManager.Progress.IReward, Assembly-CSharp]],
@@ -263,6 +277,9 @@ MonoBehaviour:
     - Name: _needsBigPrefab
       Entry: 5
       Data: false
+    - Name: _isLast
+      Entry: 5
+      Data: false
     - Name: Rewards
       Entry: 7
       Data: 19|System.Collections.Generic.List`1[[RaceManager.Progress.IReward, Assembly-CSharp]],
@@ -301,6 +318,9 @@ MonoBehaviour:
       Entry: 7
       Data: 21|RaceManager.Progress.ProgressStep, Assembly-CSharp
     - Name: _needsBigPrefab
+      Entry: 5
+      Data: false
+    - Name: _isLast
       Entry: 5
       Data: false
     - Name: Rewards
@@ -346,6 +366,9 @@ MonoBehaviour:
     - Name: _needsBigPrefab
       Entry: 5
       Data: false
+    - Name: _isLast
+      Entry: 5
+      Data: false
     - Name: Rewards
       Entry: 7
       Data: 25|System.Collections.Generic.List`1[[RaceManager.Progress.IReward, Assembly-CSharp]],
@@ -356,9 +379,12 @@ MonoBehaviour:
     - Name: 
       Entry: 7
       Data: 26|RaceManager.Progress.LootboxReward, Assembly-CSharp
-    - Name: _lootbox
-      Entry: 10
+    - Name: _rarity
+      Entry: 3
       Data: 1
+    - Name: _timeToOpen
+      Entry: 4
+      Data: 0
     - Name: 
       Entry: 8
       Data: 
@@ -384,6 +410,9 @@ MonoBehaviour:
       Entry: 7
       Data: 27|RaceManager.Progress.ProgressStep, Assembly-CSharp
     - Name: _needsBigPrefab
+      Entry: 5
+      Data: false
+    - Name: _isLast
       Entry: 5
       Data: false
     - Name: Rewards
@@ -426,6 +455,9 @@ MonoBehaviour:
     - Name: _needsBigPrefab
       Entry: 5
       Data: true
+    - Name: _isLast
+      Entry: 5
+      Data: false
     - Name: Rewards
       Entry: 7
       Data: 31|System.Collections.Generic.List`1[[RaceManager.Progress.IReward, Assembly-CSharp]],
@@ -484,6 +516,9 @@ MonoBehaviour:
     - Name: _needsBigPrefab
       Entry: 5
       Data: false
+    - Name: _isLast
+      Entry: 5
+      Data: false
     - Name: Rewards
       Entry: 7
       Data: 36|System.Collections.Generic.List`1[[RaceManager.Progress.IReward, Assembly-CSharp]],
@@ -527,6 +562,9 @@ MonoBehaviour:
     - Name: _needsBigPrefab
       Entry: 5
       Data: false
+    - Name: _isLast
+      Entry: 5
+      Data: false
     - Name: Rewards
       Entry: 7
       Data: 39|System.Collections.Generic.List`1[[RaceManager.Progress.IReward, Assembly-CSharp]],
@@ -565,6 +603,9 @@ MonoBehaviour:
       Entry: 7
       Data: 41|RaceManager.Progress.ProgressStep, Assembly-CSharp
     - Name: _needsBigPrefab
+      Entry: 5
+      Data: false
+    - Name: _isLast
       Entry: 5
       Data: false
     - Name: Rewards
@@ -607,6 +648,9 @@ MonoBehaviour:
     - Name: _needsBigPrefab
       Entry: 5
       Data: false
+    - Name: _isLast
+      Entry: 5
+      Data: false
     - Name: Rewards
       Entry: 7
       Data: 45|System.Collections.Generic.List`1[[RaceManager.Progress.IReward, Assembly-CSharp]],
@@ -617,9 +661,12 @@ MonoBehaviour:
     - Name: 
       Entry: 7
       Data: 46|RaceManager.Progress.LootboxReward, Assembly-CSharp
-    - Name: _lootbox
-      Entry: 10
+    - Name: _rarity
+      Entry: 3
       Data: 2
+    - Name: _timeToOpen
+      Entry: 4
+      Data: 0
     - Name: 
       Entry: 8
       Data: 
@@ -645,6 +692,9 @@ MonoBehaviour:
       Entry: 7
       Data: 47|RaceManager.Progress.ProgressStep, Assembly-CSharp
     - Name: _needsBigPrefab
+      Entry: 5
+      Data: false
+    - Name: _isLast
       Entry: 5
       Data: false
     - Name: Rewards
@@ -690,6 +740,9 @@ MonoBehaviour:
     - Name: _needsBigPrefab
       Entry: 5
       Data: false
+    - Name: _isLast
+      Entry: 5
+      Data: false
     - Name: Rewards
       Entry: 7
       Data: 51|System.Collections.Generic.List`1[[RaceManager.Progress.IReward, Assembly-CSharp]],
@@ -730,6 +783,9 @@ MonoBehaviour:
     - Name: _needsBigPrefab
       Entry: 5
       Data: false
+    - Name: _isLast
+      Entry: 5
+      Data: false
     - Name: Rewards
       Entry: 7
       Data: 54|System.Collections.Generic.List`1[[RaceManager.Progress.IReward, Assembly-CSharp]],
@@ -740,8 +796,11 @@ MonoBehaviour:
     - Name: 
       Entry: 7
       Data: 55|RaceManager.Progress.LootboxReward, Assembly-CSharp
-    - Name: _lootbox
-      Entry: 10
+    - Name: _rarity
+      Entry: 3
+      Data: 0
+    - Name: _timeToOpen
+      Entry: 4
       Data: 0
     - Name: 
       Entry: 8
@@ -770,6 +829,9 @@ MonoBehaviour:
     - Name: _needsBigPrefab
       Entry: 5
       Data: true
+    - Name: _isLast
+      Entry: 5
+      Data: false
     - Name: Rewards
       Entry: 7
       Data: 57|System.Collections.Generic.List`1[[RaceManager.Progress.IReward, Assembly-CSharp]],
@@ -828,6 +890,9 @@ MonoBehaviour:
     - Name: _needsBigPrefab
       Entry: 5
       Data: false
+    - Name: _isLast
+      Entry: 5
+      Data: false
     - Name: Rewards
       Entry: 7
       Data: 62|System.Collections.Generic.List`1[[RaceManager.Progress.IReward, Assembly-CSharp]],
@@ -871,6 +936,9 @@ MonoBehaviour:
     - Name: _needsBigPrefab
       Entry: 5
       Data: false
+    - Name: _isLast
+      Entry: 5
+      Data: false
     - Name: Rewards
       Entry: 7
       Data: 65|System.Collections.Generic.List`1[[RaceManager.Progress.IReward, Assembly-CSharp]],
@@ -909,6 +977,9 @@ MonoBehaviour:
       Entry: 7
       Data: 67|RaceManager.Progress.ProgressStep, Assembly-CSharp
     - Name: _needsBigPrefab
+      Entry: 5
+      Data: false
+    - Name: _isLast
       Entry: 5
       Data: false
     - Name: Rewards
@@ -951,6 +1022,9 @@ MonoBehaviour:
     - Name: _needsBigPrefab
       Entry: 5
       Data: false
+    - Name: _isLast
+      Entry: 5
+      Data: false
     - Name: Rewards
       Entry: 7
       Data: 71|System.Collections.Generic.List`1[[RaceManager.Progress.IReward, Assembly-CSharp]],
@@ -961,9 +1035,12 @@ MonoBehaviour:
     - Name: 
       Entry: 7
       Data: 72|RaceManager.Progress.LootboxReward, Assembly-CSharp
-    - Name: _lootbox
-      Entry: 10
+    - Name: _rarity
+      Entry: 3
       Data: 3
+    - Name: _timeToOpen
+      Entry: 4
+      Data: 0
     - Name: 
       Entry: 8
       Data: 
@@ -989,6 +1066,9 @@ MonoBehaviour:
       Entry: 7
       Data: 73|RaceManager.Progress.ProgressStep, Assembly-CSharp
     - Name: _needsBigPrefab
+      Entry: 5
+      Data: false
+    - Name: _isLast
       Entry: 5
       Data: false
     - Name: Rewards
@@ -1034,6 +1114,9 @@ MonoBehaviour:
     - Name: _needsBigPrefab
       Entry: 5
       Data: false
+    - Name: _isLast
+      Entry: 5
+      Data: false
     - Name: Rewards
       Entry: 7
       Data: 77|System.Collections.Generic.List`1[[RaceManager.Progress.IReward, Assembly-CSharp]],
@@ -1044,8 +1127,11 @@ MonoBehaviour:
     - Name: 
       Entry: 7
       Data: 78|RaceManager.Progress.LootboxReward, Assembly-CSharp
-    - Name: _lootbox
-      Entry: 10
+    - Name: _rarity
+      Entry: 3
+      Data: 0
+    - Name: _timeToOpen
+      Entry: 4
       Data: 0
     - Name: 
       Entry: 8
@@ -1072,6 +1158,9 @@ MonoBehaviour:
       Entry: 7
       Data: 79|RaceManager.Progress.ProgressStep, Assembly-CSharp
     - Name: _needsBigPrefab
+      Entry: 5
+      Data: false
+    - Name: _isLast
       Entry: 5
       Data: false
     - Name: Rewards
@@ -1112,6 +1201,9 @@ MonoBehaviour:
       Entry: 7
       Data: 82|RaceManager.Progress.ProgressStep, Assembly-CSharp
     - Name: _needsBigPrefab
+      Entry: 5
+      Data: true
+    - Name: _isLast
       Entry: 5
       Data: true
     - Name: Rewards

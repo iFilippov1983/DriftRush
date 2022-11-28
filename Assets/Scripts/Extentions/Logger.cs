@@ -1,9 +1,13 @@
 ﻿using System;
 using UnityEngine;
-using Zenject;
 
-public static class ConsoleLog
+public static class Logger
 {
+    public const string ColorRed = "red";
+    public const string ColorGreen = "green";
+    public const string ColorBlue = "blue";
+    public const string ColorYellow = "yellow";
+
     public static void Log(this string str, UnityEngine.Object context = null)
         => Debug.Log(str, context);
 
@@ -25,14 +29,6 @@ public static class ConsoleLog
     public static string Colored(this string str, string color)
     {
         return $"<color={color}>{str}</color>";
-    }
-
-    public class Color
-    { 
-        public const string Red = "red";
-        public const string Green = "green";
-        public const string Blue = "blue";
-        public const string Yellow = "yellow";
     }
 }
 

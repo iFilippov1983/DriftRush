@@ -1,15 +1,9 @@
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Utilities;
 using RaceManager.Cameras;
 using RaceManager.Cars;
-using RaceManager.Cars.Effects;
 using RaceManager.Progress;
 using RaceManager.Root;
 using RaceManager.Shed;
 using RaceManager.UI;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace RaceManager.Infrastructure
@@ -23,6 +17,7 @@ namespace RaceManager.Infrastructure
         [Space]
         [SerializeField] private SpritesContainerCarCollection _spritesContainerCars;
         [SerializeField] private SpritesContainerCarCards _spritesContainerCards;
+        [SerializeField] private SpritesContainerRewards _spritesContainerRewards;
         [Space]
         [SerializeField] private GameProgressScheme _gameProgressScheme;
         [SerializeField] private RaceRewardsScheme _raceRewardsScheme;
@@ -31,21 +26,37 @@ namespace RaceManager.Infrastructure
 
         public override void InstallBindings()
         {
+            BindSingletons();
+            BindObjects();
+            BindClasses();
+        }
+
+        private void BindSingletons()
+        {
             Bind(Singleton<Resolver>.Instance);
             Bind(Singleton<MenuCamerasHandler>.Instance);
             Bind(Singleton<ShedHandler>.Instance);
+            Bind(Singleton<RewardsHandler>.Instance);
+        }
 
+        private void BindObjects()
+        {
             Bind(_mainUI);
             Bind(_podium);
             Bind(_playerCarDepot);
             Bind(_spritesContainerCars);
             Bind(_spritesContainerCards);
+            Bind(_spritesContainerRewards);
             Bind(_gameProgressScheme);
             Bind(_raceRewardsScheme);
+        }
 
+        private void BindClasses()
+        {
             Bind<SaveManager>();
             Bind<PlayerProfile>();
             Bind<CarTuner>();
+            Bind<Profiler>();
         }
 
         public override void Start()

@@ -1,4 +1,5 @@
 ﻿using RaceManager.Cars;
+using RaceManager.Progress;
 using RaceManager.Race;
 using RaceManager.Tools;
 using Sirenix.OdinInspector;
@@ -13,23 +14,27 @@ namespace RaceManager.Root
     public class Debugger : MonoBehaviour
     {
         private bool IsRaceScene;
+        private bool IsMenuScene;
 
         [ReadOnly]
         public SaveManager saveManager;
         [ReadOnly]
         public PlayerProfile playerProfile;
+        public Profiler profiler;
         public LevelName nextLevelToPlay;
 
         [Inject]
-        private void Construct(SaveManager saveManager, PlayerProfile playerProfile)
+        private void Construct(SaveManager saveManager, PlayerProfile playerProfile, Profiler profiler)
         { 
             this.saveManager = saveManager;
             this.playerProfile = playerProfile;
+            this.profiler = profiler;
         }
 
         private void Awake()
         {
             IsRaceScene = SceneManager.GetActiveScene().name == Loader.Scene.RaceScene.ToString();
+            IsMenuScene = SceneManager.GetActiveScene().name == Loader.Scene.MenuScene.ToString();
         }
 
         [Button]
@@ -43,20 +48,20 @@ namespace RaceManager.Root
         }
 
         [Button]
+        [ShowIf("IsMenuScene", true)]
         public void SetLevelPrefab()
         {
-            //var level = ResourcesLoader.LoadPrefab(string.Concat(ResourcePath.LevelsPrefabsFolder, nextLevelToPlay.ToString()));
             var level = ResourcesLoader.LoadPrefab(nextLevelToPlay.ToString());
 
             if (level != null)
             {
-                $"Next level to play: {nextLevelToPlay}".Log(ConsoleLog.Color.Yellow);
-                playerProfile.NextLevelPrefabToLoad = nextLevelToPlay;
+                $"Next level to play: {nextLevelToPlay}".Log(Logger.ColorYellow);
+                profiler.SetNextLevel(nextLevelToPlay);
                 saveManager.Save();
             }
             else
             { 
-                $"Prefab whith name '{nextLevelToPlay}' was not found!".Log(ConsoleLog.Color.Red);
+                $"Prefab whith name '{nextLevelToPlay}' was not found!".Log(Logger.ColorRed);
             }
         }
 
@@ -66,5 +71,12 @@ namespace RaceManager.Root
         [Button]
         public void DeleteSave() => SaveManager.RemoveSave();
 
+        [Button]
+        [ShowIf("IsMenuScene", true)]
+        public void AddCups(int amount)
+        {
+            profiler.AddCups(amount);
+            saveManager.Save();
+        }
     }
 }

@@ -1,8 +1,4 @@
-﻿using RaceManager.Cameras;
-using RaceManager.Cars.Effects;
-using RaceManager.Race;
-using RaceManager.Root;
-using RaceManager.UI;
+﻿using RaceManager.Root;
 using Zenject;
 
 namespace RaceManager.Infrastructure

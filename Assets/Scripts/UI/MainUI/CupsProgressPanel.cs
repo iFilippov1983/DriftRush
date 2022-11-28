@@ -7,12 +7,14 @@ namespace RaceManager.UI
     public class CupsProgressPanel : MonoBehaviour
     {
         [SerializeField] private Image _fillImage;
+        [SerializeField] private Image _hasUnreceivedRewardsImage;
         [SerializeField] private TMP_Text _cupsAmountOwned;
-        [SerializeField] private TMP_Text _cupsAmountGlobal;
+        [SerializeField] private TMP_Text _nextGlobalGoalAmount;
 
         public Image FillImage => _fillImage;
+        public Image HasUnreceivedRewardsImage => _hasUnreceivedRewardsImage;
         public TMP_Text CupsAmountOwned => _cupsAmountOwned;
-        public TMP_Text CupsAmountGlobal => _cupsAmountGlobal;
+        public TMP_Text NextGlobalGoalAmount => _nextGlobalGoalAmount;
     }
 }
 

@@ -1,9 +1,11 @@
 using RaceManager.Cars;
+using RaceManager.Progress;
 using RaceManager.Root;
 using RaceManager.Shed;
 using RaceManager.Tools;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
@@ -19,26 +21,28 @@ namespace RaceManager.UI
         [SerializeField] private WorldSpaceUI _worldSpaceUI;
         [Space]
         [SerializeField] private Button _startButton;
+        [SerializeField] private Button _gameProgressButton;
         [SerializeField] private Button _settingsButton;
         [Space]
-        [SerializeField] private ChestProgressPanel _chestProgress;
         [SerializeField] private CupsProgressPanel _cupsProgress;
         [SerializeField] private CurrencyAmountPanel _currencyAmount;
         [Space]
         [SerializeField] private TuningPanel _tuningPanel;
         [SerializeField] private GameProgressPanel _gameProgressPanel;
         [SerializeField] private CarsCollectionPanel _carsCollectionPanel;
-        [SerializeField] private BottomPanelView _bottomPanel;
+        [SerializeField] private BottomPanel _bottomPanel;
         [SerializeField] private BackPanel _backPanel;
         [Space]
-        [SerializeField] private RectTransform _chestSlotsRect;
-        [SerializeField] private List<ChestSlot> _chestSlots;
+        [SerializeField] private LootboxSlotsHandler _lootboxSlotsHandler;
+        [SerializeField] private LootboxWindow _lootboxWindow;
 
         private PlayerProfile _playerProfile;
+        private RewardsHandler _rewardsHandler;
         private SaveManager _saveManager;
         private CarsDepot _playerCarDepot;
         private CarProfile _currentCarProfile;
         private PodiumView _podium;
+        private GameProgressScheme _gameProgressScheme;
 
         private GraphicRaycaster _graphicRaycaster;
         private PointerEventData _clickData;
@@ -58,9 +62,19 @@ namespace RaceManager.UI
         public Action<int> OnTuneValuesChange => (int v) => _tuningPanel.UpdateCurrentInfoValues(v);
 
         [Inject]
-        private void Construct(PlayerProfile playerProfile, SaveManager saveManager, CarsDepot playerCarDepot, PodiumView podium)
+        private void Construct
+            (
+            PlayerProfile playerProfile, 
+            GameProgressScheme gameProgressScheme,
+            RewardsHandler rewardsHandler,
+            SaveManager saveManager, 
+            CarsDepot playerCarDepot, 
+            PodiumView podium
+            )
         {
             _playerProfile = playerProfile;
+            _rewardsHandler = rewardsHandler;
+            _gameProgressScheme = gameProgressScheme;
             _saveManager = saveManager;
             _playerCarDepot = playerCarDepot;
             _podium = podium;
@@ -70,9 +84,13 @@ namespace RaceManager.UI
         {
             _currentCarProfile = _playerCarDepot.CurrentCarProfile;
 
-            UpdateCurrencyAmountPanel();
+            UpdateCurrencyAmountPanels();
             UpdateTuningPanelValues();
+
             InitializeCarsCollectionPanel();
+            InitializeGameProgressPanel();
+            InitializeLootboxSlotsHandler();
+
             RegisterButtonsListeners();
         }
 
@@ -119,18 +137,12 @@ namespace RaceManager.UI
             }
         }
 
-        private void StartRace()
-        {
-            _saveManager.Save();
-            Loader.Load(Loader.Scene.RaceScene);
-        }
-
+        #region Activate methods
         private void ActivateMainMenu(bool active)
         {
             _bottomPanel.SetActive(active);
             _startButton.SetActive(active);
-            _chestSlotsRect.SetActive(active);
-            _chestProgress.SetActive(active);
+            _lootboxSlotsHandler.SetActive(active);
             _cupsProgress.SetActive(active);
 
             _podium.ChestObject.SetActive(active);
@@ -156,34 +168,25 @@ namespace RaceManager.UI
             _bottomPanel.CarsCollectionPressedImage.SetActive(active);
         }
 
-        public void UpdateTuningPanelValues()
-        {
-            _currentCarProfile = _playerCarDepot.CurrentCarProfile;
+        private void ActivateGameProgressPanel(bool active)
+        { 
+            _gameProgressPanel.SetActive(active);
 
-            InitializeSlidersMinMaxValues();
-
-            var c = _currentCarProfile.CarCharacteristics;
-            _tuningPanel.UpdateAllSlidersValues
-                (
-                c.CurrentSpeedFactor, 
-                c.CurrentMobilityFactor, 
-                c.CurrentDurabilityFactor, 
-                c.CurrentAccelerationFactor,
-                c.AvailableFactorsToUse
-                );
-
-            _tuningPanel.UpdateCarStatsProgress
-                (
-                _currentCarProfile.CarName.ToString(), 
-                _currentCarProfile.CarCharacteristics.CurrentFactorsProgress, 
-                _currentCarProfile.CarCharacteristics.FactorsMaxTotal
-                );
+            _bottomPanel.SetActive(!active);
+            _podium.SetActive(!active);
         }
 
-        private void SetTuningPanelValues(TuneData td)
+        private void ActivateLootboxWindow(List<CarCardReward> list) => _lootboxWindow.SetActive(true);
+        #endregion
+
+        #region Initialize data methods
+        private void InitializeSlidersMinMaxValues()
         {
-            _tuningPanel.SetValueToSlider(td.cType, td.value);
-            _tuningPanel.UpdateCurrentInfoValues(td.available);
+            var c = _currentCarProfile.CarCharacteristics;
+            _tuningPanel.SetBorderValues(CharacteristicType.Speed, c.MinSpeedFactor, c.MaxSpeedFactor);
+            _tuningPanel.SetBorderValues(CharacteristicType.Mobility, c.MinMobilityFactor, c.MaxMobilityFactor);
+            _tuningPanel.SetBorderValues(CharacteristicType.Durability, c.MinDurabilityFactor, c.MaxDurabilityFactor);
+            _tuningPanel.SetBorderValues(CharacteristicType.Acceleration, c.MinAccelerationFactor, c.MaxAccelerationFactor);
         }
 
         private void InitializeCarsCollectionPanel()
@@ -204,6 +207,80 @@ namespace RaceManager.UI
             _carsCollectionPanel.OnUseCarButtonPressed += ChangeCar;
         }
 
+        private void InitializeGameProgressPanel()
+        {
+            foreach (var stepData in _gameProgressScheme.ProgressSteps)
+            {
+                int goalCupsAmount = stepData.Key;
+                ProgressStep step = stepData.Value;
+                step.IsReached = _playerProfile.Cups >= goalCupsAmount;
+
+                _gameProgressPanel.AddProgressStep(goalCupsAmount, step, () => _rewardsHandler.RewardForProgress(goalCupsAmount));
+            }
+
+            _gameProgressPanel.SetCupsAmountSlider(_playerProfile.Cups);
+
+            var closestGlobalGoal = _gameProgressScheme.ProgressSteps.First(p => p.Value.BigPrefab && p.Value.IsReached == false || p.Value.IsLast);
+            int globalCupsAmountGoal = closestGlobalGoal.Key > _playerProfile.Cups
+                ? closestGlobalGoal.Key
+                : _gameProgressScheme.LastGlobalGoal.Key;
+
+
+            InitializeCupsProgressPanel(globalCupsAmountGoal);
+
+            _rewardsHandler.OnProgressReward += UpdateCurrencyAmountPanels;
+            _rewardsHandler.OnLootboxOpen += ActivateLootboxWindow;
+            _rewardsHandler.OnLootboxOpen += _lootboxWindow.RepresentLootbox;
+        }
+
+        private void InitializeCupsProgressPanel(int globalGoalCupsAmount)
+        {
+            int currentCupsAmount = _playerProfile.Cups;
+            _cupsProgress.CupsAmountOwned.text = currentCupsAmount.ToString();
+            _cupsProgress.NextGlobalGoalAmount.text = globalGoalCupsAmount.ToString();
+
+            float fillAmount = 1f - (float)(globalGoalCupsAmount - currentCupsAmount) / (float)globalGoalCupsAmount;
+
+            if (fillAmount > 1)
+                fillAmount = 1f;
+
+            _cupsProgress.FillImage.fillAmount = fillAmount;
+            UpdateHasRewardsImage(_gameProgressScheme.HasUnreceivedRewards);
+        }
+
+        private void InitializeLootboxSlotsHandler()
+        {
+            _lootboxSlotsHandler.Initialize(_playerProfile);
+
+            _lootboxSlotsHandler.OnPopupIsActive += UpdatePodiumActivity;
+        }
+        #endregion
+
+        #region Update data methods
+        public void UpdateTuningPanelValues()
+        {
+            _currentCarProfile = _playerCarDepot.CurrentCarProfile;
+
+            InitializeSlidersMinMaxValues();
+
+            var c = _currentCarProfile.CarCharacteristics;
+            _tuningPanel.UpdateAllSlidersValues
+                (
+                c.CurrentSpeedFactor,
+                c.CurrentMobilityFactor,
+                c.CurrentDurabilityFactor,
+                c.CurrentAccelerationFactor,
+                c.AvailableFactorsToUse
+                );
+
+            _tuningPanel.UpdateCarStatsProgress
+                (
+                _currentCarProfile.CarName.ToString(),
+                _currentCarProfile.CarCharacteristics.CurrentFactorsProgress,
+                _currentCarProfile.CarCharacteristics.FactorsMaxTotal
+                );
+        }
+
         public void UpdateCarsCollectionInfo()
         {
             _carsCollectionPanel.UpdateStatsProgress
@@ -214,10 +291,24 @@ namespace RaceManager.UI
                 );
         }
 
-        private void UpdateCurrencyAmountPanel()
+        private void UpdateCurrencyAmountPanels()
         {
-            _currencyAmount.MoneyAmount.text = _playerProfile.Currency.Money.ToString();
-            _currencyAmount.GemsAmount.text = _playerProfile.Currency.Gems.ToString();
+            _currencyAmount.MoneyAmount.text = _playerProfile.Money.ToString();
+            _currencyAmount.GemsAmount.text = _playerProfile.Gems.ToString();
+
+            _gameProgressPanel.MoneyAmountText.text = _playerProfile.Money.ToString();
+            _gameProgressPanel.gemsAmountText.text = _playerProfile.Gems.ToString();
+        }
+
+        private void UpdateHasRewardsImage(bool hasUnreceived) => _cupsProgress.HasUnreceivedRewardsImage.SetActive(hasUnreceived);
+        private void UpdatePodiumActivity(bool needToHide) => _podium.SetActive(!needToHide);
+        #endregion
+
+        #region Other methods
+        private void SetTuningPanelValues(TuneData td)
+        {
+            _tuningPanel.SetValueToSlider(td.cType, td.value);
+            _tuningPanel.UpdateCurrentInfoValues(td.available);
         }
 
         private void ChangeCar(CarName newCarName)
@@ -228,13 +319,10 @@ namespace RaceManager.UI
             OnCarProfileChange?.Invoke(newCarName);
         }
 
-        private void InitializeSlidersMinMaxValues()
+        private void StartRace()
         {
-            var c = _currentCarProfile.CarCharacteristics;
-            _tuningPanel.SetBorderValues(CharacteristicType.Speed, c.MinSpeedFactor, c.MaxSpeedFactor);
-            _tuningPanel.SetBorderValues(CharacteristicType.Mobility, c.MinMobilityFactor, c.MaxMobilityFactor);
-            _tuningPanel.SetBorderValues(CharacteristicType.Durability, c.MinDurabilityFactor, c.MaxDurabilityFactor);
-            _tuningPanel.SetBorderValues(CharacteristicType.Acceleration, c.MinAccelerationFactor, c.MaxAccelerationFactor);
+            _saveManager.Save();
+            Loader.Load(Loader.Scene.RaceScene);
         }
 
         private void RegisterButtonsListeners()
@@ -244,6 +332,10 @@ namespace RaceManager.UI
             _bottomPanel.TuneButton.onClick.AddListener(() => ActivateCarsCollectionPanel(false));
             _bottomPanel.TuneButton.onClick.AddListener(() => ActivateMainMenu(false));
             _bottomPanel.TuneButton.onClick.AddListener(() => ActivateTuningPanel(true));
+
+            _bottomPanel.MainMenuButton.onClick.AddListener(() => ActivateCarsCollectionPanel(false));
+            _bottomPanel.MainMenuButton.onClick.AddListener(() => ActivateTuningPanel(false));
+            _bottomPanel.MainMenuButton.onClick.AddListener(() => ActivateMainMenu(true));
 
             _bottomPanel.CarsCollectionButton.onClick.AddListener(() => ActivateTuningPanel(false));
             _bottomPanel.CarsCollectionButton.onClick.AddListener(() => ActivateMainMenu(false));
@@ -255,14 +347,27 @@ namespace RaceManager.UI
 
             _carsCollectionPanel.CloseButton.onClick.AddListener(() => ActivateCarsCollectionPanel(false));
             _carsCollectionPanel.CloseButton.onClick.AddListener(() => ActivateMainMenu(true));
+
+            _gameProgressPanel.BackButton.onClick.AddListener(() => ActivateGameProgressPanel(false));
+            _gameProgressPanel.BackButton.onClick.AddListener(() => UpdateHasRewardsImage(_gameProgressScheme.HasUnreceivedRewards));
+
+            _gameProgressButton.onClick.AddListener(() => ActivateGameProgressPanel(true));
+            _gameProgressButton.onClick.AddListener(_gameProgressPanel.OffsetContent);
+
+            _lootboxWindow.OkButton.onClick.AddListener(() => _lootboxWindow.SetActive(false));
         }
 
         private void OnDestroy()
         {
             _carsCollectionPanel.OnUseCarButtonPressed -= ChangeCar;
 
-            //OnCarProfileChange -= UpdateTuningPanelValues;
+            _rewardsHandler.OnProgressReward -= UpdateCurrencyAmountPanels;
+            _rewardsHandler.OnLootboxOpen -= ActivateLootboxWindow;
+            _rewardsHandler.OnLootboxOpen -= _lootboxWindow.RepresentLootbox;
+
+            _lootboxSlotsHandler.OnPopupIsActive -= UpdatePodiumActivity;
         }
+        #endregion
     }
 }
 

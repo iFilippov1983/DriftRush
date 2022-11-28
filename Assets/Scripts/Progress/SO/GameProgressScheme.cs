@@ -15,7 +15,19 @@ namespace RaceManager.Progress
         [DictionaryDrawerSettings(KeyLabel = "Cups To Reach", ValueLabel = "Progress Step")]
         public Dictionary<int, ProgressStep> ProgressSteps = new Dictionary<int, ProgressStep>();
 
-        public bool HasUnreceivedRewards => ProgressSteps.First(p => p.Value.IsReached == true && p.Value.RewardsReceived == false).Value != null;
+        public bool HasUnreceivedRewards
+        {
+            get 
+            { 
+                foreach (var p in ProgressSteps)
+                {
+                    if(p.Value.IsReached && p.Value.RewardsReceived == false)
+                        return true;
+                }
+                return false;
+            }
+        }
+
         public KeyValuePair<int, ProgressStep> LastGlobalGoal => ProgressSteps.First(p => p.Value.IsLast == true);
 
         public ProgressStep GetStepWhithGoal(int goalCupsAmount) => ProgressSteps[goalCupsAmount];
@@ -68,7 +80,7 @@ namespace RaceManager.Progress
                 }
             }
 
-            Debug.Log("All ProgressStep.IsReached set to False; All Rewards.IsReceived set to False");
+            Debug.Log("All ProgressStep.IsReached are set to False | All Rewards.IsReceived are set to False");
         }
 
         public class SaveData

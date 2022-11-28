@@ -3,9 +3,9 @@ using RaceManager.Race;
 using RaceManager.Root;
 using System;
 using System.Collections;
-using UniRx;
 using UnityEngine;
 using UnityEngine.Events;
+using Zenject;
 
 namespace RaceManager.UI
 {
@@ -14,11 +14,20 @@ namespace RaceManager.UI
         [SerializeField] private RaceUIView _inRaceUI;
         [SerializeField] private FinishUIView _finishUI;
 
+        private SpritesContainerRewards _spritesRewards;
+
         private float _currentSpeed;
         private float _trackProgress;
         private int _currentPosition;
 
         private bool _isRaceFinished;
+        private bool _showLootbox;
+
+        [Inject]
+        private void Construct(SpritesContainerRewards spritesContainer)
+        { 
+            _spritesRewards = spritesContainer;
+        }
 
         public void Initialize(PlayerProfile playerProfile, UnityAction actionForRespawnButton, UnityAction actionForGetToCheckpointButton)
         {
@@ -121,14 +130,25 @@ namespace RaceManager.UI
             _finishUI.RewardMoneyAmountText.text = moneyReward.ToString();
             _finishUI.RewardCupsAmountText.text = cupsReward.ToString();
 
+            if (_showLootbox)
+                _finishUI.GotLootboxPopup.SetActive(true);
+
             //animate?
-            _finishUI.FillUpImage.fillAmount = 0.8f;
-            _finishUI.PersentageProgressText.text = "80" + "%";
+            //_finishUI.FillUpImage.fillAmount = 0.8f;
+            //_finishUI.PersentageProgressText.text = "80" + "%";
+        }
+
+        public void SetLootboxPopupValues(Rarity rarity)
+        {
+            _showLootbox = true;
+            _finishUI.GotLootboxPopup.RarityText.text = rarity.ToString().ToUpper();
+            _finishUI.GotLootboxPopup.LootboxImage.sprite = _spritesRewards.GetLootboxSprite(rarity);
         }
 
         private void ShowRaceUI()
         {
             _isRaceFinished = false;
+            _showLootbox = false;
             _inRaceUI.gameObject.SetActive(true);
         }
 

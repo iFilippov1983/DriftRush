@@ -40,7 +40,7 @@ namespace RaceManager.Root
             }
             catch (Exception e)
             {
-                $"[Saveables] Need to fix: {e}".Log(ConsoleLog.Color.Red);
+                $"[Saveables] Need to fix: {e}".Log(Logger.ColorRed);
             }
         }
 

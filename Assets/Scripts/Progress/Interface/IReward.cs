@@ -7,6 +7,6 @@ namespace RaceManager.Progress
     {
         bool IsReceived { get; set; }
         RewardType Type { get; }
-        void Reward(PlayerProfile playerProfile);
+        void Reward(Profiler profiler);
     }
 }

@@ -25,6 +25,7 @@ namespace RaceManager.Race
 
         private CarsDepot _playerCarsDepot;
         private PlayerProfile _playerProfile;
+        private Profiler _profiler;
         private DriverProfile _playerDriverProfile;
         private RaceUI _raceUI;
         private RaceCamerasHandler _camerasHandler; 
@@ -52,13 +53,15 @@ namespace RaceManager.Race
             InRacePositionsHandler positionsHandler, 
             RaceUI raceUI, 
             CarsDepot playerCarsDepot, 
-            PlayerProfile playerProfile
+            PlayerProfile playerProfile,
+            Profiler profiler
             )
         {
             _camerasHandler = Singleton<RaceCamerasHandler>.Instance;
             
             _playerCarsDepot = playerCarsDepot;
             _playerProfile = playerProfile;
+            _profiler = profiler;
             _positionsHandler = positionsHandler;
             _raceUI = raceUI;
             _raceLevelInitializer = levelInitializer;
@@ -78,6 +81,8 @@ namespace RaceManager.Race
             InitDrivers();
 
             _positionsHandler.StartHandling(_waypointsTrackersList);
+
+            _rewardsHandler.OnRaceRewardLootboxAdded += NotifyRaceUI;
         }
 
         private void Update()
@@ -113,7 +118,7 @@ namespace RaceManager.Race
                 var driver = driverGo.GetComponent<Driver>();
                 if (_startPoints[i].Type == DriverType.Player)
                 {
-                    driver.Initialize(_startPoints[i].Type, _playerCarsDepot, _waypointTrackMain, _materialsContainer, _playerProfile);
+                    driver.Initialize(_startPoints[i].Type, _playerCarsDepot, _waypointTrackMain, _materialsContainer, _playerProfile, _profiler);
 
                     _camerasHandler.FollowAndLookAt(driver.CarObject.transform, driver.CarTargetToFollow);
 
@@ -150,7 +155,7 @@ namespace RaceManager.Race
             switch (playerCarState)
             {
                 case CarState.Finished:
-                    _rewardsHandler.RewardForRace(playerDriver.DriverProfile, out RaceRewardInfo info);
+                    _rewardsHandler.RewardForRace(playerDriver.DriverProfile.PositionInRace, out RaceRewardInfo info);
                     _raceUI.SetFinishValues(info.RewardMoneyAmount, info.RewardCupsAmount, info.MoneyTotal, info.GemsTotal);
                     break;
                 case CarState.InShed:
@@ -166,6 +171,12 @@ namespace RaceManager.Race
             _raceUI.ChangeViewDependingOn(playerCarState);
 
             return Disposable.Empty;
+        }
+
+        private void NotifyRaceUI(Lootbox lootbox) => _raceUI.SetLootboxPopupValues(lootbox.LootboxModel.Rarity);
+        private void OnDestroy()
+        {
+            _rewardsHandler.OnRaceRewardLootboxAdded -= NotifyRaceUI;
         }
 
         public struct RaceRewardInfo

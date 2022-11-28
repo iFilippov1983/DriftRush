@@ -16,6 +16,7 @@ namespace RaceManager.UI
 
         [Title("Finish panel")]
         [SerializeField] private FinishPanelObjectView _finishPanel;
+        [SerializeField] private GotLootboxPopup _gotLootboxPopup;
         [SerializeField] private TMP_Text _positionText;
         [SerializeField] private TMP_Text _rewardMoneyAmountText;
         [SerializeField] private TMP_Text _rewardCupsAmountText;
@@ -33,6 +34,7 @@ namespace RaceManager.UI
         public TMP_Text GemsAmount => _gemsAmount;
 
         public FinishPanelObjectView FinishPanel => _finishPanel;
+        public GotLootboxPopup GotLootboxPopup => _gotLootboxPopup;
         public TMP_Text PositionText => _positionText;
         public TMP_Text RewardMoneyAmountText => _rewardMoneyAmountText;
         public TMP_Text RewardCupsAmountText => _rewardCupsAmountText;

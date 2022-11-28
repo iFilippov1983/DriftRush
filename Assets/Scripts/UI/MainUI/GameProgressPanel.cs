@@ -23,6 +23,9 @@ namespace RaceManager.UI
         [SerializeField] private GridLayoutGroup _progressStepsContent;
         [SerializeField] private RectTransform _progressStepsContentRect;
 
+        private float _yOffset;
+        private Vector3 _offsetPos;
+
         private GameObject _progressStepPrefab;
         private SpritesContainerCarCards _spritesCards;
         private SpritesContainerCarCollection _spritesCars;
@@ -36,7 +39,6 @@ namespace RaceManager.UI
             {
                 if (_progressStepPrefab == null)
                     _progressStepPrefab = ResourcesLoader.LoadPrefab(ResourcePath.ProgressStepPrefab);
-
                 return _progressStepPrefab;
             }
         }
@@ -55,6 +57,7 @@ namespace RaceManager.UI
 
         public void SetCupsAmountSlider(int cupsAmount)
         {
+            _yOffset = 0f;
             int previouseGoal = 0;
 
             foreach (var stepView in _progressSteps)
@@ -64,6 +67,14 @@ namespace RaceManager.UI
                     stepView.CupsAmountSlider.SliderLevelImage.SetActive(false);
                     stepView.CupsAmountSlider.SliderImage.fillAmount = 1f;
                     previouseGoal = stepView.GoalCupsAmount;
+
+                    if (stepView.IsLast)
+                    {
+                        ActivateLevelImageAndPlaceToEdge(stepView, cupsAmount, false);
+                    }
+
+                    _yOffset += _progressStepsContent.cellSize.y;
+                    _yOffset += _progressStepsContent.spacing.y;
                     continue;
                 }
                 
@@ -82,6 +93,9 @@ namespace RaceManager.UI
                     stepView.CupsAmountSlider.SliderLevelImage.rectTransform.localPosition = localPos;
 
                     previouseGoal = stepView.GoalCupsAmount;
+
+                    _yOffset += _progressStepsContent.cellSize.y;
+                    _yOffset += _progressStepsContent.spacing.y;
                     continue;
                 }
 
@@ -94,24 +108,33 @@ namespace RaceManager.UI
                     var stepPrev = _progressSteps[indexCur - 1];
                     if (stepPrev.GoalCupsAmount == cupsAmount)
                     {
-                        ActivateLevelImageAndPlaceToZero(stepView, cupsAmount);
+                        ActivateLevelImageAndPlaceToEdge(stepView, cupsAmount, true);
                     }
                 }
 
                 if (cupsAmount == 0 && indexCur == 0)
                 {
-                    ActivateLevelImageAndPlaceToZero(stepView, cupsAmount);
+                    ActivateLevelImageAndPlaceToEdge(stepView, cupsAmount, true);
                 }
             }
+
+            _yOffset += _progressStepsContent.spacing.y;
+            _offsetPos = _progressStepsContent.transform.localPosition;
+            _offsetPos.y -= _yOffset;
+            OffsetContent();
         }
 
-        private void ActivateLevelImageAndPlaceToZero(ProgressStepView stepView, int cupsAmount)
-        {
-            stepView.CupsAmountSlider.SliderLevelImage.SetActive(true);
-            stepView.CupsAmountSlider.CupsAmountText.text = cupsAmount.ToString();
+        public void OffsetContent() => _progressStepsContent.transform.localPosition = _offsetPos;
 
+        private void ActivateLevelImageAndPlaceToEdge(ProgressStepView stepView, int cupsAmount, bool toZero)
+        {
+            stepView.CupsAmountSlider.CupsAmountText.text = cupsAmount.ToString();
+            stepView.CupsAmountSlider.SliderLevelImage.SetActive(true);
+            
             Vector3 localPos = stepView.CupsAmountSlider.SliderLevelImage.rectTransform.localPosition;
-            localPos.y = 0;
+            localPos.y = toZero 
+                ? 0f 
+                : stepView.CupsAmountSlider.SliderImage.rectTransform.rect.height;
             stepView.CupsAmountSlider.SliderLevelImage.rectTransform.localPosition = localPos;
         }
 
@@ -144,6 +167,7 @@ namespace RaceManager.UI
             _progressSteps.Add(stepView);
 
             stepView.GoalCupsAmount = goalCupsAmount;
+            stepView.IsLast = step.IsLast;
 
             stepView.ClaimButton.SetActive(step.IsReached);
             stepView.ClaimButton.onClick.AddListener(claimButtonAction);
@@ -195,7 +219,7 @@ namespace RaceManager.UI
                         window.RewardLootbox.LootboxImage.sprite = _spritesRewards.GetLootboxSprite(lootbox.Rarity);
                         break;
                     case RewardType.CarCard:
-                        CarCard card = (CarCard)reward;
+                        CarCardReward card = (CarCardReward)reward;
                         window.RewardSimple.SetActive(false);
                         window.RewardLootbox.SetActive(false);
                         window.RewardCards.SetActive(true);
@@ -223,6 +247,7 @@ namespace RaceManager.UI
 
             var bigWindow = stepView.StepWindowBig;
             bigWindow.GoalCupsAmount.text = goalCupsAmount.ToString();
+            bigWindow.IncomeBonusWindow.SetActive(false);
 
             foreach (var reward in step.Rewards)
             {
@@ -242,6 +267,7 @@ namespace RaceManager.UI
                         IncomeBonus incomeBonus = (IncomeBonus)reward;
                         string t = incomeBonus.BonusValue.ToString();
                         bigWindow.IncomeBonusText.text = $"+ {t}%";
+                        bigWindow.IncomeBonusWindow.SetActive(true);
                         break;
                     case RewardType.Gems:
                         Gems gems = (Gems)reward;

@@ -10,13 +10,13 @@ namespace RaceManager.Tools
 
         public const string MaterialsContainer = "SO/MaterialsContainer";
         
-
         public const string WaypointPrefab = "Prefabs/Waypoint";
         public const string DriverPrefab = "Prefabs/Driver";
         public const string LootboxPrefab = "Prefabs/Lootbox";
         public const string FXControllerPrefab = "Prefabs/Effects/FXControllerRace";
         public const string CollectionCardPrefab = "Prefabs/UI/CollectionCard";
         public const string ProgressStepPrefab = "Prefabs/UI/ProgressStep";
+        public const string CarCardViewPrefab = "Prefabs/UI/CarCard";
 
         private const string LootboxModelsFolder = "SO/LootboxModels/";
         private const string CommonLootboxName = "0-LootboxCommon";

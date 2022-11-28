@@ -38,7 +38,7 @@ namespace RaceManager.Progress
 
         public RaceReward GetRewardFor(PositionInRace position) => _scheme[position];
 
-        public bool GetNotCommonLootbox(out Rarity rarity)
+        public bool TryLuckWithNotCommonLootbox(out Rarity rarity)
         {
             float pU = GetChestProbabilities[Rarity.Uncommon];
             float pR = GetChestProbabilities[Rarity.Rare];
@@ -49,22 +49,22 @@ namespace RaceManager.Progress
 
             if (value <= pL)
             {
-                rarity = Rarity.Uncommon;
+                rarity = Rarity.Legendary;
                 return true;
             }
             else if (pL < value & value <= pL + pE)
             {
-                rarity = Rarity.Rare;
+                rarity = Rarity.Epic;
                 return true;
             }
             else if (pL + pE < value && value <= pL + pE + pR)
             {
-                rarity = Rarity.Epic;
+                rarity = Rarity.Rare;
                 return true;
             }
             else if (pL + pE + pR < value && value <= pL + pE + pR + pU)
             {
-                rarity = Rarity.Legendary;
+                rarity = Rarity.Uncommon;
                 return true;
             }
             else
@@ -89,7 +89,7 @@ namespace RaceManager.Progress
         private void TestProbability()
         { 
             Rarity rarity;
-            bool haveGot = GetNotCommonLootbox(out rarity); 
+            bool haveGot = TryLuckWithNotCommonLootbox(out rarity); 
             
             _counter++;
 

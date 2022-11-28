@@ -52,15 +52,19 @@ namespace RaceManager.Progress
         public Rarity Rarity => _rarity;
         public bool IsOpen => _isOpen;
         public float Price => _price;
-        public float TimeToOpen => _hoursToOpen;
-        public float GemsToOpen => _gemsToOpen;
+        public int TimeToOpen => _hoursToOpen;
+        public int GemsToOpen => _gemsToOpen;
+        public int MoneyAmountMin => _moneyAmountMin;
+        public int MoneyAmountMax => _moneyAmountMax;
+        public int CardsAmountMin => _cardsAmountMin;
+        public int CardsAmountMax => _cardsAmountMax;
 
         //public List<IReward> Cards => GetRandomCardsList();
 
         [Button]
-        private List<IReward> GetRandomCardsList()
+        public List<CarCardReward> GetCardsList()
         {
-            List<IReward> list = new List<IReward>();
+            List<CarCardReward> list = new List<CarCardReward>();
             int lotsAmount = Random.Range(_lotsAmountMin, _lotsAmountMax + 1);
             int cardsAmount = Random.Range(_cardsAmountMin, _cardsAmountMax + 1);
             float factor = GetFactor();
@@ -71,7 +75,7 @@ namespace RaceManager.Progress
             {
                 CarName name = GetRandomCarName();
 
-                CarCard cardReward = new CarCard(name, amounts[i]);
+                CarCardReward cardReward = new CarCardReward(name, amounts[i]);
                 list.Add(cardReward);
 
                 Debug.Log($"Name: {name}; Amount: {amounts[i]};");

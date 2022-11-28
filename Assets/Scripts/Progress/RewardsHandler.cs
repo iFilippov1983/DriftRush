@@ -1,8 +1,8 @@
 ﻿using RaceManager.Cars;
 using RaceManager.Race;
 using RaceManager.Root;
-using RaceManager.UI;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
@@ -14,35 +14,59 @@ namespace RaceManager.Progress
         private RaceRewardsScheme _raceRewardsScheme;
 
         private PlayerProfile _playerProfile;
+        private Profiler _profiler;
         private SaveManager _saveManager;
 
+        public Action<List<CarCardReward>> OnLootboxOpen;
+        public Action<Lootbox> OnRaceRewardLootboxAdded;
         public Action OnProgressReward;
 
         [Inject]
-        private void Construct(PlayerProfile playerProfile, SaveManager saveManager, GameProgressScheme gameProgressScheme, RaceRewardsScheme raceRewardsScheme)
+        private void Construct(PlayerProfile playerProfile, Profiler profiler, SaveManager saveManager, GameProgressScheme gameProgressScheme, RaceRewardsScheme raceRewardsScheme)
         {
             _playerProfile = playerProfile;
+            _profiler = profiler;
             _saveManager = saveManager;
             _gameProgressScheme = gameProgressScheme;
             _raceRewardsScheme = raceRewardsScheme;
+
+            _profiler.OnLootboxOpen += HandleLootboxOpen;
         }
 
-        public void RewardForRace(DriverProfile driverProfile, out RaceHandler.RaceRewardInfo info)
+        public void RewardForRace(PositionInRace positionInRace, out RaceHandler.RaceRewardInfo info)
         {
-            RaceReward reward = _raceRewardsScheme.GetRewardFor(driverProfile.PositionInRace);
-            reward.Reward(_playerProfile);
+            RaceReward reward = _raceRewardsScheme.GetRewardFor(positionInRace);
+            reward.Reward(_profiler);
 
-            _playerProfile.CountRace();
+            if (_playerProfile.CanGetLootbox)
+            {
+                _profiler.CountVictory();
+
+                Rarity rarity = Rarity.Common;
+                bool isLucky = 
+                    _playerProfile.WillGetLootboxForVictiories == false 
+                    && 
+                    _raceRewardsScheme.TryLuckWithNotCommonLootbox(out rarity);
+
+                if (isLucky)
+                {
+                    Lootbox lootbox = new Lootbox(rarity);
+                    _profiler.AddOrOpenLootbox(lootbox);
+
+                    OnRaceRewardLootboxAdded?.Invoke(lootbox);
+                }
+            }
+
             info = new RaceHandler.RaceRewardInfo()
             {
                 RewardMoneyAmount = reward.Money,
                 RewardCupsAmount = reward.Cups,
-                MoneyTotal = _playerProfile.Currency.Money,
-                GemsTotal = _playerProfile.Currency.Gems
+                MoneyTotal = _playerProfile.Money,
+                GemsTotal = _playerProfile.Gems
             };
 
             _saveManager.Save();
-            Debug.Log($"GOT REWARD - M:{reward.Money}; C:{reward.Cups} => NOW HAVE - M:{_playerProfile.Currency.Money}; C:{_playerProfile.Currency.Cups} => Race count: {_playerProfile.RacesCounter}");
+            Debug.Log($"GOT REWARD - M:{reward.Money}; C:{reward.Cups} => NOW HAVE - M:{_playerProfile.Money}; C:{_playerProfile.Cups} => Race count: {_playerProfile.VictoriesCounter}");
         }
 
         public void RewardForProgress(int cupsAmountLevel)
@@ -50,12 +74,27 @@ namespace RaceManager.Progress
             ProgressStep step = _gameProgressScheme.GetStepWhithGoal(cupsAmountLevel);
             foreach (var reward in step.Rewards)
             {
-                reward.Reward(_playerProfile);
-                reward.IsReceived = true;
+                reward.Reward(_profiler);
             }
 
             OnProgressReward?.Invoke();
             _saveManager.Save();
+        }
+
+        private void HandleLootboxOpen(Lootbox lootbox)
+        {
+            List<CarCardReward> list = lootbox.LootboxModel.GetCardsList();
+            foreach (var reward in list)
+            {
+                _profiler.AddCarCards(reward.CarName, reward.CardsAmount);
+            }
+                
+            OnLootboxOpen?.Invoke(list);
+        }
+
+        private void OnDestroy()
+        {
+            _profiler.OnLootboxOpen -= HandleLootboxOpen;
         }
     }
 }

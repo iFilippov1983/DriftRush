@@ -1,3 +1,4 @@
+using RaceManager.Progress;
 using RaceManager.Race;
 using RaceManager.Root;
 using RaceManager.Waypoints;
@@ -17,6 +18,7 @@ namespace RaceManager.Cars
         public DriverType DriverType;
 
         private PlayerProfile _playerProfile;
+        private Profiler _profiler;
         private DriverProfile _driverProfile;
         private GameObject _carObject;
         private CarAI _carAI;
@@ -32,11 +34,20 @@ namespace RaceManager.Cars
         public Transform CarTargetToFollow => _carAI.Target;
         public WaypointsTracker WaypointsTracker => _waypointsTracker;
 
-        public void Initialize(DriverType type, CarsDepot carsDepot, WaypointTrack waypointTrack, MaterialsContainer materialsContainer, PlayerProfile playerProfile = null)
+        public void Initialize
+            (
+            DriverType type, 
+            CarsDepot carsDepot, 
+            WaypointTrack waypointTrack, 
+            MaterialsContainer materialsContainer, 
+            PlayerProfile playerProfile = null,
+            Profiler profiler = null
+            )
         {
             DriverType = type;
             _materialsContainer = materialsContainer;
             _playerProfile = playerProfile;
+            _profiler = profiler;
 
             CarFactory carFactory = new CarFactory(type, carsDepot, waypointTrack, _materialsContainer, transform);
             _carObject = carFactory.ConstructCarForRace(out _car, out _carVisual, out _carAI, out _waypointsTracker, out _driverProfile);
@@ -107,12 +118,12 @@ namespace RaceManager.Cars
 
             if (DriverType == DriverType.Player)
             {
-                _playerProfile.LastInRacePosition = _driverProfile.PositionInRace;
+                _profiler.SetInRacePosition(_driverProfile.PositionInRace);
                 //EventsHub<RaceEvent>.Unsunscribe(RaceEvent.FINISH, StopRace);
                 EventsHub<RaceEvent>.BroadcastNotification(RaceEvent.FINISH);
             }
 
-            $"{gameObject.name} FINISHED".Log(ConsoleLog.Color.Yellow);
+            $"{gameObject.name} FINISHED".Log(Logger.ColorYellow);
         }
 
         private void NotifyObservers()

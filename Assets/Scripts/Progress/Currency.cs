@@ -10,21 +10,7 @@ namespace RaceManager.Progress
     [Serializable]
     public class Currency
     {
-        [JsonProperty]
-        [SerializeField] 
-        private int _money;
-
-        public int Money
-        { 
-            get => _money;
-            set 
-            {
-                float v = value * IncomeFactor;
-                if(int.MaxValue > v && v > int.MinValue)
-                    _money = (int)v;
-            }
-        }
-
+        public int Money;
         public int Cups;
         public int Gems;
         public float IncomeFactor = 1f;

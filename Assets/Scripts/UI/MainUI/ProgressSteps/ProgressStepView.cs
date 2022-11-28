@@ -14,6 +14,7 @@ namespace RaceManager.UI
         [SerializeField] private CupsAmountSlider _cupsAmountSlider;
 
         public int GoalCupsAmount;
+        public bool IsLast;
 
         public Image ConnectionLineImage => _connectionLineImage;
         public Button ClaimButton => _claimButton;

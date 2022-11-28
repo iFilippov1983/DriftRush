@@ -24,7 +24,6 @@ namespace RaceManager.UI
         [SerializeField] private Button _gameProgressButton;
         [SerializeField] private Button _settingsButton;
         [Space]
-        [SerializeField] private ChestProgressPanel _chestProgress;
         [SerializeField] private CupsProgressPanel _cupsProgress;
         [SerializeField] private CurrencyAmountPanel _currencyAmount;
         [Space]
@@ -34,8 +33,8 @@ namespace RaceManager.UI
         [SerializeField] private BottomPanel _bottomPanel;
         [SerializeField] private BackPanel _backPanel;
         [Space]
-        [SerializeField] private RectTransform _chestSlotsRect;
-        [SerializeField] private List<ChestSlot> _chestSlots;
+        [SerializeField] private LootboxSlotsHandler _lootboxSlotsHandler;
+        [SerializeField] private LootboxWindow _lootboxWindow;
 
         private PlayerProfile _playerProfile;
         private RewardsHandler _rewardsHandler;
@@ -87,8 +86,11 @@ namespace RaceManager.UI
 
             UpdateCurrencyAmountPanels();
             UpdateTuningPanelValues();
+
             InitializeCarsCollectionPanel();
             InitializeGameProgressPanel();
+            InitializeLootboxSlotsHandler();
+
             RegisterButtonsListeners();
         }
 
@@ -140,8 +142,7 @@ namespace RaceManager.UI
         {
             _bottomPanel.SetActive(active);
             _startButton.SetActive(active);
-            _chestSlotsRect.SetActive(active);
-            _chestProgress.SetActive(active);
+            _lootboxSlotsHandler.SetActive(active);
             _cupsProgress.SetActive(active);
 
             _podium.ChestObject.SetActive(active);
@@ -174,6 +175,8 @@ namespace RaceManager.UI
             _bottomPanel.SetActive(!active);
             _podium.SetActive(!active);
         }
+
+        private void ActivateLootboxWindow(List<CarCardReward> list) => _lootboxWindow.SetActive(true);
         #endregion
 
         #region Initialize data methods
@@ -210,15 +213,15 @@ namespace RaceManager.UI
             {
                 int goalCupsAmount = stepData.Key;
                 ProgressStep step = stepData.Value;
-                step.IsReached = _playerProfile.Currency.Cups >= goalCupsAmount;
+                step.IsReached = _playerProfile.Cups >= goalCupsAmount;
 
                 _gameProgressPanel.AddProgressStep(goalCupsAmount, step, () => _rewardsHandler.RewardForProgress(goalCupsAmount));
             }
 
-            _gameProgressPanel.SetCupsAmountSlider(_playerProfile.Currency.Cups);
+            _gameProgressPanel.SetCupsAmountSlider(_playerProfile.Cups);
 
-            var closestGlobalGoal = _gameProgressScheme.ProgressSteps.First(p => p.Value.BigPrefab && p.Value.IsReached == false);
-            int globalCupsAmountGoal = closestGlobalGoal.Key != 0
+            var closestGlobalGoal = _gameProgressScheme.ProgressSteps.First(p => p.Value.BigPrefab && p.Value.IsReached == false || p.Value.IsLast);
+            int globalCupsAmountGoal = closestGlobalGoal.Key > _playerProfile.Cups
                 ? closestGlobalGoal.Key
                 : _gameProgressScheme.LastGlobalGoal.Key;
 
@@ -226,21 +229,30 @@ namespace RaceManager.UI
             InitializeCupsProgressPanel(globalCupsAmountGoal);
 
             _rewardsHandler.OnProgressReward += UpdateCurrencyAmountPanels;
+            _rewardsHandler.OnLootboxOpen += ActivateLootboxWindow;
+            _rewardsHandler.OnLootboxOpen += _lootboxWindow.RepresentLootbox;
         }
 
         private void InitializeCupsProgressPanel(int globalGoalCupsAmount)
         {
-            int currentCupsAmount = _playerProfile.Currency.Cups;
+            int currentCupsAmount = _playerProfile.Cups;
             _cupsProgress.CupsAmountOwned.text = currentCupsAmount.ToString();
             _cupsProgress.NextGlobalGoalAmount.text = globalGoalCupsAmount.ToString();
 
-            float fillAmount = (float)(globalGoalCupsAmount - currentCupsAmount) / (float)globalGoalCupsAmount;
-            if (fillAmount < 0)
+            float fillAmount = 1f - (float)(globalGoalCupsAmount - currentCupsAmount) / (float)globalGoalCupsAmount;
+
+            if (fillAmount > 1)
                 fillAmount = 1f;
 
             _cupsProgress.FillImage.fillAmount = fillAmount;
-            UpdateHasRewardsImage(false);
-            //UpdateHasRewardsImage(_gameProgressScheme.HasUnreceivedRewards);
+            UpdateHasRewardsImage(_gameProgressScheme.HasUnreceivedRewards);
+        }
+
+        private void InitializeLootboxSlotsHandler()
+        {
+            _lootboxSlotsHandler.Initialize(_playerProfile);
+
+            _lootboxSlotsHandler.OnPopupIsActive += UpdatePodiumActivity;
         }
         #endregion
 
@@ -281,14 +293,15 @@ namespace RaceManager.UI
 
         private void UpdateCurrencyAmountPanels()
         {
-            _currencyAmount.MoneyAmount.text = _playerProfile.Currency.Money.ToString();
-            _currencyAmount.GemsAmount.text = _playerProfile.Currency.Gems.ToString();
+            _currencyAmount.MoneyAmount.text = _playerProfile.Money.ToString();
+            _currencyAmount.GemsAmount.text = _playerProfile.Gems.ToString();
 
-            _gameProgressPanel.MoneyAmountText.text = _playerProfile.Currency.Money.ToString();
-            _gameProgressPanel.gemsAmountText.text = _playerProfile.Currency.Gems.ToString();
+            _gameProgressPanel.MoneyAmountText.text = _playerProfile.Money.ToString();
+            _gameProgressPanel.gemsAmountText.text = _playerProfile.Gems.ToString();
         }
 
         private void UpdateHasRewardsImage(bool hasUnreceived) => _cupsProgress.HasUnreceivedRewardsImage.SetActive(hasUnreceived);
+        private void UpdatePodiumActivity(bool needToHide) => _podium.SetActive(!needToHide);
         #endregion
 
         #region Other methods
@@ -336,9 +349,12 @@ namespace RaceManager.UI
             _carsCollectionPanel.CloseButton.onClick.AddListener(() => ActivateMainMenu(true));
 
             _gameProgressPanel.BackButton.onClick.AddListener(() => ActivateGameProgressPanel(false));
-            //_gameProgressPanel.BackButton.onClick.AddListener(() => UpdateHasRewardsImage(_gameProgressScheme.HasUnreceivedRewards));
+            _gameProgressPanel.BackButton.onClick.AddListener(() => UpdateHasRewardsImage(_gameProgressScheme.HasUnreceivedRewards));
 
             _gameProgressButton.onClick.AddListener(() => ActivateGameProgressPanel(true));
+            _gameProgressButton.onClick.AddListener(_gameProgressPanel.OffsetContent);
+
+            _lootboxWindow.OkButton.onClick.AddListener(() => _lootboxWindow.SetActive(false));
         }
 
         private void OnDestroy()
@@ -346,6 +362,10 @@ namespace RaceManager.UI
             _carsCollectionPanel.OnUseCarButtonPressed -= ChangeCar;
 
             _rewardsHandler.OnProgressReward -= UpdateCurrencyAmountPanels;
+            _rewardsHandler.OnLootboxOpen -= ActivateLootboxWindow;
+            _rewardsHandler.OnLootboxOpen -= _lootboxWindow.RepresentLootbox;
+
+            _lootboxSlotsHandler.OnPopupIsActive -= UpdatePodiumActivity;
         }
         #endregion
     }

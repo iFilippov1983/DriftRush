@@ -3,8 +3,9 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -37,29 +38,29 @@ MonoBehaviour:
     cloudType: 1
     cirrusAlpha: 0
     cirrusCoverage: 0
-    cirrusColorPow: 1
-    flatCloudsDensity: 2.5
-    flatCloudsAbsorbtion: 4.35
-    flatCloudsDirectLightIntensity: 26.4
-    flatCloudsAmbientLightIntensity: 0.291
-    flatCloudsHGPhase: 0.9
-    flatCoverage: 1.341
-    particleLayer1Alpha: 0.5
-    particleLayer1Brightness: 0.502
+    cirrusColorPow: 2.05
+    flatCloudsDensity: 3.89
+    flatCloudsAbsorbtion: 6.68
+    flatCloudsDirectLightIntensity: 61
+    flatCloudsAmbientLightIntensity: 0.77
+    flatCloudsHGPhase: 0.381
+    flatCoverage: 1.42
+    particleLayer1Alpha: 0.319
+    particleLayer1Brightness: 0.458
     particleLayer1ColorPow: 2
     particleLayer2Alpha: 0.217
-    particleLayer2Brightness: 0.608
-    particleLayer2ColorPow: 2
+    particleLayer2Brightness: 0.583
+    particleLayer2ColorPow: 1.57
     particleCloudsOverwrite: 0
   fogStartDistance: 0
   fogDistance: 0
-  fogDensity: 0.001
+  fogDensity: 0.0002
   weatherSkyMod:
     serializedVersion: 2
-    key0: {r: 0, g: 0, b: 0, a: 1}
+    key0: {r: 0.14582591, g: 0.15512791, b: 0.2735849, a: 1}
     key1: {r: 0, g: 0, b: 0, a: 1}
-    key2: {r: 0.21323532, g: 0.21323532, b: 0.21323532, a: 1}
-    key3: {r: 0.41911763, g: 0.41911763, b: 0.41911763, a: 1}
+    key2: {r: 0.7176471, g: 0.8117648, b: 0.91372555, a: 1}
+    key3: {r: 0.41509432, g: 0.41509432, b: 0.41509432, a: 1}
     key4: {r: 0.5058824, g: 0.5058824, b: 0.5058824, a: 0}
     key5: {r: 0, g: 0, b: 0, a: 0}
     key6: {r: 0, g: 0, b: 0, a: 0}
@@ -114,27 +115,27 @@ MonoBehaviour:
     m_NumAlphaKeys: 4
   weatherFogMod:
     serializedVersion: 2
-    key0: {r: 0, g: 0, b: 0, a: 1}
-    key1: {r: 0, g: 0, b: 0, a: 1}
-    key2: {r: 0.09019608, g: 0.09019608, b: 0.09019608, a: 0.9254902}
+    key0: {r: 0.8352942, g: 0.86666673, b: 0.8980393, a: 1}
+    key1: {r: 0.43943575, g: 0.59220946, b: 0.745283, a: 0.99599516}
+    key2: {r: 0.08453433, g: 0.08453433, b: 0.08453433, a: 0.9254902}
     key3: {r: 0.3602941, g: 0.3602941, b: 0.3602941, a: 0.9529412}
-    key4: {r: 0.58823526, g: 0.58823526, b: 0.58823526, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0.58823526, g: 0.58823526, b: 0.58823526, a: 0.9529412}
+    key5: {r: 0.58823526, g: 0.58823526, b: 0.58823526, a: 0}
     key6: {r: 0, g: 0, b: 0, a: 0}
     key7: {r: 0, g: 0, b: 0, a: 0}
     ctime0: 0
-    ctime1: 30412
-    ctime2: 33981
-    ctime3: 37201
+    ctime1: 41249
+    ctime2: 51272
+    ctime3: 58211
     ctime4: 65535
-    ctime5: 0
+    ctime5: 65535
     ctime6: 0
     ctime7: 0
     atime0: 0
-    atime1: 29491
-    atime2: 32839
+    atime1: 41827
+    atime2: 51850
     atime3: 65535
-    atime4: 0
+    atime4: 65535
     atime5: 0
     atime6: 0
     atime7: 0
@@ -143,15 +144,15 @@ MonoBehaviour:
     m_NumAlphaKeys: 4
   volumeLightIntensity: 1
   shadowIntensityMod: 0
-  heightFogDensity: 1.95
-  SkyFogHeight: 0.31
-  skyFogStart: 0
-  SkyFogIntensity: 0.776
-  FogScatteringIntensity: 1.1
+  heightFogDensity: 0
+  SkyFogHeight: 1.9
+  skyFogStart: 0.024
+  SkyFogIntensity: 0.264
+  FogScatteringIntensity: 1
   fogSunBlocking: 0
   moonIntensity: 0
   effectSystems:
-  - prefab: {fileID: 1000010755747430, guid: eb00aa0efab163240b0100942689e7fd, type: 2}
+  - prefab: {fileID: 1000010755747430, guid: eb00aa0efab163240b0100942689e7fd, type: 3}
     localPositionOffset: {x: 0, y: 25, z: 0}
     localRotationOffset: {x: -90, y: 0, z: -180}
   WindStrenght: 0.5
@@ -160,7 +161,6 @@ MonoBehaviour:
   temperatureLevel: 0
   isLightningStorm: 0
   lightningInterval: 10
-  auroraIntensity: 0
   weatherSFX: {fileID: 8300000, guid: e60b9243727bbb5428fbb3e7f7fe44cd, type: 3}
   SpringDayAmbient: {fileID: 0}
   SpringNightAmbient: {fileID: 0}

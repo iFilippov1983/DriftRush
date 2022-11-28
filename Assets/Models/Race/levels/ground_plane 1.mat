@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: ground_plane 1
-  m_Shader: {fileID: 4800000, guid: 9eb6b902b08a05a4ba5673544f12912b, type: 3}
+  m_Shader: {fileID: 4800000, guid: e26cbab2b2022b1468d439f5b47c1048, type: 3}
   m_ShaderKeywords: TCP2_REFLECTIONS_FRESNEL TCP2_RIM_LIGHTING_LIGHTMASK TCP2_UV_NORMALS_FULL
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -21,6 +21,18 @@ Material:
     m_TexEnvs:
     - _BaseMap:
         m_Texture: {fileID: 2800000, guid: bef0d90e768741944a496f4708044788, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BlendTex1:
+        m_Texture: {fileID: 2800000, guid: d124f951e0c1ee240a5994bcd881088e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BlendTex2:
+        m_Texture: {fileID: 2800000, guid: 20bfa494d4f94bd439534804711d3ee6, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BlendTex3:
+        m_Texture: {fileID: 2800000, guid: 00ecf15eb79043a409ae708e43d732ba, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
@@ -118,8 +130,15 @@ Material:
     - _RampBandsSmoothing: 0.1
     - _RampOffset: 0
     - _RampScale: 1
+    - _RampSmooth: 0.1
+    - _RampSmoothDir: 0.5
+    - _RampSmoothPoint: 0.5
+    - _RampSmoothSpot: 0.5
     - _RampSmoothing: 0.1
     - _RampThreshold: 0.75
+    - _RampThresholdDir: 0.5
+    - _RampThresholdPoint: 0.5
+    - _RampThresholdSpot: 0.5
     - _RampType: 0
     - _ReceiveShadowsOff: 1
     - _ReflectionMapType: 0
@@ -127,6 +146,9 @@ Material:
     - _RenderingMode: 0
     - _RimMax: 1
     - _RimMin: 0.5
+    - _Shadow_HSV_H: 0
+    - _Shadow_HSV_S: 0
+    - _Shadow_HSV_V: 0
     - _SingleIndirectColor: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
@@ -152,6 +174,9 @@ Material:
     - _UseShadowTexture: 0
     - _UseSpecular: 0
     - _ZWrite: 1
+    - __BeginGroup_OtherLights: 1
+    - __EndGroup: 0
+    - __dummy__: 0
     m_Colors:
     - _BaseColor: {r: 0.8773585, g: 0.8773585, b: 0.8773585, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
@@ -163,4 +188,6 @@ Material:
     - _RimColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.5}
     - _SColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecularColor: {r: 0.75, g: 0.75, b: 0.75, a: 1}
+    - _VColorBlendOffset: {r: 0, g: 0, b: 0, a: 0}
+    - _VColorBlendSmooth: {r: 0.25, g: 0.25, b: 0.25, a: 0.25}
   m_BuildTextureStacks: []

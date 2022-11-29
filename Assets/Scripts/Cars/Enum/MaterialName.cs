@@ -51,5 +51,7 @@
         TRoadster_Comics = 604,
         TRoadster_Cyber = 605,
 
+        DodgeCharger_Base = 700,
+
     }
 }

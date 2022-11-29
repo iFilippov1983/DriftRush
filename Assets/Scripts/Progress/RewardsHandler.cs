@@ -88,8 +88,9 @@ namespace RaceManager.Progress
             {
                 _profiler.AddCarCards(reward.CarName, reward.CardsAmount);
             }
-                
+
             OnLootboxOpen?.Invoke(list);
+            _saveManager.Save();
         }
 
         private void OnDestroy()

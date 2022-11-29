@@ -105,18 +105,21 @@ namespace RaceManager.UI
             LootboxImage.SetActive(true);
         }
 
-        public void SetStatusClosed(Sprite lootboxSprite, int hoursToOpen, string id)
+        public void SetStatusClosed(Sprite lootboxSprite, int hoursToOpen, int gemsToPen, string id)//, bool hasActiveTimerSlot)
         {
             CurrentLootboxId = id;
             SlotStatus = SlotStatus.Closed;
 
+            //SlotButton.interactable = !hasActiveTimerSlot;
             SlotButton.interactable = true;
 
             CanOpenText.SetActive(false);
             MidText.SetActive(false);
 
             TimerRect.SetActive(false);
+
             FastOpenRect.SetActive(false);
+            FastOpenCostText.text = gemsToPen.ToString();
 
             LootboxImage.SetActive(true);
             LootboxImage.sprite = lootboxSprite;

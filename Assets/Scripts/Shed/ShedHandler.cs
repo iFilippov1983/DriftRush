@@ -1,10 +1,7 @@
-using RaceManager.Cameras;
 using RaceManager.Cars;
 using RaceManager.Root;
 using RaceManager.UI;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using UniRx;
 using UnityEngine;
@@ -114,6 +111,7 @@ namespace RaceManager.Shed
             _mainUI.UpdateTuningPanelValues();
             _mainUI.UpdateCarsCollectionInfo();
             _saveManager.Save();
+            $"SAVE - {this}".Log();
         }
 
         public void Dispose()

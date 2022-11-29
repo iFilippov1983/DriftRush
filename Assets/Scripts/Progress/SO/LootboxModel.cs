@@ -52,14 +52,13 @@ namespace RaceManager.Progress
         public Rarity Rarity => _rarity;
         public bool IsOpen => _isOpen;
         public float Price => _price;
-        public int TimeToOpen => _hoursToOpen;
+        public int HoursToOpen => _hoursToOpen;
+        public float TimeToOpen => _hoursToOpen * 60f * 60f; // * seconds in min * minutes in hour
         public int GemsToOpen => _gemsToOpen;
         public int MoneyAmountMin => _moneyAmountMin;
         public int MoneyAmountMax => _moneyAmountMax;
         public int CardsAmountMin => _cardsAmountMin;
         public int CardsAmountMax => _cardsAmountMax;
-
-        //public List<IReward> Cards => GetRandomCardsList();
 
         [Button]
         public List<CarCardReward> GetCardsList()
@@ -164,7 +163,7 @@ namespace RaceManager.Progress
             return name;
         }
 
-
+        #region Test methods
         [ShowInInspector, ReadOnly]
         private int _counter = 0;
 
@@ -230,5 +229,6 @@ namespace RaceManager.Progress
             _epic = 0;
             _legendary = 0;
         }
+        #endregion
     }
 }

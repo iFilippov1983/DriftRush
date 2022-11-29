@@ -67,6 +67,11 @@ namespace RaceManager.Root
                 d.Dispose();
         }
 
+        private void OnApplicationQuit()
+        {
+            _saveManager.Save();
+        }
+
         private void OnDestroy()
         {
             Dispose();

@@ -38,8 +38,10 @@ namespace RaceManager.Progress
         }
 
         public string Id => _id;
+        public Rarity Rarity => _lootboxModel.Rarity;
         public LootboxModel LootboxModel => _lootboxModel;
-        public float InitialTimeToOpen => _lootboxModel.TimeToOpen;
+        public int InitialTimeToOpen => _lootboxModel.HoursToOpen;
+        public int GemsToOpen => _lootboxModel.GemsToOpen;
         public bool IsOpen => TimeToOpenLeft <= 0;
 
         private string MakeId()

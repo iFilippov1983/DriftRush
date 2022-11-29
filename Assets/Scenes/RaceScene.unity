@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.5853617, g: 0.69673866, b: 0.83539766, a: 1}
+  m_IndirectSpecularColor: {r: 0.5823636, g: 0.6977778, b: 0.83065695, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -414,6 +414,8 @@ MonoBehaviour:
   _gameProgressScheme: {fileID: 11400000, guid: 6d536a2d406b1da42a89312821126091,
     type: 2}
   _raceRewardsScheme: {fileID: 11400000, guid: b3ee5958f1d40d64887f465f310f2905, type: 2}
+  _spritesContainerRewards: {fileID: 11400000, guid: 0844653bf283a2f4daf4bf2b4726e92f,
+    type: 2}
 --- !u!1 &497530277
 GameObject:
   m_ObjectHideFlags: 0
@@ -1522,17 +1524,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerProfile:
+    _nextLevelPrefabToLoad: 1
+    _lastInRacePosition: 0
     _lootboxes: []
     _availableLevels: 
-    LastInRacePosition: 0
-    Currency:
-      _money: 0
-      _cups: 0
-      _gems: 0
-      Cups: 0
-      Gems: 0
-      IncomeFactor: 1
-    NextLevelPrefabToLoad: 1
   nextLevelToPlay: 0
 --- !u!4 &1938199604
 Transform:

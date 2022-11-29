@@ -1,9 +1,7 @@
-﻿using Newtonsoft.Json;
-using RaceManager.Cars;
+﻿using RaceManager.Cars;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace RaceManager.Progress
 {

@@ -37,13 +37,20 @@ namespace RaceManager.Root
             IsMenuScene = SceneManager.GetActiveScene().name == Loader.Scene.MenuScene.ToString();
         }
 
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.F))
+                WinRace();
+        }
+
         [Button]
         [ShowIf("IsRaceScene", true)]
-        public void FinishRace()
+        public void WinRace()
         {
             var drivers = FindObjectsOfType<Driver>();
             var list = new List<Driver>(drivers);
             var playerDriver = list.Find(d => d.DriverType == DriverType.Player);
+            playerDriver.DriverProfile.PositionInRace = PositionInRace.First;
             playerDriver.DriverProfile.CarState.Value = CarState.Finished;
         }
 
@@ -58,6 +65,7 @@ namespace RaceManager.Root
                 $"Next level to play: {nextLevelToPlay}".Log(Logger.ColorYellow);
                 profiler.SetNextLevel(nextLevelToPlay);
                 saveManager.Save();
+                $"SAVE - {this}".Log();
             }
             else
             { 
@@ -76,6 +84,30 @@ namespace RaceManager.Root
         public void AddCups(int amount)
         {
             profiler.AddCups(amount);
+            saveManager.Save();
+        }
+
+        [Button]
+        [ShowIf("IsMenuScene", true)]
+        public void AddGems(int amount)
+        { 
+            profiler.AddGems(amount);
+            saveManager.Save();
+        }
+
+        [Button]
+        [ShowIf("IsMenuScene", true)]
+        public void AddMoney(int amount)
+        { 
+            profiler.AddMoney(amount);
+            saveManager.Save();
+        }
+
+        [Button]
+        [ShowIf("IsMenuScene", true)]
+        public void AddWinsCount()
+        { 
+            profiler.CountVictory();
             saveManager.Save();
         }
     }

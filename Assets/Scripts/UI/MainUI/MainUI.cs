@@ -201,9 +201,9 @@ namespace RaceManager.UI
                 _carsCollectionPanel.AddCollectionCard
                     (
                     profile.CarName,
-                    profile.Accessibility.CurrentPointsAmount,
-                    profile.Accessibility.PointsToAccess,
-                    profile.Accessibility.IsAvailable
+                    _playerProfile.CarCardsAmount(profile.CarName),
+                    profile.Accessibility.CurrentStepPointsToAccess,
+                    profile.Accessibility.CarIsAvailable
                     );
             }
 
@@ -361,6 +361,7 @@ namespace RaceManager.UI
             _gameProgressButton.onClick.AddListener(_gameProgressPanel.OffsetContent);
 
             _lootboxWindow.OkButton.onClick.AddListener(() => _lootboxWindow.SetActive(false));
+            _lootboxWindow.OkButton.onClick.AddListener(() => _lootboxSlotsHandler.InitializeLootboxProgressPanel());
             _lootboxWindow.OkButton.onClick.AddListener(() => UpdatePodiumActivity(false));
         }
 

@@ -30,12 +30,12 @@ namespace RaceManager.Cars
 
         private void ApplyVisual()
         {
-            Debug.Log($"Initial Apply => " +
-                $"\nMat type: {_carConfigVisual.CurrentMaterialsSetType}; " +
-                $"\nWheels level: {_carConfigVisual.CurrentWheelsLevel}; " +
-                $"\nSusp level: {_carConfigVisual.CurrentSuspentionLevel}; " +
-                $"\nBumpers level: {_carConfigVisual.CurrentBumpersLevel}; " +
-                $"\nBody kits level: {_carConfigVisual.CurrentBodyKitsLevel}");
+            //Debug.Log($"Initial Apply => " +
+            //    $"\nMat type: {_carConfigVisual.CurrentMaterialsSetType}; " +
+            //    $"\nWheels level: {_carConfigVisual.CurrentWheelsLevel}; " +
+            //    $"\nSusp level: {_carConfigVisual.CurrentSuspentionLevel}; " +
+            //    $"\nBumpers level: {_carConfigVisual.CurrentBumpersLevel}; " +
+            //    $"\nBody kits level: {_carConfigVisual.CurrentBodyKitsLevel}");
 
             SetBodyMaterials(_carConfigVisual.CurrentMaterialsSetType);
             SetPartsVisual(PartType.Wheel, _carConfigVisual.CurrentWheelsLevel, _carConfigVisual.CurrentWheelsSetType);

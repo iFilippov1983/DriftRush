@@ -37,7 +37,6 @@ namespace RaceManager.Infrastructure
             Bind(Singleton<MenuCamerasHandler>.Instance);
             Bind(Singleton<ShedHandler>.Instance);
             Bind(Singleton<RewardsHandler>.Instance);
-            Bind(Singleton<ImageAnimator>.Instance);
         }
 
         private void BindObjects()

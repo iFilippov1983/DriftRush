@@ -95,7 +95,7 @@ namespace RaceManager.Root
             string path = Path.Combine(Application.persistentDataPath, FileName);
             bool fileExists = File.Exists(path);
 
-            $"Load from => {path};\n File exists => {fileExists}".Log(Logger.ColorGreen);
+            //$"Load from => {path};\n File exists => {fileExists}".Log(Logger.ColorGreen);
 
             if (!fileExists)
             {

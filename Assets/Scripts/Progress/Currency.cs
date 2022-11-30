@@ -22,7 +22,8 @@ namespace RaceManager.Progress
             { CarName.NissanSilvia, 0 },
             { CarName.Porche911, 0 },
             { CarName.Ferrari488, 0 },
-            { CarName.TeslaRoadster, 0 }
+            { CarName.TeslaRoadster, 0 },
+            { CarName.DodgeCharger, 0 }
         };
     }
 }

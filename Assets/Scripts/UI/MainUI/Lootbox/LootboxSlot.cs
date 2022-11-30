@@ -41,15 +41,17 @@ namespace RaceManager.UI
         public TMP_Text FastOpenCostText => _costText;
         public RectTransform FastOpenRect => _fastOpenRect;
         public RectTransform TimerRect => _timerRect;
+        public Vector3 ImagePosOffset => _lootboxImage.transform.localPosition;
         public SlotStatus SlotStatus 
         { 
             get => _slotStatus; 
             private set => _slotStatus = value; 
         }
 
-        public void SetStatusLootboxOpen(Sprite lootboxSprite, string id)
+        public void SetStatusLootboxOpen(Sprite lootboxSprite = null, string id = null)
         { 
-            CurrentLootboxId = id;
+            if(id != null)
+                CurrentLootboxId = id;
             SlotStatus = SlotStatus.LootboxOpen;
 
             BottomText.SetActive(false);
@@ -61,15 +63,18 @@ namespace RaceManager.UI
 
             SlotButton.interactable = true;
 
+            if(lootboxSprite != null)
+                LootboxImage.sprite = lootboxSprite;
             LootboxImage.SetActive(true);
-            LootboxImage.sprite = lootboxSprite;
+            
 
             CanOpenText.SetActive(true);
         }
 
-        public void SetStatusActiveTimer(Sprite lootboxSprite, int cost, string id)
+        public void SetStatusActiveTimer(Sprite lootboxSprite = null, int cost = 0, string id = null)
         {
-            CurrentLootboxId = id;
+            if(id != null)
+                CurrentLootboxId = id;
             SlotStatus = SlotStatus.ActiveTimer;
 
             CanOpenText.SetActive(false);
@@ -82,35 +87,19 @@ namespace RaceManager.UI
             TimerRect.SetActive(true);
             FastOpenRect.SetActive(true);
 
+            if (lootboxSprite != null)
+                LootboxImage.sprite = lootboxSprite;
             LootboxImage.SetActive(true);
-            LootboxImage.sprite = lootboxSprite;
 
-            FastOpenCostText.text = cost.ToString();
+            if(cost != 0)
+                FastOpenCostText.text = cost.ToString();
         }
 
-        public void SetStatusActiveTimer()
-        {
-            SlotStatus = SlotStatus.ActiveTimer;
-
-            CanOpenText.SetActive(false);
-            BottomText.SetActive(false);
-            MidText.SetActive(false);
-            ClosedText.SetActive(false);
-
-            SlotButton.interactable = true;
-
-            TimerRect.SetActive(true);
-            FastOpenRect.SetActive(true);
-
-            LootboxImage.SetActive(true);
-        }
-
-        public void SetStatusClosed(Sprite lootboxSprite, int hoursToOpen, int gemsToPen, string id)//, bool hasActiveTimerSlot)
+        public void SetStatusClosed(Sprite lootboxSprite, int hoursToOpen, int gemsToPen, string id)
         {
             CurrentLootboxId = id;
             SlotStatus = SlotStatus.Closed;
 
-            //SlotButton.interactable = !hasActiveTimerSlot;
             SlotButton.interactable = true;
 
             CanOpenText.SetActive(false);

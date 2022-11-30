@@ -66,7 +66,6 @@ namespace RaceManager.Progress
             };
 
             _saveManager.Save();
-            Debug.Log($"GOT REWARD - M:{reward.Money}; C:{reward.Cups} => NOW HAVE - M:{_playerProfile.Money}; C:{_playerProfile.Cups} => Race count: {_playerProfile.VictoriesCounter}");
         }
 
         public void RewardForProgress(int cupsAmountLevel)

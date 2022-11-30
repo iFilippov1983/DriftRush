@@ -61,13 +61,15 @@ namespace RaceManager.Root
         public void SubstractMoney(IProfiler profiler) => _currency.Money -= profiler.MoneyCost;
         public void SubstractGems(IProfiler profiler) => _currency.Gems -= profiler.GemsCost;
 
-        public void GiveLootboxesTo(IProfiler profiler) => profiler.SetLootboxList(_lootboxes);
-        public void TakeLooboxesFrom(IProfiler profiler) => _lootboxes = profiler.Lootboxes;
-
         public void SetIcomeFactor(IProfiler profiler) => _currency.IncomeFactor = profiler.IncomeFactor;
         public void SetNextLevelFrom(IProfiler profiler) => _nextLevelPrefabToLoad = profiler.LevelName;
         public void SetLastInRacePosition(IProfiler profiler) => _lastInRacePosition = profiler.LastInRacePosition;
         public void SetVictoryCounter(IProfiler profiler) => _victoriesCounter = profiler.VictoriesCounter;
+
+        public void GiveLootboxesTo(IProfiler profiler) => profiler.SetLootboxList(_lootboxes);
+        public void TakeLooboxesFrom(IProfiler profiler) => _lootboxes = profiler.Lootboxes;
+
+        public int CarCardsAmount(CarName carName) => _currency.CarCards[carName];
 
         public Type DataType() => typeof(SaveData);
 

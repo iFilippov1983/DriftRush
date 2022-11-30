@@ -35,8 +35,6 @@ namespace RaceManager.UI
         }
 
         public Button OkButton => _okButton;
-        public RepresentationCard RepresentationCard => _representationCard;
-        public RectTransform ReceivedCardsRect => _receivedCardsRect;
 
         [Inject]
         private void Construct(SpritesContainerCarCollection spritesContainerCars)

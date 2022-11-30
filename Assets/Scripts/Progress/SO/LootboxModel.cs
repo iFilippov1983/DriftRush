@@ -18,7 +18,6 @@ namespace RaceManager.Progress
         private const float EpicFactor = 0.9f;
         private const float LegendaryFactor = 1f;
 
-
         [SerializeField] private Rarity _rarity;
         [SerializeField] private bool _isOpen;
         [SerializeField] private CarsRarityScheme _rarityScheme;
@@ -77,7 +76,7 @@ namespace RaceManager.Progress
                 CarCardReward cardReward = new CarCardReward(name, amounts[i]);
                 list.Add(cardReward);
 
-                Debug.Log($"Name: {name}; Amount: {amounts[i]};");
+                //Debug.Log($"Name: {name}; Amount: {amounts[i]};");
             }
 
             return list;
@@ -100,7 +99,7 @@ namespace RaceManager.Progress
 
         private int[] GetAmounts(int[] array, int cardsTotal, float factor)
         {
-            Debug.Log($"<color=red><i><b>Cards total: {cardsTotal}</b></i></color>");
+            //Debug.Log($"<color=red><i><b>Cards total: {cardsTotal}</b></i></color>");
             int counter = array.Length;
             int amount = 0;
             for (int i = 0; i < array.Length; i++)

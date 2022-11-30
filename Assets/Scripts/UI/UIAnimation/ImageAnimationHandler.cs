@@ -1,41 +1,42 @@
 ﻿using System;
 using UnityEngine;
+using DG.Tweening;
 
 namespace RaceManager.UI
 {
     public class ImageAnimationHandler
-    { 
-        private ImageAnimator _imageAnimator;
+    {
+        private const float Duration = 1f;
+        private readonly Vector3 ScaleVectorBig = new Vector3(1.3f, 1.3f, 1.3f);
+        private readonly Vector3 ScaleVectorSmall = new Vector3(0.85f, 0.85f, 0.85f);
+
         private GameObject _imageToAnimate;
 
         public event Action OnAnimationInitialize;
         public event Action OnAnimationFinish;
 
-        public ImageAnimationHandler(ImageAnimator imageAnimator, GameObject imageToAnimate)
+        private Vector3 _initialPos;
+
+        public ImageAnimationHandler(GameObject imageToAnimate)
         {
-            _imageAnimator = imageAnimator;
             _imageToAnimate = imageToAnimate;
+            _initialPos = _imageToAnimate.transform.position;
         }
 
-        public void InitializeAnimationWithTarget(GameObject target)
+        public void InitializeAnimationWithTarget(GameObject target, Vector3 posOffset)
         {
             OnAnimationInitialize?.Invoke();
-            var image = MakeCopyOf(_imageToAnimate);
-            _imageAnimator.Play(image, target, () => OnAnimationFinish?.Invoke());
+            _imageToAnimate.transform.DOMove(target.transform.position + posOffset, Duration)
+                .OnComplete(FinishAnimation);
+            _imageToAnimate.transform.DOScale(ScaleVectorBig, Duration / 2)
+                .OnComplete(() => _imageToAnimate.transform.DOScale(ScaleVectorSmall, Duration / 2));
         }
 
-        private GameObject MakeCopyOf(GameObject objectToCopy)
+        private void FinishAnimation()
         {
-            var imageObj = GameObject.Instantiate(objectToCopy, objectToCopy.transform.position, Quaternion.identity);
-            Vector3 trailSpawnPos = objectToCopy.transform.position + _imageAnimator.TrailSpawnOffset;
-
-            if (_imageAnimator.ImageTrailPrefab != null)
-            {
-                GameObject.Instantiate(_imageAnimator.ImageTrailPrefab, trailSpawnPos, Quaternion.identity, imageObj.transform);
-            }
-            
-            imageObj.SetActive(true);
-            return imageObj;
+            _imageToAnimate.transform.position = _initialPos;
+            _imageToAnimate.transform.DOScale(Vector3.one, Duration / 2);
+            OnAnimationFinish?.Invoke();
         }
     }
 }

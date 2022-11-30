@@ -23,7 +23,6 @@ namespace RaceManager.UI
         private SpritesContainerRewards _spritesRewards;
         private LootboxSlot _activeTimerSlot;
         private Lootbox _activeTimerLootbox;
-        private ImageAnimator _imageAnimator;
         private ImageAnimationHandler _animationHandler;
 
         private bool _hasActiveTimerSlot;
@@ -35,30 +34,28 @@ namespace RaceManager.UI
         public Action<bool> OnPopupIsActive;
 
         [Inject]
-        public void Construct(Profiler currencyHandler, SpritesContainerRewards spritesRewards, ImageAnimator imageAnimator)
+        public void Construct(Profiler currencyHandler, SpritesContainerRewards spritesRewards)
         {
             _profiler = currencyHandler;
             _spritesRewards = spritesRewards;
-            _imageAnimator = imageAnimator;
         }
 
         public void Initialize(PlayerProfile playerProfile)
         { 
             _playerProfile = playerProfile;
-            _animationHandler = new ImageAnimationHandler(_imageAnimator, _lootboxProgress.LootboxImage);
+            _animationHandler = new ImageAnimationHandler(_lootboxProgress.LootboxImage);
 
             InitializeLootboxSlots();
             InitializeLootboxProgressPanel();
 
             AddButtonsListeners();
 
-            _animationHandler.OnAnimationInitialize += _lootboxProgress.OnAnimationStart;
             _animationHandler.OnAnimationFinish += _lootboxProgress.OnAnimationFinish;
-            _animationHandler.OnAnimationFinish += InitializeLootboxProgressPanel;
-            
+
+            _lootboxProgress.OnImagesDisableComplete += InitializeLootboxProgressPanel;
         }
 
-        private void InitializeLootboxProgressPanel()
+        public void InitializeLootboxProgressPanel()
         {
             for (int i = 0; i < _lootboxProgress.Images.Length; i++)
                 _lootboxProgress.Images[i].SetActive(false);
@@ -112,7 +109,7 @@ namespace RaceManager.UI
 
                 if (lootbox.OpenTimerActivated)
                 {
-                    $"Last save time: {lastSaveTime}; TimePassed: {timePassed}; Seconds passed: {secondsPassed}; Seconds in week: {secondsInWeek}; LB time left: {lootbox.TimeToOpenLeft}".Log();
+                    //$"Last save time: {lastSaveTime}; TimePassed: {timePassed}; Seconds passed: {secondsPassed}; Seconds in week: {secondsInWeek}; LB time left: {lootbox.TimeToOpenLeft}".Log();
 
                     if (secondsPassed >= lootbox.TimeToOpenLeft)
                     {
@@ -242,11 +239,16 @@ namespace RaceManager.UI
 
             var emptySlot = _lootboxSlots.Find(s => s.SlotStatus == SlotStatus.Empty);
 
-            $"StartimgAnimation! Target slot: {emptySlot.gameObject.name}".Log(Logger.ColorYellow);
+            _animationHandler.OnAnimationFinish += OnAnimationFinish;
 
-            _animationHandler.OnAnimationFinish += () => emptySlot.SetStatusClosed(sprite, lootbox.InitialTimeToOpen, lootbox.GemsToOpen, lootbox.Id);
+            void OnAnimationFinish()
+            {
+                emptySlot.SetStatusClosed(sprite, lootbox.InitialTimeToOpen, lootbox.GemsToOpen, lootbox.Id);
+                emptySlot.SlotButton.onClick.AddListener(() => OnLootboxSlotClicked(emptySlot));
+                _animationHandler.OnAnimationFinish -= OnAnimationFinish;
+            }
 
-            _animationHandler.InitializeAnimationWithTarget(emptySlot.gameObject);
+            _animationHandler.InitializeAnimationWithTarget(emptySlot.gameObject, emptySlot.ImagePosOffset);
 
             _profiler.AddOrOpenLootbox(lootbox);
             _profiler.ResetVictoriesCounter();
@@ -267,8 +269,7 @@ namespace RaceManager.UI
                 }
                 else
                 {
-                    Sprite lootboxSprite = _spritesRewards.GetLootboxSprite(_activeTimerLootbox.Rarity);
-                    _activeTimerSlot.SetStatusLootboxOpen(lootboxSprite, _activeTimerLootbox.Id);
+                    _activeTimerSlot.SetStatusLootboxOpen();
 
                     _hasActiveTimerSlot = false;
                     _activeTimerLootbox = null;
@@ -312,9 +313,9 @@ namespace RaceManager.UI
 
         private void OnDestroy()
         {
-            _animationHandler.OnAnimationInitialize -= _lootboxProgress.OnAnimationStart;
             _animationHandler.OnAnimationFinish -= _lootboxProgress.OnAnimationFinish;
-            _animationHandler.OnAnimationFinish -= InitializeLootboxProgressPanel;
+
+            _lootboxProgress.OnImagesDisableComplete += InitializeLootboxProgressPanel;
         }
     }
 }

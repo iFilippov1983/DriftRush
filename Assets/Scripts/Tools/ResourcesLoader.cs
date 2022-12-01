@@ -18,8 +18,8 @@ namespace RaceManager.Tools
             if (parent == null)
                 parent = new GameObject($"[{typeof(T)}]").transform;
 
-            var c = LoadPrefab(path).GetComponent<T>();
-            return Object.Instantiate(c, parent, worldCoordinates);
+            var p = LoadPrefab(path).GetComponent<T>();
+            return Object.Instantiate(p, parent, worldCoordinates);
         }
     }
 }

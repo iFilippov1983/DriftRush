@@ -141,13 +141,11 @@ namespace RaceManager.Cars
                 _ => 0
             };
 
-            //int newValue;
             int available = _carProfile.CarCharacteristics.AvailableFactorsToUse;
             bool canSet = CanSetValue(currentFactor, Mathf.RoundToInt(value), available, out int newValue);
 
             if (!canSet)
             {
-                //int available = _carProfile.CarCharacteristics.AvailableFactorsToUse;
                 OnCharValueLimit?.Invoke(new TuneData { cType = cType, value = newValue, available = available }) ;
             }
 
@@ -237,9 +235,6 @@ namespace RaceManager.Cars
         {
             OnCharacteristicValueChanged -= TuneCar;
         }
-
-
-
     }
 
     public struct TuneData

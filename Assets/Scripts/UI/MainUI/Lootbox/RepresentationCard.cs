@@ -20,6 +20,7 @@ namespace RaceManager.UI
         public Image CarCardImage => _carCardImage;
         public Animator Animator => _animator;
 
+        //Methods for Animator events
         private void HasAppeared() => IsAppearing = false;
         private void GotOut() => IsVisible = false; 
     }

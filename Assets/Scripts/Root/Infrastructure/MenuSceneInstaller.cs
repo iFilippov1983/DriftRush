@@ -26,8 +26,8 @@ namespace RaceManager.Infrastructure
 
         public override void InstallBindings()
         {
-            BindSingletons();
             BindObjects();
+            BindSingletons();
             BindClasses();
         }
 

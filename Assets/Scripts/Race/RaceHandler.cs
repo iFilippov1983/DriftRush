@@ -174,6 +174,7 @@ namespace RaceManager.Race
         }
 
         private void NotifyRaceUI(Lootbox lootbox) => _raceUI.SetLootboxPopupValues(lootbox.LootboxModel.Rarity);
+
         private void OnDestroy()
         {
             _rewardsHandler.OnRaceRewardLootboxAdded -= NotifyRaceUI;

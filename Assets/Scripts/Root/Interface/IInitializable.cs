@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace RaceManager.Root
+﻿namespace RaceManager.Root
 {
     public interface IInitializable
     {

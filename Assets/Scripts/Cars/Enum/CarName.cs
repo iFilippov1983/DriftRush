@@ -12,6 +12,6 @@ namespace RaceManager.Cars
         Porche911 = 4,      //Rare
         TeslaRoadster = 5,  //Rare
         DodgeTRX = 6,       //Legendary
-        DodgeCharger = 7,
+        DodgeCharger = 7,   //Legendary
     }
 }

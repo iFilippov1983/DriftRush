@@ -3,9 +3,7 @@ using RaceManager.Tools;
 using Sirenix.OdinInspector;
 using System;
 using UnityEngine;
-using UnityEngine.UI;
 
-#pragma warning disable 649
 namespace RaceManager.Cars
 {
     [Serializable]
@@ -35,40 +33,9 @@ namespace RaceManager.Cars
         }
 
         [Serializable]
-        public class AccessibilityProgress
-        {
-            [JsonProperty]
-            [SerializeField] private int _pointsToAccess = 100;
-            [JsonProperty]
-            [SerializeField] private int _currentPointsAmount = 0;
-
-            public int PointsToAccess => _pointsToAccess;
-            public int CurrentPointsAmount => _currentPointsAmount;
-
-            public void AddProgressPoints(int value)
-            { 
-                _currentPointsAmount += value;
-                if(_currentPointsAmount > _pointsToAccess)
-                    _currentPointsAmount = _pointsToAccess;
-            }
-
-            [ShowInInspector]
-            public bool IsAvailable
-            {
-                get => _currentPointsAmount == _pointsToAccess;
-                set 
-                { 
-                    if(value == true)
-                        _currentPointsAmount = _pointsToAccess;
-                }
-            }
-        }
-
-        [Serializable]
         public class Characteristics
         {
             public Rarity Rarity;
-            //public bool isAvailable;
 
             [JsonProperty]
             [SerializeField]

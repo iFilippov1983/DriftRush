@@ -145,7 +145,7 @@ namespace RaceManager.UI
             _lootboxSlotsHandler.SetActive(active);
             _cupsProgress.SetActive(active);
 
-            _podium.ChestObject.SetActive(active);
+            //_podium.ChestObject.SetActive(active);
 
             _inMainMenu = active;
             OnMainMenuActivityChange?.Invoke(active);
@@ -176,7 +176,12 @@ namespace RaceManager.UI
             _podium.SetActive(!active);
         }
 
-        private void ActivateLootboxWindow(List<CarCardReward> list) => _lootboxWindow.SetActive(true);
+        private void ActivateLootboxWindow(List<CarCardReward> list)
+        {
+            _lootboxWindow.SetActive(true);
+            UpdatePodiumActivity(true);
+        }
+        
         #endregion
 
         #region Initialize data methods
@@ -196,9 +201,9 @@ namespace RaceManager.UI
                 _carsCollectionPanel.AddCollectionCard
                     (
                     profile.CarName,
-                    profile.Accessibility.CurrentPointsAmount,
-                    profile.Accessibility.PointsToAccess,
-                    profile.Accessibility.IsAvailable
+                    _playerProfile.CarCardsAmount(profile.CarName),
+                    profile.Accessibility.CurrentStepPointsToAccess,
+                    profile.Accessibility.CarIsAvailable
                     );
             }
 
@@ -231,6 +236,7 @@ namespace RaceManager.UI
             _rewardsHandler.OnProgressReward += UpdateCurrencyAmountPanels;
             _rewardsHandler.OnLootboxOpen += ActivateLootboxWindow;
             _rewardsHandler.OnLootboxOpen += _lootboxWindow.RepresentLootbox;
+            _rewardsHandler.OnLootboxOpen += (List<CarCardReward> list) => UpdateCurrencyAmountPanels();
         }
 
         private void InitializeCupsProgressPanel(int globalGoalCupsAmount)
@@ -355,6 +361,8 @@ namespace RaceManager.UI
             _gameProgressButton.onClick.AddListener(_gameProgressPanel.OffsetContent);
 
             _lootboxWindow.OkButton.onClick.AddListener(() => _lootboxWindow.SetActive(false));
+            _lootboxWindow.OkButton.onClick.AddListener(() => _lootboxSlotsHandler.InitializeLootboxProgressPanel());
+            _lootboxWindow.OkButton.onClick.AddListener(() => UpdatePodiumActivity(false));
         }
 
         private void OnDestroy()
@@ -364,6 +372,7 @@ namespace RaceManager.UI
             _rewardsHandler.OnProgressReward -= UpdateCurrencyAmountPanels;
             _rewardsHandler.OnLootboxOpen -= ActivateLootboxWindow;
             _rewardsHandler.OnLootboxOpen -= _lootboxWindow.RepresentLootbox;
+            _rewardsHandler.OnLootboxOpen -= (List<CarCardReward> list) => UpdateCurrencyAmountPanels();
 
             _lootboxSlotsHandler.OnPopupIsActive -= UpdatePodiumActivity;
         }

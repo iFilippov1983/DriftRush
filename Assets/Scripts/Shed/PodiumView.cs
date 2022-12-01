@@ -9,6 +9,5 @@ namespace RaceManager.Shed
         public Transform CarPlace;
         public Transform ChestPlace;
         public Transform RespawnCarPlace;
-        public LootboxObject ChestObject;
     }
 }

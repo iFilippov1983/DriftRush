@@ -1,9 +1,7 @@
-﻿using Newtonsoft.Json;
-using RaceManager.Cars;
+﻿using RaceManager.Cars;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace RaceManager.Progress
 {
@@ -24,7 +22,8 @@ namespace RaceManager.Progress
             { CarName.NissanSilvia, 0 },
             { CarName.Porche911, 0 },
             { CarName.Ferrari488, 0 },
-            { CarName.TeslaRoadster, 0 }
+            { CarName.TeslaRoadster, 0 },
+            { CarName.DodgeCharger, 0 }
         };
     }
 }

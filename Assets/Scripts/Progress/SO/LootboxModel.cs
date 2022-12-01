@@ -18,7 +18,6 @@ namespace RaceManager.Progress
         private const float EpicFactor = 0.9f;
         private const float LegendaryFactor = 1f;
 
-
         [SerializeField] private Rarity _rarity;
         [SerializeField] private bool _isOpen;
         [SerializeField] private CarsRarityScheme _rarityScheme;
@@ -52,14 +51,13 @@ namespace RaceManager.Progress
         public Rarity Rarity => _rarity;
         public bool IsOpen => _isOpen;
         public float Price => _price;
-        public int TimeToOpen => _hoursToOpen;
+        public int HoursToOpen => _hoursToOpen;
+        public float TimeToOpen => _hoursToOpen * 60f * 60f; // * seconds in min * minutes in hour
         public int GemsToOpen => _gemsToOpen;
         public int MoneyAmountMin => _moneyAmountMin;
         public int MoneyAmountMax => _moneyAmountMax;
         public int CardsAmountMin => _cardsAmountMin;
         public int CardsAmountMax => _cardsAmountMax;
-
-        //public List<IReward> Cards => GetRandomCardsList();
 
         [Button]
         public List<CarCardReward> GetCardsList()
@@ -78,7 +76,7 @@ namespace RaceManager.Progress
                 CarCardReward cardReward = new CarCardReward(name, amounts[i]);
                 list.Add(cardReward);
 
-                Debug.Log($"Name: {name}; Amount: {amounts[i]};");
+                //Debug.Log($"Name: {name}; Amount: {amounts[i]};");
             }
 
             return list;
@@ -101,7 +99,7 @@ namespace RaceManager.Progress
 
         private int[] GetAmounts(int[] array, int cardsTotal, float factor)
         {
-            Debug.Log($"<color=red><i><b>Cards total: {cardsTotal}</b></i></color>");
+            //Debug.Log($"<color=red><i><b>Cards total: {cardsTotal}</b></i></color>");
             int counter = array.Length;
             int amount = 0;
             for (int i = 0; i < array.Length; i++)
@@ -164,7 +162,7 @@ namespace RaceManager.Progress
             return name;
         }
 
-
+        #region Test methods
         [ShowInInspector, ReadOnly]
         private int _counter = 0;
 
@@ -230,5 +228,6 @@ namespace RaceManager.Progress
             _epic = 0;
             _legendary = 0;
         }
+        #endregion
     }
 }

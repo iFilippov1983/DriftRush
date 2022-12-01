@@ -81,6 +81,11 @@ namespace RaceManager.Root
             _mainUI.OnMainMenuActivityChange -= _menuCamerasHandler.ToggleCamPriorities;
         }
 
+        private void OnApplicationQuit()
+        {
+            _saveManager.Save();
+        }
+
         private void OnDestroy()
         {
             Dispose();

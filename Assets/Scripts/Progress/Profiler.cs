@@ -157,8 +157,6 @@ namespace RaceManager.Progress
             if(index >= _lootboxes.Count)
                 return null;
 
-            Debug.Log($"Profiler returns lootbox index of: {index}");
-
             return _lootboxes[index];
         }
 
@@ -190,6 +188,12 @@ namespace RaceManager.Progress
             if(_victoriesCounter > PlayerProfile.VictoriesCounterMax)
                 _victoriesCounter = 1;
 
+            _playerProfile.SetVictoryCounter(this);
+        }
+
+        public void ResetVictoriesCounter()
+        {
+            _victoriesCounter = 0;
             _playerProfile.SetVictoryCounter(this);
         }
     }

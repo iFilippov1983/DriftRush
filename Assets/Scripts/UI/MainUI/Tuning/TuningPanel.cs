@@ -1,11 +1,5 @@
-﻿//using Grpc.Core;
-using RaceManager.Cars;
-using RaceManager.Tools;
-using System;
+﻿using RaceManager.Cars;
 using TMPro;
-using UniRx;
-using UniRx.Triggers;
-using UniRx.Operators;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,6 +7,8 @@ namespace RaceManager.UI
 {
     public class TuningPanel : MonoBehaviour
     {
+        [SerializeField] private UpgradeWindowTuner _upgradeWindow;
+        [Space]
         [SerializeField] private Button _tuneStatsButton;
         [SerializeField] private Button _tuneWheelsViewButton;
         [SerializeField] private Button _tuneCarViewButton;
@@ -48,6 +44,7 @@ namespace RaceManager.UI
         public Slider DurabilitySlider => _durabilitySlider;
         public Slider AccelerationSlider => _accelerationSlider;
 
+        public Button UpgradeButton => _upgradeWindow.UpgradeButton;
         public Button CloseButton => _closePanelButton;
 
         private void OnEnable()

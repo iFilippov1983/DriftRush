@@ -119,11 +119,11 @@ namespace RaceManager.Cars
             _carProfile.CarConfig.RPMToNextGearPercent = newRPMToNextGearPercent;
         }
 
-        private float CalculateValue(int maxFactor, int minFactor, float maxProp, float minProp, float sliderValue)
+        private float CalculateValue(int maxFactor, int minFactor, float maxValue, float minValue, float sliderValue)
         { 
             float koef = (float) minFactor / (float) maxFactor;
-            float charUnit = (maxProp - minProp) * koef;
-            float newValue = minProp + charUnit * sliderValue;
+            float charUnit = (maxValue - minValue) * koef;
+            float newValue = minValue + charUnit * sliderValue;
 
             return newValue;
         }

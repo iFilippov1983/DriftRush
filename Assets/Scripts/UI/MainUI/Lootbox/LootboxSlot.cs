@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 using TMPro;
+using Sirenix.OdinInspector;
 
 namespace RaceManager.UI
 {
@@ -29,6 +30,7 @@ namespace RaceManager.UI
 
         private SlotStatus _slotStatus = SlotStatus.Empty;
 
+        [ReadOnly]
         public string CurrentLootboxId;
 
         public Button SlotButton => _slotButton;

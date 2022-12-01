@@ -7,9 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UniRx;
-using UniRx.Triggers;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Zenject;
@@ -18,8 +16,6 @@ namespace RaceManager.UI
 {
     public class MainUI : MonoBehaviour, Root.IInitializable
     {
-        [SerializeField] private WorldSpaceUI _worldSpaceUI;
-        [Space]
         [SerializeField] private Button _startButton;
         [SerializeField] private Button _gameProgressButton;
         [SerializeField] private Button _settingsButton;
@@ -145,8 +141,6 @@ namespace RaceManager.UI
             _lootboxSlotsHandler.SetActive(active);
             _cupsProgress.SetActive(active);
 
-            //_podium.ChestObject.SetActive(active);
-
             _inMainMenu = active;
             OnMainMenuActivityChange?.Invoke(active);
         }
@@ -154,7 +148,6 @@ namespace RaceManager.UI
         private void ActivateTuningPanel(bool active)
         {
             _tuningPanel.SetActive(active);
-            _worldSpaceUI.SetActive(active);
 
             _bottomPanel.SetActive(active);
             _bottomPanel.TuningPressedImage.SetActive(active);

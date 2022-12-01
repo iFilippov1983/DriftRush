@@ -20,10 +20,7 @@ namespace RaceManager.Cars
     {
         [JsonProperty]
         [SerializeField]
-        private List<AccessibilityStep> _steps = new List<AccessibilityStep>()
-        {
-            new AccessibilityStep(AccessStepType.GrantsCarAccess, 0)
-        };
+        private List<AccessibilityStep> _steps;
 
         private AccessibilityStep _currentStep;
 
@@ -31,8 +28,7 @@ namespace RaceManager.Cars
         {
             get
             {
-                if (_currentStep == null)
-                    _currentStep = _steps.First(s => s.AccessGranted == false);
+                _currentStep = _steps.First(s => s.AccessGranted == false);
 
                 if (_currentStep == null)
                 { 
@@ -51,7 +47,7 @@ namespace RaceManager.Cars
             {
                 var step = CurrentStep.Type == AccessStepType.GrantsCarAccess && CurrentStep.AccessGranted
                     ? CurrentStep
-                    :_steps.Find(s => s.Type == AccessStepType.GrantsCarAccess && s.AccessGranted);
+                    : _steps.Find(s => s.Type == AccessStepType.GrantsCarAccess && s.AccessGranted);
 
                 return step != null;
             }
@@ -88,7 +84,7 @@ namespace RaceManager.Cars
             [JsonProperty]
             [SerializeField] private int _pointsToAccess;
             [JsonProperty]
-            private bool _accessGranted = false;
+            [SerializeField] private bool _accessGranted = false;
 
             public AccessibilityStep(AccessStepType type, int pointsToAccess)
             {

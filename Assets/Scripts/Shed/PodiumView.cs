@@ -7,7 +7,6 @@ namespace RaceManager.Shed
     {
         public GameObject Foundation;
         public Transform CarPlace;
-        public Transform ChestPlace;
         public Transform RespawnCarPlace;
     }
 }

@@ -1,11 +1,10 @@
-using System;
+
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using RaceManager.Tools;
 using RaceManager.Root;
 using RaceManager.Race;
-using UnityEngine.Events;
 
 namespace RaceManager.UI
 {

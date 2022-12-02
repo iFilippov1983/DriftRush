@@ -33,6 +33,7 @@ namespace RaceManager.UI
 
         private PlayerProfile _playerProfile;
         private RewardsHandler _rewardsHandler;
+        private RanksHandler _ranksHandler;
         private SaveManager _saveManager;
         private CarsDepot _playerCarDepot;
         private CarProfile _currentCarProfile;
@@ -62,6 +63,7 @@ namespace RaceManager.UI
             PlayerProfile playerProfile, 
             GameProgressScheme gameProgressScheme,
             RewardsHandler rewardsHandler,
+            RanksHandler ranksHandler,
             SaveManager saveManager, 
             CarsDepot playerCarDepot, 
             PodiumView podium
@@ -69,6 +71,7 @@ namespace RaceManager.UI
         {
             _playerProfile = playerProfile;
             _rewardsHandler = rewardsHandler;
+            _ranksHandler = ranksHandler;
             _gameProgressScheme = gameProgressScheme;
             _saveManager = saveManager;
             _playerCarDepot = playerCarDepot;
@@ -201,8 +204,8 @@ namespace RaceManager.UI
                     (
                     profile.CarName,
                     _playerProfile.CarCardsAmount(profile.CarName),
-                    profile.Accessibility.CurrentStepPointsToAccess,
-                    profile.Accessibility.CarIsAvailable
+                    profile.RankingScheme.CurrentRankPointsForAccess,
+                    profile.RankingScheme.CarIsAvailable
                     );
 
                 if(profile.CarName == _currentCarProfile.CarName)
@@ -213,22 +216,22 @@ namespace RaceManager.UI
 
             _carsCollectionPanel.OnUseCar += ChangeCar;
             _carsCollectionPanel.OnCarWindowOpen += InitializeCarWindow;
+
+            _ranksHandler.OnCarRankUpdate += UpdateCarsCollectionCards;
         }
 
         private void InitializeCarWindow()
         {
-            var step = _currentCarProfile.Accessibility.CurrentStep;
-            int cost = step.AccessCost;
-            bool isUpgraded = step.AccessGranted;
+            var rank = _currentCarProfile.RankingScheme.CurrentRank;
+            int cost = rank.AccessCost;
+            bool isUpgraded = rank.IsGranted;
+            bool isAvailable = rank.IsReached;
 
-            int cardsAmount = _playerProfile.CarCardsAmount(_currentCarProfile.CarName);
-            bool canUpgrade = step.IsReached(cardsAmount);
-
-            _carsCollectionPanel.SetCarWindow(cost, isUpgraded, canUpgrade);
+            _carsCollectionPanel.SetCarWindow(cost, isUpgraded, isAvailable);
 
             ActivateCarWindow(true);
 
-            _carsCollectionPanel.CarWindowUpgradeButton.onClick.AddListener(CarFeatureUpgrade);
+            _carsCollectionPanel.CarWindowUpgradeButton.onClick.AddListener(CarRankUpgrade);
             _carsCollectionPanel.CarWindowBackButton.onClick.AddListener(() => ActivateCarWindow(false));
         }
 
@@ -317,6 +320,23 @@ namespace RaceManager.UI
                 );
         }
 
+        public void UpdateCarsCollectionCards(CarName carName)
+        {
+            CarProfile profile = _playerCarDepot.CarProfiles.Find(p => p.CarName == carName);
+
+            _carsCollectionPanel.UpdateCard
+                (
+                profile.CarName,
+                _playerProfile.CarCardsAmount(profile.CarName),
+                profile.RankingScheme.CurrentRankPointsForAccess,
+                profile.RankingScheme.CarIsAvailable
+                );
+
+            if (profile.CarName == _currentCarProfile.CarName)
+                _carsCollectionPanel.UsedCarName = profile.CarName;
+
+        }
+
         private void UpdateCurrencyAmountPanels()
         {
             _currencyAmount.MoneyAmount.text = _playerProfile.Money.ToString();
@@ -345,9 +365,9 @@ namespace RaceManager.UI
             OnCarProfileChange?.Invoke(newCarName);
         }
 
-        private void CarFeatureUpgrade()
-        { 
-        
+        private void CarRankUpgrade()
+        {
+            "Car rank upgrade is not implemented!".Log(Logger.ColorRed);
         }
 
         private void StartRace()
@@ -399,6 +419,8 @@ namespace RaceManager.UI
             _rewardsHandler.OnLootboxOpen -= ActivateLootboxWindow;
             _rewardsHandler.OnLootboxOpen -= _lootboxWindow.RepresentLootbox;
             _rewardsHandler.OnLootboxOpen -= (List<CarCardReward> list) => UpdateCurrencyAmountPanels();
+
+            _ranksHandler.OnCarRankUpdate -= UpdateCarsCollectionCards;
 
             _lootboxSlotsHandler.OnPopupIsActive -= UpdatePodiumActivity;
         }

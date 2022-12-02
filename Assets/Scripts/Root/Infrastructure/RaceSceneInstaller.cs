@@ -34,7 +34,6 @@ namespace RaceManager.Infrastructure
             Bind(Singleton<RaceCamerasHandler>.Instance);
             Bind(Singleton<CarFXController>.Instance);
             Bind(Singleton<RaceHandler>.Instance);
-            Bind(Singleton<RewardsHandler>.Instance);
         }
 
         private void BindObjects()
@@ -53,6 +52,7 @@ namespace RaceManager.Infrastructure
             Bind<InRacePositionsHandler>();
             Bind<RaceLevelInitializer>();
             Bind<Profiler>();
+            Bind<RewardsHandler>();
         }
 
         public override void Start()

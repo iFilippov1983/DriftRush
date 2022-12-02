@@ -1,4 +1,5 @@
 ﻿using RaceManager.Root;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -49,6 +50,19 @@ namespace RaceManager.Cars
             public DriverType driverType = DriverType.Player;
             public CarName currentCarName = CarName.ToyotaSupra;
             public List<CarProfile> carProfiles = new List<CarProfile>();
+        }
+
+        [Button]
+        private void ResetCarsAccessibility()
+        {
+            foreach (var profile in CarProfiles)
+            {
+                foreach (var r in profile.RankingScheme.Ranks)
+                {
+                    r.IsGranted = false;
+                    r.IsReached = false;
+                }
+            }
         }
     }
 }

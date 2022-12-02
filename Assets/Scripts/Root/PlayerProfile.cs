@@ -65,6 +65,7 @@ namespace RaceManager.Root
         public void SetNextLevelFrom(IProfiler profiler) => _nextLevelPrefabToLoad = profiler.LevelName;
         public void SetLastInRacePosition(IProfiler profiler) => _lastInRacePosition = profiler.LastInRacePosition;
         public void SetVictoryCounter(IProfiler profiler) => _victoriesCounter = profiler.VictoriesCounter;
+        public void SetCardsAmount(IProfiler profiler) => _currency.CarCards[profiler.CarName] = profiler.CardsAmount;
 
         public void GiveLootboxesTo(IProfiler profiler) => profiler.SetLootboxList(_lootboxes);
         public void TakeLooboxesFrom(IProfiler profiler) => _lootboxes = profiler.Lootboxes;

@@ -8,7 +8,7 @@ using Zenject;
 
 namespace RaceManager.Progress
 {
-    public class RewardsHandler : MonoBehaviour
+    public class RewardsHandler : IDisposable
     {
         private GameProgressScheme _gameProgressScheme;
         private RaceRewardsScheme _raceRewardsScheme;
@@ -92,7 +92,7 @@ namespace RaceManager.Progress
             _saveManager.Save();
         }
 
-        private void OnDestroy()
+        public void Dispose()
         {
             _profiler.OnLootboxOpen -= HandleLootboxOpen;
         }

@@ -205,7 +205,7 @@ namespace RaceManager.UI
         {
             Lootbox lootbox = _profiler.GetLootboxWithId(slot.CurrentLootboxId);
 
-            if (_profiler.TryBuyForGems(lootbox.LootboxModel.GemsToOpen))
+            if (_profiler.TryBuyWithGems(lootbox.LootboxModel.GemsToOpen))
             {
                 _profiler.RemoveLootboxWithId(lootbox.Id);
                 lootbox.TimeToOpenLeft = 0;

@@ -10,7 +10,7 @@ namespace RaceManager.Cars
     public class CarProfile
     {
         public CarName CarName;
-        public AccessibilityProgress Accessibility;
+        public CarRankingScheme RankingScheme;
         public Speed Speed;
         public Mobility Mobility;
         public Acceleration Acceleration;

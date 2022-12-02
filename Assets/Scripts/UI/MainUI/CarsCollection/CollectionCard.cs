@@ -11,8 +11,7 @@ namespace RaceManager.UI
         [SerializeField] private Image _progressImage;
         [SerializeField] private Image _lockedImage;
         [Space]
-        [SerializeField] private TMP_Text _progressCurrentText;
-        [SerializeField] private TMP_Text _progressTotalText;
+        [SerializeField] private TMP_Text _progressText;
         [SerializeField] private TMP_Text _carNameText;
         [Space]
         [SerializeField] private Button _useCarButton;
@@ -21,8 +20,7 @@ namespace RaceManager.UI
         public Image ProgressImage => _progressImage;
         public Image LockedImage => _lockedImage;
 
-        public TMP_Text ProgressCurrentText => _progressCurrentText;
-        public TMP_Text ProgressTotalText => _progressTotalText;
+        public TMP_Text ProgressText => _progressText;
         public TMP_Text CarNameText => _carNameText;
 
         public Button UseCarButton => _useCarButton;

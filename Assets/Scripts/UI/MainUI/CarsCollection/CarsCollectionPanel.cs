@@ -64,13 +64,19 @@ namespace RaceManager.UI
             CollectionCard card = cardGo.GetComponent<CollectionCard>();
 
             card.BackgroundImage.sprite = _spritesCars.GetCarSprite(carName);
-            card.ProgressCurrentText.text = progressCurrent.ToString();
-            card.ProgressTotalText.text = progressTotal.ToString();
+            
             card.CashedCarName = carName;
             card.CarNameText.text = carName.ToString();
             card.LockedImage.SetActive(!isAvailable);
+            card.ProgressText.text = $"{progressCurrent}/{progressTotal}";
 
-            card.ProgressImage.fillAmount = progressTotal == 0
+            bool haveNoGoal = progressTotal == 0;
+
+            //card.ProgressText.text = haveNoGoal
+            //    ? $"{progressCurrent}/{progressTotal}"
+            //    : String.Empty;
+
+            card.ProgressImage.fillAmount = haveNoGoal || progressCurrent > progressTotal
                 ? 1f
                 : (float)progressCurrent / (float)progressTotal;
 
@@ -87,21 +93,22 @@ namespace RaceManager.UI
         public void UpdateCard(CarName carName, int progressCurrent, int progressTotal, bool isAvailable)
         {
             CollectionCard card = _collectionCards.Find(c => c.CarNameText.text == carName.ToString());
-            if (card != null)
-            {
-                card.ProgressCurrentText.text = progressCurrent.ToString();
-                card.ProgressTotalText.text = progressTotal.ToString();
-                card.LockedImage.SetActive(!isAvailable);
-                card.UseCarButton.interactable = isAvailable;
 
-                card.ProgressImage.fillAmount = progressTotal == 0
+            card.ProgressText.text = $"{progressCurrent}/{progressTotal}";
+            card.LockedImage.SetActive(!isAvailable);
+            card.UseCarButton.interactable = isAvailable;
+            card.ProgressText.text = $"{progressCurrent}/{progressTotal}";
+
+            bool haveNoGoal = progressTotal == 0;
+
+            //card.ProgressText.text = haveNoGoal
+            //    ? $"{progressCurrent}/{progressTotal}"
+            //    : String.Empty;
+
+            card.ProgressImage.fillAmount = haveNoGoal || progressCurrent > progressTotal
                 ? 1f
                 : (float)progressCurrent / (float)progressTotal;
-            }
-            else
-            {
-                Debug.LogError($"Collection card whith Car name '{carName}' was not found");
-            }
+
         }
 
         public void UpdateStatsProgress(string carName, int currentValue, int maxValue)
@@ -110,12 +117,12 @@ namespace RaceManager.UI
             _carStatsProgressText.text = $"{currentValue}/{maxValue}";
         }
 
-        public void SetCarWindow(int upgradeCost, bool upgraded, bool canUpgrade)
+        public void SetCarWindow(int upgradeCost, bool upgraded, bool isAvailable)
         {
             _carWindow.UpgradeCostText.text = upgradeCost.ToString();
 
             _carWindow.UpgradeButton.SetActive(!upgraded);
-            _carWindow.UpgradeButton.interactable = canUpgrade;
+            _carWindow.UpgradeButton.interactable = isAvailable;
         }
 
         private void HandleClick(CollectionCard card)
@@ -130,7 +137,7 @@ namespace RaceManager.UI
 
                 _carWindow.CardsImage.sprite = spriteCards;
                 _carWindow.ProgressBarImage.fillAmount = card.ProgressImage.fillAmount;
-                _carWindow.CardsProgressText.text = $"{card.ProgressCurrentText.text}/{card.ProgressTotalText.text}";
+                _carWindow.CardsProgressText.text = card.ProgressText.text;
             }
             else
             {

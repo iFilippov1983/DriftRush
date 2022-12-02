@@ -24,14 +24,16 @@ namespace RaceManager.Cars
 
         private AccessibilityStep _currentStep;
 
-        private AccessibilityStep CurrentStep
+        public AccessibilityStep CurrentStep
         {
             get
             {
-                _currentStep = _steps.First(s => s.AccessGranted == false);
-
-                if (_currentStep == null)
-                { 
+                try
+                {
+                    _currentStep = _steps.First(s => s.AccessGranted == false);
+                }
+                catch (Exception)
+                {
                     _currentStep = _steps.Last(s => s.AccessGranted == true);
                 }
 
@@ -77,12 +79,14 @@ namespace RaceManager.Cars
 
         [JsonObject]
         [Serializable]
-        private class AccessibilityStep
+        public class AccessibilityStep
         {
             [JsonProperty]
             [SerializeField] private AccessStepType _type;
             [JsonProperty]
             [SerializeField] private int _pointsToAccess;
+            [JsonProperty]
+            [SerializeField] private int _accessCost;
             [JsonProperty]
             [SerializeField] private bool _accessGranted = false;
 
@@ -94,6 +98,7 @@ namespace RaceManager.Cars
 
             public AccessStepType Type => _type;
             public int PointsToAccess => _pointsToAccess;
+            public int AccessCost => _accessCost;
             public bool AccessGranted => _accessGranted;
             public bool IsReached(int currentPointsAmount) => currentPointsAmount >= _pointsToAccess;
             public void GrantAccess() => _accessGranted = true;

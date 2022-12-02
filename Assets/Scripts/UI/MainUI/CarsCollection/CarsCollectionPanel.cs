@@ -20,11 +20,23 @@ namespace RaceManager.UI
         [Space]
         [SerializeField] private GridLayoutGroup _collectionContent;
         [SerializeField] private RectTransform _collectionContentRect;
+        [Space]
+        [SerializeField] private CarWindow _carWindow;
 
         private GameObject _collectionCardPrefab;
-        private SpritesContainerCarCollection _spritesContainer;
+        private SpritesContainerCarCollection _spritesCars;
+        private SpritesContainerCarCards _spritesCarCards;
 
         private List<CollectionCard> _collectionCards = new List<CollectionCard>();
+
+        public Action<CarName> OnUseCar;
+        public Action OnCarWindowOpen;
+
+        public CarName UsedCarName { get; set; }
+        public CarWindow CarWindow => _carWindow;
+        public Button CloseButton => _closePanelButton;
+        public Button CarWindowUpgradeButton => _carWindow.UpgradeButton;
+        public Button CarWindowBackButton => _carWindow.BackButton;
 
         private GameObject CollectionCardPrefab
         {
@@ -37,31 +49,33 @@ namespace RaceManager.UI
             }
         }
 
-        public Button CloseButton => _closePanelButton;
-        public Action<CarName> OnUseCarButtonPressed;
-
         [Inject]
-        private void Construct(SpritesContainerCarCollection spritesContainer)
+        private void Construct(SpritesContainerCarCollection spritesCars, SpritesContainerCarCards spritesCarCards)
         { 
-            _spritesContainer = spritesContainer;
+            _spritesCars = spritesCars;
+            _spritesCarCards = spritesCarCards;
         }
 
+        [Title("TEST")]
         [Button]
         public void AddCollectionCard(CarName carName, int progressCurrent, int progressTotal, bool isAvailable)
         {
             GameObject cardGo = Instantiate(CollectionCardPrefab, _collectionContent.transform, false);
             CollectionCard card = cardGo.GetComponent<CollectionCard>();
 
-            card.BackgroundImage.sprite = _spritesContainer.GetCarSprite(carName);
-            card.ProgressImage.fillAmount = (float)progressCurrent / (float)progressTotal;
+            card.BackgroundImage.sprite = _spritesCars.GetCarSprite(carName);
             card.ProgressCurrentText.text = progressCurrent.ToString();
             card.ProgressTotalText.text = progressTotal.ToString();
             card.CashedCarName = carName;
             card.CarNameText.text = carName.ToString();
             card.LockedImage.SetActive(!isAvailable);
 
+            card.ProgressImage.fillAmount = progressTotal == 0
+                ? 1f
+                : (float)progressCurrent / (float)progressTotal;
+
             card.UseCarButton.interactable = isAvailable;
-            card.UseCarButton.onClick.AddListener(() => OnUseCarButtonPressed?.Invoke(card.CashedCarName));
+            card.UseCarButton.onClick.AddListener(() => HandleClick(card));
 
             _collectionCards.Add(card);
 
@@ -75,11 +89,14 @@ namespace RaceManager.UI
             CollectionCard card = _collectionCards.Find(c => c.CarNameText.text == carName.ToString());
             if (card != null)
             {
-                card.ProgressImage.fillAmount = (float)progressCurrent / (float)progressTotal;
                 card.ProgressCurrentText.text = progressCurrent.ToString();
                 card.ProgressTotalText.text = progressTotal.ToString();
                 card.LockedImage.SetActive(!isAvailable);
                 card.UseCarButton.interactable = isAvailable;
+
+                card.ProgressImage.fillAmount = progressTotal == 0
+                ? 1f
+                : (float)progressCurrent / (float)progressTotal;
             }
             else
             {
@@ -93,10 +110,33 @@ namespace RaceManager.UI
             _carStatsProgressText.text = $"{currentValue}/{maxValue}";
         }
 
-        private void OnDestroy()
+        public void SetCarWindow(int upgradeCost, bool upgraded, bool canUpgrade)
         {
-            foreach (var card in _collectionCards)
-                card.UseCarButton.onClick.RemoveAllListeners();
+            _carWindow.UpgradeCostText.text = upgradeCost.ToString();
+
+            _carWindow.UpgradeButton.SetActive(!upgraded);
+            _carWindow.UpgradeButton.interactable = canUpgrade;
+        }
+
+        private void HandleClick(CollectionCard card)
+        {
+            bool openCarWindow = card.CashedCarName == UsedCarName;
+
+            if (openCarWindow)
+            {
+                OnCarWindowOpen.Invoke();
+
+                Sprite spriteCards = _spritesCarCards.GetCardSprite(card.CashedCarName);
+
+                _carWindow.CardsImage.sprite = spriteCards;
+                _carWindow.ProgressBarImage.fillAmount = card.ProgressImage.fillAmount;
+                _carWindow.CardsProgressText.text = $"{card.ProgressCurrentText.text}/{card.ProgressTotalText.text}";
+            }
+            else
+            {
+                OnUseCar?.Invoke(card.CashedCarName);
+                UsedCarName = card.CashedCarName;
+            }
         }
     }
 }

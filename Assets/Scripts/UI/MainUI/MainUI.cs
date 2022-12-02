@@ -27,7 +27,6 @@ namespace RaceManager.UI
         [SerializeField] private GameProgressPanel _gameProgressPanel;
         [SerializeField] private CarsCollectionPanel _carsCollectionPanel;
         [SerializeField] private BottomPanel _bottomPanel;
-        [SerializeField] private BackPanel _backPanel;
         [Space]
         [SerializeField] private LootboxSlotsHandler _lootboxSlotsHandler;
         [SerializeField] private LootboxWindow _lootboxWindow;
@@ -174,6 +173,13 @@ namespace RaceManager.UI
             _lootboxWindow.SetActive(true);
             UpdatePodiumActivity(true);
         }
+
+        private void ActivateCarWindow(bool active)
+        {
+            _carsCollectionPanel.CarWindow.SetActive(active);
+
+            _bottomPanel.SetActive(!active);
+        }
         
         #endregion
 
@@ -198,11 +204,32 @@ namespace RaceManager.UI
                     profile.Accessibility.CurrentStepPointsToAccess,
                     profile.Accessibility.CarIsAvailable
                     );
+
+                if(profile.CarName == _currentCarProfile.CarName)
+                    _carsCollectionPanel.UsedCarName = profile.CarName;
             }
 
             UpdateCarsCollectionInfo();
 
-            _carsCollectionPanel.OnUseCarButtonPressed += ChangeCar;
+            _carsCollectionPanel.OnUseCar += ChangeCar;
+            _carsCollectionPanel.OnCarWindowOpen += InitializeCarWindow;
+        }
+
+        private void InitializeCarWindow()
+        {
+            var step = _currentCarProfile.Accessibility.CurrentStep;
+            int cost = step.AccessCost;
+            bool isUpgraded = step.AccessGranted;
+
+            int cardsAmount = _playerProfile.CarCardsAmount(_currentCarProfile.CarName);
+            bool canUpgrade = step.IsReached(cardsAmount);
+
+            _carsCollectionPanel.SetCarWindow(cost, isUpgraded, canUpgrade);
+
+            ActivateCarWindow(true);
+
+            _carsCollectionPanel.CarWindowUpgradeButton.onClick.AddListener(CarFeatureUpgrade);
+            _carsCollectionPanel.CarWindowBackButton.onClick.AddListener(() => ActivateCarWindow(false));
         }
 
         private void InitializeGameProgressPanel()
@@ -318,6 +345,11 @@ namespace RaceManager.UI
             OnCarProfileChange?.Invoke(newCarName);
         }
 
+        private void CarFeatureUpgrade()
+        { 
+        
+        }
+
         private void StartRace()
         {
             _saveManager.Save();
@@ -360,7 +392,8 @@ namespace RaceManager.UI
 
         private void OnDestroy()
         {
-            _carsCollectionPanel.OnUseCarButtonPressed -= ChangeCar;
+            _carsCollectionPanel.OnUseCar -= ChangeCar;
+            _carsCollectionPanel.OnCarWindowOpen -= InitializeCarWindow;
 
             _rewardsHandler.OnProgressReward -= UpdateCurrencyAmountPanels;
             _rewardsHandler.OnLootboxOpen -= ActivateLootboxWindow;

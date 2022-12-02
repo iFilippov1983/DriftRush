@@ -105,6 +105,14 @@ namespace RaceManager.Root
 
         [Button]
         [ShowIf("IsMenuScene", true)]
+        public void AddCards(CarName carName, int amount)
+        { 
+            profiler.AddCarCards(carName, amount);
+            saveManager.Save();
+        }
+
+        [Button]
+        [ShowIf("IsMenuScene", true)]
         public void AddWinsCount()
         { 
             profiler.CountVictory();

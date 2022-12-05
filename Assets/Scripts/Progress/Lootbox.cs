@@ -1,8 +1,10 @@
 ﻿using RaceManager.Cars;
 using RaceManager.Tools;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityStandardAssets.Cameras;
 
 namespace RaceManager.Progress
 {
@@ -39,10 +41,16 @@ namespace RaceManager.Progress
 
         public string Id => _id;
         public Rarity Rarity => _lootboxModel.Rarity;
-        public LootboxModel LootboxModel => _lootboxModel;
+        public float Price => _lootboxModel.Price;
         public int InitialTimeToOpen => _lootboxModel.HoursToOpen;
         public int GemsToOpen => _lootboxModel.GemsToOpen;
-        public bool IsOpen => TimeToOpenLeft <= 0;
+        public bool IsOpen => TimeToOpenLeft <= 0 || _lootboxModel.IsOpen;
+        public int MoneyAmountMin => _lootboxModel.MoneyAmountMin;
+        public int MoneyAmountMax => _lootboxModel.MoneyAmountMax;
+        public int CardsAmountMin => _lootboxModel.CardsAmountMin;
+        public int CardsAmountMax => _lootboxModel.CardsAmountMax;
+
+        public List<CarCardReward> CardsList => _lootboxModel.GetCardsList();
 
         private string MakeId()
         {

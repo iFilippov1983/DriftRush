@@ -111,7 +111,6 @@ namespace RaceManager.Shed
             _mainUI.UpdateTuningPanelValues();
             _mainUI.UpdateCarsCollectionInfo();
             _saveManager.Save();
-            $"SAVE - {this}".Log();
         }
 
         public void Dispose()

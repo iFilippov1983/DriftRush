@@ -53,7 +53,7 @@ namespace RaceManager.Cars
         }
 
         [Button]
-        private void ResetCarsAccessibility()
+        public void ResetCarsAccessibility()
         {
             foreach (var profile in CarProfiles)
             {
@@ -62,7 +62,15 @@ namespace RaceManager.Cars
                     r.IsGranted = false;
                     r.IsReached = false;
                 }
+
+                if (profile.CarName == CarName.ToyotaSupra)
+                {
+                    profile.RankingScheme.Ranks[0].IsGranted = true;
+                    profile.RankingScheme.Ranks[0].IsReached = true;
+                }
             }
+
+            Debug.Log($"All cars ranks IsReached and IsGranted properties are set to False (exept default car - {CarName.ToyotaSupra})");
         }
     }
 }

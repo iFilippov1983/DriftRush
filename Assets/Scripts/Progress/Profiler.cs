@@ -28,6 +28,7 @@ namespace RaceManager.Progress
         private Lootbox _lootboxToAdd;
 
         private List<Lootbox> _lootboxes = new List<Lootbox>();
+        private List<LevelName> _levels = new List<LevelName>();
 
         public int Money => _money;
         public int Gems => _gems;
@@ -45,6 +46,7 @@ namespace RaceManager.Progress
         public PositionInRace LastInRacePosition => _positionInRace;
         public Lootbox LootboxToAdd => _lootboxToAdd;
         public List<Lootbox> Lootboxes => _lootboxes;
+        public List<LevelName> AvailableLevels => _levels;
 
         public Action<Lootbox> OnLootboxOpen;
         public Action<CarName, int> OnCarCardsAdded;
@@ -55,6 +57,7 @@ namespace RaceManager.Progress
         }
 
         public void SetLootboxList(List<Lootbox> lootboxes) => _lootboxes = lootboxes;
+        public void SetLevelsList(List<LevelName> levels) => _levels = levels;
 
         public void AddMoney(int money, bool ignorIncomeFactor = false)
         { 

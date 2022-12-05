@@ -7,5 +7,6 @@
         Level_2_test,
         Level_3_test,
         Level_4_test,
+        Level_0_Igora_test
     }
 }

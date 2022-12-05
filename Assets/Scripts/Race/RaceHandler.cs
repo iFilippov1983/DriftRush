@@ -26,12 +26,11 @@ namespace RaceManager.Race
         private CarsDepot _playerCarsDepot;
         private PlayerProfile _playerProfile;
         private Profiler _profiler;
-        private DriverProfile _playerDriverProfile;
         private RaceUI _raceUI;
         private RaceCamerasHandler _camerasHandler; 
         private InRacePositionsHandler _positionsHandler;
         private RaceLevelInitializer _raceLevelInitializer;
-        private RaceLevelView _level;
+        private IRaceLevel _raceLevel;
         private RewardsHandler _rewardsHandler;
 
         private WaypointTrack _waypointTrackMain;
@@ -70,12 +69,12 @@ namespace RaceManager.Race
 
         public void Initialize()
         {
-            _level = _raceLevelInitializer.RaceLevel;
+            _raceLevel = _raceLevelInitializer.GetRaceLevel();
 
-            _startPoints = _level.StartPoints;
-            _waypointTrackMain = _level.WaypointTrackMain;
-            _waypointTrackEven = _level.WaypointTrackEven;
-            _waypointTrackOdd = _level.WaypointTrackOdd;
+            _startPoints = _raceLevel.StartPoints;
+            _waypointTrackMain = _raceLevel.WaypointTrackMain;
+            _waypointTrackEven = _raceLevel.WaypointTrackEven;
+            _waypointTrackOdd = _raceLevel.WaypointTrackOdd;
 
             InitCameras();
             InitDrivers();
@@ -96,9 +95,9 @@ namespace RaceManager.Race
 
         private void InitCameras()
         {
-            _camerasHandler.FollowCam.position = _level.FollowCamInitialPosition;
-            _camerasHandler.StartCam.position = _level.StartCamInitialPosition;
-            _camerasHandler.FinishCam.position = _level.FinishCamInitialPosition;
+            _camerasHandler.FollowCam.position = _raceLevel.FollowCamInitialPosition;
+            _camerasHandler.StartCam.position = _raceLevel.StartCamInitialPosition;
+            _camerasHandler.FinishCam.position = _raceLevel.FinishCamInitialPosition;
         }
 
         private void InitDrivers()
@@ -134,7 +133,6 @@ namespace RaceManager.Race
                         tracker.ResetTargetToCashedValues();
                     }
 
-                    _playerDriverProfile = driver.DriverProfile;
                     _raceUI.Initialize(driver.PlayerProfile, selfRighting.RightCar, GetToCheckpoint);
                 }
                 else
@@ -173,7 +171,7 @@ namespace RaceManager.Race
             return Disposable.Empty;
         }
 
-        private void NotifyRaceUI(Lootbox lootbox) => _raceUI.SetLootboxPopupValues(lootbox.LootboxModel.Rarity);
+        private void NotifyRaceUI(Lootbox lootbox) => _raceUI.SetLootboxPopupValues(lootbox.Rarity);
 
         private void OnDestroy()
         {

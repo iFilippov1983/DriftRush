@@ -41,7 +41,7 @@ namespace RaceManager.Root
                 return;
             }
              
-            $"No data to delete".Log(Logger.ColorYellow);
+            $"No Save data to delete".Log(Logger.ColorYellow);
         }
 
         public void RegisterSavable(ISaveable savable)

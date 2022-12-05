@@ -26,7 +26,7 @@ namespace RaceManager.Root
         private Currency _currency = new Currency();
 
         [JsonProperty, SerializeField]
-        private LevelName _nextLevelPrefabToLoad = LevelName.Level_0_test;
+        private LevelName _nextLevelPrefabToLoad = LevelName.Level_0_Igora_test;
 
         [JsonProperty, SerializeField]
         private PositionInRace _lastInRacePosition = PositionInRace.DNF;
@@ -70,6 +70,9 @@ namespace RaceManager.Root
         public void GiveLootboxesTo(IProfiler profiler) => profiler.SetLootboxList(_lootboxes);
         public void TakeLooboxesFrom(IProfiler profiler) => _lootboxes = profiler.Lootboxes;
 
+        public void GiveLevelsTo(IProfiler profiler) => profiler.SetLevelsList(_availableLevels);
+        public void TakeLevelsFrom(IProfiler profiler) => _availableLevels = profiler.AvailableLevels;
+
         public int CarCardsAmount(CarName carName) => _currency.CarCards[carName];
 
         public Type DataType() => typeof(SaveData);
@@ -105,7 +108,7 @@ namespace RaceManager.Root
                         new LootboxData()
                         {
                             Id = lootbox.Id,
-                            Rarity = lootbox.LootboxModel.Rarity,
+                            Rarity = lootbox.Rarity,
                             TimeToOpenLeft = lootbox.TimeToOpenLeft,
                             OpenTimerActivated = lootbox.OpenTimerActivated
                         }

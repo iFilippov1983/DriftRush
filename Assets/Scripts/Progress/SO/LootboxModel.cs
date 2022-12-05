@@ -23,7 +23,7 @@ namespace RaceManager.Progress
         [SerializeField] private CarsRarityScheme _rarityScheme;
         [Space]
         [Tooltip("How much gems costs to BUY this Lootbox")]
-        [SerializeField] private int _price;
+        [SerializeField] private float _price;
         [Title("Loot")]
         [SerializeField] private int _cardsAmountMax;
         [SerializeField] private int _cardsAmountMin;

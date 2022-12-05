@@ -8,8 +8,10 @@ namespace RaceManager.Tools
         public const string MaterialsPrefabsFolder = "Prefabs/Mat/";
         public const string LevelsPrefabsFolder = "Prefabs/Levels/";
 
-        public const string MaterialsContainer = "SO/MaterialsContainer";
-        
+        public const string MaterialsContainer = "SO/Containers/MaterialsContainer";
+        public const string GameProgressScheme = "SO/Schemes/GameProgressScheme";
+        public const string CarDepotPlayer = "SO/Depots/CarsDepotPlayer";
+
         public const string WaypointPrefab = "Prefabs/Waypoint";
         public const string DriverPrefab = "Prefabs/Driver";
         public const string LootboxPrefab = "Prefabs/Lootbox";

@@ -67,9 +67,6 @@ namespace RaceManager.Progress
             return new SaveData { StatusContainers = statusContainers };
         }
 
-//#if UNITY_EDITOR
-//        [UnityEditor.MenuItem("Tools/Reset Game Progress Scheme")]
-//#endif
         [Button]
         public void ResetAllSteps()
         {

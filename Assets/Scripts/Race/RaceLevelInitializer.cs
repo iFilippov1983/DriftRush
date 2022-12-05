@@ -1,31 +1,24 @@
 ﻿using RaceManager.Root;
 using RaceManager.Tools;
-using System;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace RaceManager.Race
 {
     public class RaceLevelInitializer
     { 
-        private RaceLevelView _raceLevelView;
+        private IRaceLevel _raceLevel;
         private PlayerProfile _playerProfile;
 
-        public RaceLevelView RaceLevel
+        public IRaceLevel GetRaceLevel()
         {
-            get
+            if (_raceLevel == null)
             {
-                if (_raceLevelView == null)
-                {
-                    //string path = string.Concat(ResourcePath.LevelsPrefabsFolder, _playerProfile.nextLevelPrefabToLoad);
-                    //string path = string.Concat(ResourcePath.LevelsPrefabsFolder, "Level_0_test");
-                    string path = _playerProfile.NextLevelPrefabToLoad.ToString();
-                    //Debug.Log("Prefab: " + _playerProfile.NextLevelPrefabToLoad);
+                string path = _playerProfile.NextLevelPrefabToLoad.ToString();
+                //Debug.Log("Prefab: " + _playerProfile.NextLevelPrefabToLoad);
 
-                    _raceLevelView = InitializeLevel(path);
-                }
-                return _raceLevelView;
+                _raceLevel = InitializeLevel(path);
             }
+            return _raceLevel;
         }
 
         public RaceLevelInitializer(PlayerProfile playerProfile)
@@ -33,9 +26,35 @@ namespace RaceManager.Race
             _playerProfile = playerProfile;
         }
 
-        private RaceLevelView InitializeLevel(string path)
+        private IRaceLevel InitializeLevel(string path)
         {
-            return ResourcesLoader.LoadAndInstantiate<RaceLevelView>(path, new GameObject("Level").transform);
+            IRaceLevel level = ResourcesLoader.LoadAndInstantiate<IRaceLevel>(path, new GameObject("Level").transform);
+
+            if (level.GetType().Equals(typeof(RaceLevel)))
+            {
+                RaceLevel raceLevel = (RaceLevel)level;
+                var configurations = raceLevel.Configurations;
+
+                foreach (var trackConfiguration in configurations)
+                    trackConfiguration.SetActive(false);
+
+                var c = configurations[Random.Range(0, configurations.Count)];
+                c.SetActive(true);
+
+                foreach (var active in c.Actives)
+                    active.SetActive(true);
+
+                foreach (var inactive in c.Inactives)
+                    inactive.SetActive(false);
+
+                raceLevel.SetCurrentConfiguration(c);
+
+                Debug.Log($"Race level configuration loaded => [{c.name}]");
+
+                return raceLevel;
+            }
+
+            return level;
         }
     }
 }

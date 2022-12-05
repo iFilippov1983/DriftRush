@@ -20,7 +20,9 @@ namespace RaceManager.Root
         public PositionInRace LastInRacePosition { get; }
         public Lootbox LootboxToAdd { get; }
         public List<Lootbox> Lootboxes { get; }
+        public List<LevelName> AvailableLevels { get; }
         public void SetLootboxList(List<Lootbox> lootboxes);
+        public void SetLevelsList(List<LevelName> levels);
     }
 }
 

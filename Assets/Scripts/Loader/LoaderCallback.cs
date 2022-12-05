@@ -4,14 +4,14 @@ namespace RaceManager
 {
     public class LoaderCallback : MonoBehaviour
     {
-        private bool firstUpdate = true;
+        private bool _firstUpdate = true;
         
         void Update()
         {
-            if (firstUpdate)
+            if (_firstUpdate)
             { 
                 Loader.InvokeLoadUsing(this);
-                firstUpdate = false;
+                _firstUpdate = false;
             }
         }
     }

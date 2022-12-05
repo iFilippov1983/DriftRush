@@ -13,6 +13,9 @@ namespace RaceManager.Root
 {
     public class Debugger : MonoBehaviour
     {
+        [SerializeField] private static CarsDepot _playerCarDepot;
+        [SerializeField] private static GameProgressScheme _gameProgressScheme;
+        
         private bool IsRaceScene;
         private bool IsMenuScene;
 
@@ -76,8 +79,22 @@ namespace RaceManager.Root
         [Button]
         public void Save() => saveManager.Save();
 
+#if UNITY_EDITOR
+        [UnityEditor.MenuItem("Tools/Clear All Data")]
+#endif
         [Button]
-        public void DeleteSave() => SaveManager.RemoveSave();
+        public static void ClearAllData()
+        {
+            if (_playerCarDepot == null)
+                _playerCarDepot = ResourcesLoader.LoadObject<CarsDepot>(ResourcePath.CarDepotPlayer);
+            _playerCarDepot.ResetCarsAccessibility();
+
+            if(_gameProgressScheme == null)
+                _gameProgressScheme = ResourcesLoader.LoadObject<GameProgressScheme>(ResourcePath.GameProgressScheme);
+            _gameProgressScheme.ResetAllSteps();
+
+            SaveManager.RemoveSave();
+        }
 
         [Button]
         [ShowIf("IsMenuScene", true)]

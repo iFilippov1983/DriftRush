@@ -82,7 +82,7 @@ namespace RaceManager.Progress
 
         private void HandleLootboxOpen(Lootbox lootbox)
         {
-            List<CarCardReward> list = lootbox.LootboxModel.GetCardsList();
+            List<CarCardReward> list = lootbox.CardsList;
             foreach (var reward in list)
             {
                 _profiler.AddCarCards(reward.CarName, reward.CardsAmount);

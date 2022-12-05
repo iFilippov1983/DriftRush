@@ -100,7 +100,7 @@ namespace RaceManager.UI
                     continue;
                 }
 
-                Sprite sprite = _spritesRewards.GetLootboxSprite(lootbox.LootboxModel.Rarity);
+                Sprite sprite = _spritesRewards.GetLootboxSprite(lootbox.Rarity);
 
                 if (lootbox.OpenTimerActivated == false)
                 {
@@ -118,7 +118,7 @@ namespace RaceManager.UI
                     else
                     {
                         lootbox.TimeToOpenLeft -= secondsPassed;
-                        slot.SetStatusActiveTimer(sprite, lootbox.LootboxModel.GemsToOpen, lootbox.Id);
+                        slot.SetStatusActiveTimer(sprite, lootbox.GemsToOpen, lootbox.Id);
 
                         _activeTimerLootbox = lootbox;
                         _activeTimerSlot = slot;
@@ -160,13 +160,13 @@ namespace RaceManager.UI
 
             LootboxPopup.PopupInfo info = new LootboxPopup.PopupInfo()
             {
-                lootboxRarity = lootbox.LootboxModel.Rarity,
+                lootboxRarity = lootbox.Rarity,
                 lootboxSprite = slot.LootboxImage.sprite,
-                moneyMin = lootbox.LootboxModel.MoneyAmountMin,
-                moneyMax = lootbox.LootboxModel.MoneyAmountMax,
-                cardsMin = lootbox.LootboxModel.CardsAmountMin,
-                cardsMax = lootbox.LootboxModel.CardsAmountMax,
-                instantOpenCost = lootbox.LootboxModel.GemsToOpen,
+                moneyMin = lootbox.MoneyAmountMin,
+                moneyMax = lootbox.MoneyAmountMax,
+                cardsMin = lootbox.CardsAmountMin,
+                cardsMax = lootbox.CardsAmountMax,
+                instantOpenCost = lootbox.GemsToOpen,
                 timeToOpen = lootbox.InitialTimeToOpen
             };
 
@@ -205,11 +205,12 @@ namespace RaceManager.UI
         {
             Lootbox lootbox = _profiler.GetLootboxWithId(slot.CurrentLootboxId);
 
-            if (_profiler.TryBuyWithGems(lootbox.LootboxModel.GemsToOpen))
+            if (_profiler.TryBuyWithGems(lootbox.GemsToOpen))
             {
                 _profiler.RemoveLootboxWithId(lootbox.Id);
                 lootbox.TimeToOpenLeft = 0;
                 CloseLootboxPopup();
+                HandleSlotTimer();
                 _profiler.AddOrOpenLootbox(lootbox);
 
                 slot.SetStatusEmpty();

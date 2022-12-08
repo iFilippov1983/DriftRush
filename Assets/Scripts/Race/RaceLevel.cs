@@ -1,4 +1,5 @@
 ﻿using RaceManager.Waypoints;
+using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,6 +9,7 @@ namespace RaceManager.Race
     {
         [SerializeField] private List<TrackConfiguration> _trackConfigurations = new List<TrackConfiguration>();
 
+        [ShowInInspector, ReadOnly]
         private TrackConfiguration _configuration;
 
         public StartPoint[] StartPoints => _configuration.StartPoints;

@@ -18,14 +18,24 @@ MonoBehaviour:
   - CarName: 0
     RankingScheme:
       _ranks:
-      - _rank: 1
-        _pointsForAccess: 0
-        _accessCost: 0
-        _isGranted: 1
-      - _rank: 2
-        _pointsForAccess: 0
-        _accessCost: 0
-        _isGranted: 1
+      - Rank: 1
+        PointsForAccess: 0
+        AccessCost: 0
+        AvailableTunePercentage: 1
+        IsGranted: 1
+        IsReached: 1
+      - Rank: 2
+        PointsForAccess: 0
+        AccessCost: 0
+        AvailableTunePercentage: 1
+        IsGranted: 1
+        IsReached: 1
+      - Rank: 3
+        PointsForAccess: 0
+        AccessCost: 0
+        AvailableTunePercentage: 1
+        IsGranted: 1
+        IsReached: 1
     Speed:
       Max: 0
       Min: 0
@@ -57,7 +67,9 @@ MonoBehaviour:
     CarCharacteristics:
       Rarity: 0
       _factorsMaxTotal: 400
-      CurrentFactorsProgress: 200
+      _initialFactorsProgress: 400
+      FactorsMaxCurrent: 0
+      CurrentFactorsProgress: 400
       MinSpeedFactor: 1
       MaxSpeedFactor: 120
       CurrentSpeedFactor: 60

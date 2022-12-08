@@ -46,10 +46,17 @@ namespace RaceManager.Progress
         public PositionInRace LastInRacePosition => _positionInRace;
         public Lootbox LootboxToAdd => _lootboxToAdd;
         public List<Lootbox> Lootboxes => _lootboxes;
-        public List<LevelName> AvailableLevels => _levels;
+        public List<LevelName> AvailableLevels
+        {
+            get 
+            {
+                _playerProfile.GiveLevelsTo(this);
+                return _levels;
+            }
+        }
 
         public Action<Lootbox> OnLootboxOpen;
-        public Action<CarName, int> OnCarCardsAdded;
+        public Action<CarName, int> OnCarCardsAmountChange;
 
         public Profiler(PlayerProfile playerProfile)
         {
@@ -89,7 +96,7 @@ namespace RaceManager.Progress
             _carName = carName;
             _cardsAmount = cardsAmount;
             _playerProfile.AddCards(this);
-            OnCarCardsAdded?.Invoke(carName, _playerProfile.CarCardsAmount(carName));
+            OnCarCardsAmountChange?.Invoke(carName, _playerProfile.CarCardsAmount(carName));
         }
 
         public void AddLevel(LevelName levelName)
@@ -165,8 +172,11 @@ namespace RaceManager.Progress
             _cardsAmount = availableCards - cost;
             _carName = carName;
             _playerProfile.SetCardsAmount(this);
+            OnCarCardsAmountChange?.Invoke(carName, _playerProfile.CarCardsAmount(carName));
             return true;
         }
+
+        public int GetCardsAmount(CarName carName) => _playerProfile.CarCardsAmount(carName);
 
         public Lootbox GetLootboxIndexOf(int index)
         {

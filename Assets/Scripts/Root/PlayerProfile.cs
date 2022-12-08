@@ -35,7 +35,7 @@ namespace RaceManager.Root
         private List<Lootbox> _lootboxes = new List<Lootbox>();
 
         [JsonProperty, SerializeField]
-        private List<LevelName> _availableLevels = new List<LevelName>();
+        private List<LevelName> _availableLevels = new List<LevelName>() { LevelName.Level_0_Igora_test };
 
         [JsonProperty]
         public int VictoriesCounter => _victoriesCounter;

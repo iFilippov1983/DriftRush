@@ -33,7 +33,7 @@ namespace RaceManager.UI
 
         private PlayerProfile _playerProfile;
         private RewardsHandler _rewardsHandler;
-        private RanksHandler _ranksHandler;
+        private CarUpgradesHandler _upgradesHandler;
         private SaveManager _saveManager;
         private CarsDepot _playerCarDepot;
         private CarProfile _currentCarProfile;
@@ -63,7 +63,7 @@ namespace RaceManager.UI
             PlayerProfile playerProfile, 
             GameProgressScheme gameProgressScheme,
             RewardsHandler rewardsHandler,
-            RanksHandler ranksHandler,
+            CarUpgradesHandler upgradesHandler,
             SaveManager saveManager, 
             CarsDepot playerCarDepot, 
             PodiumView podium
@@ -71,7 +71,7 @@ namespace RaceManager.UI
         {
             _playerProfile = playerProfile;
             _rewardsHandler = rewardsHandler;
-            _ranksHandler = ranksHandler;
+            _upgradesHandler = upgradesHandler;
             _gameProgressScheme = gameProgressScheme;
             _saveManager = saveManager;
             _playerCarDepot = playerCarDepot;
@@ -205,7 +205,8 @@ namespace RaceManager.UI
                     profile.CarName,
                     _playerProfile.CarCardsAmount(profile.CarName),
                     profile.RankingScheme.CurrentRankPointsForAccess,
-                    profile.RankingScheme.CarIsAvailable
+                    profile.RankingScheme.CarIsAvailable,
+                    profile.RankingScheme.AllRanksGranted
                     );
 
                 if(profile.CarName == _currentCarProfile.CarName)
@@ -216,22 +217,17 @@ namespace RaceManager.UI
 
             _carsCollectionPanel.OnUseCar += ChangeCar;
             _carsCollectionPanel.OnCarWindowOpen += InitializeCarWindow;
-
-            _ranksHandler.OnCarRankUpdate += UpdateCarsCollectionCards;
         }
 
         private void InitializeCarWindow()
         {
-            var rank = _currentCarProfile.RankingScheme.CurrentRank;
-            int cost = rank.AccessCost;
-            bool isUpgraded = rank.IsGranted;
-            bool isAvailable = rank.IsReached;
-
-            _carsCollectionPanel.SetCarWindow(cost, isUpgraded, isAvailable);
-
+            UpdateCarWindow();
             ActivateCarWindow(true);
 
+            _carsCollectionPanel.CarWindowUpgradeButton.onClick.RemoveAllListeners();
             _carsCollectionPanel.CarWindowUpgradeButton.onClick.AddListener(CarRankUpgrade);
+
+            _carsCollectionPanel.CarWindowBackButton.onClick.RemoveAllListeners();
             _carsCollectionPanel.CarWindowBackButton.onClick.AddListener(() => ActivateCarWindow(false));
         }
 
@@ -289,7 +285,7 @@ namespace RaceManager.UI
         public void UpdateTuningPanelValues()
         {
             _currentCarProfile = _playerCarDepot.CurrentCarProfile;
-
+           
             InitializeSlidersMinMaxValues();
 
             var c = _currentCarProfile.CarCharacteristics;
@@ -308,6 +304,11 @@ namespace RaceManager.UI
                 _currentCarProfile.CarCharacteristics.CurrentFactorsProgress,
                 _currentCarProfile.CarCharacteristics.FactorsMaxTotal
                 );
+
+            _tuningPanel.UpgradeWindow.SetActive(_upgradesHandler.CanUpgradeCurrentCarFactors());
+            //_tuningPanel.UpgradeWindow.SetActive(true);
+            _tuningPanel.UpgradeCostText.text = _upgradesHandler.CurrentUpgradeCost.ToString();
+            _tuningPanel.PartsAmountText.text = _upgradesHandler.CurrentUpgradeStatsToAdd.ToString();
         }
 
         public void UpdateCarsCollectionInfo()
@@ -325,25 +326,46 @@ namespace RaceManager.UI
             CarProfile profile = _playerCarDepot.CarProfiles.Find(p => p.CarName == carName);
 
             _carsCollectionPanel.UpdateCard
-                (
-                profile.CarName,
-                _playerProfile.CarCardsAmount(profile.CarName),
-                profile.RankingScheme.CurrentRankPointsForAccess,
-                profile.RankingScheme.CarIsAvailable
-                );
+                    (
+                    profile.CarName,
+                    _playerProfile.CarCardsAmount(profile.CarName),
+                    profile.RankingScheme.CurrentRankPointsForAccess,
+                    profile.RankingScheme.CarIsAvailable,
+                    profile.RankingScheme.AllRanksGranted
+                    );
 
             if (profile.CarName == _currentCarProfile.CarName)
                 _carsCollectionPanel.UsedCarName = profile.CarName;
-
         }
 
-        private void UpdateCurrencyAmountPanels()
+        public void UpdateCarWindow()
+        {
+            var rank = _currentCarProfile.RankingScheme.CurrentRank;
+            int cost = rank.AccessCost;
+            bool isUpgraded = rank.IsGranted;
+            bool isAvailable = rank.IsReached;
+
+            _carsCollectionPanel.SetCarWindow(cost, isUpgraded, isAvailable);
+        }
+
+        public void UpdateCurrencyAmountPanels()
         {
             _currencyAmount.MoneyAmount.text = _playerProfile.Money.ToString();
             _currencyAmount.GemsAmount.text = _playerProfile.Gems.ToString();
 
             _gameProgressPanel.MoneyAmountText.text = _playerProfile.Money.ToString();
             _gameProgressPanel.gemsAmountText.text = _playerProfile.Gems.ToString();
+        }
+
+        public void UpdateGameProgressPanel()
+        {
+            _rewardsHandler.OnProgressReward -= UpdateCurrencyAmountPanels;
+            _rewardsHandler.OnLootboxOpen -= ActivateLootboxWindow;
+            _rewardsHandler.OnLootboxOpen -= _lootboxWindow.RepresentLootbox;
+            _rewardsHandler.OnLootboxOpen -= (List<CarCardReward> list) => UpdateCurrencyAmountPanels();
+
+            _gameProgressPanel.ClearProgressSteps();
+            InitializeGameProgressPanel();
         }
 
         private void UpdateHasRewardsImage(bool hasUnreceived) => _cupsProgress.HasUnreceivedRewardsImage.SetActive(hasUnreceived);
@@ -367,7 +389,28 @@ namespace RaceManager.UI
 
         private void CarRankUpgrade()
         {
-            "Car rank upgrade is not implemented!".Log(Logger.ColorRed);
+            if (_upgradesHandler.TryUpgradeCurrentCarRank())
+            {
+                UpdateCurrencyAmountPanels();
+                //TODO: Visualize upgrade success
+            }
+            else
+            {
+                //TODO: Visualize upgrade fail
+            }
+        }
+
+        private void CarFactorsUpgrade()
+        {
+            if (_upgradesHandler.TryUpgradeCurrentCarFactors())
+            {
+                UpdateCurrencyAmountPanels();
+                //TODO: Visualize upgrade success
+            }
+            else
+            { 
+                //TODO: Visualize upgrade fail
+            }
         }
 
         private void StartRace()
@@ -395,6 +438,7 @@ namespace RaceManager.UI
             _tuningPanel.RegisterButtonsListeners();
             _tuningPanel.CloseButton.onClick.AddListener(() => ActivateTuningPanel(false));
             _tuningPanel.CloseButton.onClick.AddListener(() => ActivateMainMenu(true));
+            _tuningPanel.UpgradeButton.onClick.AddListener(CarFactorsUpgrade);
 
             _carsCollectionPanel.CloseButton.onClick.AddListener(() => ActivateCarsCollectionPanel(false));
             _carsCollectionPanel.CloseButton.onClick.AddListener(() => ActivateMainMenu(true));
@@ -419,8 +463,6 @@ namespace RaceManager.UI
             _rewardsHandler.OnLootboxOpen -= ActivateLootboxWindow;
             _rewardsHandler.OnLootboxOpen -= _lootboxWindow.RepresentLootbox;
             _rewardsHandler.OnLootboxOpen -= (List<CarCardReward> list) => UpdateCurrencyAmountPanels();
-
-            _ranksHandler.OnCarRankUpdate -= UpdateCarsCollectionCards;
 
             _lootboxSlotsHandler.OnPopupIsActive -= UpdatePodiumActivity;
         }

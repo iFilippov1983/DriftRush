@@ -2,6 +2,7 @@
 using RaceManager.Progress;
 using RaceManager.Race;
 using RaceManager.Tools;
+using RaceManager.UI;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UniRx;
@@ -15,6 +16,7 @@ namespace RaceManager.Root
     {
         [SerializeField] private static CarsDepot _playerCarDepot;
         [SerializeField] private static GameProgressScheme _gameProgressScheme;
+        [SerializeField] private MainUI _mainUI;
         
         private bool IsRaceScene;
         private bool IsMenuScene;
@@ -87,7 +89,7 @@ namespace RaceManager.Root
         {
             if (_playerCarDepot == null)
                 _playerCarDepot = ResourcesLoader.LoadObject<CarsDepot>(ResourcePath.CarDepotPlayer);
-            _playerCarDepot.ResetCarsAccessibility();
+            _playerCarDepot.ResetCars();
 
             if(_gameProgressScheme == null)
                 _gameProgressScheme = ResourcesLoader.LoadObject<GameProgressScheme>(ResourcePath.GameProgressScheme);
@@ -102,6 +104,11 @@ namespace RaceManager.Root
         {
             profiler.AddCups(amount);
             saveManager.Save();
+
+            if (_mainUI != null)
+            { 
+                _mainUI.UpdateGameProgressPanel();
+            }
         }
 
         [Button]
@@ -110,6 +117,9 @@ namespace RaceManager.Root
         { 
             profiler.AddGems(amount);
             saveManager.Save();
+
+            if(_mainUI != null)
+                _mainUI.UpdateCurrencyAmountPanels();
         }
 
         [Button]
@@ -118,6 +128,9 @@ namespace RaceManager.Root
         { 
             profiler.AddMoney(amount);
             saveManager.Save();
+
+            if (_mainUI != null)
+                _mainUI.UpdateCurrencyAmountPanels();
         }
 
         [Button]

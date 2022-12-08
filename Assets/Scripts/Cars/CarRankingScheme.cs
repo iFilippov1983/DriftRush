@@ -12,7 +12,8 @@ namespace RaceManager.Cars
     public enum Rank
     {
         Rank_1 = 1,
-        Rank_2 = 2
+        Rank_2 = 2,
+        Rank_3 = 3,
     }
 
     [Serializable]
@@ -58,12 +59,28 @@ namespace RaceManager.Cars
             }
         }
 
+        public float RanksWeightTotal
+        {
+            get 
+            {
+                float weight = 0;
+                foreach (var rank in _ranks)
+                    weight += rank.AvailableTunePercentage;
+
+                return weight;
+            }
+        }
+
+        public bool AllRanksGranted => _ranks.TrueForAll(r => r.IsGranted == true);
+
         [Serializable]
         public class CarRank
         {
             public Rank Rank;
             public int PointsForAccess;
             public int AccessCost;
+            [Range(0f, 1f)]
+            public float AvailableTunePercentage;
             public bool IsGranted;
             public bool IsReached;
         }

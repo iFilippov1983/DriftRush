@@ -44,8 +44,13 @@ namespace RaceManager.UI
         public Slider DurabilitySlider => _durabilitySlider;
         public Slider AccelerationSlider => _accelerationSlider;
 
+        public UpgradeWindowTuner UpgradeWindow => _upgradeWindow;
+
         public Button UpgradeButton => _upgradeWindow.UpgradeButton;
         public Button CloseButton => _closePanelButton;
+
+        public TMP_Text UpgradeCostText => _upgradeWindow.CostText;
+        public TMP_Text PartsAmountText => _upgradeWindow.PartsAmountText;
 
         private void OnEnable()
         {

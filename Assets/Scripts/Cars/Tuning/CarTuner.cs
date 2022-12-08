@@ -22,15 +22,13 @@ namespace RaceManager.Cars
         public CarTuner(CarsDepot playerCarDepot)
         {
             _playerCarDepot = playerCarDepot;
-            _carProfile = _playerCarDepot.CurrentCarProfile;
+            SetCarProfile();
 
             OnCharacteristicValueChanged += TuneCar;
         }
 
-        public void SetTuner(CarVisual carVisual)
-        {
-            _carVisual = carVisual;
-        }
+        public void SetTuner(CarVisual carVisual) => _carVisual = carVisual;
+        public void SetCarProfile() => _carProfile = _playerCarDepot.CurrentCarProfile;
 
         private int TuneCar(CharacteristicType characteristics, float value)
         {
@@ -226,7 +224,7 @@ namespace RaceManager.Cars
         public void ChangeCar()
         {
             _playerCarDepot.UpdateProfile(_carProfile);
-            _carProfile = _playerCarDepot.CurrentCarProfile;
+            SetCarProfile();
 
             OnCurrentCarChanged?.Invoke();
         }

@@ -53,7 +53,7 @@ namespace RaceManager.Cars
         }
 
         [Button]
-        public void ResetCarsAccessibility()
+        public void ResetCars()
         {
             foreach (var profile in CarProfiles)
             {
@@ -68,9 +68,17 @@ namespace RaceManager.Cars
                     profile.RankingScheme.Ranks[0].IsGranted = true;
                     profile.RankingScheme.Ranks[0].IsReached = true;
                 }
+
+                var c = profile.CarCharacteristics;
+                c.CurrentFactorsProgress = c.FactorsMaxTotal / 2;
+                c.CurrentAccelerationFactor = c.MaxAccelerationFactor / 2;
+                c.CurrentDurabilityFactor = c.MaxDurabilityFactor / 2;
+                c.CurrentMobilityFactor = c.MaxMobilityFactor / 2;
+                c.CurrentSpeedFactor = c.MaxSpeedFactor / 2;
+                c.FactorsMaxCurrent = 0;
             }
 
-            Debug.Log($"All cars ranks IsReached and IsGranted properties are set to False (exept default car - {CarName.ToyotaSupra})");
+            Debug.Log($"All cars ranks IsReached and IsGranted properties are set to False (exept default car - {CarName.ToyotaSupra}) | All CurrentFactors amount are set to Max/2");
         }
     }
 }

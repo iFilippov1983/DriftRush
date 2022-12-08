@@ -1,4 +1,5 @@
 using RaceManager.Cars;
+using RaceManager.Progress;
 using RaceManager.Root;
 using RaceManager.UI;
 using System;
@@ -16,24 +17,35 @@ namespace RaceManager.Shed
         private MainUI _mainUI;
         private PodiumView _podium;
         private CarTuner _carTuner;
+        private CarUpgradesHandler _upgradesHandler;
         private CarVisual _carVisual;
         private SaveManager _saveManager;
         private CarDestroyer _carDestroyer;
 
         [Inject]
-        private void Construct(CarsDepot playerCarDepot, CarTuner carTuner, MainUI mainUI, PodiumView podium, SaveManager saveManager)
+        private void Construct
+            (
+            CarsDepot playerCarDepot, 
+            CarTuner carTuner, 
+            CarUpgradesHandler upgradesHandler,
+            MainUI mainUI, 
+            PodiumView podium, 
+            SaveManager saveManager
+            )
         {
+            _playerCarDepot = playerCarDepot;
             _carTuner = carTuner;
+            _upgradesHandler = upgradesHandler;
             _mainUI = mainUI;
             _podium = podium;
-            _playerCarDepot = playerCarDepot;
             _saveManager = saveManager;
         }
 
         public void Initialize()
         {
             InitializeCar();
-            InitializeTunerVisual();
+            InitializeTuner();
+            InitializeHandler();
         }
 
         private void InitializeCar()
@@ -54,7 +66,7 @@ namespace RaceManager.Shed
             _carTuner.SetTuner(_carVisual);
         }
 
-        private void InitializeTunerVisual()
+        private void InitializeTuner()
         {
             _mainUI.OnCarProfileChange += ChangeCar;
             _carTuner.OnCurrentCarChanged += InitializeNewCar;
@@ -104,19 +116,37 @@ namespace RaceManager.Shed
                 });
         }
 
+        private void InitializeHandler()
+        { 
+            _upgradesHandler.OnCarRankUpdate += UpdateCarInfo;
+            _upgradesHandler.OnCarFactorsUpgrade += UpdateCarInfo;
+        }
+
         private void ChangeCar(CarName newCarName)
         {
             _playerCarDepot.CurrentCarName = newCarName;
             _carTuner.ChangeCar();
-            _mainUI.UpdateTuningPanelValues();
-            _mainUI.UpdateCarsCollectionInfo();
+            UpdateCarInfo(newCarName);
             _saveManager.Save();
+        }
+
+        private void UpdateCarInfo(CarName carName)
+        {
+            _mainUI.UpdateTuningPanelValues();
+            _mainUI.UpdateCarsCollectionCards(carName);
+            _mainUI.UpdateCarsCollectionInfo();
+            _mainUI.UpdateCarWindow();
+
+            _carTuner.SetCarProfile();
         }
 
         public void Dispose()
         {
             _mainUI.OnCarProfileChange -= ChangeCar;
             _carTuner.OnCurrentCarChanged -= InitializeNewCar;
+
+            _upgradesHandler.OnCarRankUpdate -= UpdateCarInfo;
+            _upgradesHandler.OnCarFactorsUpgrade -= UpdateCarInfo;
         }
 
         /// <summary>

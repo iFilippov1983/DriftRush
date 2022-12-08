@@ -1,5 +1,6 @@
 ﻿using RaceManager.Root;
 using RaceManager.Tools;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace RaceManager.Race
@@ -7,23 +8,26 @@ namespace RaceManager.Race
     public class RaceLevelInitializer
     { 
         private IRaceLevel _raceLevel;
-        private PlayerProfile _playerProfile;
+        private IProfiler _profiler;
+
+        public LevelName LevelName { get; private set; }
 
         public IRaceLevel GetRaceLevel()
         {
             if (_raceLevel == null)
             {
-                string path = _playerProfile.NextLevelPrefabToLoad.ToString();
-                //Debug.Log("Prefab: " + _playerProfile.NextLevelPrefabToLoad);
+                List<LevelName> levels = _profiler.AvailableLevels;
+                LevelName = levels[Random.Range(0, levels.Count)];
+                string path = LevelName.ToString();
 
                 _raceLevel = InitializeLevel(path);
             }
             return _raceLevel;
         }
 
-        public RaceLevelInitializer(PlayerProfile playerProfile)
+        public RaceLevelInitializer(IProfiler profiler)
         {
-            _playerProfile = playerProfile;
+            _profiler = profiler;
         }
 
         private IRaceLevel InitializeLevel(string path)
@@ -38,8 +42,7 @@ namespace RaceManager.Race
                 foreach (var trackConfiguration in configurations)
                     trackConfiguration.SetActive(false);
 
-                var c = configurations[Random.Range(0, configurations.Count)];
-                c.SetActive(true);
+                TrackConfiguration c = configurations[Random.Range(0, configurations.Count)];
 
                 foreach (var active in c.Actives)
                     active.SetActive(true);
@@ -47,6 +50,7 @@ namespace RaceManager.Race
                 foreach (var inactive in c.Inactives)
                     inactive.SetActive(false);
 
+                c.SetActive(true);
                 raceLevel.SetCurrentConfiguration(c);
 
                 Debug.Log($"Race level configuration loaded => [{c.name}]");

@@ -40,7 +40,7 @@ namespace RaceManager.UI
         private void Construct(SpritesContainerCarCollection spritesContainerCars)
         {
             _spritesCars = spritesContainerCars;
-
+            
             _okButton.onClick.AddListener(Cleanup);
         }
 
@@ -51,10 +51,10 @@ namespace RaceManager.UI
                 AddCarCard(card.CarName, card.CardsAmount);
             }
 
-            //Debug.Log($"List: {_cardsList.Count}; Stack: {_cardsStack.Count}");
-
-            var task = RepresentReceivedCards();
-            await Task.WhenAll(task);
+            Debug.Log($"List: {_cardsList.Count}; Stack: {_cardsStack.Count}");
+            
+            while (await RepresentReceivedCards() == false)
+                await Task.Yield();
         }
 
         private void AddCarCard(CarName carName, int amount)
@@ -77,11 +77,10 @@ namespace RaceManager.UI
             _cardsList.Add(cardView);
         }
 
-        private async Task RepresentReceivedCards()
+        private async Task<bool> RepresentReceivedCards()
         {
             _okButton.SetActive(false);
             _receivedCardsRect.SetActive(false);
-            Vector3 cardsPos = _representationCard.transform.localPosition;
 
             foreach (CarCardView cardView in _cardsList)
             {
@@ -111,11 +110,13 @@ namespace RaceManager.UI
 
             _receivedCardsRect.SetActive(true);
             _okButton.SetActive(true);
+
+            return true;
         }
 
         private void Cleanup()
         {
-            foreach (var card in _cardsList)
+            foreach (CarCardView card in _cardsList)
                 _cardsStack.Push(card);
 
             _cardsList.Clear();

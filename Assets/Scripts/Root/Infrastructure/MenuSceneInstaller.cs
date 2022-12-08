@@ -21,6 +21,7 @@ namespace RaceManager.Infrastructure
         [Space]
         [SerializeField] private GameProgressScheme _gameProgressScheme;
         [SerializeField] private RaceRewardsScheme _raceRewardsScheme;
+        [SerializeField] private CarsUpgradeScheme _carUpgradeScheme;
 
         private MainSceneRoot _mainSceneRoot;
 
@@ -40,7 +41,6 @@ namespace RaceManager.Infrastructure
 
         private void BindObjects()
         {
-            Bind(_mainUI);
             Bind(_podium);
             Bind(_playerCarDepot);
             Bind(_spritesContainerCars);
@@ -48,6 +48,8 @@ namespace RaceManager.Infrastructure
             Bind(_spritesContainerRewards);
             Bind(_gameProgressScheme);
             Bind(_raceRewardsScheme);
+            Bind(_carUpgradeScheme);
+            Bind(_mainUI);
         }
 
         private void BindClasses()
@@ -57,7 +59,7 @@ namespace RaceManager.Infrastructure
             Bind<CarTuner>();
             Bind<Profiler>();
             Bind<RewardsHandler>();
-            Bind<RanksHandler>();
+            Bind<CarUpgradesHandler>();
         }
 
         public override void Start()

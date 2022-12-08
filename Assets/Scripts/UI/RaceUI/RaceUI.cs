@@ -29,7 +29,7 @@ namespace RaceManager.UI
             _spritesRewards = spritesContainer;
         }
 
-        public void Initialize(PlayerProfile playerProfile, UnityAction actionForRespawnButton, UnityAction actionForGetToCheckpointButton)
+        public void Initialize(RaceLevelInitializer levelInitializer, UnityAction actionForRespawnButton, UnityAction actionForGetToCheckpointButton)
         {
             _finishUI.gameObject.SetActive(false);
             _finishUI.OkButtonFinish.onClick.AddListener(FinalizeRace);
@@ -37,7 +37,7 @@ namespace RaceManager.UI
             //_finishUI.OkButtonExtraReward.onClick.AddListener(FinalizeRace);
 
             _inRaceUI.gameObject.SetActive(true);
-            _inRaceUI.RaceProgressBar.LevelText.text = "LEVEL " + (int)playerProfile.NextLevelPrefabToLoad;
+            _inRaceUI.RaceProgressBar.LevelText.text = "LEVEL " + levelInitializer.LevelName;
 
             _inRaceUI.RespawnCarButton.AddListener(actionForRespawnButton);
             _inRaceUI.GetToCheckpointButton.AddListener(actionForGetToCheckpointButton);

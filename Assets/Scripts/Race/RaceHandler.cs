@@ -133,7 +133,7 @@ namespace RaceManager.Race
                         tracker.ResetTargetToCashedValues();
                     }
 
-                    _raceUI.Initialize(driver.PlayerProfile, selfRighting.RightCar, GetToCheckpoint);
+                    _raceUI.Initialize(_raceLevelInitializer, selfRighting.RightCar, GetToCheckpoint);
                 }
                 else
                 {

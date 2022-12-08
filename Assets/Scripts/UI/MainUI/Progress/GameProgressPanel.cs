@@ -170,16 +170,25 @@ namespace RaceManager.UI
             stepView.IsLast = step.IsLast;
 
             stepView.ClaimButton.SetActive(step.IsReached);
+            stepView.ClaimButton.onClick.RemoveAllListeners();
             stepView.ClaimButton.onClick.AddListener(claimButtonAction);
             stepView.ClaimButton.onClick.AddListener(() => UpdateStepStatus(step, stepView));
             
-
             if (step.BigPrefab)
                 SetBigPrefab(goalCupsAmount, stepView, step);
             else
                 SetPrefab(goalCupsAmount, stepView, step);
 
             UpdateStepStatus(step, stepView);
+        }
+
+        public void ClearProgressSteps()
+        {
+            foreach (var step in _progressSteps)
+                if(step)
+                    Destroy(step.gameObject);
+
+            _progressSteps.Clear();
         }
 
         private void SetPrefab(int goalCupsAmount, ProgressStepView stepView, ProgressStep step)
@@ -282,14 +291,6 @@ namespace RaceManager.UI
                         Debug.LogError($"Incorrect ProgressStep.Rewards settings in Scheme! Goal Cups Amount: {goalCupsAmount}");
                         break;
                 }
-            }
-        }
-
-        private void OnDestroy()
-        {
-            foreach (var stepView in _progressSteps)
-            {
-                stepView.ClaimButton.onClick.RemoveAllListeners();
             }
         }
     }

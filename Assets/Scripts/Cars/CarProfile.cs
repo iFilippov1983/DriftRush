@@ -37,10 +37,16 @@ namespace RaceManager.Cars
         {
             public Rarity Rarity;
 
+            [Space]
+            [Title("Factors Amount")]
             [JsonProperty]
             [SerializeField]
             private int _factorsMaxTotal;
-
+            [JsonProperty]
+            [SerializeField]
+            private int _initialFactorsProgress;
+            [ReadOnly]
+            public int FactorsMaxCurrent;
             public int CurrentFactorsProgress;
 
             [Space]
@@ -70,7 +76,9 @@ namespace RaceManager.Cars
 
             [ReadOnly, ShowInInspector]
             public int AvailableFactorsToUse => CurrentFactorsProgress - CurrentSpeedFactor - CurrentMobilityFactor - CurrentDurabilityFactor - CurrentAccelerationFactor;
+
             public int FactorsMaxTotal => _factorsMaxTotal;
+            public int InitialFactorsProgress => _initialFactorsProgress;
         }
     }
 }

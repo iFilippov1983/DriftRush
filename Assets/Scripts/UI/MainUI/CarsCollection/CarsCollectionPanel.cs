@@ -14,6 +14,7 @@ namespace RaceManager.UI
     public class CarsCollectionPanel : MonoBehaviour
     {
         [SerializeField] private Button _closePanelButton;
+        [SerializeField] private Button _closePanelWindowButton;
         [Space]
         [SerializeField] private TMP_Text _carNameText;
         [SerializeField] private TMP_Text _carStatsProgressText;
@@ -35,6 +36,7 @@ namespace RaceManager.UI
         public CarName UsedCarName { get; set; }
         public CarWindow CarWindow => _carWindow;
         public Button CloseButton => _closePanelButton;
+        public Button ClosePanelWindowButton => _closePanelWindowButton;
         public Button CarWindowUpgradeButton => _carWindow.UpgradeButton;
         public Button CarWindowBackButton => _carWindow.BackButton;
 

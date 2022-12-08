@@ -436,12 +436,16 @@ namespace RaceManager.UI
             _bottomPanel.CarsCollectionButton.onClick.AddListener(() => ActivateCarsCollectionPanel(true));
 
             _tuningPanel.RegisterButtonsListeners();
-            _tuningPanel.CloseButton.onClick.AddListener(() => ActivateTuningPanel(false));
-            _tuningPanel.CloseButton.onClick.AddListener(() => ActivateMainMenu(true));
+            _tuningPanel.ClosePanelButton.onClick.AddListener(() => ActivateTuningPanel(false));
+            _tuningPanel.ClosePanelButton.onClick.AddListener(() => ActivateMainMenu(true));
+            _tuningPanel.ClosePanelWindowButton.onClick.AddListener(() => ActivateTuningPanel(false));
+            _tuningPanel.ClosePanelWindowButton.onClick.AddListener(() => ActivateMainMenu(true));
             _tuningPanel.UpgradeButton.onClick.AddListener(CarFactorsUpgrade);
 
             _carsCollectionPanel.CloseButton.onClick.AddListener(() => ActivateCarsCollectionPanel(false));
             _carsCollectionPanel.CloseButton.onClick.AddListener(() => ActivateMainMenu(true));
+            _carsCollectionPanel.ClosePanelWindowButton.onClick.AddListener(() => ActivateCarsCollectionPanel(false));
+            _carsCollectionPanel.ClosePanelWindowButton.onClick.AddListener(() => ActivateMainMenu(true));
 
             _gameProgressPanel.BackButton.onClick.AddListener(() => ActivateGameProgressPanel(false));
             _gameProgressPanel.BackButton.onClick.AddListener(() => UpdateHasRewardsImage(_gameProgressScheme.HasUnreceivedRewards));

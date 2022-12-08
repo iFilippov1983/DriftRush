@@ -119,7 +119,7 @@ namespace RaceManager.Race
                 {
                     driver.Initialize(_startPoints[i].Type, _playerCarsDepot, _waypointTrackMain, _materialsContainer, _playerProfile, _profiler);
 
-                    _camerasHandler.FollowAndLookAt(driver.CarObject.transform, driver.CarTargetToFollow);
+                    _camerasHandler.FollowAndLookAt(driver.CarObject.transform, driver.CarTargetToLookAt);
 
                     driver.Subscribe(_raceUI);
                     driver.DriverProfile.CarState.Subscribe(cs => HandlePlayerCarState(cs, driver));

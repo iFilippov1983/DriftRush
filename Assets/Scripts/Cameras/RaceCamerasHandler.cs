@@ -24,17 +24,17 @@ namespace RaceManager.Cameras
         public Transform FinishCam => _finishCamera.transform;
         public Transform StartCam => _startCamera.transform;
 
-        public void FollowAndLookAt(Transform carTransform, Transform followTarget)
+        public void FollowAndLookAt(Transform followTransform, Transform lookAtTransform)
         {
             //_followGroupCamera.TargetGroup.m_Targets = new CinemachineTargetGroup.Target[0];
             //_followGroupCamera.TargetGroup.AddMember(carTransform, 1f, 0f);
             //_followGroupCamera.TargetGroup.AddMember(followTarget, 1f, 0f);
             //_followGroupCamera.SetTargetGroup();
-            _followCamera.LookAt = carTransform;
-            _followCamera.Follow = carTransform;
+            _followCamera.LookAt = lookAtTransform;
+            _followCamera.Follow = followTransform;
 
-            _startCamera.LookAt = carTransform;
-            _finishCamera.LookAt = carTransform;
+            _startCamera.LookAt = lookAtTransform;
+            _finishCamera.LookAt = followTransform;
 
             EventsHub<RaceEvent>.Subscribe(RaceEvent.COUNTDOWN, SetStartCamera);
             EventsHub<RaceEvent>.Subscribe(RaceEvent.START, SetFollowCamera);

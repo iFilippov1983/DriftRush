@@ -13,6 +13,7 @@ namespace RaceManager.UI
         [SerializeField] private Button _tuneWheelsViewButton;
         [SerializeField] private Button _tuneCarViewButton;
         [SerializeField] private Button _closePanelButton;
+        [SerializeField] private Button _closePanelWindowButton;
         [Space]
         [SerializeField] private RectTransform _statsValuesPanel;
         [SerializeField] private RectTransform _tuneWheelsViewPanel;
@@ -47,7 +48,8 @@ namespace RaceManager.UI
         public UpgradeWindowTuner UpgradeWindow => _upgradeWindow;
 
         public Button UpgradeButton => _upgradeWindow.UpgradeButton;
-        public Button CloseButton => _closePanelButton;
+        public Button ClosePanelButton => _closePanelButton;
+        public Button ClosePanelWindowButton => _closePanelWindowButton;
 
         public TMP_Text UpgradeCostText => _upgradeWindow.CostText;
         public TMP_Text PartsAmountText => _upgradeWindow.PartsAmountText;
@@ -68,6 +70,7 @@ namespace RaceManager.UI
             _tuneWheelsViewButton.onClick.AddListener(OpenTuneWheelsViewPanel);
             _tuneCarViewButton.onClick.AddListener(OpenTuneCarViewPanel);
             _closePanelButton.onClick.AddListener(DeactivateAllPanels);
+            _closePanelWindowButton.onClick.AddListener(DeactivateAllPanels);
         }
 
         public void SetBorderValues(CharacteristicType characteristics, int minValue, int maxValue)

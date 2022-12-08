@@ -31,7 +31,7 @@ namespace RaceManager.Cars
         public DriverProfile DriverProfile => _driverProfile;
         public PlayerProfile PlayerProfile => _playerProfile;
         public GameObject CarObject => _carObject;
-        public Transform CarTargetToFollow => _carAI.Target;
+        public Transform CarTargetToLookAt => _car.CameraTarget;// _carAI.Target;
         public WaypointsTracker WaypointsTracker => _waypointsTracker;
 
         public void Initialize

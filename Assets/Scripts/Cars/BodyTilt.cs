@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace RaceManager.Cars
@@ -11,43 +10,101 @@ namespace RaceManager.Cars
 	[RequireComponent(typeof(Car))]
 	public class BodyTilt : MonoBehaviour
 	{
+		[Title("Tilt")]
+		[SerializeField] private bool _useTilt = true;
 
-		[SerializeField] Transform Body;                                //Link to car body.
-		[SerializeField] float MaxAngle = 10;                           //Max tilt angle of car body.
-		[SerializeField] float AngleVelocityMultiplayer = 0.2f;         //Rotation angle multiplier when moving forward.
-		[SerializeField] float RearAngleVelocityMultiplayer = 0.4f;     //Rotation angle multiplier when moving backwards.
-		[SerializeField] float MaxTiltOnSpeed = 60;                     //The speed at which the maximum tilt is reached.
+        [Tooltip("Link to car body.")]
+		[SerializeField] private Transform _body;
 
-		Car Car;
-		float Angle;
+        [Tooltip("Max tilt angle of car body.")]
+		[SerializeField] private float _maxAngle = 10;     
+        
+        [Tooltip("Rotation angle multiplier when moving forward.")]
+		[SerializeField] private float _angleVelocityMultiplayer = 0.2f;    
+        
+        [Tooltip("Rotation angle multiplier when moving backwards.")]
+		[SerializeField] private float _rearAngleVelocityMultiplayer = 0.4f;   
+        
+        [Tooltip("The speed at which the maximum tilt is reached.")]
+		[SerializeField] private float _maxTiltOnSpeed = 60;      
+        
+		[Space]
+		[Title("AntiRoll")]
+		[SerializeField] private bool _useAntiRoll = false;
+        [SerializeField] private WheelCollider _wheelL;
+        [SerializeField] private WheelCollider _wheelR;
+        [SerializeField] private float _antiRoll = 5000.0f;
 
-		//private void Awake()
-		//{
-		//	Car = GetComponent<Car>();
-		//}
+        private Car _car;
+        private Rigidbody _carRb;
+        private float _angle;
+
+        void Start()
+        {
+            _carRb = GetComponent<Rigidbody>();
+        }
 
         private void OnEnable()
         {
-			Car = GetComponent<Car>();
+			_car = GetComponent<Car>();
 		}
 
         private void Update()
 		{
-
-			if (Car.CarDirection == 1)
-				Angle = -Car.VelocityAngle * AngleVelocityMultiplayer;
-			else if (Car.CarDirection == -1)
-			{
-				Angle = MathExtentions.LoopClamp(Car.VelocityAngle + 180, -180, 180) * RearAngleVelocityMultiplayer;
-			}
-			else
-			{
-				Angle = 0;
-			}
-
-			Angle *= Mathf.Clamp01(Car.SpeedInDesiredUnits / MaxTiltOnSpeed);
-			Angle = Mathf.Clamp(Angle, -MaxAngle, MaxAngle);
-			Body.localRotation = Quaternion.AngleAxis(Angle, Vector3.forward);
+            if (_useTilt)
+                TiltBody();
 		}
-	}
+
+        void FixedUpdate()
+        {
+            if(_useAntiRoll)
+                HandleAntiRoll();
+        }
+
+        private void TiltBody()
+		{
+            if (_car.CarDirection == 1)
+                _angle = -_car.VelocityAngle * _angleVelocityMultiplayer;
+            else if (_car.CarDirection == -1)
+            {
+                _angle = MathExtentions.LoopClamp(_car.VelocityAngle + 180, -180, 180) * _rearAngleVelocityMultiplayer;
+            }
+            else
+            {
+                _angle = 0;
+            }
+
+            _angle *= Mathf.Clamp01(_car.SpeedInDesiredUnits / _maxTiltOnSpeed);
+            _angle = Mathf.Clamp(_angle, -_maxAngle, _maxAngle);
+            _body.localRotation = Quaternion.AngleAxis(_angle, Vector3.forward);
+        }
+
+        private void HandleAntiRoll()
+        {
+            WheelHit hit;
+            float travelL = 1.0f;
+            float travelR = 1.0f;
+
+
+            bool groundedL = _wheelL.GetGroundHit(out hit);
+            if (groundedL)
+            {
+                travelL = (-_wheelL.transform.InverseTransformPoint(hit.point).y - _wheelL.radius) / _wheelL.suspensionDistance;
+            }
+
+            bool groundedR = _wheelR.GetGroundHit(out hit);
+            if (groundedR)
+            {
+                travelR = (-_wheelR.transform.InverseTransformPoint(hit.point).y - _wheelR.radius) / _wheelR.suspensionDistance;
+            }
+
+            float antiRollForce = (travelL - travelR) * _antiRoll;
+
+            if (groundedL)
+                _carRb.AddForceAtPosition(_wheelL.transform.up * -antiRollForce, _wheelL.transform.position);
+
+            if (groundedR)
+                _carRb.AddForceAtPosition(_wheelR.transform.up * antiRollForce, _wheelR.transform.position);
+        }
+    }
 }

@@ -44,7 +44,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _BaseColorMap:
         m_Texture: {fileID: 2800000, guid: 86248ac488836084da5ade2f7ce6e22f, type: 3}
-        m_Scale: {x: 10, y: 10}
+        m_Scale: {x: 12, y: 12}
         m_Offset: {x: 0, y: 0}
     - _BentNormalMap:
         m_Texture: {fileID: 2800000, guid: 20d42792311edb2429eafd86e70d6e7e, type: 3}
@@ -119,8 +119,8 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
-        m_Texture: {fileID: 2800000, guid: 017c09535a70ada42a786cfd56c8cdb5, type: 3}
-        m_Scale: {x: 5, y: 5}
+        m_Texture: {fileID: 2800000, guid: 635d171f852c07f41af5151df895a7eb, type: 3}
+        m_Scale: {x: 15, y: 15}
         m_Offset: {x: 0, y: 0}
     - _NormalMap1:
         m_Texture: {fileID: 2800000, guid: f40ccfc03d2b8bf47bea5081fa353585, type: 3}
@@ -199,7 +199,7 @@ Material:
     - _CullModeForward: 2
     - _Cutoff: 0.5
     - _DepthOffsetEnable: 0
-    - _DetailAlbedoScale: 0.8
+    - _DetailAlbedoScale: 1
     - _DetailNormalMapScale: 1
     - _DetailNormalScale: 0
     - _DetailSmoothnessScale: 1
@@ -239,12 +239,12 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _GroundSnowDetail: 0.5
+    - _GroundSnowDetail: 0.31
     - _GroundSnowGradient: 2.96
-    - _GroundSnowIntensity: 1.5
+    - _GroundSnowIntensity: 1.31
     - _GroundSnowNormalInfluence: 1
     - _GroundSnowOcclusionInfluence: 1
-    - _GroundSnowPosition: 0.3
+    - _GroundSnowPosition: -1.77
     - _HdrpVersion: 2
     - _HeightAmplitude: 0.02
     - _HeightCenter: 0.5
@@ -281,15 +281,15 @@ Material:
     - _SmoothnessRemapMax: 1
     - _SmoothnessRemapMin: 0
     - _SmoothnessTextureChannel: 0
-    - _SnowCoverNormalInfluence: 1.12
-    - _SnowCoverageMax: 0.4
+    - _SnowCoverNormalInfluence: 0
+    - _SnowCoverageMax: -1
     - _SnowCoverageMin: -12
     - _SnowGround: 3
     - _SnowMaskAdd: 1
     - _SnowMultiplier: 0
-    - _SnowSplash: 0.59
-    - _SnowSplashNormalInfluence: 1
-    - _SnowSplashOcclusionInfluence: 1
+    - _SnowSplash: 0
+    - _SnowSplashNormalInfluence: 0
+    - _SnowSplashOcclusionInfluence: 0.681
     - _SpecularAAScreenSpaceVariance: 0.1
     - _SpecularAAThreshold: 0.2
     - _SpecularHighlights: 1
@@ -332,7 +332,7 @@ Material:
     - _ZWrite: 1
     - __dirty: 0
     m_Colors:
-    - _BaseColor: {r: 0.8987098, g: 1, b: 0.6839622, a: 1}
+    - _BaseColor: {r: 0.44286186, g: 0.6320754, b: 0.068574235, a: 1}
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _CoverageSSSThickness: {r: 1, g: 1, b: 1, a: 0}

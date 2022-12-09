@@ -1,11 +1,11 @@
 ﻿using RaceManager.Cars;
+using RaceManager.Effects;
 using RaceManager.Progress;
 using RaceManager.Race;
 using RaceManager.Tools;
 using RaceManager.UI;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
-using UniRx;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Zenject;
@@ -17,7 +17,9 @@ namespace RaceManager.Root
         [SerializeField] private static CarsDepot _playerCarDepot;
         [SerializeField] private static GameProgressScheme _gameProgressScheme;
         [SerializeField] private MainUI _mainUI;
-        
+
+        private EffectsController _fxController;
+
         private bool IsRaceScene;
         private bool IsMenuScene;
 
@@ -29,12 +31,21 @@ namespace RaceManager.Root
         public LevelName nextLevelToPlay;
 
         [Inject]
-        private void Construct(SaveManager saveManager, PlayerProfile playerProfile, Profiler profiler)
+        private void Construct
+            (
+            SaveManager saveManager, 
+            PlayerProfile playerProfile, 
+            Profiler profiler
+            )
         { 
             this.saveManager = saveManager;
             this.playerProfile = playerProfile;
             this.profiler = profiler;
+
+            _fxController = Singleton<EffectsController>.Instance;
         }
+
+#if UNITY_EDITOR
 
         private void Awake()
         {
@@ -46,7 +57,13 @@ namespace RaceManager.Root
         {
             if (Input.GetKeyDown(KeyCode.F))
                 WinRace();
+
+            HandleSoundtrackTest();
+            HandleSfxTest();
         }
+
+#endif
+
 
         [Button]
         [ShowIf("IsRaceScene", true)]
@@ -148,5 +165,45 @@ namespace RaceManager.Root
             profiler.CountVictory();
             saveManager.Save();
         }
+
+        #region Test Functions
+
+        private void HandleSoundtrackTest()
+        {
+            if (Input.GetKeyUp(KeyCode.T))
+            {
+                _fxController.PlayEffect(Effects.AudioType.Soundtrack_01);
+            }
+
+            if (Input.GetKeyUp(KeyCode.G))
+            {
+                _fxController.StopEffect(Effects.AudioType.Soundtrack_01);
+            }
+
+            if (Input.GetKeyUp(KeyCode.B))
+            {
+                _fxController.RestartEffect(Effects.AudioType.Soundtrack_01);
+            }
+        }
+
+        private void HandleSfxTest()
+        {
+            if (Input.GetKeyUp(KeyCode.Y))
+            {
+                _fxController.PlayEffect(Effects.AudioType.SFX_CarHit);
+            }
+
+            if (Input.GetKeyUp(KeyCode.H))
+            {
+                _fxController.StopEffect(Effects.AudioType.SFX_CarHit);
+            }
+
+            if (Input.GetKeyUp(KeyCode.N))
+            {
+                _fxController.RestartEffect(Effects.AudioType.SFX_CarHit);
+            }
+        }
+
+        #endregion
     }
 }

@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using RaceManager.Cars.Effects;
+﻿using UnityEngine;
 using Sirenix.OdinInspector;
 using RaceManager.Root;
+using RaceManager.Effects;
 
 namespace RaceManager.Cars
 {

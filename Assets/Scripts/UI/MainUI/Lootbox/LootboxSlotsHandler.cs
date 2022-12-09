@@ -290,6 +290,7 @@ namespace RaceManager.UI
         private void AddButtonsListeners()
         {
             _lootboxPopup.ClosePopupButton.onClick.AddListener(CloseLootboxPopup);
+            _lootboxPopup.ClosePopupWindowButton.onClick.AddListener(CloseLootboxPopup);
         }
 
         private void FixedUpdate()
@@ -316,7 +317,7 @@ namespace RaceManager.UI
         {
             _lootboxAnimationHandler.OnAnimationFinish -= _lootboxProgress.OnAnimationFinish;
 
-            _lootboxProgress.OnImagesDisableComplete += InitializeLootboxProgressPanel;
+            _lootboxProgress.OnImagesDisableComplete -= InitializeLootboxProgressPanel;
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using RaceManager.Cameras;
 using RaceManager.Cars;
-using RaceManager.Cars.Effects;
+using RaceManager.Effects;
 using RaceManager.Progress;
 using RaceManager.Race;
 using RaceManager.Root;

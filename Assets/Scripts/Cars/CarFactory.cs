@@ -1,4 +1,4 @@
-﻿using RaceManager.Cars.Effects;
+﻿using RaceManager.Effects;
 using RaceManager.Waypoints;
 using UnityEngine;
 //using Object = UnityEngine.Object;

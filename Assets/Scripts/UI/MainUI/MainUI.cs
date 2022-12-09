@@ -30,6 +30,8 @@ namespace RaceManager.UI
         [Space]
         [SerializeField] private LootboxSlotsHandler _lootboxSlotsHandler;
         [SerializeField] private LootboxWindow _lootboxWindow;
+        [Space]
+        [SerializeField] private SettingsPopup _settingsPopup;
 
         private PlayerProfile _playerProfile;
         private RewardsHandler _rewardsHandler;
@@ -183,6 +185,8 @@ namespace RaceManager.UI
 
             _bottomPanel.SetActive(!active);
         }
+
+        private void ActivateSettingsPopup(bool active) => _settingsPopup.SetActive(active);
         
         #endregion
 
@@ -456,6 +460,11 @@ namespace RaceManager.UI
             _lootboxWindow.OkButton.onClick.AddListener(() => _lootboxWindow.SetActive(false));
             _lootboxWindow.OkButton.onClick.AddListener(() => _lootboxSlotsHandler.InitializeLootboxProgressPanel());
             _lootboxWindow.OkButton.onClick.AddListener(() => UpdatePodiumActivity(false));
+
+            _settingsButton.onClick.AddListener(() => ActivateSettingsPopup(true));
+
+            _settingsPopup.OkButton.onClick.AddListener(() => ActivateSettingsPopup(false));
+            _settingsPopup.ClosePopupWindowButton.onClick.AddListener(() => ActivateSettingsPopup(false));
         }
 
         private void OnDestroy()

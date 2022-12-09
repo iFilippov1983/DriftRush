@@ -1,5 +1,6 @@
 using RaceManager.Cameras;
 using RaceManager.Cars;
+using RaceManager.Effects;
 using RaceManager.Progress;
 using RaceManager.Root;
 using RaceManager.Shed;
@@ -12,6 +13,8 @@ namespace RaceManager.Infrastructure
     {
         [SerializeField] private MainUI _mainUI;
         [SerializeField] private PodiumView _podium;
+        [SerializeField] private MenuCamerasHandler _menuCamerasHandler;
+        [SerializeField] private ShedHandler _shedHandler;
         [Space]
         [SerializeField] private CarsDepot _playerCarDepot;
         [Space]
@@ -35,8 +38,7 @@ namespace RaceManager.Infrastructure
         private void BindSingletons()
         {
             Bind(Singleton<Resolver>.Instance);
-            Bind(Singleton<MenuCamerasHandler>.Instance);
-            Bind(Singleton<ShedHandler>.Instance);
+            Bind(Singleton<EffectsController>.Instance);
         }
 
         private void BindObjects()
@@ -50,6 +52,8 @@ namespace RaceManager.Infrastructure
             Bind(_raceRewardsScheme);
             Bind(_carUpgradeScheme);
             Bind(_mainUI);
+            Bind(_menuCamerasHandler);
+            Bind(_shedHandler);
         }
 
         private void BindClasses()

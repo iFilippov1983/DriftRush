@@ -17,7 +17,6 @@ namespace RaceManager.Cars
     {
         public DriverType DriverType;
 
-        private PlayerProfile _playerProfile;
         private Profiler _profiler;
         private DriverProfile _driverProfile;
         private GameObject _carObject;
@@ -29,7 +28,6 @@ namespace RaceManager.Cars
         private List<IObserver<DriverProfile>> _observersList;
 
         public DriverProfile DriverProfile => _driverProfile;
-        public PlayerProfile PlayerProfile => _playerProfile;
         public GameObject CarObject => _carObject;
         public Transform CarCameraLookTarget => _car.CameraLookTarget;
         public Transform CarCameraFollowTarget => _car.CameraFollowTarget;
@@ -40,18 +38,17 @@ namespace RaceManager.Cars
             DriverType type, 
             CarsDepot carsDepot, 
             WaypointTrack waypointTrack, 
-            MaterialsContainer materialsContainer, 
-            PlayerProfile playerProfile = null,
+            MaterialsContainer materialsContainer,
+            bool playSouds = true,
             Profiler profiler = null
             )
         {
             DriverType = type;
             _materialsContainer = materialsContainer;
-            _playerProfile = playerProfile;
             _profiler = profiler;
 
             CarFactory carFactory = new CarFactory(type, carsDepot, waypointTrack, _materialsContainer, transform);
-            _carObject = carFactory.ConstructCarForRace(out _car, out _carVisual, out _carAI, out _waypointsTracker, out _driverProfile);
+            _carObject = carFactory.ConstructCarForRace(out _car, out _carVisual, out _carAI, out _waypointsTracker, out _driverProfile, playSouds);
 
             _driverProfile.CarState.Value = CarState.OnTrack;
             _driverProfile.CarState.Subscribe(s => OnCarStateChange(s));
@@ -62,19 +59,12 @@ namespace RaceManager.Cars
         private void OnEnable()
         {
             EventsHub<RaceEvent>.Subscribe(RaceEvent.START, StartRace);
-            //EventsHub<RaceEvent>.Subscribe(RaceEvent.FINISH, StopRace);
         }
 
         private void OnDisable()
         {
             EventsHub<RaceEvent>.Unsunscribe(RaceEvent.START, StartRace);
-            //EventsHub<RaceEvent>.Unsunscribe(RaceEvent.FINISH, StopRace);
         }
-
-        //private void OnDestroy()
-        //{
-        //    _profile.CarState.UnSubscribeOnChange(OnCarStateChange);
-        //}
 
         private void Update()
         {
@@ -120,7 +110,6 @@ namespace RaceManager.Cars
             if (DriverType == DriverType.Player)
             {
                 _profiler.SetInRacePosition(_driverProfile.PositionInRace);
-                //EventsHub<RaceEvent>.Unsunscribe(RaceEvent.FINISH, StopRace);
                 EventsHub<RaceEvent>.BroadcastNotification(RaceEvent.FINISH);
             }
 

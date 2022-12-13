@@ -12,12 +12,15 @@ namespace RaceManager.Infrastructure
     public class RaceSceneInstaller : BaseInstaller
     {
         [SerializeField] private RaceUI _raceUI;
+        [SerializeField] private RaceSceneEffectsHandler _effectsHandler;
+        [Space]
         [SerializeField] private CarsDepot _playerCarDepot;
         [Space]
         [SerializeField] private GameProgressScheme _gameProgressScheme;
         [SerializeField] private RaceRewardsScheme _raceRewardsScheme;
         [Space]
         [SerializeField] private SpritesContainerRewards _spritesContainerRewards;
+        [SerializeField] private EffectsSettingsContainer _settingsContainer;
 
         private RaceSceneRoot _raceSceneRoot;
 
@@ -32,17 +35,20 @@ namespace RaceManager.Infrastructure
         {
             Bind(Singleton<Resolver>.Instance);
             Bind(Singleton<RaceCamerasHandler>.Instance);
+            Bind(Singleton<EffectsController>.Instance);
             Bind(Singleton<CarFXController>.Instance);
             Bind(Singleton<RaceHandler>.Instance);
         }
 
         private void BindObjects()
         {
+            Bind(_settingsContainer);
             Bind(_raceUI);
             Bind(_playerCarDepot);
             Bind(_gameProgressScheme);
             Bind(_raceRewardsScheme);
             Bind(_spritesContainerRewards);
+            Bind(_effectsHandler);
         }
 
         private void BindClasses()

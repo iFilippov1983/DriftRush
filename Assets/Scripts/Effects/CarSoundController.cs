@@ -10,7 +10,6 @@ namespace RaceManager.Effects
 	[RequireComponent(typeof(Car))]
 	public class CarSoundController : MonoBehaviour
 	{
-
 		[Header("Engine sounds")]
 		[SerializeField] AudioClip EngineIdleClip;
 		[SerializeField] AudioClip EngineBackFireClip;
@@ -21,6 +20,8 @@ namespace RaceManager.Effects
 		[SerializeField] AudioSource SlipSource;
 		[SerializeField] float MinSlipSound = 0.15f;
 		[SerializeField] float MaxSlipForSound = 1f;
+		[Space]
+		[SerializeField] private GameObject SoundsAndEffectsObject;
 
 		Car CarController;
 
@@ -33,33 +34,52 @@ namespace RaceManager.Effects
 			CarController.BackFireAction += PlayBackfire;
 		}
 
+		private void OnEnable()
+		{
+			SoundsAndEffectsObject.SetActive(true);
+		}
+
+		private void OnDisable()
+		{
+			SoundsAndEffectsObject.SetActive(false);
+		}
+
 		void Update()
 		{
-
-			//Engine PRM sound
-			EngineSource.pitch = (EngineRPM / MaxRPM) + PitchOffset;
-
-			//Slip sound logic
-			if (CarController.CurrentMaxSlip > MinSlipSound
-			)
-			{
-				if (!SlipSource.isPlaying)
-				{
-					SlipSource.Play();
-				}
-				var slipVolumeProcent = CarController.CurrentMaxSlip / MaxSlipForSound;
-				SlipSource.volume = slipVolumeProcent * 0.5f;
-				SlipSource.pitch = Mathf.Clamp(slipVolumeProcent, 0.75f, 1);
-			}
-			else
-			{
-				SlipSource.Stop();
-			}
+			PlaySlipSound();
 		}
+
+		private void PlaySlipSound()
+		{
+            //Engine PRM sound
+            EngineSource.pitch = (EngineRPM / MaxRPM) + PitchOffset;
+
+            //Slip sound logic
+            if (CarController.CurrentMaxSlip > MinSlipSound
+            )
+            {
+                if (!SlipSource.isPlaying)
+                {
+                    SlipSource.Play();
+                }
+                var slipVolumeProcent = CarController.CurrentMaxSlip / MaxSlipForSound;
+                SlipSource.volume = slipVolumeProcent * 0.5f;
+                SlipSource.pitch = Mathf.Clamp(slipVolumeProcent, 0.75f, 1);
+            }
+            else
+            {
+                SlipSource.Stop();
+            }
+        }
 
 		void PlayBackfire()
 		{
-			EngineSource.PlayOneShot(EngineBackFireClip);
+            EngineSource.PlayOneShot(EngineBackFireClip);
 		}
+
+		private void OnDestroy()
+		{
+            CarController.BackFireAction -= PlayBackfire;
+        }
 	}
 }

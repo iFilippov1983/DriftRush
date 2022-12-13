@@ -14,11 +14,12 @@ namespace RaceManager.Root
 {
     public class Debugger : MonoBehaviour
     {
-        [SerializeField] private static CarsDepot _playerCarDepot;
-        [SerializeField] private static GameProgressScheme _gameProgressScheme;
-        [SerializeField] private MainUI _mainUI;
+        private static CarsDepot _playerCarDepot;
+        private static GameProgressScheme _gameProgressScheme;
+        private static EffectsSettingsContainer _settingsContainer;
 
-        private EffectsController _fxController;
+        [SerializeField]
+        private MainUI _mainUI;
 
         private bool IsRaceScene;
         private bool IsMenuScene;
@@ -29,6 +30,38 @@ namespace RaceManager.Root
         public PlayerProfile playerProfile;
         public Profiler profiler;
         public LevelName nextLevelToPlay;
+
+        private EffectsController FxController => Singleton<EffectsController>.Instance;
+
+        private static CarsDepot PlayerCarDepot
+        {
+            get
+            {
+                if (_playerCarDepot == null)
+                    _playerCarDepot = ResourcesLoader.LoadObject<CarsDepot>(ResourcePath.CarDepotPlayer);
+                return _playerCarDepot;
+            }
+        }
+
+        private static GameProgressScheme GameProgressScheme
+        {
+            get
+            {
+                if (_gameProgressScheme == null)
+                    _gameProgressScheme = ResourcesLoader.LoadObject<GameProgressScheme>(ResourcePath.GameProgressScheme);
+                return _gameProgressScheme;
+            }
+        }
+
+        private static EffectsSettingsContainer SettingsContainer
+        {
+            get 
+            {
+                if (_settingsContainer == null)
+                    _settingsContainer = ResourcesLoader.LoadObject<EffectsSettingsContainer>(ResourcePath.EffectsSettingsContainer);
+                return _settingsContainer;
+            }
+        }
 
         [Inject]
         private void Construct
@@ -41,8 +74,6 @@ namespace RaceManager.Root
             this.saveManager = saveManager;
             this.playerProfile = playerProfile;
             this.profiler = profiler;
-
-            _fxController = Singleton<EffectsController>.Instance;
         }
 
 #if UNITY_EDITOR
@@ -104,13 +135,9 @@ namespace RaceManager.Root
         [Button]
         public static void ClearAllData()
         {
-            if (_playerCarDepot == null)
-                _playerCarDepot = ResourcesLoader.LoadObject<CarsDepot>(ResourcePath.CarDepotPlayer);
-            _playerCarDepot.ResetCars();
-
-            if(_gameProgressScheme == null)
-                _gameProgressScheme = ResourcesLoader.LoadObject<GameProgressScheme>(ResourcePath.GameProgressScheme);
-            _gameProgressScheme.ResetAllSteps();
+            PlayerCarDepot.ResetCars();
+            GameProgressScheme.ResetAllSteps();
+            SettingsContainer.ResetToDefault();
 
             SaveManager.RemoveSave();
         }
@@ -172,17 +199,17 @@ namespace RaceManager.Root
         {
             if (Input.GetKeyUp(KeyCode.T))
             {
-                _fxController.PlayEffect(Effects.AudioType.Soundtrack_01);
+                FxController.PlayEffect(Effects.AudioType.MenuTrack_01, true);
             }
 
             if (Input.GetKeyUp(KeyCode.G))
             {
-                _fxController.StopEffect(Effects.AudioType.Soundtrack_01);
+                FxController.StopAudio(Effects.AudioType.MenuTrack_01, true);
             }
 
             if (Input.GetKeyUp(KeyCode.B))
             {
-                _fxController.RestartEffect(Effects.AudioType.Soundtrack_01);
+                FxController.RestartAudio(Effects.AudioType.MenuTrack_01, true);
             }
         }
 
@@ -190,17 +217,17 @@ namespace RaceManager.Root
         {
             if (Input.GetKeyUp(KeyCode.Y))
             {
-                _fxController.PlayEffect(Effects.AudioType.SFX_CarHit);
+                FxController.PlayEffect(Effects.AudioType.SFX_ButtonPressed);
             }
 
             if (Input.GetKeyUp(KeyCode.H))
             {
-                _fxController.StopEffect(Effects.AudioType.SFX_CarHit);
+                FxController.StopAudio(Effects.AudioType.SFX_ButtonPressed);
             }
 
             if (Input.GetKeyUp(KeyCode.N))
             {
-                _fxController.RestartEffect(Effects.AudioType.SFX_CarHit);
+                FxController.RestartAudio(Effects.AudioType.SFX_ButtonPressed);
             }
         }
 

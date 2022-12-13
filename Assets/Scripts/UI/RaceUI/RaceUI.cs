@@ -23,6 +23,8 @@ namespace RaceManager.UI
         private bool _isRaceFinished;
         private bool _showLootbox;
 
+        public Action OnButtonPressed;
+
         [Inject]
         private void Construct(SpritesContainerRewards spritesContainer)
         { 
@@ -32,7 +34,9 @@ namespace RaceManager.UI
         public void Initialize(RaceLevelInitializer levelInitializer, UnityAction actionForRespawnButton, UnityAction actionForGetToCheckpointButton)
         {
             _finishUI.gameObject.SetActive(false);
+            _finishUI.OkButtonFinish.onClick.AddListener(OnButtonPressedMethod);
             _finishUI.OkButtonFinish.onClick.AddListener(FinalizeRace);
+            
             //_finishUI.OkButtonFinish.onClick.AddListener(ShowExtraRewardPanel);
             //_finishUI.OkButtonExtraReward.onClick.AddListener(FinalizeRace);
 
@@ -182,6 +186,8 @@ namespace RaceManager.UI
             _finishUI.FinishPanel.gameObject.SetActive(false);
             _finishUI.ExtraRewardPanel.gameObject.SetActive(true);
         }
+
+        private void OnButtonPressedMethod() => OnButtonPressed?.Invoke();
 
         public void OnNext(DriverProfile profile)
         {

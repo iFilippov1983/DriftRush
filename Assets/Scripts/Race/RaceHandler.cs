@@ -14,6 +14,7 @@ using Zenject;
 using RaceManager.Infrastructure;
 using RaceManager.Progress;
 using UniRx;
+using RaceManager.Effects;
 
 namespace RaceManager.Race
 {
@@ -24,6 +25,7 @@ namespace RaceManager.Race
         [SerializeField] private CarsDepot _opponentsCarsDepot;
 
         private CarsDepot _playerCarsDepot;
+        private EffectsSettingsContainer _settingsContainer;
         private PlayerProfile _playerProfile;
         private Profiler _profiler;
         private RaceUI _raceUI;
@@ -52,6 +54,7 @@ namespace RaceManager.Race
             InRacePositionsHandler positionsHandler, 
             RaceUI raceUI, 
             CarsDepot playerCarsDepot, 
+            EffectsSettingsContainer settingsContainer,
             PlayerProfile playerProfile,
             Profiler profiler
             )
@@ -59,6 +62,7 @@ namespace RaceManager.Race
             _camerasHandler = Singleton<RaceCamerasHandler>.Instance;
             
             _playerCarsDepot = playerCarsDepot;
+            _settingsContainer = settingsContainer;
             _playerProfile = playerProfile;
             _profiler = profiler;
             _positionsHandler = positionsHandler;
@@ -117,7 +121,15 @@ namespace RaceManager.Race
                 var driver = driverGo.GetComponent<Driver>();
                 if (_startPoints[i].Type == DriverType.Player)
                 {
-                    driver.Initialize(_startPoints[i].Type, _playerCarsDepot, _waypointTrackMain, _materialsContainer, _playerProfile, _profiler);
+                    driver.Initialize
+                        (
+                        _startPoints[i].Type, 
+                        _playerCarsDepot, 
+                        _waypointTrackMain, 
+                        _materialsContainer, 
+                        _settingsContainer.PlaySounds, 
+                        _profiler
+                        );
 
                     _camerasHandler.FollowAndLookAt(driver.CarCameraFollowTarget, driver.CarCameraLookTarget);
 
@@ -138,7 +150,16 @@ namespace RaceManager.Race
                 else
                 {
                     WaypointTrack track = (i % 2) == 0 ? _waypointTrackEven : _waypointTrackOdd;
-                    driver.Initialize(_startPoints[i].Type, _opponentsCarsDepot, track, _materialsContainer);
+
+                    driver.Initialize
+                        (
+                        _startPoints[i].Type, 
+                        _opponentsCarsDepot, 
+                        track, 
+                        _materialsContainer, 
+                        _settingsContainer.PlaySounds
+                        );
+
                     driverGo.name += $"_{i + 1}";
                 }
 

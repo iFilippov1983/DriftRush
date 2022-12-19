@@ -1,7 +1,4 @@
-﻿using Google.Protobuf.WellKnownTypes;
-using RaceManager.Root;
-
-namespace RaceManager.Progress
+﻿namespace RaceManager.Progress
 {
     public interface IReward
     {

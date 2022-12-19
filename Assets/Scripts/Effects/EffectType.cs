@@ -40,4 +40,21 @@
     // Heavy : a heavy impact on iOS and a long and heavy vibration on Android
     // Rigid : a short and hard impact
     // Soft : a slightly longer and softer impact
+
+    public enum ParticleType
+    {
+        None,
+
+        MetalHitSoft,
+        MetalHitMedium,
+        MetalHitHard,
+
+        PlasticHitSoft,
+        PlasticHitMedium,
+        PlasticHitHard,
+
+        GlassHitSoft,
+        GlassHitMedium,
+        GlassHitHard,
+    }
 }

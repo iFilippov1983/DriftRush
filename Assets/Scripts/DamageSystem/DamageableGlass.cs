@@ -1,0 +1,71 @@
+﻿using UnityEngine;
+
+namespace RaceManager.DamageSystem
+{
+    /// <summary>
+    /// Attach this class to a glass or light object to make it damageable 
+    /// </summary>
+    public class DamageableGlass : DamageableObject
+    {
+        [Tooltip("Material applied to the object after complete damage, if this field is null then the object will not be visible after destruction")]
+        [SerializeField] private Material _brokenGlassMaterial;
+
+        [Tooltip("Particle system, reproduced at the moment of destruction")]
+        [SerializeField] private ParticleSystem _shardsParticles;
+
+        [Tooltip("Material index if the mesh has multiple materials")]
+        [SerializeField] protected int p_glassMaterialIndex;  
+
+        //public FMODUnity.EventReference DestroyEventRef;    //Sound reproduced when destroyed.            
+        
+        protected Renderer p_renderer;
+        protected Material[] p_materials;
+        protected Material p_defaultGlassMaterial;
+
+        public ParticleSystem ShardsParticles => _shardsParticles;
+
+        protected override void InitDamageObject()
+        {
+            if (!IsInited)
+            {
+                base.InitDamageObject();
+                _shardsParticles.SetActive(false);
+                p_renderer = GetComponent<Renderer>();
+                if (p_renderer)
+                {
+                    p_materials = p_renderer.materials;
+                    p_defaultGlassMaterial = p_materials[p_glassMaterialIndex];
+                }
+            }
+        }
+
+        protected override void DoDeath()
+        {
+            base.DoDeath();
+            if (p_renderer)
+            {
+                if (_brokenGlassMaterial)
+                {
+                    p_materials[p_glassMaterialIndex] = _brokenGlassMaterial;
+                    p_renderer.materials = p_materials;
+                }
+                else
+                {
+                    p_renderer.enabled = false;
+                }
+            }
+
+            if (_shardsParticles)
+            {
+                _shardsParticles.SetActive(true);
+                _shardsParticles.Play();
+            }
+
+            //if (!DestroyEventRef.IsNull)
+            //{
+            //    FMODUnity.RuntimeManager.PlayOneShot(DestroyEventRef, transform.position);
+            //}
+        }
+    }
+}
+

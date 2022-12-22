@@ -21,14 +21,16 @@ namespace RaceManager.Cars
 		public float CurrentMaxSlip { get { return Mathf.Max(CurrentForwardSleep, CurrentSidewaysSleep); } }
 		public float CurrentForwardSleep { get; private set; }
 		public float CurrentSidewaysSleep { get; private set; }
-		public WheelHit GetHit { get { return Hit; } }
+		public WheelHit GetHit { get { return _hit; } }
 
-		WheelHit Hit;
-		TrailRenderer Trail;
-
+		WheelHit _hit;
+		TrailRenderer _currentTrail;
+		GroundConfig _currentGroundConfig;
 		WheelColliderHandler m_PGWC;
 
 		public WheelColliderHandler WcHandler => m_PGWC;
+
+		public GroundConfig CurrentGroundConfig => _currentGroundConfig;
 
 		public WheelColliderHandler WheelColliderHandler
 		{
@@ -47,10 +49,10 @@ namespace RaceManager.Cars
 			}
 		}
 
-		CarFXController FXController { get { return Singleton<CarFXController>.Instance; } }
+		GroundDetection GroundDetection => Singleton<GroundDetection>.Instance;
+		GroundConfig DefaultGroundConfig => GroundDetection.DefaultGroundConfig;
+		CarFXController FXController => Singleton<CarFXController>.Instance;
 		Vector3 HitPoint;
-
-		const int SmoothValuesCount = 3;
 
 		/// <summary>
 		/// Update gameplay logic.
@@ -58,13 +60,13 @@ namespace RaceManager.Cars
 		public void FixedUpdate()
 		{
 
-			if (WheelCollider.GetGroundHit(out Hit))
+			if (WheelCollider.GetGroundHit(out _hit))
 			{
 				var prevForwar = CurrentForwardSleep;
 				var prevSide = CurrentSidewaysSleep;
 
-				CurrentForwardSleep = (prevForwar + Mathf.Abs(Hit.forwardSlip)) / 2;
-				CurrentSidewaysSleep = (prevSide + Mathf.Abs(Hit.sidewaysSlip)) / 2;
+				CurrentForwardSleep = (prevForwar + Mathf.Abs(_hit.forwardSlip)) / 2;
+				CurrentSidewaysSleep = (prevSide + Mathf.Abs(_hit.sidewaysSlip)) / 2;
 			}
 			else
 			{
@@ -85,25 +87,25 @@ namespace RaceManager.Cars
 				//Emit particle.
 				var particles = FXController.AspahaltParticles;
 				var point = WheelCollider.transform.position;
-				point.y = Hit.point.y;
+				point.y = _hit.point.y;
 				particles.transform.position = point;
 				particles.Emit(1);
 
-				if (Trail == null)
+				if (_currentTrail == null)
 				{
 					//Get free or create trail.
 					HitPoint = WheelCollider.transform.position;
-					HitPoint.y = Hit.point.y;
-					Trail = FXController.GetTrail(HitPoint);
-					Trail.transform.SetParent(WheelCollider.transform);
-					Trail.transform.localPosition += TrailOffset;
+					HitPoint.y = _hit.point.y;
+					_currentTrail = FXController.GetTrail(HitPoint);
+					_currentTrail.transform.SetParent(WheelCollider.transform);
+					_currentTrail.transform.localPosition += TrailOffset;
 				}
 			}
-			else if (Trail != null)
+			else if (_currentTrail != null)
 			{
 				//Set trail as free.
-				FXController.SetFreeTrail(Trail);
-				Trail = null;
+				FXController.SetFreeTrail(_currentTrail);
+				_currentTrail = null;
 			}
 		}
 

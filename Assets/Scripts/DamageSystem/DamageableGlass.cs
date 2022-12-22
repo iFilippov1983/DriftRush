@@ -46,11 +46,9 @@ namespace RaceManager.DamageSystem
         public override void SetDamage(float damage)
         {
             base.SetDamage(damage);
-            _onTakeDamageEvent.Invoke(new EffectData() 
+            _onTakeDamageEvent?.Invoke(new EffectData() 
             { 
-                audioType = AudioType.SFX_GlassShards_Light,
-                hapticType = HapticType.None,
-                particleType = ParticleType.None
+                audioType = AudioType.SFX_GlassShards_Light
             });
         }
 
@@ -76,11 +74,9 @@ namespace RaceManager.DamageSystem
                 _shardsParticles.Play();
             }
 
-            _onTakeDamageEvent.Invoke(new EffectData()
+            _onTakeDamageEvent?.Invoke(new EffectData()
             {
                 audioType = AudioType.SFX_GlassShards_Heavy,
-                hapticType = HapticType.None,
-                particleType = ParticleType.None
             });
         }
     }

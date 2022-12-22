@@ -19,6 +19,7 @@ namespace RaceManager.Cars
 
         public CarBody CarBody => _carBody;
         public CarName CarName => _carName;
+        public bool IsVisible => _carBody.IsVisible;
 
         public void Initialize(CarConfigVisual carConfigVisual, MaterialsContainer materialsContainer)
         { 

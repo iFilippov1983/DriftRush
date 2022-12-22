@@ -6,9 +6,8 @@ namespace RaceManager.Effects
 	/// <summary>
 	/// Car sound controller, for play car sound effects
 	/// </summary>
-
 	[RequireComponent(typeof(Car))]
-	public class CarSoundController : MonoBehaviour
+	public class CarSFXController : MonoBehaviour
 	{
 		[Header("Engine sounds")]
 		[SerializeField] AudioClip EngineIdleClip;

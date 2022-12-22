@@ -74,5 +74,19 @@
         GlassShards_Light,
         GlassShards_Medium,
         GlassShards_Heavy,
+
+        Drift_Asphalt,
+        Drift_Grass,
+        Drift_Gravel
+    }
+
+    public enum TrailType
+    { 
+        None,
+
+        AsphaltTrail,
+        GravelTrail,
+        GrassTrail,
+        DirtTrail
     }
 }

@@ -6,7 +6,7 @@ namespace RaceManager.Effects
 {
     [Serializable]
     [CreateAssetMenu(menuName = "Containers/EffectsSettingsContainer", fileName = "EffectsSettingsContainer", order = 1)]
-    public class EffectsSettingsContainer : ScriptableObject, ISettingsContainer, ISaveable
+    public class EffectsSettingsContainer : ScriptableObject, IEffectsSettings, ISaveable
     {
         [SerializeField] private bool _playSounds = true;
         [SerializeField] private bool _playMusic = true;
@@ -57,7 +57,7 @@ namespace RaceManager.Effects
         }
     }
 
-    public interface ISettingsContainer
+    public interface IEffectsSettings
     { 
         public bool PlaySounds { get; }
         public bool PlayMusic { get; }

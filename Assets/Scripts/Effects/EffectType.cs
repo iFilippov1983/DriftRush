@@ -10,8 +10,30 @@
         RaceTrack_00,
         RaceTrack_01,
 
-        SFX_CarHit,
         SFX_ButtonPressed,
+
+        SFX_MetalCollision_Light,
+        SFX_MetalCollision_Medium,
+        SFX_MetalCollision_Heavy,
+
+        SFX_PlasticCollision_Light,
+        SFX_PlasticCollision_Medium,
+        SFX_PlasticCollision_Heavy,
+
+        SFX_StoneCollision_Light,
+        SFX_StoneCollision_Medium,
+        SFX_StoneCollision_Heavy,
+
+        SFX_TreeCollision_Light,
+        SFX_TreeCollision_Medium,
+        SFX_TreeCollision_Heavy,
+
+        SFX_GlassShards_Light,
+        SFX_GlassShards_Medium,
+        SFX_GlassShards_Heavy,
+
+        SFX_DriftGravel,
+        SFX_DriftAsphalt,
     }
 
     public enum HapticType
@@ -45,16 +67,12 @@
     {
         None,
 
-        MetalHitSoft,
-        MetalHitMedium,
-        MetalHitHard,
+        MetalCollision_Light,
+        MetalCollision_Medium,
+        MetalCollision_Heavy,
 
-        PlasticHitSoft,
-        PlasticHitMedium,
-        PlasticHitHard,
-
-        GlassHitSoft,
-        GlassHitMedium,
-        GlassHitHard,
+        GlassShards_Light,
+        GlassShards_Medium,
+        GlassShards_Heavy,
     }
 }

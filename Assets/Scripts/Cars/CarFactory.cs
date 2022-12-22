@@ -97,8 +97,6 @@ namespace RaceManager.Cars
             var carSoundController = go.GetComponent<CarSoundController>();
             carSoundController.enabled = false;
 
-            go.AddComponent<AudioListener>();
-
             return go;
         }
 

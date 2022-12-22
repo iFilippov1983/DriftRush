@@ -23,15 +23,15 @@ namespace RaceManager.Effects
 		[Space]
 		[SerializeField] private GameObject SoundsAndEffectsObject;
 
-		Car CarController;
+		Car _car;
 
-		float MaxRPM { get { return CarController.GetMaxRPM; } }
-		float EngineRPM { get { return CarController.EngineRPM; } }
+		float MaxRPM { get { return _car.GetMaxRPM; } }
+		float EngineRPM { get { return _car.EngineRPM; } }
 
 		private void Awake()
 		{
-			CarController = GetComponent<Car>();
-			CarController.BackFireAction += PlayBackfire;
+			_car = GetComponent<Car>();
+			_car.BackFireAction += PlayBackfire;
 		}
 
 		private void OnEnable()
@@ -55,14 +55,14 @@ namespace RaceManager.Effects
             EngineSource.pitch = (EngineRPM / MaxRPM) + PitchOffset;
 
             //Slip sound logic
-            if (CarController.CurrentMaxSlip > MinSlipSound
+            if (_car.CurrentMaxSlip > MinSlipSound
             )
             {
                 if (!SlipSource.isPlaying)
                 {
                     SlipSource.Play();
                 }
-                var slipVolumeProcent = CarController.CurrentMaxSlip / MaxSlipForSound;
+                var slipVolumeProcent = _car.CurrentMaxSlip / MaxSlipForSound;
                 SlipSource.volume = slipVolumeProcent * 0.5f;
                 SlipSource.pitch = Mathf.Clamp(slipVolumeProcent, 0.75f, 1);
             }
@@ -79,7 +79,7 @@ namespace RaceManager.Effects
 
 		private void OnDestroy()
 		{
-            CarController.BackFireAction -= PlayBackfire;
+            _car.BackFireAction -= PlayBackfire;
         }
 	}
 }

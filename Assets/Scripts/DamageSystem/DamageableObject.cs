@@ -15,6 +15,7 @@ namespace RaceManager.DamageSystem
         [Tooltip("Maximum damage done at one time")]
         [SerializeField] private float _maxDamage = float.PositiveInfinity;
 
+        private Transform _thisTransform;
         private MeshFilter _meshFilter;
         private Vector3? _localCenterPoint;     
         
@@ -51,6 +52,8 @@ namespace RaceManager.DamageSystem
             }
         }
 
+        public Transform Transform => _thisTransform;
+
         public bool IsDead => _health <= 0; 
         public bool IsInited { get; private set; }
 
@@ -72,6 +75,8 @@ namespace RaceManager.DamageSystem
                 IsInited = true;
                 InitHealth = _health;
                 HealthPercent = 1;
+
+                _thisTransform = transform;
             }
         }
 

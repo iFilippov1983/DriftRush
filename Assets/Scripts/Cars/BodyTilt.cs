@@ -67,7 +67,7 @@ namespace RaceManager.Cars
                 _angle = -_car.VelocityAngle * _angleVelocityMultiplayer;
             else if (_car.CarDirection == -1)
             {
-                _angle = MathExtentions.LoopClamp(_car.VelocityAngle + 180, -180, 180) * _rearAngleVelocityMultiplayer;
+                _angle = MathExtentions.Repeat(_car.VelocityAngle + 180, -180, 180) * _rearAngleVelocityMultiplayer;
             }
             else
             {

@@ -3099,6 +3099,7 @@ GameObject:
   - component: {fileID: 919296511746490442}
   - component: {fileID: 919296511746490443}
   - component: {fileID: 6756450288714276880}
+  - component: {fileID: 4958166431841715378}
   m_Layer: 5
   m_Name: MainUI
   m_TagString: Untagged
@@ -3223,6 +3224,14 @@ MonoBehaviour:
   _lootboxSlotsHandler: {fileID: 7820653535736334876}
   _lootboxWindow: {fileID: 7200769138540595422}
   _settingsPopup: {fileID: 1705780642386584729}
+--- !u!81 &4958166431841715378
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919296511746490440}
+  m_Enabled: 1
 --- !u!1 &919296511861197908
 GameObject:
   m_ObjectHideFlags: 0
@@ -8428,7 +8437,6 @@ GameObject:
   - component: {fileID: 8509927839991374465}
   - component: {fileID: 7083420318482002656}
   - component: {fileID: 2830933328753007231}
-  - component: {fileID: 3654293034509868448}
   m_Layer: 5
   m_Name: GameProgressPanel
   m_TagString: Untagged
@@ -8515,14 +8523,6 @@ MonoBehaviour:
   _gemsAmountText: {fileID: 9060171444263655350}
   _progressStepsContent: {fileID: 6747467876703054127}
   _progressStepsContentRect: {fileID: 5137350490735150892}
---- !u!81 &3654293034509868448
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1182752192803219333}
-  m_Enabled: 1
 --- !u!1 &1214357762572028968
 GameObject:
   m_ObjectHideFlags: 0
@@ -13973,7 +13973,6 @@ GameObject:
   - component: {fileID: 7782300344162590313}
   - component: {fileID: 8261543356701037018}
   - component: {fileID: 4507579965558403318}
-  - component: {fileID: 47551135558045532}
   m_Layer: 5
   m_Name: LootboxPopup
   m_TagString: Untagged
@@ -14071,14 +14070,6 @@ MonoBehaviour:
   _timeToOpenText: {fileID: 1621782440542810281}
   _lootboxRarityText: {fileID: 8211510620572625883}
   _lootboxImage: {fileID: 3599740132577952430}
---- !u!81 &47551135558045532
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3694007592394613819}
-  m_Enabled: 1
 --- !u!1 &3723401094145714159
 GameObject:
   m_ObjectHideFlags: 0

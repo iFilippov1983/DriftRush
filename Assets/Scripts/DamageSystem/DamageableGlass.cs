@@ -1,11 +1,14 @@
-﻿using UnityEngine;
+﻿using RaceManager.Effects;
+using System;
+using UnityEngine;
+using AudioType = RaceManager.Effects.AudioType;
 
 namespace RaceManager.DamageSystem
 {
     /// <summary>
     /// Attach this class to a glass or light object to make it damageable 
     /// </summary>
-    public class DamageableGlass : DamageableObject
+    public class DamageableGlass : DamageableObject, IEffectEventSource
     {
         [Tooltip("Material applied to the object after complete damage, if this field is null then the object will not be visible after destruction")]
         [SerializeField] private Material _brokenGlassMaterial;
@@ -14,15 +17,16 @@ namespace RaceManager.DamageSystem
         [SerializeField] private ParticleSystem _shardsParticles;
 
         [Tooltip("Material index if the mesh has multiple materials")]
-        [SerializeField] protected int p_glassMaterialIndex;  
-
-        //public FMODUnity.EventReference DestroyEventRef;    //Sound reproduced when destroyed.            
+        [SerializeField] protected int p_glassMaterialIndex;            
         
         protected Renderer p_renderer;
         protected Material[] p_materials;
         protected Material p_defaultGlassMaterial;
 
+        private Action<EffectData> _onTakeDamageEvent;
+
         public ParticleSystem ShardsParticles => _shardsParticles;
+        public Action<EffectData> EffectEvent => _onTakeDamageEvent;
 
         protected override void InitDamageObject()
         {
@@ -37,6 +41,17 @@ namespace RaceManager.DamageSystem
                     p_defaultGlassMaterial = p_materials[p_glassMaterialIndex];
                 }
             }
+        }
+
+        public override void SetDamage(float damage)
+        {
+            base.SetDamage(damage);
+            _onTakeDamageEvent.Invoke(new EffectData() 
+            { 
+                audioType = AudioType.SFX_GlassShards_Light,
+                hapticType = HapticType.None,
+                particleType = ParticleType.None
+            });
         }
 
         protected override void DoDeath()
@@ -61,10 +76,12 @@ namespace RaceManager.DamageSystem
                 _shardsParticles.Play();
             }
 
-            //if (!DestroyEventRef.IsNull)
-            //{
-            //    FMODUnity.RuntimeManager.PlayOneShot(DestroyEventRef, transform.position);
-            //}
+            _onTakeDamageEvent.Invoke(new EffectData()
+            {
+                audioType = AudioType.SFX_GlassShards_Heavy,
+                hapticType = HapticType.None,
+                particleType = ParticleType.None
+            });
         }
     }
 }

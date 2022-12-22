@@ -5,7 +5,6 @@ using Lofelt.NiceVibrations;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using RaceManager.Root;
 
 namespace RaceManager.Effects
 {
@@ -22,7 +21,7 @@ namespace RaceManager.Effects
         [Tooltip("Relationship between audio types (key) and jobs (value) (Coroutine, IEnumerator)")]
         private Hashtable _jobTableAudio;
 
-        private ISettingsContainer _settings;
+        private IEffectsSettings _settings;
 
         private Dictionary<HapticType, HapticPatterns.PresetType> _haptics = new Dictionary<HapticType, HapticPatterns.PresetType>()
         {
@@ -90,7 +89,7 @@ namespace RaceManager.Effects
 
         #region Public Functions
 
-        public void InstallSettings(ISettingsContainer settings) => _settings = settings;
+        public void InstallSettings(IEffectsSettings settings) => _settings = settings;
 
         public void PlayEffect(AudioType type, bool fade = false, float secondsDelay = 0f)
         {

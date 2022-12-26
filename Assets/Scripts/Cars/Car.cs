@@ -342,7 +342,8 @@ namespace RaceManager.Cars
 
         private void OnDestroy()
         {
-            _carSelfRighting.OnCarRespawn -= CarResetNotification;
+            if(_carSelfRighting)
+                _carSelfRighting.OnCarRespawn -= CarResetNotification;
         }
 
         #endregion

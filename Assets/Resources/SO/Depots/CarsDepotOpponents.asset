@@ -13,63 +13,63 @@ MonoBehaviour:
   m_Name: CarsDepotOpponents
   m_EditorClassIdentifier: 
   DriverType: 1
-  CurrentCarName: 0
+  CurrentCarName: 1
   CarProfiles:
-  - CarName: 0
+  - CarName: 1
     RankingScheme:
       _ranks:
       - Rank: 1
-        PointsForAccess: 0
+        PointsForAccess: 30
         AccessCost: 0
-        AvailableTunePercentage: 1
+        AvailableTunePercentage: 0.5
         IsGranted: 1
         IsReached: 1
       - Rank: 2
-        PointsForAccess: 0
-        AccessCost: 0
-        AvailableTunePercentage: 1
+        PointsForAccess: 30
+        AccessCost: 100
+        AvailableTunePercentage: 0.75
         IsGranted: 1
         IsReached: 1
       - Rank: 3
-        PointsForAccess: 0
-        AccessCost: 0
+        PointsForAccess: 30
+        AccessCost: 100
         AvailableTunePercentage: 1
         IsGranted: 1
         IsReached: 1
     Speed:
-      Max: 0
-      Min: 0
+      Max: 190
+      Min: 230
     Mobility:
-      f_frictionForward_Max: 0
-      f_frictionForward_Min: 0
-      f_frictionSideway_Max: 0
-      f_frictionSideway_Min: 0
-      r_frictionForward_Max: 0
-      r_frictionForward_Min: 0
-      r_frictionSideway_Max: 0
+      f_frictionForward_Max: 0.7
+      f_frictionForward_Min: 0.4
+      f_frictionSideway_Max: 0.6
+      f_frictionSideway_Min: 0.4
+      r_frictionForward_Max: 0.7
+      r_frictionForward_Min: 0.5
+      r_frictionSideway_Max: 0.15
       r_frictionSideway_Min: 0
-      steerAngle_Max: 0
-      steerAngle_Min: 0
-      helpSteerPower_Max: 0
-      helpSteerPower_Min: 0
-      steerAngleChangeSpeed_Max: 0
-      steerAngleChangeSpeed_Min: 0
+      steerAngle_Max: 90
+      steerAngle_Min: 50
+      helpSteerPower_Max: 0.7
+      helpSteerPower_Min: 0.8
+      steerAngleChangeSpeed_Max: 300
+      steerAngleChangeSpeed_Min: 100
     Acceleration:
-      torqueMax: 0
-      torqueMin: 0
-      brakeTorqueMax: 0
-      brakeTorqueMin: 0
-      rpmToNextGearMax: 0
-      rpmToNextGearMin: 0
+      torqueMax: 550
+      torqueMin: 450
+      brakeTorqueMax: 2000
+      brakeTorqueMin: 2000
+      rpmToNextGearMax: 0.8
+      rpmToNextGearMin: 0.6
     Durability:
-      durabilityMax: 0
-      durabilityMin: 0
+      durabilityMax: 20
+      durabilityMin: 10
     CarCharacteristics:
       Rarity: 0
       _factorsMaxTotal: 400
-      _initialFactorsProgress: 400
-      FactorsMaxCurrent: 0
-      CurrentFactorsProgress: 400
+      _initialFactorsProgress: 200
+      FactorsMaxCurrent: 200
+      CurrentFactorsProgress: 200
       MinSpeedFactor: 1
       MaxSpeedFactor: 120
       CurrentSpeedFactor: 60
@@ -83,24 +83,24 @@ MonoBehaviour:
       MaxAccelerationFactor: 100
       CurrentAccelerationFactor: 50
     CarConfig:
-      CarName: 0
+      CarName: 1
       SpeedType: 1
       DriveType: 2
-      MaxSpeed: 160
+      MaxSpeed: 203
       CruiseSpeed: 40
-      CruiseSpeedPercentMax: 0.7
-      CruiseSpeedPercentMin: 0.6
-      FWheelsForwardFriction: 0.4
-      FWheelsSidewaysFriction: 0.4
-      RWheelsForwardFriction: 0.4
-      RWheelsSidewaysFriction: 0.4
+      CruiseSpeedPercentMax: 0.8
+      CruiseSpeedPercentMin: 0.7
+      FWheelsForwardFriction: 0.55
+      FWheelsSidewaysFriction: 0.5
+      RWheelsForwardFriction: 0.59999996
+      RWheelsSidewaysFriction: 0.075
       MaxSteerAngle: 70
-      HelpSteerPower: 0.8
-      SteerAngleChangeSpeed: 240
-      MaxMotorTorque: 600
-      RPMToNextGearPercent: 0.9
+      HelpSteerPower: 0.75
+      SteerAngleChangeSpeed: 200
+      MaxMotorTorque: 500
+      RPMToNextGearPercent: 0.7
       MaxBrakeTorque: 2000
-      Durability: 20
+      Durability: 15
       ProbabilityBackfire: 0.1
       MaxForwardSlipToBlockChangeGear: 0.25
       RpmEngineToRpmWheelsLerpSpeed: 15
@@ -109,9 +109,9 @@ MonoBehaviour:
       MaxSteerAngleMultiplier: 1
       MaxSpeedForMinAngleMultiplier: 250
       MinSpeedForSteerHelp: 1
-      MaxAngularVelocityHelpAngle: 90
-      OppositeAngularVelocityHelpPower: 0.2
-      PositiveAngularVelocityHelpPower: -0.1
+      MaxAngularVelocityHelpAngle: 45
+      OppositeAngularVelocityHelpPower: 0.05
+      PositiveAngularVelocityHelpPower: 0
       AngularVelocityInMaxAngle: 0.5
       AngularVelocityInMinAngle: 2
       AutomaticGearBox: 1
@@ -168,10 +168,10 @@ MonoBehaviour:
       MaxRPM: 7000
       CutOffTime: 0.1
     CarConfigVisual:
-      DriverType: 1
-      CarName: 0
+      DriverType: 0
+      CarName: 1
       CurrentMaterialsSetType: 0
-      _availableMaterialSets: 000000000100000002000000
+      _availableMaterialSets: 00000000
       CurrentWheelsSetType: 0
       CurrentWheelsLevel: 1
       CurrentSuspentionLevel: 1

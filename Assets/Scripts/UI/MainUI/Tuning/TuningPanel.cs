@@ -1,4 +1,5 @@
 ﻿using RaceManager.Cars;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -48,11 +49,16 @@ namespace RaceManager.UI
         public UpgradeWindowTuner UpgradeWindow => _upgradeWindow;
 
         public Button UpgradeButton => _upgradeWindow.UpgradeButton;
+        public Button TuneStatsButton => _tuneStatsButton;
+        public Button TuneWeelsViewButton => _tuneWheelsViewButton;
+        public Button TuneCarViewButton => _tuneCarViewButton;
         public Button ClosePanelButton => _closePanelButton;
         public Button ClosePanelWindowButton => _closePanelWindowButton;
 
         public TMP_Text UpgradeCostText => _upgradeWindow.CostText;
         public TMP_Text PartsAmountText => _upgradeWindow.PartsAmountText;
+
+        public Action OnButtonPressed;
 
         private void OnEnable()
         {
@@ -67,9 +73,13 @@ namespace RaceManager.UI
         public void RegisterButtonsListeners()
         {
             _tuneStatsButton.onClick.AddListener(OpenStatsValuesPanel);
+
             _tuneWheelsViewButton.onClick.AddListener(OpenTuneWheelsViewPanel);
+
             _tuneCarViewButton.onClick.AddListener(OpenTuneCarViewPanel);
+
             _closePanelButton.onClick.AddListener(DeactivateAllPanels);
+
             _closePanelWindowButton.onClick.AddListener(DeactivateAllPanels);
         }
 

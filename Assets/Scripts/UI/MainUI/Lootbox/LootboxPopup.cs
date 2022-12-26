@@ -8,6 +8,7 @@ namespace RaceManager.UI
     public class LootboxPopup : MonoBehaviour
     {
         [SerializeField] private Button _closePopupButton;
+        [SerializeField] private Button _closePopupWindowButton;
         [SerializeField] private Button _timerOpenButton;
         [SerializeField] private Button _instantOpenButton;
         [SerializeField] private Button _speedupButton;
@@ -21,6 +22,7 @@ namespace RaceManager.UI
         [SerializeField] private Image _lootboxImage;
 
         public Button ClosePopupButton => _closePopupButton;
+        public Button ClosePopupWindowButton => _closePopupWindowButton;
         public Button TimerOpenButton => _timerOpenButton;
         public Button InstantOpenButton => _instantOpenButton;
         public Button SpeedupButton => _speedupButton;

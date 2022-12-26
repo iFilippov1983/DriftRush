@@ -32,6 +32,7 @@ namespace RaceManager.UI
         private float _minutes;
 
         public Action<bool> OnPopupIsActive;
+        public Action OnButtonPressed;
 
         [Inject]
         public void Construct(Profiler currencyHandler, SpritesContainerRewards spritesRewards)
@@ -127,6 +128,7 @@ namespace RaceManager.UI
                 }
 
                 slot.SlotButton.onClick.AddListener(() => OnLootboxSlotClicked(slot));
+                slot.SlotButton.onClick.AddListener(OnButtonPressedMethod);
             }
         }
 
@@ -175,8 +177,13 @@ namespace RaceManager.UI
             _lootboxPopup.SpeedupButton.SetActive(timerActive);
 
             _lootboxPopup.TimerOpenButton.onClick.AddListener(() => SlotStartTimer(slot));
+            _lootboxPopup.TimerOpenButton.onClick.AddListener(OnButtonPressedMethod);
+
             _lootboxPopup.InstantOpenButton.onClick.AddListener(() => SlotInstantOpen(slot));
+            _lootboxPopup.InstantOpenButton.onClick.AddListener(OnButtonPressedMethod);
+
             _lootboxPopup.SpeedupButton.onClick.AddListener(() => SlotSpeedupTimer(slot));
+            _lootboxPopup.SpeedupButton.onClick.AddListener(OnButtonPressedMethod);
 
             _lootboxPopup.TimerOpenButton.interactable = !_hasActiveTimerSlot;
 
@@ -246,6 +253,7 @@ namespace RaceManager.UI
             {
                 emptySlot.SetStatusClosed(sprite, lootbox.InitialTimeToOpen, lootbox.GemsToOpen, lootbox.Id);
                 emptySlot.SlotButton.onClick.AddListener(() => OnLootboxSlotClicked(emptySlot));
+                emptySlot.SlotButton.onClick.AddListener(OnButtonPressedMethod);
                 _lootboxAnimationHandler.OnAnimationFinish -= OnAnimationFinish;
             }
 
@@ -287,11 +295,18 @@ namespace RaceManager.UI
             }
         }
 
+        private void OnButtonPressedMethod() => OnButtonPressed?.Invoke();
+
         private void AddButtonsListeners()
         {
             _lootboxPopup.ClosePopupButton.onClick.AddListener(CloseLootboxPopup);
+            _lootboxPopup.ClosePopupButton.onClick.AddListener(OnButtonPressedMethod);
+
+            _lootboxPopup.ClosePopupWindowButton.onClick.AddListener(CloseLootboxPopup);
+            _lootboxPopup.ClosePopupWindowButton.onClick.AddListener(OnButtonPressedMethod);
         }
 
+        #region Unity Functions
         private void FixedUpdate()
         {
             UpdateTimer();
@@ -316,8 +331,9 @@ namespace RaceManager.UI
         {
             _lootboxAnimationHandler.OnAnimationFinish -= _lootboxProgress.OnAnimationFinish;
 
-            _lootboxProgress.OnImagesDisableComplete += InitializeLootboxProgressPanel;
+            _lootboxProgress.OnImagesDisableComplete -= InitializeLootboxProgressPanel;
         }
+        #endregion
     }
 }
 

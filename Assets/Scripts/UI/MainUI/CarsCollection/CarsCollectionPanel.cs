@@ -32,6 +32,7 @@ namespace RaceManager.UI
 
         public Action<CarName> OnUseCar;
         public Action OnCarWindowOpen;
+        public Action OnButtonPressed;
 
         public CarName UsedCarName { get; set; }
         public CarWindow CarWindow => _carWindow;
@@ -84,6 +85,7 @@ namespace RaceManager.UI
 
             card.UseCarButton.interactable = isAvailable;
             card.UseCarButton.onClick.AddListener(() => HandleClick(card));
+            card.UseCarButton.onClick.AddListener(OnButtonPressedMethod);
 
             _collectionCards.Add(card);
 
@@ -151,6 +153,8 @@ namespace RaceManager.UI
             _carWindow.ProgressBarImage.fillAmount = card.ProgressImage.fillAmount;
             _carWindow.CardsProgressText.text = card.ProgressText.text;
         }
+
+        private void OnButtonPressedMethod() => OnButtonPressed?.Invoke();
     }
 }
 

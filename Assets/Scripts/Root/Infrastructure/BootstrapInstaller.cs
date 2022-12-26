@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Globalization;
 using RaceManager.Root;
 using SaveData = System.Collections.Generic.Dictionary<string, Newtonsoft.Json.Linq.JObject>;
+using RaceManager.Effects;
 
 namespace RaceManager.Infrastructure
 {
@@ -16,7 +17,8 @@ namespace RaceManager.Infrastructure
         public override void InstallBindings()
         {
             AotEnsureObjects();
-            //TODO: Services installation
+
+            
         }
 
         public override void Start()

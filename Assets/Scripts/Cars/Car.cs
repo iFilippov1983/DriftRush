@@ -34,9 +34,11 @@ namespace RaceManager.Cars
         [SerializeField] Transform _cameraFollowTarget;
         [SerializeField] List<ParticleSystem> BackFireParticles = new List<ParticleSystem>();
         [SerializeField] private CarConfig _carConfig;
-        [SerializeField] private GameObject _effectsChild;
 
         private CarSelfRighting _carSelfRighting;
+        private CarBody _carBody;
+        private Rigidbody _rB;
+        private Wheel[] _wheels;
 
         /// <summary>
         /// Action performed at the moment of collision event.
@@ -49,9 +51,14 @@ namespace RaceManager.Cars
         public event Action<Car, Collision> CollisionStayAction;
 
         /// <summary>
+        /// Backfire invoked when cut off (You can add a invoke when changing gears).
+        /// </summary>
+        public Action BackFireAction;
+
+        /// <summary>
         /// Action performed when the vehicle is reset.
         /// </summary>
-        public event Action ResetVehicleAction;
+        public Action ResetVehicleAction;
 
         #region Properties of car parameters
 
@@ -96,18 +103,15 @@ namespace RaceManager.Cars
         public string ID => _id;
         public CarConfig CarConfig => _carConfig;
         public CarSelfRighting CarSelfRighting => _carSelfRighting;
-        public GameObject EffectsChild => _effectsChild;
         public Transform CameraLookTarget => _cameraLookTarget;
         public Transform CameraFollowTarget => _cameraFollowTarget;
         
-        public Action BackFireAction; //Backfire invoked when cut off (You can add a invoke when changing gears).
 
-        float[] AllGearsRatio; //All gears (Reverce, neutral and all forward).
+        /// <summary>
+        /// All gears (Reverce, neutral and all forward).
+        /// </summary>
+        float[] AllGearsRatio;
 
-        Rigidbody _rB;
-
-        private Wheel[] _wheels;
-        
         public Wheel[] Wheels 
         { 
             get
@@ -142,6 +146,7 @@ namespace RaceManager.Cars
         public int VehicleDirection { get { return CurrentSpeed < 1 ? 0 : (VelocityAngle.Abs() < 90 ? 1 : -1); } }
         public float SpeedInDesiredUnits => _carConfig.SpeedType == SpeedType.KPH ? CurrentSpeed * C.KPHFactor : CurrentSpeed * C.MPHFactor;
         public int CarDirection { get { return CurrentSpeed < 1 ? 0 : (VelocityAngle < 90 && VelocityAngle > -90 ? 1 : -1); } }
+        public bool IsVisible => _carBody.IsVisible;
 
         float CurrentSteerAngle;
         float CurrentAcceleration;
@@ -157,7 +162,9 @@ namespace RaceManager.Cars
         {
             _carConfig = carConfig;
             _carSelfRighting = GetComponent<CarSelfRighting>();
+            _carBody = GetComponent<CarBody>();
             _id = MakeId();
+
             RB.centerOfMass = COM.localPosition;
 
             InitWheels();
@@ -192,10 +199,7 @@ namespace RaceManager.Cars
                 AllGearsRatio[i + 2] = GearsRatio[i] * MainRatio;
             }
 
-            foreach (var particles in BackFireParticles)
-            {
-                BackFireAction += () => particles.Emit(2);
-            }
+            _carSelfRighting.OnCarRespawn += CarResetNotification;
         }
 
         private void InitWheels()
@@ -263,6 +267,8 @@ namespace RaceManager.Cars
             InHandBrake = handBrake;
         }
 
+        #region Unity Functions
+
         private void Update()
         {
             for (int i = 0; i < Wheels.Length; i++)
@@ -307,6 +313,39 @@ namespace RaceManager.Cars
             }
 
         }
+
+        public virtual void OnCollisionEnter(Collision collision)
+        {
+            CollisionAction.SafeInvoke(this, collision);
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            var centerPos = transform.position;
+            var velocity = transform.position + (Vector3.ClampMagnitude(RB.velocity, 4));
+            var forwardPos = transform.TransformPoint(Vector3.forward * 4);
+
+            Gizmos.color = Color.green;
+
+            Gizmos.DrawWireSphere(centerPos, 0.2f);
+            Gizmos.DrawLine(centerPos, velocity);
+            Gizmos.DrawLine(centerPos, forwardPos);
+
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(forwardPos, 0.2f);
+
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(velocity, 0.2f);
+
+            Gizmos.color = Color.white;
+        }
+
+        private void OnDestroy()
+        {
+            _carSelfRighting.OnCarRespawn -= CarResetNotification;
+        }
+
+        #endregion
 
         #region Steer help logic
 
@@ -487,7 +526,7 @@ namespace RaceManager.Cars
                 bool forwardIsSlip = false;
                 for (int i = FirstDriveWheel; i <= LastDriveWheel; i++)
                 {
-                    if (Wheels[i].CurrentForwardSleep > MaxForwardSlipToBlockChangeGear)
+                    if (Wheels[i].CurrentForwardSlip > MaxForwardSlipToBlockChangeGear)
                     {
                         forwardIsSlip = true;
                         break;
@@ -544,31 +583,7 @@ namespace RaceManager.Cars
 
         #endregion
 
-        public virtual void OnCollisionEnter(Collision collision)
-        {
-            CollisionAction.SafeInvoke(this, collision);
-        }
-
-        private void OnDrawGizmosSelected()
-        {
-            var centerPos = transform.position;
-            var velocity = transform.position + (Vector3.ClampMagnitude(RB.velocity, 4));
-            var forwardPos = transform.TransformPoint(Vector3.forward * 4);
-
-            Gizmos.color = Color.green;
-
-            Gizmos.DrawWireSphere(centerPos, 0.2f);
-            Gizmos.DrawLine(centerPos, velocity);
-            Gizmos.DrawLine(centerPos, forwardPos);
-
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(forwardPos, 0.2f);
-
-            Gizmos.color = Color.blue;
-            Gizmos.DrawWireSphere(velocity, 0.2f);
-
-            Gizmos.color = Color.white;
-        }
+        private void CarResetNotification() => ResetVehicleAction?.Invoke();
 
         private string MakeId()
         {

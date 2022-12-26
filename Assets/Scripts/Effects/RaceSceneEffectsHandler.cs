@@ -5,10 +5,11 @@ using UnityEngine;
 using Zenject;
 using RaceManager.UI;
 using Random = UnityEngine.Random;
+using IInitializable = RaceManager.Root.IInitializable;
 
 namespace RaceManager.Effects
 {
-    public class RaceSceneEffectsHandler : MonoBehaviour, Root.IInitializable
+    public class RaceSceneEffectsHandler : MonoBehaviour, IInitializable
     {
         private RaceUI _raceUI;
         private EffectsSettingsContainer _settingsContainer;

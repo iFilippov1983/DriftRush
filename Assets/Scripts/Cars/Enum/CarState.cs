@@ -1,14 +1,5 @@
-﻿using System;
-
-namespace RaceManager.Cars
+﻿namespace RaceManager.Cars
 {
-    [Serializable]
-    public enum CarState
-    {
-        InShed,
-        OnTrack,
-        Stuck,
-        Finished,
-        GotHit
-    }
+    [System.Serializable]
+    public enum CarState { OnTrack, Finished }
 }

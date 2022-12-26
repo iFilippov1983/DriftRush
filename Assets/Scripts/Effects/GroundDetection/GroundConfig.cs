@@ -5,12 +5,18 @@ namespace RaceManager.Effects
     [System.Serializable]
     public class GroundConfig 
     {
-        [SerializeField] private EffectData _effectData;
-        [SerializeField] private float _slipModificator;
-        [SerializeField] private float _steerModificator;
+        [SerializeField] private GroundType _type;
+        [SerializeField] private ParticleSystem _idleParticles;
+        [SerializeField] private ParticleSystem _slipParticles;
+        [Tooltip("Dependence of particle system operation on the speed of the car.")]
+        [SerializeField] private bool _speedDependent;
 
-        public EffectData EffectData => _effectData;
-        public float SlipModificator => _slipModificator;
-        public float SteeringModificator => _steerModificator;
+        [Tooltip("Wheel friction multiplier.")]
+        public float WheelStiffness;
+
+        public GroundType Type => _type;
+        public ParticleSystem IdleParticles => _idleParticles;
+        public ParticleSystem SlipParticles => _slipParticles;
+        public bool SpeedDependent => _speedDependent;
     }
 }

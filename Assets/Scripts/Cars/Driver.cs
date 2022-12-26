@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
-using Zenject;
 
 namespace RaceManager.Cars
 {
@@ -83,16 +82,10 @@ namespace RaceManager.Cars
         {
             switch (carState)
             {
-                case CarState.InShed:
-                    break;
                 case CarState.OnTrack:
-                    break;
-                case CarState.Stuck:
                     break;
                 case CarState.Finished:
                     StopRace();
-                    break;
-                case CarState.GotHit:
                     break;
             }
         }

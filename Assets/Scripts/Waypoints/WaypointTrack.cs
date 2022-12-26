@@ -53,30 +53,6 @@ namespace RaceManager.Waypoints
         public Transform PreviouseTargetWaypoint => waypointList.items[p1n];
         public int LapsToComplete => _lapsToComplete;
 
-        [ShowInInspector]
-        [ToggleLeft]
-        private bool _buildMode = false;
-
-        [ButtonGroup]
-        public void Build()
-        {
-            StopAllCoroutines();
-            _buildMode = true;
-            StartCoroutine(BuildCoroutine());
-        }
-
-        private IEnumerator BuildCoroutine()
-        {
-            while (_buildMode)
-            {
-
-                    Debug.Log("Click");
-                yield return new WaitForEndOfFrame();
-            }
-
-            Debug.Log("Done");
-        }
-
         private void Awake()
         {
             if (Waypoints.Length > 1)

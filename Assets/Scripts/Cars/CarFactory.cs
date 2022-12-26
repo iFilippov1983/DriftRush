@@ -12,9 +12,15 @@ namespace RaceManager.Cars
         private WaypointTrack _waypointTrack;
         private Transform _spawnPoint;
         private MaterialsContainer _materialsContainer;
-        private EffectsSettingsContainer _settingsContainer;
 
-        public CarFactory(DriverType driverType, CarsDepot carsDepot, WaypointTrack waypointTrack, MaterialsContainer materialsContainer, Transform spawnPoint)
+        public CarFactory
+            (
+            DriverType driverType, 
+            CarsDepot carsDepot, 
+            WaypointTrack waypointTrack, 
+            MaterialsContainer materialsContainer, 
+            Transform spawnPoint
+            )
         {
             _driverType = driverType;
             _carsDepot = carsDepot;
@@ -57,7 +63,7 @@ namespace RaceManager.Cars
             waypointsTracker = go.GetComponent<WaypointsTracker>();
             waypointsTracker.Initialize(_waypointTrack, driverProfile);
 
-            var carSoundController = go.GetComponent<CarSFXController>();
+            var carSoundController = go.GetComponent<CarSfxController>();
             carSoundController.enabled = playSound;
 
             if (_driverType == DriverType.Player)
@@ -79,7 +85,6 @@ namespace RaceManager.Cars
             carVisual.Initialize(_carProfile.CarConfigVisual, _materialsContainer);
 
             var car = go.GetComponent<Car>();
-            car.EffectsChild.SetActive(false);
             car.enabled = false;
 
             var carAI = go.GetComponent<CarAI>();
@@ -94,7 +99,7 @@ namespace RaceManager.Cars
             var bodyTilt = go.GetComponent<BodyTilt>();
             bodyTilt.enabled = false;
 
-            var carSoundController = go.GetComponent<CarSFXController>();
+            var carSoundController = go.GetComponent<CarSfxController>();
             carSoundController.enabled = false;
 
             return go;

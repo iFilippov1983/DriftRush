@@ -197,6 +197,38 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &2874779708638177770
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9122753195117067429}
+  m_Layer: 8
+  m_Name: VFX
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9122753195117067429
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2874779708638177770}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 7878376467224290500}
+  - {fileID: 7365077152986294479}
+  m_Father: {fileID: 7878384805958699896}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3553035095062558327
 GameObject:
   m_ObjectHideFlags: 0
@@ -209,7 +241,7 @@ GameObject:
   - component: {fileID: 5894044915176394335}
   - component: {fileID: 377270625980748890}
   m_Layer: 8
-  m_Name: Backfire (1)
+  m_Name: Backfire_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -226,8 +258,8 @@ Transform:
   m_LocalPosition: {x: 0.588, y: 0.285, z: -2.358}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 7878402621752400320}
-  m_RootOrder: 3
+  m_Father: {fileID: 9122753195117067429}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: -180, y: 0, z: 0}
 --- !u!198 &5894044915176394335
 ParticleSystem:
@@ -5338,7 +5370,7 @@ GameObject:
   - component: {fileID: 8042060132909517162}
   - component: {fileID: 8043137710302060168}
   m_Layer: 8
-  m_Name: Backfire
+  m_Name: Backfire_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5355,8 +5387,8 @@ Transform:
   m_LocalPosition: {x: -0.554, y: 0.274, z: -2.411}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 7878402621752400320}
-  m_RootOrder: 2
+  m_Father: {fileID: 9122753195117067429}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -180, y: 0, z: 0}
 --- !u!198 &8042060132909517162
 ParticleSystem:
@@ -10151,6 +10183,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7878439831868071556}
+  - component: {fileID: 6379138964917198064}
   - component: {fileID: 7839753183079772920}
   - component: {fileID: 8021698394765830114}
   m_Layer: 8
@@ -10175,6 +10208,22 @@ Transform:
   m_Father: {fileID: 7878202026340033326}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6379138964917198064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7880208374295072754}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cbfdb2e9b4ffdb49a4ad4815bc2a5a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  WheelCollider: {fileID: 8021698394765830114}
+  WheelView: {fileID: 7875374632307656022}
+  SlipForGenerateParticle: 0
+  TrailOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &7839753183079772920
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10435,6 +10484,7 @@ Transform:
   - {fileID: 7878202026340033326}
   - {fileID: 3556345638502056076}
   - {fileID: 7878402621752400320}
+  - {fileID: 9122753195117067429}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -10498,26 +10548,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b5e71ace82184d409819aa47af74854, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FrontLeftWheel:
-    WheelCollider: {fileID: 8021491962794878516}
-    WheelView: {fileID: 7878102637726409176}
-    SlipForGenerateParticle: 0.2
-    TrailOffset: {x: 0.1, y: 0.05, z: 0}
-  FrontRightWheel:
-    WheelCollider: {fileID: 8021687935178480580}
-    WheelView: {fileID: 7875611640171047958}
-    SlipForGenerateParticle: 0.2
-    TrailOffset: {x: -0.1, y: 0.05, z: 0}
-  RearLeftWheel:
-    WheelCollider: {fileID: 8021971220770076928}
-    WheelView: {fileID: 7878025339093233764}
-    SlipForGenerateParticle: 0.2
-    TrailOffset: {x: 0.1, y: 0.05, z: 0}
-  RearRightWheel:
-    WheelCollider: {fileID: 8021698394765830114}
-    WheelView: {fileID: 7875374632307656022}
-    SlipForGenerateParticle: 0.2
-    TrailOffset: {x: -0.1, y: 0.05, z: 0}
+  FrontLeftWheel: {fileID: 2653447566028898479}
+  FrontRightWheel: {fileID: 7420961262960529272}
+  RearLeftWheel: {fileID: 5897434432614094259}
+  RearRightWheel: {fileID: 6379138964917198064}
   COM: {fileID: 7875330837019206152}
   _cameraLookTarget: {fileID: 5554413697011292690}
   _cameraFollowTarget: {fileID: 7878384805958699896}
@@ -10609,7 +10643,6 @@ MonoBehaviour:
     ReversGearRatio: 4
     MaxRPM: 7000
     CutOffTime: 0.1
-  _effectsChild: {fileID: 7881238219054167782}
 --- !u!114 &5310208226601326112
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10681,137 +10714,73 @@ MonoBehaviour:
     _parts:
     - PartLevel: 0
       Parts:
-      - _wheel:
-          WheelCollider: {fileID: 8021491962794878516}
-          WheelView: {fileID: 7878102637726409176}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: 0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _wheelProperty:
           WheelRadius: 0.25
           WheelScale: {x: 0.8, y: 0.8, z: 0.8}
-      - _wheel:
-          WheelCollider: {fileID: 8021687935178480580}
-          WheelView: {fileID: 7875611640171047958}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: -0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _wheelProperty:
           WheelRadius: 0.25
           WheelScale: {x: 0.8, y: 0.8, z: 0.8}
-      - _wheel:
-          WheelCollider: {fileID: 8021971220770076928}
-          WheelView: {fileID: 7878025339093233764}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: 0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _wheelProperty:
           WheelRadius: 0.25
           WheelScale: {x: 0.8, y: 0.8, z: 0.8}
-      - _wheel:
-          WheelCollider: {fileID: 8021698394765830114}
-          WheelView: {fileID: 7875374632307656022}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: -0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _wheelProperty:
           WheelRadius: 0.25
           WheelScale: {x: 0.8, y: 0.8, z: 0.8}
     - PartLevel: 1
       Parts:
-      - _wheel:
-          WheelCollider: {fileID: 8021491962794878516}
-          WheelView: {fileID: 7878102637726409176}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: 0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _wheelProperty:
           WheelRadius: 0.35
           WheelScale: {x: 1, y: 1, z: 1}
-      - _wheel:
-          WheelCollider: {fileID: 8021687935178480580}
-          WheelView: {fileID: 7875611640171047958}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: -0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _wheelProperty:
           WheelRadius: 0.35
           WheelScale: {x: 1, y: 1, z: 1}
-      - _wheel:
-          WheelCollider: {fileID: 8021971220770076928}
-          WheelView: {fileID: 7878025339093233764}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: 0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _wheelProperty:
           WheelRadius: 0.35
           WheelScale: {x: 1, y: 1, z: 1}
-      - _wheel:
-          WheelCollider: {fileID: 8021698394765830114}
-          WheelView: {fileID: 7875374632307656022}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: -0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _wheelProperty:
           WheelRadius: 0.35
           WheelScale: {x: 1, y: 1, z: 1}
     - PartLevel: 2
       Parts:
-      - _wheel:
-          WheelCollider: {fileID: 8021491962794878516}
-          WheelView: {fileID: 7878102637726409176}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: 0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _wheelProperty:
           WheelRadius: 0.36
           WheelScale: {x: 1.1, y: 1.1, z: 1.1}
-      - _wheel:
-          WheelCollider: {fileID: 8021687935178480580}
-          WheelView: {fileID: 7875611640171047958}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: -0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _wheelProperty:
           WheelRadius: 0.36
           WheelScale: {x: 1.1, y: 1.1, z: 1.1}
-      - _wheel:
-          WheelCollider: {fileID: 8021971220770076928}
-          WheelView: {fileID: 7878025339093233764}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: 0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _wheelProperty:
           WheelRadius: 0.36
           WheelScale: {x: 1.1, y: 1.1, z: 1.1}
-      - _wheel:
-          WheelCollider: {fileID: 8021698394765830114}
-          WheelView: {fileID: 7875374632307656022}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: -0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _wheelProperty:
           WheelRadius: 0.36
           WheelScale: {x: 1.1, y: 1.1, z: 1.1}
     - PartLevel: 3
       Parts:
-      - _wheel:
-          WheelCollider: {fileID: 8021491962794878516}
-          WheelView: {fileID: 7878102637726409176}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: 0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _wheelProperty:
           WheelRadius: 0.37
           WheelScale: {x: 1.2, y: 1.1, z: 1.1}
-      - _wheel:
-          WheelCollider: {fileID: 8021687935178480580}
-          WheelView: {fileID: 7875611640171047958}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: -0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _wheelProperty:
           WheelRadius: 0.37
           WheelScale: {x: 1.2, y: 1.1, z: 1.1}
-      - _wheel:
-          WheelCollider: {fileID: 8021971220770076928}
-          WheelView: {fileID: 7878025339093233764}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: 0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _wheelProperty:
           WheelRadius: 0.37
           WheelScale: {x: 1.2, y: 1.1, z: 1.1}
-      - _wheel:
-          WheelCollider: {fileID: 8021698394765830114}
-          WheelView: {fileID: 7875374632307656022}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: -0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _wheelProperty:
           WheelRadius: 0.37
           WheelScale: {x: 1.2, y: 1.1, z: 1.1}
@@ -10825,137 +10794,73 @@ MonoBehaviour:
     _parts:
     - PartLevel: 0
       Parts:
-      - _wheel:
-          WheelCollider: {fileID: 8021491962794878516}
-          WheelView: {fileID: 7878102637726409176}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: 0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _wheelProperty:
           WheelRadius: 0.25
           WheelScale: {x: 0.8, y: 0.8, z: 0.8}
-      - _wheel:
-          WheelCollider: {fileID: 8021687935178480580}
-          WheelView: {fileID: 7875611640171047958}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: -0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _wheelProperty:
           WheelRadius: 0.25
           WheelScale: {x: 0.8, y: 0.8, z: 0.8}
-      - _wheel:
-          WheelCollider: {fileID: 8021971220770076928}
-          WheelView: {fileID: 7878025339093233764}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: 0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _wheelProperty:
           WheelRadius: 0.25
           WheelScale: {x: 0.8, y: 0.8, z: 0.8}
-      - _wheel:
-          WheelCollider: {fileID: 8021698394765830114}
-          WheelView: {fileID: 7875374632307656022}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: -0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _wheelProperty:
           WheelRadius: 0.25
           WheelScale: {x: 0.8, y: 0.8, z: 0.8}
     - PartLevel: 1
       Parts:
-      - _wheel:
-          WheelCollider: {fileID: 8021491962794878516}
-          WheelView: {fileID: 7878102637726409176}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: 0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _wheelProperty:
           WheelRadius: 0.35
           WheelScale: {x: 1, y: 1, z: 1}
-      - _wheel:
-          WheelCollider: {fileID: 8021687935178480580}
-          WheelView: {fileID: 7875611640171047958}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: -0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _wheelProperty:
           WheelRadius: 0.35
           WheelScale: {x: 1, y: 1, z: 1}
-      - _wheel:
-          WheelCollider: {fileID: 8021971220770076928}
-          WheelView: {fileID: 7878025339093233764}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: 0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _wheelProperty:
           WheelRadius: 0.35
           WheelScale: {x: 1, y: 1, z: 1}
-      - _wheel:
-          WheelCollider: {fileID: 8021698394765830114}
-          WheelView: {fileID: 7875374632307656022}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: -0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _wheelProperty:
           WheelRadius: 0.35
           WheelScale: {x: 1, y: 1, z: 1}
     - PartLevel: 2
       Parts:
-      - _wheel:
-          WheelCollider: {fileID: 8021491962794878516}
-          WheelView: {fileID: 7878102637726409176}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: 0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _wheelProperty:
           WheelRadius: 0.37
           WheelScale: {x: 1.1, y: 1.1, z: 1.1}
-      - _wheel:
-          WheelCollider: {fileID: 8021687935178480580}
-          WheelView: {fileID: 7875611640171047958}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: -0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _wheelProperty:
           WheelRadius: 0.37
           WheelScale: {x: 1.1, y: 1.1, z: 1.1}
-      - _wheel:
-          WheelCollider: {fileID: 8021971220770076928}
-          WheelView: {fileID: 7878025339093233764}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: 0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _wheelProperty:
           WheelRadius: 0.37
           WheelScale: {x: 1.1, y: 1.1, z: 1.1}
-      - _wheel:
-          WheelCollider: {fileID: 8021698394765830114}
-          WheelView: {fileID: 7875374632307656022}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: -0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _wheelProperty:
           WheelRadius: 0.37
           WheelScale: {x: 1.1, y: 1.1, z: 1.1}
     - PartLevel: 3
       Parts:
-      - _wheel:
-          WheelCollider: {fileID: 8021491962794878516}
-          WheelView: {fileID: 7878102637726409176}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: 0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _wheelProperty:
           WheelRadius: 0.39
           WheelScale: {x: 1.2, y: 1.2, z: 1.2}
-      - _wheel:
-          WheelCollider: {fileID: 8021687935178480580}
-          WheelView: {fileID: 7875611640171047958}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: -0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _wheelProperty:
           WheelRadius: 0.39
           WheelScale: {x: 1.2, y: 1.2, z: 1.2}
-      - _wheel:
-          WheelCollider: {fileID: 8021971220770076928}
-          WheelView: {fileID: 7878025339093233764}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: 0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _wheelProperty:
           WheelRadius: 0.39
           WheelScale: {x: 1.2, y: 1.2, z: 1.2}
-      - _wheel:
-          WheelCollider: {fileID: 8021698394765830114}
-          WheelView: {fileID: 7875374632307656022}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: -0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _wheelProperty:
           WheelRadius: 0.39
           WheelScale: {x: 1.2, y: 1.2, z: 1.2}
@@ -10970,122 +10875,58 @@ MonoBehaviour:
     _parts:
     - PartLevel: 0
       Parts:
-      - _wheel:
-          WheelCollider: {fileID: 8021491962794878516}
-          WheelView: {fileID: 7878102637726409176}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: 0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _suspentionProperty:
           SuspentionHeight: 0.22
-      - _wheel:
-          WheelCollider: {fileID: 8021687935178480580}
-          WheelView: {fileID: 7875611640171047958}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: -0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _suspentionProperty:
           SuspentionHeight: 0.22
-      - _wheel:
-          WheelCollider: {fileID: 8021971220770076928}
-          WheelView: {fileID: 7878025339093233764}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: 0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _suspentionProperty:
           SuspentionHeight: 0.22
-      - _wheel:
-          WheelCollider: {fileID: 8021698394765830114}
-          WheelView: {fileID: 7875374632307656022}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: -0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _suspentionProperty:
           SuspentionHeight: 0.22
     - PartLevel: 1
       Parts:
-      - _wheel:
-          WheelCollider: {fileID: 8021491962794878516}
-          WheelView: {fileID: 7878102637726409176}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: 0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _suspentionProperty:
           SuspentionHeight: 0.15
-      - _wheel:
-          WheelCollider: {fileID: 8021687935178480580}
-          WheelView: {fileID: 7875611640171047958}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: -0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _suspentionProperty:
           SuspentionHeight: 0.15
-      - _wheel:
-          WheelCollider: {fileID: 8021971220770076928}
-          WheelView: {fileID: 7878025339093233764}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: 0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _suspentionProperty:
           SuspentionHeight: 0.15
-      - _wheel:
-          WheelCollider: {fileID: 8021698394765830114}
-          WheelView: {fileID: 7875374632307656022}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: -0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _suspentionProperty:
           SuspentionHeight: 0.15
     - PartLevel: 2
       Parts:
-      - _wheel:
-          WheelCollider: {fileID: 8021491962794878516}
-          WheelView: {fileID: 7878102637726409176}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: 0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _suspentionProperty:
           SuspentionHeight: 0.13
-      - _wheel:
-          WheelCollider: {fileID: 8021687935178480580}
-          WheelView: {fileID: 7875611640171047958}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: -0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _suspentionProperty:
           SuspentionHeight: 0.13
-      - _wheel:
-          WheelCollider: {fileID: 8021971220770076928}
-          WheelView: {fileID: 7878025339093233764}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: 0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _suspentionProperty:
           SuspentionHeight: 0.13
-      - _wheel:
-          WheelCollider: {fileID: 8021698394765830114}
-          WheelView: {fileID: 7875374632307656022}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: -0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _suspentionProperty:
           SuspentionHeight: 0.13
     - PartLevel: 3
       Parts:
-      - _wheel:
-          WheelCollider: {fileID: 8021491962794878516}
-          WheelView: {fileID: 7878102637726409176}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: 0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _suspentionProperty:
           SuspentionHeight: 0.11
-      - _wheel:
-          WheelCollider: {fileID: 8021687935178480580}
-          WheelView: {fileID: 7875611640171047958}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: -0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _suspentionProperty:
           SuspentionHeight: 0.11
-      - _wheel:
-          WheelCollider: {fileID: 8021971220770076928}
-          WheelView: {fileID: 7878025339093233764}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: 0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _suspentionProperty:
           SuspentionHeight: 0.11
-      - _wheel:
-          WheelCollider: {fileID: 8021698394765830114}
-          WheelView: {fileID: 7875374632307656022}
-          SlipForGenerateParticle: 0.2
-          TrailOffset: {x: -0.1, y: 0.05, z: 0}
+      - _wheel: {fileID: 0}
         _suspentionProperty:
           SuspentionHeight: 0.11
   _bumpersSet:
@@ -11270,6 +11111,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7875619981322046650}
+  - component: {fileID: 2653447566028898479}
   - component: {fileID: 7840174887550465978}
   - component: {fileID: 8021491962794878516}
   m_Layer: 8
@@ -11294,6 +11136,22 @@ Transform:
   m_Father: {fileID: 7878202026340033326}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 25, z: 0}
+--- !u!114 &2653447566028898479
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7880975730117686612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cbfdb2e9b4ffdb49a4ad4815bc2a5a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  WheelCollider: {fileID: 8021491962794878516}
+  WheelView: {fileID: 7878102637726409176}
+  SlipForGenerateParticle: 0
+  TrailOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &7840174887550465978
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11361,6 +11219,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7878390613956978682}
+  - component: {fileID: 5897434432614094259}
   - component: {fileID: 7836996256954062096}
   - component: {fileID: 8021971220770076928}
   m_Layer: 8
@@ -11385,6 +11244,22 @@ Transform:
   m_Father: {fileID: 7878202026340033326}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5897434432614094259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7880978549004840908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cbfdb2e9b4ffdb49a4ad4815bc2a5a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  WheelCollider: {fileID: 8021971220770076928}
+  WheelView: {fileID: 7878025339093233764}
+  SlipForGenerateParticle: 0
+  TrailOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &7836996256954062096
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11611,6 +11486,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7875428027045212160}
+  - component: {fileID: 7420961262960529272}
   - component: {fileID: 7839971029740495578}
   - component: {fileID: 8021687935178480580}
   m_Layer: 8
@@ -11635,6 +11511,22 @@ Transform:
   m_Father: {fileID: 7878202026340033326}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 25, z: 0}
+--- !u!114 &7420961262960529272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7881190947299257746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cbfdb2e9b4ffdb49a4ad4815bc2a5a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  WheelCollider: {fileID: 8021687935178480580}
+  WheelView: {fileID: 7875611640171047958}
+  SlipForGenerateParticle: 0
+  TrailOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &7839971029740495578
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11703,7 +11595,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7878402621752400320}
   m_Layer: 8
-  m_Name: SoundsAndEffects
+  m_Name: SFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11722,8 +11614,6 @@ Transform:
   m_Children:
   - {fileID: 7878337273154803822}
   - {fileID: 7875485782245113168}
-  - {fileID: 7878376467224290500}
-  - {fileID: 7365077152986294479}
   m_Father: {fileID: 7878384805958699896}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -11876,15 +11766,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d1fa1dd6fcff54a7c996e6b096b462e7, type: 3}
---- !u!4 &492335810206490287 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d1fa1dd6fcff54a7c996e6b096b462e7,
-    type: 3}
-  m_PrefabInstance: {fileID: 98966710554638660}
-  m_PrefabAsset: {fileID: 0}
 --- !u!23 &1629753391864358336 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: d1fa1dd6fcff54a7c996e6b096b462e7,
+    type: 3}
+  m_PrefabInstance: {fileID: 98966710554638660}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &492335810206490287 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d1fa1dd6fcff54a7c996e6b096b462e7,
     type: 3}
   m_PrefabInstance: {fileID: 98966710554638660}
   m_PrefabAsset: {fileID: 0}
@@ -12382,36 +12272,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1b7187b2f9b9e384d846092809055ba0, type: 3}
---- !u!1 &8616555044351913934 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4985084516474848249, guid: 1b7187b2f9b9e384d846092809055ba0,
-    type: 3}
-  m_PrefabInstance: {fileID: 3655432911764237367}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &2682086526909669465 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1693946791515737198, guid: 1b7187b2f9b9e384d846092809055ba0,
-    type: 3}
-  m_PrefabInstance: {fileID: 3655432911764237367}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &6913829981948560810 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: -1348705624341878371, guid: 1b7187b2f9b9e384d846092809055ba0,
-    type: 3}
-  m_PrefabInstance: {fileID: 3655432911764237367}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &740527783158144812 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 4106252367727981339, guid: 1b7187b2f9b9e384d846092809055ba0,
-    type: 3}
-  m_PrefabInstance: {fileID: 3655432911764237367}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &224583188758073811 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: -5645449162468508188, guid: 1b7187b2f9b9e384d846092809055ba0,
-    type: 3}
-  m_PrefabInstance: {fileID: 3655432911764237367}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &5018543406958357213 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8583797659399816938, guid: 1b7187b2f9b9e384d846092809055ba0,
@@ -12430,9 +12290,9 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 3655432911764237367}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &5485392031079872821 stripped
+--- !u!1 &224583188758073811 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 9122799849588954370, guid: 1b7187b2f9b9e384d846092809055ba0,
+  m_CorrespondingSourceObject: {fileID: -5645449162468508188, guid: 1b7187b2f9b9e384d846092809055ba0,
     type: 3}
   m_PrefabInstance: {fileID: 3655432911764237367}
   m_PrefabAsset: {fileID: 0}
@@ -12463,12 +12323,6 @@ GameObject:
 --- !u!1 &3556306822291503730 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 279292359609488965, guid: 1b7187b2f9b9e384d846092809055ba0,
-    type: 3}
-  m_PrefabInstance: {fileID: 3655432911764237367}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &7020069411798453764 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: -3182075496323112397, guid: 1b7187b2f9b9e384d846092809055ba0,
     type: 3}
   m_PrefabInstance: {fileID: 3655432911764237367}
   m_PrefabAsset: {fileID: 0}
@@ -12544,6 +12398,12 @@ MeshRenderer:
     type: 3}
   m_PrefabInstance: {fileID: 3655432911764237367}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &6913829981948560810 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -1348705624341878371, guid: 1b7187b2f9b9e384d846092809055ba0,
+    type: 3}
+  m_PrefabInstance: {fileID: 3655432911764237367}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &6792344788046524128 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7852577103182004951, guid: 1b7187b2f9b9e384d846092809055ba0,
@@ -12565,12 +12425,6 @@ Transform:
 --- !u!23 &8395866704402981804 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: -4161703645651234917, guid: 1b7187b2f9b9e384d846092809055ba0,
-    type: 3}
-  m_PrefabInstance: {fileID: 3655432911764237367}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &2847651486836507495 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1530756775093628752, guid: 1b7187b2f9b9e384d846092809055ba0,
     type: 3}
   m_PrefabInstance: {fileID: 3655432911764237367}
   m_PrefabAsset: {fileID: 0}
@@ -12598,6 +12452,12 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 3655432911764237367}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &5292879346039740115 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8921245368210553572, guid: 1b7187b2f9b9e384d846092809055ba0,
+    type: 3}
+  m_PrefabInstance: {fileID: 3655432911764237367}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1230525425184321328 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2569585644003656455, guid: 1b7187b2f9b9e384d846092809055ba0,
@@ -12622,9 +12482,9 @@ MeshRenderer:
     type: 3}
   m_PrefabInstance: {fileID: 3655432911764237367}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &5292879346039740115 stripped
+--- !u!1 &2847651486836507495 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 8921245368210553572, guid: 1b7187b2f9b9e384d846092809055ba0,
+  m_CorrespondingSourceObject: {fileID: 1530756775093628752, guid: 1b7187b2f9b9e384d846092809055ba0,
     type: 3}
   m_PrefabInstance: {fileID: 3655432911764237367}
   m_PrefabAsset: {fileID: 0}
@@ -12679,6 +12539,36 @@ MeshRenderer:
 --- !u!1 &5128790556455900262 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -749942745961580463, guid: 1b7187b2f9b9e384d846092809055ba0,
+    type: 3}
+  m_PrefabInstance: {fileID: 3655432911764237367}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8616555044351913934 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4985084516474848249, guid: 1b7187b2f9b9e384d846092809055ba0,
+    type: 3}
+  m_PrefabInstance: {fileID: 3655432911764237367}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2682086526909669465 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1693946791515737198, guid: 1b7187b2f9b9e384d846092809055ba0,
+    type: 3}
+  m_PrefabInstance: {fileID: 3655432911764237367}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5485392031079872821 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9122799849588954370, guid: 1b7187b2f9b9e384d846092809055ba0,
+    type: 3}
+  m_PrefabInstance: {fileID: 3655432911764237367}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &740527783158144812 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 4106252367727981339, guid: 1b7187b2f9b9e384d846092809055ba0,
+    type: 3}
+  m_PrefabInstance: {fileID: 3655432911764237367}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7020069411798453764 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -3182075496323112397, guid: 1b7187b2f9b9e384d846092809055ba0,
     type: 3}
   m_PrefabInstance: {fileID: 3655432911764237367}
   m_PrefabAsset: {fileID: 0}
@@ -13546,15 +13436,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d1fa1dd6fcff54a7c996e6b096b462e7, type: 3}
---- !u!4 &4124576255133267198 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d1fa1dd6fcff54a7c996e6b096b462e7,
-    type: 3}
-  m_PrefabInstance: {fileID: 4519302015834641173}
-  m_PrefabAsset: {fileID: 0}
 --- !u!23 &2987677231719206801 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: d1fa1dd6fcff54a7c996e6b096b462e7,
+    type: 3}
+  m_PrefabInstance: {fileID: 4519302015834641173}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4124576255133267198 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d1fa1dd6fcff54a7c996e6b096b462e7,
     type: 3}
   m_PrefabInstance: {fileID: 4519302015834641173}
   m_PrefabAsset: {fileID: 0}
@@ -13763,15 +13653,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d1fa1dd6fcff54a7c996e6b096b462e7, type: 3}
---- !u!23 &8975092002072399549 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: d1fa1dd6fcff54a7c996e6b096b462e7,
-    type: 3}
-  m_PrefabInstance: {fileID: 7731690168173400633}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7838165795005167058 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d1fa1dd6fcff54a7c996e6b096b462e7,
+    type: 3}
+  m_PrefabInstance: {fileID: 7731690168173400633}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &8975092002072399549 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: d1fa1dd6fcff54a7c996e6b096b462e7,
     type: 3}
   m_PrefabInstance: {fileID: 7731690168173400633}
   m_PrefabAsset: {fileID: 0}

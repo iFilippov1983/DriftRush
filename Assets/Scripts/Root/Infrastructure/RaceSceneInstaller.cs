@@ -12,6 +12,7 @@ namespace RaceManager.Infrastructure
     public class RaceSceneInstaller : BaseInstaller
     {
         [SerializeField] private RaceUI _raceUI;
+        [SerializeField] private RaceHandler _raceHandler;
         [SerializeField] private RaceSceneEffectsHandler _effectsHandler;
         [Space]
         [SerializeField] private CarsDepot _playerCarDepot;
@@ -37,11 +38,11 @@ namespace RaceManager.Infrastructure
             Bind(Singleton<RaceCamerasHandler>.Instance);
             Bind(Singleton<EffectsController>.Instance);
             Bind(Singleton<CarFXController>.Instance);
-            Bind(Singleton<RaceHandler>.Instance);
         }
 
         private void BindObjects()
         {
+            Bind(_raceHandler);
             Bind(_settingsContainer);
             Bind(_raceUI);
             Bind(_playerCarDepot);

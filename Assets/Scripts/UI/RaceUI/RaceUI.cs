@@ -109,17 +109,11 @@ namespace RaceManager.UI
         {
             switch (playerCarState)
             {
-                case CarState.InShed:
-                    break;
                 case CarState.OnTrack:
                     ShowRaceUI();
                     break;
-                case CarState.Stuck:
-                    break;
                 case CarState.Finished:
                     ShowFinishUI();
-                    break;
-                case CarState.GotHit:
                     break;
             }
         }

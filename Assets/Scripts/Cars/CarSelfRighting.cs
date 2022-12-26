@@ -1,5 +1,6 @@
 using RaceManager.Tools;
 using Sirenix.OdinInspector;
+using System;
 using UnityEngine;
 
 namespace RaceManager.Cars
@@ -18,10 +19,13 @@ namespace RaceManager.Cars
         private CarAI _carAI;
         private Rigidbody _rigidbody;
         private Wheel[] _wheels;
+
         [ReadOnly]
         public Transform LastOkPoint;
         [ReadOnly]
         public Transform LastCheckpoint;
+
+        public Action OnCarRespawn; 
 
         public void RightCar() => RespawnCar(LastOkPoint);
         public void GetToCheckpoint() => RespawnCar(LastCheckpoint, true);
@@ -83,6 +87,8 @@ namespace RaceManager.Cars
                 _carAI.StartEngine();
             }
             _stuckTimer = 0;
+
+            OnCarRespawn?.Invoke();
         }
 
         private void GroundingControl()

@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 using UniRx;
 using UnityEngine;
 using Zenject;
+using IInitializable = RaceManager.Root.IInitializable;
 
 namespace RaceManager.Shed
 {
-    public class ShedHandler : MonoBehaviour, Root.IInitializable, IDisposable
+    public class ShedHandler : MonoBehaviour, IInitializable, IDisposable
     {
         [SerializeField] private MaterialsContainer _materialsContainer;
         private CarsDepot _playerCarDepot;

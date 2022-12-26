@@ -7,7 +7,7 @@ namespace RaceManager.Effects
 	/// Car sound controller, for play car sound effects
 	/// </summary>
 	[RequireComponent(typeof(Car))]
-	public class CarSFXController : MonoBehaviour
+	public class CarSfxController : MonoBehaviour
 	{
 		[Header("Engine sounds")]
 		[SerializeField] AudioClip EngineIdleClip;
@@ -27,7 +27,9 @@ namespace RaceManager.Effects
 		float MaxRPM { get { return _car.GetMaxRPM; } }
 		float EngineRPM { get { return _car.EngineRPM; } }
 
-		private void Awake()
+        #region Unity Functions
+
+        private void Awake()
 		{
 			_car = GetComponent<Car>();
 			_car.BackFireAction += PlayBackfire;
@@ -48,7 +50,16 @@ namespace RaceManager.Effects
 			PlaySlipSound();
 		}
 
-		private void PlaySlipSound()
+        private void OnDestroy()
+        {
+            _car.BackFireAction -= PlayBackfire;
+        }
+
+        #endregion
+
+        #region Private Functions
+
+        private void PlaySlipSound()
 		{
             //Engine PRM sound
             EngineSource.pitch = (EngineRPM / MaxRPM) + PitchOffset;
@@ -71,14 +82,11 @@ namespace RaceManager.Effects
             }
         }
 
-		void PlayBackfire()
+		private void PlayBackfire()
 		{
             EngineSource.PlayOneShot(EngineBackFireClip);
 		}
 
-		private void OnDestroy()
-		{
-            _car.BackFireAction -= PlayBackfire;
-        }
-	}
+        #endregion
+    }
 }

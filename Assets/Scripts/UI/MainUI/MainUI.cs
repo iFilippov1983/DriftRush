@@ -12,10 +12,11 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Zenject;
+using IInitializable = RaceManager.Root.IInitializable;
 
 namespace RaceManager.UI
 {
-    public class MainUI : MonoBehaviour, Root.IInitializable
+    public class MainUI : MonoBehaviour, IInitializable
     {
         [SerializeField] private Button _startButton;
         [SerializeField] private Button _gameProgressButton;
@@ -157,7 +158,7 @@ namespace RaceManager.UI
         //    }
         //}
 
-        #region Activate methods
+        #region Activate Functions
         private void ActivateMainMenu(bool active)
         {
             _bottomPanel.SetActive(active);
@@ -210,7 +211,7 @@ namespace RaceManager.UI
         
         #endregion
 
-        #region Initialize data methods
+        #region Initialize Data Functions
         private void InitializeSlidersMinMaxValues()
         {
             var c = _currentCarProfile.CarCharacteristics;
@@ -311,7 +312,7 @@ namespace RaceManager.UI
         }
         #endregion
 
-        #region Update data methods
+        #region Update Data Functions
         public void UpdateTuningPanelValues()
         {
             _currentCarProfile = _playerCarDepot.CurrentCarProfile;
@@ -336,7 +337,6 @@ namespace RaceManager.UI
                 );
 
             _tuningPanel.UpgradeWindow.SetActive(_upgradesHandler.CanUpgradeCurrentCarFactors());
-            //_tuningPanel.UpgradeWindow.SetActive(true);
             _tuningPanel.UpgradeCostText.text = _upgradesHandler.CurrentUpgradeCost.ToString();
             _tuningPanel.PartsAmountText.text = _upgradesHandler.CurrentUpgradeStatsToAdd.ToString();
         }
@@ -402,7 +402,7 @@ namespace RaceManager.UI
         private void UpdatePodiumActivity(bool needToHide) => _podium.SetActive(!needToHide);
         #endregion
 
-        #region Other Private Methods
+        #region Other Private Functions
         private void SetTuningPanelValues(TuneData td)
         {
             _tuningPanel.SetValueToSlider(td.cType, td.value);

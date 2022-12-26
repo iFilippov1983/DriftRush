@@ -1,24 +1,21 @@
-﻿using Cinemachine;
-using RaceManager.Root;
+﻿using RaceManager.Root;
 using RaceManager.Tools;
 using RaceManager.Cars;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using RaceManager.Waypoints;
 using RaceManager.UI;
-using Sirenix.OdinInspector;
 using RaceManager.Cameras;
 using Zenject;
-using RaceManager.Infrastructure;
 using RaceManager.Progress;
 using UniRx;
 using RaceManager.Effects;
+using IInitializable = RaceManager.Root.IInitializable;
 
 namespace RaceManager.Race
 {
-    public class RaceHandler : MonoBehaviour, Root.IInitializable
+    public class RaceHandler : MonoBehaviour, IInitializable
     {
         [SerializeField] private MaterialsContainer _materialsContainer;
         [SerializeField] private RaceRewardsScheme _rewardsScheme;
@@ -26,7 +23,6 @@ namespace RaceManager.Race
 
         private CarsDepot _playerCarsDepot;
         private EffectsSettingsContainer _settingsContainer;
-        private PlayerProfile _playerProfile;
         private Profiler _profiler;
         private RaceUI _raceUI;
         private RaceCamerasHandler _camerasHandler; 
@@ -55,7 +51,6 @@ namespace RaceManager.Race
             RaceUI raceUI, 
             CarsDepot playerCarsDepot, 
             EffectsSettingsContainer settingsContainer,
-            PlayerProfile playerProfile,
             Profiler profiler
             )
         {
@@ -63,7 +58,6 @@ namespace RaceManager.Race
             
             _playerCarsDepot = playerCarsDepot;
             _settingsContainer = settingsContainer;
-            _playerProfile = playerProfile;
             _profiler = profiler;
             _positionsHandler = positionsHandler;
             _raceUI = raceUI;
@@ -111,7 +105,6 @@ namespace RaceManager.Race
             _waypointsTrackersList = new List<WaypointsTracker>();
 
             GameObject driverPrefab = ResourcesLoader.LoadPrefab(ResourcePath.DriverPrefab);
-            GameObject parent = new GameObject("[Drivers]");
 
             for (int i = 0; i < _startPoints.Length; i++)
             {
@@ -163,6 +156,7 @@ namespace RaceManager.Race
                     driverGo.name += $"_{i + 1}";
                 }
 
+                GameObject parent = new GameObject("[Drivers]");
                 driverGo.transform.SetParent(parent.transform, false);
                 _driversList.Add(driver);
                 _waypointsTrackersList.Add(driver.WaypointsTracker);
@@ -177,13 +171,7 @@ namespace RaceManager.Race
                     _rewardsHandler.RewardForRace(playerDriver.DriverProfile.PositionInRace, out RaceRewardInfo info);
                     _raceUI.SetFinishValues(info.RewardMoneyAmount, info.RewardCupsAmount, info.MoneyTotal, info.GemsTotal);
                     break;
-                case CarState.InShed:
-                    break;
                 case CarState.OnTrack:
-                    break;
-                case CarState.Stuck:
-                    break;
-                case CarState.GotHit:
                     break;
             }
 

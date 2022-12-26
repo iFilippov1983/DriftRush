@@ -36,6 +36,20 @@
         SFX_DriftAsphalt,
     }
 
+    public enum ParticleType
+    {
+        None,
+
+        MetalCollision_Light,
+        MetalCollision_Medium,
+        MetalCollision_Heavy,
+
+        Drift_Asphalt,
+        Drift_Gravel,
+        Drift_Grass,
+        Drift_Dirt
+    }
+
     public enum HapticType
     { 
         None,
@@ -63,30 +77,5 @@
     // Rigid : a short and hard impact
     // Soft : a slightly longer and softer impact
 
-    public enum ParticleType
-    {
-        None,
-
-        MetalCollision_Light,
-        MetalCollision_Medium,
-        MetalCollision_Heavy,
-
-        GlassShards_Light,
-        GlassShards_Medium,
-        GlassShards_Heavy,
-
-        Drift_Asphalt,
-        Drift_Grass,
-        Drift_Gravel
-    }
-
-    public enum TrailType
-    { 
-        None,
-
-        AsphaltTrail,
-        GravelTrail,
-        GrassTrail,
-        DirtTrail
-    }
+    
 }

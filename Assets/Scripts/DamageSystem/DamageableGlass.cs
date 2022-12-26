@@ -8,7 +8,7 @@ namespace RaceManager.DamageSystem
     /// <summary>
     /// Attach this class to a glass or light object to make it damageable 
     /// </summary>
-    public class DamageableGlass : DamageableObject, IEffectEventSource
+    public class DamageableGlass : DamageableObject, ISfxEventSource
     {
         [Tooltip("Material applied to the object after complete damage, if this field is null then the object will not be visible after destruction")]
         [SerializeField] private Material _brokenGlassMaterial;
@@ -23,10 +23,10 @@ namespace RaceManager.DamageSystem
         protected Material[] p_materials;
         protected Material p_defaultGlassMaterial;
 
-        private Action<EffectData> _onTakeDamageEvent;
+        private Action<AudioType> _onTakeDamageEvent;
 
         public ParticleSystem ShardsParticles => _shardsParticles;
-        public Action<EffectData> EffectEvent => _onTakeDamageEvent;
+        public Action<AudioType> SfxEvent => _onTakeDamageEvent;
 
         protected override void InitDamageObject()
         {
@@ -46,10 +46,7 @@ namespace RaceManager.DamageSystem
         public override void SetDamage(float damage)
         {
             base.SetDamage(damage);
-            _onTakeDamageEvent?.Invoke(new EffectData() 
-            { 
-                audioType = AudioType.SFX_GlassShards_Light
-            });
+            _onTakeDamageEvent?.Invoke(AudioType.SFX_GlassShards_Medium);
         }
 
         protected override void DoDeath()
@@ -74,10 +71,7 @@ namespace RaceManager.DamageSystem
                 _shardsParticles.Play();
             }
 
-            _onTakeDamageEvent?.Invoke(new EffectData()
-            {
-                audioType = AudioType.SFX_GlassShards_Heavy,
-            });
+            _onTakeDamageEvent?.Invoke(AudioType.SFX_GlassShards_Heavy);
         }
     }
 }

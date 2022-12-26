@@ -4,10 +4,11 @@ using UnityEngine;
 using Zenject;
 using RaceManager.UI;
 using Random = UnityEngine.Random;
+using IInitializable = RaceManager.Root.IInitializable;
 
 namespace RaceManager.Effects
 {
-    public class MenuSceneEffectsHandler : MonoBehaviour, Root.IInitializable
+    public class MenuSceneEffectsHandler : MonoBehaviour, IInitializable
     {
         private MainUI _mainUI;
         private EffectsSettingsContainer _settingsContainer;

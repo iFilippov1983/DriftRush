@@ -31,7 +31,7 @@ namespace RaceManager.Root
         public Profiler profiler;
         public LevelName nextLevelToPlay;
 
-        private EffectsController FxController => Singleton<EffectsController>.Instance;
+        private GameEffectsController FxController => Singleton<GameEffectsController>.Instance;
 
         private static CarsDepot PlayerCarDepot
         {

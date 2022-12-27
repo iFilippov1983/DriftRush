@@ -21,24 +21,32 @@ namespace RaceManager.Cars
 		public float CurrentMaxSlip { get { return Mathf.Max(CurrentForwardSlip, CurrentSidewaysSlip); } }
 		public float CurrentForwardSlip { get; private set; }
 		public float CurrentSidewaysSlip { get; private set; }
+        public float ForwardSlipNormalized { get; private set; }
+        public float SidewaysSlipNormalized { get; private set; }
+        public float SlipNormalized { get; private set; }
+
         public float Radius => WheelCollider.radius;
 		public float RPM => WheelCollider.rpm;
         public WheelHit GetHit => _hit;
-		
 		public bool HasForwardSlip => CurrentForwardSlip > WheelCollider.forwardFriction.asymptoteSlip;
 		public bool HasSideSlip => CurrentSidewaysSlip > WheelCollider.sidewaysFriction.asymptoteSlip;
 		public bool IsGrounded => WheelCollider.isGrounded;
 
-        WheelHit _hit;
-		TrailRenderer _currentTrail;
-		GroundConfig _currentGroundConfig;
-		WheelColliderHandler _wcHandler;
-        Vector3 HitPoint;
-        float GroundStiffness;
+		private Transform[] _childsView;
+        private WheelHit _hit;
+		private TrailRenderer _currentTrail;
+		private GroundConfig _currentGroundConfig;
+		private WheelColliderHandler _wcHandler;
+        private Vector3 HitPoint;
+        private float _stiffnessMultiplier;
 
-        GroundDetection GroundDetection => Singleton<GroundDetection>.Instance;
-		GroundConfig DefaultGroundConfig => GroundDetection.DefaultGroundConfig;
-		CarFXController FXController => Singleton<CarFXController>.Instance;
+		private WheelFrictionCurve _initialForwardFriction;
+		private WheelFrictionCurve _initialSidewaysFriction;
+
+        private GroundDetection GroundDetection => Singleton<GroundDetection>.Instance;
+		private GroundConfig DefaultGroundConfig => GroundDetection.DefaultGroundConfig;
+		//CarFXController SfxController => Singleton<CarFXController>.Instance;
+
         public GroundConfig CurrentGroundConfig
 		{
 			get => _currentGroundConfig;
@@ -49,7 +57,7 @@ namespace RaceManager.Cars
 					_currentGroundConfig = value;
 					if (_currentGroundConfig != null)
 					{
-						GroundStiffness = _currentGroundConfig.WheelStiffness;
+						_stiffnessMultiplier = _currentGroundConfig.WheelStiffnessMultiplier;
                     }
 				}
 			}
@@ -72,67 +80,122 @@ namespace RaceManager.Cars
             }
         }
 
-        /// <summary>
-        /// Update gameplay logic.
-        /// </summary>
-        public void FixedUpdate()
+		//private void Update()
+		//{
+		//	UpdateVisual();
+		//}
+
+		private void FixedUpdate()
 		{
-
-			if (WheelCollider.GetGroundHit(out _hit))
-			{
-				var prevForwar = CurrentForwardSlip;
-				var prevSide = CurrentSidewaysSlip;
-
-				CurrentForwardSlip = (prevForwar + Mathf.Abs(_hit.forwardSlip)) / 2;
-				CurrentSidewaysSlip = (prevSide + Mathf.Abs(_hit.sidewaysSlip)) / 2;
-			}
-			else
-			{
-				CurrentForwardSlip = 0;
-				CurrentSidewaysSlip = 0;
-			}
+			UpdateGameplayLogic();
 		}
 
-		private void InitSelf()
-		{ 
-			
-		}
-
-		/// <summary>
-		/// Update visual logic (Transform, FX).
-		/// </summary>
-		public void UpdateVisual()
+		private void LateUpdate()
 		{
 			UpdateTransform();
-
-			if (WheelCollider.isGrounded && CurrentMaxSlip > SlipForGenerateParticle)
-			{
-				//Emit particle.
-				var particles = FXController.AspahaltParticles;
-				var point = WheelCollider.transform.position;
-				point.y = _hit.point.y;
-				particles.transform.position = point;
-				particles.Emit(1);
-
-				if (_currentTrail == null)
-				{
-					//Get free or create trail.
-					HitPoint = WheelCollider.transform.position;
-					HitPoint.y = _hit.point.y;
-					_currentTrail = FXController.GetTrail(HitPoint);
-					_currentTrail.transform.SetParent(WheelCollider.transform);
-					_currentTrail.transform.localPosition += TrailOffset;
-				}
-			}
-			else if (_currentTrail != null)
-			{
-				//Set trail as free.
-				FXController.SetFreeTrail(_currentTrail);
-				_currentTrail = null;
-			}
 		}
 
-		public void UpdateTransform()
+		public void InitializeSelf()
+		{ 
+			if(WheelCollider == null)
+				WheelCollider = GetComponent<WheelCollider>();
+
+			_childsView = new Transform[WheelView.childCount];
+            for (int i = 0; i < _childsView.Length; i++)
+            {
+                _childsView[i] = WheelView.GetChild(i);
+            }
+
+			_initialForwardFriction = WheelCollider.forwardFriction;
+			_initialSidewaysFriction = WheelCollider.sidewaysFriction;
+			CurrentGroundConfig = DefaultGroundConfig;
+        }
+
+		//private void UpdateVisual()
+		//{
+		//	if (WheelCollider.isGrounded && CurrentMaxSlip > SlipForGenerateParticle)
+		//	{
+		//		//Emit particle.
+		//		var particles = SfxController.AspahaltParticles;
+		//		var point = WheelCollider.transform.position;
+		//		point.y = _hit.point.y;
+		//		particles.transform.position = point;
+		//		particles.Emit(1);
+
+		//		if (_currentTrail == null)
+		//		{
+		//			//Get free or create trail.
+		//			HitPoint = WheelCollider.transform.position;
+		//			HitPoint.y = _hit.point.y;
+		//			_currentTrail = SfxController.GetTrail(HitPoint);
+		//			_currentTrail.transform.SetParent(WheelCollider.transform);
+		//			_currentTrail.transform.localPosition += TrailOffset;
+		//		}
+		//	}
+		//	else if (_currentTrail != null)
+		//	{
+		//		//Set trail as free.
+		//		SfxController.SetFreeTrail(_currentTrail);
+		//		_currentTrail = null;
+		//	}
+		//}
+
+		private void UpdateGameplayLogic()
+		{
+            if (WheelCollider.GetGroundHit(out _hit))
+            {
+                CurrentForwardSlip = (CurrentForwardSlip + Mathf.Abs(_hit.forwardSlip)) / 2;
+                CurrentSidewaysSlip = (CurrentSidewaysSlip + Mathf.Abs(_hit.sidewaysSlip)) / 2;
+
+                ForwardSlipNormalized = CurrentForwardSlip / WheelCollider.forwardFriction.extremumSlip;
+                SidewaysSlipNormalized = CurrentSidewaysSlip / WheelCollider.sidewaysFriction.extremumSlip;
+
+                SlipNormalized = Mathf.Max(ForwardSlipNormalized, SidewaysSlipNormalized);
+
+                GroundConfig groundConfig = DefaultGroundConfig;
+                if (GroundDetection.TryGetGroundEntity(_hit.collider.gameObject, out IGround groundEntity))
+                {
+                    groundConfig = groundEntity.Config;
+                }
+
+				CurrentGroundConfig = groundConfig;
+            }
+            else
+            {
+                CurrentForwardSlip = 0;
+                CurrentSidewaysSlip = 0;
+                ForwardSlipNormalized = 0;
+                SidewaysSlipNormalized = 0;
+                SlipNormalized = 0;
+                CurrentGroundConfig = DefaultGroundConfig;
+            }
+
+			UpdateFriction();
+        }
+
+		private void UpdateFriction()
+        {
+            //float stiffness = _stiffnessMultiplier;
+            //var friction = WheelCollider.forwardFriction;
+            //friction.stiffness = stiffness;
+            //WheelCollider.forwardFriction = friction;
+
+            //friction = WheelCollider.sidewaysFriction;
+            //friction.stiffness = stiffness * Mathf.Lerp(0.3f, 1, Mathf.InverseLerp(2, 1, ForwardSlipNormalized));
+            //WheelCollider.sidewaysFriction = friction;
+
+            float multiplier = _stiffnessMultiplier;
+
+            var friction = _initialForwardFriction;
+            friction.stiffness *= multiplier;
+            WheelCollider.forwardFriction = friction;
+
+            friction = _initialSidewaysFriction;
+            friction.stiffness *= multiplier * Mathf.Lerp(0.3f, 1, Mathf.InverseLerp(2, 1, ForwardSlipNormalized));
+            WheelCollider.sidewaysFriction = friction;
+        }
+
+        public void UpdateTransform()
 		{
 			Vector3 pos;
 			Quaternion quat;
@@ -141,7 +204,15 @@ namespace RaceManager.Cars
 			WheelView.rotation = quat;
 		}
 
-		public void UpdateFrictionConfig(WheelColliderConfig config)
+        public void OnResetAction()
+        {
+            CurrentForwardSlip = 0;
+            CurrentSidewaysSlip = 0;
+            SlipNormalized = 0;
+            CurrentGroundConfig = DefaultGroundConfig;
+        }
+
+        public void UpdateFrictionConfig(WheelColliderConfig config)
 		{
 			WheelColliderHandler.UpdateConfig(config);
 		}

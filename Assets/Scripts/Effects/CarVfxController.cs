@@ -38,9 +38,8 @@ namespace RaceManager.Effects
         protected virtual void Awake()
         {
             _trailPrefab.gameObject.SetActive(false);
-            _car = GetComponentInParent<Car>();
-
-            if (_car == null)
+            
+            if (!TryGetComponent<Car>(out _car))
             {
                 Debug.LogErrorFormat("[{0}] VehicleVFX without VehicleController in parent", name);
                 enabled = false;
@@ -68,6 +67,9 @@ namespace RaceManager.Effects
 
         private void OnDestroy()
         {
+            if (_car == null)
+                return;
+
             _car.ResetVehicleAction -= ResetAllTrails;
             _car.CollisionAction -= PlayCollisionParticles;
             _car.CollisionStayAction -= CollisionStay;
@@ -130,11 +132,11 @@ namespace RaceManager.Effects
 
         #region Trail Functions
 
-        public void UpdateTrail(Wheel wheel, bool hasSlip)
+        public void UpdateTrail(Wheel wheel, bool emmit)
         {
             var trail = ActiveTrails[wheel];
 
-            if (hasSlip)
+            if (emmit)
             {
                 if (trail == null)
                 {

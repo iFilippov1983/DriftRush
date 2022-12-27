@@ -13,7 +13,7 @@ namespace RaceManager.Effects
     {
         private RaceUI _raceUI;
         private EffectsSettingsContainer _settingsContainer;
-        private EffectsController _effectsController;
+        private GameEffectsController _effectsController;
 
         private AudioType _currentTrackType;
 
@@ -28,7 +28,7 @@ namespace RaceManager.Effects
 
         public void Initialize()
         {
-            _effectsController = Singleton<EffectsController>.Instance;
+            _effectsController = Singleton<GameEffectsController>.Instance;
             _effectsController.InstallSettings(_settingsContainer);
             StartPlayingRandomRaceTrack();
 
@@ -43,7 +43,7 @@ namespace RaceManager.Effects
         {
             if (_effectsController.AudioTable.ContainsKey(AudioType.RaceTrack_00))
             {
-                EffectsController.AudioTrack audioTrack = _effectsController.AudioTable[AudioType.RaceTrack_00] as EffectsController.AudioTrack;
+                GameEffectsController.AudioTrack audioTrack = _effectsController.AudioTable[AudioType.RaceTrack_00] as GameEffectsController.AudioTrack;
                 _currentTrackType = audioTrack.Audio[Random.Range(0, audioTrack.Audio.Length)].Type;
 
                 _effectsController.PlayEffect(_currentTrackType, true);

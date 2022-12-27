@@ -85,6 +85,8 @@ namespace RaceManager.Cars
             carVisual.Initialize(_carProfile.CarConfigVisual, _materialsContainer);
 
             var car = go.GetComponent<Car>();
+            for (int i = 0; i < car.Wheels.Length; i++)
+                car.Wheels[i].enabled = false;
             car.enabled = false;
 
             var carAI = go.GetComponent<CarAI>();
@@ -99,8 +101,11 @@ namespace RaceManager.Cars
             var bodyTilt = go.GetComponent<BodyTilt>();
             bodyTilt.enabled = false;
 
-            var carSoundController = go.GetComponent<CarSfxController>();
-            carSoundController.enabled = false;
+            var carSfxController = go.GetComponent<CarSfxController>();
+            carSfxController.enabled = false;
+
+            var carVfxController = go.GetComponent<CarVfxController>();
+            carVfxController.enabled = false;
 
             return go;
         }

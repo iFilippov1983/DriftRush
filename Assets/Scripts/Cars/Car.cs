@@ -37,6 +37,7 @@ namespace RaceManager.Cars
 
         private CarSelfRighting _carSelfRighting;
         private CarBody _carBody;
+
         private Rigidbody _rB;
         private Wheel[] _wheels;
 
@@ -162,12 +163,16 @@ namespace RaceManager.Cars
         {
             _carConfig = carConfig;
             _carSelfRighting = GetComponent<CarSelfRighting>();
-            _carBody = GetComponent<CarBody>();
+            _carBody = GetComponentInChildren<CarBody>();
             _id = MakeId();
 
             RB.centerOfMass = COM.localPosition;
 
             InitWheels();
+            FrontLeftWheel.InitializeSelf();
+            FrontRightWheel.InitializeSelf();
+            RearLeftWheel.InitializeSelf();
+            RearRightWheel.InitializeSelf();
 
             //Set drive wheel.
             switch (DriveType)
@@ -189,7 +194,6 @@ namespace RaceManager.Cars
             //Divide the motor torque by the count of driving wheels
             MaxMotorTorque = _carConfig.MaxMotorTorque / (LastDriveWheel - FirstDriveWheel + 1);
 
-
             //Calculated gears ratio with main ratio
             AllGearsRatio = new float[GearsRatio.Length + 2];
             AllGearsRatio[0] = ReversGearRatio * MainRatio;
@@ -200,6 +204,11 @@ namespace RaceManager.Cars
             }
 
             _carSelfRighting.OnCarRespawn += CarResetNotification;
+
+            ResetVehicleAction += FrontLeftWheel.OnResetAction;
+            ResetVehicleAction += FrontRightWheel.OnResetAction;
+            ResetVehicleAction += RearLeftWheel.OnResetAction;
+            ResetVehicleAction += RearRightWheel.OnResetAction;
         }
 
         private void InitWheels()
@@ -269,13 +278,13 @@ namespace RaceManager.Cars
 
         #region Unity Functions
 
-        private void Update()
-        {
-            for (int i = 0; i < Wheels.Length; i++)
-            {
-                Wheels[i].UpdateVisual();
-            }
-        }
+        //private void Update()
+        //{
+        //    for (int i = 0; i < Wheels.Length; i++)
+        //    {
+        //        Wheels[i].UpdateVisual();
+        //    }
+        //}
 
         private void FixedUpdate()
         {
@@ -303,7 +312,7 @@ namespace RaceManager.Cars
                     Wheels[i].WheelCollider.brakeTorque = CurrentBrake;
                 }
 
-                Wheels[i].FixedUpdate();
+                //Wheels[i].FixedUpdate();
 
                 if (CurrentMaxSlip < Wheels[i].CurrentMaxSlip)
                 {
@@ -317,6 +326,11 @@ namespace RaceManager.Cars
         public virtual void OnCollisionEnter(Collision collision)
         {
             CollisionAction.SafeInvoke(this, collision);
+        }
+
+        private void OnCollisionStay(Collision collision)
+        {
+            CollisionStayAction.SafeInvoke(this, collision);
         }
 
         private void OnDrawGizmosSelected()
@@ -344,6 +358,11 @@ namespace RaceManager.Cars
         {
             if(_carSelfRighting)
                 _carSelfRighting.OnCarRespawn -= CarResetNotification;
+
+            ResetVehicleAction -= FrontLeftWheel.OnResetAction;
+            ResetVehicleAction -= FrontRightWheel.OnResetAction;
+            ResetVehicleAction -= RearLeftWheel.OnResetAction;
+            ResetVehicleAction -= RearRightWheel.OnResetAction;
         }
 
         #endregion

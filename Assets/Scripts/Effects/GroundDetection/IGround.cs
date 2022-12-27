@@ -1,4 +1,6 @@
-﻿namespace RaceManager.Effects
+﻿using UnityEngine;
+
+namespace RaceManager.Effects
 {
     public interface IGround
     { 

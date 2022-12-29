@@ -1,4 +1,5 @@
 ﻿using RaceManager.Cars;
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,7 +18,7 @@ namespace RaceManager.Effects
 		[SerializeField] private List<ParticleSystem> _backFireParticles = new List<ParticleSystem>();
 
         private Car _car;
-        private Transform _trailParent;
+        private Transform _vfxParent;
         private Queue<TrailRenderer> _freeTrails = new Queue<TrailRenderer>();
 
         private float _lastCollisionTime;
@@ -51,12 +52,18 @@ namespace RaceManager.Effects
             _car.CollisionStayAction += CollisionStay;
             _car.BackFireAction += OnBackFire;
 
-            _trailParent = new GameObject(string.Format("Effects for {0}", _car.name)).transform;
+            _vfxParent = new GameObject(string.Format("Effects for {0}", _car.name)).transform;
 
             ActiveTrails = new Dictionary<Wheel, TrailRenderer>();
             foreach (var wheel in _car.Wheels)
             {
                 ActiveTrails.Add(wheel, null);
+
+                _debugInfo.Add(wheel, new VfxDebugInfo() 
+                { 
+                   HasSlip = false,
+                   ParticleName = string.Empty
+                });
             }
         }
 
@@ -114,6 +121,12 @@ namespace RaceManager.Effects
                         emitParams.startColor = particles.main.startColor.color;
 
                         particles.Emit(emitParams, 1);
+
+                        _debugInfo[wheel].HasSlip = hasSlip;
+                        _debugInfo[wheel].ParticleName = particles.name;
+                        _debugInfo[wheel].P_Velocity = emitParams.velocity;
+                        _debugInfo[wheel].P_StartSize = emitParams.startSize;
+                        _debugInfo[wheel].P_StartLifetime = emitParams.startLifetime;
                     }
                 }
 
@@ -187,7 +200,7 @@ namespace RaceManager.Effects
             }
             else
             {
-                trail = Instantiate(_trailPrefab, _trailParent);
+                trail = Instantiate(_trailPrefab, _vfxParent);
             }
 
             trail.transform.position = startPos;
@@ -210,7 +223,7 @@ namespace RaceManager.Effects
         /// </summary>
         private IEnumerator WaitVisibleTrail(TrailRenderer trail)
         {
-            trail.transform.SetParent(_trailParent);
+            trail.transform.SetParent(_vfxParent);
             yield return new WaitForSeconds(trail.time);
             trail.Clear();
             trail.gameObject.SetActive(false);
@@ -261,6 +274,24 @@ namespace RaceManager.Effects
 
             return _defaultColisionParticle;
         }
+
+        #endregion
+
+        #region Debug 
+
+        [System.Serializable]
+        private class VfxDebugInfo
+        {
+            [ReadOnly] public bool HasSlip;
+            [ReadOnly] public string ParticleName;
+            [ReadOnly] public Vector3 P_Velocity;
+            [ReadOnly] public float P_StartSize;
+            [ReadOnly] public float P_StartLifetime;
+        }
+
+        [Header("DEBUG ONLY")]
+        [ShowInInspector]
+        private Dictionary<Wheel, VfxDebugInfo> _debugInfo = new Dictionary<Wheel, VfxDebugInfo>();
 
         #endregion
     }

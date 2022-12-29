@@ -15,7 +15,7 @@ namespace RaceManager.Effects
         {
             if (!_groundsDic.TryGetValue(go, out entity))
             {
-                if (!go.TryGetComponent<IGround>(out entity))
+                if (!go.TryGetComponent(out entity))
                 {
                     return false;
                 }

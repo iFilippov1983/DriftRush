@@ -103,12 +103,12 @@ namespace RaceManager.UI
         {
             _currentCarProfile = _playerCarDepot.CurrentCarProfile;
 
-            UpdateCurrencyAmountPanels();
-            UpdateTuningPanelValues();
-
             InitializeCarsCollectionPanel();
             InitializeGameProgressPanel();
             InitializeLootboxSlotsHandler();
+
+            UpdateCurrencyAmountPanels();
+            UpdateTuningPanelValues();
 
             RegisterButtonsListeners();
         }

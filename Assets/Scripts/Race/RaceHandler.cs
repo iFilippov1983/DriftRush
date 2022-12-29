@@ -27,6 +27,7 @@ namespace RaceManager.Race
         private RaceUI _raceUI;
         private RaceCamerasHandler _camerasHandler; 
         private InRacePositionsHandler _positionsHandler;
+        private InRaceLootboxHandler _lootboxHandler;
         private RaceLevelInitializer _raceLevelInitializer;
         private IRaceLevel _raceLevel;
         private RewardsHandler _rewardsHandler;
@@ -77,6 +78,7 @@ namespace RaceManager.Race
             InitCameras();
             InitDrivers();
 
+            _lootboxHandler = new InRaceLootboxHandler(_profiler);
             _positionsHandler.StartHandling(_waypointsTrackersList);
 
             _rewardsHandler.OnRaceRewardLootboxAdded += NotifyRaceUI;
@@ -89,6 +91,11 @@ namespace RaceManager.Race
 
             _raceStarted = true;
             EventsHub<RaceEvent>.BroadcastNotification(RaceEvent.COUNTDOWN);
+        }
+
+        private void FixedUpdate()
+        {
+            _lootboxHandler.Handle();
         }
 
         private void InitCameras()

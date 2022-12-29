@@ -3,7 +3,6 @@ using RaceManager.Race;
 using RaceManager.Root;
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace RaceManager.Progress
 {
@@ -176,7 +175,12 @@ namespace RaceManager.Progress
             return true;
         }
 
-        public int GetCardsAmount(CarName carName) => _playerProfile.CarCardsAmount(carName);
+        public bool TryGetLootboxWhithActiveTimer(out Lootbox lootbox)
+        {
+            _playerProfile.GiveLootboxesTo(this);
+            lootbox = _lootboxes.Find(l => l.OpenTimerActivated == true);
+            return lootbox != null;
+        }
 
         public Lootbox GetLootboxIndexOf(int index)
         {
@@ -200,6 +204,8 @@ namespace RaceManager.Progress
                     
             return lootbox;
         }
+
+        public int GetCardsAmount(CarName carName) => _playerProfile.CarCardsAmount(carName);
 
         public void RemoveLootboxWithId(string Id)
         {

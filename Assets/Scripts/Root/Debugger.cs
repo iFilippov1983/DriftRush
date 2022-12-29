@@ -105,6 +105,8 @@ namespace RaceManager.Root
             var playerDriver = list.Find(d => d.DriverType == DriverType.Player);
             playerDriver.DriverProfile.PositionInRace = PositionInRace.First;
             playerDriver.DriverProfile.CarState.Value = CarState.Finished;
+
+            saveManager.Save();
         }
 
         [Button]

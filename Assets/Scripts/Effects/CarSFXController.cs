@@ -145,12 +145,17 @@ namespace RaceManager.Effects
 
 		private void PlayBackfire()
 		{
+            if (!isActiveAndEnabled)
+                return;
+
             _engineSource.PlayOneShot(_engineBackFireClip);
 		}
 
         private void PlayCollisionSound(Car car, Collision collision)
         {
-            if (!car.IsVisible || collision == null)
+            $"Col enter: {collision.gameObject.name}".Log();
+
+            if (!car.IsVisible || collision == null || !isActiveAndEnabled)
                 return;
 
             int collisionLayer = collision.gameObject.layer;
@@ -160,15 +165,9 @@ namespace RaceManager.Effects
                 return;
             }
 
-            float collisionMagnitude = 0;
-            if (collision.rigidbody)
-            {
-                collisionMagnitude = (_car.RB.velocity - collision.rigidbody.velocity).magnitude;
-            }
-            else
-            {
-                collisionMagnitude = collision.relativeVelocity.magnitude;
-            }
+            float collisionMagnitude = collision.rigidbody == null
+                ? collision.relativeVelocity.magnitude
+                : (_car.RB.velocity - collision.rigidbody.velocity).magnitude;
 
             CollisionEvent colEvent = GetEventForCollision(collisionLayer, collisionMagnitude, out float magnitudeDivider);
             float volume = Mathf.Clamp01(collisionMagnitude / magnitudeDivider.Clamp(0, MaxSoundsVolumeDividerValue));
@@ -212,6 +211,11 @@ namespace RaceManager.Effects
 
         private void PlayCollisionStaySound(Car car, Collision collision)
         {
+            $"Col stay: {collision.gameObject.name}".Log();
+
+            if (!isActiveAndEnabled)
+                return;
+
             if (_car.CurrentSpeed >= 1 
                 && (collision.rigidbody == null || (collision.rigidbody.velocity - _car.RB.velocity).sqrMagnitude > MinFrictionVectorSqrMag))
             {

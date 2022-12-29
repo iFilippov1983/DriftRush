@@ -27,6 +27,7 @@ namespace RaceManager.Root
         private void HandleSceneQuit()
         {
             _saveManager.Save();
+            Loader.Load(Loader.Scene.MenuScene);
         }
 
         private void RegisterSavebles()

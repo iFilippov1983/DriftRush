@@ -160,7 +160,6 @@ namespace RaceManager.UI
         private void FinalizeRace()
         {
             EventsHub<RaceEvent>.BroadcastNotification(RaceEvent.QUIT);
-            Loader.Load(Loader.Scene.MenuScene);
         }
 
         private string GetPositionText()

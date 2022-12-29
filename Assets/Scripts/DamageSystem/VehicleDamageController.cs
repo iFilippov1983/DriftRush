@@ -367,12 +367,22 @@ namespace RaceManager.DamageSystem
                     continue;
                 }
 
-                sqrDist = (damageableObject.Transform.TransformPoint(damageableObject.LocalCenterPoint) - damagePoint).sqrMagnitude;
-
-                if (sqrDist < sqrMaxDamageRadius)
+                try
                 {
-                    percent = _damageDistanceCurve.Evaluate(sqrDist / sqrMaxDamageRadius);
-                    _damageableObjects[i].TrySetMaxDamage(forceMagFactor * percent * surfaceDot);
+                    sqrDist = (damageableObject.Transform.TransformPoint(damageableObject.LocalCenterPoint) - damagePoint).sqrMagnitude;
+
+                    if (sqrDist < sqrMaxDamageRadius)
+                    {
+                        percent = _damageDistanceCurve.Evaluate(sqrDist / sqrMaxDamageRadius);
+                        _damageableObjects[i].TrySetMaxDamage(forceMagFactor * percent * surfaceDot);
+                    }
+                }
+                catch
+                {
+                    List<DamageableObjectData> tempList = new List<DamageableObjectData>(_damageableObjects);
+                    tempList.Remove(_damageableObjects[i]);
+                    _damageableObjects = tempList.ToArray();
+                    continue;
                 }
             }
 

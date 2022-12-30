@@ -1,4 +1,4 @@
-﻿using RaceManager.Cars;
+using RaceManager.Cars;
 using System;
 using System.Collections.Generic;
 using UnityEngine;

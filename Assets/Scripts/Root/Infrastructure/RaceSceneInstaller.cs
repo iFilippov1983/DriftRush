@@ -35,9 +35,6 @@ namespace RaceManager.Infrastructure
         private void BindSingletons()
         {
             Bind(Singleton<Resolver>.Instance);
-            Bind(Singleton<RaceCamerasHandler>.Instance);
-            //Bind(Singleton<GameEffectsController>.Instance);
-            //Bind(Singleton<CarFXController>.Instance);
         }
 
         private void BindObjects()

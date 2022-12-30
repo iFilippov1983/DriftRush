@@ -34,10 +34,8 @@ namespace RaceManager.Cars
 
 		private Transform[] _childsView;
         private WheelHit _hit;
-		private TrailRenderer _currentTrail;
 		private GroundConfig _currentGroundConfig;
 		private WheelColliderHandler _wcHandler;
-        private Vector3 HitPoint;
         private float _stiffnessMultiplier;
 
 		private WheelFrictionCurve _initialForwardFriction;
@@ -45,7 +43,6 @@ namespace RaceManager.Cars
 
         private GroundDetection GroundDetection => Singleton<GroundDetection>.Instance;
 		private GroundConfig DefaultGroundConfig => GroundDetection.DefaultGroundConfig;
-		//CarFXController SfxController => Singleton<CarFXController>.Instance;
 
         public GroundConfig CurrentGroundConfig
 		{
@@ -80,11 +77,6 @@ namespace RaceManager.Cars
             }
         }
 
-		//private void Update()
-		//{
-		//	UpdateVisual();
-		//}
-
 		private void FixedUpdate()
 		{
 			UpdateGameplayLogic();
@@ -110,35 +102,6 @@ namespace RaceManager.Cars
 			_initialSidewaysFriction = WheelCollider.sidewaysFriction;
 			CurrentGroundConfig = DefaultGroundConfig;
         }
-
-		//private void UpdateVisual()
-		//{
-		//	if (WheelCollider.isGrounded && CurrentMaxSlip > SlipForGenerateParticle)
-		//	{
-		//		//Emit particle.
-		//		var particles = SfxController.AspahaltParticles;
-		//		var point = WheelCollider.transform.position;
-		//		point.y = _hit.point.y;
-		//		particles.transform.position = point;
-		//		particles.Emit(1);
-
-		//		if (_currentTrail == null)
-		//		{
-		//			//Get free or create trail.
-		//			HitPoint = WheelCollider.transform.position;
-		//			HitPoint.y = _hit.point.y;
-		//			_currentTrail = SfxController.GetTrail(HitPoint);
-		//			_currentTrail.transform.SetParent(WheelCollider.transform);
-		//			_currentTrail.transform.localPosition += TrailOffset;
-		//		}
-		//	}
-		//	else if (_currentTrail != null)
-		//	{
-		//		//Set trail as free.
-		//		SfxController.SetFreeTrail(_currentTrail);
-		//		_currentTrail = null;
-		//	}
-		//}
 
 		private void UpdateGameplayLogic()
 		{
@@ -186,13 +149,13 @@ namespace RaceManager.Cars
 
             float multiplier = _stiffnessMultiplier;
 
-            var friction = _initialForwardFriction;
-            friction.stiffness *= multiplier;
-            WheelCollider.forwardFriction = friction;
+            var fFriction = _initialForwardFriction;
+            fFriction.stiffness *= multiplier;
 
-            friction = _initialSidewaysFriction;
-            friction.stiffness *= multiplier * Mathf.Lerp(0.3f, 1, Mathf.InverseLerp(2, 1, ForwardSlipNormalized));
-            WheelCollider.sidewaysFriction = friction;
+            var sFriction = _initialSidewaysFriction;
+            sFriction.stiffness *= multiplier * Mathf.Lerp(0.3f, 1, Mathf.InverseLerp(2, 1, ForwardSlipNormalized));
+
+			WheelColliderHandler.UpdateStiffness(fFriction.stiffness, sFriction.stiffness);
         }
 
         public void UpdateTransform()

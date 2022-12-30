@@ -10,6 +10,7 @@ namespace RaceManager.Effects
 	{
         private const float MaxSoundsVolumeDividerValue = 40f;
         private const int MinFrictionVectorSqrMag = 25;
+        private const int MinWheelsAudioSourcesAmount = 2;
 
 		[Header("Engine sounds")]
         [SerializeField] private float _pitchOffset = 0.5f;
@@ -17,13 +18,11 @@ namespace RaceManager.Effects
         [SerializeField] private AudioClip _engineIdleClip;
 		[SerializeField] private AudioClip _engineBackFireClip;
         [Space]
-		[Header("Wheels slip sounds")]
+		[Header("Wheels sounds")]
         [SerializeField] private float _minSlipSound = 0.15f;
         [SerializeField] private float _maxSlipForSound = 1f;
-        [SerializeField] private AudioSource _slipSource;
-        [SerializeField] private Dictionary<LayerMask, AudioClip> _groundSlipSounds = new Dictionary<LayerMask, AudioClip>();
-        [Space]
-        [Header("Wheels ground sounds")]
+        //[SerializeField] private AudioSource _slipSource;
+        [SerializeField] private AudioSource[] _audioSourcesForWheels;
         [SerializeField] private List<GroundSounds> _groundSounds = new List<GroundSounds>();
         [Space]
 		[Header("Collision sounds")]
@@ -41,9 +40,9 @@ namespace RaceManager.Effects
 		[Space]
 		[SerializeField] private GameObject _sfxObject;
 
-        private Dictionary<Wheel, WheelSoundData> _wheelsSoundData = new Dictionary<Wheel, WheelSoundData>();
+        private Dictionary<Wheel, AudioSource> _wheelsAudioSources = new Dictionary<Wheel, AudioSource>();
 
-		private Car _car;
+        private Car _car;
         private CollisionEvent _currentFrictionEvent;
         private FrictionSoundData _currentFrictionSoundData;
         private float _currentFrictionVolume;
@@ -75,13 +74,6 @@ namespace RaceManager.Effects
             public float LastFrictionTime;
         }
 
-        private class WheelSoundData
-        {
-            public AudioSource Source;
-            public float Slip;
-            public int WheelsCount;
-        }
-
         #region Unity Functions
 
         private void Awake()
@@ -91,6 +83,7 @@ namespace RaceManager.Effects
 			_car.BackFireAction += PlayBackfire;
             _car.CollisionAction += PlayCollisionSound;
             _car.CollisionStayAction += PlayCollisionStaySound;
+            _car.CollisionExitAction += StopFrictionSound;
         }
 
         private void OnEnable()
@@ -105,7 +98,8 @@ namespace RaceManager.Effects
 
 		void Update()
 		{
-			PlaySlipSound();
+            HandleEngineSound();
+			HandleWheelsSound();
             UpdateFrictions();
 		}
 
@@ -114,32 +108,103 @@ namespace RaceManager.Effects
             _car.BackFireAction -= PlayBackfire;
             _car.CollisionAction -= PlayCollisionSound;
             _car.CollisionStayAction -= PlayCollisionStaySound;
+            _car.CollisionExitAction -= StopFrictionSound;
+        }
+
+        #endregion
+
+        #region Public Functions
+
+        public void Initialize()
+        {
+            Wheel[] wheelsArray = _audioSourcesForWheels.Length <= MinWheelsAudioSourcesAmount
+                ? _car.RearAxis
+                : _car.Wheels;
+
+            for (int i = 0; i < _audioSourcesForWheels.Length; i++)
+            {
+                Wheel wheel = wheelsArray[i];
+                AudioSource source = _audioSourcesForWheels[i];
+
+                if (wheel != null && source != null)
+                    _wheelsAudioSources.Add(wheel, source);
+            }
         }
 
         #endregion
 
         #region Private Functions
-
-        private void PlaySlipSound()
+        private void HandleWheelsSound()
 		{
-            //Engine PRM sound
-            _engineSource.pitch = (EngineRPM / MaxRPM) + _pitchOffset;
+            if (!_car.IsVisible)
+                return;
 
-            //Slip sound logic
-            if (_car.CurrentMaxSlip > _minSlipSound)
+            foreach (var kvp in _wheelsAudioSources)
             {
-                if (!_slipSource.isPlaying)
+                Wheel wheel = kvp.Key;
+                AudioSource source = kvp.Value;
+                bool hasSlip = wheel.HasForwardSlip || wheel.HasSideSlip;
+
+                LayerMask layer = wheel.CurrentGroundConfig.LayerMask;
+                GroundSounds groundSounds = _groundSounds.Find(g => g.Layer.LayerInMask(layer));
+
+                if (groundSounds == null)
                 {
-                    _slipSource.Play();
+                    $"GroundSoungs doesn't contain sounds for layer: {LayerMask.LayerToName(layer)}".Log(Logger.ColorYellow);
+                    continue;
                 }
-                var slipVolumeProcent = _car.CurrentMaxSlip / _maxSlipForSound;
-                _slipSource.volume = slipVolumeProcent * 0.5f;
-                _slipSource.pitch = Mathf.Clamp(slipVolumeProcent, 0.75f, 1);
+
+                AudioClip clip;
+                if (hasSlip && groundSounds.SlipSound != null)
+                {
+                    clip = groundSounds.SlipSound;
+                    if (!source.isPlaying || source.clip != clip)
+                    {
+                        source.clip = clip;
+                        source.Play();
+                    }
+
+                }
+                else if (groundSounds.IdleSound != null)
+                {
+                    clip = groundSounds.IdleSound;
+                    if (!source.isPlaying || source.clip != clip)
+                    {
+                        source.clip = groundSounds.IdleSound;
+                        source.Play();
+                    }
+                }
+                else
+                {
+                    source.Stop();
+                }
+
+                var slipVolumePercent = _car.CurrentMaxSlip / _maxSlipForSound;
+                source.volume = slipVolumePercent * 0.5f;
+                source.pitch = Mathf.Clamp(slipVolumePercent, 0.75f, 1);
             }
-            else
-            {
-                _slipSource.Stop();
-            }
+
+
+            ////Slip sound logic
+            //if (_car.CurrentMaxSlip > _minSlipSound)
+            //{
+            //    if (!_slipSource.isPlaying)
+            //    {
+            //        _slipSource.Play();
+            //    }
+            //    var slipVolumePercent = _car.CurrentMaxSlip / _maxSlipForSound;
+            //    _slipSource.volume = slipVolumePercent * 0.5f;
+            //    _slipSource.pitch = Mathf.Clamp(slipVolumePercent, 0.75f, 1);
+            //}
+            //else
+            //{
+            //    _slipSource.Stop();
+            //}
+        }
+
+        private void HandleEngineSound()
+        {
+            _engineSource.pitch = (EngineRPM / MaxRPM) + _pitchOffset;
         }
 
 		private void PlayBackfire()
@@ -152,17 +217,16 @@ namespace RaceManager.Effects
 
         private void PlayCollisionSound(Car car, Collision collision)
         {
-            //$"Col enter: {collision.gameObject.name}".Log();
+            $"Col ENTER => {collision.gameObject.name}".Log();
 
-            if (!car.IsVisible || collision == null || !isActiveAndEnabled)
+            if (!car.IsVisible 
+                || collision == null 
+                || !isActiveAndEnabled 
+                || collision.transform.parent.gameObject.GetInstanceID() == car.GetInstanceID()
+                || Time.time - _lastColTime < _minTimeBetweenCollisions) 
                 return;
 
             int collisionLayer = collision.gameObject.layer;
-
-            if (Time.time - _lastColTime < _minTimeBetweenCollisions)
-            {
-                return;
-            }
 
             float collisionMagnitude = collision.rigidbody == null
                 ? collision.relativeVelocity.magnitude
@@ -210,7 +274,7 @@ namespace RaceManager.Effects
 
         private void PlayCollisionStaySound(Car car, Collision collision)
         {
-            //$"Col stay: {collision.gameObject.name}".Log();
+            //$"Col STAY: {collision.gameObject.name}".Log();
 
             if (!isActiveAndEnabled)
                 return;
@@ -220,6 +284,16 @@ namespace RaceManager.Effects
             {
                 PlayFrictionSound(collision, collision.relativeVelocity.magnitude);
             }
+        }
+
+        private void StopFrictionSound(Car car, Collision collision)
+        {
+            //$"Col EXIT => {collision.gameObject.name}".Log();
+
+            if (_currentFrictionSoundData != null)
+            {
+                _currentFrictionSoundData.Source.Stop();
+            } 
         }
 
         private void PlayFrictionSound(Collision collision, float magnitude)

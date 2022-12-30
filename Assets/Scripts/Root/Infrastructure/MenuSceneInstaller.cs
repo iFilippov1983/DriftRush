@@ -41,7 +41,6 @@ namespace RaceManager.Infrastructure
         private void BindSingletons()
         {
             Bind(Singleton<Resolver>.Instance);
-            //Bind(Singleton<GameEffectsController>.Instance);
         }
 
         private void BindObjects()

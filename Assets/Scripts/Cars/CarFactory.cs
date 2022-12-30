@@ -63,8 +63,9 @@ namespace RaceManager.Cars
             waypointsTracker = go.GetComponent<WaypointsTracker>();
             waypointsTracker.Initialize(_waypointTrack, driverProfile);
 
-            var carSoundController = go.GetComponent<CarSfxController>();
-            carSoundController.enabled = playSound;
+            var carSfxController = go.GetComponent<CarSfxController>();
+            carSfxController.enabled = playSound;
+            if (playSound) carSfxController.Initialize();
 
             if (_driverType == DriverType.Player)
             {

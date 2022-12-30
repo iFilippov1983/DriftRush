@@ -32,7 +32,6 @@ namespace RaceManager.Cars
         [SerializeField] Transform COM;
         [SerializeField] Transform _cameraLookTarget;
         [SerializeField] Transform _cameraFollowTarget;
-        [SerializeField] List<ParticleSystem> BackFireParticles = new List<ParticleSystem>();
         [SerializeField] private CarConfig _carConfig;
 
         private CarSelfRighting _carSelfRighting;
@@ -50,6 +49,11 @@ namespace RaceManager.Cars
         /// Action performed at the moment of collision stay event.
         /// </summary>
         public event Action<Car, Collision> CollisionStayAction;
+
+        /// <summary>
+        /// Action performed when object stops colliding whith other Rigidbody or Collider
+        /// </summary>
+        public event Action<Car, Collision> CollisionExitAction;
 
         /// <summary>
         /// Backfire invoked when cut off (You can add a invoke when changing gears).
@@ -141,6 +145,8 @@ namespace RaceManager.Cars
             }
         }
 
+        public Wheel[] FrontAxis { get; private set; }
+        public Wheel[] RearAxis { get; private set; }
         public float CurrentMaxSlip { get; private set; }                       //Max slip of all wheels.
         public int CurrentMaxSlipWheelIndex { get; private set; }               //Max slip wheel index.
         public float CurrentSpeed { get; private set; }                         //Speed, magnitude of velocity.
@@ -247,11 +253,24 @@ namespace RaceManager.Cars
             RearRightWheel.WheelColliderHandler.Config = config;
             RearRightWheel.WheelColliderHandler.UpdateConfig();
 
-            _wheels = new Wheel[4] {
-            FrontLeftWheel,
-            FrontRightWheel,
-            RearLeftWheel,
-            RearRightWheel
+            _wheels = new Wheel[4] 
+            {
+                FrontLeftWheel,
+                FrontRightWheel,
+                RearLeftWheel,
+                RearRightWheel
+            };
+
+            FrontAxis = new Wheel[2]
+            {
+                FrontLeftWheel,
+                FrontRightWheel
+            };
+
+            RearAxis = new Wheel[2]
+            {
+                RearLeftWheel,
+                RearRightWheel
             };
         }
 
@@ -331,6 +350,11 @@ namespace RaceManager.Cars
         private void OnCollisionStay(Collision collision)
         {
             CollisionStayAction.SafeInvoke(this, collision);
+        }
+
+        private void OnCollisionExit(Collision collision)
+        {
+            CollisionExitAction.SafeInvoke(this, collision);
         }
 
         private void OnDrawGizmosSelected()

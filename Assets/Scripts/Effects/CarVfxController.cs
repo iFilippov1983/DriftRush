@@ -10,6 +10,7 @@ namespace RaceManager.Effects
     public class CarVfxController : MonoBehaviour
 	{
         private const float TrailOffset = 0.05f;
+        private const int SpeedDivider = 30;
 
 		[SerializeField] private float _minTimeBetweenCollisions = 0.1f;
 		[SerializeField] private TrailRenderer _trailPrefab;
@@ -101,7 +102,7 @@ namespace RaceManager.Effects
                     if (particles)
                     {
                         float sizeAndLifeTimeMultiplier = (groundConfig.SpeedDependent
-                            ? (Mathf.Max(_car.CurrentSpeed, (wheel.Radius * Mathf.PI * wheel.RPM / 30)) / 30).Clamp()
+                            ? (Mathf.Max(_car.CurrentSpeed, (wheel.Radius * Mathf.PI * wheel.RPM / SpeedDivider)) / SpeedDivider).Clamp()
                             : 1)
                             * rndValue;
 

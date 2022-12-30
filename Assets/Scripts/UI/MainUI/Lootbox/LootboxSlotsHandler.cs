@@ -35,9 +35,9 @@ namespace RaceManager.UI
         public Action OnButtonPressed;
 
         [Inject]
-        public void Construct(Profiler currencyHandler, SpritesContainerRewards spritesRewards)
+        private void Construct(Profiler profiler, SpritesContainerRewards spritesRewards)
         {
-            _profiler = currencyHandler;
+            _profiler = profiler;
             _spritesRewards = spritesRewards;
         }
 
@@ -86,7 +86,9 @@ namespace RaceManager.UI
         {
             DateTime lastSaveTime = _playerProfile.LastSaveTime;
             TimeSpan timePassed = DateTime.UtcNow - lastSaveTime;
-            float secondsPassed = (float)timePassed.TotalSeconds;
+            float secondsPassed = timePassed.TotalSeconds > float.MaxValue
+                ? float.MaxValue
+                : (float) timePassed.TotalSeconds;
             float secondsInWeek = 7f * 24f * 60f * 60f;
             secondsPassed = Mathf.Clamp(secondsPassed, 0f, secondsInWeek);
 
@@ -103,14 +105,9 @@ namespace RaceManager.UI
 
                 Sprite sprite = _spritesRewards.GetLootboxSprite(lootbox.Rarity);
 
-                if (lootbox.OpenTimerActivated == false)
-                {
-                    slot.SetStatusClosed(sprite, lootbox.InitialTimeToOpen, lootbox.GemsToOpen, lootbox.Id);
-                }
-
                 if (lootbox.OpenTimerActivated)
                 {
-                    //$"Last save time: {lastSaveTime}; TimePassed: {timePassed}; Seconds passed: {secondsPassed}; Seconds in week: {secondsInWeek}; LB time left: {lootbox.TimeToOpenLeft}".Log();
+                    //$"UtcNow: {DateTime.UtcNow}; Last save time: {lastSaveTime}; Seconds passed: {secondsPassed}; LB time left: {lootbox.TimeToOpenLeft}".Log();
 
                     if (secondsPassed >= lootbox.TimeToOpenLeft)
                     {
@@ -125,6 +122,10 @@ namespace RaceManager.UI
                         _activeTimerSlot = slot;
                         _hasActiveTimerSlot = true;
                     }
+                }
+                else
+                {
+                    slot.SetStatusClosed(sprite, lootbox.InitialTimeToOpen, lootbox.GemsToOpen, lootbox.Id);
                 }
 
                 slot.SlotButton.onClick.AddListener(() => OnLootboxSlotClicked(slot));

@@ -152,7 +152,7 @@ namespace RaceManager.Effects
 
         private void PlayCollisionSound(Car car, Collision collision)
         {
-            $"Col enter: {collision.gameObject.name}".Log();
+            //$"Col enter: {collision.gameObject.name}".Log();
 
             if (!car.IsVisible || collision == null || !isActiveAndEnabled)
                 return;
@@ -210,7 +210,7 @@ namespace RaceManager.Effects
 
         private void PlayCollisionStaySound(Car car, Collision collision)
         {
-            $"Col stay: {collision.gameObject.name}".Log();
+            //$"Col stay: {collision.gameObject.name}".Log();
 
             if (!isActiveAndEnabled)
                 return;

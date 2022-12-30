@@ -34,6 +34,7 @@ namespace RaceManager.Race
         {
             IRaceLevel level = ResourcesLoader.LoadAndInstantiate<IRaceLevel>(path, new GameObject("Level").transform);
 
+            //TODO: Refactoring is needed after Level version finnaly approved
             if (level.GetType().Equals(typeof(RaceLevel)))
             {
                 RaceLevel raceLevel = (RaceLevel)level;

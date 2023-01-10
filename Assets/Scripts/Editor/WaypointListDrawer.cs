@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+using RaceManager.Waypoints;
 #if UNITY_EDITOR
 using UnityEditor;
 
@@ -143,17 +144,20 @@ namespace RaceManager.Waypoints
             y += lineHeight + spacing;
 
             var addDebudWaypointComponent = new Rect(x, y, inspectorWidth, lineHeight);
-            if (GUI.Button(addDebudWaypointComponent, "Add DebugWaypoint component to all"))
+            if (GUI.Button(addDebudWaypointComponent, "Add/Update WaypointEditHelper component to/on all "))
             {
                 var track = property.FindPropertyRelative("track").objectReferenceValue as WaypointTrack;
                 foreach (Transform child in track.waypointList.items)
                 {
-                    Debug.Log($"Adding to: {child.gameObject.name}");
-                    if (child.GetComponent<DebugWaypoint>() == null)
+                    //Debug.Log($"Adding to: {child.gameObject.name}");
+                    WaypointEditHelper helper = child.GetComponent<WaypointEditHelper>();
+                    if (helper == null)
                     {
-                        child.gameObject.AddComponent<DebugWaypoint>();
+                        helper = child.gameObject.AddComponent<WaypointEditHelper>();
                         Debug.Log($"Added to: {child.gameObject.name}");
                     }
+
+                    helper.SetWaypoint(track.MaxHeight, track.HeightAboveRoad, track.RoadMask);
                 }
             }
             y += lineHeight + spacing;

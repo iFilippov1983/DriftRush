@@ -19,7 +19,7 @@ namespace RaceManager.Effects
 		[SerializeField] private AudioClip _engineBackFireClip;
         [Space]
 		[Header("Wheels sounds")]
-        [SerializeField] private float _minSlipSound = 0.15f;
+        //[SerializeField] private float _minSlipSound = 0.15f;
         [SerializeField] private float _maxSlipForSound = 1f;
         //[SerializeField] private AudioSource _slipSource;
         [SerializeField] private AudioSource[] _audioSourcesForWheels;
@@ -183,23 +183,6 @@ namespace RaceManager.Effects
                 source.volume = slipVolumePercent * 0.5f;
                 source.pitch = Mathf.Clamp(slipVolumePercent, 0.75f, 1);
             }
-
-
-            ////Slip sound logic
-            //if (_car.CurrentMaxSlip > _minSlipSound)
-            //{
-            //    if (!_slipSource.isPlaying)
-            //    {
-            //        _slipSource.Play();
-            //    }
-            //    var slipVolumePercent = _car.CurrentMaxSlip / _maxSlipForSound;
-            //    _slipSource.volume = slipVolumePercent * 0.5f;
-            //    _slipSource.pitch = Mathf.Clamp(slipVolumePercent, 0.75f, 1);
-            //}
-            //else
-            //{
-            //    _slipSource.Stop();
-            //}
         }
 
         private void HandleEngineSound()
@@ -217,19 +200,26 @@ namespace RaceManager.Effects
 
         private void PlayCollisionSound(Car car, Collision collision)
         {
-            $"Col ENTER => {collision.gameObject.name}".Log();
+            //$"Col ENTER => {collision.gameObject.name}".Log();
+
+            //List<ContactPoint> contactPoints = new List<ContactPoint>();
+            //collision.GetContacts(contactPoints);
+            //foreach (ContactPoint cp in contactPoints)
+            //{
+            //    Debug.Log($"this col: {cp.thisCollider.gameObject.name}");
+            //}
 
             if (!car.IsVisible 
                 || collision == null 
                 || !isActiveAndEnabled 
-                || collision.transform.parent.gameObject.GetInstanceID() == car.GetInstanceID()
+                || collision.transform.parent.gameObject.GetInstanceID() == car.gameObject.GetInstanceID()
                 || Time.time - _lastColTime < _minTimeBetweenCollisions) 
                 return;
 
             int collisionLayer = collision.gameObject.layer;
 
             float collisionMagnitude = collision.rigidbody == null
-                ? collision.relativeVelocity.magnitude
+                ? 0//collision.relativeVelocity.magnitude
                 : (_car.RB.velocity - collision.rigidbody.velocity).magnitude;
 
             CollisionEvent colEvent = GetEventForCollision(collisionLayer, collisionMagnitude, out float magnitudeDivider);

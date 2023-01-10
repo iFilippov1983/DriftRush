@@ -29,4 +29,12 @@ public static class ActionExtentions
 			action.Invoke (p1, p2);
 		}
 	}
+
+    public static void SafeInvoke<P1, P2, P3>(this Action<P1, P2, P3> action, P1 p1, P2 p2, P3 p3)
+    {
+        if (action != null)
+        {
+            action.Invoke(p1, p2, p3);
+        }
+    }
 }

@@ -11048,7 +11048,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _target: {fileID: 3643873277590708756}
   _isDriving: 0
-  _isAvoidingCars: 1
+  _isAvoidingCars: 0
   _castMaxDistance: 12
   _desireToGetTheWaypoint: 6
   _avoidanceLerpFactor: 1
@@ -11552,7 +11552,6 @@ MonoBehaviour:
   _engineSource: {fileID: 7818093736894073228}
   _engineIdleClip: {fileID: 0}
   _engineBackFireClip: {fileID: 0}
-  _minSlipSound: 0.15
   _maxSlipForSound: 1
   _audioSourcesForWheels:
   - {fileID: 1485831851299302470}
@@ -11568,23 +11567,28 @@ MonoBehaviour:
       m_Bits: 64
     IdleSound: {fileID: 8300000, guid: 793e95096321e884eba763e6d746f30b, type: 3}
     SlipSound: {fileID: 8300000, guid: 7dc519ba8b2c8e345a8caf5355761e6c, type: 3}
+  - Layer:
+      serializedVersion: 2
+      m_Bits: 32768
+    IdleSound: {fileID: 8300000, guid: 793e95096321e884eba763e6d746f30b, type: 3}
+    SlipSound: {fileID: 8300000, guid: 7dc519ba8b2c8e345a8caf5355761e6c, type: 3}
   _minTimeBetweenCollisions: 0.1
   _defaultMagnitudeDivider: 20
   _collisionSource: {fileID: 4954476833200453148}
   _defaultCollisionEvent:
     CollisionMask:
       serializedVersion: 2
-      m_Bits: 256
+      m_Bits: 1
     CollisionClip: {fileID: 8300000, guid: d79e7c5f6401f40379cb41779427dd2a, type: 3}
-    MinMagnitudeCollision: 10
+    MinMagnitudeCollision: 100
     MaxMagnitudeCollision: 100
   _colissionEvents:
   - CollisionMask:
       serializedVersion: 2
       m_Bits: 256
     CollisionClip: {fileID: 8300000, guid: 143f27e3f36747242b2e777a1ef39e37, type: 3}
-    MinMagnitudeCollision: 0
-    MaxMagnitudeCollision: 10
+    MinMagnitudeCollision: 5
+    MaxMagnitudeCollision: 20
   _playFrictionTime: 0.5
   _frictionSource: {fileID: 4909227967609243474}
   _defaultFrictionEvent:
@@ -11599,7 +11603,7 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 48904
     CollisionClip: {fileID: 8300000, guid: 247142ad24c204144a9c08afa30a74a3, type: 3}
-    MinMagnitudeCollision: 0
+    MinMagnitudeCollision: 10
     MaxMagnitudeCollision: 20
   _sfxObject: {fileID: 7881238219054167782}
 --- !u!114 &8899460055232772893

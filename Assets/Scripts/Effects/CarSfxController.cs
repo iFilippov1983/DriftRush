@@ -219,7 +219,7 @@ namespace RaceManager.Effects
             int collisionLayer = collision.gameObject.layer;
 
             float collisionMagnitude = collision.rigidbody == null
-                ? 0//collision.relativeVelocity.magnitude
+                ? 0 //collision.relativeVelocity.magnitude
                 : (_car.RB.velocity - collision.rigidbody.velocity).magnitude;
 
             CollisionEvent colEvent = GetEventForCollision(collisionLayer, collisionMagnitude, out float magnitudeDivider);
@@ -293,7 +293,7 @@ namespace RaceManager.Effects
                 _currentFrictionEvent = GetEventForFriction(collision.collider.gameObject.layer, magnitude);
 
                 float collisionMagnitude = collision.rigidbody == null
-                    ? collision.relativeVelocity.magnitude
+                    ? 0 //collision.relativeVelocity.magnitude
                     : (_car.RB.velocity - collision.rigidbody.velocity).magnitude ;
 
                 float magnitudeDivider = _currentFrictionEvent.MaxMagnitudeCollision == float.PositiveInfinity

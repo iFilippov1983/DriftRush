@@ -23,9 +23,9 @@ namespace RaceManager.Race
 
         private CarsDepot _playerCarsDepot;
         private EffectsSettingsContainer _settingsContainer;
+        private RaceSceneEffectsHandler _sceneEffectsHandler;
         private Profiler _profiler;
         private RaceUI _raceUI;
-        private RaceCamerasHandler _camerasHandler; 
         private InRacePositionsHandler _positionsHandler;
         private InRaceLootboxHandler _lootboxHandler;
         private RaceLevelInitializer _raceLevelInitializer;
@@ -36,12 +36,9 @@ namespace RaceManager.Race
         private WaypointTrack _waypointTrackEven;
         private WaypointTrack _waypointTrackOdd;
         private StartPoint[] _startPoints;
-        private List<Driver> _driversList;
         private List<WaypointsTracker> _waypointsTrackersList;
 
         private bool _raceStarted;
-
-        public List<Driver> Drivers => _driversList;
 
         [Inject]
         private void Construct
@@ -52,13 +49,13 @@ namespace RaceManager.Race
             RaceUI raceUI, 
             CarsDepot playerCarsDepot, 
             EffectsSettingsContainer settingsContainer,
+            RaceSceneEffectsHandler sceneEffectsHandler,
             Profiler profiler
             )
         {
-            _camerasHandler = Singleton<RaceCamerasHandler>.Instance;
-            
             _playerCarsDepot = playerCarsDepot;
             _settingsContainer = settingsContainer;
+            _sceneEffectsHandler = sceneEffectsHandler;
             _profiler = profiler;
             _positionsHandler = positionsHandler;
             _raceUI = raceUI;
@@ -75,7 +72,6 @@ namespace RaceManager.Race
             _waypointTrackEven = _raceLevel.WaypointTrackEven;
             _waypointTrackOdd = _raceLevel.WaypointTrackOdd;
 
-            InitCameras();
             InitDrivers();
 
             _lootboxHandler = new InRaceLootboxHandler(_profiler);
@@ -98,17 +94,9 @@ namespace RaceManager.Race
             _lootboxHandler.Handle();
         }
 
-        private void InitCameras()
-        {
-            _camerasHandler.FollowCam.position = _raceLevel.FollowCamInitialPosition;
-            _camerasHandler.StartCam.position = _raceLevel.StartCamInitialPosition;
-            _camerasHandler.FinishCam.position = _raceLevel.FinishCamInitialPosition;
-        }
-
         private void InitDrivers()
         {
             _raceStarted = false;
-            _driversList = new List<Driver>();
             _waypointsTrackersList = new List<WaypointsTracker>();
 
             GameObject driverPrefab = ResourcesLoader.LoadPrefab(ResourcePath.DriverPrefab);
@@ -131,7 +119,7 @@ namespace RaceManager.Race
                         _profiler
                         );
 
-                    _camerasHandler.FollowAndLookAt(driver.CarCameraFollowTarget, driver.CarCameraLookTarget);
+                    _sceneEffectsHandler.HandleEffectsFor(driver, _raceLevel);
 
                     driver.Subscribe(_raceUI);
                     driver.DriverProfile.CarState.Subscribe(cs => HandlePlayerCarState(cs, driver));
@@ -165,7 +153,6 @@ namespace RaceManager.Race
 
                 GameObject parent = new GameObject("[Drivers]");
                 driverGo.transform.SetParent(parent.transform, false);
-                _driversList.Add(driver);
                 _waypointsTrackersList.Add(driver.WaypointsTracker);
             }
         }

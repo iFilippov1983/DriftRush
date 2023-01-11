@@ -182,6 +182,9 @@ namespace RaceManager.Effects
                 trail = ActiveTrails[_car.Wheels[i]];
                 if (trail)
                 {
+                    if (!_car.Wheels[i].IsGrounded)
+                        trail.emitting = false;
+
                     SetTrailAsFree(trail);
                     trail = null;
                     ActiveTrails[_car.Wheels[i]] = trail;
@@ -216,7 +219,8 @@ namespace RaceManager.Effects
         /// </summary>
         private void SetTrailAsFree(TrailRenderer trail)
         {
-            StartCoroutine(WaitVisibleTrail(trail));
+            if(trail.emitting)
+                StartCoroutine(WaitVisibleTrail(trail));
         }
 
         /// <summary>

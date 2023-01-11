@@ -112,8 +112,6 @@ namespace RaceManager.Effects
             {
                 await Task.Delay(millisecondsDelay);
                 HapticPatterns.PlayPreset(_haptics[hapticType]);
-
-                $"[Haptic played] => {hapticType}".Log(Logger.ColorYellow);
             }
         }
 

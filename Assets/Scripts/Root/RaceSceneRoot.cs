@@ -26,7 +26,10 @@ namespace RaceManager.Root
 
         private void HandleSceneQuit()
         {
+            EventsHub<RaceEvent>.Unsunscribe(RaceEvent.QUIT, HandleSceneQuit);
+
             _saveManager.Save();
+
             Loader.Load(Loader.Scene.MenuScene);
         }
 

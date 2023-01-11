@@ -13,6 +13,9 @@ namespace RaceManager.Effects
         [Space]
         [SerializeField] private ParticleSystem _idleParticles;
         [SerializeField] private ParticleSystem _slipParticles;
+        [Space]
+        [Tooltip("Flag for extra VFX if they're needed")]
+        [SerializeField] private bool _extraVfxRequired;
 
         private LayerMask _layerMask;
 
@@ -20,11 +23,12 @@ namespace RaceManager.Effects
         public ParticleSystem IdleParticles => _idleParticles;
         public ParticleSystem SlipParticles => _slipParticles;
         public LayerMask LayerMask => _layerMask;
+        public bool ExtraVfxRequired => _extraVfxRequired;
 
         public void SetGroundLayer(IGround ground)
         {
             _layerMask.value = ground.LayerMask;
-            $"Layer is set => [{_layerMask.value}]".Log(Logger.ColorBlue);
+            //$"Layer is set => [{_layerMask.value}]".Log(Logger.ColorBlue);
         }
     }
 }

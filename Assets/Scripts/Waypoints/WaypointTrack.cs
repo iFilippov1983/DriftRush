@@ -1,18 +1,18 @@
 ﻿using RaceManager.Tools;
 using Sirenix.OdinInspector;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 namespace RaceManager.Waypoints
 {
     public class WaypointTrack : MonoBehaviour
     {
-
         [SerializeField] protected bool _smoothRoute = true;
         [SerializeField] protected Color _drawColor = Color.yellow;
         [SerializeField, Range(0.1f, 2f)] private float _nodeSphereSize = 0.25f;
+        [SerializeField] private float _maxPointPosHeight = 1000f;
+        [SerializeField] private float _pointPosHeightAboveRoad = 1f;
+        [SerializeField] private LayerMask _roadMask;//= 1 << 10;
         [SerializeField, ReadOnly] private int _lapsToComplete = 1;
 
         public float editorVisualisationSubsteps = 100;
@@ -51,20 +51,43 @@ namespace RaceManager.Waypoints
         public float AccumulateDistance => _accumulateDistance;
         public Transform CurrentTargetWaypoint => waypointList.items[p2n];
         public Transform PreviouseTargetWaypoint => waypointList.items[p1n];
+        public float MaxHeight => _maxPointPosHeight;
+        public float HeightAboveRoad => _pointPosHeightAboveRoad;
+        public LayerMask RoadMask => _roadMask;
         public int LapsToComplete => _lapsToComplete;
 
         private void Awake()
         {
-            if (Waypoints.Length > 1)
-            {
-                CachePositionsAndDistances();
-            }
-            _numPoints = Waypoints.Length;
+            PresetWaypoints();
         }
 
         private void Start()
         {
             SetWaypoints();
+        }
+
+        private void PresetWaypoints()
+        {
+            AdjustWaypointsPositions();
+
+            if (Waypoints.Length > 1)
+            {
+                CachePositionsAndDistances();
+            }
+
+            _numPoints = Waypoints.Length;
+        }
+
+        private void AdjustWaypointsPositions()
+        {
+            for (int i = 0; i < Waypoints.Length; i++)
+            {
+                var wpHelper = Waypoints[i].GetComponent<WaypointEditHelper>();
+                if (wpHelper != null)
+                {
+                    wpHelper.UpdatePositionHeight(MaxHeight, HeightAboveRoad, RoadMask);
+                }
+            }
         }
 
         private void SetWaypoints()
@@ -92,8 +115,8 @@ namespace RaceManager.Waypoints
                     if(i != 0)
                         _waypoints[i-1].NextWaypoint = wp;
 
-                    var debugWp = Waypoints[i].GetComponent<DebugWaypoint>();
-                    if (debugWp != null && debugWp.isCheckpoint)
+                    var wpHelper = Waypoints[i].GetComponent<WaypointEditHelper>();
+                    if (wpHelper != null && wpHelper.isCheckpoint)
                         wp.isCheckpoint = true;
                 }
 
@@ -262,7 +285,14 @@ namespace RaceManager.Waypoints
 
                 Gizmos.color = Color.black;
                 foreach (var waypoint in Waypoints)
+                {
                     Gizmos.DrawSphere(waypoint.transform.position, _nodeSphereSize);
+
+                    Vector3 to = waypoint.position;
+                    to.y -= HeightAboveRoad;
+                    Gizmos.DrawLine(waypoint.position, to);
+                }
+
             }
         }
     }

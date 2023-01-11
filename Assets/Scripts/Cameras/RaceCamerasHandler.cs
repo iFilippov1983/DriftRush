@@ -1,8 +1,7 @@
 using Cinemachine;
 using RaceManager.Race;
 using RaceManager.Root;
-using RaceManager.Waypoints;
-using Sirenix.OdinInspector;
+using System.Collections;
 using UnityEngine;
 
 namespace RaceManager.Cameras
@@ -12,17 +11,61 @@ namespace RaceManager.Cameras
         private const int MajorPriority = 10;
         private const int MinorPriority = 0;
 
-        [SerializeField] private WaypointTrack _pointsTrack;
-        [SerializeField] private FollowCamera _followGroupCamera;
+        [Header("Speed effect settings")]
+        [Range(0f, 2f)]
+        [SerializeField] private float _cameraShakeAmountForSpeed = 1f;
+        [Range(1f, 10f)]
+        [SerializeField] private float _shakeSpeedForSpeed = 1f;
+        [Range(0f, 10f)]
+        [SerializeField] private float _xDampingChangeSpeed = 5f;
+        [Range(1f, 10f)]
+        [SerializeField] private float _fovEncreaseSpeed = 1f;
+        [Range(1f, 10f)]
+        [SerializeField] private float _fovDecreaseSpeed = 2f;
+        [SerializeField] private float _maxExtraFovValue = 5f;
+
+        [Header("Off road effect settings")]
+        [Range(0f, 2f)]
+        [SerializeField] private float _cameraShakeAmountForOffRoad = 1f;
+        [Range(0f, 10f)]
+        [SerializeField] private float _shakeSpeedForOffRoad = 2f;
+        [Space]
+
+        //[SerializeField] private WaypointTrack _pointsTrack;
+        //[SerializeField] private FollowCamera _followGroupCamera;
         [SerializeField] private CinemachineVirtualCamera _followCamera;
         [SerializeField] private CinemachineVirtualCamera _finishCamera;
         [SerializeField] private CinemachineVirtualCamera _startCamera;
-        [SerializeField] private CinemachineSmoothPath _path;
-        [SerializeField] private CinemachineDollyCart _cart;
+        //[SerializeField] private CinemachineSmoothPath _path;
+        //[SerializeField] private CinemachineDollyCart _cart;
+
+        private IEnumerator _currentShakeJob;
+        private IEnumerator _currentFovJob;
+        private IEnumerator _currentDampingJob;
+
+        private CinemachineTransposer _transposer;
+        private float _defaultMainCamFov;
+        private float _defaultMainCamDampingX;
+        private Vector3 _defaultCamFollowOffset;
+
+        private float CurrentCamFov => _followCamera.m_Lens.FieldOfView;
+        private float CurrentCamDampingX
+        { 
+            get => _transposer.m_XDamping;
+            set { _transposer.m_XDamping = value; }
+        }
+        private Vector3 CameraFollowOffset
+        {
+            get => _transposer.m_FollowOffset;
+            set { _transposer.m_FollowOffset = value; }
+        } 
 
         public Transform FollowCam => _followCamera.transform;
         public Transform FinishCam => _finishCamera.transform;
         public Transform StartCam => _startCamera.transform;
+        
+
+        #region Public Functions
 
         public void FollowAndLookAt(Transform followTransform, Transform lookAtTransform)
         {
@@ -36,9 +79,135 @@ namespace RaceManager.Cameras
             _startCamera.LookAt = lookAtTransform;
             _finishCamera.LookAt = followTransform;
 
+            _transposer = _followCamera.GetCinemachineComponent<CinemachineTransposer>();
+            _defaultMainCamDampingX = CurrentCamDampingX;
+            _defaultMainCamFov = CurrentCamFov;
+            _defaultCamFollowOffset = CameraFollowOffset;
+
             EventsHub<RaceEvent>.Subscribe(RaceEvent.COUNTDOWN, SetStartCamera);
             EventsHub<RaceEvent>.Subscribe(RaceEvent.START, SetFollowCamera);
             EventsHub<RaceEvent>.Subscribe(RaceEvent.FINISH, SetFinishCamera);
+        }
+
+        public void InvokeSpeedEffect(float curSpeed, float maxSpeed, bool doShake)
+        {
+            float speedFactor = curSpeed / maxSpeed;
+
+            if (_currentFovJob != null)
+                StopCoroutine(_currentFovJob);
+
+            float newFovValue = _defaultMainCamFov + _maxExtraFovValue * speedFactor;
+            bool isBraking = CurrentCamFov > newFovValue;
+            float fovChangeSpeed = isBraking  ? _fovDecreaseSpeed : _fovEncreaseSpeed;
+            _currentFovJob = ChangeCameraFov(_followCamera, CurrentCamFov, newFovValue, fovChangeSpeed);
+            StartCoroutine(_currentFovJob);
+
+            if (_currentDampingJob != null)
+                StopCoroutine(_currentDampingJob);
+
+            float newDampingValue = _defaultMainCamDampingX - _defaultMainCamDampingX * speedFactor;
+            float dampingChangeSpeed = _xDampingChangeSpeed * speedFactor;
+            _currentDampingJob = ChangeCameraFollowDamping(CurrentCamDampingX, newDampingValue, dampingChangeSpeed);
+            StartCoroutine(_currentDampingJob);
+
+            float shakeAmount = _cameraShakeAmountForSpeed * speedFactor;
+            float shakeSpeed = _shakeSpeedForSpeed * speedFactor;
+            InvokeCameraShakeEffect(shakeAmount, shakeSpeed, doShake);
+        }
+
+        public void StopSpeedEffect()
+        {
+            ChangeCameraFovToDefault();
+            ChangeCameraFollowDampingToDefault();
+            StopCameraShakeEffect();
+        }
+
+        public void InvokeCameraShakeEffect()
+        {
+            InvokeCameraShakeEffect(_cameraShakeAmountForOffRoad, _shakeSpeedForOffRoad, true);
+        }
+
+        public void StopCameraShakeEffect()
+        {
+            if (_currentShakeJob == null)
+                return;
+
+            StopCoroutine(_currentShakeJob);
+            _currentShakeJob = null;
+            CameraFollowOffset = _defaultCamFollowOffset;
+        }
+
+        #endregion
+
+        #region Private Functions
+
+        private void InvokeCameraShakeEffect(float shakeAmount, float shakeSpeed, bool doShake)
+        {
+            if (_currentShakeJob != null)
+                StopCoroutine(_currentShakeJob);
+
+            _currentShakeJob = ShakeCamera(shakeAmount, shakeSpeed, doShake);
+            StartCoroutine(_currentShakeJob);
+
+            Debug.Log("[SHAKING]");
+        }
+
+        private IEnumerator ChangeCameraFov(CinemachineVirtualCamera cmCamera, float fromValue, float toValue, float changeSpeed)
+        {
+            while (!Mathf.Approximately(fromValue, toValue))
+            {
+                fromValue = Mathf.Lerp(fromValue, toValue, Time.deltaTime * changeSpeed);
+                cmCamera.m_Lens.FieldOfView = fromValue;
+                yield return null;
+            }
+        }
+
+        private void ChangeCameraFovToDefault()
+        {
+            if (_currentFovJob == null)
+                return;
+
+            StopCoroutine(_currentFovJob);
+
+            _currentFovJob = Mathf.Approximately(CurrentCamFov, _defaultMainCamFov)
+                ? null
+                : ChangeCameraFov(_followCamera, CurrentCamFov, _defaultMainCamFov, _fovDecreaseSpeed);
+
+            if(_currentFovJob != null)
+                StartCoroutine(_currentFovJob);
+        }
+
+        private IEnumerator ChangeCameraFollowDamping(float fromValue, float toValue, float changeSpeed)
+        {
+            while (!Mathf.Approximately(fromValue, toValue))
+            {
+                fromValue = Mathf.Lerp(fromValue, toValue, Time.deltaTime * changeSpeed);
+                CurrentCamDampingX = fromValue;
+                yield return null;
+            }
+        }
+
+        private void ChangeCameraFollowDampingToDefault()
+        {
+            if (_currentDampingJob == null)
+                return;
+
+            StopCoroutine(_currentDampingJob);
+            _currentDampingJob = null;
+            CurrentCamDampingX = _defaultMainCamDampingX;
+        }
+
+        private IEnumerator ShakeCamera(float shakeAmount, float shakeSpeed, bool shake)
+        {
+            while (shake)
+            {
+                Vector3 randomPoint = _defaultCamFollowOffset + Random.insideUnitSphere * shakeAmount;
+                randomPoint.z = _defaultCamFollowOffset.z;
+                CameraFollowOffset = Vector3.Lerp(CameraFollowOffset, randomPoint, Time.deltaTime * shakeSpeed);
+                yield return null;
+            }
+
+            CameraFollowOffset = _defaultCamFollowOffset;
         }
 
         private void SetFinishCamera()
@@ -68,15 +237,15 @@ namespace RaceManager.Cameras
             _finishCamera.Priority = MinorPriority;
         }
 
-        [Button]
-        private void MakePath()
-        {
-            _path.m_Waypoints = new CinemachineSmoothPath.Waypoint[_pointsTrack.Waypoints.Length];
-            for (int i = 0; i < _pointsTrack.Waypoints.Length; i++)
-            { 
-                _path.m_Waypoints[i].position = _pointsTrack.waypointList.items[i].position;
-            }
-        }
+        //[Button]
+        //private void MakePath()
+        //{
+        //    _path.m_Waypoints = new CinemachineSmoothPath.Waypoint[_pointsTrack.Waypoints.Length];
+        //    for (int i = 0; i < _pointsTrack.Waypoints.Length; i++)
+        //    { 
+        //        _path.m_Waypoints[i].position = _pointsTrack.waypointList.items[i].position;
+        //    }
+        //}
 
         private void OnDestroy()
         {
@@ -84,5 +253,7 @@ namespace RaceManager.Cameras
             EventsHub<RaceEvent>.Unsunscribe(RaceEvent.START, SetFollowCamera);
             EventsHub<RaceEvent>.Unsunscribe(RaceEvent.FINISH, SetFinishCamera);
         }
+
+        #endregion
     }
 }

@@ -42,7 +42,7 @@ namespace RaceManager.Root
         }
     }
 
-    public class EventsHub<T, TValue> where T : Enum where TValue : UnityEvent<TValue>
+    public class EventsHub<T, TValue> where T : Enum 
     {
         private static readonly Dictionary<T, UnityEvent<TValue>> _events = new Dictionary<T, UnityEvent<TValue>>();
 

@@ -95,7 +95,7 @@ namespace RaceManager.Effects
             float speedPercent = (CarCurrentSpeed / CarMaxSpeed) * 100;
             if (speedPercent >= SpeedEffectThreshold)
             {
-                "[Speed Effect] => START".Log(Logger.ColorRed);
+                //"[Speed Effect] => START".Log(Logger.ColorRed);
 
                 bool doShake = CarCurrentSpeed > _carPreviousSpeed || Mathf.Approximately(CarCurrentSpeed, CarMaxSpeed);
 
@@ -104,7 +104,7 @@ namespace RaceManager.Effects
             }
             else if(_speedEffectActing)
             {
-                Debug.Log($"[Speed Effect] => STOP");
+                //Debug.Log($"[Speed Effect] => STOP");
 
                 CamerasHandler.StopSpeedEffect();
                 _speedEffectActing = false;

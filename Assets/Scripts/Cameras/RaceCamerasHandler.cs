@@ -12,6 +12,8 @@ namespace RaceManager.Cameras
         private const int MinorPriority = 0;
 
         [Header("Speed effect settings")]
+        [Tooltip("If TRUE, values change for speed effects will depend on Car current speed")]
+        [SerializeField] private bool _useSpeedFactor = true;
         [Range(0f, 2f)]
         [SerializeField] private float _cameraShakeAmountForSpeed = 1f;
         [Range(1f, 10f)]
@@ -23,7 +25,7 @@ namespace RaceManager.Cameras
         [Range(1f, 10f)]
         [SerializeField] private float _fovDecreaseSpeed = 2f;
         [SerializeField] private float _maxExtraFovValue = 5f;
-
+        [Space]
         [Header("Off road effect settings")]
         [Range(0f, 2f)]
         [SerializeField] private float _cameraShakeAmountForOffRoad = 1f;
@@ -91,7 +93,9 @@ namespace RaceManager.Cameras
 
         public void InvokeSpeedEffect(float curSpeed, float maxSpeed, bool doShake)
         {
-            float speedFactor = curSpeed / maxSpeed;
+            float speedFactor = _useSpeedFactor
+                ? curSpeed / maxSpeed
+                : 1f;
 
             if (_currentFovJob != null)
                 StopCoroutine(_currentFovJob);

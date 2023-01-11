@@ -209,12 +209,18 @@ namespace RaceManager.Effects
             //    Debug.Log($"this col: {cp.thisCollider.gameObject.name}");
             //}
 
-            if (!car.IsVisible 
-                || collision == null 
-                || !isActiveAndEnabled 
-                || collision.transform.parent.gameObject.GetInstanceID() == car.gameObject.GetInstanceID()
-                || Time.time - _lastColTime < _minTimeBetweenCollisions) 
+            if (!car.IsVisible
+                || collision == null
+                || !isActiveAndEnabled
+                //|| collision.transform.parent.gameObject.GetInstanceID() == car.gameObject.GetInstanceID()
+                || Time.time - _lastColTime < _minTimeBetweenCollisions)
                 return;
+
+            //if (!car.IsVisible) return;
+            //if (collision == null) return;
+            //if (!isActiveAndEnabled) return;
+            //if (collision.transform.parent.gameObject.GetInstanceID() == car.gameObject.GetInstanceID()) return;
+            //if (Time.time - _lastColTime < _minTimeBetweenCollisions) return;
 
             int collisionLayer = collision.gameObject.layer;
 

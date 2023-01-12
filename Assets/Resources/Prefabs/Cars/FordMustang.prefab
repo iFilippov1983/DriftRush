@@ -11013,12 +11013,12 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 1400
   m_Drag: 0.05
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 1
+  m_Interpolate: 2
   m_Constraints: 0
-  m_CollisionDetection: 3
+  m_CollisionDetection: 0
 --- !u!135 &7880778198000635408
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -11167,10 +11167,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8eabc76edb52a1848a828e3eac4ed3c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _damageFactor: 1
-  _maxCollisionMagnitude: 100
-  _maxImpulseMagnitude: 35
-  _maxDeformRadiusInMaxMag: 0.25
+  _damageFactor: 0.5
+  _maxCollisionMagnitude: 20
+  _maxImpulseMagnitude: 7
+  _maxDeformRadiusInMaxMag: 0.02
   _deformMultiplier: 0.3
   _maxContactPoints: 10
   _minTimeBetweenCollisions: 0.03
@@ -11199,7 +11199,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _useNoise: 1
-  _noiseSize: 20
+  _noiseSize: 2
   _calculateNormals: 1
   IgnoreDeformMeshes:
   - {fileID: 6815169808741078409}
@@ -13431,21 +13431,21 @@ MonoBehaviour:
   _mass: 15
   _drag: 0
   _angularDrag: 0.05
-  LooseForce: 20
-  _breakForce: 200
+  LooseForce: 2
+  _breakForce: 2000
   _joints:
   - hingeAnchor: {x: 0, y: 0, z: 0}
     hingeAxis: {x: 0, y: 1, z: 0}
     useLimits: 1
     minLimit: 0
-    maxLimit: -60
+    maxLimit: -70
     bounciness: 0
     useSpring: 0
     springTargetPosition: 0
     springForce: 0
     springDamper: 20
     UseDetachSpeed: 1
-    springTargetPositionMaxSpeed: -60
+    springTargetPositionMaxSpeed: -70
     springForceMaxSpeed: 250
     maxDetachSpeed: 30
     carDirection: -1
@@ -13453,7 +13453,7 @@ MonoBehaviour:
   _damageCheckPoints:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: -0.135}
-  _useLoseHealth: 1
+  _useLoseHealth: 0
 --- !u!114 &4905592834169999052
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13466,7 +13466,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcb9a77523aa1ae44a016e3ecc4362bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _health: 2
+  _health: 0.2
   _maxDamage: Infinity
   _brokenGlassMaterial: {fileID: 0}
   _shardsParticles: {fileID: 6636932315003309986}
@@ -13598,18 +13598,18 @@ MonoBehaviour:
   _mass: 15
   _drag: 0
   _angularDrag: 0.05
-  LooseForce: 20
-  _breakForce: 200
+  LooseForce: 2
+  _breakForce: 2000
   _joints:
-  - hingeAnchor: {x: -0.07, y: 0.005, z: -0.025}
-    hingeAxis: {x: -1, y: 0, z: 0.5}
+  - hingeAnchor: {x: -0.09, y: 0.005, z: -0.015}
+    hingeAxis: {x: -0.42, y: 0.52, z: 0.5}
     useLimits: 1
-    minLimit: 0
-    maxLimit: 10
+    minLimit: -5
+    maxLimit: 5
     bounciness: 0
     useSpring: 1
     springTargetPosition: 0
-    springForce: 20
+    springForce: 500
     springDamper: 10
     UseDetachSpeed: 0
     springTargetPositionMaxSpeed: 0
@@ -13617,15 +13617,15 @@ MonoBehaviour:
     maxDetachSpeed: 0
     carDirection: 0
     DetachTime: 0
-  - hingeAnchor: {x: 0.07, y: 0.005, z: -0.025}
-    hingeAxis: {x: 1, y: 0, z: 0.5}
+  - hingeAnchor: {x: 0.09, y: 0.005, z: -0.015}
+    hingeAxis: {x: 0.42, y: 0.52, z: 0.24}
     useLimits: 1
-    minLimit: 0
-    maxLimit: 10
+    minLimit: -5
+    maxLimit: 5
     bounciness: 0
     useSpring: 1
     springTargetPosition: 0
-    springForce: 20
+    springForce: 500
     springDamper: 10
     UseDetachSpeed: 0
     springTargetPositionMaxSpeed: 0
@@ -13635,7 +13635,7 @@ MonoBehaviour:
     DetachTime: 0
   _damageCheckPoints:
   - {x: 0, y: 0, z: 0}
-  _useLoseHealth: 1
+  _useLoseHealth: 0
 --- !u!114 &8951234350500143025
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13651,18 +13651,18 @@ MonoBehaviour:
   _mass: 15
   _drag: 0
   _angularDrag: 0.05
-  LooseForce: 20
-  _breakForce: 200
+  LooseForce: 2
+  _breakForce: 2000
   _joints:
   - hingeAnchor: {x: -0.06, y: -0.025, z: -0.015}
     hingeAxis: {x: -1, y: 0, z: -0.5}
     useLimits: 1
-    minLimit: 0
-    maxLimit: -10
+    minLimit: -5
+    maxLimit: 5
     bounciness: 0
     useSpring: 1
     springTargetPosition: 0
-    springForce: 20
+    springForce: 500
     springDamper: 10
     UseDetachSpeed: 0
     springTargetPositionMaxSpeed: 0
@@ -13673,12 +13673,12 @@ MonoBehaviour:
   - hingeAnchor: {x: 0.06, y: -0.025, z: -0.015}
     hingeAxis: {x: 1, y: 0, z: -0.5}
     useLimits: 1
-    minLimit: 0
-    maxLimit: -10
+    minLimit: -5
+    maxLimit: 5
     bounciness: 0
     useSpring: 1
     springTargetPosition: 0
-    springForce: 20
+    springForce: 500
     springDamper: 10
     UseDetachSpeed: 0
     springTargetPositionMaxSpeed: 0
@@ -13687,8 +13687,8 @@ MonoBehaviour:
     carDirection: 0
     DetachTime: 0
   _damageCheckPoints:
-  - {x: 0, y: -0.02, z: -0.03}
-  _useLoseHealth: 1
+  - {x: 0, y: -0.02, z: -0.035}
+  _useLoseHealth: 0
 --- !u!64 &8079084512890354458
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -13729,7 +13729,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcb9a77523aa1ae44a016e3ecc4362bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _health: 2
+  _health: 0.2
   _maxDamage: Infinity
   _brokenGlassMaterial: {fileID: 0}
   _shardsParticles: {fileID: 8348081428513313522}
@@ -13830,7 +13830,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcb9a77523aa1ae44a016e3ecc4362bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _health: 2
+  _health: 0.2
   _maxDamage: Infinity
   _brokenGlassMaterial: {fileID: 0}
   _shardsParticles: {fileID: 3346814250664782062}
@@ -13940,7 +13940,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcb9a77523aa1ae44a016e3ecc4362bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _health: 2
+  _health: 0.2
   _maxDamage: Infinity
   _brokenGlassMaterial: {fileID: 0}
   _shardsParticles: {fileID: 7773321223152409442}
@@ -13960,21 +13960,21 @@ MonoBehaviour:
   _mass: 15
   _drag: 0
   _angularDrag: 0.05
-  LooseForce: 20
-  _breakForce: 200
+  LooseForce: 2
+  _breakForce: 2000
   _joints:
   - hingeAnchor: {x: 0, y: 0, z: 0}
     hingeAxis: {x: 0, y: 1, z: 0}
     useLimits: 1
     minLimit: 0
-    maxLimit: 60
+    maxLimit: 70
     bounciness: 0
     useSpring: 0
     springTargetPosition: 0
     springForce: 0
     springDamper: 20
     UseDetachSpeed: 1
-    springTargetPositionMaxSpeed: 60
+    springTargetPositionMaxSpeed: 70
     springForceMaxSpeed: 250
     maxDetachSpeed: 30
     carDirection: -1
@@ -13982,7 +13982,7 @@ MonoBehaviour:
   _damageCheckPoints:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: -0.135}
-  _useLoseHealth: 1
+  _useLoseHealth: 0
 --- !u!1001 &3961705493633098095
 PrefabInstance:
   m_ObjectHideFlags: 0

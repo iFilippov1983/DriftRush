@@ -1,6 +1,4 @@
 ﻿using RaceManager.Root;
-using UniRx;
-using System;
 using UnityEngine;
 using Zenject;
 using RaceManager.UI;
@@ -14,8 +12,7 @@ namespace RaceManager.Effects
 {
     public class RaceSceneEffectsHandler : MonoBehaviour, IInitializable
     {
-        [Tooltip("Percentage value from Players Car speed, when speed effect starts")]
-        [Range(1, 100)]
+        [Tooltip("Player's Car speed, when speed effect starts")]
         [SerializeField] private int SpeedEffectThreshold = 70;
 
         private RaceUI _raceUI;
@@ -92,8 +89,8 @@ namespace RaceManager.Effects
 
         private void HandleCarSpeed()
         {
-            float speedPercent = (CarCurrentSpeed / CarMaxSpeed) * 100;
-            if (speedPercent >= SpeedEffectThreshold)
+            //float speedPercent = (CarCurrentSpeed / CarMaxSpeed) * 100;
+            if (CarCurrentSpeed >= SpeedEffectThreshold)
             {
                 //"[Speed Effect] => START".Log(Logger.ColorRed);
 

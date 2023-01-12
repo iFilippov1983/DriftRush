@@ -32,12 +32,12 @@ namespace RaceManager.Cameras
         [Range(0f, 10f)]
         [SerializeField] private float _shakeSpeedForOffRoad = 2f;
         [Space]
-
-        //[SerializeField] private WaypointTrack _pointsTrack;
-        //[SerializeField] private FollowCamera _followGroupCamera;
         [SerializeField] private CinemachineVirtualCamera _followCamera;
         [SerializeField] private CinemachineVirtualCamera _finishCamera;
         [SerializeField] private CinemachineVirtualCamera _startCamera;
+
+        //[SerializeField] private FollowCamera _followGroupCamera;
+        //[SerializeField] private WaypointTrack _pointsTrack;
         //[SerializeField] private CinemachineSmoothPath _path;
         //[SerializeField] private CinemachineDollyCart _cart;
 
@@ -153,7 +153,7 @@ namespace RaceManager.Cameras
             _currentShakeJob = ShakeCamera(shakeAmount, shakeSpeed, doShake);
             StartCoroutine(_currentShakeJob);
 
-            Debug.Log("[SHAKING]");
+            //Debug.Log("[SHAKING]");
         }
 
         private IEnumerator ChangeCameraFov(CinemachineVirtualCamera cmCamera, float fromValue, float toValue, float changeSpeed)

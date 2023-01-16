@@ -102,7 +102,7 @@ namespace RaceManager.Cameras
 
             float newFovValue = _defaultMainCamFov + _maxExtraFovValue * speedFactor;
             bool isBraking = CurrentCamFov > newFovValue;
-            float fovChangeSpeed = isBraking  ? _fovDecreaseSpeed : _fovEncreaseSpeed;
+            float fovChangeSpeed = isBraking ? _fovDecreaseSpeed : _fovEncreaseSpeed;
             _currentFovJob = ChangeCameraFov(_followCamera, CurrentCamFov, newFovValue, fovChangeSpeed);
             StartCoroutine(_currentFovJob);
 
@@ -216,29 +216,47 @@ namespace RaceManager.Cameras
 
         private void SetFinishCamera()
         {
-            _finishCamera.Priority = MajorPriority;
+            SetCameraState(MajorPriority, true, _finishCamera);
+            SetCameraState(MinorPriority, false, _startCamera, _followCamera);
 
-            _startCamera.Priority = MinorPriority;
-            //_followGroupCamera.Camera.Priority = MinorPriority;
-            _followCamera.Priority = MinorPriority;
+            //_finishCamera.Priority = MajorPriority;
+
+            //_startCamera.Priority = MinorPriority;
+                //_followGroupCamera.Camera.Priority = MinorPriority;
+            //_followCamera.Priority = MinorPriority;
         }
 
         private void SetFollowCamera()
         {
-            _followCamera.Priority = MajorPriority;
-            //_followGroupCamera.Camera.Priority = MajorPriority;
+            SetCameraState(MajorPriority, true, _followCamera);
+            SetCameraState(MinorPriority, false, _finishCamera, _startCamera);
 
-            _finishCamera.Priority = MinorPriority;
-            _startCamera.Priority = MinorPriority;
+            //_followCamera.Priority = MajorPriority;
+                //_followGroupCamera.Camera.Priority = MajorPriority;
+
+            //_finishCamera.Priority = MinorPriority;
+            //_startCamera.Priority = MinorPriority;
         }
 
         private void SetStartCamera()
         {
-            _startCamera.Priority = MajorPriority;
+            SetCameraState(MajorPriority, true, _startCamera);
+            SetCameraState(MinorPriority, false, _followCamera, _finishCamera);
 
-            _followCamera.Priority = MinorPriority;
-            //_followGroupCamera.Camera.Priority = MinorPriority;
-            _finishCamera.Priority = MinorPriority;
+            //_startCamera.Priority = MajorPriority;
+
+            //_followCamera.Priority = MinorPriority;
+                //_followGroupCamera.Camera.Priority = MinorPriority;
+            //_finishCamera.Priority = MinorPriority;
+        }
+
+        private void SetCameraState(int priority, bool isActive, params CinemachineVirtualCamera[] cameras)
+        {
+            foreach (var cam in cameras)
+            {
+                cam.Priority = priority;
+                cam.SetActive(isActive);
+            }
         }
 
         //[Button]

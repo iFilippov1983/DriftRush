@@ -5,6 +5,7 @@ namespace RaceManager.Race
 {
     public class RaceLevelView : MonoBehaviour, IRaceLevel
     {
+        [SerializeField] private RaceLine _raceLine;
         [SerializeField] private StartPoint[] _startPoints;
         [SerializeField] private WaypointTrack _waypointTrackMain;
         [SerializeField] private WaypointTrack _waypointTrackEven;
@@ -14,6 +15,7 @@ namespace RaceManager.Race
         [SerializeField] private Transform _startCamInitialPoint;
         [SerializeField] private Transform _finishCamInitialPoint;
 
+        public RaceLine RaceLine => _raceLine;
         public StartPoint[] StartPoints => _startPoints;
         public WaypointTrack WaypointTrackMain => _waypointTrackMain;
         public WaypointTrack WaypointTrackEven => _waypointTrackEven;

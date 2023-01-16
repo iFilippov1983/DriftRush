@@ -3,8 +3,9 @@ using UnityEngine;
 
 namespace RaceManager.Waypoints
 {
-    public class WaypointEditHelper : MonoBehaviour 
+    public class TrackNode : MonoBehaviour 
     {
+        public float recomendedSpeed;
         public bool isCheckpoint;
 
         [ShowInInspector, ReadOnly] private float _maxHeight;
@@ -20,10 +21,10 @@ namespace RaceManager.Waypoints
             _roadMask = roadMask;
         }
 
-        public void UpdatePositionHeight()
-        {
-            UpdatePositionHeight(_maxHeight, _heightAboveRoad, _roadMask);
-        }
+        //public void UpdatePositionHeight()
+        //{
+        //    UpdatePositionHeight(_maxHeight, _heightAboveRoad, _roadMask);
+        //}
 
         public void UpdatePositionHeight(float maxHeight, float heightAboveRoad, LayerMask roadMask)
         {

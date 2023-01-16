@@ -7,6 +7,8 @@ namespace RaceManager.Waypoints
 {
     public class WaypointTrack : MonoBehaviour
     {
+        private const float DeltaStep = 0.1f;
+
         [SerializeField] protected bool _smoothRoute = true;
         [SerializeField] protected Color _drawColor = Color.yellow;
         [SerializeField, Range(0.1f, 2f)] private float _nodeSphereSize = 0.25f;
@@ -48,6 +50,8 @@ namespace RaceManager.Waypoints
         public float Length { get; protected set; }
         public Transform[] Waypoints => waypointList.items;
         public List<Waypoint> WaypointsList => _waypoints;
+        public Vector3[] Points => _points;
+        public float[] Distances => _distances;
         public float AccumulateDistance => _accumulateDistance;
         public Transform CurrentTargetWaypoint => waypointList.items[p2n];
         public Transform PreviouseTargetWaypoint => waypointList.items[p1n];
@@ -61,6 +65,7 @@ namespace RaceManager.Waypoints
             PresetWaypoints();
         }
 
+        [Button]
         private void Start()
         {
             SetWaypoints();
@@ -82,10 +87,10 @@ namespace RaceManager.Waypoints
         {
             for (int i = 0; i < Waypoints.Length; i++)
             {
-                var wpHelper = Waypoints[i].GetComponent<WaypointEditHelper>();
-                if (wpHelper != null)
+                var node = Waypoints[i].GetComponent<TrackNode>();
+                if (node != null)
                 {
-                    wpHelper.UpdatePositionHeight(MaxHeight, HeightAboveRoad, RoadMask);
+                    node.UpdatePositionHeight(MaxHeight, HeightAboveRoad, RoadMask);
                 }
             }
         }
@@ -109,15 +114,19 @@ namespace RaceManager.Waypoints
                     wp.Number = i;
                     _waypoints.Add(wp);
 
-                    if(i == _distances.Length - 2)
+                    if (i == _distances.Length - 2)
                         wp.isFinishLine = true;
 
-                    if(i != 0)
-                        _waypoints[i-1].NextWaypoint = wp;
+                    if (i != 0)
+                        _waypoints[i - 1].NextWaypoint = wp;
 
-                    var wpHelper = Waypoints[i].GetComponent<WaypointEditHelper>();
-                    if (wpHelper != null && wpHelper.isCheckpoint)
-                        wp.isCheckpoint = true;
+                    var node = Waypoints[i].GetComponent<TrackNode>();
+                    if (node != null)
+                    {
+                        wp.RecomendedSpeed = node.recomendedSpeed;
+                        if (node.isCheckpoint)
+                            wp.isCheckpoint = true;
+                    }
                 }
 
                 for (int i = 0; i < _waypoints.Count; i++)
@@ -136,7 +145,7 @@ namespace RaceManager.Waypoints
         {
             // position and direction
             Vector3 p1 = GetRoutePosition(dist);
-            Vector3 p2 = GetRoutePosition(dist + 0.1f);
+            Vector3 p2 = GetRoutePosition(dist + DeltaStep);
             Vector3 delta = p2 - p1;
             return new RoutePoint(p1, delta.normalized);
         }

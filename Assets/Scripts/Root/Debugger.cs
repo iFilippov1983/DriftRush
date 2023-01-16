@@ -16,7 +16,7 @@ namespace RaceManager.Root
     {
         private static CarsDepot _playerCarDepot;
         private static GameProgressScheme _gameProgressScheme;
-        private static EffectsSettingsContainer _settingsContainer;
+        private static GameSettingsContainer _settingsContainer;
 
         [SerializeField]
         private MainUI _mainUI;
@@ -53,12 +53,12 @@ namespace RaceManager.Root
             }
         }
 
-        private static EffectsSettingsContainer SettingsContainer
+        private static GameSettingsContainer SettingsContainer
         {
             get 
             {
                 if (_settingsContainer == null)
-                    _settingsContainer = ResourcesLoader.LoadObject<EffectsSettingsContainer>(ResourcePath.EffectsSettingsContainer);
+                    _settingsContainer = ResourcesLoader.LoadObject<GameSettingsContainer>(ResourcePath.EffectsSettingsContainer);
                 return _settingsContainer;
             }
         }

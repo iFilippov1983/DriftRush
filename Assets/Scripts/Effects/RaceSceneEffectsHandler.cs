@@ -16,7 +16,7 @@ namespace RaceManager.Effects
         [SerializeField] private int SpeedEffectThreshold = 70;
 
         private RaceUI _raceUI;
-        private EffectsSettingsContainer _settingsContainer;
+        private GameSettingsContainer _settingsContainer;
         private Driver _playerDriver;
         private AudioType _currentTrackType;
 
@@ -32,7 +32,7 @@ namespace RaceManager.Effects
         #region Initial Functions
 
         [Inject]
-        private void Construct(RaceUI raceUI, EffectsSettingsContainer settingsContainer)
+        private void Construct(RaceUI raceUI, GameSettingsContainer settingsContainer)
         { 
             _raceUI = raceUI;
             _settingsContainer = settingsContainer;

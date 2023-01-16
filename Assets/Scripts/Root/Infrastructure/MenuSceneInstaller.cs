@@ -27,7 +27,7 @@ namespace RaceManager.Infrastructure
         [SerializeField] private RaceRewardsScheme _raceRewardsScheme;
         [SerializeField] private CarsUpgradeScheme _carUpgradeScheme;
         [Space]
-        [SerializeField] private EffectsSettingsContainer _effectsSettings;
+        [SerializeField] private GameSettingsContainer _effectsSettings;
 
         private MainSceneRoot _mainSceneRoot;
 

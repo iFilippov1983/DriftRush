@@ -16,6 +16,8 @@ namespace RaceManager.Waypoints
         [ReadOnly]
         public Waypoint NextWaypoint;
 
+        public float RecomendedSpeed { get; set; }
+
         private const int NumberOfCarsOnTrack = 6;
 
         [SerializeField]

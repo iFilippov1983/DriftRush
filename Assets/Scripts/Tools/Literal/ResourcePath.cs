@@ -14,6 +14,7 @@ namespace RaceManager.Tools
         public const string CarDepotPlayer = "SO/Depots/CarsDepotPlayer";
 
         public const string WaypointPrefab = "Prefabs/Waypoint";
+        public const string RaceLineSegmentPrefab = "Prefabs/RaceLineSegment";
         public const string DriverPrefab = "Prefabs/Driver";
         public const string LootboxPrefab = "Prefabs/Lootbox";
         public const string FXControllerPrefab = "Prefabs/Effects/FXControllerRace";

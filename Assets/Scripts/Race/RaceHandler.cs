@@ -21,13 +21,14 @@ namespace RaceManager.Race
         [SerializeField] private CarsDepot _opponentsCarsDepot;
 
         private CarsDepot _playerCarsDepot;
-        private EffectsSettingsContainer _settingsContainer;
+        private GameSettingsContainer _settingsContainer;
         private RaceSceneEffectsHandler _sceneEffectsHandler;
         private Profiler _profiler;
         private RaceUI _raceUI;
         private InRacePositionsHandler _positionsHandler;
         private InRaceLootboxHandler _lootboxHandler;
         private RaceLevelInitializer _raceLevelInitializer;
+        private RaceLineHandler _lineHandler;
         private IRaceLevel _raceLevel;
         private RewardsHandler _rewardsHandler;
 
@@ -47,7 +48,7 @@ namespace RaceManager.Race
             InRacePositionsHandler positionsHandler, 
             RaceUI raceUI, 
             CarsDepot playerCarsDepot, 
-            EffectsSettingsContainer settingsContainer,
+            GameSettingsContainer settingsContainer,
             RaceSceneEffectsHandler sceneEffectsHandler,
             Profiler profiler
             )
@@ -73,6 +74,7 @@ namespace RaceManager.Race
 
             InitDrivers();
 
+            _lineHandler = new RaceLineHandler(_raceLevel.WaypointTrackMain, _raceLevel.RaceLine, _settingsContainer.UseRaceLine);
             _lootboxHandler = new InRaceLootboxHandler(_profiler);
             _positionsHandler.StartHandling(_waypointsTrackersList);
 
@@ -98,6 +100,7 @@ namespace RaceManager.Race
             _raceStarted = false;
             _waypointsTrackersList = new List<WaypointsTracker>();
 
+            GameObject parent = new GameObject("[Drivers]");
             GameObject driverPrefab = ResourcesLoader.LoadPrefab(ResourcePath.DriverPrefab);
 
             for (int i = 0; i < _startPoints.Length; i++)
@@ -121,6 +124,7 @@ namespace RaceManager.Race
                     _sceneEffectsHandler.HandleEffectsFor(driver, _raceLevel);
 
                     driver.Subscribe(_raceUI);
+                    driver.Subscribe(_lineHandler);
                     driver.DriverProfile.CarState.Subscribe(cs => HandlePlayerCarState(cs, driver));
 
                     var selfRighting = driver.CarObject.GetComponent<CarSelfRighting>();
@@ -150,7 +154,6 @@ namespace RaceManager.Race
                     driverGo.name += $"_{i + 1}";
                 }
 
-                GameObject parent = new GameObject("[Drivers]");
                 driverGo.transform.SetParent(parent.transform, false);
                 _waypointsTrackersList.Add(driver.WaypointsTracker);
             }

@@ -144,20 +144,20 @@ namespace RaceManager.Waypoints
             y += lineHeight + spacing;
 
             var addDebudWaypointComponent = new Rect(x, y, inspectorWidth, lineHeight);
-            if (GUI.Button(addDebudWaypointComponent, "Add/Update WaypointEditHelper component to/on all "))
+            if (GUI.Button(addDebudWaypointComponent, "Add/Update TrackNode component to/on all "))
             {
                 var track = property.FindPropertyRelative("track").objectReferenceValue as WaypointTrack;
                 foreach (Transform child in track.waypointList.items)
                 {
                     //Debug.Log($"Adding to: {child.gameObject.name}");
-                    WaypointEditHelper helper = child.GetComponent<WaypointEditHelper>();
-                    if (helper == null)
+                    TrackNode node = child.GetComponent<TrackNode>();
+                    if (node == null)
                     {
-                        helper = child.gameObject.AddComponent<WaypointEditHelper>();
+                        node = child.gameObject.AddComponent<TrackNode>();
                         Debug.Log($"Added to: {child.gameObject.name}");
                     }
 
-                    helper.SetWaypoint(track.MaxHeight, track.HeightAboveRoad, track.RoadMask);
+                    node.SetWaypoint(track.MaxHeight, track.HeightAboveRoad, track.RoadMask);
                 }
             }
             y += lineHeight + spacing;

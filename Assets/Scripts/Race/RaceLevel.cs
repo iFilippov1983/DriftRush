@@ -7,11 +7,13 @@ namespace RaceManager.Race
 {
     public class RaceLevel : MonoBehaviour, IRaceLevel
     {
+        [SerializeField] private RaceLine _raceLine;
         [SerializeField] private List<TrackConfiguration> _trackConfigurations = new List<TrackConfiguration>();
 
         [ShowInInspector, ReadOnly]
         private TrackConfiguration _configuration;
 
+        public RaceLine RaceLine => _raceLine;
         public StartPoint[] StartPoints => _configuration.StartPoints;
         public WaypointTrack WaypointTrackMain => _configuration.WaypointTrackMain;
         public WaypointTrack WaypointTrackEven => _configuration.WaypointTrackEven;

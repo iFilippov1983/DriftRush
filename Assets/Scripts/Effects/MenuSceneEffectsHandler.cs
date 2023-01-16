@@ -11,7 +11,7 @@ namespace RaceManager.Effects
     public class MenuSceneEffectsHandler : MonoBehaviour, IInitializable
     {
         private MainUI _mainUI;
-        private EffectsSettingsContainer _settingsContainer;
+        private GameSettingsContainer _settingsContainer;
         private GameEffectsController _effectsController;
         private SaveManager _saveManager;
 
@@ -22,7 +22,7 @@ namespace RaceManager.Effects
         #region Initial Functions
 
         [Inject]
-        private void Construct(MainUI mainUI, EffectsSettingsContainer settingsContainer, SaveManager saveManager)
+        private void Construct(MainUI mainUI, GameSettingsContainer settingsContainer, SaveManager saveManager)
         {
             _mainUI = mainUI;
             _settingsContainer = settingsContainer;

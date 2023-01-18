@@ -62,7 +62,7 @@ namespace RaceManager.Waypoints
 
         private void Awake()
         {
-            PresetWaypoints();
+            PresetTrack();
         }
 
         [Button]
@@ -71,7 +71,7 @@ namespace RaceManager.Waypoints
             SetWaypoints();
         }
 
-        private void PresetWaypoints()
+        private void PresetTrack()
         {
             AdjustWaypointsPositions();
 
@@ -90,7 +90,7 @@ namespace RaceManager.Waypoints
                 var node = Waypoints[i].GetComponent<TrackNode>();
                 if (node != null)
                 {
-                    node.UpdatePositionHeight(MaxHeight, HeightAboveRoad, RoadMask);
+                    node.UpdatePositionHeight(MaxHeight, HeightAboveRoad);
                 }
             }
         }

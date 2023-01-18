@@ -24,6 +24,7 @@ namespace RaceManager.Cars
         private CarVisual _carVisual;
         private WaypointsTracker _waypointsTracker;
         private MaterialsContainer _materialsContainer;
+
         private List<IObserver<DriverProfile>> _observersList;
 
         public DriverProfile DriverProfile => _driverProfile;
@@ -75,6 +76,7 @@ namespace RaceManager.Cars
         {
             _driverProfile.CarCurrentSpeed = _car.SpeedInDesiredUnits;
             _driverProfile.TrackProgress = _waypointsTracker.Progress;
+            _driverProfile.DistanceFromStart = _waypointsTracker.DistanceFromStart;
             _driverProfile.PositionInRace = (PositionInRace)_waypointsTracker.CarPosition;
             NotifyObservers();
         }

@@ -72,12 +72,12 @@ namespace RaceManager.Race
             _waypointTrackEven = _raceLevel.WaypointTrackEven;
             _waypointTrackOdd = _raceLevel.WaypointTrackOdd;
 
-            InitDrivers();
-
             _lineHandler = new RaceLineHandler(_raceLevel.WaypointTrackMain, _raceLevel.RaceLine, _settingsContainer.UseRaceLine);
             _lootboxHandler = new InRaceLootboxHandler(_profiler);
-            _positionsHandler.StartHandling(_waypointsTrackersList);
 
+            InitDrivers();
+
+            _positionsHandler.StartHandling(_waypointsTrackersList);
             _rewardsHandler.OnRaceRewardLootboxAdded += NotifyRaceUI;
         }
 

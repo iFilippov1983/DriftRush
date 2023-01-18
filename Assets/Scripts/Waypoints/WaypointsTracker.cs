@@ -36,6 +36,7 @@ namespace RaceManager.Waypoints
 
         public RoutePoint ProgressPoint { get; private set; }
         public float Progress => _progressDistance / _waypointTrack.AccumulateDistance;
+        public float DistanceFromStart => _progressDistance;
         public int CarPosition => _carPosition;
         public int NumberOfWaypointsPassed => _numberOfPassedWaypoints;
         public float TimeAtLastWaypoint => _timeAtLastPassedWaypoint;

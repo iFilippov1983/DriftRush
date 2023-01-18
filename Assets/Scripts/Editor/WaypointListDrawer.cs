@@ -157,7 +157,7 @@ namespace RaceManager.Waypoints
                         Debug.Log($"Added to: {child.gameObject.name}");
                     }
 
-                    node.SetWaypoint(track.MaxHeight, track.HeightAboveRoad, track.RoadMask);
+                    node.SetWaypoint(track.MaxHeight, track.HeightAboveRoad);
                 }
             }
             y += lineHeight + spacing;

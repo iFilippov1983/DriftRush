@@ -1,5 +1,6 @@
 ﻿using RaceManager.Tools;
 using Sirenix.OdinInspector;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,13 +10,16 @@ namespace RaceManager.Waypoints
     {
         private GameObject _segmentPrefab;
 
-        [SerializeField] private Color _normalColor = Color.blue;
-        [SerializeField] private Color _awareColor = Color.yellow;
+        [Tooltip("The distance offset wich will be used to check each line segment")]
+        [SerializeField] private float _checkOffset = 10f;
+        [Space]
+        [SerializeField] private Color _baseColor = Color.blue;
         [SerializeField] private Color _warningColor = Color.red;
-        [SerializeField] private float _segmentSpawnInterval = 1;
-        [SerializeField] private float _observeFactor = 15;
-
-        private List<RaceLineSegment> _segments = new List<RaceLineSegment>();
+        [SerializeField] private float _segmentFadeSpeed = 1f;
+        [SerializeField] private float _segmentColorTransitionSpeed = 1f;
+        [Space]
+        [SerializeField] private float _segmentSpawnInterval = 1f;
+        [SerializeField] private float _observeFactor = 15f;
 
         private float _currentDistance = 0;
 
@@ -30,25 +34,38 @@ namespace RaceManager.Waypoints
             }
         }
 
-        public Color NormalColor => _normalColor;
-        public Color AwareColor => _awareColor;
-        public Color WarningColor => _warningColor;
-        public List<RaceLineSegment> Segments => _segments;
         [ShowInInspector, ReadOnly]
-        public float ObserveDistance => _segmentSpawnInterval * _observeFactor;
+        private float ObserveDistance => _segmentSpawnInterval * _observeFactor;
+
+        public Action<float> OnSpeedChange;
+        public Action<float> OnDistanceChange;
 
         [Button]
         public void SpawnSegments(WaypointTrack mainTrack)
         {
-            while (_currentDistance < mainTrack.Length)
+            var disArray = mainTrack.Distances;
+            while (_currentDistance < disArray[disArray.Length - 1])
             {
                 RoutePoint point = mainTrack.GetRoutePoint(_currentDistance);
                 GameObject go = Instantiate(SegmentPrefab, point.position, Quaternion.LookRotation(point.direction), transform);
 
                 RaceLineSegment segment = go.GetComponent<RaceLineSegment>();
                 segment.DistanceFromStart = _currentDistance;
-                segment.RecomendedSpeed = GetRecomendedSpeed(mainTrack, segment);
-                _segments.Add(segment);
+
+                segment.Initiallize(new RaceLineSegmentData()
+                {
+                    recomendedSpeed = GetRecomendedSpeed(mainTrack, segment),
+                    fadeSpeed = _segmentFadeSpeed,
+                    colorTransitionSpeed = _segmentColorTransitionSpeed,
+                    baseColor = _baseColor,
+                    warningColor = _warningColor,
+                    checkOffset = _checkOffset                    
+                });
+
+                segment.OnDestroyAction += OnSegmentDestroy;
+
+                OnSpeedChange += segment.CheckSpeed;
+                OnDistanceChange += segment.CheckDistance;
 
                 _currentDistance += _segmentSpawnInterval;
             }
@@ -64,7 +81,6 @@ namespace RaceManager.Waypoints
             {
                 if (distances[i] > segment.DistanceFromStart || Mathf.Approximately(distances[i], segment.DistanceFromStart))
                 {
-                    Debug.Log(i);
                     prev = waypoints[i - 1].GetComponent<TrackNode>();
                     next = waypoints[i].GetComponent<TrackNode>();
                     float speedDif = next.recomendedSpeed - prev.recomendedSpeed;
@@ -78,21 +94,12 @@ namespace RaceManager.Waypoints
             return 0.0f;
         }
 
-        private void ClearLine()
+        private void OnSegmentDestroy(RaceLineSegment segment)
         {
-            if (_segments.Count < 1)
-                return;
+            OnSpeedChange -= segment.CheckSpeed;
+            OnDistanceChange -= segment.CheckDistance;
 
-            foreach (var segment in _segments)
-            {
-                _segments.Remove(segment);
-                Destroy(segment);
-            }
-        }
-
-        private void OnDestroy()
-        {
-            ClearLine();
+            segment.OnDestroyAction -= OnSegmentDestroy;
         }
     }
 }

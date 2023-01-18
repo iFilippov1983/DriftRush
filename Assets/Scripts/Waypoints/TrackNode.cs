@@ -10,25 +10,18 @@ namespace RaceManager.Waypoints
 
         [ShowInInspector, ReadOnly] private float _maxHeight;
         [ShowInInspector, ReadOnly] private float _heightAboveRoad;
-        [ShowInInspector, ReadOnly] private LayerMask _roadMask;
 
         private Ray _ray;
 
-        public void SetWaypoint(float maxHeight, float heightAboveRoad, LayerMask roadMask)
+        public void SetWaypoint(float maxHeight, float heightAboveRoad)
         { 
             _maxHeight = maxHeight;
             _heightAboveRoad = heightAboveRoad;
-            _roadMask = roadMask;
         }
 
-        //public void UpdatePositionHeight()
-        //{
-        //    UpdatePositionHeight(_maxHeight, _heightAboveRoad, _roadMask);
-        //}
-
-        public void UpdatePositionHeight(float maxHeight, float heightAboveRoad, LayerMask roadMask)
+        public void UpdatePositionHeight(float maxHeight, float heightAboveRoad)
         {
-            SetWaypoint(maxHeight, heightAboveRoad, roadMask);
+            SetWaypoint(maxHeight, heightAboveRoad);
 
             Vector3 pos = transform.position;
             _ray = new Ray(pos, Vector3.down);
@@ -38,7 +31,6 @@ namespace RaceManager.Waypoints
                 pos = hit.point;
                 pos.y += _heightAboveRoad;
                 transform.position = pos;
-                //Debug.Log($"[{name}] => HITS {hit.transform.name} => yPOS {pos.y} ");
             }
         }
     }

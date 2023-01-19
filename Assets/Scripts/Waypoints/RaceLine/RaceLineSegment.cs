@@ -1,8 +1,11 @@
 ﻿using Sirenix.OdinInspector;
 using System;
 using System.Collections;
+using System.Threading;
+using System.Threading.Tasks;
+using UniRx;
+using UniRx.Triggers;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace RaceManager.Waypoints
 {
@@ -22,25 +25,24 @@ namespace RaceManager.Waypoints
 
         private Color _baseColor;
         private Color _warningColor;
-        private Color _currentColor;
 
         [ShowInInspector, ReadOnly]
         private bool _isVisible = true;
         [ShowInInspector, ReadOnly]
         private bool _isWarning = false;
-        private bool _isFading;
 
         [ShowInInspector, ReadOnly]
         private IEnumerator _currentFadeJob;
         [ShowInInspector, ReadOnly]
         private IEnumerator _currentColorJob;
-        private IEnumerator _currentJob;
 
-        private Transform _transform;
+        private Task<bool> _currentFadeTask;
+        private Task<bool> _currentColorTask;
+        private CancellationTokenSource _cancelTokenFade = new CancellationTokenSource();
+        private CancellationTokenSource _cancelTokenColor = new CancellationTokenSource();
 
         private Material MeshMaterial => _mesh.material;
 
-        public Action<bool> OnSpeedCheckAction;
         public Action<RaceLineSegment> OnDestroyAction;
 
         [ShowInInspector, ReadOnly]
@@ -49,9 +51,6 @@ namespace RaceManager.Waypoints
             get => _distanceFromStart; 
             set { _distanceFromStart = value; } 
         }
-
-        [ShowInInspector, ReadOnly]
-        public float RecomendedSpeed => _recomendedSpeed;
 
         public void Initiallize(RaceLineSegmentData data)
         {
@@ -62,23 +61,116 @@ namespace RaceManager.Waypoints
             _warningColor = data.warningColor;
             _checkOffset = data.checkOffset;
 
-            _transform = transform;
-
             MeshMaterial.color = _baseColor;
         }
+
+        #region Using Tasks implementation
+
+        public async void DistanceCheck(float distance)
+        {
+            _checkDistance = distance + _checkOffset;
+            bool isPassed = _checkDistance >= _distanceFromStart;
+
+            if (isPassed == _isVisible && (_currentFadeTask == null || _currentFadeTask.IsCompleted))
+            {
+                _currentFadeTask = VisibilityChange(isPassed, _cancelTokenFade.Token);
+                await _currentFadeTask;
+                _isVisible = _currentFadeTask.Result;
+            }
+        }
+
+        public async void SpeedCheck(float speed)
+        {
+            if (!_isVisible) return;
+
+            bool isInRange = _checkDistance * _checkDistanceFactor >= _distanceFromStart;
+            bool isOverspeed = speed >= _recomendedSpeed;
+
+            if (isOverspeed != _isWarning && isInRange && (_currentColorTask == null || _currentColorTask.IsCompleted))
+            {
+                _currentColorTask = ColorChange(isOverspeed, _cancelTokenColor.Token);
+                await _currentColorTask;
+                _isWarning = _currentColorTask.Result;
+            }
+        }
+
+        private async Task<bool> VisibilityChange(bool fade, CancellationToken token)
+        {
+            if (MeshMaterial == null) return false;
+
+            Color color = MeshMaterial.color;
+
+            float maxAlphaValue = _isWarning
+                ? _warningColor.a
+                : _baseColor.a;
+
+            float targetAlpha = fade ? 0 : maxAlphaValue;
+
+            while (!Mathf.Approximately(color.a, targetAlpha))
+            {
+                try
+                {
+                    token.ThrowIfCancellationRequested();
+
+                    color.a = Mathf.Lerp(color.a, targetAlpha, Time.deltaTime * _fadeSpeed);
+                    MeshMaterial.color = color;
+
+                    await Task.Yield();
+                }
+                catch (Exception)
+                {
+                    return !fade;
+                }
+                
+            }
+
+            return !fade;
+        }
+
+        private async Task<bool> ColorChange(bool warning, CancellationToken token)
+        {
+            if (MeshMaterial == null) return false;
+
+            Color color = MeshMaterial.color;
+            Color targetColor = warning ? _warningColor : _baseColor;
+            targetColor.a = MeshMaterial.color.a;
+
+            while (!Equals(color, targetColor))
+            {
+                try
+                {
+                    token.ThrowIfCancellationRequested();
+
+                    color = Color.Lerp(color, targetColor, Time.deltaTime * _colorTransitionSpeed);
+                    color.a = MeshMaterial.color.a;
+                    targetColor.a = MeshMaterial.color.a;
+                    MeshMaterial.color = color;
+                    
+
+                    await Task.Yield();
+                }
+                catch (Exception)
+                {
+                    return warning;
+                }
+            }
+
+            return warning;
+        }
+        #endregion
+
+        #region Using Coroutines implementation 
 
         public void CheckDistance(float distance)
         {
             _checkDistance = distance + _checkOffset;
             bool isPassed = _checkDistance > _distanceFromStart;
 
-            if (isPassed == _isVisible)
+            if (isPassed == _isVisible && _currentFadeJob == null)
             {
-                if (_currentFadeJob != null)
-                    StopCoroutine(_currentFadeJob);
+                //if (_currentFadeJob != null && !isPassed)
+                //    StopCoroutine(_currentFadeJob);
 
-                _isVisible = !isPassed;
-                //Debug.Log($"Is visible: {_isVisible}");
                 _currentFadeJob = ChangeVisibility(isPassed);
                 StartCoroutine(_currentFadeJob);
             }
@@ -86,20 +178,16 @@ namespace RaceManager.Waypoints
 
         public void CheckSpeed(float speed)
         {
-            if (!_isVisible)
-                return;
+            if (!_isVisible) return;
 
-            //bool isInRange = _checkDistance * _checkDistanceFactor > _distanceFromStart;
+            bool isInRange = _checkDistance * _checkDistanceFactor > _distanceFromStart;
             bool isOverspeed = speed >= _recomendedSpeed;
 
-            //OnSpeedCheckAction?.Invoke(isOverspeed);
-
-            if (isOverspeed != _isWarning || !_isVisible)// && isInRange)
+            if (isOverspeed != _isWarning && _currentColorTask == null && isInRange)
             {
-                if(_currentColorJob != null)
-                    StopCoroutine(_currentColorJob);
+                //if (_currentColorJob != null)
+                //    StopCoroutine(_currentColorJob);
 
-                _isWarning = isOverspeed;
                 _currentColorJob = ChangeColor(isOverspeed);
                 StartCoroutine(_currentColorJob);
             }
@@ -107,37 +195,54 @@ namespace RaceManager.Waypoints
 
         private IEnumerator ChangeVisibility(bool fade)
         {
-            _currentColor = MeshMaterial.color;
-            _isFading = fade;
-            float targetAlpha = fade ? 0 : 1;
+            Color color = MeshMaterial.color;
 
-            while (!Mathf.Approximately(_currentColor.a, targetAlpha))
+            float maxAlphaValue = _isWarning
+                ? _warningColor.a
+                : _baseColor.a;
+
+            float targetAlpha = fade ? 0 : maxAlphaValue;
+
+            while (!Mathf.Approximately(color.a, targetAlpha))
             {
-                _currentColor.a = Mathf.Lerp(_currentColor.a, targetAlpha, Time.deltaTime * _fadeSpeed);
-                MeshMaterial.color = _currentColor;
+                color.a = Mathf.Lerp(color.a, targetAlpha, Time.deltaTime * _fadeSpeed);
+                MeshMaterial.color = color;
 
                 yield return null;
             }
+
+            _isVisible = !fade;
+            _currentFadeJob = null;
         }
 
         private IEnumerator ChangeColor(bool warning)
-        { 
-            _currentColor = MeshMaterial.color;
+        {
+            Color color = MeshMaterial.color;
             Color targetColor = warning ? _warningColor : _baseColor;
+            targetColor.a = color.a;
 
-            while (!Equals(_currentColor, targetColor))
+            while (!Equals(color, targetColor))
             {
-                _currentColor = Color.Lerp(_currentColor, targetColor, Time.deltaTime * _colorTransitionSpeed);
-                MeshMaterial.color = _currentColor;
+                color = Color.Lerp(color, targetColor, Time.deltaTime * _colorTransitionSpeed);
+                MeshMaterial.color = color;
 
                 yield return null;
             }
+
+            _isWarning = warning;
+            _currentColorTask = null;
         }
+
+        #endregion
 
         private void OnDestroy()
         {
-            OnDestroyAction?.Invoke(this);
+            _cancelTokenFade.Cancel();
+            _cancelTokenColor.Cancel();
+
             StopAllCoroutines();
+
+            OnDestroyAction?.Invoke(this);
         }
     }
 }

@@ -1,15 +1,12 @@
 using RaceManager.Cars;
-using RaceManager.Effects;
 using RaceManager.Progress;
 using RaceManager.Root;
 using RaceManager.Shed;
-using RaceManager.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UniRx;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Zenject;
 using IInitializable = RaceManager.Root.IInitializable;
@@ -44,12 +41,6 @@ namespace RaceManager.UI
         private PodiumView _podium;
         private GameProgressScheme _gameProgressScheme;
 
-        //private GraphicRaycaster _graphicRaycaster;
-        //private PointerEventData _clickData;
-        //private List<RaycastResult> _raycastResults;
-
-        private bool _inMainMenu = true;
-
         public Action<bool> OnMainMenuActivityChange;
         public Action<CarName> OnCarProfileChange;
         public Action OnButtonPressed;
@@ -71,6 +62,7 @@ namespace RaceManager.UI
         public IObservable<float> OnSoundsSettingChange => _settingsPopup.SoundToggleSlider.onValueChanged.AsObservable();
         public IObservable<float> OnMusicSettingChange => _settingsPopup.MusicToggleSlider.onValueChanged.AsObservable();
         public IObservable<float> OnVibroSettingChange => _settingsPopup.VibrationToggleSlider.onValueChanged.AsObservable();
+        public IObservable<float> OnRaceLineSettingsChange => _settingsPopup.RaceLineToggleSlider.onValueChanged.AsObservable();
 
         public IObserver<SettingsData> OnSettingsInitialize => Observer.Create((SettingsData sd) => SetSettingsPopupValues(sd));
 
@@ -81,11 +73,11 @@ namespace RaceManager.UI
         [Inject]
         private void Construct
             (
-            PlayerProfile playerProfile, 
+            PlayerProfile playerProfile,
             GameProgressScheme gameProgressScheme,
             RewardsHandler rewardsHandler,
             CarUpgradesHandler upgradesHandler,
-            SaveManager saveManager, 
+            SaveManager saveManager,
             CarsDepot playerCarDepot,
             PodiumView podium
             )
@@ -115,48 +107,12 @@ namespace RaceManager.UI
 
         private void Start()
         {
-            //_graphicRaycaster = GetComponent<GraphicRaycaster>();
-            //_clickData = new PointerEventData(EventSystem.current);
-            //_raycastResults = new List<RaycastResult>();
+
 
             ActivateMainMenu(true);
         }
 
         #endregion
-
-        //private void Update()
-        //{
-        //    if (Input.GetMouseButtonDown(0))
-        //    {
-        //        GetUIElementClicked();
-        //    }
-        //}
-
-        //private void GetUIElementClicked()
-        //{
-        //    if (_inMainMenu)
-        //        return;
-
-        //    _clickData.position = Input.mousePosition;
-        //    _raycastResults.Clear();
-        //    _graphicRaycaster.Raycast(_clickData, _raycastResults);
-        //    bool backPanelClicked = false;
-        //    bool otherElementClicked = false;
-
-        //    foreach (var element in _raycastResults)
-        //    { 
-        //        if(element.gameObject.CompareTag(Tag.BackPanel))
-        //            backPanelClicked = true;
-        //        else
-        //            otherElementClicked = true;
-        //    }
-
-        //    if (backPanelClicked && !otherElementClicked)
-        //    {
-        //        ActivateTuningPanel(false);
-        //        ActivateCarsCollectionPanel(false);
-        //    }
-        //}
 
         #region Activate Functions
         private void ActivateMainMenu(bool active)
@@ -166,7 +122,6 @@ namespace RaceManager.UI
             _lootboxSlotsHandler.SetActive(active);
             _cupsProgress.SetActive(active);
 
-            _inMainMenu = active;
             OnMainMenuActivityChange?.Invoke(active);
         }
 
@@ -187,7 +142,7 @@ namespace RaceManager.UI
         }
 
         private void ActivateGameProgressPanel(bool active)
-        { 
+        {
             _gameProgressPanel.SetActive(active);
 
             _bottomPanel.SetActive(!active);
@@ -208,10 +163,11 @@ namespace RaceManager.UI
         }
 
         private void ActivateSettingsPopup(bool active) => _settingsPopup.SetActive(active);
-        
+
         #endregion
 
         #region Initialize Data Functions
+
         private void InitializeSlidersMinMaxValues()
         {
             var c = _currentCarProfile.CarCharacteristics;
@@ -234,7 +190,7 @@ namespace RaceManager.UI
                     profile.RankingScheme.AllRanksGranted
                     );
 
-                if(profile.CarName == _currentCarProfile.CarName)
+                if (profile.CarName == _currentCarProfile.CarName)
                     _carsCollectionPanel.UsedCarName = profile.CarName;
             }
 
@@ -316,7 +272,7 @@ namespace RaceManager.UI
         public void UpdateTuningPanelValues()
         {
             _currentCarProfile = _playerCarDepot.CurrentCarProfile;
-           
+
             InitializeSlidersMinMaxValues();
 
             var c = _currentCarProfile.CarCharacteristics;
@@ -400,7 +356,7 @@ namespace RaceManager.UI
 
         private void UpdateHasRewardsImage(bool hasUnreceived) => _cupsProgress.HasUnreceivedRewardsImage.SetActive(hasUnreceived);
         private void UpdatePodiumActivity(bool needToHide) => _podium.SetActive(!needToHide);
-        #endregion
+        #endregion 
 
         #region Other Private Functions
         private void SetTuningPanelValues(TuneData td)
@@ -414,6 +370,7 @@ namespace RaceManager.UI
             _settingsPopup.SoundToggleSlider.value = sd.playSounds ? 1f : 0f;
             _settingsPopup.MusicToggleSlider.value = sd.playMusic ? 1f : 0f;
             _settingsPopup.VibrationToggleSlider.value = sd.useHaptics ? 1f : 0f;
+            _settingsPopup.RaceLineToggleSlider.value = sd.useRaceLine ? 1f : 0f;
         }
 
         private void ChangeCar(CarName newCarName)
@@ -445,7 +402,7 @@ namespace RaceManager.UI
                 //TODO: Visualize upgrade success
             }
             else
-            { 
+            {
                 //TODO: Visualize upgrade fail
             }
         }
@@ -541,6 +498,55 @@ namespace RaceManager.UI
             _lootboxSlotsHandler.OnPopupIsActive -= UpdatePodiumActivity;
             _lootboxSlotsHandler.OnButtonPressed -= OnButtonPressedMethod;
         }
+
+        #endregion
+
+        #region Legacy
+
+        //private GraphicRaycaster _graphicRaycaster;
+        //private PointerEventData _clickData;
+        //private List<RaycastResult> _raycastResults;
+
+        //private void Start
+        //{
+        //    _graphicRaycaster = GetComponent<GraphicRaycaster>();
+        //    _clickData = new PointerEventData(EventSystem.current);
+        //    _raycastResults = new List<RaycastResult>();
+        //}
+
+        //private void Update()
+        //{
+        //    if (Input.GetMouseButtonDown(0))
+        //    {
+        //        GetUIElementClicked();
+        //    }
+        //}
+
+        //private void GetUIElementClicked()
+        //{
+        //    if (_inMainMenu)
+        //        return;
+
+        //    _clickData.position = Input.mousePosition;
+        //    _raycastResults.Clear();
+        //    _graphicRaycaster.Raycast(_clickData, _raycastResults);
+        //    bool backPanelClicked = false;
+        //    bool otherElementClicked = false;
+
+        //    foreach (var element in _raycastResults)
+        //    { 
+        //        if(element.gameObject.CompareTag(Tag.BackPanel))
+        //            backPanelClicked = true;
+        //        else
+        //            otherElementClicked = true;
+        //    }
+
+        //    if (backPanelClicked && !otherElementClicked)
+        //    {
+        //        ActivateTuningPanel(false);
+        //        ActivateCarsCollectionPanel(false);
+        //    }
+        //}
 
         #endregion
     }

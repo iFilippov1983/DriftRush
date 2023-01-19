@@ -5,6 +5,7 @@
         public bool playSounds;
         public bool playMusic;
         public bool useHaptics;
+        public bool useRaceLine;
     }
 }
 

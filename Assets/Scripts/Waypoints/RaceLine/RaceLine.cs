@@ -1,7 +1,5 @@
 ﻿using RaceManager.Tools;
-using Sirenix.OdinInspector;
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace RaceManager.Waypoints
@@ -11,7 +9,7 @@ namespace RaceManager.Waypoints
         private GameObject _segmentPrefab;
 
         [Tooltip("The distance offset wich will be used to check each line segment")]
-        [SerializeField] private float _checkOffset = 10f;
+        [SerializeField] private float _segmentCheckOffset = 10f;
         [Space]
         [SerializeField] private Color _baseColor = Color.blue;
         [SerializeField] private Color _warningColor = Color.red;
@@ -19,7 +17,6 @@ namespace RaceManager.Waypoints
         [SerializeField] private float _segmentColorTransitionSpeed = 1f;
         [Space]
         [SerializeField] private float _segmentSpawnInterval = 1f;
-        [SerializeField] private float _observeFactor = 15f;
 
         private float _currentDistance = 0;
 
@@ -34,13 +31,9 @@ namespace RaceManager.Waypoints
             }
         }
 
-        [ShowInInspector, ReadOnly]
-        private float ObserveDistance => _segmentSpawnInterval * _observeFactor;
-
         public Action<float> OnSpeedChange;
         public Action<float> OnDistanceChange;
 
-        [Button]
         public void SpawnSegments(WaypointTrack mainTrack)
         {
             var disArray = mainTrack.Distances;
@@ -59,13 +52,15 @@ namespace RaceManager.Waypoints
                     colorTransitionSpeed = _segmentColorTransitionSpeed,
                     baseColor = _baseColor,
                     warningColor = _warningColor,
-                    checkOffset = _checkOffset                    
+                    checkOffset = _segmentCheckOffset                    
                 });
 
-                segment.OnDestroyAction += OnSegmentDestroy;
+                segment.OnDestroyAction += SegmentDestroy;
 
-                OnSpeedChange += segment.CheckSpeed;
-                OnDistanceChange += segment.CheckDistance;
+                //OnSpeedChange += segment.CheckSpeed;
+                //OnDistanceChange += segment.CheckDistance;
+                OnSpeedChange += segment.SpeedCheck;
+                OnDistanceChange += segment.DistanceCheck;
 
                 _currentDistance += _segmentSpawnInterval;
             }
@@ -94,12 +89,14 @@ namespace RaceManager.Waypoints
             return 0.0f;
         }
 
-        private void OnSegmentDestroy(RaceLineSegment segment)
+        private void SegmentDestroy(RaceLineSegment segment)
         {
-            OnSpeedChange -= segment.CheckSpeed;
-            OnDistanceChange -= segment.CheckDistance;
+            //OnSpeedChange -= segment.CheckSpeed;
+            //OnDistanceChange -= segment.CheckDistance;
+            OnSpeedChange -= segment.SpeedCheck;
+            OnDistanceChange -= segment.DistanceCheck;
 
-            segment.OnDestroyAction -= OnSegmentDestroy;
+            segment.OnDestroyAction -= SegmentDestroy;
         }
     }
 }

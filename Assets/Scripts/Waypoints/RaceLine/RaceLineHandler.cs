@@ -13,8 +13,7 @@ namespace RaceManager.Waypoints
         {
             _handle = handle;
 
-            if(!_handle)
-                return;
+            if(!_handle) return;
 
             _raceLine = raceLine;
             _raceLine.SpawnSegments(mainTrack);
@@ -22,8 +21,7 @@ namespace RaceManager.Waypoints
 
         public void OnNext(DriverProfile profile)
         {
-            if (!_handle)
-                return;
+            if (!_handle) return;
 
             _raceLine.OnSpeedChange?.Invoke(profile.CarCurrentSpeed);
             _raceLine.OnDistanceChange?.Invoke(profile.DistanceFromStart);

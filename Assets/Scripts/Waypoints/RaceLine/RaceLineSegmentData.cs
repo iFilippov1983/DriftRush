@@ -1,7 +1,9 @@
-﻿using UnityEngine;
+﻿
+using UnityEngine;
 
 namespace RaceManager.Waypoints
 {
+    [System.Serializable]
     public struct RaceLineSegmentData
     {
         public float recomendedSpeed;

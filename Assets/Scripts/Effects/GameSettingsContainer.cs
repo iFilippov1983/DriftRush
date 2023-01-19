@@ -30,7 +30,7 @@ namespace RaceManager.Effects
             _useHaptics = true;
             _useRaceLine = true;
 
-            Debug.Log("Effects settings are reset to default");
+            Debug.Log("Game settings are reset to default");
         }
 
         public Type DataType() => typeof(SaveData);

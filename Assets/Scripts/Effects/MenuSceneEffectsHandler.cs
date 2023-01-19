@@ -18,6 +18,7 @@ namespace RaceManager.Effects
         private AudioType _currentTrackType;
 
         private enum EffectType { Music, Sfx, Haptic}
+        private enum SettingsType { None, RaceLine }
 
         #region Initial Functions
 
@@ -48,13 +49,15 @@ namespace RaceManager.Effects
             {
                 playSounds = _settingsContainer.PlaySounds,
                 playMusic = _settingsContainer.PlayMusic,
-                useHaptics = _settingsContainer.UseHaptics
+                useHaptics = _settingsContainer.UseHaptics,
+                useRaceLine = _settingsContainer.UseRaceLine
             };
 
             _mainUI.OnSettingsInitialize.OnNext(settingsData);
             _mainUI.OnSoundsSettingChange.Subscribe((v) => ToggleEffectSetting(v, EffectType.Sfx));
             _mainUI.OnMusicSettingChange.Subscribe((v) => ToggleEffectSetting(v, EffectType.Music));
             _mainUI.OnVibroSettingChange.Subscribe((v) => ToggleEffectSetting(v, EffectType.Haptic));
+            _mainUI.OnRaceLineSettingsChange.Subscribe((v) => ToggleSettings(v, SettingsType.RaceLine));
 
             _mainUI.OnButtonPressed += PlayButtonPressedEffect;
         }
@@ -80,23 +83,37 @@ namespace RaceManager.Effects
 
         private void ToggleEffectSetting(float toggleValue, EffectType type)
         {
-            bool can = toggleValue > 0.5f ? true : false;
+            bool use = toggleValue > 0.5f ? true : false;
 
             switch (type)
             {
                 case EffectType.Music:
-                    ToggleMusic(can);
+                    ToggleMusic(use);
                     break;
                 case EffectType.Sfx:
-                    ToggleSfx(can);
+                    ToggleSfx(use);
                     break;
                 case EffectType.Haptic:
-                    ToggleHaptics(can);
+                    ToggleHaptics(use);
                     break;
             }
            
             _effectsController.InstallSettings(_settingsContainer);
             _saveManager.Save();
+        }
+
+        private void ToggleSettings(float toggleValue, SettingsType settingsType)
+        {
+            bool use = toggleValue > 0.5f ? true : false;
+
+            switch (settingsType)
+            {
+                case SettingsType.None:
+                    break;
+                case SettingsType.RaceLine:
+                    ToggleRaceLine(use);
+                    break;
+            }
         }
 
         private void ToggleMusic(bool canPlay)
@@ -123,6 +140,11 @@ namespace RaceManager.Effects
         private void ToggleHaptics(bool canUse)
         {
             _settingsContainer.CanUseHaptics(canUse);
+        }
+
+        private void ToggleRaceLine(bool canUse)
+        {
+            _settingsContainer.CanUseRaceLine(canUse);
         }
 
         public void OnDestroy()

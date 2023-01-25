@@ -1,5 +1,4 @@
-﻿using RaceManager.Cameras;
-using RaceManager.Cars;
+﻿using RaceManager.Cars;
 using RaceManager.Effects;
 using RaceManager.Progress;
 using RaceManager.Race;
@@ -13,7 +12,9 @@ namespace RaceManager.Infrastructure
     {
         [SerializeField] private RaceUI _raceUI;
         [SerializeField] private RaceHandler _raceHandler;
-        [SerializeField] private RaceSceneEffectsHandler _effectsHandler;
+        [SerializeField] private RaceSceneHandler _effectsHandler;
+        [SerializeField] private GameFlagsHandler _gameFlagsHandler;
+        [SerializeField] private TutorialSteps _tutorialSteps;
         [Space]
         [SerializeField] private CarsDepot _playerCarDepot;
         [Space]
@@ -21,7 +22,7 @@ namespace RaceManager.Infrastructure
         [SerializeField] private RaceRewardsScheme _raceRewardsScheme;
         [Space]
         [SerializeField] private SpritesContainerRewards _spritesContainerRewards;
-        [SerializeField] private EffectsSettingsContainer _settingsContainer;
+        [SerializeField] private GameSettingsContainer _settingsContainer;
 
         private RaceSceneRoot _raceSceneRoot;
 
@@ -47,11 +48,14 @@ namespace RaceManager.Infrastructure
             Bind(_raceRewardsScheme);
             Bind(_spritesContainerRewards);
             Bind(_effectsHandler);
+            Bind(_gameFlagsHandler);
+            Bind(_tutorialSteps);
         }
 
         private void BindClasses()
         {
             Bind<SaveManager>();
+            Bind<GameEvents>();
             Bind<PlayerProfile>();
             Bind<InRacePositionsHandler>();
             Bind<RaceLevelInitializer>();

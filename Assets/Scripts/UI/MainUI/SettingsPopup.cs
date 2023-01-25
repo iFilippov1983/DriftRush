@@ -10,12 +10,14 @@ namespace RaceManager.UI
         [SerializeField] private Slider _soundToggleSlider;
         [SerializeField] private Slider _musicToggleSlider;
         [SerializeField] private Slider _vibrationToggleSlider;
+        [SerializeField] private Slider _raceLineToggleSlider;
 
         public Button OkButton => _okButton;
         public Button ClosePopupWindowButton => _closePopupWindowButton;
         public Slider SoundToggleSlider => _soundToggleSlider;
         public Slider MusicToggleSlider => _musicToggleSlider;
         public Slider VibrationToggleSlider => _vibrationToggleSlider;
+        public Slider RaceLineToggleSlider => _raceLineToggleSlider;
     }
 }
 

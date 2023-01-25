@@ -16,11 +16,12 @@ namespace RaceManager.Root
     {
         private static CarsDepot _playerCarDepot;
         private static GameProgressScheme _gameProgressScheme;
-        private static EffectsSettingsContainer _settingsContainer;
+        private static GameSettingsContainer _settingsContainer;
+        private static TutorialSteps _tutorial;
 
         [SerializeField]
         private MainUI _mainUI;
-
+        
         private bool IsRaceScene;
         private bool IsMenuScene;
 
@@ -53,13 +54,24 @@ namespace RaceManager.Root
             }
         }
 
-        private static EffectsSettingsContainer SettingsContainer
+        private static GameSettingsContainer SettingsContainer
         {
             get 
             {
                 if (_settingsContainer == null)
-                    _settingsContainer = ResourcesLoader.LoadObject<EffectsSettingsContainer>(ResourcePath.EffectsSettingsContainer);
+                    _settingsContainer = ResourcesLoader.LoadObject<GameSettingsContainer>(ResourcePath.EffectsSettingsContainer);
                 return _settingsContainer;
+            }
+        }
+
+        private static TutorialSteps Tutorial
+        {
+            get
+            { 
+                if(_tutorial == null)
+                    _tutorial = FindObjectOfType<TutorialSteps>();
+
+                return _tutorial;
             }
         }
 
@@ -91,6 +103,11 @@ namespace RaceManager.Root
 
             HandleSoundtrackTest();
             HandleSfxTest();
+        }
+
+        public static void Log(string text)
+        { 
+            Debug.Log(text);
         }
 
 #endif
@@ -140,7 +157,7 @@ namespace RaceManager.Root
             PlayerCarDepot.ResetCars();
             GameProgressScheme.ResetAllSteps();
             SettingsContainer.ResetToDefault();
-
+            
             SaveManager.RemoveSave();
         }
 
@@ -191,7 +208,7 @@ namespace RaceManager.Root
         [ShowIf("IsMenuScene", true)]
         public void AddWinsCount()
         { 
-            profiler.CountVictory();
+            profiler.CountVictoryCycle();
             saveManager.Save();
         }
 

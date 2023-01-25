@@ -42,7 +42,14 @@ namespace RaceManager.Cars
             _carProfile = _carsDepot.CurrentCarProfile;
         }
 
-        public GameObject ConstructCarForRace(out Car car, out CarVisual carVisual, out CarAI carAI, out WaypointsTracker waypointsTracker, out DriverProfile driverProfile, bool playSound)
+        public GameObject ConstructCarForRace
+            (
+            out Car car, 
+            out CarVisual carVisual, 
+            out CarAI carAI, 
+            out WaypointsTracker waypointsTracker, 
+            out DriverProfile driverProfile, 
+            bool playSound)
         {
             var prefab = _carProfile.Prefab;
 

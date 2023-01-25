@@ -47,13 +47,13 @@ namespace RaceManager.Cars
 
         public class SaveData
         {
-            public DriverType driverType = DriverType.Player;
-            public CarName currentCarName = CarName.ToyotaSupra;
-            public List<CarProfile> carProfiles = new List<CarProfile>();
+            public DriverType driverType;
+            public CarName currentCarName;
+            public List<CarProfile> carProfiles;
         }
 
         [Button]
-        public void ResetCars()
+        public void ResetCars(CarName defaultCarName = CarName.FordMustang)
         {
             foreach (var profile in CarProfiles)
             {
@@ -63,7 +63,7 @@ namespace RaceManager.Cars
                     r.IsReached = false;
                 }
 
-                if (profile.CarName == CarName.ToyotaSupra)
+                if (profile.CarName == defaultCarName)
                 {
                     profile.RankingScheme.Ranks[0].IsGranted = true;
                     profile.RankingScheme.Ranks[0].IsReached = true;
@@ -78,7 +78,7 @@ namespace RaceManager.Cars
                 c.FactorsMaxCurrent = 0;
             }
 
-            Debug.Log($"All cars ranks IsReached and IsGranted properties are set to False (exept default car - {CarName.ToyotaSupra}) | All CurrentFactors amount are set to Max/2");
+            Debug.Log($"All cars ranks IsReached and IsGranted properties are set to False (exept default car - {CarName.FordMustang}) | All CurrentFactors amount are set to Max/2");
         }
     }
 }

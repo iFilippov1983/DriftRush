@@ -14,7 +14,7 @@ namespace RaceManager
 
         void FixedUpdate()
         {
-            float fill = Mathf.Lerp(_fillImage.fillAmount, Loader.GetLoadingProgress(), 0.2f);
+            float fill = Mathf.Lerp(_fillImage.fillAmount, Loader.GetLoadingProgress(), 0.05f);
             _fillImage.fillAmount = fill;
         }
     }

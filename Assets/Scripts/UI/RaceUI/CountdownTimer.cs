@@ -13,12 +13,13 @@ namespace RaceManager.UI
 
         private void Awake()
         {
+            EventsHub<RaceEvent>.Subscribe(RaceEvent.COUNTDOWN, StartTimer);
             _countdownTimerView.gameObject.SetActive(false);
         }
 
         private void OnEnable()
         {
-            EventsHub<RaceEvent>.Subscribe(RaceEvent.COUNTDOWN, StartTimer);
+            
         }
 
         private void OnDisable()

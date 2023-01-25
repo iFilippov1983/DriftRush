@@ -183,7 +183,7 @@ namespace RaceManager.Effects
                 if (trail)
                 {
                     if (!_car.Wheels[i].IsGrounded)
-                        trail.emitting = false;
+                        trail.Clear();
 
                     SetTrailAsFree(trail);
                     trail = null;

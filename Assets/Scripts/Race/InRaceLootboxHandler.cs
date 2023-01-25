@@ -15,7 +15,7 @@ namespace RaceManager.Race
         }
 
         /// <summary>
-        /// Need to be called in FixedUpdate
+        /// Handles open time of lootbox whith active timer. Need to be called in FixedUpdate
         /// </summary>
         public void Handle()
         {

@@ -33,7 +33,7 @@ namespace RaceManager.UI
 
         private List<ProgressStepView> _progressSteps = new List<ProgressStepView>();
 
-        public Action OnButtonPressed;
+        public Action<Button> OnButtonPressed;
 
         private GameObject ProgressStepPrefab
         {
@@ -127,7 +127,7 @@ namespace RaceManager.UI
         }
 
         public void OffsetContent() => _progressStepsContent.transform.localPosition = _offsetPos;
-        private void OnButtonPressedMethod() => OnButtonPressed?.Invoke();
+        private void OnButtonPressedMethod(Button button) => OnButtonPressed?.Invoke(button);
 
         private void ActivateLevelImageAndPlaceToEdge(ProgressStepView stepView, int cupsAmount, bool toZero)
         {
@@ -176,7 +176,7 @@ namespace RaceManager.UI
             stepView.ClaimButton.onClick.RemoveAllListeners();
             stepView.ClaimButton.onClick.AddListener(claimButtonAction);
             stepView.ClaimButton.onClick.AddListener(() => UpdateStepStatus(step, stepView));
-            stepView.ClaimButton.onClick.AddListener(OnButtonPressedMethod);
+            stepView.ClaimButton.onClick.AddListener(() => OnButtonPressedMethod(stepView.ClaimButton));
 
 
             if (step.BigPrefab)

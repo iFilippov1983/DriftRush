@@ -15,19 +15,29 @@ namespace RaceManager.Progress
         private PlayerProfile _playerProfile;
         private Profiler _profiler;
         private SaveManager _saveManager;
+        private GameEvents _gameEvents;
 
         public Action<List<CarCardReward>> OnLootboxOpen;
         public Action<Lootbox> OnRaceRewardLootboxAdded;
         public Action OnProgressReward;
 
         [Inject]
-        private void Construct(PlayerProfile playerProfile, Profiler profiler, SaveManager saveManager, GameProgressScheme gameProgressScheme, RaceRewardsScheme raceRewardsScheme)
+        private void Construct
+            (
+            PlayerProfile playerProfile, 
+            Profiler profiler, 
+            SaveManager saveManager, 
+            GameProgressScheme gameProgressScheme, 
+            RaceRewardsScheme raceRewardsScheme,
+            GameEvents gameEvents
+            )
         {
             _playerProfile = playerProfile;
             _profiler = profiler;
             _saveManager = saveManager;
             _gameProgressScheme = gameProgressScheme;
             _raceRewardsScheme = raceRewardsScheme;
+            _gameEvents = gameEvents;
 
             _profiler.OnLootboxOpen += HandleLootboxOpen;
         }
@@ -39,13 +49,15 @@ namespace RaceManager.Progress
 
             if (_playerProfile.CanGetLootbox)
             {
-                _profiler.CountVictory();
+                _profiler.CountVictoryCycle();
 
                 Rarity rarity = Rarity.Common;
                 bool isLucky = 
                     _playerProfile.WillGetLootboxForVictiories == false 
                     && 
-                    _raceRewardsScheme.TryLuckWithNotCommonLootbox(out rarity);
+                    _raceRewardsScheme.TryLuckWithNotCommonLootbox(out rarity)
+                    &&
+                    _profiler.LootboxForRaceEnabled;
 
                 if (isLucky)
                 {
@@ -56,6 +68,13 @@ namespace RaceManager.Progress
                 }
             }
 
+            if (positionInRace == PositionInRace.First)
+            {
+                _gameEvents.RaceWin.OnNext();
+                Debugger.Log($"Victories count: {_playerProfile.VictoriesTotalCounter}");
+            }
+                
+
             info = new RaceHandler.RaceRewardInfo()
             {
                 RewardMoneyAmount = reward.Money,
@@ -63,7 +82,6 @@ namespace RaceManager.Progress
                 MoneyTotal = _playerProfile.Money,
                 GemsTotal = _playerProfile.Gems
             };
-
             _saveManager.Save();
         }
 

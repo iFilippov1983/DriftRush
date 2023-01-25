@@ -150,7 +150,7 @@ namespace RaceManager.Effects
 
                 if (groundSounds == null)
                 {
-                    $"GroundSoungs doesn't contain sounds for layer: {LayerMask.LayerToName(layer)}".Log(Logger.ColorYellow);
+                    $"GroundSounds doesn't contain sounds for layer: {LayerMask.LayerToName(layer)}".Log(Logger.ColorYellow);
                     continue;
                 }
 
@@ -209,17 +209,24 @@ namespace RaceManager.Effects
             //    Debug.Log($"this col: {cp.thisCollider.gameObject.name}");
             //}
 
-            if (!car.IsVisible 
-                || collision == null 
-                || !isActiveAndEnabled 
-                || collision.transform.parent.gameObject.GetInstanceID() == car.gameObject.GetInstanceID()
-                || Time.time - _lastColTime < _minTimeBetweenCollisions) 
+            if (!car.IsVisible
+                || collision == null
+                || !isActiveAndEnabled
+                //|| collision.transform.parent.gameObject.GetInstanceID() == car.gameObject.GetInstanceID()
+                || Time.time - _lastColTime < _minTimeBetweenCollisions)
                 return;
+
+            //if (!car.IsVisible) return;
+            //if (collision == null) return;
+            //if (!isActiveAndEnabled) return;
+            //if (collision.transform.parent.gameObject.GetInstanceID() == car.gameObject.GetInstanceID()) return;
+            //if (Time.time - _lastColTime < _minTimeBetweenCollisions) return;
 
             int collisionLayer = collision.gameObject.layer;
 
             float collisionMagnitude = collision.rigidbody == null
-                ? 0 //collision.relativeVelocity.magnitude
+                //? 0 
+                ? collision.relativeVelocity.magnitude
                 : (_car.RB.velocity - collision.rigidbody.velocity).magnitude;
 
             CollisionEvent colEvent = GetEventForCollision(collisionLayer, collisionMagnitude, out float magnitudeDivider);
@@ -293,7 +300,8 @@ namespace RaceManager.Effects
                 _currentFrictionEvent = GetEventForFriction(collision.collider.gameObject.layer, magnitude);
 
                 float collisionMagnitude = collision.rigidbody == null
-                    ? 0 //collision.relativeVelocity.magnitude
+                    //? 0 
+                    ? collision.relativeVelocity.magnitude
                     : (_car.RB.velocity - collision.rigidbody.velocity).magnitude ;
 
                 float magnitudeDivider = _currentFrictionEvent.MaxMagnitudeCollision == float.PositiveInfinity

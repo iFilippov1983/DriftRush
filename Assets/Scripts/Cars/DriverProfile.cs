@@ -8,6 +8,7 @@ namespace RaceManager.Cars
         public DriverType DriverType;
         public float CarCurrentSpeed;
         public float TrackProgress;
+        public float DistanceFromStart;
         public PositionInRace PositionInRace = PositionInRace.Sixth;
 
         public ReactiveProperty<CarState> CarState;

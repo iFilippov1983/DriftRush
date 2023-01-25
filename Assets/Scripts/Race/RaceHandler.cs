@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using RaceManager.Waypoints;
 using RaceManager.UI;
-using RaceManager.Cameras;
 using Zenject;
 using RaceManager.Progress;
 using UniRx;
@@ -22,15 +21,17 @@ namespace RaceManager.Race
         [SerializeField] private CarsDepot _opponentsCarsDepot;
 
         private CarsDepot _playerCarsDepot;
-        private EffectsSettingsContainer _settingsContainer;
-        private RaceSceneEffectsHandler _sceneEffectsHandler;
+        private GameSettingsContainer _settingsContainer;
+        private RaceSceneHandler _sceneHandler;
         private Profiler _profiler;
         private RaceUI _raceUI;
         private InRacePositionsHandler _positionsHandler;
         private InRaceLootboxHandler _lootboxHandler;
         private RaceLevelInitializer _raceLevelInitializer;
+        private RaceLineHandler _lineHandler;
         private IRaceLevel _raceLevel;
         private RewardsHandler _rewardsHandler;
+        private GameEvents _gameEvents;
 
         private WaypointTrack _waypointTrackMain;
         private WaypointTrack _waypointTrackEven;
@@ -40,6 +41,8 @@ namespace RaceManager.Race
 
         private bool _raceStarted;
 
+        private bool CanStartImmediate => _profiler.CanStartImmediate;
+
         [Inject]
         private void Construct
             (
@@ -48,19 +51,21 @@ namespace RaceManager.Race
             InRacePositionsHandler positionsHandler, 
             RaceUI raceUI, 
             CarsDepot playerCarsDepot, 
-            EffectsSettingsContainer settingsContainer,
-            RaceSceneEffectsHandler sceneEffectsHandler,
-            Profiler profiler
+            GameSettingsContainer settingsContainer,
+            RaceSceneHandler sceneHandler,
+            Profiler profiler,
+            GameEvents gameEvents
             )
         {
             _playerCarsDepot = playerCarsDepot;
             _settingsContainer = settingsContainer;
-            _sceneEffectsHandler = sceneEffectsHandler;
+            _sceneHandler = sceneHandler;
             _profiler = profiler;
             _positionsHandler = positionsHandler;
             _raceUI = raceUI;
             _raceLevelInitializer = levelInitializer;
             _rewardsHandler = rewardsHandler;
+            _gameEvents = gameEvents;
         }
 
         public void Initialize()
@@ -72,9 +77,11 @@ namespace RaceManager.Race
             _waypointTrackEven = _raceLevel.WaypointTrackEven;
             _waypointTrackOdd = _raceLevel.WaypointTrackOdd;
 
+            _lineHandler = new RaceLineHandler(_raceLevel.WaypointTrackMain, _raceLevel.RaceLine, _settingsContainer.UseRaceLine);
+            _lootboxHandler = new InRaceLootboxHandler(_profiler);
+
             InitDrivers();
 
-            _lootboxHandler = new InRaceLootboxHandler(_profiler);
             _positionsHandler.StartHandling(_waypointsTrackersList);
 
             _rewardsHandler.OnRaceRewardLootboxAdded += NotifyRaceUI;
@@ -82,10 +89,11 @@ namespace RaceManager.Race
 
         private void Update()
         {
-            if (_raceStarted)
+            if (_raceStarted || !CanStartImmediate)
                 return;
 
             _raceStarted = true;
+
             EventsHub<RaceEvent>.BroadcastNotification(RaceEvent.COUNTDOWN);
         }
 
@@ -99,6 +107,7 @@ namespace RaceManager.Race
             _raceStarted = false;
             _waypointsTrackersList = new List<WaypointsTracker>();
 
+            GameObject parent = new GameObject("[Drivers]");
             GameObject driverPrefab = ResourcesLoader.LoadPrefab(ResourcePath.DriverPrefab);
 
             for (int i = 0; i < _startPoints.Length; i++)
@@ -115,13 +124,14 @@ namespace RaceManager.Race
                         _playerCarsDepot, 
                         _waypointTrackMain, 
                         _materialsContainer, 
-                        _settingsContainer.PlaySounds, 
-                        _profiler
+                        _profiler,
+                        _settingsContainer.PlaySounds
                         );
 
-                    _sceneEffectsHandler.HandleEffectsFor(driver, _raceLevel);
+                    _sceneHandler.HandleEffectsFor(driver, _raceLevel);
 
                     driver.Subscribe(_raceUI);
+                    driver.Subscribe(_lineHandler);
                     driver.DriverProfile.CarState.Subscribe(cs => HandlePlayerCarState(cs, driver));
 
                     var selfRighting = driver.CarObject.GetComponent<CarSelfRighting>();
@@ -134,6 +144,7 @@ namespace RaceManager.Race
                     }
 
                     _raceUI.Initialize(_raceLevelInitializer, selfRighting.RightCar, GetToCheckpoint);
+                    _waypointTrackMain.OnCheckpointPass += MakeGameNotification;
                 }
                 else
                 {
@@ -145,13 +156,13 @@ namespace RaceManager.Race
                         _opponentsCarsDepot, 
                         track, 
                         _materialsContainer, 
+                        null,
                         _settingsContainer.PlaySounds
                         );
 
                     driverGo.name += $"_{i + 1}";
                 }
 
-                GameObject parent = new GameObject("[Drivers]");
                 driverGo.transform.SetParent(parent.transform, false);
                 _waypointsTrackersList.Add(driver.WaypointsTracker);
             }
@@ -161,11 +172,13 @@ namespace RaceManager.Race
         {
             switch (playerCarState)
             {
+                case CarState.None:
+                case CarState.CanStart:
+                case CarState.OnTrack:
+                    break;
                 case CarState.Finished:
                     _rewardsHandler.RewardForRace(playerDriver.DriverProfile.PositionInRace, out RaceRewardInfo info);
                     _raceUI.SetFinishValues(info.RewardMoneyAmount, info.RewardCupsAmount, info.MoneyTotal, info.GemsTotal);
-                    break;
-                case CarState.OnTrack:
                     break;
             }
 
@@ -176,9 +189,12 @@ namespace RaceManager.Race
 
         private void NotifyRaceUI(Lootbox lootbox) => _raceUI.SetLootboxPopupValues(lootbox.Rarity);
 
+        private void MakeGameNotification() => _gameEvents.Notification.OnNext(NotificationType.Checkpoint.ToString());
+
         private void OnDestroy()
         {
             _rewardsHandler.OnRaceRewardLootboxAdded -= NotifyRaceUI;
+            _waypointTrackMain.OnCheckpointPass -= MakeGameNotification;
         }
 
         public struct RaceRewardInfo

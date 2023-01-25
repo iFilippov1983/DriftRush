@@ -13,7 +13,7 @@ namespace RaceManager.Root
         public int MoneyCost { get; }
         public int GemsCost { get; }
         public float IncomeFactor { get; }
-        public int VictoriesCounter { get; }
+        public int VictoriesCycleCounter { get; }
         public int CardsAmount { get; }
         public CarName CarName { get; }
         public LevelName LevelName { get; }

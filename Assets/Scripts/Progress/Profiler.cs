@@ -3,6 +3,7 @@ using RaceManager.Race;
 using RaceManager.Root;
 using System;
 using System.Collections.Generic;
+using Zenject.ReflectionBaking.Mono.Cecil.Cil;
 
 namespace RaceManager.Progress
 {
@@ -18,7 +19,7 @@ namespace RaceManager.Progress
         private int _moneyCost;
         private int _gemsCost;
 
-        private int _victoriesCounter;
+        private int _victoriesCycleCounter;
         private int _cardsAmount;
 
         private CarName _carName;
@@ -37,7 +38,9 @@ namespace RaceManager.Progress
         public int GemsCost => _gemsCost;
         public float IncomeFactor => _incomeFactor;
 
-        public int VictoriesCounter => _victoriesCounter;
+        public bool LootboxForRaceEnabled => _playerProfile.LotboxForRaceEnabled;
+        public bool CanStartImmediate => _playerProfile.CanStartImmediate;
+        public int VictoriesCycleCounter => _victoriesCycleCounter;
         public int CardsAmount => _cardsAmount;
 
         public CarName CarName => _carName;
@@ -64,6 +67,8 @@ namespace RaceManager.Progress
 
         public void SetLootboxList(List<Lootbox> lootboxes) => _lootboxes = lootboxes;
         public void SetLevelsList(List<LevelName> levels) => _levels = levels;
+        public void SetImmediateStart() => _playerProfile.CanStartImmediate = true;
+        public void SetLootboxForRaceEnabled() => _playerProfile.LotboxForRaceEnabled = true;
 
         public void AddMoney(int money, bool ignorIncomeFactor = false)
         { 
@@ -140,6 +145,7 @@ namespace RaceManager.Progress
         {
             _positionInRace = positionInRace;
             _playerProfile.SetLastInRacePosition(this);
+            _playerProfile.AddRaceCount(this);
         }
 
         public bool TryBuyWithMoney(int cost)
@@ -207,6 +213,8 @@ namespace RaceManager.Progress
 
         public int GetCardsAmount(CarName carName) => _playerProfile.CarCardsAmount(carName);
 
+        public int GetVictoriesTotalCount() => _playerProfile.VictoriesTotalCounter;
+
         public void RemoveLootboxWithId(string Id)
         {
             _playerProfile.GiveLootboxesTo(this);
@@ -215,19 +223,19 @@ namespace RaceManager.Progress
             _playerProfile.TakeLooboxesFrom(this);
         }
 
-        public void CountVictory()
+        public void CountVictoryCycle()
         { 
-            _victoriesCounter = _playerProfile.VictoriesCounter + 1;
-            if(_victoriesCounter > PlayerProfile.VictoriesCounterMax)
-                _victoriesCounter = 1;
+            _victoriesCycleCounter = _playerProfile.VictoriesCycleCounter + 1;
+            if(_victoriesCycleCounter > PlayerProfile.VictoriesCycle)
+                _victoriesCycleCounter = 1;
 
-            _playerProfile.SetVictoryCounter(this);
+            _playerProfile.SetVictoryCycleCounter(this);
         }
 
         public void ResetVictoriesCounter()
         {
-            _victoriesCounter = 0;
-            _playerProfile.SetVictoryCounter(this);
+            _victoriesCycleCounter = 0;
+            _playerProfile.SetVictoryCycleCounter(this);
         }
     }
 }

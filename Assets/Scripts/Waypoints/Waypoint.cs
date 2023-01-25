@@ -16,12 +16,16 @@ namespace RaceManager.Waypoints
         [ReadOnly]
         public Waypoint NextWaypoint;
 
+        public float RecomendedSpeed { get; set; }
+
         private const int NumberOfCarsOnTrack = 6;
 
         [SerializeField]
         private RespawnPoint[] _respawnPoints = new RespawnPoint[NumberOfCarsOnTrack];
         private List<string> _carIDs = new List<string>();
         private List<IObserver<string>> _observers = new List<IObserver<string>>();
+
+        public Action<Waypoint> OnCheckpointPass;
 
         private void OnTriggerEnter(Collider other)
         {
@@ -31,9 +35,7 @@ namespace RaceManager.Waypoints
                 return;
 
             SetRespawnPosition(car);
-
-            if (isCheckpoint)
-                SetCheckpointPoisition(car);
+            SetCheckpointPosition(car, other);
         }
 
         private void SetRespawnPosition(Car car)
@@ -57,9 +59,16 @@ namespace RaceManager.Waypoints
             }
         }
 
-        private void SetCheckpointPoisition(Car car)
+        private void SetCheckpointPosition(Car car, Collider other)
         {
-            car.CarSelfRighting.LastCheckpoint = transform;
+            if (isCheckpoint)
+            {
+                car.CarSelfRighting.LastCheckpoint = transform;
+
+                bool isPlayer = other.TryGetComponent(out PlayerControl playerControl);
+                if (isPlayer)
+                    OnCheckpointPass?.Invoke(this);
+            }
         }
 
         private void OnDestroy()

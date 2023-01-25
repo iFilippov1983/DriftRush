@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
 
 namespace RaceManager.UI
@@ -32,7 +33,7 @@ namespace RaceManager.UI
         private float _minutes;
 
         public Action<bool> OnPopupIsActive;
-        public Action OnButtonPressed;
+        public Action<Button> OnButtonPressed;
 
         [Inject]
         private void Construct(Profiler profiler, SpritesContainerRewards spritesRewards)
@@ -61,7 +62,7 @@ namespace RaceManager.UI
             for (int i = 0; i < _lootboxProgress.Images.Length; i++)
                 _lootboxProgress.Images[i].SetActive(false);
 
-            int counter = _playerProfile.VictoriesCounter;
+            int counter = _playerProfile.VictoriesCycleCounter;
             for (int i = 0; i < counter; i++)
                 _lootboxProgress.Images[i].SetActive(true);
 
@@ -129,7 +130,7 @@ namespace RaceManager.UI
                 }
 
                 slot.SlotButton.onClick.AddListener(() => OnLootboxSlotClicked(slot));
-                slot.SlotButton.onClick.AddListener(OnButtonPressedMethod);
+                slot.SlotButton.onClick.AddListener(() => OnButtonPressedMethod(slot.SlotButton));
             }
         }
 
@@ -178,13 +179,13 @@ namespace RaceManager.UI
             _lootboxPopup.SpeedupButton.SetActive(timerActive);
 
             _lootboxPopup.TimerOpenButton.onClick.AddListener(() => SlotStartTimer(slot));
-            _lootboxPopup.TimerOpenButton.onClick.AddListener(OnButtonPressedMethod);
+            _lootboxPopup.TimerOpenButton.onClick.AddListener(() => OnButtonPressedMethod(_lootboxPopup.TimerOpenButton));
 
             _lootboxPopup.InstantOpenButton.onClick.AddListener(() => SlotInstantOpen(slot));
-            _lootboxPopup.InstantOpenButton.onClick.AddListener(OnButtonPressedMethod);
+            _lootboxPopup.InstantOpenButton.onClick.AddListener(() => OnButtonPressedMethod(_lootboxPopup.InstantOpenButton));
 
             _lootboxPopup.SpeedupButton.onClick.AddListener(() => SlotSpeedupTimer(slot));
-            _lootboxPopup.SpeedupButton.onClick.AddListener(OnButtonPressedMethod);
+            _lootboxPopup.SpeedupButton.onClick.AddListener(() => OnButtonPressedMethod(_lootboxPopup.SpeedupButton));
 
             _lootboxPopup.TimerOpenButton.interactable = !_hasActiveTimerSlot;
 
@@ -254,7 +255,7 @@ namespace RaceManager.UI
             {
                 emptySlot.SetStatusClosed(sprite, lootbox.InitialTimeToOpen, lootbox.GemsToOpen, lootbox.Id);
                 emptySlot.SlotButton.onClick.AddListener(() => OnLootboxSlotClicked(emptySlot));
-                emptySlot.SlotButton.onClick.AddListener(OnButtonPressedMethod);
+                emptySlot.SlotButton.onClick.AddListener(() => OnButtonPressedMethod(emptySlot.SlotButton));
                 _lootboxAnimationHandler.OnAnimationFinish -= OnAnimationFinish;
             }
 
@@ -262,6 +263,7 @@ namespace RaceManager.UI
 
             _profiler.AddOrOpenLootbox(lootbox);
             _profiler.ResetVictoriesCounter();
+
         }
 
         private void HandleSlotTimer()
@@ -296,15 +298,15 @@ namespace RaceManager.UI
             }
         }
 
-        private void OnButtonPressedMethod() => OnButtonPressed?.Invoke();
+        private void OnButtonPressedMethod(Button button) => OnButtonPressed?.Invoke(button);
 
         private void AddButtonsListeners()
         {
             _lootboxPopup.ClosePopupButton.onClick.AddListener(CloseLootboxPopup);
-            _lootboxPopup.ClosePopupButton.onClick.AddListener(OnButtonPressedMethod);
+            _lootboxPopup.ClosePopupButton.onClick.AddListener(() => OnButtonPressedMethod(_lootboxPopup.ClosePopupButton));
 
             _lootboxPopup.ClosePopupWindowButton.onClick.AddListener(CloseLootboxPopup);
-            _lootboxPopup.ClosePopupWindowButton.onClick.AddListener(OnButtonPressedMethod);
+            _lootboxPopup.ClosePopupWindowButton.onClick.AddListener(() => OnButtonPressedMethod(_lootboxPopup.ClosePopupWindowButton));
         }
 
         #region Unity Functions

@@ -19,11 +19,11 @@ MonoBehaviour:
     RankingScheme:
       _ranks:
       - Rank: 1
-        PointsForAccess: 0
+        PointsForAccess: 30
         AccessCost: 0
         AvailableTunePercentage: 0
-        IsGranted: 1
-        IsReached: 1
+        IsGranted: 0
+        IsReached: 0
     Speed:
       Max: 200
       Min: 160
@@ -169,9 +169,21 @@ MonoBehaviour:
     RankingScheme:
       _ranks:
       - Rank: 1
+        PointsForAccess: 0
+        AccessCost: 0
+        AvailableTunePercentage: 0.65
+        IsGranted: 1
+        IsReached: 1
+      - Rank: 2
         PointsForAccess: 30
         AccessCost: 0
-        AvailableTunePercentage: 0
+        AvailableTunePercentage: 0.9
+        IsGranted: 0
+        IsReached: 0
+      - Rank: 3
+        PointsForAccess: 30
+        AccessCost: 0
+        AvailableTunePercentage: 1
         IsGranted: 0
         IsReached: 0
     Speed:

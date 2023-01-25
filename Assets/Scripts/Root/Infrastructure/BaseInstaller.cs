@@ -1,5 +1,4 @@
 ﻿using RaceManager.Root;
-using UnityEngine;
 using Zenject;
 
 namespace RaceManager.Infrastructure
@@ -11,11 +10,6 @@ namespace RaceManager.Infrastructure
             Container.BindInterfacesAndSelfTo<T>().FromInstance(instance);
             Singleton<Resolver>.Instance.Add(instance);
 
-            //Container.BindInterfacesAndSelfTo<T>().FromInstance(instance).OnInstantiated<T>((ctx, obj) =>
-            //{
-            //    Singleton<Resolver>.Instance.Add(obj);
-            //});
-
             Container.QueueForInject(instance);
         }
 
@@ -26,5 +20,19 @@ namespace RaceManager.Infrastructure
                 Singleton<Resolver>.Instance.Add(obj);
             });
         }
+
+        #region Legacy
+
+        //protected void Bind<T>(T instance) where T : class
+        //{
+        //    Container.BindInterfacesAndSelfTo<T>().FromInstance(instance).OnInstantiated<T>((ctx, obj) =>
+        //    {
+        //        Singleton<Resolver>.Instance.Add(obj);
+        //    });
+
+        //    Container.QueueForInject(instance);
+        //}
+
+        #endregion
     }
 }

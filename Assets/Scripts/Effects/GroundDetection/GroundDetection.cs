@@ -26,6 +26,5 @@ namespace RaceManager.Effects
 
             return true; 
         }
-
     }
 }

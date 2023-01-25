@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using RaceManager.Root;
+using Sirenix.OdinInspector;
+using UnityEngine;
+using Zenject;
 
 namespace RaceManager.Cars
 {
@@ -37,6 +40,7 @@ namespace RaceManager.Cars
         {
             if (_accelerating)
                 return;
+
             _carAI.DesiredSpeed = _car.CarConfig.MaxSpeed;
             _accelerating = true;
         }
@@ -45,6 +49,7 @@ namespace RaceManager.Cars
         {
             if (!_accelerating)
                 return;
+
             _carAI.DesiredSpeed = _car.CarConfig.CruiseSpeed;
             _accelerating = false;
         }

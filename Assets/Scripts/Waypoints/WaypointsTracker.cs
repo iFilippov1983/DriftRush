@@ -1,5 +1,4 @@
 using RaceManager.Cars;
-using RaceManager.Race;
 using RaceManager.Tools;
 using Sirenix.OdinInspector;
 using System;
@@ -24,8 +23,6 @@ namespace RaceManager.Waypoints
         private int _lapsToComplete;
         private int _carPosition;
 
-        private bool _raceFinished;
-
         [SerializeField, ReadOnly]
         private Transform _target;
         private float _progressDistance;    // The progress round the route, used in smooth mode.
@@ -37,6 +34,7 @@ namespace RaceManager.Waypoints
 
         public RoutePoint ProgressPoint { get; private set; }
         public float Progress => _progressDistance / _waypointTrack.AccumulateDistance;
+        public float DistanceFromStart => _progressDistance;
         public int CarPosition => _carPosition;
         public int NumberOfWaypointsPassed => _numberOfPassedWaypoints;
         public float TimeAtLastWaypoint => _timeAtLastPassedWaypoint;

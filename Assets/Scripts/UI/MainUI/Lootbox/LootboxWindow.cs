@@ -51,7 +51,7 @@ namespace RaceManager.UI
                 AddCarCard(card.CarName, card.CardsAmount);
             }
 
-            Debug.Log($"List: {_cardsList.Count}; Stack: {_cardsStack.Count}");
+            //Debug.Log($"List: {_cardsList.Count}; Stack: {_cardsStack.Count}");
             
             while (await RepresentReceivedCards() == false)
                 await Task.Yield();

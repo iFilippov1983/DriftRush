@@ -38,8 +38,11 @@ namespace RaceManager.Progress
         public int GemsCost => _gemsCost;
         public float IncomeFactor => _incomeFactor;
 
-        public bool LootboxForRaceEnabled => _playerProfile.LotboxForRaceEnabled;
         public bool CanStartImmediate => _playerProfile.CanStartImmediate;
+        public bool GotFirstFreeLootbox => _playerProfile.GotFirstFreeLootbox;
+        public bool GotIapFreeLootbox => _playerProfile.GotIapFreeLootbox;
+        public bool LootboxForRaceEnabled => _playerProfile.LotboxForRaceEnabled;
+        
         public int VictoriesCycleCounter => _victoriesCycleCounter;
         public int CardsAmount => _cardsAmount;
 
@@ -68,6 +71,8 @@ namespace RaceManager.Progress
         public void SetLootboxList(List<Lootbox> lootboxes) => _lootboxes = lootboxes;
         public void SetLevelsList(List<LevelName> levels) => _levels = levels;
         public void SetImmediateStart() => _playerProfile.CanStartImmediate = true;
+        public void SetFirstFreeLootboxGot() => _playerProfile.GotFirstFreeLootbox = true;
+        public void SetIapFreeLootboxGot() => _playerProfile.GotIapFreeLootbox = true;
         public void SetLootboxForRaceEnabled() => _playerProfile.LotboxForRaceEnabled = true;
 
         public void AddMoney(int money, bool ignorIncomeFactor = false)

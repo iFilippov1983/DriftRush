@@ -17,6 +17,9 @@
         WinRace_4,
         WinRace_6,
         WinRace_8,
-        GlobalDeactivation
+        GlobalDeactivation,
+        Drift,
+        FirstLootboxOffer,
+        FirstLootboxGot
     }
 }

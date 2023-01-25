@@ -53,7 +53,12 @@ namespace RaceManager.Root
         private void EnableOnFlag()
         {
             if (_flagsHandler.HasFlag(_key))
+            {
+                if (HasHelpers)
+                    ActivateHelpers(true);
+
                 return;
+            }
 
             DeactivateSelf();
             _flagsHandler
@@ -95,22 +100,13 @@ namespace RaceManager.Root
 
         private void DestroySelf()
         {
-            if (HasHelpers)
-            {
-                foreach (var helper in _helpers)
-                    helper.Destroy();
-            }
-
             gameObject.DoDestroy();
         }
 
         private void DeactivateSelf()
         {
             if (HasHelpers)
-            {
-                foreach (var helper in _helpers)
-                    helper.Deactivate();
-            }
+                ActivateHelpers(false);
 
             $"- Deactivate object [{gameObject.name}] with key => {_key}".Log();
             transform.localScale = Vector3.zero;
@@ -118,13 +114,27 @@ namespace RaceManager.Root
 
         private void ActivateSelf()
         {
+            if (HasHelpers)
+                ActivateHelpers(true);
+
             $"+ Activating object [{gameObject.name}] with key => {_key}".Log();
             transform.localScale = _originalScale;
+        }
 
-            if (HasHelpers)
+        private void ActivateHelpers(bool activate)
+        {
+            foreach (var helper in _helpers)
             {
-                foreach (var helper in _helpers)
+                if (activate)
+                {
                     helper.Activate();
+                    $"Helper [+A] => {helper.GetType()} => Agent: {gameObject.name}".Log(Logger.ColorYellow);
+                }
+                else
+                {
+                    helper.Deactivate();
+                    $"Helper [-D] => {helper.GetType()} => Agent: {gameObject.name}".Log(Logger.ColorYellow);
+                }
             }
         }
     }

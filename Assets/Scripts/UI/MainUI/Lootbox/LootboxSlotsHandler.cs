@@ -25,6 +25,7 @@ namespace RaceManager.UI
         private LootboxSlot _activeTimerSlot;
         private Lootbox _activeTimerLootbox;
         private LootboxImageAnimationHandler _lootboxAnimationHandler;
+        private GameEvents _gameEvents;
 
         private bool _hasActiveTimerSlot;
 
@@ -36,10 +37,11 @@ namespace RaceManager.UI
         public Action<Button> OnButtonPressed;
 
         [Inject]
-        private void Construct(Profiler profiler, SpritesContainerRewards spritesRewards)
+        private void Construct(Profiler profiler, SpritesContainerRewards spritesRewards, GameEvents gameEvents)
         {
             _profiler = profiler;
             _spritesRewards = spritesRewards;
+            _gameEvents = gameEvents;
         }
 
         public void Initialize(PlayerProfile playerProfile)
@@ -253,17 +255,25 @@ namespace RaceManager.UI
 
             void OnAnimationFinish()
             {
+                _profiler.AddOrOpenLootbox(lootbox);
+                _profiler.ResetVictoriesCounter();
+
                 emptySlot.SetStatusClosed(sprite, lootbox.InitialTimeToOpen, lootbox.GemsToOpen, lootbox.Id);
+
+                if (_profiler.GotFirstFreeLootbox == false)
+                {
+                    emptySlot.SetStatusLootboxOpen();
+                    _profiler.SetFirstFreeLootboxGot();
+                    _gameEvents.Notification.OnNext(NotificationType.FirstLootbox.ToString());
+                }
+
                 emptySlot.SlotButton.onClick.AddListener(() => OnLootboxSlotClicked(emptySlot));
                 emptySlot.SlotButton.onClick.AddListener(() => OnButtonPressedMethod(emptySlot.SlotButton));
+
                 _lootboxAnimationHandler.OnAnimationFinish -= OnAnimationFinish;
             }
 
             _lootboxAnimationHandler.InitializeAnimationWithTarget(emptySlot.gameObject, emptySlot.ImagePosOffset);
-
-            _profiler.AddOrOpenLootbox(lootbox);
-            _profiler.ResetVictoriesCounter();
-
         }
 
         private void HandleSlotTimer()

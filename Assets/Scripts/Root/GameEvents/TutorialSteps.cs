@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
 using Zenject;
+using static Logger;
 
 namespace RaceManager.Root
 {
@@ -58,7 +59,7 @@ namespace RaceManager.Root
             List<TutorialStep> steps = Steps.FindAll(s => s.Number == CurrentStep);
             Subscribe(steps.ToArray());
 
-            string color = steps.Count == 0 ? Logger.ColorRed : Logger.ColorGreen;
+            string color = steps.Count == 0 ? ColorRed : ColorGreen;
             $"Step {CurrentStep} subscribers count => {steps.Count}".Log(color);
         }
 
@@ -115,7 +116,6 @@ namespace RaceManager.Root
 
                     case TutorialEventType.WinRace:
                         _gameEvents.RaceWin
-                            //.Where(v => v == step.Count)
                             .Take(step.Count)
                             .Last()
                             .Subscribe(c => OnTrigger(step));
@@ -139,7 +139,7 @@ namespace RaceManager.Root
 
         private void SetFlag(TutorialStep step)
         {
-            $"Flag is set to => {step.FlagType}".Log();
+            $"Flag is set to => {step.FlagType}".Log(ColorGreen);
             _flagsHandler.Add(step.FlagType);
         }
 
@@ -150,13 +150,12 @@ namespace RaceManager.Root
         public void Load(object data)
         {
             CurrentStep = ((SaveData)data).step;
-            $"Current step LOAD: {CurrentStep}".Log();
+            //$"Current step LOAD: {CurrentStep}".Log(ColorGreen);
         }
 
         public object Save()
         {
-            $"Current step SAVE: {CurrentStep}".Log();
-
+            //$"Current step SAVE: {CurrentStep}".Log(ColorGreen);
             return new SaveData() { step = CurrentStep };
         }
     }

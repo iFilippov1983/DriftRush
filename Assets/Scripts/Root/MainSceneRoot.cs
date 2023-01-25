@@ -1,10 +1,7 @@
 using RaceManager.Cameras;
-using RaceManager.Cars;
 using RaceManager.Shed;
 using RaceManager.UI;
 using System;
-using System.Threading.Tasks;
-using UniRx;
 using UnityEngine;
 using Zenject;
 
@@ -16,15 +13,17 @@ namespace RaceManager.Root
         private MainUI _mainUI;
         private MenuCamerasHandler _menuCamerasHandler;
         private PodiumView _podium;
+        private TutorialSteps _tutorial;
 
         [Inject]
-        private void Construct(SaveManager saveManager, MainUI mainUI, PodiumView podium)
+        private void Construct(SaveManager saveManager, MainUI mainUI, PodiumView podium, TutorialSteps tutorial)
         {
             _menuCamerasHandler = Singleton<MenuCamerasHandler>.Instance;
 
             _saveManager = saveManager;
             _mainUI = mainUI;
             _podium = podium;
+            _tutorial = tutorial;
         }
 
         public void Run()
@@ -33,6 +32,7 @@ namespace RaceManager.Root
             LoadFromSave();
             InvokeInitializables();
             InitCameras();
+            RunTutorial();
         }
 
         private void InitCameras()
@@ -71,6 +71,8 @@ namespace RaceManager.Root
         }
 
         private void LoadFromSave() => _saveManager.Load();
+
+        private void RunTutorial() => _tutorial.RunStep();
 
         private void Dispose()
         {

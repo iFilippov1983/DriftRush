@@ -21,6 +21,7 @@ namespace RaceManager.Shed
         private CarUpgradesHandler _upgradesHandler;
         private CarVisual _carVisual;
         private SaveManager _saveManager;
+        private GameEvents _gameEvents;
         private CarDestroyer _carDestroyer;
 
         [Inject]
@@ -31,7 +32,8 @@ namespace RaceManager.Shed
             CarUpgradesHandler upgradesHandler,
             MainUI mainUI, 
             PodiumView podium, 
-            SaveManager saveManager
+            SaveManager saveManager,
+            GameEvents gameEvents
             )
         {
             _playerCarDepot = playerCarDepot;
@@ -40,6 +42,7 @@ namespace RaceManager.Shed
             _mainUI = mainUI;
             _podium = podium;
             _saveManager = saveManager;
+            _gameEvents = gameEvents;
         }
 
         public void Initialize()
@@ -139,6 +142,18 @@ namespace RaceManager.Shed
             _mainUI.UpdateCarWindow();
 
             _carTuner.SetCarProfile();
+        }
+
+        private void Update()
+        {
+            if (Input.GetMouseButtonDown(0))
+                _gameEvents.ScreenTaped.OnNext();
+
+            if (Input.GetMouseButton(0))
+                _gameEvents.ScreenTapHold.OnNext();
+
+            if (Input.GetMouseButtonUp(0))
+                _gameEvents.ScreenTapReleased.OnNext();
         }
 
         public void Dispose()

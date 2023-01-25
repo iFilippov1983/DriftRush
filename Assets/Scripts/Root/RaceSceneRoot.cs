@@ -8,11 +8,13 @@ namespace RaceManager.Root
     public class RaceSceneRoot : MonoBehaviour
     {
         private SaveManager _saveManager;
+        private TutorialSteps _tutorial;
 
         [Inject]
-        private void Construct(SaveManager saveManager)
+        private void Construct(SaveManager saveManager, TutorialSteps tutorial)
         {
             _saveManager = saveManager;
+            _tutorial = tutorial;
 
             EventsHub<RaceEvent>.Subscribe(RaceEvent.QUIT, HandleSceneQuit);
         }
@@ -22,6 +24,7 @@ namespace RaceManager.Root
             RegisterSavebles();
             LoadFromSave();
             InvokeInitializables();
+            RunTutorial();
         }
 
         private void HandleSceneQuit()
@@ -62,6 +65,8 @@ namespace RaceManager.Root
         }
 
         private void LoadFromSave() => _saveManager.Load();
+
+        private void RunTutorial() => _tutorial.RunStep();
 
         private void Dispose()
         {

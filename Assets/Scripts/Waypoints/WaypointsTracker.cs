@@ -23,8 +23,6 @@ namespace RaceManager.Waypoints
         private int _lapsToComplete;
         private int _carPosition;
 
-        private bool _raceFinished;
-
         [SerializeField, ReadOnly]
         private Transform _target;
         private float _progressDistance;    // The progress round the route, used in smooth mode.

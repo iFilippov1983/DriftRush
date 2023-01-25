@@ -1,5 +1,7 @@
-﻿using RaceManager.Tools;
+﻿using RaceManager.Cars;
+using RaceManager.Tools;
 using Sirenix.OdinInspector;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -46,6 +48,8 @@ namespace RaceManager.Waypoints
 
         private GameObject _waypointPrefab;
         private List<Waypoint> _waypoints;
+
+        public Action OnCheckpointPass;
 
         public float Length { get; protected set; }
         public Transform[] Waypoints => waypointList.items;
@@ -125,7 +129,10 @@ namespace RaceManager.Waypoints
                     {
                         wp.RecomendedSpeed = node.recomendedSpeed;
                         if (node.isCheckpoint)
+                        {
                             wp.isCheckpoint = true;
+                            wp.OnCheckpointPass += OnChepointPassed;
+                        }   
                     }
                 }
 
@@ -246,15 +253,14 @@ namespace RaceManager.Waypoints
             }
         }
 
-        private void OnDrawGizmos()
-        {
-            DrawGizmos(false);
-        }
+        private void OnDrawGizmos() => DrawGizmos(false);
 
+        private void OnDrawGizmosSelected() => DrawGizmos(true);
 
-        private void OnDrawGizmosSelected()
-        {
-            DrawGizmos(true);
+        private void OnChepointPassed(Waypoint waypoint)
+        { 
+            OnCheckpointPass?.Invoke();
+            waypoint.OnCheckpointPass -= OnChepointPassed;
         }
 
         protected virtual void DrawGizmos(bool selected)

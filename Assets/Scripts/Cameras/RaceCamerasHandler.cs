@@ -46,9 +46,10 @@ namespace RaceManager.Cameras
         private IEnumerator _currentDampingJob;
 
         private CinemachineTransposer _transposer;
+        private CinemachineComposer _composer;
         private float _defaultMainCamFov;
         private float _defaultMainCamDampingX;
-        private Vector3 _defaultCamFollowOffset;
+        private Vector3 _defaultCamAimOffset;
 
         private float CurrentCamFov => _followCamera.m_Lens.FieldOfView;
         private float CurrentCamDampingX
@@ -56,10 +57,10 @@ namespace RaceManager.Cameras
             get => _transposer.m_XDamping;
             set { _transposer.m_XDamping = value; }
         }
-        private Vector3 CameraFollowOffset
+        private Vector3 CameraAimOffset
         {
-            get => _transposer.m_FollowOffset;
-            set { _transposer.m_FollowOffset = value; }
+            get => _composer.m_TrackedObjectOffset;
+            set { _composer.m_TrackedObjectOffset = value; }
         } 
 
         public Transform FollowCam => _followCamera.transform;
@@ -82,9 +83,10 @@ namespace RaceManager.Cameras
             _finishCamera.LookAt = followTransform;
 
             _transposer = _followCamera.GetCinemachineComponent<CinemachineTransposer>();
+            _composer = _followCamera.GetCinemachineComponent<CinemachineComposer>();
             _defaultMainCamDampingX = CurrentCamDampingX;
             _defaultMainCamFov = CurrentCamFov;
-            _defaultCamFollowOffset = CameraFollowOffset;
+            _defaultCamAimOffset = CameraAimOffset;
 
             EventsHub<RaceEvent>.Subscribe(RaceEvent.COUNTDOWN, SetStartCamera);
             EventsHub<RaceEvent>.Subscribe(RaceEvent.START, SetFollowCamera);
@@ -138,7 +140,7 @@ namespace RaceManager.Cameras
 
             StopCoroutine(_currentShakeJob);
             _currentShakeJob = null;
-            CameraFollowOffset = _defaultCamFollowOffset;
+            CameraAimOffset = _defaultCamAimOffset;
         }
 
         #endregion
@@ -205,13 +207,13 @@ namespace RaceManager.Cameras
         {
             while (shake)
             {
-                Vector3 randomPoint = _defaultCamFollowOffset + Random.insideUnitSphere * shakeAmount;
-                randomPoint.z = _defaultCamFollowOffset.z;
-                CameraFollowOffset = Vector3.Lerp(CameraFollowOffset, randomPoint, Time.deltaTime * shakeSpeed);
+                Vector3 randomPoint = _defaultCamAimOffset + Random.insideUnitSphere * shakeAmount;
+                randomPoint.z = _defaultCamAimOffset.z;
+                CameraAimOffset = Vector3.Lerp(CameraAimOffset, randomPoint, Time.deltaTime * shakeSpeed);
                 yield return null;
             }
 
-            CameraFollowOffset = _defaultCamFollowOffset;
+            CameraAimOffset = _defaultCamAimOffset;
         }
 
         private void SetFinishCamera()

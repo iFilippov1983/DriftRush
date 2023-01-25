@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 using Zenject;
 
 namespace RaceManager.UI
@@ -23,7 +24,7 @@ namespace RaceManager.UI
         private bool _isRaceFinished;
         private bool _showLootbox;
 
-        public Action OnButtonPressed;
+        public Action<string> OnButtonPressed;
 
         [Inject]
         private void Construct(SpritesContainerRewards spritesContainer)
@@ -34,11 +35,12 @@ namespace RaceManager.UI
         public void Initialize(RaceLevelInitializer levelInitializer, UnityAction actionForRespawnButton, UnityAction actionForGetToCheckpointButton)
         {
             _finishUI.gameObject.SetActive(false);
-            _finishUI.OkButtonFinish.onClick.AddListener(OnButtonPressedMethod);
             _finishUI.OkButtonFinish.onClick.AddListener(FinalizeRace);
-            
+            _finishUI.OkButtonFinish.onClick.AddListener(() => OnButtonPressedMethod(_finishUI.OkButtonFinish));
+
             //_finishUI.OkButtonFinish.onClick.AddListener(ShowExtraRewardPanel);
             //_finishUI.OkButtonExtraReward.onClick.AddListener(FinalizeRace);
+            //_finishUI.OkButtonExtraReward.onClick.AddListener(() => OnButtonPressedMethod(_finishUI.OkButtonExtraReward));
 
             _inRaceUI.gameObject.SetActive(true);
             _inRaceUI.RaceProgressBar.LevelText.text = "LEVEL " + levelInitializer.LevelName;
@@ -109,12 +111,16 @@ namespace RaceManager.UI
         {
             switch (playerCarState)
             {
+                case CarState.None:
+                case CarState.CanStart:
+                    break;
                 case CarState.OnTrack:
                     ShowRaceUI();
                     break;
                 case CarState.Finished:
                     ShowFinishUI();
                     break;
+                
             }
         }
 
@@ -164,12 +170,12 @@ namespace RaceManager.UI
 
         private string GetPositionText()
         {
-            if (_currentPosition == 1)
+            if (_currentPosition == 0)
+                return "DNF";
+            else if (_currentPosition == 1)
                 return string.Concat(_currentPosition, "st");
             else if (_currentPosition == 2 || _currentPosition == 3)
-                return string.Concat(_currentPosition, "d");
-            else if (_currentPosition == 0)
-                return "DNF";
+                return string.Concat(_currentPosition, "d"); 
             else
                 return string.Concat(_currentPosition, "th");
         }
@@ -180,7 +186,7 @@ namespace RaceManager.UI
             _finishUI.ExtraRewardPanel.gameObject.SetActive(true);
         }
 
-        private void OnButtonPressedMethod() => OnButtonPressed?.Invoke();
+        private void OnButtonPressedMethod(Button button) => OnButtonPressed?.Invoke(button.gameObject.name);
 
         public void OnNext(DriverProfile profile)
         {

@@ -13,11 +13,23 @@ namespace RaceManager.Root
     [Serializable]
     public class PlayerProfile : ISaveable
     {
-        public const int VictoriesCounterMax = 3;
+        public const int VictoriesCycle = 3;
         public const int LootboxesAmountMax = 4;
 
         [JsonProperty, ShowInInspector, ReadOnly]
-        private int _victoriesCounter = 0;
+        private bool _canStartImmediate;
+
+        [JsonProperty, ShowInInspector, ReadOnly]
+        private bool _lootboxForRaceEnabled;
+
+        [JsonProperty, ShowInInspector, ReadOnly]
+        private int _victoriesCycleCounter = 0;
+
+        [JsonProperty, ShowInInspector, ReadOnly]
+        private int _victoriesTotalCounter;
+
+        [JsonProperty, ShowInInspector, ReadOnly]
+        private int _racesTotalCounter;
 
         [JsonProperty, ShowInInspector, ReadOnly]
         private DateTime _lastSaveTime = DateTime.UtcNow;
@@ -38,7 +50,26 @@ namespace RaceManager.Root
         private List<LevelName> _availableLevels = new List<LevelName>() { LevelName.Level_0_Igora_test };
 
         [JsonProperty]
-        public int VictoriesCounter => _victoriesCounter;
+        public bool CanStartImmediate
+        {
+            get => _canStartImmediate;
+            set { _canStartImmediate = value; }
+        }
+
+        [JsonProperty]
+        public bool LotboxForRaceEnabled
+        {
+            get => _lootboxForRaceEnabled;
+            set { _lootboxForRaceEnabled = value; }
+        }
+
+        [JsonProperty]
+        public int VictoriesCycleCounter => _victoriesCycleCounter;
+        [JsonProperty]
+        public int VictoriesTotalCounter => _victoriesTotalCounter;
+        [JsonProperty]
+        public int RacesTotalCounter => _racesTotalCounter;
+
         public int Money => _currency.Money;
         public int Gems => _currency.Gems;
         public int Cups => _currency.Cups;
@@ -49,7 +80,7 @@ namespace RaceManager.Root
         public PositionInRace LastInRacePosition => _lastInRacePosition;
 
         public bool CanGetLootbox => _lootboxes.Count < LootboxesAmountMax;
-        public bool WillGetLootboxForVictiories => VictoriesCounter == VictoriesCounterMax;
+        public bool WillGetLootboxForVictiories => VictoriesCycleCounter == VictoriesCycle;
 
         public void AddMoney(IProfiler profiler) => _currency.Money += profiler.Money;
         public void AddCups(IProfiler profiler) => _currency.Cups += profiler.Cups;
@@ -57,6 +88,13 @@ namespace RaceManager.Root
         public void AddLootbox(IProfiler profiler) => _lootboxes.Add(profiler.LootboxToAdd);
         public void AddCards(IProfiler profiler) => _currency.CarCards[profiler.CarName] += profiler.CardsAmount;
         public void AddLevel(IProfiler profiler) => _availableLevels.Add(profiler.LevelName);
+        public void AddRaceCount(IProfiler profiler)
+        {
+            _racesTotalCounter++;
+
+            if (profiler.LastInRacePosition == PositionInRace.First)
+                _victoriesTotalCounter++;
+        }
 
         public void SubstractMoney(IProfiler profiler) => _currency.Money -= profiler.MoneyCost;
         public void SubstractGems(IProfiler profiler) => _currency.Gems -= profiler.GemsCost;
@@ -64,7 +102,7 @@ namespace RaceManager.Root
         public void SetIcomeFactor(IProfiler profiler) => _currency.IncomeFactor = profiler.IncomeFactor;
         public void SetNextLevelFrom(IProfiler profiler) => _nextLevelPrefabToLoad = profiler.LevelName;
         public void SetLastInRacePosition(IProfiler profiler) => _lastInRacePosition = profiler.LastInRacePosition;
-        public void SetVictoryCounter(IProfiler profiler) => _victoriesCounter = profiler.VictoriesCounter;
+        public void SetVictoryCycleCounter(IProfiler profiler) => _victoriesCycleCounter = profiler.VictoriesCycleCounter;
         public void SetCardsAmount(IProfiler profiler) => _currency.CarCards[profiler.CarName] = profiler.CardsAmount;
 
         public void GiveLootboxesTo(IProfiler profiler) => profiler.SetLootboxList(_lootboxes);
@@ -84,7 +122,10 @@ namespace RaceManager.Root
             _lastInRacePosition = saveData.lastInRacePosition;
             _currency = saveData.currency;
             _nextLevelPrefabToLoad = saveData.nextLevelPrefabToLoad;
-            _victoriesCounter = saveData.racesCounter;
+            _canStartImmediate = saveData.canStartImmediate;
+            _victoriesTotalCounter = saveData.victoriesTotalCounter;
+            _victoriesCycleCounter = saveData.victoriesCycleCounter;
+            _racesTotalCounter = saveData.racesTotalCounter;
 
             _lastSaveTime = ParseDateTime(saveData.lastSaveDateTimeString, DateTime.UtcNow);
             _availableLevels = saveData.availableLevels;
@@ -122,7 +163,10 @@ namespace RaceManager.Root
                 lastInRacePosition = LastInRacePosition,
                 currency = _currency,
                 nextLevelPrefabToLoad = NextLevelPrefabToLoad,
-                racesCounter = VictoriesCounter,
+                canStartImmediate = CanStartImmediate,
+                victoriesTotalCounter = VictoriesTotalCounter,
+                victoriesCycleCounter = VictoriesCycleCounter,
+                racesTotalCounter = RacesTotalCounter,
                 lastSaveDateTimeString = _lastSaveTime.ToString("u", CultureInfo.InvariantCulture),
 
                 availableLevels = _availableLevels,
@@ -146,7 +190,10 @@ namespace RaceManager.Root
             public PositionInRace lastInRacePosition;
             public Currency currency;
             public LevelName nextLevelPrefabToLoad;
-            public int racesCounter;
+            public bool canStartImmediate;
+            public int victoriesTotalCounter;
+            public int victoriesCycleCounter;
+            public int racesTotalCounter;
             public string lastSaveDateTimeString;
 
             public List<LevelName> availableLevels;

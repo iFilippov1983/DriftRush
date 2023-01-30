@@ -79,7 +79,7 @@ namespace RaceManager.Root
         }
 
         [JsonProperty]
-        public bool LotboxForRaceEnabled
+        public bool LootboxForRaceEnabled
         {
             get => _lootboxForRaceEnabled;
             set { _lootboxForRaceEnabled = value; }
@@ -197,7 +197,7 @@ namespace RaceManager.Root
                 canStartImmediate = CanStartImmediate,
                 gotFirstFreeLootbox = GotFirstFreeLootbox,
                 gotIapFreeLootbox = GotIapFreeLootbox,
-                lootboxForRaceEnabled = LotboxForRaceEnabled,
+                lootboxForRaceEnabled = LootboxForRaceEnabled,
                 victoriesTotalCounter = VictoriesTotalCounter,
                 victoriesCycleCounter = VictoriesCycleCounter,
                 racesTotalCounter = RacesTotalCounter,

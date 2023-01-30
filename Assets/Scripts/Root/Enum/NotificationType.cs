@@ -8,5 +8,6 @@
         Start,
         Checkpoint,
         Finish,
+        SecondLootbox
     }
 }

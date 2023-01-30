@@ -3,6 +3,7 @@ using RaceManager.Race;
 using RaceManager.Root;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Zenject.ReflectionBaking.Mono.Cecil.Cil;
 
 namespace RaceManager.Progress
@@ -41,7 +42,7 @@ namespace RaceManager.Progress
         public bool CanStartImmediate => _playerProfile.CanStartImmediate;
         public bool GotFirstFreeLootbox => _playerProfile.GotFirstFreeLootbox;
         public bool GotIapFreeLootbox => _playerProfile.GotIapFreeLootbox;
-        public bool LootboxForRaceEnabled => _playerProfile.LotboxForRaceEnabled;
+        public bool LootboxForRaceEnabled => _playerProfile.LootboxForRaceEnabled;
         
         public int VictoriesCycleCounter => _victoriesCycleCounter;
         public int CardsAmount => _cardsAmount;
@@ -71,9 +72,20 @@ namespace RaceManager.Progress
         public void SetLootboxList(List<Lootbox> lootboxes) => _lootboxes = lootboxes;
         public void SetLevelsList(List<LevelName> levels) => _levels = levels;
         public void SetImmediateStart() => _playerProfile.CanStartImmediate = true;
-        public void SetFirstFreeLootboxGot() => _playerProfile.GotFirstFreeLootbox = true;
         public void SetIapFreeLootboxGot() => _playerProfile.GotIapFreeLootbox = true;
-        public void SetLootboxForRaceEnabled() => _playerProfile.LotboxForRaceEnabled = true;
+        public void SetLootboxForRaceEnabled() => _playerProfile.LootboxForRaceEnabled = true;
+
+        //public void SetFirstFreeLootboxGot()
+        //{
+        //    _playerProfile.GotFirstFreeLootbox = true;
+        //    _playerProfile.GiveLootboxesTo(this);
+
+        //    _lootboxToAdd = _lootboxes.First(l => l.IsOpen == false);
+        //    _lootboxToAdd.TimeToOpenLeft = -1f;
+        //    _lootboxToAdd.OpenTimerActivated = true;
+
+        //    _playerProfile.TakeLooboxesFrom(this);
+        //}
 
         public void AddMoney(int money, bool ignorIncomeFactor = false)
         { 
@@ -116,7 +128,7 @@ namespace RaceManager.Progress
 
         public void AddOrOpenLootbox(Lootbox lootbox)
         {
-            if (lootbox.IsOpen)
+            if (lootbox.IsOpen && _playerProfile.GotFirstFreeLootbox)
                 OnLootboxOpen?.Invoke(lootbox);
             else
             {
@@ -129,6 +141,9 @@ namespace RaceManager.Progress
 
         public void OpenLootboxWithId(string id)
         {
+            if(_playerProfile.GotFirstFreeLootbox == false)
+                _playerProfile.GotFirstFreeLootbox = true;
+
             Lootbox lootbox = GetLootboxWithId(id);
             RemoveLootboxWithId(id);
             OnLootboxOpen?.Invoke(lootbox);
@@ -151,6 +166,11 @@ namespace RaceManager.Progress
             _positionInRace = positionInRace;
             _playerProfile.SetLastInRacePosition(this);
             _playerProfile.AddRaceCount(this);
+
+            if (_playerProfile.VictoriesTotalCounter >= 8)
+            {
+                _playerProfile.LootboxForRaceEnabled = true;
+            }
         }
 
         public bool TryBuyWithMoney(int cost)

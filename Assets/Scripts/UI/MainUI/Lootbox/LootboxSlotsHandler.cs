@@ -255,17 +255,23 @@ namespace RaceManager.UI
 
             void OnAnimationFinish()
             {
-                _profiler.AddOrOpenLootbox(lootbox);
-                _profiler.ResetVictoriesCounter();
-
                 emptySlot.SetStatusClosed(sprite, lootbox.InitialTimeToOpen, lootbox.GemsToOpen, lootbox.Id);
 
                 if (_profiler.GotFirstFreeLootbox == false)
                 {
                     emptySlot.SetStatusLootboxOpen();
-                    _profiler.SetFirstFreeLootboxGot();
+                    lootbox.TimeToOpenLeft = -1;
+                    lootbox.OpenTimerActivated = true;
+
                     _gameEvents.Notification.OnNext(NotificationType.FirstLootbox.ToString());
                 }
+                if (_profiler.GetVictoriesTotalCount() == 6)
+                {
+                    _gameEvents.Notification.OnNext(NotificationType.SecondLootbox.ToString());
+                }
+
+                _profiler.AddOrOpenLootbox(lootbox);
+                _profiler.ResetVictoriesCounter();
 
                 emptySlot.SlotButton.onClick.AddListener(() => OnLootboxSlotClicked(emptySlot));
                 emptySlot.SlotButton.onClick.AddListener(() => OnButtonPressedMethod(emptySlot.SlotButton));

@@ -37,9 +37,9 @@ namespace RaceManager.UI
             OnAnimationInitialize?.Invoke();
             _imageToAnimate.transform.DOScale(ScaleVectorBig, Duration / 2).OnComplete(() =>
             {
-                _imageToAnimate.transform.DOMove(target.transform.position + targetPosOffset, Duration)
-                    .OnComplete(FinishAnimation);
-                _imageToAnimate.transform.DOScale(ScaleVectorSmall, Duration);
+                _imageToAnimate.transform.DOMove(target.transform.position + targetPosOffset, Duration);
+                _imageToAnimate.transform.DOScale(ScaleVectorSmall, Duration)
+                .OnComplete(FinishAnimation);
             });
         }
 

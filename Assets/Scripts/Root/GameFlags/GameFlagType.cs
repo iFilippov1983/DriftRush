@@ -2,24 +2,48 @@
 {
     public enum GameFlagType
     { 
-        InitialGameStart = 0,
-        FirstsRace,
-        AccelerationStart,
-        AccelerationFinish,
-        BrakeRequest,
-        Brake,
-        UpgradeCar,
-        TuneCar,
-        GetReward,
-        WinRace_1,
-        WinRace_2,
-        WinRace_3,
-        WinRace_4,
-        WinRace_6,
-        WinRace_8,
-        GlobalDeactivation,
-        Drift,
-        FirstLootboxOffer,
-        FirstLootboxGot
+        None = 0,
+
+        GlobalDeactivation = 1,
+
+        InitialGameStart = 2,
+        FirstsRace = 3,
+        AccelerationStart = 4,
+        AccelerationFinish = 5,
+        BrakeRequest = 6,
+        Brake = 7,
+        Drift = 8,
+
+        UpgradeCar = 9,
+        TuneCar = 10,
+
+        WinRace_1 = 11,
+        WinRace_2 = 12,
+        WinRace_3 = 13,
+        WinRace_4 = 14,
+        WinRace_6 = 15,
+        WinRace_8 = 16,
+
+        FirstLootboxOffer = 17,
+        FirstLootboxGot = 18,
+
+        TakeProgressRewardOffer = 19,
+        ProgressRewardGot = 20,
+
+        LookAtCarsCollectionOffer = 21,
+        LookAtCarOffer = 22,
+        CarShown = 23,
+        CarsCollectionShown = 24,
+
+        LootboxOpenOffer = 25,
+        LootboxOpenShown = 26,
+
+        IapLootboxOffer = 27,
+        IapLootboxGot = 28,
+
+        WinRace_5 = 29,
+        WinRace_7 = 30,
+
+        HowToOpenLootboxShown = 31
     }
 }

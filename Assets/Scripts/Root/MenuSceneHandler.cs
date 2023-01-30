@@ -85,12 +85,17 @@ namespace RaceManager.Root
             }
         }
 
-        private void StopPlayingCurrentTrack() => _effectsController.StopAudio(_currentTrackType);
+        private void StopPlayingCurrentTrack()
+        { 
+            if(_effectsController)
+                _effectsController.StopAudio(_currentTrackType);
+        }
 
         private void HandleButton(string buttonName)
         {
             _effectsController.PlayEffect(AudioType.SFX_ButtonPressed, HapticType.Selection);
             _gameEvents.ButtonPressed.OnNext(buttonName);
+            //$"Button pressed notification => [{buttonName.ToLower()}]".Log();
         }
 
         private void ToggleEffectSetting(float toggleValue, EffectType type)

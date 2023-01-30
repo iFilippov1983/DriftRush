@@ -523,6 +523,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &712014419648891706
 GameObject:
@@ -759,6 +760,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &983597748715191460
 GameObject:
@@ -1091,6 +1093,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &1358956448340343484
 GameObject:
@@ -1135,6 +1138,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &1522557334160480484
 GameObject:
@@ -1275,6 +1279,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &1747741270458515565
 GameObject:
@@ -1541,6 +1546,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &2198504016750251261
 GameObject:
@@ -1874,6 +1880,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &2463052085456229313
 GameObject:
@@ -1918,6 +1925,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &2521427054403008473
 GameObject:
@@ -1962,6 +1970,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &2601910532037515228
 GameObject:
@@ -2102,6 +2111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &2961274133421480845
 GameObject:
@@ -2227,6 +2237,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &2961274133431118457
 GameObject:
@@ -2271,6 +2282,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &2961274133490538229
 GameObject:
@@ -2315,6 +2327,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &2961274133514530897
 GameObject:
@@ -2359,6 +2372,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &2961274133663049065
 GameObject:
@@ -2403,6 +2417,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &2961274133668494622
 GameObject:
@@ -2453,19 +2468,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2e44403ee4cae74d993614f3fbe84bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _startPoints:
-  - {fileID: 2961274133816059141}
-  - {fileID: 2961274134816441795}
-  - {fileID: 2961274134985685894}
-  - {fileID: 2961274135322382199}
-  - {fileID: 2961274134985940104}
-  - {fileID: 2961274133745967748}
-  _waypointTrackMain: {fileID: 2961274133711793785}
-  _waypointTrackEven: {fileID: 2961274133711793785}
-  _waypointTrackOdd: {fileID: 2961274133711793785}
-  _followCamInitialPoint: {fileID: 7352697619263546116}
-  _startCamInitialPoint: {fileID: 1936750766040160463}
-  _finishCamInitialPoint: {fileID: 3218290320012322975}
+  _raceLine: {fileID: 0}
+  _startPoints: []
+  _waypointTrackMain: {fileID: 0}
+  _waypointTrackEven: {fileID: 0}
+  _waypointTrackOdd: {fileID: 0}
+  _followCamInitialPoint: {fileID: 0}
+  _startCamInitialPoint: {fileID: 0}
+  _finishCamInitialPoint: {fileID: 0}
 --- !u!1 &2961274133711793784
 GameObject:
   m_ObjectHideFlags: 0
@@ -2565,6 +2575,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 161d8978f8de9f74f986abba794717a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _smoothRoute: 1
+  _drawColor: {r: 1, g: 0.015686274, b: 0.025428254, a: 1}
+  _nodeSphereSize: 0.5
+  _maxPointPosHeight: 1000
+  _pointPosHeightAboveRoad: 1
+  _roadMask:
+    serializedVersion: 2
+    m_Bits: 0
+  _lapsToComplete: 1
+  editorVisualisationSubsteps: 400
+  minDistanceToReachWaypoint: 5
   MainTrack: 1
   waypointList:
     track: {fileID: 2961274133711793785}
@@ -2626,12 +2647,6 @@ MonoBehaviour:
     - {fileID: 4223574615739386204}
     - {fileID: 2644043030230605687}
     - {fileID: 4688383089589385590}
-  editorVisualisationSubsteps: 400
-  minDistanceToReachWaypoint: 5
-  _smoothRoute: 1
-  _drawColor: {r: 1, g: 0.015686274, b: 0.025428254, a: 1}
-  _nodeSphereSize: 0.5
-  _lapsToComplete: 1
 --- !u!1 &2961274133745967747
 GameObject:
   m_ObjectHideFlags: 0
@@ -2720,6 +2735,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &2961274133816059139
 GameObject:
@@ -2809,6 +2825,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &2961274133851466103
 GameObject:
@@ -2934,6 +2951,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &2961274133956803297
 GameObject:
@@ -2978,6 +2996,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &2961274133996462789
 GameObject:
@@ -3022,6 +3041,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &2961274134057889009
 GameObject:
@@ -3102,6 +3122,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &2961274134161167049
 GameObject:
@@ -3146,6 +3167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &2961274134225286549
 GameObject:
@@ -3190,6 +3212,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &2961274134266020693
 GameObject:
@@ -3234,6 +3257,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &2961274134374365120
 GameObject:
@@ -3278,6 +3302,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &2961274134465133369
 GameObject:
@@ -3322,6 +3347,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &2961274134466561299
 GameObject:
@@ -3366,6 +3392,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &2961274134477077501
 GameObject:
@@ -3410,6 +3437,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &2961274134512198779
 GameObject:
@@ -3454,6 +3482,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &2961274134605384043
 GameObject:
@@ -3498,6 +3527,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &2961274134678463538
 GameObject:
@@ -3542,6 +3572,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &2961274134761338145
 GameObject:
@@ -3724,6 +3755,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &2961274134985685892
 GameObject:
@@ -3858,6 +3890,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &2961274135106188685
 GameObject:
@@ -4271,6 +4304,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &2961274135478843073
 GameObject:
@@ -4315,6 +4349,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &2981069527198409301
 GameObject:
@@ -4359,6 +4394,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &3017696656854073715
 GameObject:
@@ -4595,6 +4631,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &3481889626265940644
 GameObject:
@@ -4848,6 +4885,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &3712308632733330021
 GameObject:
@@ -4892,6 +4930,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &3734764846019776593
 GameObject:
@@ -4936,6 +4975,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &3745676555037433849
 GameObject:
@@ -4980,6 +5020,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &3846728956179249933
 GameObject:
@@ -5444,6 +5485,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &4489886477677854624
 GameObject:
@@ -5488,6 +5530,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &4739013346370362875
 GameObject:
@@ -6364,6 +6407,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &5932506905313169634
 GameObject:
@@ -6504,6 +6548,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &6212232740118201671
 GameObject:
@@ -6548,6 +6593,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &6264455591884984936
 GameObject:
@@ -7074,6 +7120,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &6887188971929032662
 GameObject:
@@ -7216,6 +7263,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &7282967082469419053
 GameObject:
@@ -7260,6 +7308,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &7299471521819613707
 GameObject:
@@ -7400,6 +7449,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &7398361709232677191
 GameObject:
@@ -7646,6 +7696,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &7605642503253251126
 GameObject:
@@ -8422,6 +8473,38 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -5442490538803938309, guid: b32b9fedf9ed4f94aabd7c42a6e1abdb, type: 3}
+--- !u!1 &8567049549487501739
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: ba99ecef4c3f7d340bcbedde7a69a8c1,
+    type: 3}
+  m_PrefabInstance: {fileID: 6846119876826820198}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6379617960641530253}
+  m_Layer: 0
+  m_Name: 'decorR2 (Missing Prefab with guid: ba99ecef4c3f7d340bcbedde7a69a8c1)'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6379617960641530253
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: ba99ecef4c3f7d340bcbedde7a69a8c1,
+    type: 3}
+  m_PrefabInstance: {fileID: 6846119876826820198}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8567049549487501739}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1031713614994040181}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8755897707845463029
 GameObject:
   m_ObjectHideFlags: 0
@@ -8561,6 +8644,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &8818934129645038654
 GameObject:
@@ -8605,6 +8689,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &8919129623105678911
 GameObject:
@@ -8649,6 +8734,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &8958742431422733860
 GameObject:
@@ -8693,6 +8779,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1 &9177460065298943605
 GameObject:
@@ -8737,6 +8824,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recomendedSpeed: 0
   isCheckpoint: 0
 --- !u!1001 &894793611162238411
 PrefabInstance:
@@ -9007,12 +9095,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ba99ecef4c3f7d340bcbedde7a69a8c1, type: 3}
---- !u!4 &6379617960641530253 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: ba99ecef4c3f7d340bcbedde7a69a8c1,
-    type: 3}
-  m_PrefabInstance: {fileID: 6846119876826820198}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8178344225432592287
 PrefabInstance:
   m_ObjectHideFlags: 0

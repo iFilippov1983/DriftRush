@@ -167,7 +167,7 @@ namespace RaceManager.Progress
             _playerProfile.SetLastInRacePosition(this);
             _playerProfile.AddRaceCount(this);
 
-            if (_playerProfile.VictoriesTotalCounter >= 8)
+            if (_playerProfile.VictoriesTotalCounter >= PlayerProfile.UnlockLootboxForRaceThreshold)
             {
                 _playerProfile.LootboxForRaceEnabled = true;
             }

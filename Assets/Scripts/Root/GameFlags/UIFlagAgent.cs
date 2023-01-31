@@ -10,8 +10,8 @@ using DG.Tweening;
 using DG.Tweening.Core;
 using DG.Tweening.Plugins.Options;
 using System;
-using static Logger;
 using System.Threading.Tasks;
+using static Logger;
 
 namespace RaceManager.Root
 {
@@ -34,13 +34,13 @@ namespace RaceManager.Root
             Text
         }
 
-        public enum AnimationType
-        {
-            None,
-            FadeInOutLoop,
-            ScaleUpDownLoop,
-            MoveFromTo
-        }
+        //public enum AnimationType
+        //{
+        //    None,
+        //    FadeInOutLoop,
+        //    ScaleUpDownLoop,
+        //    MoveFromTo
+        //}
 
         [Serializable]
         public class AgentAction
@@ -127,7 +127,7 @@ namespace RaceManager.Root
         public AgentType Type { get; private set; }
 
         [Inject]
-        protected void Construct(GameFlagsHandler flagsHandler, Resolver resolver)
+        private void Construct(GameFlagsHandler flagsHandler, Resolver resolver)
         {
             resolver.Add(this);
             _flagsHandler = flagsHandler;

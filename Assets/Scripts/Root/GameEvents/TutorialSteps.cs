@@ -46,6 +46,8 @@ namespace RaceManager.Root
         private GameFlagsHandler _flagsHandler;
         private SaveManager _saveManager;
 
+        public bool IsTutorialComplete => Steps.FindAll(s => s.Number >= CurrentStep).Count == 0;
+
         [Inject]
         private void Construct(GameEvents gameEvents, GameFlagsHandler flagsHandler, SaveManager saveManager)
         { 

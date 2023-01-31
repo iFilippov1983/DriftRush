@@ -43,6 +43,8 @@
 
         WinRace_5 = 29,
         WinRace_7 = 30,
+        WinRace_9 = 32,
+        WinRace_10 = 33,
 
         HowToOpenLootboxShown = 31
     }

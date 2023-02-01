@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using UniRx;
+﻿using UniRx;
 using UnityEngine;
 using Zenject;
 
@@ -17,11 +16,10 @@ namespace RaceManager.Root
         [SerializeField] private GameFlagType _key;
         [SerializeField] private AgentAction _action;
 
-        private List<IAgentsHelper> _helpers;
         private GameFlagsHandler _flagsHandler;
         private Vector3 _originalScale;
 
-        public bool HasHelpers => _helpers.Count > 0;
+        public bool TimeToAct => _flagsHandler.HasFlag(_key);
 
         [Inject]
         private void Construct(GameFlagsHandler flagsHandler, Resolver resolver)
@@ -29,7 +27,6 @@ namespace RaceManager.Root
             resolver.Add(this);
             _flagsHandler = flagsHandler;
             _originalScale = transform.localScale;
-            _helpers = new List<IAgentsHelper>(GetComponentsInChildren<IAgentsHelper>());
         }
 
         public void Initialize()
@@ -52,20 +49,21 @@ namespace RaceManager.Root
 
         private void EnableOnFlag()
         {
-            if (_flagsHandler.HasFlag(_key))
+            if (TimeToAct)
                 return;
 
             DeactivateSelf();
+
             _flagsHandler
                 .Subscribe(_key, ActivateSelf)
                 .AddTo(this);
 
-            $"EnableOnFlag sub => Key: [{_key}] => Object: [{gameObject.name}] => Helpers count: [{_helpers.Count}]".Log(Logger.ColorYellow);
+            $"EnableOnFlag subscribed => Key: [{_key}] => Object: [{gameObject.name}]".Log(Logger.ColorYellow);
         }
 
         private void DisableOnFlag()
         {
-            if (_flagsHandler.HasFlag(_key))
+            if (TimeToAct)
             { 
                 DeactivateSelf();
                 return;
@@ -75,12 +73,12 @@ namespace RaceManager.Root
                 .Subscribe(_key, DeactivateSelf)
                 .AddTo(this);
 
-            $"DisableOnFlag sub => Key: [{_key}] => Object: [{gameObject.name}] => Helpers count: [{_helpers.Count}]".Log(Logger.ColorYellow);
+            $"DisableOnFlag subscribed => Key: [{_key}] => Object: [{gameObject.name}]".Log(Logger.ColorYellow);
         }
 
         private void DestroyOnFlag()
         {
-            if (_flagsHandler.HasFlag(_key))
+            if (TimeToAct)
             {
                 DestroySelf();
                 return;
@@ -90,28 +88,16 @@ namespace RaceManager.Root
                 .Subscribe(_key, DestroySelf)
                 .AddTo(this);
 
-            $"DestroyOnFlag sub => Key: [{_key}] => Object: [{gameObject.name}] => Helpers count: [{_helpers.Count}]".Log(Logger.ColorYellow);
+            $"DestroyOnFlag subscribed => Key: [{_key}] => Object: [{gameObject.name}]".Log(Logger.ColorYellow);
         }
 
         private void DestroySelf()
         {
-            if (HasHelpers)
-            {
-                foreach (var helper in _helpers)
-                    helper.Destroy();
-            }
-
             gameObject.DoDestroy();
         }
 
         private void DeactivateSelf()
         {
-            if (HasHelpers)
-            {
-                foreach (var helper in _helpers)
-                    helper.Deactivate();
-            }
-
             $"- Deactivate object [{gameObject.name}] with key => {_key}".Log();
             transform.localScale = Vector3.zero;
         }
@@ -120,12 +106,6 @@ namespace RaceManager.Root
         {
             $"+ Activating object [{gameObject.name}] with key => {_key}".Log();
             transform.localScale = _originalScale;
-
-            if (HasHelpers)
-            {
-                foreach (var helper in _helpers)
-                    helper.Activate();
-            }
         }
     }
 }

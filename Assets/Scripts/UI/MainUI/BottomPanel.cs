@@ -14,7 +14,7 @@ namespace RaceManager.UI
         [SerializeField] private Image _carsCollectionPressedImage;
         [Space]
         [SerializeField] private Button _mainMenuButton;
-        [SerializeField] private Image _cupsMapPressedImage;
+        [SerializeField] private Image _mainMenuPressedImage;
         [Space]
         [SerializeField] private Button _tuningButton;
         [SerializeField] private Image _tuningPressedImage;
@@ -30,7 +30,7 @@ namespace RaceManager.UI
 
         public Image IapSopPressedImage => _iapShopPressedImage;
         public Image CarsCollectionPressedImage => _carsCollectionPressedImage;
-        public Image CupsMapPressedImage => _cupsMapPressedImage;
+        public Image MainMenuPressedImage => _mainMenuPressedImage;
         public Image TuningPressedImage => _tuningPressedImage;
         public Image SoonPressedImage => _soonPressedImage;
 
@@ -40,7 +40,7 @@ namespace RaceManager.UI
 
             IapShopButton.onClick.AddListener(() => TogglePressedImageActivity(_iapShopPressedImage));
             CarsCollectionButton.onClick.AddListener(() => TogglePressedImageActivity(_carsCollectionPressedImage));
-            MainMenuButton.onClick.AddListener(() => TogglePressedImageActivity(_cupsMapPressedImage));
+            MainMenuButton.onClick.AddListener(() => TogglePressedImageActivity(_mainMenuPressedImage));
             TuneButton.onClick.AddListener(() => TogglePressedImageActivity(_tuningPressedImage));
         }
 
@@ -61,7 +61,7 @@ namespace RaceManager.UI
         { 
             _iapShopPressedImage.SetActive(false);
             _carsCollectionPressedImage.SetActive(false);
-            _cupsMapPressedImage.SetActive(false);
+            _mainMenuPressedImage.SetActive(false);
             _tuningPressedImage.SetActive(false);
             _soonPressedImage.SetActive(false);
         }

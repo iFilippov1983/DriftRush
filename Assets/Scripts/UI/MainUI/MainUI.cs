@@ -31,6 +31,7 @@ namespace RaceManager.UI
         [SerializeField] private LootboxWindow _lootboxWindow;
         [Space]
         [SerializeField] private SettingsPopup _settingsPopup;
+        [SerializeField] private IapShopPanel _iapShopPanel;
 
         private PlayerProfile _playerProfile;
         private RewardsHandler _rewardsHandler;
@@ -432,6 +433,10 @@ namespace RaceManager.UI
             _bottomPanel.CarsCollectionButton.onClick.AddListener(() => ActivateMainMenu(false));
             _bottomPanel.CarsCollectionButton.onClick.AddListener(() => ActivateCarsCollectionPanel(true));
             _bottomPanel.CarsCollectionButton.onClick.AddListener(() => OnButtonPressedMethod(_bottomPanel.CarsCollectionButton));
+
+            _bottomPanel.IapShopButton.onClick.AddListener(() => OnButtonPressedMethod(_bottomPanel.IapShopButton));
+
+            _iapShopPanel.ClosePanalButton.onClick.AddListener(() => OnButtonPressedMethod(_iapShopPanel.ClosePanalButton));
 
             _tuningPanel.RegisterButtonsListeners();
 

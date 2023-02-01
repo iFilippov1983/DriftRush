@@ -15,9 +15,16 @@ namespace RaceManager.Root
     {
         public const int VictoriesCycle = 3;
         public const int LootboxesAmountMax = 4;
+        public const int UnlockLootboxForRaceThreshold = 10;
 
         [JsonProperty, ShowInInspector, ReadOnly]
         private bool _canStartImmediate;
+
+        [JsonProperty, ShowInInspector, ReadOnly]
+        private bool _gotFirstFreeLootbox;
+
+        [JsonProperty, ShowInInspector, ReadOnly]
+        private bool _gotIapFreeLootbox;
 
         [JsonProperty, ShowInInspector, ReadOnly]
         private bool _lootboxForRaceEnabled;
@@ -49,6 +56,8 @@ namespace RaceManager.Root
         [JsonProperty, SerializeField]
         private List<LevelName> _availableLevels = new List<LevelName>() { LevelName.Level_0_Igora_test };
 
+        #region Boolean Properties
+
         [JsonProperty]
         public bool CanStartImmediate
         {
@@ -57,11 +66,32 @@ namespace RaceManager.Root
         }
 
         [JsonProperty]
-        public bool LotboxForRaceEnabled
+        public bool GotFirstFreeLootbox
+        {
+            get => _gotFirstFreeLootbox;
+            set { _gotFirstFreeLootbox = value; }
+        }
+
+        [JsonProperty]
+        public bool GotIapFreeLootbox
+        {
+            get => _gotIapFreeLootbox;
+            set { _gotIapFreeLootbox = value; }
+        }
+
+        [JsonProperty]
+        public bool LootboxForRaceEnabled
         {
             get => _lootboxForRaceEnabled;
             set { _lootboxForRaceEnabled = value; }
         }
+
+        public bool CanGetLootbox => _lootboxes.Count < LootboxesAmountMax;
+        public bool WillGetLootboxForVictiories => VictoriesCycleCounter == VictoriesCycle;
+
+        #endregion
+
+        #region Values Properties
 
         [JsonProperty]
         public int VictoriesCycleCounter => _victoriesCycleCounter;
@@ -79,8 +109,7 @@ namespace RaceManager.Root
         public LevelName NextLevelPrefabToLoad => _nextLevelPrefabToLoad;
         public PositionInRace LastInRacePosition => _lastInRacePosition;
 
-        public bool CanGetLootbox => _lootboxes.Count < LootboxesAmountMax;
-        public bool WillGetLootboxForVictiories => VictoriesCycleCounter == VictoriesCycle;
+        #endregion
 
         public void AddMoney(IProfiler profiler) => _currency.Money += profiler.Money;
         public void AddCups(IProfiler profiler) => _currency.Cups += profiler.Cups;
@@ -123,6 +152,9 @@ namespace RaceManager.Root
             _currency = saveData.currency;
             _nextLevelPrefabToLoad = saveData.nextLevelPrefabToLoad;
             _canStartImmediate = saveData.canStartImmediate;
+            _gotFirstFreeLootbox = saveData.gotFirstFreeLootbox;
+            _gotIapFreeLootbox = saveData.gotIapFreeLootbox;
+            _lootboxForRaceEnabled = saveData.lootboxForRaceEnabled;
             _victoriesTotalCounter = saveData.victoriesTotalCounter;
             _victoriesCycleCounter = saveData.victoriesCycleCounter;
             _racesTotalCounter = saveData.racesTotalCounter;
@@ -164,6 +196,9 @@ namespace RaceManager.Root
                 currency = _currency,
                 nextLevelPrefabToLoad = NextLevelPrefabToLoad,
                 canStartImmediate = CanStartImmediate,
+                gotFirstFreeLootbox = GotFirstFreeLootbox,
+                gotIapFreeLootbox = GotIapFreeLootbox,
+                lootboxForRaceEnabled = LootboxForRaceEnabled,
                 victoriesTotalCounter = VictoriesTotalCounter,
                 victoriesCycleCounter = VictoriesCycleCounter,
                 racesTotalCounter = RacesTotalCounter,
@@ -191,6 +226,9 @@ namespace RaceManager.Root
             public Currency currency;
             public LevelName nextLevelPrefabToLoad;
             public bool canStartImmediate;
+            public bool gotFirstFreeLootbox;
+            public bool gotIapFreeLootbox;
+            public bool lootboxForRaceEnabled;
             public int victoriesTotalCounter;
             public int victoriesCycleCounter;
             public int racesTotalCounter;

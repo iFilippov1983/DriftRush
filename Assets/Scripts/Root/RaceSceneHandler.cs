@@ -148,12 +148,16 @@ namespace RaceManager.Root
             _gameEvents.Notification.OnNext(NotificationType.Start.ToString());
             EventsHub<RaceEvent>.Unsunscribe(RaceEvent.START, SendStartNotification);
         }
-        
-        //private void StopPlayingCurrentTrack() => EffectsController.StopAudio(_currentTrackType);
+
+        private void StopPlayingCurrentTrack()
+        { 
+            if(EffectsController != null)
+                EffectsController.StopAudio(_currentTrackType);
+        }
 
         public void OnDestroy()
         {
-            //StopPlayingCurrentTrack();
+            StopPlayingCurrentTrack();
 
             if(_raceUI != null)
                 _raceUI.OnButtonPressed -= PlayButtonPressedEffect;

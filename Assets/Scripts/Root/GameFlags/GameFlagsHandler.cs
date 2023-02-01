@@ -2,6 +2,7 @@
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UniRx;
 
 namespace RaceManager.Root
@@ -17,6 +18,7 @@ namespace RaceManager.Root
         private Dictionary<GameFlagType, GameFlagsListener> _listeners = new Dictionary<GameFlagType, GameFlagsListener>();
 
         public bool HasFlag(GameFlagType key) => _flags.Contains(key);
+        public bool IsLast(GameFlagType key) => _flags.ElementAtOrDefault(_flags.Count - 1) == key;
 
         public void Add(GameFlagType key)
         {

@@ -21,10 +21,12 @@ namespace RaceManager.Progress
             _carUpgradesHandler = carUpgradesHandler;
         }
 
-        public bool CanUpgradeCurrentCarFactors() => 
-            _carUpgradesHandler.CanUpgradeCurrentCarFactors() & _tutorialSteps.IsTutorialComplete;
+        public bool CanUpgradeCurrentCarFactors() =>
+            _tutorialSteps.IsTutorialComplete
+            &&
+            _carUpgradesHandler.CanUpgradeCurrentCarFactors();
 
-        public bool TryGetRankUpgradableCars(out List<CarName> cars)
+        public bool HasRankUpgradableCars(out List<CarName> cars)
         {
             cars = new List<CarName>();
             bool hasUpgradeable = false;
@@ -34,10 +36,12 @@ namespace RaceManager.Progress
                 var scheme = profile.RankingScheme;
 
                 bool canUpgrade =
+                    _tutorialSteps.IsTutorialComplete
+                    &&
                     !scheme.CurrentRank.IsGranted
-                    &
+                    &&
                     _playerProfile.Money > scheme.CurrentRank.AccessCost 
-                    &
+                    &&
                     _playerProfile.CarCardsAmount(profile.CarName) > scheme.CurrentRank.PointsForAccess;
 
                 if (canUpgrade)
@@ -50,7 +54,7 @@ namespace RaceManager.Progress
             return hasUpgradeable;
         }
 
-        public bool TryGetUlockableCars(out List<CarName> cars)
+        public bool HasUlockableCars(out List<CarName> cars)
         {
             cars = new List<CarName>();
             bool hasUlockable = false;
@@ -60,15 +64,28 @@ namespace RaceManager.Progress
                 var scheme = profile.RankingScheme;
                 var curRank = scheme.CurrentRank;
 
-                bool canUnlock = curRank.Rank == Rank.Rank_1 & curRank.IsReached;
+                bool canUnlock = 
+                    _tutorialSteps.IsTutorialComplete
+                    &&
+                    curRank.Rank == Rank.Rank_1 
+                    && 
+                    curRank.IsReached;
+
+                if (canUnlock)
+                {
+                    cars.Add(profile.CarName);
+                    hasUlockable = true;
+                }
             }
 
             return hasUlockable;
         }
 
-        public bool TryGetIapSpecialOffer(out IReward reward)
+        public bool HasIapSpecialOffer(out IReward reward)
         {
-            throw new System.NotImplementedException();
+            //TODO: Implement function
+            reward = null;
+            return false;
         }
     }
 }

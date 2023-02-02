@@ -1,13 +1,13 @@
-﻿using UnityEngine;
+﻿using UniRx;
+using UnityEngine;
 using Zenject;
 using RaceManager.UI;
 using RaceManager.Cameras;
+using RaceManager.Effects;
 using RaceManager.Cars;
 using RaceManager.Race;
 using Random = UnityEngine.Random;
-using RaceManager.Effects;
 using AudioType = RaceManager.Effects.AudioType;
-using UniRx;
 
 namespace RaceManager.Root
 {

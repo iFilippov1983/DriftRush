@@ -6,8 +6,8 @@ namespace RaceManager.Root
 {
     public class GameEvents
     {
-        public Subject<string> ButtonPressed = new Subject<string>();
         public Subject<IReward> GotReward = new Subject<IReward>();
+        public Subject<string> ButtonPressed = new Subject<string>();
         public Subject<string> Notification = new Subject<string>();
         public Subject<Unit> ScreenTaped = new Subject<Unit>();
         public Subject<Unit> ScreenTapHold = new Subject<Unit>();
@@ -17,8 +17,8 @@ namespace RaceManager.Root
         [Inject]
         private void Cunstruct()
         {
-            ButtonPressed = new Subject<string>();
             GotReward = new Subject<IReward>();
+            ButtonPressed = new Subject<string>();
             Notification = new Subject<string>();
             ScreenTaped = new Subject<Unit>();
             ScreenTapHold = new Subject<Unit>();

@@ -14,9 +14,17 @@ namespace RaceManager.Root
         private MenuCamerasHandler _menuCamerasHandler;
         private PodiumView _podium;
         private TutorialSteps _tutorial;
+        private GameRemindHandler _remindHandler;
 
         [Inject]
-        private void Construct(SaveManager saveManager, MainUI mainUI, PodiumView podium, TutorialSteps tutorial)
+        private void Construct
+            (
+            SaveManager saveManager, 
+            MainUI mainUI, 
+            PodiumView podium, 
+            TutorialSteps tutorial, 
+            GameRemindHandler remindHandler
+            )
         {
             _menuCamerasHandler = Singleton<MenuCamerasHandler>.Instance;
 
@@ -24,6 +32,7 @@ namespace RaceManager.Root
             _mainUI = mainUI;
             _podium = podium;
             _tutorial = tutorial;
+            _remindHandler = remindHandler;
         }
 
         public void Run()
@@ -33,6 +42,8 @@ namespace RaceManager.Root
             InvokeInitializables();
             InitCameras();
             RunTutorial();
+            InvokeLateInitializables();
+            RunReminders();
         }
 
         private void InitCameras()
@@ -70,9 +81,25 @@ namespace RaceManager.Root
             }
         }
 
+        private void InvokeLateInitializables()
+        {
+            try
+            {
+                var initializables = Singleton<Resolver>.Instance.ResolveAll<ILateInitializable>();
+                foreach (var i in initializables)
+                    i.LateInitialize();
+            }
+            catch (Exception e)
+            {
+                $"[Late Initializables] Need to fix: {e}".Error();
+            }
+        }
+
         private void LoadFromSave() => _saveManager.Load();
 
         private void RunTutorial() => _tutorial.RunStep();
+
+        private void RunReminders() => _remindHandler.RunReminders();
 
         private void Dispose()
         {

@@ -18,7 +18,7 @@ namespace RaceManager.Infrastructure
         [SerializeField] private MenuSceneHandler _menuHandler;
         [SerializeField] private GameFlagsHandler _gameFlagsHandler;
         [SerializeField] private TutorialSteps _tutorialSteps;
-        [SerializeField] private GameEventsHandler _gameEventsHandler;
+        [SerializeField] private GameRemindHandler _gameProgressReminder;
         [Space]
         [SerializeField] private CarsDepot _playerCarDepot;
         [Space]
@@ -63,7 +63,7 @@ namespace RaceManager.Infrastructure
             Bind(_menuHandler);
             Bind(_gameFlagsHandler);
             Bind(_tutorialSteps);
-            Bind(_gameEventsHandler);
+            Bind(_gameProgressReminder);
         }
 
         private void BindClasses()

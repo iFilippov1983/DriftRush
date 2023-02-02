@@ -12,18 +12,25 @@ using DG.Tweening.Plugins.Options;
 using System;
 using System.Threading.Tasks;
 using static Logger;
+using System.Linq;
 
 namespace RaceManager.Root
 {
-    public class UIFlagAgent : MonoBehaviour, IInitializable
+    public class UIFlagAgent : MonoBehaviour, IInitializable, ILateInitializable
     {
-        public enum ActionType
+        public enum AgentActionType
         {
             Click,
             InteractableTrue,
             InteractableFalse,
             StartAnimation,
             StopAnimation
+        }
+
+        public enum ReminderActionType
+        { 
+            Click,
+            StartAnimation
         }
 
         public enum AgentType
@@ -34,20 +41,12 @@ namespace RaceManager.Root
             Text
         }
 
-        //public enum AnimationType
-        //{
-        //    None,
-        //    FadeInOutLoop,
-        //    ScaleUpDownLoop,
-        //    MoveFromTo
-        //}
-
         [Serializable]
         public class AgentAction
         {
             public GameFlagType key;
             [Space(20)]
-            public List<ActionType> actions = new List<ActionType>();
+            public List<AgentActionType> actions = new List<AgentActionType>();
             [Space]
             [ShowIf("UseAnimations")]
             public List<AnimationType> animationTypes = new List<AnimationType>();
@@ -86,11 +85,11 @@ namespace RaceManager.Root
             #region ShowIf Editor Properties
 
             public bool UseAnimations => 
-                actions.Contains(ActionType.StartAnimation) || NeedToStopAnimation;
+                actions.Contains(AgentActionType.StartAnimation) || NeedToStopAnimation;
             public bool NeedToSetAnimations => 
-                actions.Contains(ActionType.StartAnimation) && !NeedToStopAnimation;
+                actions.Contains(AgentActionType.StartAnimation) && !NeedToStopAnimation;
             public bool NeedToStopAnimation => 
-                actions.Contains(ActionType.StopAnimation);
+                actions.Contains(AgentActionType.StopAnimation);
             public bool UseFadeInOut => 
                 animationTypes.Contains(AnimationType.FadeInOutLoop) && NeedToSetAnimations;
             public bool UseScaleUpDown => 
@@ -100,20 +99,108 @@ namespace RaceManager.Root
 
             #endregion
 
+            #region Debug fields
+
             //Doesn't have technical sense. Only for debug.
-            [Header("Only for debug")]
-            [ShowInInspector, ReadOnly]
-            public IEnumerator currentFadeJob;
-            [ShowInInspector, ReadOnly]
-            public IEnumerator currentScaleJob;
-            [ShowInInspector, ReadOnly]
-            public IEnumerator currentMoveJob;
+            //[Header("Only for debug")]
+            //[ShowInInspector, ReadOnly]
+            [HideInInspector]
+            public IEnumerator CurrentFadeJob;
+            //[ShowInInspector, ReadOnly]
+            [HideInInspector]
+            public IEnumerator CurrentScaleJob;
+            //[ShowInInspector, ReadOnly]
+            [HideInInspector]
+            public IEnumerator CurrentMoveJob;
             //
+
+            #endregion
         }
 
+        [Serializable]
+        public class ReminderAction : AgentAction
+        {
+            public ProgressConditionType Condition;
+            //[Space(20)]
+            public List<ReminderActionType> remindActions = new List<ReminderActionType>();
+            //[Space]
+            //[ShowIf("UseAnimations")]
+            //public List<AnimationType> animationTypes = new List<AnimationType>();
+
+            //[ShowIf("UseAnimations")]
+            //public float animationDuration = 1f;
+            //[ShowIf("UseAnimations")]
+            //public float animationStartDelay = 0f;
+
+            //[Header("Fade In/Out Settings")]
+            //[ShowIf("UseFadeInOut")]
+            //[Range(0f, 1f)]
+            //public float minAlpha;
+            //[ShowIf("UseFadeInOut")]
+            //[Range(0f, 1f)]
+            //public float maxAlpha = 1f;
+
+            //[Header("Scale Up/Down Setings")]
+            //[ShowIf("UseScaleUpDown")]
+            //[Range(0f, 10f)]
+            //public float minScale = 1f;
+            //[ShowIf("UseScaleUpDown")]
+            //[Range(0f, 10f)]
+            //public float maxScale = 1.05f;
+
+            //[Header("Move From/To Settings")]
+            //[ShowIf("UseMoveFromTo")]
+            //public Transform fromPosition;
+            //[ShowIf("UseMoveFromTo")]
+            //public Transform toPosition;
+            //[ShowIf("UseMoveFromTo")]
+            //[Range(0.01f, 10f)]
+            //public float moveDurationFactor = 1f;
+            //[ShowIf("UseMoveFromTo")]
+            //public bool loopMove;
+
+            public Subject<ProgressConditionType> OnObjectDisabled = new Subject<ProgressConditionType>();
+
+            //#region ShowIf Editor Properties
+
+            //public bool UseAnimations =>
+            //    actions.Contains(ReminderActionType.StartAnimation);
+            //public bool UseFadeInOut =>
+            //    animationTypes.Contains(AnimationType.FadeInOutLoop);
+            //public bool UseScaleUpDown =>
+            //    animationTypes.Contains(AnimationType.ScaleUpDownLoop);
+            //public bool UseMoveFromTo =>
+            //    animationTypes.Contains(AnimationType.MoveFromTo);
+
+            //#endregion
+
+            //#region Debug fields
+
+            //////Doesn't have technical sense. Only for debug.
+            //////[Header("Only for debug")]
+            //////[ShowInInspector, ReadOnly]
+            ////[HideInInspector]
+            ////public IEnumerator CurrentFadeJob;
+            //////[ShowInInspector, ReadOnly]
+            ////[HideInInspector]
+            ////public IEnumerator CurrentScaleJob;
+            //////[ShowInInspector, ReadOnly]
+            ////[HideInInspector]
+            ////public IEnumerator CurrentMoveJob;
+            //////
+
+            //#endregion
+        }
+
+        [Header("Flags Actions")]
         [SerializeField] private List<AgentAction> _agentActions = new List<AgentAction>();
+        [SerializeField] private bool useAsReminder;
+        [Header("Reminder Actions")]
+        [ShowIf("useAsReminder")]
+        [SerializeField] private List<ReminderAction> _reminderActions = new List<ReminderAction>();
 
         private GameFlagsHandler _flagsHandler;
+        private GameRemindHandler _remindHandler;
         private Button _button;
         private Image _image;
         private TMP_Text _text;
@@ -127,10 +214,11 @@ namespace RaceManager.Root
         public AgentType Type { get; private set; }
 
         [Inject]
-        private void Construct(GameFlagsHandler flagsHandler, Resolver resolver)
+        private void Construct(GameFlagsHandler flagsHandler, GameRemindHandler remindHandler, Resolver resolver)
         {
             resolver.Add(this);
             _flagsHandler = flagsHandler;
+            _remindHandler = remindHandler;
             _originalScale = transform.localScale;
             _originalPosition = transform.position;
 
@@ -145,20 +233,38 @@ namespace RaceManager.Root
                 {
                     switch (action)
                     {
-                        case ActionType.Click:
+                        case AgentActionType.Click:
                             ClickOnFlag(aAction);
                             break;
-                        case ActionType.InteractableTrue:
+                        case AgentActionType.InteractableTrue:
                             InteractableOnFlag(true, aAction);
                             break;
-                        case ActionType.InteractableFalse:
+                        case AgentActionType.InteractableFalse:
                             InteractableOnFlag(false, aAction);
                             break;
-                        case ActionType.StartAnimation:
+                        case AgentActionType.StartAnimation:
                             ToggleAnimationOnFlag(true, aAction);
                             break;
-                        case ActionType.StopAnimation:
+                        case AgentActionType.StopAnimation:
                             ToggleAnimationOnFlag(false, aAction);
+                            break;
+                    }
+                }
+            }
+        }
+
+        public void LateInitialize()
+        {
+            foreach (var rAction in _reminderActions)
+            {
+                foreach (var action in rAction.remindActions)
+                {
+                    switch (action)
+                    {
+                        case ReminderActionType.Click:
+                            ClickOnRemind(rAction);
+                            break;
+                        case ReminderActionType.StartAnimation:
                             break;
                     }
                 }
@@ -190,6 +296,21 @@ namespace RaceManager.Root
                 .AddTo(this);
 
             $"ClickOnFlag subscribed => Key: [{aAction.key}] => Object: [{gameObject.name}]".Log(ColorBlue);
+        }
+
+        private void ClickOnRemind(ReminderAction rAction)
+        {
+            if (Type != AgentType.Button)
+            {
+                $"UI Flag Agent [{gameObject.name}] has no any Button component, but you whant to click it!".Log(Logger.ColorRed);
+                return;
+            }
+
+            _remindHandler
+                .Subscribe(rAction.Condition, ClickAgent, rAction.OnObjectDisabled)
+                .AddTo(this);
+
+            $"ClickOnRemind subscribed => Condition: [{rAction.Condition}] => Object: [{gameObject.name}]".Log(ColorGreen);
         }
 
         private void InteractableOnFlag(bool interactable, AgentAction aAction)
@@ -241,6 +362,28 @@ namespace RaceManager.Root
             $"ToggleAnimationOnFlag ({start}) subscribed => Key: [{aAction.key}] => Object: [{gameObject.name}]".Log(ColorBlue);
         }
 
+        private void ToggleAnimationOnReminder(bool start, ReminderAction rAction)
+        {
+            bool incorrectAnimationTypes =
+                rAction.animationTypes.Count == 0 || rAction.animationTypes.Contains(AnimationType.None);
+
+            if (start && incorrectAnimationTypes)
+            {
+                $"You're trying to animate UI Flag Agent [{gameObject.name}] but you haven't assigned correct animation type!".Log(ColorRed);
+                return;
+            }
+
+            _remindHandler
+                .Subscribe(rAction.Condition, () => ToggleAnimationsStatus(start, rAction), rAction.OnObjectDisabled)
+                .AddTo(this);
+
+            rAction.OnObjectDisabled
+                .Subscribe(c => ToggleAnimationsStatus(!start, rAction))
+                .AddTo(this);
+
+            $"ToggleAnimationOnReminder ({start}) subscribed => Condition: [{rAction.Condition}] => Object: [{gameObject.name}]".Log(ColorGreen);
+        }
+
         private void ClickAgent()
         {
             _button.onClick?.Invoke();
@@ -270,9 +413,9 @@ namespace RaceManager.Root
             IEnumerator currentAnimJob = type switch
             {
                 AnimationType.None => null,
-                AnimationType.FadeInOutLoop => aAction.currentFadeJob,
-                AnimationType.ScaleUpDownLoop => aAction.currentScaleJob,
-                AnimationType.MoveFromTo => aAction.currentMoveJob,
+                AnimationType.FadeInOutLoop => aAction.CurrentFadeJob,
+                AnimationType.ScaleUpDownLoop => aAction.CurrentScaleJob,
+                AnimationType.MoveFromTo => aAction.CurrentMoveJob,
                 _ => null,
             };
 
@@ -324,9 +467,9 @@ namespace RaceManager.Root
                 _ = type switch
                 {
                     AnimationType.None => null,
-                    AnimationType.FadeInOutLoop => aAction.currentFadeJob = enumerator,
-                    AnimationType.ScaleUpDownLoop => aAction.currentScaleJob = enumerator,
-                    AnimationType.MoveFromTo => aAction.currentMoveJob = enumerator,
+                    AnimationType.FadeInOutLoop => aAction.CurrentFadeJob = enumerator,
+                    AnimationType.ScaleUpDownLoop => aAction.CurrentScaleJob = enumerator,
+                    AnimationType.MoveFromTo => aAction.CurrentMoveJob = enumerator,
                     _ => null,
                 };
             }
@@ -495,6 +638,14 @@ namespace RaceManager.Root
 
             Type = AgentType.None;
             Debug.LogWarning($"UI Flag Agent [{gameObject.name}] has no porper components to work with!");
+        }
+
+        private void OnDisable()
+        {
+            foreach (var rAction in _reminderActions)
+            {
+                rAction.OnObjectDisabled.OnNext(rAction.Condition);
+            }
         }
 
         private void OnDestroy()

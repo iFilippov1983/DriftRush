@@ -46,6 +46,8 @@ namespace RaceManager.UI
         public Action<CarName> OnCarProfileChange;
         public Action<string> OnButtonPressed;
 
+
+
         #region Car tuning properties
 
         public IObservable<float> OnSpeedValueChange => _tuningPanel.SpeedSlider.onValueChanged.AsObservable();

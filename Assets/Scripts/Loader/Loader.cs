@@ -16,8 +16,12 @@ namespace RaceManager
 
         public static Action OnLoadingComplete;
 
+        private static string _lastSceneName;
+
         private static AsyncOperation _loadingAsyncOperation;
         private static Action<MonoBehaviour> OnLoaderCallback;
+
+        public static string LastSceneName => _lastSceneName;
 
         public static void Load(Scene scene)
         {
@@ -25,6 +29,9 @@ namespace RaceManager
             {
                 mb.StartCoroutine(LoadSceneAsync(scene));
             };
+
+            _lastSceneName = SceneManager.GetActiveScene().name;
+            //$"LoadingFromScene: {_lastSceneName}".Log();
 
             SceneManager.LoadScene(Scene.Loader.ToString());
         }

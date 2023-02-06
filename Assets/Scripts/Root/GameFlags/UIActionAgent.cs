@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using RaceManager.UI;
 using TMPro;
 using Zenject;
 using UniRx;
@@ -12,29 +13,11 @@ using DG.Tweening.Plugins.Options;
 using System;
 using System.Threading.Tasks;
 using static Logger;
-using RaceManager.UI;
 
 namespace RaceManager.Root
 {
     public class UIActionAgent : MonoBehaviour, IInitializable
     {
-        public enum AgentActionType
-        {
-            Click,
-            InteractableTrue,
-            InteractableFalse,
-            StartAnimation,
-            StopAnimation
-        }
-
-        public enum AgentType
-        {
-            None,
-            Button,
-            Image,
-            Text
-        }
-
         [Serializable]
         public class AgentAction
         {
@@ -78,17 +61,17 @@ namespace RaceManager.Root
 
             #region ShowIf Editor Properties
 
-            public bool UseAnimations => 
+            public bool UseAnimations =>
                 actions.Contains(AgentActionType.StartAnimation) || NeedToStopAnimation;
-            public bool NeedToSetAnimations => 
+            public bool NeedToSetAnimations =>
                 actions.Contains(AgentActionType.StartAnimation) && !NeedToStopAnimation;
-            public bool NeedToStopAnimation => 
+            public bool NeedToStopAnimation =>
                 actions.Contains(AgentActionType.StopAnimation);
-            public bool UseFadeInOut => 
+            public bool UseFadeInOut =>
                 animationTypes.Contains(AnimationType.FadeInOutLoop) && NeedToSetAnimations;
-            public bool UseScaleUpDown => 
+            public bool UseScaleUpDown =>
                 animationTypes.Contains(AnimationType.ScaleUpDownLoop) && NeedToSetAnimations;
-            public bool UseMoveFromTo => 
+            public bool UseMoveFromTo =>
                 animationTypes.Contains(AnimationType.MoveFromTo) && NeedToSetAnimations;
 
             #endregion
@@ -111,6 +94,14 @@ namespace RaceManager.Root
 
         [Header("Flags Actions")]
         [SerializeField] private List<AgentAction> _agentActions = new List<AgentAction>();
+
+        public bool useToRemind;
+
+        [ShowIf("useToRemind")]
+        [Header("Reminder Actions")]
+        [SerializeField]
+        private AgentAction _reminderAction = new AgentAction();
+        
         private GameFlagsHandler _flagsHandler;
         private Button _button;
         private Image _image;
@@ -163,11 +154,31 @@ namespace RaceManager.Root
             }
         }
 
+        public async Task Click()
+        {
+            await ClickAgent(_reminderAction.actionStartDelay);
+        }
+
+        public async Task ButtonInteractable(bool interactable)
+        {
+            await MakeButtonInteractable(interactable, _reminderAction.actionStartDelay);
+        }
+
+        public async Task StartAnimation()
+        {
+            await ToggleAnimationsStatus(true, _reminderAction, _reminderAction.actionStartDelay);
+        }
+
+        public async Task StopAnimation()
+        {
+            await ToggleAnimationsStatus(false, _reminderAction, _reminderAction.actionStartDelay);
+        }
+
         private bool TimeForAction(GameFlagType key) => _flagsHandler.HasFlag(key);
 
         private bool IsLastKey(GameFlagType key) => _flagsHandler.IsLast(key);
 
-        private void ClickOnFlag(AgentAction aAction)
+        private async void ClickOnFlag(AgentAction aAction)
         {
             if (Type != AgentType.Button)
             {
@@ -178,19 +189,19 @@ namespace RaceManager.Root
             if (TimeForAction(aAction.key))
             { 
                 if(IsLastKey(aAction.key))
-                    ClickAgent(aAction.actionStartDelay);
+                    await ClickAgent(aAction.actionStartDelay);
 
                 return;
             }
 
             _flagsHandler
-                .Subscribe(aAction.key, () => ClickAgent(aAction.actionStartDelay))
+                .Subscribe(aAction.key, async () => await ClickAgent(aAction.actionStartDelay))
                 .AddTo(this);
 
             $"ClickOnFlag subscribed => Key: [{aAction.key}] => Object: [{gameObject.name}]".Log(ColorBlue);
         }
 
-        private void InteractableOnFlag(bool interactable, AgentAction aAction)
+        private async void InteractableOnFlag(bool interactable, AgentAction aAction)
         {
             if (Type != AgentType.Button)
             {
@@ -201,19 +212,19 @@ namespace RaceManager.Root
             if (TimeForAction(aAction.key))
             {
                 if (IsLastKey(aAction.key))
-                    MakeButtonInteractable(interactable);
+                    await MakeButtonInteractable(interactable);
 
                 return;
             }
 
             _flagsHandler
-                .Subscribe(aAction.key, () => MakeButtonInteractable(interactable))
+                .Subscribe(aAction.key, async () => await MakeButtonInteractable(interactable))
                 .AddTo(this);
 
             $"InteractableOnFlag ({interactable}) subscribed => Key: [{aAction.key}] => Object: [{gameObject.name}]".Log(ColorBlue);
         }
 
-        private void ToggleAnimationOnFlag(bool start, AgentAction aAction)
+        private async void ToggleAnimationOnFlag(bool start, AgentAction aAction)
         {
             bool incorrectAnimationTypes =
                 aAction.animationTypes.Count == 0 || aAction.animationTypes.Contains(AnimationType.None);
@@ -227,19 +238,19 @@ namespace RaceManager.Root
             if (TimeForAction(aAction.key))
             {
                 if (IsLastKey(aAction.key))
-                    ToggleAnimationsStatus(start, aAction);
+                    await ToggleAnimationsStatus(start, aAction);
 
                 return;
             }
 
             _flagsHandler
-                .Subscribe(aAction.key, () => ToggleAnimationsStatus(start, aAction))
+                .Subscribe(aAction.key, async () => await ToggleAnimationsStatus(start, aAction))
                 .AddTo(this);
 
             $"ToggleAnimationOnFlag ({start}) subscribed => Key: [{aAction.key}] => Object: [{gameObject.name}]".Log(ColorBlue);
         }
 
-        private async void ClickAgent(float actionDelaySeconds = 0)
+        private async Task ClickAgent(float actionDelaySeconds = 0)
         {
             int delay = Convert.ToInt32(actionDelaySeconds * 1000);
             await Task.Delay(delay);
@@ -247,13 +258,19 @@ namespace RaceManager.Root
             _button.onClick?.Invoke();
         }
 
-        private void MakeButtonInteractable(bool interactable)
+        private async Task MakeButtonInteractable(bool interactable, float actionDelaySeconds = 0)
         {
+            int delay = Convert.ToInt32(actionDelaySeconds * 1000);
+            await Task.Delay(delay);
+
             _button.interactable = interactable;
         }
 
-        private void ToggleAnimationsStatus(bool start, AgentAction aAction)
+        private async Task ToggleAnimationsStatus(bool start, AgentAction aAction, float actionDelaySeconds = 0)
         {
+            int delay = Convert.ToInt32(actionDelaySeconds * 1000);
+            await Task.Delay(delay);
+
             foreach (var animationType in aAction.animationTypes)
             {
                 if (animationType == AnimationType.None)

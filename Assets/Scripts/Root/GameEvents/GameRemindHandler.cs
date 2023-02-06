@@ -16,6 +16,8 @@ namespace RaceManager.Root
 {
     public class GameRemindHandler : SerializedMonoBehaviour, IInitializable
     {
+        private const int _maxAttempts = 10;
+
         private IProgressConditionInfo _conditionInfo;
         private GameEvents _gameEvents;
 
@@ -97,12 +99,18 @@ namespace RaceManager.Root
 
         private void NextReminder(ProgressConditionType conditionType)
         {
-            conditionType++;
+            do
+            {
+                conditionType++;
+            }
+            while (!HasCondition(conditionType) && (int)conditionType <= _maxAttempts);
 
             if (HasCondition(conditionType))
             {
                 ReminderCase reminderCase = _cases[conditionType];
                 reminderCase.OnReminder.OnNext(reminderCase);
+
+                Debug.Log($"Next reminder condition: {reminderCase.Condition}");
             }
         }
     }

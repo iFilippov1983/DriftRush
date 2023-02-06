@@ -33,6 +33,8 @@ namespace RaceManager.Root
             _podium = podium;
             _tutorial = tutorial;
             _remindHandler = remindHandler;
+
+            InitCameras();
         }
 
         public void Run()
@@ -40,7 +42,6 @@ namespace RaceManager.Root
             RegisterSavebles();
             LoadFromSave();
             InvokeInitializables();
-            InitCameras();
             RunTutorial();
             InvokeLateInitializables();
             RunReminders();
@@ -99,7 +100,7 @@ namespace RaceManager.Root
 
         private void RunTutorial() => _tutorial.RunStep();
 
-        private void RunReminders() => _remindHandler.RunReminders();
+        private void RunReminders() => _remindHandler.RunRemindersSequence();
 
         private void Dispose()
         {

@@ -46,15 +46,10 @@ namespace RaceManager.UI
 
         private void TogglePressedImageActivity(Image pressedImage)
         {
-            if (pressedImage.IsActive())
-            {
-                pressedImage.SetActive(false);
-            }
-            else
-            {
-                DeactivateAllPressedImages();
-                pressedImage.SetActive(true);
-            }
+            DeactivateAllPressedImages();
+
+            bool active = pressedImage.IsActive() ? false : true;
+            pressedImage.SetActive(active);
         }
 
         private void DeactivateAllPressedImages()

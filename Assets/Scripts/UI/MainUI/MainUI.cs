@@ -92,6 +92,8 @@ namespace RaceManager.UI
             _saveManager = saveManager;
             _playerCarDepot = playerCarDepot;
             _podium = podium;
+
+            RegisterButtonsListeners();
         }
 
         public void Initialize()
@@ -104,11 +106,9 @@ namespace RaceManager.UI
 
             UpdateCurrencyAmountPanels();
             UpdateTuningPanelValues();
-
-            RegisterButtonsListeners();
         }
 
-        private void Start()
+        private void Awake()
         {
             ActivateMainMenu(true);
         }

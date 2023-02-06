@@ -12,6 +12,8 @@ namespace RaceManager.Progress
         private CarsDepot _playerCarDepot;
         private CarUpgradesHandler _carUpgradesHandler;
 
+        private bool LastSceneWasRace => Loader.LastSceneName.Equals(Loader.Scene.RaceScene.ToString());
+
         [Inject]
         private void Construct(PlayerProfile playerProfile, TutorialSteps tutorialSteps, CarsDepot playerCarDepot, CarUpgradesHandler carUpgradesHandler)
         {
@@ -24,7 +26,11 @@ namespace RaceManager.Progress
         public bool CanUpgradeCurrentCarFactors() =>
             _tutorialSteps.IsTutorialComplete
             &&
-            _carUpgradesHandler.CanUpgradeCurrentCarFactors();
+            LastSceneWasRace
+            &&
+            _carUpgradesHandler.CanUpgradeCurrentCarFactors()
+            &&
+            !_carUpgradesHandler.CurrentCarHasMaxFactorsUpgrade();
 
         public bool HasRankUpgradableCars(out List<CarName> cars)
         {
@@ -38,11 +44,13 @@ namespace RaceManager.Progress
                 bool canUpgrade =
                     _tutorialSteps.IsTutorialComplete
                     &&
+                    LastSceneWasRace
+                    &&
                     !scheme.CurrentRank.IsGranted
                     &&
                     _playerProfile.Money > scheme.CurrentRank.AccessCost 
                     &&
-                    _playerProfile.CarCardsAmount(profile.CarName) > scheme.CurrentRank.PointsForAccess;
+                    _playerProfile.CarCardsAmount(profile.CarName) >= scheme.CurrentRank.PointsForAccess;
 
                 if (canUpgrade)
                 {
@@ -66,6 +74,8 @@ namespace RaceManager.Progress
 
                 bool canUnlock = 
                     _tutorialSteps.IsTutorialComplete
+                    &&
+                    LastSceneWasRace
                     &&
                     curRank.Rank == Rank.Rank_1 
                     && 

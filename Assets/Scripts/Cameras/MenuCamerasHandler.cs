@@ -11,7 +11,7 @@ namespace RaceManager.Cameras
         [SerializeField] private CinemachineVirtualCamera _closeCamera;
         [SerializeField] private CinemachineVirtualCamera _farCamera;
 
-        private void Start()
+        private void Awake()
         {
             _closeCamera.Priority = MajorPriority;
             _farCamera.Priority = MinorPriority;
@@ -27,6 +27,8 @@ namespace RaceManager.Cameras
         {
             _closeCamera.Priority = isMainMenuActive ? MajorPriority : MinorPriority;
             _farCamera.Priority = isMainMenuActive ? MinorPriority : MajorPriority;
+
+            //Debug.Log($"Close cam: {_closeCamera.Priority}; Far cam: {_farCamera.Priority}");
         }
     }
 }

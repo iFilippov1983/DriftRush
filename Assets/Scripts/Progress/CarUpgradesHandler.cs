@@ -113,6 +113,12 @@ namespace RaceManager.Progress
             return false;
         }
 
+        public bool CurrentCarHasMaxFactorsUpgrade()
+        {
+            var characteristics = _carsDepot.CurrentCarProfile.CarCharacteristics;
+            return characteristics.FactorsMaxCurrent <= characteristics.CurrentFactorsProgress;
+        }
+
         private void InitializeProfiles()
         {
             foreach (CarProfile carProfile in _carsDepot.CarProfiles)

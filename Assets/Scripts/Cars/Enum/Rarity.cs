@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RaceManager.Cars
+namespace RaceManager
 {
     [Serializable]
     public enum Rarity

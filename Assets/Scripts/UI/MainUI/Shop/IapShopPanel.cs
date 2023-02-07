@@ -5,9 +5,9 @@ namespace RaceManager.UI
 {
     public class IapShopPanel : MonoBehaviour
     {
-        [SerializeField] private Button _closePanelButton;
+        [SerializeField] private RectTransform _contentRect;
 
-        public Button ClosePanalButton => _closePanelButton;
+        public RectTransform ContentRect => _contentRect;
     }
 }
 

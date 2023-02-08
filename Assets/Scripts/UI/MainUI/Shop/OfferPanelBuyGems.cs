@@ -21,7 +21,10 @@ namespace RaceManager.UI
         public PanelBuyGems BuyGems_5;
         public PanelBuyGems BuyGems_6;
 
+        public Action<string> OnPurchaseButtonClicked;
+
         public ShopOfferType Type => _type;
+        public GameObject GameObject => gameObject;
         public int PanelsAmount => _panelsAmount;
         
         public void Accept(IOfferPanelInstaller installer)

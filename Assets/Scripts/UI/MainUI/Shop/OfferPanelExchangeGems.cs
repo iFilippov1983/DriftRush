@@ -18,7 +18,13 @@ namespace RaceManager.UI
         public PanelExchangeGems PanelExchangeGems_2;
         public PanelExchangeGems PanelExchangeGems_3;
 
+        /// <summary>
+        /// int 1: Money amount; int 2: Exchange cost in gems;
+        /// </summary>
+        public Action<int, int> OnExchangeGemsButtonPressed;
+
         public ShopOfferType Type => _type;
+        public GameObject GameObject => gameObject;
         public int PanelsAmount => _panelsAmount;
 
         public void Accept(IOfferPanelInstaller installer)
@@ -47,6 +53,8 @@ namespace RaceManager.UI
                 panel.MoneyAmountImage.sprite = d.moneyAmountSprite;
                 panel.MoneyAmountText.text = d.moneyAmount.ToString();
                 panel.ExchangeCostText.text = d.exchangeCostInGems.ToString();
+
+                panel.BuyButton.onClick.AddListener(() => OnExchangeGemsButtonPressed?.Invoke(d.moneyAmount, d.exchangeCostInGems));
             }
         }
     }

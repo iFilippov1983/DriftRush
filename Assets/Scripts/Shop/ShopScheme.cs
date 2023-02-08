@@ -21,6 +21,7 @@ namespace RaceManager.Shop
             new OfferPanelInstaller() { ShopOfferType = ShopOfferType.BuyGems }
         };
 
+        public List<OfferPanelInstaller> Installers => _installers;
         public class SaveData { public bool gotSpecialOffer; }
         public Type DataType() => typeof(SaveData);
         public void Load(object data) => GotSpecialOffer = ((SaveData)data).gotSpecialOffer;

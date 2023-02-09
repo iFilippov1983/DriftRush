@@ -2,15 +2,19 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace RaceManager.UI
 {
     public class ShopPanel : MonoBehaviour
     {
+        [SerializeField] private Button _getFreeLootboxButton;
         [SerializeField] private RectTransform _contentRect;
         [SerializeField] private List<GameObject> _panelsGoList;
 
         private List<IOfferPanel> _panels;
+
+        public Button GetFreeLootboxButton => _getFreeLootboxButton;
 
         public void InstallAllPanels(List<OfferPanelInstaller> installers)
         {

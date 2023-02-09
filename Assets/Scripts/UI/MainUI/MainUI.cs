@@ -507,6 +507,8 @@ namespace RaceManager.UI
 
             _settingsPopup.ClosePopupWindowButton.onClick.AddListener(() => ActivateSettingsPopup(false));
             _settingsPopup.ClosePopupWindowButton.onClick.AddListener(() => OnButtonPressedMethod(_settingsPopup.ClosePopupWindowButton));
+
+            _shopPanel.GetFreeLootboxButton.onClick.AddListener(() => _lootboxSlotsHandler.OpenFreeLootboxPopup());
         }
 
         private void OnDestroy()

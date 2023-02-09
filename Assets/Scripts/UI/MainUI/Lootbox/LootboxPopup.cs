@@ -12,6 +12,7 @@ namespace RaceManager.UI
         [SerializeField] private Button _timerOpenButton;
         [SerializeField] private Button _instantOpenButton;
         [SerializeField] private Button _speedupButton;
+        [SerializeField] private Button _getFreeLootboxButton;
         [Space]
         [SerializeField] private TMP_Text _moneyAmountText;
         [SerializeField] private TMP_Text _cardsAmountText;
@@ -26,16 +27,20 @@ namespace RaceManager.UI
         public Button TimerOpenButton => _timerOpenButton;
         public Button InstantOpenButton => _instantOpenButton;
         public Button SpeedupButton => _speedupButton;
+        public Button GetFreeLootboxButton => _getFreeLootboxButton;
         public TMP_Text MoneyAmountText => _moneyAmountText;
         public TMP_Text CardAmountText => _cardsAmountText;
         public TMP_Text InstantOpenCostText => _instantOpenCostText;
         public TMP_Text TimeToOpenText => _timeToOpenText;
         public TMP_Text LootboxRarityText => _lootboxRarityText;
         public Image LootboxImage => _lootboxImage;
-
-        public void InitiallizeView(PopupInfo info)
+        
+        public void InitiallizeView(PopupInfo info, bool addFree = false)
         {
-            LootboxRarityText.text = $"{info.lootboxRarity.ToString().ToUpper()} LOOTBOX";
+            string rarityText = $"{info.lootboxRarity.ToString().ToUpper()} LOOTBOX";
+            if (addFree) { rarityText = string.Concat("FREE ", rarityText); }
+
+            LootboxRarityText.text = rarityText;
             LootboxImage.sprite = info.lootboxSprite;
             MoneyAmountText.text = $"{info.moneyMin}-{info.moneyMax}";
             CardAmountText.text = $"{info.cardsMin}-{info.cardsMax}";

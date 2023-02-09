@@ -26,7 +26,7 @@ namespace RaceManager.Shop
             }
         }
 
-        public void InitializePurchasing()
+        public async void InitializePurchasing()
         {
             //if (IsInitialized)
             //    return;
@@ -37,6 +37,9 @@ namespace RaceManager.Shop
             builder.AddProduct(IapIds.Gems_100, ProductType.Consumable);
 
             UnityPurchasing.Initialize(this, builder);
+
+            while(!IsInitialized)
+                await Task.Yield();
         }
 
         public void BuyNoAds()

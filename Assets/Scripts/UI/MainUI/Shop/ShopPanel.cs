@@ -8,29 +8,32 @@ namespace RaceManager.UI
     public class ShopPanel : MonoBehaviour
     {
         [SerializeField] private RectTransform _contentRect;
-        [SerializeField] private List<OfferPanel> _offerPanels;
+        [SerializeField] private List<GameObject> _panelsGoList;
 
-        private List<IOfferPanel> _panels = new List<IOfferPanel>();
+        private List<IOfferPanel> _panels;
 
         public void InstallAllPanels(List<OfferPanelInstaller> installers)
         {
+            if (_panels == null)
+                MakePanelsList();
+
             try
             {
-                foreach (var panel in _offerPanels)
+                foreach (var panel in _panels)
                 {
-                    var i = installers[_offerPanels.IndexOf(panel)];
-                    panel.Accept(i);
+                    var installer = installers.Find(i => i.ShopOfferType == panel.Type);
+                    panel.Accept(installer);
                 }
             }
             catch (Exception e)
             {
-                $"Error: OfferPanels amount desn't match with installers amount! Or: {e.Message}".Error();
+                $"Error: OfferPanels amount doesn't match with installers amount! || {e.Message}".Error();
             }
         }
 
         public bool TryRemovePanel(ShopOfferType offerType)
         {
-            var panel = _offerPanels.Find(p => p.Type == offerType);
+            var panel = _panels.Find(p => p.Type == offerType);
             if (panel != null)
             {
                 _panels.Remove(panel);
@@ -40,6 +43,19 @@ namespace RaceManager.UI
 
             $"Panel with Type [{offerType}] was not found!".Log(Logger.ColorRed);
             return false;
+        }
+
+        private void MakePanelsList()
+        {
+            _panels = new List<IOfferPanel>();
+
+            foreach (var go in _panelsGoList)
+            {
+                if (go.TryGetComponent(out IOfferPanel panel))
+                {
+                    _panels.Add(panel);
+                }
+            }
         }
     }
 }

@@ -28,8 +28,8 @@ namespace RaceManager.Shop
 
         public void InitializePurchasing()
         {
-            if (IsInitialized)
-                return;
+            //if (IsInitialized)
+            //    return;
 
             var builder = ConfigurationBuilder.Instance(StandardPurchasingModule.Instance());
 

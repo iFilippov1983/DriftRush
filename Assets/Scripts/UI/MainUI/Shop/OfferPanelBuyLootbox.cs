@@ -2,6 +2,7 @@
 using Sirenix.OdinInspector;
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace RaceManager.UI
 {
@@ -17,7 +18,13 @@ namespace RaceManager.UI
         public PanelBuyLootbox BuyLootbox_2;
         public PanelBuyLootbox BuyLootbox_3;
 
+        /// <summary>
+        /// Rarity: Lootbox rarity; int: Cost in gems;
+        /// </summary>
+        public UnityAction<Rarity, int> OnBuyLootboxButtonPressed;
+
         public ShopOfferType Type => _type;
+        public GameObject GameObject => gameObject;
         public int PanelsAmount => _panelsAmount;
 
         public void Accept(IOfferPanelInstaller installer)
@@ -46,6 +53,8 @@ namespace RaceManager.UI
                 panel.LooboxRarity = d.lootboxRarity;
                 panel.LootboxImage.sprite = d.lootboxSprite;
                 panel.CostText.text = d.costInGems.ToString();
+
+                panel.BuyButton.onClick.AddListener(() => OnBuyLootboxButtonPressed?.Invoke(d.lootboxRarity, d.costInGems));
             }
         }
     }

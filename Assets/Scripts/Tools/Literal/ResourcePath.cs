@@ -10,6 +10,7 @@ namespace RaceManager.Tools
 
         public const string MaterialsContainer = "SO/Containers/MaterialsContainer";
         public const string EffectsSettingsContainer = "SO/Containers/EffectsSettingsContainer";
+
         public const string GameProgressScheme = "SO/Schemes/GameProgressScheme";
         public const string CarDepotPlayer = "SO/Depots/CarsDepotPlayer";
 
@@ -17,7 +18,9 @@ namespace RaceManager.Tools
         public const string RaceLineSegmentPrefab = "Prefabs/RaceLineSegment";
         public const string DriverPrefab = "Prefabs/Driver";
         public const string LootboxPrefab = "Prefabs/Lootbox";
+
         public const string FXControllerPrefab = "Prefabs/Effects/FXControllerRace";
+
         public const string CollectionCardPrefab = "Prefabs/UI/CollectionCard";
         public const string ProgressStepPrefab = "Prefabs/UI/ProgressStep";
         public const string CarCardViewPrefab = "Prefabs/UI/CarCard";

@@ -29,7 +29,7 @@ namespace RaceManager.Shop
             set => _type = value;
         }
 
-        #region ShowIf Inspecor Properties
+        #region ShowIf Inspector Properties
 
         private bool NoAdsInstaller => _type == ShopOfferType.NoAds;
         private bool BuyLootboxInstaller => _type == ShopOfferType.BuyLootbox;

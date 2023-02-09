@@ -31,7 +31,7 @@ namespace RaceManager.UI
         [SerializeField] private LootboxWindow _lootboxWindow;
         [Space]
         [SerializeField] private SettingsPopup _settingsPopup;
-        [SerializeField] private IapShopPanel _iapShopPanel;
+        [SerializeField] private ShopPanel _shopPanel;
 
         private PlayerProfile _playerProfile;
         private RewardsHandler _rewardsHandler;
@@ -45,8 +45,6 @@ namespace RaceManager.UI
         public Action<bool> OnMainMenuActivityChange;
         public Action<CarName> OnCarProfileChange;
         public Action<string> OnButtonPressed;
-
-
 
         #region Car tuning properties
 
@@ -68,6 +66,12 @@ namespace RaceManager.UI
         public IObservable<float> OnRaceLineSettingsChange => _settingsPopup.RaceLineToggleSlider.onValueChanged.AsObservable();
 
         public IObserver<SettingsData> OnSettingsInitialize => Observer.Create((SettingsData sd) => SetSettingsPopupValues(sd));
+
+        #endregion
+
+        #region Shop properties
+
+        public ShopPanel ShopPanel => _shopPanel;
 
         #endregion
 
@@ -143,9 +147,9 @@ namespace RaceManager.UI
             _bottomPanel.CarsCollectionPressedImage.SetActive(active);
         }
 
-        private void ActivateIapShopPanel(bool active)
+        private void ActivateShopPanel(bool active)
         {
-            _iapShopPanel.SetActive(active);
+            _shopPanel.SetActive(active);
 
             _bottomPanel.SetActive(active);
             _bottomPanel.IapSopPressedImage.SetActive(active);
@@ -279,6 +283,7 @@ namespace RaceManager.UI
         #endregion
 
         #region Update Data Functions
+
         public void UpdateTuningPanelValues()
         {
             _currentCarProfile = _playerCarDepot.CurrentCarProfile;
@@ -366,9 +371,11 @@ namespace RaceManager.UI
 
         private void UpdateHasRewardsImage(bool hasUnreceived) => _cupsProgress.HasUnreceivedRewardsImage.SetActive(hasUnreceived);
         private void UpdatePodiumActivity(bool needToHide) => _podium.SetActive(!needToHide);
+
         #endregion 
 
         #region Other Private Functions
+
         private void SetTuningPanelValues(TuneData td)
         {
             _tuningPanel.SetValueToSlider(td.cType, td.value);
@@ -432,27 +439,27 @@ namespace RaceManager.UI
 
             _bottomPanel.TuneButton.onClick.AddListener(() => ActivateMainMenu(false));
             _bottomPanel.TuneButton.onClick.AddListener(() => ActivateCarsCollectionPanel(false));
-            _bottomPanel.TuneButton.onClick.AddListener(() => ActivateIapShopPanel(false));
+            _bottomPanel.TuneButton.onClick.AddListener(() => ActivateShopPanel(false));
             _bottomPanel.TuneButton.onClick.AddListener(() => ActivateTuningPanel(true));
             _bottomPanel.TuneButton.onClick.AddListener(() => OnButtonPressedMethod(_bottomPanel.TuneButton));
 
             _bottomPanel.MainMenuButton.onClick.AddListener(() => ActivateTuningPanel(false));
             _bottomPanel.MainMenuButton.onClick.AddListener(() => ActivateCarsCollectionPanel(false));
-            _bottomPanel.MainMenuButton.onClick.AddListener(() => ActivateIapShopPanel(false));
+            _bottomPanel.MainMenuButton.onClick.AddListener(() => ActivateShopPanel(false));
             _bottomPanel.MainMenuButton.onClick.AddListener(() => ActivateMainMenu(true));
             _bottomPanel.MainMenuButton.onClick.AddListener(() => OnButtonPressedMethod(_bottomPanel.MainMenuButton));
 
             _bottomPanel.CarsCollectionButton.onClick.AddListener(() => ActivateMainMenu(false));
             _bottomPanel.CarsCollectionButton.onClick.AddListener(() => ActivateTuningPanel(false));
-            _bottomPanel.CarsCollectionButton.onClick.AddListener(() => ActivateIapShopPanel(false));
+            _bottomPanel.CarsCollectionButton.onClick.AddListener(() => ActivateShopPanel(false));
             _bottomPanel.CarsCollectionButton.onClick.AddListener(() => ActivateCarsCollectionPanel(true));
             _bottomPanel.CarsCollectionButton.onClick.AddListener(() => OnButtonPressedMethod(_bottomPanel.CarsCollectionButton));
 
-            _bottomPanel.IapShopButton.onClick.AddListener(() => ActivateTuningPanel(false));
-            _bottomPanel.IapShopButton.onClick.AddListener(() => ActivateMainMenu(false));
-            _bottomPanel.IapShopButton.onClick.AddListener(() => ActivateCarsCollectionPanel(false));
-            _bottomPanel.IapShopButton.onClick.AddListener(() => ActivateIapShopPanel(true));
-            _bottomPanel.IapShopButton.onClick.AddListener(() => OnButtonPressedMethod(_bottomPanel.IapShopButton));
+            _bottomPanel.ShopButton.onClick.AddListener(() => ActivateTuningPanel(false));
+            _bottomPanel.ShopButton.onClick.AddListener(() => ActivateMainMenu(false));
+            _bottomPanel.ShopButton.onClick.AddListener(() => ActivateCarsCollectionPanel(false));
+            _bottomPanel.ShopButton.onClick.AddListener(() => ActivateShopPanel(true));
+            _bottomPanel.ShopButton.onClick.AddListener(() => OnButtonPressedMethod(_bottomPanel.ShopButton));
 
             _tuningPanel.RegisterButtonsListeners();
 

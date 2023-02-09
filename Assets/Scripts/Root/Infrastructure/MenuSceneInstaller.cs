@@ -4,6 +4,7 @@ using RaceManager.Effects;
 using RaceManager.Progress;
 using RaceManager.Root;
 using RaceManager.Shed;
+using RaceManager.Shop;
 using RaceManager.UI;
 using UnityEngine;
 
@@ -15,6 +16,8 @@ namespace RaceManager.Infrastructure
         [SerializeField] private PodiumView _podium;
         [SerializeField] private MenuCamerasHandler _menuCamerasHandler;
         [SerializeField] private ShedHandler _shedHandler;
+        [SerializeField] private ShopHandler _shopHandler;
+        [SerializeField] private ShopCore _iapCore;
         [SerializeField] private MenuSceneHandler _menuHandler;
         [SerializeField] private GameFlagsHandler _gameFlagsHandler;
         [SerializeField] private TutorialSteps _tutorialSteps;
@@ -29,6 +32,7 @@ namespace RaceManager.Infrastructure
         [SerializeField] private GameProgressScheme _gameProgressScheme;
         [SerializeField] private RaceRewardsScheme _raceRewardsScheme;
         [SerializeField] private CarsUpgradeScheme _carUpgradeScheme;
+        [SerializeField] private ShopScheme _shopScheme;
         [Space]
         [SerializeField] private GameSettingsContainer _effectsSettings;
 
@@ -48,6 +52,7 @@ namespace RaceManager.Infrastructure
 
         private void BindObjects()
         {
+            Bind(_iapCore);
             Bind(_effectsSettings);
             Bind(_podium);
             Bind(_playerCarDepot);
@@ -60,10 +65,12 @@ namespace RaceManager.Infrastructure
             Bind(_mainUI);
             Bind(_menuCamerasHandler);
             Bind(_shedHandler);
+            Bind(_shopHandler);
             Bind(_menuHandler);
             Bind(_gameFlagsHandler);
             Bind(_tutorialSteps);
             Bind(_gameProgressReminder);
+            Bind(_shopScheme);
         }
 
         private void BindClasses()

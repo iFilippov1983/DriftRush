@@ -1,5 +1,7 @@
 ﻿using RaceManager.Shop;
 using Sirenix.OdinInspector;
+using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Purchasing;
@@ -9,23 +11,26 @@ namespace RaceManager.UI
 {
     public class OfferPanelNoAds : MonoBehaviour, IOfferPanel
     {
+        [Serializable]
+        public class BonusContentView
+        {
+            public Image Image;
+            public TMP_Text AmountText;
+        }
+
+        [ShowInInspector, ReadOnly]
+        private const int DefaultBonusesAmount = 2;
         [ShowInInspector, ReadOnly]
         private const ShopOfferType _type = ShopOfferType.NoAds;
 
         [SerializeField] private IAPButton _buyButton;
         [SerializeField] private TMP_Text _costText;
-        [SerializeField] private Image _bonusImage_1;
-        [SerializeField] private Image _bonusImage_2;
-        [SerializeField] private TMP_Text _bonusAmountText_1;
-        [SerializeField] private TMP_Text _bonusAmountText_2;
+
+        [SerializeField] private BonusContentView[] _bonusViews = new BonusContentView[DefaultBonusesAmount];
 
         public IAPButton BuyButton => _buyButton;
         public TMP_Text CostText => _costText;
-        public Image BonusImage_1 => _bonusImage_1;
-        public Image BonusImage_2 => _bonusImage_2;
-        public TMP_Text BonusAmountText_1 => _bonusAmountText_1;
-        public TMP_Text BonusAmountText_2 => _bonusAmountText_2;
-
+        public BonusContentView[] BonusViews => _bonusViews;
         public ShopOfferType Type => _type;
         public GameObject GameObject => gameObject;
 

@@ -44,6 +44,10 @@ namespace RaceManager.UI
 
         public Action<bool> OnMainMenuActivityChange;
         public Action<CarName> OnCarProfileChange;
+
+        /// <summary>
+        /// string = Button name
+        /// </summary>
         public Action<string> OnButtonPressed;
 
         #region Car tuning properties

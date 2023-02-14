@@ -30,7 +30,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8981002589906247316}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -165,7 +165,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7475342169939219034}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -300,7 +300,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1651540677123414154}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -435,10 +435,10 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 4971538872722166996}
   - {fileID: 7704898418970125856}
   - {fileID: 7701241924210533540}
   - {fileID: 7321296083031033582}
+  - {fileID: 4971538872722166996}
   m_Father: {fileID: 5478110058355221413}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -497,7 +497,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 152f4ef2f96c3354fabb2469d4fad1bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _buyButton: {fileID: 0}
+  _buyButton: {fileID: 5465126898541274580}
   _gemsImage: {fileID: 137533157442491440}
   _gemsAmountText: {fileID: 3161518963045422594}
   _costText: {fileID: 5980799792731274279}
@@ -515,7 +515,7 @@ GameObject:
   - component: {fileID: 9020615280188622320}
   - component: {fileID: 297995168107117068}
   m_Layer: 5
-  m_Name: UseButton
+  m_Name: BuyButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -533,7 +533,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8981002589906247316}
-  m_RootOrder: 0
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -634,9 +634,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36a5f511b0d8142cba0aeb92d0b264c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  productId: gems_100
+  productId: 
   buttonType: 0
   consumePurchase: 1
+  onTransactionsRestored:
+    m_PersistentCalls:
+      m_Calls: []
   onPurchaseComplete:
     m_PersistentCalls:
       m_Calls: []
@@ -676,10 +679,10 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 2737151422767770763}
   - {fileID: 6185364660014667871}
   - {fileID: 2238479414787392712}
   - {fileID: 3452505700191311531}
+  - {fileID: 2737151422767770763}
   m_Father: {fileID: 5478110058355221413}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -738,7 +741,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 152f4ef2f96c3354fabb2469d4fad1bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _buyButton: {fileID: 0}
+  _buyButton: {fileID: 9051840321305643176}
   _gemsImage: {fileID: 4657725294935537527}
   _gemsAmountText: {fileID: 2964147784173715002}
   _costText: {fileID: 7326701263735314125}
@@ -772,10 +775,10 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 3301596978549621706}
   - {fileID: 1004320186349380541}
   - {fileID: 6412347657164265296}
   - {fileID: 4523326378231297694}
+  - {fileID: 3301596978549621706}
   m_Father: {fileID: 5478110058355221413}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -834,7 +837,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 152f4ef2f96c3354fabb2469d4fad1bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _buyButton: {fileID: 0}
+  _buyButton: {fileID: 5666233842945681879}
   _gemsImage: {fileID: 3957103742192488430}
   _gemsAmountText: {fileID: 8557196269460947538}
   _costText: {fileID: 8821349569371817601}
@@ -868,7 +871,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7723948940815685200}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -927,7 +930,7 @@ GameObject:
   - component: {fileID: 7335464087077654122}
   - component: {fileID: 9051840321305643176}
   m_Layer: 5
-  m_Name: UseButton
+  m_Name: BuyButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -945,7 +948,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7475342169939219034}
-  m_RootOrder: 0
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1046,9 +1049,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36a5f511b0d8142cba0aeb92d0b264c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  productId: gems_100
+  productId: 
   buttonType: 0
   consumePurchase: 1
+  onTransactionsRestored:
+    m_PersistentCalls:
+      m_Calls: []
   onPurchaseComplete:
     m_PersistentCalls:
       m_Calls: []
@@ -1088,10 +1094,10 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 5076596896717032295}
   - {fileID: 6959498550537132924}
   - {fileID: 3011737601747873438}
   - {fileID: 4443409200817139303}
+  - {fileID: 5076596896717032295}
   m_Father: {fileID: 5478110058355221413}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1150,7 +1156,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 152f4ef2f96c3354fabb2469d4fad1bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _buyButton: {fileID: 0}
+  _buyButton: {fileID: 1243288490487733315}
   _gemsImage: {fileID: 8671427285677300295}
   _gemsAmountText: {fileID: 5907703988881370915}
   _costText: {fileID: 2923969920484884323}
@@ -1184,7 +1190,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8981002589906247316}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1285,12 +1291,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32be25f55b9c8e54ea3a146ef34bfa6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BuyGems_1: {fileID: 893754011800180011}
-  BuyGems_2: {fileID: 6713549702405121427}
-  BuyGems_3: {fileID: 1487097578814396454}
-  BuyGems_4: {fileID: 1793595308942783222}
-  BuyGems_5: {fileID: 2064793302964113890}
-  BuyGems_6: {fileID: 5368561319578251993}
+  _panelsArray:
+  - {fileID: 893754011800180011}
+  - {fileID: 6713549702405121427}
+  - {fileID: 1487097578814396454}
+  - {fileID: 1793595308942783222}
+  - {fileID: 2064793302964113890}
+  - {fileID: 5368561319578251993}
 --- !u!1 &2883680089680033400
 GameObject:
   m_ObjectHideFlags: 0
@@ -1321,10 +1328,10 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 6844989106473898953}
   - {fileID: 1255908129917220368}
   - {fileID: 4141426156482485461}
   - {fileID: 2514279485606662091}
+  - {fileID: 6844989106473898953}
   m_Father: {fileID: 5478110058355221413}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1383,7 +1390,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 152f4ef2f96c3354fabb2469d4fad1bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _buyButton: {fileID: 0}
+  _buyButton: {fileID: 5773609128321804529}
   _gemsImage: {fileID: 7536633329348167239}
   _gemsAmountText: {fileID: 6644895569933383313}
   _costText: {fileID: 4902178076586633863}
@@ -1417,7 +1424,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7475342169939219034}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1476,7 +1483,7 @@ GameObject:
   - component: {fileID: 6761706118072841175}
   - component: {fileID: 1243288490487733315}
   m_Layer: 5
-  m_Name: UseButton
+  m_Name: BuyButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1494,7 +1501,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2610926486980283554}
-  m_RootOrder: 0
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1595,9 +1602,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36a5f511b0d8142cba0aeb92d0b264c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  productId: gems_100
+  productId: 
   buttonType: 0
   consumePurchase: 1
+  onTransactionsRestored:
+    m_PersistentCalls:
+      m_Calls: []
   onPurchaseComplete:
     m_PersistentCalls:
       m_Calls: []
@@ -1637,7 +1647,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7475342169939219034}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1772,7 +1782,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7723948940815685200}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2042,7 +2052,7 @@ GameObject:
   - component: {fileID: 1477886516108067035}
   - component: {fileID: 5773609128321804529}
   m_Layer: 5
-  m_Name: UseButton
+  m_Name: BuyButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2060,7 +2070,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1651540677123414154}
-  m_RootOrder: 0
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2161,9 +2171,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36a5f511b0d8142cba0aeb92d0b264c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  productId: gems_100
+  productId: 
   buttonType: 0
   consumePurchase: 1
+  onTransactionsRestored:
+    m_PersistentCalls:
+      m_Calls: []
   onPurchaseComplete:
     m_PersistentCalls:
       m_Calls: []
@@ -2203,7 +2216,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2342559370777900260}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2338,7 +2351,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7723948940815685200}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2473,7 +2486,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2342559370777900260}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2532,7 +2545,7 @@ GameObject:
   - component: {fileID: 1009441498107540170}
   - component: {fileID: 5465126898541274580}
   m_Layer: 5
-  m_Name: UseButton
+  m_Name: BuyButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2550,7 +2563,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7723948940815685200}
-  m_RootOrder: 0
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2651,9 +2664,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36a5f511b0d8142cba0aeb92d0b264c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  productId: gems_100
+  productId: 
   buttonType: 0
   consumePurchase: 1
+  onTransactionsRestored:
+    m_PersistentCalls:
+      m_Calls: []
   onPurchaseComplete:
     m_PersistentCalls:
       m_Calls: []
@@ -2677,7 +2693,7 @@ GameObject:
   - component: {fileID: 8349008768921942901}
   - component: {fileID: 5666233842945681879}
   m_Layer: 5
-  m_Name: UseButton
+  m_Name: BuyButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2695,7 +2711,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2342559370777900260}
-  m_RootOrder: 0
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2796,9 +2812,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36a5f511b0d8142cba0aeb92d0b264c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  productId: gems_100
+  productId: 
   buttonType: 0
   consumePurchase: 1
+  onTransactionsRestored:
+    m_PersistentCalls:
+      m_Calls: []
   onPurchaseComplete:
     m_PersistentCalls:
       m_Calls: []
@@ -2838,7 +2857,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2610926486980283554}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2973,7 +2992,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1651540677123414154}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3108,7 +3127,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2610926486980283554}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3243,7 +3262,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1651540677123414154}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3318,7 +3337,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8981002589906247316}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3453,7 +3472,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2342559370777900260}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3588,10 +3607,10 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 4070271261217414914}
   - {fileID: 1206385499762247583}
   - {fileID: 7684251641183331252}
   - {fileID: 6972078974579361814}
+  - {fileID: 4070271261217414914}
   m_Father: {fileID: 5478110058355221413}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3650,7 +3669,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 152f4ef2f96c3354fabb2469d4fad1bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _buyButton: {fileID: 0}
+  _buyButton: {fileID: 297995168107117068}
   _gemsImage: {fileID: 6150232997486030654}
   _gemsAmountText: {fileID: 5750637094270638992}
   _costText: {fileID: 2785272472412507986}
@@ -3684,7 +3703,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2610926486980283554}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}

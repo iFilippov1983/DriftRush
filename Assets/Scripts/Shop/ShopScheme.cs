@@ -1,4 +1,5 @@
 ﻿using RaceManager.Root;
+using RaceManager.UI;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
@@ -8,9 +9,9 @@ namespace RaceManager.Shop
 {
     [Serializable]
     [CreateAssetMenu(menuName = "Shop/ShopScheme", fileName = "ShopScheme", order = 1)]
-    public class ShopScheme : SerializedScriptableObject, ISaveable
+    public class ShopScheme : SerializedScriptableObject
     {
-        public bool GotSpecialOffer;
+        [SerializeField] private SpritesContainerRewards _rewardSpritesContainer;
 
         [SerializeField]
         private List<OfferPanelInstaller> _installers = new List<OfferPanelInstaller>()
@@ -22,9 +23,11 @@ namespace RaceManager.Shop
         };
 
         public List<OfferPanelInstaller> Installers => _installers;
-        public class SaveData { public bool gotSpecialOffer; }
-        public Type DataType() => typeof(SaveData);
-        public void Load(object data) => GotSpecialOffer = ((SaveData)data).gotSpecialOffer;
-        public object Save() => new SaveData() { gotSpecialOffer = GotSpecialOffer };
+
+        public bool TryGetInstallerTypeOf(ShopOfferType type, out OfferPanelInstaller installer)
+        {
+            installer = _installers.Find(i => i.ShopOfferType == type);
+            return installer != null;
+        }
     }
 }

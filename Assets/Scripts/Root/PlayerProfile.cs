@@ -24,7 +24,7 @@ namespace RaceManager.Root
         private bool _gotFirstFreeLootbox;
 
         [JsonProperty, ShowInInspector, ReadOnly]
-        private bool _gotIapFreeLootbox;
+        private bool _gotSpecialOffer;
 
         [JsonProperty, ShowInInspector, ReadOnly]
         private bool _lootboxForRaceEnabled;
@@ -72,11 +72,10 @@ namespace RaceManager.Root
             set { _gotFirstFreeLootbox = value; }
         }
 
-        [JsonProperty]
-        public bool GotIapFreeLootbox
-        {
-            get => _gotIapFreeLootbox;
-            set { _gotIapFreeLootbox = value; }
+        public bool GotSpecialOffer
+        { 
+            get => _gotSpecialOffer; 
+            set { _gotSpecialOffer = value; }
         }
 
         [JsonProperty]
@@ -153,7 +152,7 @@ namespace RaceManager.Root
             _nextLevelPrefabToLoad = saveData.nextLevelPrefabToLoad;
             _canStartImmediate = saveData.canStartImmediate;
             _gotFirstFreeLootbox = saveData.gotFirstFreeLootbox;
-            _gotIapFreeLootbox = saveData.gotIapFreeLootbox;
+            _gotSpecialOffer = saveData.gotSpecialOffer;
             _lootboxForRaceEnabled = saveData.lootboxForRaceEnabled;
             _victoriesTotalCounter = saveData.victoriesTotalCounter;
             _victoriesCycleCounter = saveData.victoriesCycleCounter;
@@ -197,7 +196,7 @@ namespace RaceManager.Root
                 nextLevelPrefabToLoad = NextLevelPrefabToLoad,
                 canStartImmediate = CanStartImmediate,
                 gotFirstFreeLootbox = GotFirstFreeLootbox,
-                gotIapFreeLootbox = GotIapFreeLootbox,
+                gotSpecialOffer = GotSpecialOffer,
                 lootboxForRaceEnabled = LootboxForRaceEnabled,
                 victoriesTotalCounter = VictoriesTotalCounter,
                 victoriesCycleCounter = VictoriesCycleCounter,
@@ -227,7 +226,7 @@ namespace RaceManager.Root
             public LevelName nextLevelPrefabToLoad;
             public bool canStartImmediate;
             public bool gotFirstFreeLootbox;
-            public bool gotIapFreeLootbox;
+            public bool gotSpecialOffer;
             public bool lootboxForRaceEnabled;
             public int victoriesTotalCounter;
             public int victoriesCycleCounter;

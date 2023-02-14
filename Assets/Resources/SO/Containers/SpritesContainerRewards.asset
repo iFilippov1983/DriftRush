@@ -16,6 +16,12 @@ MonoBehaviour:
     SerializedFormat: 2
     SerializedBytes: 
     ReferencedUnityObjects:
+    - {fileID: 21300000, guid: aae3f799fd30c44aa9eaae531a12e0c3, type: 3}
+    - {fileID: 21300000, guid: 12a56c3648ee34c5ea06294a5b21120c, type: 3}
+    - {fileID: 21300000, guid: 32e1bd35332eab14c8b72c6d9481919e, type: 3}
+    - {fileID: 21300000, guid: e447681b4eb39ad41bc48c25a1797e07, type: 3}
+    - {fileID: 21300000, guid: 5aeeead8a00b62d4b9491834514e237b, type: 3}
+    - {fileID: 21300000, guid: d6d5e9c5a2b343649a0fb4d8c1de1ea8, type: 3}
     - {fileID: 21300000, guid: 4951586078829434c977f34f3f4db751, type: 3}
     - {fileID: 21300000, guid: 6a87262ec8ccc0749a81357913f4c05d, type: 3}
     - {fileID: 21300000, guid: f1007a2741113504ea2e78425310936e, type: 3}
@@ -30,19 +36,25 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes:
-    - Name: _simpleRewardSprites
+    - Name: _shopRewardSprites
       Entry: 7
-      Data: 0|System.Collections.Generic.List`1[[RaceManager.UI.SpritesContainerRewards+SimpleRewardSpriteHolder,
+      Data: 0|System.Collections.Generic.List`1[[RaceManager.UI.SpritesContainerRewards+ShopRewardSpriteHolder,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
-      Data: 3
+      Data: 8
     - Name: 
       Entry: 7
-      Data: 1|RaceManager.UI.SpritesContainerRewards+SimpleRewardSpriteHolder, Assembly-CSharp
+      Data: 1|RaceManager.UI.SpritesContainerRewards+ShopRewardSpriteHolder, Assembly-CSharp
     - Name: RewardType
       Entry: 3
       Data: 1
+    - Name: MinAmountThreshold
+      Entry: 3
+      Data: 0
+    - Name: MaxAmountThreshold
+      Entry: 3
+      Data: 1000
     - Name: RewardSprite
       Entry: 10
       Data: 0
@@ -51,10 +63,16 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 2|RaceManager.UI.SpritesContainerRewards+SimpleRewardSpriteHolder, Assembly-CSharp
+      Data: 2|RaceManager.UI.SpritesContainerRewards+ShopRewardSpriteHolder, Assembly-CSharp
     - Name: RewardType
       Entry: 3
-      Data: 3
+      Data: 1
+    - Name: MinAmountThreshold
+      Entry: 3
+      Data: 1001
+    - Name: MaxAmountThreshold
+      Entry: 3
+      Data: 5000
     - Name: RewardSprite
       Entry: 10
       Data: 1
@@ -63,13 +81,158 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 3|RaceManager.UI.SpritesContainerRewards+SimpleRewardSpriteHolder, Assembly-CSharp
+      Data: 3|RaceManager.UI.SpritesContainerRewards+ShopRewardSpriteHolder, Assembly-CSharp
+    - Name: RewardType
+      Entry: 3
+      Data: 1
+    - Name: MinAmountThreshold
+      Entry: 3
+      Data: 5001
+    - Name: MaxAmountThreshold
+      Entry: 3
+      Data: 25000
+    - Name: RewardSprite
+      Entry: 10
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 4|RaceManager.UI.SpritesContainerRewards+ShopRewardSpriteHolder, Assembly-CSharp
+    - Name: RewardType
+      Entry: 3
+      Data: 1
+    - Name: MinAmountThreshold
+      Entry: 3
+      Data: 25001
+    - Name: MaxAmountThreshold
+      Entry: 3
+      Data: 900000
+    - Name: RewardSprite
+      Entry: 10
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 5|RaceManager.UI.SpritesContainerRewards+ShopRewardSpriteHolder, Assembly-CSharp
+    - Name: RewardType
+      Entry: 3
+      Data: 3
+    - Name: MinAmountThreshold
+      Entry: 3
+      Data: 0
+    - Name: MaxAmountThreshold
+      Entry: 3
+      Data: 100
+    - Name: RewardSprite
+      Entry: 10
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 6|RaceManager.UI.SpritesContainerRewards+ShopRewardSpriteHolder, Assembly-CSharp
+    - Name: RewardType
+      Entry: 3
+      Data: 3
+    - Name: MinAmountThreshold
+      Entry: 3
+      Data: 101
+    - Name: MaxAmountThreshold
+      Entry: 3
+      Data: 1500
+    - Name: RewardSprite
+      Entry: 10
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 7|RaceManager.UI.SpritesContainerRewards+ShopRewardSpriteHolder, Assembly-CSharp
+    - Name: RewardType
+      Entry: 3
+      Data: 3
+    - Name: MinAmountThreshold
+      Entry: 3
+      Data: 1501
+    - Name: MaxAmountThreshold
+      Entry: 3
+      Data: 7000
+    - Name: RewardSprite
+      Entry: 10
+      Data: 4
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 8|RaceManager.UI.SpritesContainerRewards+ShopRewardSpriteHolder, Assembly-CSharp
+    - Name: RewardType
+      Entry: 3
+      Data: 3
+    - Name: MinAmountThreshold
+      Entry: 3
+      Data: 7001
+    - Name: MaxAmountThreshold
+      Entry: 3
+      Data: 100000
+    - Name: RewardSprite
+      Entry: 10
+      Data: 5
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _simpleRewardSprites
+      Entry: 7
+      Data: 9|System.Collections.Generic.List`1[[RaceManager.UI.SpritesContainerRewards+SimpleRewardSpriteHolder,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 3
+    - Name: 
+      Entry: 7
+      Data: 10|RaceManager.UI.SpritesContainerRewards+SimpleRewardSpriteHolder, Assembly-CSharp
+    - Name: RewardType
+      Entry: 3
+      Data: 1
+    - Name: RewardSprite
+      Entry: 10
+      Data: 6
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 11|RaceManager.UI.SpritesContainerRewards+SimpleRewardSpriteHolder, Assembly-CSharp
+    - Name: RewardType
+      Entry: 3
+      Data: 3
+    - Name: RewardSprite
+      Entry: 10
+      Data: 7
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 12|RaceManager.UI.SpritesContainerRewards+SimpleRewardSpriteHolder, Assembly-CSharp
     - Name: RewardType
       Entry: 3
       Data: 2
     - Name: RewardSprite
       Entry: 10
-      Data: 2
+      Data: 8
     - Name: 
       Entry: 8
       Data: 
@@ -81,68 +244,68 @@ MonoBehaviour:
       Data: 
     - Name: _lootboxSrites
       Entry: 7
-      Data: 4|System.Collections.Generic.List`1[[RaceManager.UI.SpritesContainerRewards+LootboxSriteHolder,
+      Data: 13|System.Collections.Generic.List`1[[RaceManager.UI.SpritesContainerRewards+LootboxSriteHolder,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
       Data: 5
     - Name: 
       Entry: 7
-      Data: 5|RaceManager.UI.SpritesContainerRewards+LootboxSriteHolder, Assembly-CSharp
+      Data: 14|RaceManager.UI.SpritesContainerRewards+LootboxSriteHolder, Assembly-CSharp
     - Name: Rarity
       Entry: 3
       Data: 0
     - Name: LootboxSprite
       Entry: 10
-      Data: 3
+      Data: 9
     - Name: 
       Entry: 8
       Data: 
     - Name: 
       Entry: 7
-      Data: 6|RaceManager.UI.SpritesContainerRewards+LootboxSriteHolder, Assembly-CSharp
+      Data: 15|RaceManager.UI.SpritesContainerRewards+LootboxSriteHolder, Assembly-CSharp
     - Name: Rarity
       Entry: 3
       Data: 1
     - Name: LootboxSprite
       Entry: 10
-      Data: 4
+      Data: 10
     - Name: 
       Entry: 8
       Data: 
     - Name: 
       Entry: 7
-      Data: 7|RaceManager.UI.SpritesContainerRewards+LootboxSriteHolder, Assembly-CSharp
+      Data: 16|RaceManager.UI.SpritesContainerRewards+LootboxSriteHolder, Assembly-CSharp
     - Name: Rarity
       Entry: 3
       Data: 2
     - Name: LootboxSprite
       Entry: 10
-      Data: 5
+      Data: 11
     - Name: 
       Entry: 8
       Data: 
     - Name: 
       Entry: 7
-      Data: 8|RaceManager.UI.SpritesContainerRewards+LootboxSriteHolder, Assembly-CSharp
+      Data: 17|RaceManager.UI.SpritesContainerRewards+LootboxSriteHolder, Assembly-CSharp
     - Name: Rarity
       Entry: 3
       Data: 3
     - Name: LootboxSprite
       Entry: 10
-      Data: 6
+      Data: 12
     - Name: 
       Entry: 8
       Data: 
     - Name: 
       Entry: 7
-      Data: 9|RaceManager.UI.SpritesContainerRewards+LootboxSriteHolder, Assembly-CSharp
+      Data: 18|RaceManager.UI.SpritesContainerRewards+LootboxSriteHolder, Assembly-CSharp
     - Name: Rarity
       Entry: 3
       Data: 4
     - Name: LootboxSprite
       Entry: 10
-      Data: 7
+      Data: 13
     - Name: 
       Entry: 8
       Data: 
@@ -154,68 +317,68 @@ MonoBehaviour:
       Data: 
     - Name: _levelSprites
       Entry: 7
-      Data: 10|System.Collections.Generic.List`1[[RaceManager.UI.SpritesContainerRewards+LevelSpriteHolder,
+      Data: 19|System.Collections.Generic.List`1[[RaceManager.UI.SpritesContainerRewards+LevelSpriteHolder,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
       Data: 5
     - Name: 
       Entry: 7
-      Data: 11|RaceManager.UI.SpritesContainerRewards+LevelSpriteHolder, Assembly-CSharp
+      Data: 20|RaceManager.UI.SpritesContainerRewards+LevelSpriteHolder, Assembly-CSharp
     - Name: LevelName
       Entry: 3
       Data: 1
     - Name: LevelSprite
       Entry: 10
-      Data: 8
+      Data: 14
     - Name: 
       Entry: 8
       Data: 
     - Name: 
       Entry: 7
-      Data: 12|RaceManager.UI.SpritesContainerRewards+LevelSpriteHolder, Assembly-CSharp
+      Data: 21|RaceManager.UI.SpritesContainerRewards+LevelSpriteHolder, Assembly-CSharp
     - Name: LevelName
       Entry: 3
       Data: 2
     - Name: LevelSprite
       Entry: 10
-      Data: 8
+      Data: 14
     - Name: 
       Entry: 8
       Data: 
     - Name: 
       Entry: 7
-      Data: 13|RaceManager.UI.SpritesContainerRewards+LevelSpriteHolder, Assembly-CSharp
+      Data: 22|RaceManager.UI.SpritesContainerRewards+LevelSpriteHolder, Assembly-CSharp
     - Name: LevelName
       Entry: 3
       Data: 3
     - Name: LevelSprite
       Entry: 10
-      Data: 8
+      Data: 14
     - Name: 
       Entry: 8
       Data: 
     - Name: 
       Entry: 7
-      Data: 14|RaceManager.UI.SpritesContainerRewards+LevelSpriteHolder, Assembly-CSharp
+      Data: 23|RaceManager.UI.SpritesContainerRewards+LevelSpriteHolder, Assembly-CSharp
     - Name: LevelName
       Entry: 3
       Data: 4
     - Name: LevelSprite
       Entry: 10
-      Data: 8
+      Data: 14
     - Name: 
       Entry: 8
       Data: 
     - Name: 
       Entry: 7
-      Data: 15|RaceManager.UI.SpritesContainerRewards+LevelSpriteHolder, Assembly-CSharp
+      Data: 24|RaceManager.UI.SpritesContainerRewards+LevelSpriteHolder, Assembly-CSharp
     - Name: LevelName
       Entry: 3
       Data: 5
     - Name: LevelSprite
       Entry: 10
-      Data: 8
+      Data: 14
     - Name: 
       Entry: 8
       Data: 

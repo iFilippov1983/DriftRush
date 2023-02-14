@@ -1,17 +1,23 @@
-﻿using System;
+﻿using RaceManager.Progress;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
+using Sirenix.OdinInspector;
 
 namespace RaceManager.Shop
 {
     [Serializable]
-    public struct NoAdsData
+    public class NoAdsData
     {
+        [Serializable]
+        public struct BonusContent
+        {
+            public RewardType Type;
+            public int Amount;
+        }
+
         public float offerCost;
 
-        public int bonusAmount_1;
-        public Sprite bonusSprite_1;
-
-        public int bonusAmount_2;
-        public Sprite bonusSprite_2;
+        public List<BonusContent> BonusContents = new List<BonusContent>();
     }
 }

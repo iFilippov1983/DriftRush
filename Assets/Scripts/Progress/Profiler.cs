@@ -41,7 +41,7 @@ namespace RaceManager.Progress
 
         public bool CanStartImmediate => _playerProfile.CanStartImmediate;
         public bool GotFirstFreeLootbox => _playerProfile.GotFirstFreeLootbox;
-        public bool GotIapFreeLootbox => _playerProfile.GotIapFreeLootbox;
+        public bool GotSpecialOffer => _playerProfile.GotSpecialOffer;
         public bool LootboxForRaceEnabled => _playerProfile.LootboxForRaceEnabled;
         
         public int VictoriesCycleCounter => _victoriesCycleCounter;
@@ -72,20 +72,8 @@ namespace RaceManager.Progress
         public void SetLootboxList(List<Lootbox> lootboxes) => _lootboxes = lootboxes;
         public void SetLevelsList(List<LevelName> levels) => _levels = levels;
         public void SetImmediateStart() => _playerProfile.CanStartImmediate = true;
-        public void SetIapFreeLootboxGot() => _playerProfile.GotIapFreeLootbox = true;
-        public void SetLootboxForRaceEnabled() => _playerProfile.LootboxForRaceEnabled = true;
-
-        //public void SetFirstFreeLootboxGot()
-        //{
-        //    _playerProfile.GotFirstFreeLootbox = true;
-        //    _playerProfile.GiveLootboxesTo(this);
-
-        //    _lootboxToAdd = _lootboxes.First(l => l.IsOpen == false);
-        //    _lootboxToAdd.TimeToOpenLeft = -1f;
-        //    _lootboxToAdd.OpenTimerActivated = true;
-
-        //    _playerProfile.TakeLooboxesFrom(this);
-        //}
+        public void SetNoAds() => _playerProfile.GotSpecialOffer = true;
+        public void SetAdsOn() => _playerProfile.GotSpecialOffer = false;
 
         public void AddMoney(int money, bool ignorIncomeFactor = false)
         { 

@@ -2,39 +2,55 @@ using RaceManager.Root;
 using RaceManager.Tools;
 using System;
 using System.Threading.Tasks;
-using Unity.Services.Core;
 using UnityEngine;
 using UnityEngine.Purchasing;
 
 namespace RaceManager.Shop
 {
-    public class ShopCore : MonoBehaviour, IInitializable, IStoreListener
+    public class ShopCore : MonoBehaviour, IStoreListener //, IInitializable
     {
         private static IStoreController m_StoreController;
         private static IExtensionProvider m_StoreExtensionProvider;
 
         public Action<string> OnPurchaseSuccess;
 
+        /// <summary>
+        /// int - cost in gems; Rarity = Lootbox rarity
+        /// </summary>
+        public Action<int, Rarity> OnTryBuyLootbox;
+
+        /// <summary>
+        /// int 1 - gems amount; int 2 - money amount
+        /// </summary>
+        public Action<int, int> OnTryGemsExchange;
+
         private bool IsInitialized => 
             m_StoreController != null && m_StoreExtensionProvider != null;
 
-        public void Initialize()
+        private void Awake()
         {
-            if (m_StoreController == null)
-            {
-                InitializePurchasing();
-            }
+            InitializePurchasing();
         }
+
+        //public void Initialize()
+        //{
+        //    if (m_StoreController == null)
+        //    {
+        //        InitializePurchasing();
+        //    }
+        //}
 
         public async void InitializePurchasing()
         {
-            //if (IsInitialized)
-            //    return;
-
             var builder = ConfigurationBuilder.Instance(StandardPurchasingModule.Instance());
 
             builder.AddProduct(IapIds.NoAds, ProductType.NonConsumable); //or ProductType.Subscription if use kind a "vip" sub
-            builder.AddProduct(IapIds.Gems_100, ProductType.Consumable);
+            builder.AddProduct(IapIds.Gems_80, ProductType.Consumable);
+            builder.AddProduct(IapIds.Gems_500, ProductType.Consumable);
+            builder.AddProduct(IapIds.Gems_1200, ProductType.Consumable);
+            builder.AddProduct(IapIds.Gems_2500, ProductType.Consumable);
+            builder.AddProduct(IapIds.Gems_6500, ProductType.Consumable);
+            builder.AddProduct(IapIds.Gems_14000, ProductType.Consumable);
 
             UnityPurchasing.Initialize(this, builder);
 
@@ -47,9 +63,34 @@ namespace RaceManager.Shop
             BuyProductID(IapIds.NoAds);
         }
 
-        public void BuyGems100()
+        public void BuyGems80()
         {
-            BuyProductID(IapIds.Gems_100);
+            BuyProductID(IapIds.Gems_80);
+        }
+
+        public void BuyGems500()
+        {
+            BuyProductID(IapIds.Gems_500);
+        }
+
+        public void BuyGems1200()
+        { 
+            BuyProductID(IapIds.Gems_1200);
+        }
+
+        public void BuyGems2500()
+        { 
+            BuyProductID(IapIds.Gems_2500);
+        }
+
+        public void BuyGems6500()
+        {
+            BuyProductID(IapIds.Gems_6500);
+        }
+
+        public void BuyGems14000()
+        {
+            BuyProductID(IapIds.Gems_14000);
         }
 
         public void BuyProductID(string productId)
@@ -60,17 +101,17 @@ namespace RaceManager.Shop
 
                 if (product != null && product.availableToPurchase)
                 {
-                    Debug.Log(string.Format("Purchasing product asychronously: '{0}'", product.definition.id));
+                    Debug.Log(string.Format("[Shop Core] Purchasing product asychronously: '{0}'", product.definition.id));
                     m_StoreController.InitiatePurchase(product);
                 }
                 else
                 {
-                    Debug.Log("BuyProductID: FAIL. Not purchasing product, either is not found or is not available for purchase");
+                    Debug.Log("[Shop Core] BuyProductID: FAIL. Not purchasing product, either is not found or is not available for purchase");
                 }
             }
             else
             {
-                Debug.Log("BuyProductID FAIL. Not initialized.");
+                Debug.Log("[Shop Core] BuyProductID FAIL. Not initialized.");
             }
         }
 
@@ -80,7 +121,7 @@ namespace RaceManager.Shop
             {
                 if (string.Equals(args.purchasedProduct.definition.id, id, StringComparison.Ordinal))
                 {
-                    Debug.Log(string.Format("ProcessPurchase: PASS. Product: '{0}'", args.purchasedProduct.definition.id));
+                    Debug.Log(string.Format("[Shop Core] ProcessPurchase: PASS. Product: '{0}'", args.purchasedProduct.definition.id));
                     OnPurchaseSuccess?.Invoke(id);
                 }
             }
@@ -92,43 +133,48 @@ namespace RaceManager.Shop
         {
             if (!IsInitialized)
             {
-                Debug.Log("RestorePurchases FAIL. Not initialized.");
+                Debug.Log("[Shop Core] RestorePurchases FAIL. Not initialized.");
                 return;
             }
 
             if (Application.platform == RuntimePlatform.IPhonePlayer ||
                 Application.platform == RuntimePlatform.OSXPlayer) //if apple device runtime
             {
-                Debug.Log("RestorePurchases started ...");
+                Debug.Log("[Shop Core] RestorePurchases started ...");
 
                 var apple = m_StoreExtensionProvider.GetExtension<IAppleExtensions>();
 
-                apple.RestoreTransactions((result) =>
+                apple.RestoreTransactions((b, s) =>
                 {
-                    Debug.Log("RestorePurchases continuing: " + result + ". If no further messages, no purchases available to restore.");
+                    Debug.Log("[Shop Core] RestorePurchases continuing: " + b + ". If no further messages, no purchases available to restore. Message: " + s);
                 });
             }
             else
             {
-                Debug.Log("RestorePurchases FAIL. Not supported on this platform. Current = " + Application.platform);
+                Debug.Log("[Shop Core] RestorePurchases FAIL. Not supported on this platform. Current = " + Application.platform);
             }
         }
 
         public void OnInitialized(IStoreController controller, IExtensionProvider extensions)
         {
-            Debug.Log("OnInitialized: PASS");
+            Debug.Log("[Shop Core] OnInitialized: PASS");
             m_StoreController = controller;
             m_StoreExtensionProvider = extensions;
         }
 
-        public void OnInitializeFailed(InitializationFailureReason error)
-        {
-            Debug.Log("OnInitializeFailed InitializationFailureReason:" + error);
-        }
-
         public void OnPurchaseFailed(Product product, PurchaseFailureReason failureReason)
         {
-            Debug.Log(string.Format("OnPurchaseFailed: FAIL. Product: '{0}', PurchaseFailureReason: {1}", product.definition.storeSpecificId, failureReason));
+            Debug.Log(string.Format("[Shop Core] OnPurchaseFailed: FAIL. Product: '{0}', PurchaseFailureReason: {1}", product.definition.storeSpecificId, failureReason));
+        }
+
+        public void OnInitializeFailed(InitializationFailureReason error, string message)
+        {
+            Debug.Log($"[Shop Core] OnInitializeFailed InitializationFailureReason: { error}; Message: {message}");
+        }
+
+        public void OnInitializeFailed(InitializationFailureReason error)
+        {
+            Debug.Log($"[Shop Core] OnInitializeFailed InitializationFailureReason: {error}");
         }
     }
 }

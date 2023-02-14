@@ -1,14 +1,16 @@
-﻿using System;
+﻿using RaceManager.Progress;
+using Sirenix.OdinInspector;
+using System;
 using UnityEngine;
 
 namespace RaceManager.Shop
 {
     [Serializable]
-    public struct BuyGemsData
+    public class BuyGemsData
     {
+        [ReadOnly]
+        public readonly RewardType Type = RewardType.Gems;
         public float offerCost;
-
         public int gemsAmount;
-        public Sprite gemsAmountSprite;
     }
 }

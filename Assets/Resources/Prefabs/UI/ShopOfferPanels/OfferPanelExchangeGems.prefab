@@ -148,7 +148,7 @@ GameObject:
   - component: {fileID: 8143828887654739499}
   - component: {fileID: 5298099346139684556}
   m_Layer: 5
-  m_Name: UseButton
+  m_Name: ExchangeButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -344,7 +344,7 @@ GameObject:
   - component: {fileID: 2474175496555595879}
   - component: {fileID: 2594113884377739393}
   m_Layer: 5
-  m_Name: UseButton
+  m_Name: ExchangeButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -618,7 +618,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be348458e8d475446a6d377f9ecced08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _buyButton: {fileID: 2594113884377739393}
+  _exchangeButton: {fileID: 2594113884377739393}
   _moneyAmountImage: {fileID: 2081709598141783897}
   _moneyAmountText: {fileID: 5902177195313671799}
   _exchangeCostText: {fileID: 4980094411395290697}
@@ -810,9 +810,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1b6808872cda93439ca7be13805eab7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PanelExchangeGems_1: {fileID: 6257207046479266547}
-  PanelExchangeGems_2: {fileID: 2177158858459598999}
-  PanelExchangeGems_3: {fileID: 6142191470944317433}
+  _panelsArray:
+  - {fileID: 6257207046479266547}
+  - {fileID: 2177158858459598999}
+  - {fileID: 6142191470944317433}
 --- !u!1 &2990467946379842076
 GameObject:
   m_ObjectHideFlags: 0
@@ -1326,7 +1327,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be348458e8d475446a6d377f9ecced08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _buyButton: {fileID: 632833075448763301}
+  _exchangeButton: {fileID: 632833075448763301}
   _moneyAmountImage: {fileID: 2633579404454495392}
   _moneyAmountText: {fileID: 615328936634742645}
   _exchangeCostText: {fileID: 242248683313337537}
@@ -1708,7 +1709,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be348458e8d475446a6d377f9ecced08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _buyButton: {fileID: 5298099346139684556}
+  _exchangeButton: {fileID: 5298099346139684556}
   _moneyAmountImage: {fileID: 8507850287722856584}
   _moneyAmountText: {fileID: 2917072006017103526}
   _exchangeCostText: {fileID: 7461896646803397237}
@@ -1725,7 +1726,7 @@ GameObject:
   - component: {fileID: 4333635258186328100}
   - component: {fileID: 632833075448763301}
   m_Layer: 5
-  m_Name: UseButton
+  m_Name: ExchangeButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

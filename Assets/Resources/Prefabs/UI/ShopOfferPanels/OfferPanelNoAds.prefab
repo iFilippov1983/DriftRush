@@ -235,17 +235,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4092630246409687079}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4291109654776862066}
   m_Father: {fileID: 5409360716835021680}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 234, y: -173}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 727, y: -393}
   m_SizeDelta: {x: 60, y: 61}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &911021754479838956
@@ -316,7 +316,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5409360716835021680}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -435,7 +435,7 @@ GameObject:
   - component: {fileID: 6942286180960247318}
   - component: {fileID: 2256948548022520537}
   m_Layer: 5
-  m_Name: UseButton
+  m_Name: BuyButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -453,7 +453,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5409360716835021680}
-  m_RootOrder: 1
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -557,6 +557,9 @@ MonoBehaviour:
   productId: noads
   buttonType: 0
   consumePurchase: 1
+  onTransactionsRestored:
+    m_PersistentCalls:
+      m_Calls: []
   onPurchaseComplete:
     m_PersistentCalls:
       m_Calls: []
@@ -591,18 +594,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7477679164572047194}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8927656704586972841}
   m_Father: {fileID: 5409360716835021680}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 234, y: -100}
-  m_SizeDelta: {x: 84.6, y: 53.6}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 727, y: -317.85}
+  m_SizeDelta: {x: 86.3, y: 56.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7849065189163569398
 CanvasRenderer:
@@ -806,11 +809,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5527493579168398151}
-  - {fileID: 3037732075611464406}
   - {fileID: 3081055888424977928}
   - {fileID: 3575493270706075404}
   - {fileID: 1073475221505474087}
   - {fileID: 3097059844726720282}
+  - {fileID: 3037732075611464406}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -833,10 +836,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _buyButton: {fileID: 2256948548022520537}
   _costText: {fileID: 5002133416192167394}
-  _bonusImage_1: {fileID: 5488654113204929779}
-  _bonusImage_2: {fileID: 8773867980549769542}
-  _bonusAmountText_1: {fileID: 6643189544314026090}
-  _bonusAmountText_2: {fileID: 4665605289950044968}
+  _bonusViews:
+  - Image: {fileID: 5488654113204929779}
+    AmountText: {fileID: 6643189544314026090}
+  - Image: {fileID: 8773867980549769542}
+    AmountText: {fileID: 4665605289950044968}
 --- !u!1 &8338268029899512099
 GameObject:
   m_ObjectHideFlags: 0
@@ -868,7 +872,7 @@ RectTransform:
   m_Children:
   - {fileID: 8289703966283789259}
   m_Father: {fileID: 5409360716835021680}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}

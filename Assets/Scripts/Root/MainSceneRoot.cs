@@ -104,8 +104,8 @@ namespace RaceManager.Root
 
         private void Dispose()
         {
-            var disposeables = Singleton<Resolver>.Instance.ResolveAll<IDisposable>();
-            foreach (var d in disposeables)
+            var disposables = Singleton<Resolver>.Instance.ResolveAll<IDisposable>();
+            foreach (var d in disposables)
                 d.Dispose();
 
             _mainUI.OnMainMenuActivityChange -= _menuCamerasHandler.ToggleCamPriorities;

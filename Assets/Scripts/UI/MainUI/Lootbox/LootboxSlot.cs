@@ -14,8 +14,8 @@ namespace RaceManager.UI
         [SerializeField] private Button _slotButton;
         [Space]
         [SerializeField] private Image _lootboxImage;
-        [SerializeField] private Image _lootboxOpenImage;
-        [SerializeField] private Image _lootboxActiveTimerImage;
+        [SerializeField] private Image _imageTimerPassive;
+        [SerializeField] private Image _imageTimerActive;
         [Space]
         [SerializeField] private TMP_Text _canOpenText;
         [SerializeField] private TMP_Text _closedText;
@@ -35,6 +35,8 @@ namespace RaceManager.UI
 
         public Button SlotButton => _slotButton;
         public Image LootboxImage => _lootboxImage;
+        public Image ImageTimerPassive => _imageTimerPassive;
+        public Image ImageTimerActive => _imageTimerActive;
         public TMP_Text TimerText => _timerText;
         public TMP_Text CanOpenText => _canOpenText;
         public TMP_Text ClosedText => _closedText;
@@ -69,6 +71,8 @@ namespace RaceManager.UI
                 LootboxImage.sprite = lootboxSprite;
             LootboxImage.SetActive(true);
             
+            ImageTimerPassive.SetActive(true);
+            ImageTimerPassive.SetActive(false);
 
             CanOpenText.SetActive(true);
         }
@@ -93,7 +97,10 @@ namespace RaceManager.UI
                 LootboxImage.sprite = lootboxSprite;
             LootboxImage.SetActive(true);
 
-            if(cost != 0)
+            ImageTimerPassive.SetActive(false);
+            ImageTimerPassive.SetActive(true);
+
+            if (cost != 0)
                 FastOpenCostText.text = cost.ToString();
         }
 
@@ -118,6 +125,9 @@ namespace RaceManager.UI
             BottomText.SetActive(true);
             BottomText.text = string.Concat(hoursToOpen.ToString(), "h");
 
+            ImageTimerPassive.SetActive(true);
+            ImageTimerPassive.SetActive(false);
+
             ClosedText.SetActive(true);
         }
 
@@ -136,6 +146,9 @@ namespace RaceManager.UI
 
             TimerRect.SetActive(false);
             FastOpenRect.SetActive(false);
+
+            ImageTimerPassive.SetActive(false);
+            ImageTimerPassive.SetActive(false);
 
             MidText.SetActive(true);
         }

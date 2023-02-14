@@ -333,7 +333,7 @@ namespace RaceManager.UI
                     _minutes = Mathf.Floor((_hours - _hoursRounded) * 60f);
                     if (_minutes >= 60) _minutes = 59;
 
-                    _activeTimerSlot.TimerText.text = _hoursRounded.ToString("00") + "h. " + _minutes.ToString("00") + "m.";
+                    _activeTimerSlot.TimerText.text = _hoursRounded.ToString("00") + "h." + _minutes.ToString("00") + "m.";
                 }
                 else
                 {

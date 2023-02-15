@@ -54,7 +54,7 @@ namespace RaceManager.UI
 
             AddButtonsListeners();
 
-            _lootboxAnimationHandler.OnAnimationFinish += _lootboxProgress.OnAnimationFinish;
+            _lootboxAnimationHandler.OnAnimationFinish += OnLootboxAnimationFinish;
 
             _lootboxProgress.OnImagesDisableComplete += InitializeLootboxProgressPanel;
         }
@@ -82,7 +82,7 @@ namespace RaceManager.UI
                 if (counter != 2)
                     text += "s";
             }
-            _lootboxProgress.MoreWinsText.text = text;
+            _lootboxProgress.MoreWinsText.text = text.ToUpper();
         }
 
         private void InitializeLootboxSlots()
@@ -354,6 +354,12 @@ namespace RaceManager.UI
             }
         }
 
+        private void OnLootboxAnimationFinish()
+        {
+            if (_lootboxProgress.gameObject.activeSelf)
+                _lootboxProgress.OnAnimationFinish();
+        }
+
         private void OnButtonPressedMethod(Button button) => OnButtonPressed?.Invoke(button);
 
         private void AddButtonsListeners()
@@ -388,7 +394,7 @@ namespace RaceManager.UI
 
         private void OnDestroy()
         {
-            _lootboxAnimationHandler.OnAnimationFinish -= _lootboxProgress.OnAnimationFinish;
+            _lootboxAnimationHandler.OnAnimationFinish -= OnLootboxAnimationFinish;
 
             _lootboxProgress.OnImagesDisableComplete -= InitializeLootboxProgressPanel;
         }

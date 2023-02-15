@@ -131,6 +131,7 @@ namespace RaceManager.UI
             _startButton.SetActive(active);
             _lootboxSlotsHandler.SetActive(active);
             _cupsProgress.SetActive(active);
+            //_currencyAmount.SetActive(active);
 
             OnMainMenuActivityChange?.Invoke(active);
         }
@@ -139,6 +140,7 @@ namespace RaceManager.UI
         {
             _tuningPanel.SetActive(active);
 
+            //_currencyAmount.SetActive(!active);
             _bottomPanel.SetActive(active);
             _bottomPanel.TuningPressedImage.SetActive(active);
         }
@@ -147,6 +149,7 @@ namespace RaceManager.UI
         {
             _carsCollectionPanel.SetActive(active);
 
+            //_currencyAmount.SetActive(!active);
             _bottomPanel.SetActive(active);
             _bottomPanel.CarsCollectionPressedImage.SetActive(active);
         }
@@ -155,6 +158,7 @@ namespace RaceManager.UI
         {
             _shopPanel.SetActive(active);
 
+            //_currencyAmount.SetActive(active);
             _bottomPanel.SetActive(active);
             _bottomPanel.IapSopPressedImage.SetActive(active);
         }
@@ -307,8 +311,7 @@ namespace RaceManager.UI
             _tuningPanel.UpdateCarStatsProgress
                 (
                 _currentCarProfile.CarName.ToString(),
-                _currentCarProfile.CarCharacteristics.CurrentFactorsProgress,
-                _currentCarProfile.CarCharacteristics.FactorsMaxTotal
+                _currentCarProfile.CarCharacteristics.CurrentFactorsProgress
                 );
 
             _tuningPanel.UpgradeWindow.SetActive(_upgradesHandler.CanUpgradeCurrentCarFactors());

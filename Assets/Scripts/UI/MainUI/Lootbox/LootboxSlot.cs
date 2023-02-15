@@ -16,6 +16,7 @@ namespace RaceManager.UI
         [SerializeField] private Image _lootboxImage;
         [SerializeField] private Image _imageTimerPassive;
         [SerializeField] private Image _imageTimerActive;
+        [SerializeField] private Image _imageOverlay;
         [Space]
         [SerializeField] private TMP_Text _canOpenText;
         [SerializeField] private TMP_Text _closedText;
@@ -28,6 +29,7 @@ namespace RaceManager.UI
         [SerializeField] private RectTransform _fastOpenRect;
         [SerializeField] private TMP_Text _costText;
 
+        [ShowInInspector, ReadOnly]
         private SlotStatus _slotStatus = SlotStatus.Empty;
 
         [ReadOnly]
@@ -37,6 +39,7 @@ namespace RaceManager.UI
         public Image LootboxImage => _lootboxImage;
         public Image ImageTimerPassive => _imageTimerPassive;
         public Image ImageTimerActive => _imageTimerActive;
+        public Image ImageOverlay => _imageOverlay;
         public TMP_Text TimerText => _timerText;
         public TMP_Text CanOpenText => _canOpenText;
         public TMP_Text ClosedText => _closedText;
@@ -71,8 +74,9 @@ namespace RaceManager.UI
                 LootboxImage.sprite = lootboxSprite;
             LootboxImage.SetActive(true);
             
-            ImageTimerPassive.SetActive(true);
             ImageTimerPassive.SetActive(false);
+            ImageTimerActive.SetActive(true);
+            ImageOverlay.SetActive(true);
 
             CanOpenText.SetActive(true);
         }
@@ -98,7 +102,8 @@ namespace RaceManager.UI
             LootboxImage.SetActive(true);
 
             ImageTimerPassive.SetActive(false);
-            ImageTimerPassive.SetActive(true);
+            ImageTimerActive.SetActive(true);
+            ImageOverlay.SetActive(false);
 
             if (cost != 0)
                 FastOpenCostText.text = cost.ToString();
@@ -126,7 +131,8 @@ namespace RaceManager.UI
             BottomText.text = string.Concat(hoursToOpen.ToString(), "h");
 
             ImageTimerPassive.SetActive(true);
-            ImageTimerPassive.SetActive(false);
+            ImageTimerActive.SetActive(false);
+            ImageOverlay.SetActive(false);
 
             ClosedText.SetActive(true);
         }
@@ -148,7 +154,8 @@ namespace RaceManager.UI
             FastOpenRect.SetActive(false);
 
             ImageTimerPassive.SetActive(false);
-            ImageTimerPassive.SetActive(false);
+            ImageTimerActive.SetActive(false);
+            ImageOverlay.SetActive(false);
 
             MidText.SetActive(true);
         }

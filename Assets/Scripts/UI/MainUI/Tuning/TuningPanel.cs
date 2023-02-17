@@ -208,32 +208,5 @@ namespace RaceManager.UI
             _tuneWheelsActiveImage.SetActive(false);
             _tuneCarViewActiveImage.SetActive(false);
         }
-
-        private string GetProperCarName(string carName)
-        {
-            string name = string.Empty;
-            string substring = string.Empty;
-
-            foreach (char c in carName)
-            {
-                if (char.IsUpper(c))
-                {
-                    name = name.Equals(string.Empty)
-                        ? substring
-                        : name + " " + substring;
-
-                    substring = string.Empty;
-                    substring += c;
-                }
-                else
-                {
-                    substring += c;
-                }
-            }
-
-            name += " " + substring;
-
-            return name;
-        }
     }
 }

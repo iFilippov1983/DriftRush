@@ -18,7 +18,7 @@ namespace RaceManager.Progress
         {
             { CarName.ToyotaSupra, 0 },
             { CarName.FordMustang, 0 },
-            { CarName.DodgeTRX, 0 },
+            { CarName.DodgeTrx, 0 },
             { CarName.NissanSilvia, 0 },
             { CarName.Porche911, 0 },
             { CarName.Ferrari488, 0 },

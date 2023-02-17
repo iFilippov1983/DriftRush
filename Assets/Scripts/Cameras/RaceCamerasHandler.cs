@@ -47,6 +47,7 @@ namespace RaceManager.Cameras
 
         private CinemachineTransposer _transposer;
         private CinemachineComposer _composer;
+        private Transform _cameraFinalPosition;
         private float _defaultMainCamFov;
         private float _defaultMainCamDampingX;
         private Vector3 _defaultCamAimOffset;
@@ -70,7 +71,7 @@ namespace RaceManager.Cameras
 
         #region Public Functions
 
-        public void FollowAndLookAt(Transform followTransform, Transform lookAtTransform)
+        public void SetTargets(Transform followTransform, Transform lookAtTransform, Transform cameraFinalPosition)
         {
             //_followGroupCamera.TargetGroup.m_Targets = new CinemachineTargetGroup.Target[0];
             //_followGroupCamera.TargetGroup.AddMember(carTransform, 1f, 0f);
@@ -87,6 +88,8 @@ namespace RaceManager.Cameras
             _defaultMainCamDampingX = CurrentCamDampingX;
             _defaultMainCamFov = CurrentCamFov;
             _defaultCamAimOffset = CameraAimOffset;
+
+            _cameraFinalPosition = cameraFinalPosition;
 
             EventsHub<RaceEvent>.Subscribe(RaceEvent.COUNTDOWN, SetStartCamera);
             EventsHub<RaceEvent>.Subscribe(RaceEvent.START, SetFollowCamera);
@@ -142,6 +145,8 @@ namespace RaceManager.Cameras
             _currentShakeJob = null;
             CameraAimOffset = _defaultCamAimOffset;
         }
+
+        public void SetCameraToFinalPosition() => _finishCamera.transform.position = _cameraFinalPosition.position;
 
         #endregion
 

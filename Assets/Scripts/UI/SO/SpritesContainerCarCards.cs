@@ -14,7 +14,7 @@ namespace RaceManager.UI
         private List<CardSpriteHolder> _spriteHolders = new List<CardSpriteHolder>();
 
         public Sprite GetCardSprite(CarName carName)
-        { 
+        {
             CardSpriteHolder holder = _spriteHolders.Find(x => x.CarName == carName);
             return holder.CardIcon;
         }

@@ -206,6 +206,8 @@ namespace RaceManager.UI
                 _carsCollectionPanel.AddCollectionCard
                     (
                     profile.CarName,
+                    profile.CarCharacteristics.Rarity,
+                    profile.CarCharacteristics.CurrentFactorsProgress,
                     _playerProfile.CarCardsAmount(profile.CarName),
                     profile.RankingScheme.CurrentRankPointsForAccess,
                     profile.RankingScheme.CarIsAvailable,
@@ -324,8 +326,7 @@ namespace RaceManager.UI
             _carsCollectionPanel.UpdateStatsProgress
                 (
                 _currentCarProfile.CarName.ToString(),
-                _currentCarProfile.CarCharacteristics.CurrentFactorsProgress,
-                _currentCarProfile.CarCharacteristics.FactorsMaxTotal
+                _currentCarProfile.CarCharacteristics.CurrentFactorsProgress
                 );
         }
 
@@ -336,6 +337,7 @@ namespace RaceManager.UI
             _carsCollectionPanel.UpdateCard
                     (
                     profile.CarName,
+                    profile.CarCharacteristics.CurrentFactorsProgress,
                     _playerProfile.CarCardsAmount(profile.CarName),
                     profile.RankingScheme.CurrentRankPointsForAccess,
                     profile.RankingScheme.CarIsAvailable,
@@ -353,7 +355,9 @@ namespace RaceManager.UI
             bool isUpgraded = rank.IsGranted;
             bool isAvailable = rank.IsReached;
 
-            _carsCollectionPanel.SetCarWindow(cost, isUpgraded, isAvailable);
+            Rarity carRarity = _currentCarProfile.CarCharacteristics.Rarity;
+
+            _carsCollectionPanel.SetCarWindow(carRarity, cost, isUpgraded, isAvailable);
         }
 
         public void UpdateCurrencyAmountPanels()

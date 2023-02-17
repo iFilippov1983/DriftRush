@@ -54,6 +54,13 @@ namespace RaceManager.UI
             { new LevelSpriteHolder() { LevelName = LevelName.Level_0_test, LevelSprite = null } }
         };
 
+        [Space(20)]
+        [SerializeField]
+        private List<MenuColorHolder> _menuColors = new List<MenuColorHolder>()
+        {
+            { new MenuColorHolder() { Name = MenuColorName.Default, Color = Color.gray } }
+        };
+
         public Sprite GetSimpleRewardSprite(RewardType rewardType)
         {
             var holder = _simpleRewardSprites.Find(h => h.RewardType == rewardType);
@@ -88,6 +95,8 @@ namespace RaceManager.UI
             return holder.RewardSprite;
         }
 
+        public Color GetMenuColor(MenuColorName name) => _menuColors.Find(h => h.Name == name).Color;
+
         public class LevelSpriteHolder
         {
             public LevelName LevelName;
@@ -112,6 +121,12 @@ namespace RaceManager.UI
             public int MinAmountThreshold;
             public int MaxAmountThreshold;
             public Sprite RewardSprite;
+        }
+
+        public class MenuColorHolder
+        {
+            public MenuColorName Name;
+            public Color Color;
         }
     }
 }

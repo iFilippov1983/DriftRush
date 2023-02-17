@@ -71,9 +71,9 @@ namespace RaceManager.Progress
 
             for (int i = 0; i < lotsAmount; i++)
             {
-                CarName name = GetRandomCarName();
+                (CarName name, Rarity rarity) = GetRandomCarName();
 
-                CarCardReward cardReward = new CarCardReward(name, amounts[i]);
+                CarCardReward cardReward = new CarCardReward(name, rarity, amounts[i]);
                 list.Add(cardReward);
 
                 //Debug.Log($"Name: {name}; Amount: {amounts[i]};");
@@ -123,7 +123,7 @@ namespace RaceManager.Progress
             return array;
         }
 
-        private CarName GetRandomCarName()
+        private (CarName, Rarity) GetRandomCarName()
         { 
             float pU = _probabilities[Rarity.Uncommon];
             float pR = _probabilities[Rarity.Rare];
@@ -159,7 +159,7 @@ namespace RaceManager.Progress
             list = _rarityScheme.Scheme[rarity];
             name = list[Random.Range(0, list.Count)];
 
-            return name;
+            return (name, rarity);
         }
 
         #region Test methods
@@ -175,13 +175,14 @@ namespace RaceManager.Progress
         [Button]
         private void TestProbability()
         {
-            CarName name = GetRandomCarName();
-            Rarity rarity = Rarity.Common;
-            foreach (var pair in _rarityScheme.Scheme)
-            {
-                if (pair.Value.Contains(name))
-                    rarity = pair.Key;
-            }
+            (CarName name, Rarity rarity) = GetRandomCarName();
+
+            //Rarity rarity = Rarity.Common;
+            //foreach (var pair in _rarityScheme.Scheme)
+            //{
+            //    if (pair.Value.Contains(name))
+            //        rarity = pair.Key;
+            //}
 
             _counter++;
 

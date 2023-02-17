@@ -128,7 +128,7 @@ namespace RaceManager.UI
             LootboxImage.sprite = lootboxSprite;
 
             BottomText.SetActive(true);
-            BottomText.text = string.Concat(hoursToOpen.ToString(), "h");
+            BottomText.text = string.Concat(hoursToOpen.ToString(), "h.");
 
             ImageTimerPassive.SetActive(true);
             ImageTimerActive.SetActive(false);

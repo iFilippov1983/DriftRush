@@ -329,6 +329,7 @@ namespace RaceManager.UI
                 if (_activeTimerLootbox.TimeToOpenLeft > 0)
                 {
                     _hours = _activeTimerLootbox.TimeToOpenLeft / 3600f;
+                    //_hoursRounded = Mathf.RoundToInt(_hours);
                     _hoursRounded = Mathf.Floor(_hours);
                     _minutes = Mathf.Floor((_hours - _hoursRounded) * 60f);
                     if (_minutes >= 60) _minutes = 59;

@@ -24,7 +24,7 @@ namespace RaceManager.Progress
             { 
                 Rarity.Uncommon, new List<CarName>()
                 { 
-                    CarName.DodgeTRX,
+                    CarName.DodgeTrx,
                     CarName.NissanSilvia
                 }
             },

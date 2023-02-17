@@ -100,17 +100,20 @@ namespace RaceManager.Progress
     public class CarCardReward : IReward
     {
         [SerializeField] private CarName _carName;
+        [SerializeField] private Rarity _carRarity;
         [SerializeField] private int _cardsAmount;
 
         public CarCardReward()
         {
             _carName = CarName.ToyotaSupra;
+            _carRarity = Rarity.Common;
             _cardsAmount = 0;
         }
 
-        public CarCardReward(CarName name, int amount)
+        public CarCardReward(CarName name, Rarity carRarity, int amount)
         {
             _carName = name;
+            _carRarity = carRarity;
             _cardsAmount = amount;
             IsReceived = true;
         }
@@ -118,6 +121,7 @@ namespace RaceManager.Progress
         public bool IsReceived { get; set; }
         public RewardType Type => RewardType.CarCard;
         public CarName CarName => _carName;
+        public Rarity Rarity => _carRarity;
         public int CardsAmount => _cardsAmount;
 
         public void Reward(Profiler profiler)

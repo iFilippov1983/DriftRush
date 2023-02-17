@@ -26,7 +26,6 @@ namespace RaceManager.Infrastructure
         [SerializeField] private CarsDepot _playerCarDepot;
         [Space]
         [SerializeField] private SpritesContainerCarCollection _spritesContainerCars;
-        [SerializeField] private SpritesContainerCarCards _spritesContainerCards;
         [SerializeField] private SpritesContainerRewards _spritesContainerRewards;
         [Space]
         [SerializeField] private GameProgressScheme _gameProgressScheme;
@@ -57,7 +56,6 @@ namespace RaceManager.Infrastructure
             Bind(_podium);
             Bind(_playerCarDepot);
             Bind(_spritesContainerCars);
-            Bind(_spritesContainerCards);
             Bind(_spritesContainerRewards);
             Bind(_gameProgressScheme);
             Bind(_raceRewardsScheme);

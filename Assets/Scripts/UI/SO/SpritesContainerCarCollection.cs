@@ -12,11 +12,26 @@ namespace RaceManager.UI
     {
         [SerializeField]
         private List<CarSpriteHolder> _carSprites = new List<CarSpriteHolder>();
+        [Space(20)]
 
-        public Sprite GetCarSprite(CarName carName)
+        [SerializeField]
+        private List<CarRarityColor> _cardColors = new List<CarRarityColor>();
+
+        public Sprite GetCarSprite(CarName carName, bool locked = false)
         {
             CarSpriteHolder holder = _carSprites.Find(h => h.CarName == carName);
+
+            Sprite sprite = locked
+                ? holder.CarLockedSprite
+                : holder.CarSprite;
+
             return holder.CarSprite;
+        }
+
+        public Color GetCarRarityColor(Rarity carRarity)
+        {
+            CarRarityColor color = _cardColors.Find(h => h.CarRarity == carRarity);
+            return color.RarityColor;
         }
 
         [Serializable]
@@ -24,6 +39,14 @@ namespace RaceManager.UI
         { 
             public CarName CarName;
             public Sprite CarSprite;
+            public Sprite CarLockedSprite;
+        }
+
+        [Serializable]
+        public class CarRarityColor
+        {
+            public Rarity CarRarity;
+            public Color RarityColor;
         }
     }
 }

@@ -41,7 +41,7 @@ namespace RaceManager.Cars
             if (_accelerating)
                 return;
 
-            _carAI.DesiredSpeed = _car.CarConfig.MaxSpeed;
+            _carAI.DesiredSpeed = _carAI.IsStopping ? 0 : _car.CarConfig.MaxSpeed;
             _accelerating = true;
         }
 
@@ -50,7 +50,7 @@ namespace RaceManager.Cars
             if (!_accelerating)
                 return;
 
-            _carAI.DesiredSpeed = _car.CarConfig.CruiseSpeed;
+            _carAI.DesiredSpeed = _carAI.IsStopping ? 0 : _car.CarConfig.CruiseSpeed;
             _accelerating = false;
         }
     }

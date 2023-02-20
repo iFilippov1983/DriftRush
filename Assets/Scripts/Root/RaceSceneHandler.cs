@@ -55,7 +55,7 @@ namespace RaceManager.Root
             _playerDriver = driver;
             _gameEvents.ScreenTaped.Subscribe((u) => SetImmediateStart());
 
-            CamerasHandler.FollowAndLookAt(driver.CarCameraFollowTarget, driver.CarCameraLookTarget);
+            CamerasHandler.SetTargets(driver.CarCameraFollowTarget, driver.CarCameraLookTarget, driver.CameraFinalPosition);
 
             CamerasHandler.FollowCam.position = raceLevel.FollowCamInitialPosition;
             CamerasHandler.StartCam.position = raceLevel.StartCamInitialPosition;

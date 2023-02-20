@@ -58,7 +58,7 @@ namespace RaceManager.Cars
 
         private void HandleSafety()
         {
-            if (_carAI.isDriving && LastOkPoint != null)
+            if (_carAI.isDriving && _carAI.IsStopping == false && LastOkPoint != null)
             {
                 if (_rigidbody.velocity.magnitude < _velocityThreshold)
                 {
@@ -84,7 +84,7 @@ namespace RaceManager.Cars
                     _rigidbody.velocity = Vector3.zero;
                 transform.position = positionToRespawnOn.position;
                 transform.rotation = positionToRespawnOn.rotation;
-                _carAI.StartEngine();
+                _carAI.StartDriving();
             }
             _stuckTimer = 0;
 

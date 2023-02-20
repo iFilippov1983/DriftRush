@@ -58,7 +58,7 @@ namespace RaceManager.Root
                 .Subscribe(_key, ActivateSelf)
                 .AddTo(this);
 
-            $"EnableOnFlag subscribed => Key: [{_key}] => Object: [{gameObject.name}]".Log(Logger.ColorYellow);
+            //$"EnableOnFlag subscribed => Key: [{_key}] => Object: [{gameObject.name}]".Log(Logger.ColorYellow);
         }
 
         private void DisableOnFlag()
@@ -73,7 +73,7 @@ namespace RaceManager.Root
                 .Subscribe(_key, DeactivateSelf)
                 .AddTo(this);
 
-            $"DisableOnFlag subscribed => Key: [{_key}] => Object: [{gameObject.name}]".Log(Logger.ColorYellow);
+            //$"DisableOnFlag subscribed => Key: [{_key}] => Object: [{gameObject.name}]".Log(Logger.ColorYellow);
         }
 
         private void DestroyOnFlag()
@@ -88,7 +88,7 @@ namespace RaceManager.Root
                 .Subscribe(_key, DestroySelf)
                 .AddTo(this);
 
-            $"DestroyOnFlag subscribed => Key: [{_key}] => Object: [{gameObject.name}]".Log(Logger.ColorYellow);
+            //$"DestroyOnFlag subscribed => Key: [{_key}] => Object: [{gameObject.name}]".Log(Logger.ColorYellow);
         }
 
         private void DestroySelf()
@@ -98,13 +98,13 @@ namespace RaceManager.Root
 
         private void DeactivateSelf()
         {
-            $"- Deactivate object [{gameObject.name}] with key => {_key}".Log();
+            //$"- Deactivate object [{gameObject.name}] with key => {_key}".Log();
             transform.localScale = Vector3.zero;
         }
 
         private void ActivateSelf()
         {
-            $"+ Activating object [{gameObject.name}] with key => {_key}".Log();
+            //$"+ Activating object [{gameObject.name}] with key => {_key}".Log();
             transform.localScale = _originalScale;
         }
     }

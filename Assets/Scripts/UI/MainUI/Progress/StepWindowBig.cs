@@ -10,6 +10,7 @@ namespace RaceManager.UI
         [SerializeField] private TMP_Text _levelNameText;
         [SerializeField] private Image _claimedImage;
         [SerializeField] private Image _levelRepresentationImage;
+        [SerializeField] private Image _titleImage;
         [Space]
         [SerializeField] private RewardSimpleUIView _rewardSimple;
         [SerializeField] private TMP_Text _incomeBonusText;
@@ -21,6 +22,7 @@ namespace RaceManager.UI
 
         public Image ClaimedImage => _claimedImage;
         public Image LevelRepresentationImage => _levelRepresentationImage;
+        public Image TitleImage => _titleImage;
 
         public RewardSimpleUIView RewardSimple => _rewardSimple;
         public RectTransform IncomeBonusWindow => _incomeBonusRectTransform;

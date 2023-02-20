@@ -4,6 +4,7 @@ using RaceManager.Race;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace RaceManager.UI
@@ -13,6 +14,21 @@ namespace RaceManager.UI
     public class SpritesContainerRewards : SerializedScriptableObject
     {
         [SerializeField]
+        List<ShopRewardSpriteHolder> _shopRewardSprites = new List<ShopRewardSpriteHolder>()
+        {
+            { new ShopRewardSpriteHolder() { RewardType = RewardType.Money, RewardSprite = null } },
+            { new ShopRewardSpriteHolder() { RewardType = RewardType.Money, RewardSprite = null } },
+            { new ShopRewardSpriteHolder() { RewardType = RewardType.Money, RewardSprite = null } },
+            { new ShopRewardSpriteHolder() { RewardType = RewardType.Money, RewardSprite = null } },
+
+            { new ShopRewardSpriteHolder() { RewardType = RewardType.Gems, RewardSprite = null } },
+            { new ShopRewardSpriteHolder() { RewardType = RewardType.Gems, RewardSprite = null } },
+            { new ShopRewardSpriteHolder() { RewardType = RewardType.Gems, RewardSprite = null } },
+            { new ShopRewardSpriteHolder() { RewardType = RewardType.Gems, RewardSprite = null } },
+        };
+
+        [Space(20)]
+        [SerializeField]
         private List<SimpleRewardSpriteHolder> _simpleRewardSprites = new List<SimpleRewardSpriteHolder>()
         {
             { new SimpleRewardSpriteHolder() { RewardType = RewardType.Money, RewardSprite = null } },
@@ -20,6 +36,7 @@ namespace RaceManager.UI
             { new SimpleRewardSpriteHolder() { RewardType = RewardType.Cups, RewardSprite = null } }
         };
 
+        [Space(20)]
         [SerializeField]
         private List<LootboxSriteHolder> _lootboxSrites = new List<LootboxSriteHolder>()
         {
@@ -30,10 +47,18 @@ namespace RaceManager.UI
             { new LootboxSriteHolder() { Rarity = Rarity.Legendary, LootboxSprite = null} }
         };
 
+        [Space(20)]
         [SerializeField]
         private List<LevelSpriteHolder> _levelSprites = new List<LevelSpriteHolder>()
         {
             { new LevelSpriteHolder() { LevelName = LevelName.Level_0_test, LevelSprite = null } }
+        };
+
+        [Space(20)]
+        [SerializeField]
+        private List<MenuColorHolder> _menuColors = new List<MenuColorHolder>()
+        {
+            { new MenuColorHolder() { Name = MenuColorName.Default, Color = Color.gray } }
         };
 
         public Sprite GetSimpleRewardSprite(RewardType rewardType)
@@ -54,6 +79,24 @@ namespace RaceManager.UI
             return holder.LevelSprite;
         }
 
+        public Sprite GetShopSprite(RewardType rewardType, int rewardsAmount)
+        {
+            var holder = _shopRewardSprites.Find
+                (
+                h => 
+                h.RewardType == rewardType 
+                && rewardsAmount > h.MinAmountThreshold 
+                && rewardsAmount <= h.MaxAmountThreshold 
+                );
+
+            if (holder == null)
+                holder = _shopRewardSprites.First(h => h.RewardType == rewardType);
+
+            return holder.RewardSprite;
+        }
+
+        public Color GetMenuColor(MenuColorName name) => _menuColors.Find(h => h.Name == name).Color;
+
         public class LevelSpriteHolder
         {
             public LevelName LevelName;
@@ -70,6 +113,20 @@ namespace RaceManager.UI
         { 
             public Rarity Rarity;
             public Sprite LootboxSprite;
+        }
+
+        public class ShopRewardSpriteHolder
+        {
+            public RewardType RewardType;
+            public int MinAmountThreshold;
+            public int MaxAmountThreshold;
+            public Sprite RewardSprite;
+        }
+
+        public class MenuColorHolder
+        {
+            public MenuColorName Name;
+            public Color Color;
         }
     }
 }

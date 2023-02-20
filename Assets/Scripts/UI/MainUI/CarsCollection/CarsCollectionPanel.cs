@@ -25,8 +25,7 @@ namespace RaceManager.UI
         [SerializeField] private CarWindow _carWindow;
 
         private GameObject _collectionCardPrefab;
-        private SpritesContainerCarCollection _spritesCars;
-        private SpritesContainerCarCards _spritesCarCards;
+        private SpritesContainerCarCollection _spritesCarsCollection;
 
         private List<CollectionCard> _collectionCards = new List<CollectionCard>();
 
@@ -53,23 +52,35 @@ namespace RaceManager.UI
         }
 
         [Inject]
-        private void Construct(SpritesContainerCarCollection spritesCars, SpritesContainerCarCards spritesCarCards)
+        private void Construct(SpritesContainerCarCollection spritesCars)
         { 
-            _spritesCars = spritesCars;
-            _spritesCarCards = spritesCarCards;
+            _spritesCarsCollection = spritesCars;
         }
 
         [Title("TEST")]
         [Button]
-        public void AddCollectionCard(CarName carName, int progressCurrent, int progressTotal, bool isAvailable, bool noGoal)
+        public void AddCollectionCard
+            (
+            CarName carName, 
+            Rarity carRarity, 
+            int factorsProgress,
+            int progressCurrent, 
+            int progressTotal, 
+            bool isAvailable, 
+            bool noGoal)
         {
             GameObject cardGo = Instantiate(CollectionCardPrefab, _collectionContent.transform, false);
             CollectionCard card = cardGo.GetComponent<CollectionCard>();
 
-            card.BackgroundImage.sprite = _spritesCars.GetCarSprite(carName);
+            Color rarityColor = _spritesCarsCollection.GetCarRarityColor(carRarity);
+            card.FrameImage.color = rarityColor;
+            //card.CardImage.color = rarityColor;
+            card.CarImage.sprite = _spritesCarsCollection.GetCarSprite(carName);
+            card.LockedImage.sprite = _spritesCarsCollection.GetCarSprite(carName, true);
             
+            string name = carName.ToString().SplitByUppercaseWith(" ");
+            card.CarNameText.text = name.ToUpper();
             card.CashedCarName = carName;
-            card.CarNameText.text = carName.ToString();
             card.LockedImage.SetActive(!isAvailable);
 
             string text = noGoal
@@ -77,7 +88,7 @@ namespace RaceManager.UI
                 : $"{progressCurrent}/{progressTotal}";
 
             card.ProgressText.text = text;
-
+            card.PartsAmountText.text = factorsProgress.ToString();
 
             card.ProgressImage.fillAmount = noGoal || progressCurrent > progressTotal
                 ? 1f
@@ -94,34 +105,38 @@ namespace RaceManager.UI
             _collectionContentRect.rect.SetHeight(rect.height);
         }
 
-        public void UpdateCard(CarName carName, int progressCurrent, int progressTotal, bool isAvailable, bool noGoal)
+        public void UpdateCard(CarName carName, int factorsProgress, int cardsProgressCurrent, int progressTotal, bool isAvailable, bool noGoal)
         {
-            CollectionCard card = _collectionCards.Find(c => c.CarNameText.text == carName.ToString());
+            CollectionCard card = _collectionCards.Find(c => c.CashedCarName == carName);
 
             card.LockedImage.SetActive(!isAvailable);
             card.UseCarButton.interactable = isAvailable;
 
             string text = noGoal
-                ? progressCurrent.ToString()
-                : $"{progressCurrent}/{progressTotal}";
+                ? cardsProgressCurrent.ToString()
+                : $"{cardsProgressCurrent}/{progressTotal}";
 
             card.ProgressText.text = text;
+            card.PartsAmountText.text = factorsProgress.ToString();
 
-            card.ProgressImage.fillAmount = noGoal || progressCurrent > progressTotal
+            card.ProgressImage.fillAmount = noGoal || cardsProgressCurrent > progressTotal
                 ? 1f
-                : (float)progressCurrent / (float)progressTotal;
+                : (float)cardsProgressCurrent / (float)progressTotal;
 
             UpdateCarWindow(card);
         }
 
-        public void UpdateStatsProgress(string carName, int currentValue, int maxValue)
+        public void UpdateStatsProgress(string carName, int currentValue) //, int maxValue)
         {
-            _carNameText.text = carName;
-            _carStatsProgressText.text = $"{currentValue}/{maxValue}";
+            string name = carName.SplitByUppercaseWith(" ");
+
+            _carNameText.text = name.ToUpper();
+            _carStatsProgressText.text = $"{currentValue}"; //  /{maxValue}";
         }
 
-        public void SetCarWindow(int upgradeCost, bool upgraded, bool isAvailable)
+        public void SetCarWindow(Rarity carRarity, int upgradeCost, bool upgraded, bool isAvailable)
         {
+            //_carWindow.CardsImage.color = _spritesCarsCollection.GetCarRarityColor(carRarity);
             _carWindow.UpgradeCostText.text = upgradeCost.ToString();
 
             _carWindow.UpgradeButton.SetActive(!upgraded);
@@ -147,14 +162,22 @@ namespace RaceManager.UI
 
         private void UpdateCarWindow(CollectionCard card)
         {
-            Sprite spriteCards = _spritesCarCards.GetCardSprite(card.CashedCarName);
+            //Sprite spriteCards = _spritesCarCards.GetCardSprite(card.CashedCarName);
 
-            _carWindow.CardsImage.sprite = spriteCards;
-            _carWindow.ProgressBarImage.fillAmount = card.ProgressImage.fillAmount;
+            //_carWindow.CardsImage.sprite = spriteCards;
+            //_carWindow.CardsImage.color = card.FrameImage.color;
+            //_carWindow.CardsProgressText.color = card.FrameImage.color;
             _carWindow.CardsProgressText.text = card.ProgressText.text;
+            _carWindow.ProgressBarImage.fillAmount = card.ProgressImage.fillAmount;
+            
         }
 
         private void OnButtonPressedMethod(Button button) => OnButtonPressed?.Invoke(button);
+
+        private void OnDisable()
+        {
+            _carWindow.SetActive(false);
+        }
     }
 }
 

@@ -19,7 +19,7 @@ namespace RaceManager.UI
         [SerializeField] private GridLayoutGroup _receivedCardsContent;
 
         private GameObject _carCardPrefab;
-        private SpritesContainerCarCollection _spritesCars;
+        private SpritesContainerCarCollection _spritesCarsCollection;
 
         private List<CarCardView> _cardsList = new List<CarCardView>();
         private Stack<CarCardView> _cardsStack = new Stack<CarCardView>();
@@ -39,7 +39,7 @@ namespace RaceManager.UI
         [Inject]
         private void Construct(SpritesContainerCarCollection spritesContainerCars)
         {
-            _spritesCars = spritesContainerCars;
+            _spritesCarsCollection = spritesContainerCars;
             
             _okButton.onClick.AddListener(Cleanup);
         }
@@ -48,7 +48,7 @@ namespace RaceManager.UI
         { 
             foreach (var card in list)
             {
-                AddCarCard(card.CarName, card.CardsAmount);
+                AddCarCard(card.CarName, card.Rarity, card.CardsAmount);
             }
 
             //Debug.Log($"List: {_cardsList.Count}; Stack: {_cardsStack.Count}");
@@ -57,7 +57,7 @@ namespace RaceManager.UI
                 await Task.Yield();
         }
 
-        private void AddCarCard(CarName carName, int amount)
+        private void AddCarCard(CarName carName, Rarity carRarity, int amount)
         {
             CarCardView cardView;
             if (_cardsStack.Count != 0)
@@ -70,9 +70,16 @@ namespace RaceManager.UI
                 GameObject cardGo = Instantiate(CarCardPrefab, _receivedCardsContent.transform, false);
                 cardView = cardGo.GetComponent<CarCardView>();
             }
+
+            Color color = _spritesCarsCollection.GetCarRarityColor(carRarity);
+            cardView.CardsAmount.color = color;
+            cardView.FrameImage.color = color;
+
             cardView.CarName = carName;
-            cardView.CardImage.sprite = _spritesCars.GetCarSprite(carName);
+            cardView.CarRarity = carRarity;
+            cardView.CardCarImage.sprite = _spritesCarsCollection.GetCarSprite(carName);
             cardView.CardsAmount.text = amount.ToString();
+            
 
             _cardsList.Add(cardView);
         }
@@ -88,9 +95,13 @@ namespace RaceManager.UI
                 _representationCard.IsVisible = true;
                 _representationCard.IsAppearing = true;
 
-                _representationCard.CarName.text = cardView.CarName.ToString();
+                string name = cardView.CarName.ToString().SplitByUppercaseWith(" ");
+                _representationCard.CarName.text = name.ToUpper();
+
+                //Color color = _spritesCarsCollection.GetCarRarityColor(cardView.CarRarity);
+                _representationCard.FrameImage.color = cardView.FrameImage.color;
                 _representationCard.CardAmount.text = cardView.CardsAmount.text;
-                _representationCard.CarCardImage.sprite = cardView.CardImage.sprite;
+                _representationCard.CarImage.sprite = cardView.CardCarImage.sprite;
                 _representationCard.Animator.SetBool(AnimParameter.Taped, false);
 
                 while (_representationCard.IsVisible)

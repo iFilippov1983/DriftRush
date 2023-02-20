@@ -36,9 +36,11 @@ namespace RaceManager.Cars
         private float _lateralWanderSpeed = 1f;
 
         private bool _playerDriving = false;
+        private bool _isStopping = false;
+
+        public float DesiredSpeed;
 
         public bool isDriving => _isDriving;
-        [ReadOnly]
         public bool PlayerDriving
         { 
             get => _playerDriving;
@@ -52,8 +54,23 @@ namespace RaceManager.Cars
                 //Debug.Log($"{gameObject.name} speed: {DesiredSpeed}");
             }
         }
-        [ReadOnly]
-        public float DesiredSpeed;
+        public bool IsStopping
+        { 
+            get => _isStopping;
+            set 
+            {
+                if (value)
+                    DesiredSpeed = 0;
+                else
+                { 
+                    DesiredSpeed = PlayerDriving
+                        ? _car.CarConfig.CruiseSpeed
+                        : _car.CarConfig.MaxSpeed * Random.Range(_car.CarConfig.CruiseSpeedPercentMin, _car.CarConfig.CruiseSpeedPercentMax);
+                }
+
+                _isStopping = value;
+            }
+        }
         public Transform Target => _target;
 
         public void StopAvoiding() => _isAvoidingCars = false;
@@ -99,10 +116,11 @@ namespace RaceManager.Cars
         {
             if (isDriving)
             {
-                float accel = CalculateAcceleration();
+                bool handBrake = IsStopping;
+                float accel = IsStopping ? 0 : CalculateAcceleration();
                 float steer = CalculateSteering();
 
-                _car.UpdateControls(steer, accel, false);
+                _car.UpdateControls(steer, accel, handBrake);
             }
             else
             {
@@ -253,7 +271,6 @@ namespace RaceManager.Cars
                 }
             }
         }
-
         private void PushOpponent(Collision collision)
         {
             Vector3 contactPoint = collision.GetContact(0).point;
@@ -290,17 +307,14 @@ namespace RaceManager.Cars
             _avoidPathOffset = _lateralWanderDistance * -Mathf.Sign(otherCarAngle);
         }
 
+        public void StartDriving() => _isDriving = true;
         public void StopDriving() => _isDriving = false;
 
         public void StopEngine()
         {
-            _isDriving = false;
-            _target = null;
-        }
-
-        public void StartEngine()
-        {
-            _isDriving = true;
+            IsStopping = true;
+            //_isDriving = false;
+            //_target = null;
         }
     }
 }

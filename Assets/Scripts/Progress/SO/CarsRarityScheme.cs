@@ -1,10 +1,8 @@
 ﻿using Sirenix.OdinInspector;
-using static ToonyColorsPro.ShaderGenerator.Enums;
 using System;
 using UnityEngine;
 using RaceManager.Cars;
 using System.Collections.Generic;
-using UnityEngine.UIElements;
 
 namespace RaceManager.Progress
 {
@@ -26,7 +24,7 @@ namespace RaceManager.Progress
             { 
                 Rarity.Uncommon, new List<CarName>()
                 { 
-                    CarName.DodgeTRX,
+                    CarName.DodgeTrx,
                     CarName.NissanSilvia
                 }
             },

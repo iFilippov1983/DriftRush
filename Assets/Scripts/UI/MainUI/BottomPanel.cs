@@ -7,7 +7,7 @@ namespace RaceManager.UI
 {
     public class BottomPanel : MonoBehaviour
     {
-        [SerializeField] private Button _iapShopButton;
+        [SerializeField] private Button _shopButton;
         [SerializeField] private Image _iapShopPressedImage;
         [Space]
         [SerializeField] private Button _carsCollectionButton;
@@ -22,7 +22,7 @@ namespace RaceManager.UI
         [SerializeField] private Button _soonButton;
         [SerializeField] private Image _soonPressedImage;
 
-        public Button IapShopButton => _iapShopButton;
+        public Button ShopButton => _shopButton;
         public Button CarsCollectionButton => _carsCollectionButton;
         public Button MainMenuButton => _mainMenuButton;
         public Button TuneButton => _tuningButton;
@@ -38,7 +38,7 @@ namespace RaceManager.UI
         {
             DeactivateAllPressedImages();
 
-            IapShopButton.onClick.AddListener(() => TogglePressedImageActivity(_iapShopPressedImage));
+            ShopButton.onClick.AddListener(() => TogglePressedImageActivity(_iapShopPressedImage));
             CarsCollectionButton.onClick.AddListener(() => TogglePressedImageActivity(_carsCollectionPressedImage));
             MainMenuButton.onClick.AddListener(() => TogglePressedImageActivity(_mainMenuPressedImage));
             TuneButton.onClick.AddListener(() => TogglePressedImageActivity(_tuningPressedImage));
@@ -46,15 +46,10 @@ namespace RaceManager.UI
 
         private void TogglePressedImageActivity(Image pressedImage)
         {
-            if (pressedImage.IsActive())
-            {
-                pressedImage.SetActive(false);
-            }
-            else
-            {
-                DeactivateAllPressedImages();
-                pressedImage.SetActive(true);
-            }
+            DeactivateAllPressedImages();
+
+            bool active = pressedImage.IsActive() ? false : true;
+            pressedImage.SetActive(active);
         }
 
         private void DeactivateAllPressedImages()

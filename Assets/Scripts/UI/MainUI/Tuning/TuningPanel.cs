@@ -1,5 +1,6 @@
 ﻿using RaceManager.Cars;
 using System;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,16 +31,20 @@ namespace RaceManager.UI
         [SerializeField] private TMP_Text _factorPointsAvailableText;
         [Space]
         [SerializeField] private TMP_Text _speedPointsText;
-        [SerializeField] private TMP_Text _speedPointsMaxText;
+        //[SerializeField] private TMP_Text _speedPointsMaxText;
         [Space]
         [SerializeField] private TMP_Text _mobilityPointsText;
-        [SerializeField] private TMP_Text _mobilityPointsMaxText;
+        //[SerializeField] private TMP_Text _mobilityPointsMaxText;
         [Space]
         [SerializeField] private TMP_Text _durabilityPointsText;
-        [SerializeField] private TMP_Text _durabilityPointsMaxText;
+        //[SerializeField] private TMP_Text _durabilityPointsMaxText;
         [Space]
         [SerializeField] private TMP_Text _accelerationPointsText;
-        [SerializeField] private TMP_Text _accelerationPointsMaxText;
+        //[SerializeField] private TMP_Text _accelerationPointsMaxText;
+        [Space]
+        [SerializeField] private Image _tuneCarStatsActiveImage;
+        [SerializeField] private Image _tuneWheelsActiveImage;
+        [SerializeField] private Image _tuneCarViewActiveImage;
 
         public Slider SpeedSlider => _speedSlider;
         public Slider MobilitySlider => _mobilitySlider;
@@ -68,6 +73,7 @@ namespace RaceManager.UI
         private void OnDisable()
         {
             DeactivateAllPanels();
+            DeactivetaAllPanelActiveImages();
         }
 
         public void RegisterButtonsListeners()
@@ -91,22 +97,22 @@ namespace RaceManager.UI
                 case CharacteristicType.Speed:
                     SpeedSlider.minValue = minValue;
                     SpeedSlider.maxValue = maxValue;
-                    _speedPointsMaxText.text = maxValue.ToString();
+                    //_speedPointsMaxText.text = maxValue.ToString();
                     break;
                 case CharacteristicType.Mobility:
                     MobilitySlider.minValue = minValue;
                     MobilitySlider.maxValue = maxValue;
-                    _mobilityPointsMaxText.text = maxValue.ToString();
+                    //_mobilityPointsMaxText.text = maxValue.ToString();
                     break;
                 case CharacteristicType.Durability:
                     DurabilitySlider.minValue = minValue;
                     DurabilitySlider.maxValue = maxValue;
-                    _durabilityPointsMaxText.text = maxValue.ToString();
+                    //_durabilityPointsMaxText.text = maxValue.ToString();
                     break;
                 case CharacteristicType.Acceleration:
                     AccelerationSlider.minValue = minValue;
                     AccelerationSlider.maxValue = maxValue;
-                    _accelerationPointsMaxText.text = maxValue.ToString();
+                    //_accelerationPointsMaxText.text = maxValue.ToString();
                     break;
             }
         }
@@ -151,45 +157,42 @@ namespace RaceManager.UI
             DurabilitySlider.value = durability;
             AccelerationSlider.value = acceleration;
 
-            //_speedPointsText.text = speed.ToString();
-            //_mobilityPointsText.text = mobility.ToString();
-            //_durabilityPointsText.text = durability.ToString();
-            //_accelerationPointsText.text = acceleration.ToString();
-
             UpdateCurrentInfoValues(fatorsAvailable);
         }
 
-        public void UpdateCarStatsProgress(string carName, int currentValue, int maxValue)
+        public void UpdateCarStatsProgress(string carName, int currentValue)
         {
-            _carNameText.text = carName;
-            _carStatsProgressText.text = $"{currentValue}/{maxValue}";
+            string name = carName.SplitByUppercaseWith(" ");
+
+            _carNameText.text = name.ToUpper();
+            _carStatsProgressText.text = $"{currentValue}";
         }
 
         public void OpenStatsValuesPanel()
         {
-            bool isActive = _statsValuesPanel.gameObject.activeSelf;
-            isActive = !isActive;
-            _statsValuesPanel.SetActive(isActive);
-            _tuneWheelsViewPanel.SetActive(false);
-            _tuneCarViewPanel.SetActive(false);
+            DeactivateAllPanels();
+            _statsValuesPanel.SetActive(true);
+
+            DeactivetaAllPanelActiveImages();
+            _tuneCarStatsActiveImage.SetActive(true);
         }
 
         public void OpenTuneWheelsViewPanel()
         {
-            bool isActive = _tuneWheelsViewPanel.gameObject.activeSelf;
-            isActive = !isActive;
-            _statsValuesPanel.SetActive(false);
-            _tuneWheelsViewPanel.SetActive(isActive);
-            _tuneCarViewPanel.SetActive(false);
+            DeactivateAllPanels();
+            _tuneWheelsViewPanel.SetActive(true);
+
+            DeactivetaAllPanelActiveImages();
+            _tuneWheelsActiveImage.SetActive(true);
         }
 
         public void OpenTuneCarViewPanel()
         {
-            bool isActive = _tuneCarViewPanel.gameObject.activeSelf;
-            isActive = !isActive;
-            _statsValuesPanel.SetActive(false);
-            _tuneWheelsViewPanel.SetActive(false);
-            _tuneCarViewPanel.SetActive(isActive);
+            DeactivateAllPanels();
+            _tuneCarViewPanel.SetActive(true);
+
+            DeactivetaAllPanelActiveImages();
+            _tuneCarViewActiveImage.SetActive(true);
         }
 
         public void DeactivateAllPanels()
@@ -197,6 +200,13 @@ namespace RaceManager.UI
             _statsValuesPanel.SetActive(false);
             _tuneWheelsViewPanel.SetActive(false);
             _tuneCarViewPanel.SetActive(false);
+        }
+
+        public void DeactivetaAllPanelActiveImages()
+        { 
+            _tuneCarStatsActiveImage.SetActive(false);
+            _tuneWheelsActiveImage.SetActive(false);
+            _tuneCarViewActiveImage.SetActive(false);
         }
     }
 }

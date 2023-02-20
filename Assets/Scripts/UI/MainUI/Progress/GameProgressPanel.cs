@@ -22,12 +22,14 @@ namespace RaceManager.UI
         [Space]
         [SerializeField] private GridLayoutGroup _progressStepsContent;
         [SerializeField] private RectTransform _progressStepsContentRect;
+        [Space]
+        [SerializeField] private MenuColorName _notReachedColor = MenuColorName.PurpleDark;
+        [SerializeField] private MenuColorName _reachedColor = MenuColorName.PinkBright;
 
         private float _yOffset;
         private Vector3 _offsetPos;
 
         private GameObject _progressStepPrefab;
-        private SpritesContainerCarCards _spritesCards;
         private SpritesContainerCarCollection _spritesCars;
         private SpritesContainerRewards _spritesRewards;
 
@@ -50,9 +52,8 @@ namespace RaceManager.UI
         public TMP_Text gemsAmountText => _gemsAmountText; 
 
         [Inject]
-        private void Construct(SpritesContainerCarCards spritesContainerCards, SpritesContainerCarCollection spritesContainerCars, SpritesContainerRewards spritesContainerRewards)
+        private void Construct(SpritesContainerCarCollection spritesContainerCars, SpritesContainerRewards spritesContainerRewards)
         { 
-            _spritesCards = spritesContainerCards;
             _spritesCars = spritesContainerCars;
             _spritesRewards = spritesContainerRewards;
         }
@@ -66,7 +67,7 @@ namespace RaceManager.UI
             {
                 if (cupsAmount > stepView.GoalCupsAmount)
                 {
-                    stepView.CupsAmountSlider.SliderLevelImage.SetActive(false);
+                    stepView.CupsAmountSlider.SliderFlag.SetActive(false);
                     stepView.CupsAmountSlider.SliderImage.fillAmount = 1f;
                     previouseGoal = stepView.GoalCupsAmount;
 
@@ -83,16 +84,16 @@ namespace RaceManager.UI
                 if (stepView.GoalCupsAmount >= cupsAmount && cupsAmount > previouseGoal)
                 {
                     stepView.CupsAmountSlider.CupsAmountText.text = cupsAmount.ToString();
-                    stepView.CupsAmountSlider.SliderLevelImage.SetActive(true);
+                    stepView.CupsAmountSlider.SliderFlag.SetActive(true);
 
                     int stepSize = stepView.GoalCupsAmount - previouseGoal;
                     int localLevel = cupsAmount - previouseGoal;
                     float fillAmount = (float)localLevel / (float)stepSize;
                     stepView.CupsAmountSlider.SliderImage.fillAmount = fillAmount;
 
-                    Vector3 localPos = stepView.CupsAmountSlider.SliderLevelImage.rectTransform.localPosition;
+                    Vector3 localPos = stepView.CupsAmountSlider.SliderFlag.localPosition;
                     localPos.y = stepView.CupsAmountSlider.SliderImage.rectTransform.rect.height * fillAmount;
-                    stepView.CupsAmountSlider.SliderLevelImage.rectTransform.localPosition = localPos;
+                    stepView.CupsAmountSlider.SliderFlag.localPosition = localPos;
 
                     previouseGoal = stepView.GoalCupsAmount;
 
@@ -101,7 +102,7 @@ namespace RaceManager.UI
                     continue;
                 }
 
-                stepView.CupsAmountSlider.SliderLevelImage.SetActive(false);
+                stepView.CupsAmountSlider.SliderFlag.SetActive(false);
                 stepView.CupsAmountSlider.SliderImage.fillAmount = 0f;
 
                 int indexCur = _progressSteps.IndexOf(stepView);
@@ -132,13 +133,13 @@ namespace RaceManager.UI
         private void ActivateLevelImageAndPlaceToEdge(ProgressStepView stepView, int cupsAmount, bool toZero)
         {
             stepView.CupsAmountSlider.CupsAmountText.text = cupsAmount.ToString();
-            stepView.CupsAmountSlider.SliderLevelImage.SetActive(true);
+            stepView.CupsAmountSlider.SliderFlag.SetActive(true);
             
-            Vector3 localPos = stepView.CupsAmountSlider.SliderLevelImage.rectTransform.localPosition;
+            Vector3 localPos = stepView.CupsAmountSlider.SliderFlag.localPosition;
             localPos.y = toZero 
                 ? 0f 
                 : stepView.CupsAmountSlider.SliderImage.rectTransform.rect.height;
-            stepView.CupsAmountSlider.SliderLevelImage.rectTransform.localPosition = localPos;
+            stepView.CupsAmountSlider.SliderFlag.localPosition = localPos;
         }
 
         private void UpdateStepStatus(ProgressStep step, ProgressStepView stepView)
@@ -161,6 +162,11 @@ namespace RaceManager.UI
             {
                 stepView.StepWindow.ClaimedImage.SetActive(step.RewardsReceived);
             }
+
+            MenuColorName colorName = step.IsReached ? _reachedColor : _notReachedColor;
+            Color color = _spritesRewards.GetMenuColor(colorName);
+            stepView.StepWindow.TitleImage.color = color;
+            stepView.StepWindowBig.TitleImage.color = color;
         }
 
         public void AddProgressStep(int goalCupsAmount, ProgressStep step, UnityAction claimButtonAction)
@@ -238,8 +244,6 @@ namespace RaceManager.UI
                         window.RewardLootbox.SetActive(false);
                         window.RewardCards.SetActive(true);
                         window.RewardCards.CarImage.sprite = _spritesCars.GetCarSprite(card.CarName);
-                        window.RewardCards.CardsRarityImage.sprite = _spritesCards.GetCardSprite(card.CarName);
-                        window.RewardCards.CarName.text = card.CarName.ToString();
                         window.RewardCards.CardAmountText.text = card.CardsAmount.ToString();
                         break;
                     case RewardType.RaceReward:

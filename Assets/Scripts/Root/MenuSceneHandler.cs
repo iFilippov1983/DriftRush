@@ -95,7 +95,7 @@ namespace RaceManager.Root
         {
             _effectsController.PlayEffect(AudioType.SFX_ButtonPressed, HapticType.Selection);
             _gameEvents.ButtonPressed.OnNext(buttonName);
-            //$"Button pressed notification => [{buttonName.ToLower()}]".Log();
+            //$"Button pressed notification => [{buttonName}]".Log();
         }
 
         private void ToggleEffectSetting(float toggleValue, EffectType type)

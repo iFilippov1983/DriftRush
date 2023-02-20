@@ -54,7 +54,7 @@ namespace RaceManager.UI
 
             AddButtonsListeners();
 
-            _lootboxAnimationHandler.OnAnimationFinish += _lootboxProgress.OnAnimationFinish;
+            _lootboxAnimationHandler.OnAnimationFinish += OnLootboxAnimationFinish;
 
             _lootboxProgress.OnImagesDisableComplete += InitializeLootboxProgressPanel;
         }
@@ -82,7 +82,7 @@ namespace RaceManager.UI
                 if (counter != 2)
                     text += "s";
             }
-            _lootboxProgress.MoreWinsText.text = text;
+            _lootboxProgress.MoreWinsText.text = text.ToUpper();
         }
 
         private void InitializeLootboxSlots()
@@ -177,19 +177,58 @@ namespace RaceManager.UI
             };
 
             _lootboxPopup.InitiallizeView(info);
-            _lootboxPopup.TimerOpenButton.SetActive(!timerActive);
-            _lootboxPopup.SpeedupButton.SetActive(timerActive);
 
+            _lootboxPopup.TimerOpenButton.SetActive(!timerActive);
+            _lootboxPopup.TimerOpenButton.interactable = !_hasActiveTimerSlot;
             _lootboxPopup.TimerOpenButton.onClick.AddListener(() => SlotStartTimer(slot));
             _lootboxPopup.TimerOpenButton.onClick.AddListener(() => OnButtonPressedMethod(_lootboxPopup.TimerOpenButton));
 
+            _lootboxPopup.InstantOpenButton.SetActive(true);
             _lootboxPopup.InstantOpenButton.onClick.AddListener(() => SlotInstantOpen(slot));
             _lootboxPopup.InstantOpenButton.onClick.AddListener(() => OnButtonPressedMethod(_lootboxPopup.InstantOpenButton));
 
+            _lootboxPopup.SpeedupButton.SetActive(timerActive);
             _lootboxPopup.SpeedupButton.onClick.AddListener(() => SlotSpeedupTimer(slot));
             _lootboxPopup.SpeedupButton.onClick.AddListener(() => OnButtonPressedMethod(_lootboxPopup.SpeedupButton));
 
-            _lootboxPopup.TimerOpenButton.interactable = !_hasActiveTimerSlot;
+            _lootboxPopup.GetFreeLootboxButton.SetActive(false);
+
+            _lootboxPopup.SetActive(true);
+            OnPopupIsActive.Invoke(true);
+        }
+
+        public void OpenFreeLootboxPopup()
+        {
+            Rarity rarity = Rarity.Common;
+            float timeLeft = -1f;
+
+            Lootbox lootbox = new Lootbox(rarity, timeLeft);
+            lootbox.OpenTimerActivated = true;
+
+            Sprite sprite = _spritesRewards.GetLootboxSprite(rarity);
+
+            LootboxPopup.PopupInfo info = new LootboxPopup.PopupInfo()
+            {
+                lootboxRarity = lootbox.Rarity,
+                lootboxSprite = sprite,
+                moneyMin = lootbox.MoneyAmountMin,
+                moneyMax = lootbox.MoneyAmountMax,
+                cardsMin = lootbox.CardsAmountMin,
+                cardsMax = lootbox.CardsAmountMax,
+                instantOpenCost = lootbox.GemsToOpen,
+                timeToOpen = lootbox.InitialTimeToOpen
+            };
+
+            _lootboxPopup.InitiallizeView(info);
+
+            _lootboxPopup.TimerOpenButton.SetActive(false);
+            _lootboxPopup.InstantOpenButton.SetActive(false);
+            _lootboxPopup.SpeedupButton.SetActive(false);
+
+            _lootboxPopup.GetFreeLootboxButton.SetActive(true);
+            _lootboxPopup.GetFreeLootboxButton.onClick.AddListener(() => _profiler.AddOrOpenLootbox(lootbox));
+            _lootboxPopup.GetFreeLootboxButton.onClick.AddListener(() => OnButtonPressedMethod(_lootboxPopup.GetFreeLootboxButton));
+            _lootboxPopup.GetFreeLootboxButton.onClick.AddListener(CloseLootboxPopup);
 
             _lootboxPopup.SetActive(true);
             OnPopupIsActive.Invoke(true);
@@ -216,7 +255,7 @@ namespace RaceManager.UI
         {
             Lootbox lootbox = _profiler.GetLootboxWithId(slot.CurrentLootboxId);
 
-            if (_profiler.TryBuyWithGems(lootbox.GemsToOpen))
+            if (lootbox != null && _profiler.TryBuyWithGems(lootbox.GemsToOpen))
             {
                 _profiler.RemoveLootboxWithId(lootbox.Id);
                 lootbox.TimeToOpenLeft = 0;
@@ -238,6 +277,7 @@ namespace RaceManager.UI
             _lootboxPopup.TimerOpenButton.onClick.RemoveAllListeners();
             _lootboxPopup.InstantOpenButton.onClick.RemoveAllListeners();
             _lootboxPopup.SpeedupButton.onClick.RemoveAllListeners();
+            _lootboxPopup.GetFreeLootboxButton.onClick.RemoveAllListeners();
  
             _lootboxPopup.SetActive(false);
 
@@ -289,11 +329,12 @@ namespace RaceManager.UI
                 if (_activeTimerLootbox.TimeToOpenLeft > 0)
                 {
                     _hours = _activeTimerLootbox.TimeToOpenLeft / 3600f;
+                    //_hoursRounded = Mathf.RoundToInt(_hours);
                     _hoursRounded = Mathf.Floor(_hours);
                     _minutes = Mathf.Floor((_hours - _hoursRounded) * 60f);
                     if (_minutes >= 60) _minutes = 59;
 
-                    _activeTimerSlot.TimerText.text = _hoursRounded.ToString("00") + "h. " + _minutes.ToString("00") + "m.";
+                    _activeTimerSlot.TimerText.text = _hoursRounded.ToString("00") + "h." + _minutes.ToString("00") + "m.";
                 }
                 else
                 {
@@ -312,6 +353,12 @@ namespace RaceManager.UI
             {
                 _activeTimerLootbox.TimeToOpenLeft -= Time.deltaTime;
             }
+        }
+
+        private void OnLootboxAnimationFinish()
+        {
+            if (_lootboxProgress.gameObject.activeSelf)
+                _lootboxProgress.OnAnimationFinish();
         }
 
         private void OnButtonPressedMethod(Button button) => OnButtonPressed?.Invoke(button);
@@ -348,7 +395,7 @@ namespace RaceManager.UI
 
         private void OnDestroy()
         {
-            _lootboxAnimationHandler.OnAnimationFinish -= _lootboxProgress.OnAnimationFinish;
+            _lootboxAnimationHandler.OnAnimationFinish -= OnLootboxAnimationFinish;
 
             _lootboxProgress.OnImagesDisableComplete -= InitializeLootboxProgressPanel;
         }

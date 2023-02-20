@@ -1,5 +1,4 @@
-﻿using UniRx;
-using UnityEngine;
+﻿using UnityEngine;
 
 public static class StringExtentions
 {
@@ -19,4 +18,31 @@ public static class StringExtentions
 		int milliseconds = (int)(1000 * (time - minutes * 60 - seconds));
 		return string.Format (format, minutes, seconds, milliseconds);
 	}
+
+	public static string SplitByUppercaseWith(this string str, string separator)
+	{
+        string result = string.Empty;
+        string substring = string.Empty;
+
+        foreach (char c in str)
+        {
+            if (char.IsUpper(c))
+            {
+                result = result.Equals(string.Empty)
+                    ? substring
+                    : result + separator + substring;
+
+                substring = string.Empty;
+                substring += c;
+            }
+            else
+            {
+                substring += c;
+            }
+        }
+
+        result += separator + substring;
+
+        return result;
+    }
 }

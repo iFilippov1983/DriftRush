@@ -212,6 +212,16 @@ namespace RaceManager.Root
             saveManager.Save();
         }
 
+        [Button]
+        [ShowIf("IsMenuScene", true)]
+        public void ResetPlayerIap()
+        {
+            profiler.SetAdsOn();
+            saveManager.Save();
+
+            $"GotSpecialOffer = false".Log();
+        }
+
         #region Test Functions
 
         private void HandleSoundtrackTest()

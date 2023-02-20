@@ -32,6 +32,7 @@ namespace RaceManager.Cars
         public Car Car => _car;
         public Transform CarCameraLookTarget => _car.CameraLookTarget;
         public Transform CarCameraFollowTarget => _car.CameraFollowTarget;
+        public Transform CameraFinalPosition => _car.CameraFinalPosition;
         public WaypointsTracker WaypointsTracker => _waypointsTracker;
 
         public void Initialize
@@ -98,6 +99,8 @@ namespace RaceManager.Cars
                 case CarState.Finished:
                     StopRace();
                     break;
+                case CarState.Stoped:
+                    break;
             }
         }
 
@@ -113,7 +116,7 @@ namespace RaceManager.Cars
 
         private void StartRace()
         {
-            _carAI.StartEngine();
+            _carAI.StartDriving();
             NotifyObservers();
         }
 

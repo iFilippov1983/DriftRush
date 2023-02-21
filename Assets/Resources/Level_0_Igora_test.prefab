@@ -45,6 +45,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &51769927510964080
 GameObject:
   m_ObjectHideFlags: 0
@@ -90,6 +91,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &59608355948505165
 GameObject:
   m_ObjectHideFlags: 0
@@ -314,6 +316,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &117338716878868361
 GameObject:
   m_ObjectHideFlags: 0
@@ -359,6 +362,53 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
+--- !u!1 &184046077720800389
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3356095444267917726}
+  - component: {fileID: 2261837946601603277}
+  m_Layer: 0
+  m_Name: Waypoint 060
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3356095444267917726
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 184046077720800389}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 206.4, y: 5.71, z: -110.7}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 7708952171949527531}
+  m_RootOrder: 60
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2261837946601603277
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 184046077720800389}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  recomendedSpeed: 0
+  isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &273499910298198824
 GameObject:
   m_ObjectHideFlags: 0
@@ -464,6 +514,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &438423840767455229
 GameObject:
   m_ObjectHideFlags: 0
@@ -569,6 +620,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &780154552920487318
 GameObject:
   m_ObjectHideFlags: 0
@@ -605,6 +657,52 @@ Transform:
   m_Father: {fileID: 8385432661451514693}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: -6.32, z: 0}
+--- !u!1 &812882535437177748
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 705621281188291007}
+  - component: {fileID: 2836932042803392357}
+  m_Layer: 0
+  m_Name: Waypoint 053
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &705621281188291007
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 812882535437177748}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 289.8, y: 5.7, z: -152.1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1098331896256796745}
+  m_RootOrder: 53
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2836932042803392357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 812882535437177748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  recomendedSpeed: 0
+  isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &939221759711255095
 GameObject:
   m_ObjectHideFlags: 0
@@ -686,6 +784,52 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &1025867897134264298
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3019287012105751731}
+  - component: {fileID: 990399272504631750}
+  m_Layer: 0
+  m_Name: Waypoint 052
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3019287012105751731
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1025867897134264298}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 253.3, y: 5.7, z: -177.3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1098331896256796745}
+  m_RootOrder: 52
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &990399272504631750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1025867897134264298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  recomendedSpeed: 0
+  isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &1117272722717738785
 GameObject:
   m_ObjectHideFlags: 0
@@ -825,6 +969,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &1277507601482735479
 GameObject:
   m_ObjectHideFlags: 0
@@ -870,6 +1015,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &1287976269309169515
 GameObject:
   m_ObjectHideFlags: 0
@@ -895,7 +1041,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1287976269309169515}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 93.20001, y: 5.71, z: -151.8}
+  m_LocalPosition: {x: 105.05, y: 5.71, z: -150.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7708952171949527531}
@@ -915,6 +1061,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 1
 --- !u!1 &1307562677132463556
 GameObject:
   m_ObjectHideFlags: 0
@@ -960,6 +1107,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &1573292055386045142
 GameObject:
   m_ObjectHideFlags: 0
@@ -1005,6 +1153,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &1581868937057776387
 GameObject:
   m_ObjectHideFlags: 0
@@ -1145,6 +1294,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &1705179924929728375
 GameObject:
   m_ObjectHideFlags: 0
@@ -1190,6 +1340,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &1726614127505197513
 GameObject:
   m_ObjectHideFlags: 0
@@ -1235,6 +1386,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &1797925838018181408
 GameObject:
   m_ObjectHideFlags: 0
@@ -1314,6 +1466,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &2056243008924043074
 GameObject:
   m_ObjectHideFlags: 0
@@ -1359,6 +1512,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &2072753670625598296
 GameObject:
   m_ObjectHideFlags: 0
@@ -1404,6 +1558,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &2109147854331323127
 GameObject:
   m_ObjectHideFlags: 0
@@ -1494,6 +1649,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &2222116047515489551
 GameObject:
   m_ObjectHideFlags: 0
@@ -1637,6 +1793,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &2393636177933968765
 GameObject:
   m_ObjectHideFlags: 0
@@ -1788,6 +1945,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &2571390743753302594
 GameObject:
   m_ObjectHideFlags: 0
@@ -1833,6 +1991,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &2691013365832191888
 GameObject:
   m_ObjectHideFlags: 0
@@ -1878,6 +2037,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &2716048578863295568
 GameObject:
   m_ObjectHideFlags: 0
@@ -1923,6 +2083,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &2802806096696074737
 GameObject:
   m_ObjectHideFlags: 0
@@ -1968,6 +2129,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &2845423261829218957
 GameObject:
   m_ObjectHideFlags: 0
@@ -2013,6 +2175,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &2882999427724090665
 GameObject:
   m_ObjectHideFlags: 0
@@ -2058,6 +2221,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &2902407245120335775
 GameObject:
   m_ObjectHideFlags: 0
@@ -2185,6 +2349,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &3025486275893035905
 GameObject:
   m_ObjectHideFlags: 0
@@ -2260,6 +2425,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &3175471780136511606
 GameObject:
   m_ObjectHideFlags: 0
@@ -2305,6 +2471,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &3203188122145148333
 GameObject:
   m_ObjectHideFlags: 0
@@ -2350,6 +2517,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &3220955781352417355
 GameObject:
   m_ObjectHideFlags: 0
@@ -2432,6 +2600,52 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &3261889322204801636
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8750590843054872615}
+  - component: {fileID: 6784551018160417694}
+  m_Layer: 0
+  m_Name: Waypoint 051
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8750590843054872615
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3261889322204801636}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 211.5, y: 5.7, z: -190.3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1098331896256796745}
+  m_RootOrder: 51
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6784551018160417694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3261889322204801636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  recomendedSpeed: 0
+  isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &3377076340491493848
 GameObject:
   m_ObjectHideFlags: 0
@@ -2477,6 +2691,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &3625625990622881244
 GameObject:
   m_ObjectHideFlags: 0
@@ -2522,6 +2737,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &3652166876265035329
 GameObject:
   m_ObjectHideFlags: 0
@@ -2654,6 +2870,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &3710385401707419717
 GameObject:
   m_ObjectHideFlags: 0
@@ -2699,6 +2916,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &3839008826734190280
 GameObject:
   m_ObjectHideFlags: 0
@@ -2847,6 +3065,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &4231049716755500895
 GameObject:
   m_ObjectHideFlags: 0
@@ -2892,6 +3111,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 1
+  isFinishPoint: 0
 --- !u!1 &4245867690265057947
 GameObject:
   m_ObjectHideFlags: 0
@@ -2971,6 +3191,9 @@ Transform:
   - {fileID: 7906693029357284706}
   - {fileID: 758966279891206190}
   - {fileID: 6708407501011587435}
+  - {fileID: 8750590843054872615}
+  - {fileID: 3019287012105751731}
+  - {fileID: 705621281188291007}
   m_Father: {fileID: 8385432661451514693}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3053,6 +3276,9 @@ MonoBehaviour:
     - {fileID: 7906693029357284706}
     - {fileID: 758966279891206190}
     - {fileID: 6708407501011587435}
+    - {fileID: 8750590843054872615}
+    - {fileID: 3019287012105751731}
+    - {fileID: 705621281188291007}
 --- !u!1 &4247209149953032824
 GameObject:
   m_ObjectHideFlags: 0
@@ -3078,7 +3304,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4247209149953032824}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 268.19998, y: 5.7, z: -175}
+  m_LocalPosition: {x: 171.9, y: 5.7, z: -197.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1098331896256796745}
@@ -3098,6 +3324,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &4259602003021823502
 GameObject:
   m_ObjectHideFlags: 0
@@ -3143,6 +3370,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &4422914591578272049
 GameObject:
   m_ObjectHideFlags: 0
@@ -3364,6 +3592,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &4684335252770507472
 GameObject:
   m_ObjectHideFlags: 0
@@ -3490,6 +3719,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &4797265535621263295
 GameObject:
   m_ObjectHideFlags: 0
@@ -3662,6 +3892,53 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
+--- !u!1 &5002508054086617648
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2265748780529042377}
+  - component: {fileID: 5416436202093024216}
+  m_Layer: 0
+  m_Name: Waypoint 061
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2265748780529042377
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5002508054086617648}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 209.8, y: 5.71, z: -76.2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 7708952171949527531}
+  m_RootOrder: 61
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5416436202093024216
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5002508054086617648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  recomendedSpeed: 0
+  isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &5039592360263253081
 GameObject:
   m_ObjectHideFlags: 0
@@ -3707,6 +3984,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 1
+  isFinishPoint: 0
 --- !u!1 &5052631679443059379
 GameObject:
   m_ObjectHideFlags: 0
@@ -3785,6 +4063,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &5209721178295859189
 GameObject:
   m_ObjectHideFlags: 0
@@ -3830,6 +4109,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &5252657736788468737
 GameObject:
   m_ObjectHideFlags: 0
@@ -3875,6 +4155,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &5288824009941920186
 GameObject:
   m_ObjectHideFlags: 0
@@ -4051,6 +4332,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &5556500411681070483
 GameObject:
   m_ObjectHideFlags: 0
@@ -4076,7 +4358,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5556500411681070483}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 209.6, y: 5.7, z: -192.59999}
+  m_LocalPosition: {x: 130.6, y: 5.7, z: -201.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1098331896256796745}
@@ -4096,6 +4378,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 1
 --- !u!1 &5572280511423346304
 GameObject:
   m_ObjectHideFlags: 0
@@ -4141,6 +4424,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &5591602451332385421
 GameObject:
   m_ObjectHideFlags: 0
@@ -4186,6 +4470,52 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 1
+--- !u!1 &5682891818839667307
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4677366999593259443}
+  - component: {fileID: 4460225848001863738}
+  m_Layer: 0
+  m_Name: Waypoint 059
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4677366999593259443
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5682891818839667307}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 189.9, y: 5.71, z: -131.3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 7708952171949527531}
+  m_RootOrder: 59
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4460225848001863738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5682891818839667307}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09d91dda262506546a2d79a2a13fa398, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  recomendedSpeed: 0
+  isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &5690274844107958497
 GameObject:
   m_ObjectHideFlags: 0
@@ -4295,6 +4625,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &5762873706932642070
 GameObject:
   m_ObjectHideFlags: 0
@@ -4340,6 +4671,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &5768655287082301992
 GameObject:
   m_ObjectHideFlags: 0
@@ -4385,6 +4717,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &5797679650513722375
 GameObject:
   m_ObjectHideFlags: 0
@@ -4430,6 +4763,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &5826544984896962618
 GameObject:
   m_ObjectHideFlags: 0
@@ -4591,6 +4925,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &5881582737629718460
 GameObject:
   m_ObjectHideFlags: 0
@@ -4636,6 +4971,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &5913201310311322206
 GameObject:
   m_ObjectHideFlags: 0
@@ -4681,6 +5017,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &5920499675955399010
 GameObject:
   m_ObjectHideFlags: 0
@@ -4726,6 +5063,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &6053708192998329758
 GameObject:
   m_ObjectHideFlags: 0
@@ -4771,6 +5109,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &6053918457288278328
 GameObject:
   m_ObjectHideFlags: 0
@@ -5006,6 +5345,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &6330863227750918156
 GameObject:
   m_ObjectHideFlags: 0
@@ -5051,6 +5391,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &6426574689326371960
 GameObject:
   m_ObjectHideFlags: 0
@@ -5096,6 +5437,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &6487528158517618445
 GameObject:
   m_ObjectHideFlags: 0
@@ -5171,6 +5513,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 1
+  isFinishPoint: 0
 --- !u!1 &6580637920710783004
 GameObject:
   m_ObjectHideFlags: 0
@@ -5216,6 +5559,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &6599296877313696882
 GameObject:
   m_ObjectHideFlags: 0
@@ -5372,6 +5716,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &6756285129979421486
 GameObject:
   m_ObjectHideFlags: 0
@@ -5417,6 +5762,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &6787036395383953575
 GameObject:
   m_ObjectHideFlags: 0
@@ -5462,6 +5808,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &6806094516403076979
 GameObject:
   m_ObjectHideFlags: 0
@@ -5620,6 +5967,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &7120474200434174542
 GameObject:
   m_ObjectHideFlags: 0
@@ -5780,6 +6128,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &7331329339151209420
 GameObject:
   m_ObjectHideFlags: 0
@@ -5920,6 +6269,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &7470989055293452456
 GameObject:
   m_ObjectHideFlags: 0
@@ -6021,6 +6371,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &7548609727150663379
 GameObject:
   m_ObjectHideFlags: 0
@@ -6177,6 +6528,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &7630942566319655831
 GameObject:
   m_ObjectHideFlags: 0
@@ -6222,6 +6574,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &7679426890381583942
 GameObject:
   m_ObjectHideFlags: 0
@@ -6349,6 +6702,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &7708952171626124776
 GameObject:
   m_ObjectHideFlags: 0
@@ -6394,6 +6748,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &7708952171635082375
 GameObject:
   m_ObjectHideFlags: 0
@@ -6439,6 +6794,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &7708952171635893276
 GameObject:
   m_ObjectHideFlags: 0
@@ -6565,6 +6921,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &7708952171745185728
 GameObject:
   m_ObjectHideFlags: 0
@@ -6610,6 +6967,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &7708952171859559055
 GameObject:
   m_ObjectHideFlags: 0
@@ -6712,6 +7070,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &7708952171949527529
 GameObject:
   m_ObjectHideFlags: 0
@@ -6799,6 +7158,9 @@ Transform:
   - {fileID: 4345443696455544774}
   - {fileID: 6750692972036035687}
   - {fileID: 3456721618381382711}
+  - {fileID: 4677366999593259443}
+  - {fileID: 3356095444267917726}
+  - {fileID: 2265748780529042377}
   m_Father: {fileID: 7776026576006570233}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6889,6 +7251,9 @@ MonoBehaviour:
     - {fileID: 4345443696455544774}
     - {fileID: 6750692972036035687}
     - {fileID: 3456721618381382711}
+    - {fileID: 4677366999593259443}
+    - {fileID: 3356095444267917726}
+    - {fileID: 2265748780529042377}
 --- !u!1 &7708952171983510802
 GameObject:
   m_ObjectHideFlags: 0
@@ -7024,6 +7389,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &7708952172071814138
 GameObject:
   m_ObjectHideFlags: 0
@@ -7069,6 +7435,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &7708952172078192358
 GameObject:
   m_ObjectHideFlags: 0
@@ -7195,6 +7562,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &7708952172175197552
 GameObject:
   m_ObjectHideFlags: 0
@@ -7240,6 +7608,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &7708952172202810708
 GameObject:
   m_ObjectHideFlags: 0
@@ -7285,6 +7654,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &7708952172274389856
 GameObject:
   m_ObjectHideFlags: 0
@@ -7366,6 +7736,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &7708952172373486936
 GameObject:
   m_ObjectHideFlags: 0
@@ -7411,6 +7782,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 1
+  isFinishPoint: 0
 --- !u!1 &7708952172443617796
 GameObject:
   m_ObjectHideFlags: 0
@@ -7456,6 +7828,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &7708952172469959876
 GameObject:
   m_ObjectHideFlags: 0
@@ -7501,6 +7874,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &7708952172563073105
 GameObject:
   m_ObjectHideFlags: 0
@@ -7546,6 +7920,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &7708952172672072322
 GameObject:
   m_ObjectHideFlags: 0
@@ -7591,6 +7966,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &7708952172673500328
 GameObject:
   m_ObjectHideFlags: 0
@@ -7636,6 +8012,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &7708952172728697964
 GameObject:
   m_ObjectHideFlags: 0
@@ -7681,6 +8058,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &7708952172759636970
 GameObject:
   m_ObjectHideFlags: 0
@@ -7726,6 +8104,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &7708952172800669434
 GameObject:
   m_ObjectHideFlags: 0
@@ -7771,6 +8150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &7708952172930096035
 GameObject:
   m_ObjectHideFlags: 0
@@ -7816,6 +8196,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &7708952173060553296
 GameObject:
   m_ObjectHideFlags: 0
@@ -7906,6 +8287,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &7708952173219603582
 GameObject:
   m_ObjectHideFlags: 0
@@ -7951,6 +8333,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &7708952173225517831
 GameObject:
   m_ObjectHideFlags: 0
@@ -8374,6 +8757,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &7708952173641109877
 GameObject:
   m_ObjectHideFlags: 0
@@ -8500,6 +8884,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &7720356470387264712
 GameObject:
   m_ObjectHideFlags: 0
@@ -8545,6 +8930,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &7731722939527147463
 GameObject:
   m_ObjectHideFlags: 0
@@ -8590,6 +8976,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &7744831663658221335
 GameObject:
   m_ObjectHideFlags: 0
@@ -8635,6 +9022,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &7770684070852412947
 GameObject:
   m_ObjectHideFlags: 0
@@ -9008,6 +9396,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &8152878651892832705
 GameObject:
   m_ObjectHideFlags: 0
@@ -9198,6 +9587,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &8614087073657178803
 GameObject:
   m_ObjectHideFlags: 0
@@ -9243,6 +9633,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &8636598871384106057
 GameObject:
   m_ObjectHideFlags: 0
@@ -9288,6 +9679,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &8917955686789725383
 GameObject:
   m_ObjectHideFlags: 0
@@ -9333,6 +9725,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &8982699859983086251
 GameObject:
   m_ObjectHideFlags: 0
@@ -9473,6 +9866,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &9026660192394446676
 GameObject:
   m_ObjectHideFlags: 0
@@ -9518,6 +9912,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &9166456477200613610
 GameObject:
   m_ObjectHideFlags: 0
@@ -9655,7 +10050,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9193875940095711949}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 163.70001, y: 5.71, z: -143.09999}
+  m_LocalPosition: {x: 169, y: 5.71, z: -141.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7708952171949527531}
@@ -9675,6 +10070,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &9212866265200858650
 GameObject:
   m_ObjectHideFlags: 0
@@ -9720,6 +10116,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1 &9214753047981613470
 GameObject:
   m_ObjectHideFlags: 0
@@ -9765,6 +10162,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recomendedSpeed: 0
   isCheckpoint: 0
+  isFinishPoint: 0
 --- !u!1001 &13607868577451125
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13524,27 +13922,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c0785ce4a4372734fb19ac385dbe8eb6, type: 3}
---- !u!198 &7913226579479998432 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 7092614822268972844, guid: c0785ce4a4372734fb19ac385dbe8eb6,
-    type: 3}
-  m_PrefabInstance: {fileID: 1134742452672299212}
-  m_PrefabAsset: {fileID: 0}
 --- !u!198 &7913226579024673462 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 7092614822887914106, guid: c0785ce4a4372734fb19ac385dbe8eb6,
     type: 3}
   m_PrefabInstance: {fileID: 1134742452672299212}
   m_PrefabAsset: {fileID: 0}
---- !u!198 &4507587025199465411 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 3544685556912489231, guid: c0785ce4a4372734fb19ac385dbe8eb6,
-    type: 3}
-  m_PrefabInstance: {fileID: 1134742452672299212}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7913226577878054553 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7092614821741295189, guid: c0785ce4a4372734fb19ac385dbe8eb6,
+    type: 3}
+  m_PrefabInstance: {fileID: 1134742452672299212}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &7913226579479998432 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 7092614822268972844, guid: c0785ce4a4372734fb19ac385dbe8eb6,
+    type: 3}
+  m_PrefabInstance: {fileID: 1134742452672299212}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &4507587025199465411 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 3544685556912489231, guid: c0785ce4a4372734fb19ac385dbe8eb6,
     type: 3}
   m_PrefabInstance: {fileID: 1134742452672299212}
   m_PrefabAsset: {fileID: 0}
@@ -38587,33 +38985,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 50bec643dfe4f7b49b28fa22c4e95d47, type: 3}
---- !u!1 &665956806307939901 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8214575570272928637, guid: 50bec643dfe4f7b49b28fa22c4e95d47,
-    type: 3}
-  m_PrefabInstance: {fileID: 8880532055709271360}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &5896608069452000576 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: -6131359424735467520, guid: 50bec643dfe4f7b49b28fa22c4e95d47,
-    type: 3}
-  m_PrefabInstance: {fileID: 8880532055709271360}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &3607540398353024154 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5272996334061830618, guid: 50bec643dfe4f7b49b28fa22c4e95d47,
-    type: 3}
-  m_PrefabInstance: {fileID: 8880532055709271360}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1031396860322020689 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8461627221595338769, guid: 50bec643dfe4f7b49b28fa22c4e95d47,
     type: 3}
   m_PrefabInstance: {fileID: 8880532055709271360}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &5810153024296676057 stripped
+--- !u!1 &3164851342207975969 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: -6080928502048608359, guid: 50bec643dfe4f7b49b28fa22c4e95d47,
+  m_CorrespondingSourceObject: {fileID: -3398472391758919839, guid: 50bec643dfe4f7b49b28fa22c4e95d47,
     type: 3}
   m_PrefabInstance: {fileID: 8880532055709271360}
   m_PrefabAsset: {fileID: 0}
@@ -38629,21 +39009,9 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 8880532055709271360}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &3164851342207975969 stripped
+--- !u!1 &5810153024296676057 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: -3398472391758919839, guid: 50bec643dfe4f7b49b28fa22c4e95d47,
-    type: 3}
-  m_PrefabInstance: {fileID: 8880532055709271360}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &8986728169226117803 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 50bec643dfe4f7b49b28fa22c4e95d47,
-    type: 3}
-  m_PrefabInstance: {fileID: 8880532055709271360}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &8614154808528120504 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 916021769197842424, guid: 50bec643dfe4f7b49b28fa22c4e95d47,
+  m_CorrespondingSourceObject: {fileID: -6080928502048608359, guid: 50bec643dfe4f7b49b28fa22c4e95d47,
     type: 3}
   m_PrefabInstance: {fileID: 8880532055709271360}
   m_PrefabAsset: {fileID: 0}
@@ -38656,6 +39024,36 @@ GameObject:
 --- !u!1 &5112124550043731223 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4452959334060277847, guid: 50bec643dfe4f7b49b28fa22c4e95d47,
+    type: 3}
+  m_PrefabInstance: {fileID: 8880532055709271360}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &665956806307939901 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8214575570272928637, guid: 50bec643dfe4f7b49b28fa22c4e95d47,
+    type: 3}
+  m_PrefabInstance: {fileID: 8880532055709271360}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8986728169226117803 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 50bec643dfe4f7b49b28fa22c4e95d47,
+    type: 3}
+  m_PrefabInstance: {fileID: 8880532055709271360}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5896608069452000576 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -6131359424735467520, guid: 50bec643dfe4f7b49b28fa22c4e95d47,
+    type: 3}
+  m_PrefabInstance: {fileID: 8880532055709271360}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8614154808528120504 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 916021769197842424, guid: 50bec643dfe4f7b49b28fa22c4e95d47,
+    type: 3}
+  m_PrefabInstance: {fileID: 8880532055709271360}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3607540398353024154 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5272996334061830618, guid: 50bec643dfe4f7b49b28fa22c4e95d47,
     type: 3}
   m_PrefabInstance: {fileID: 8880532055709271360}
   m_PrefabAsset: {fileID: 0}

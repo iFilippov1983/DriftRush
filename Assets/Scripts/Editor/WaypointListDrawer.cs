@@ -166,7 +166,6 @@ namespace RaceManager.Waypoints
             EditorGUI.EndProperty();
         }
 
-
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
             SerializedProperty items = property.FindPropertyRelative("items");

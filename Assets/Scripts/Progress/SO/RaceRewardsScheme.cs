@@ -12,6 +12,11 @@ namespace RaceManager.Progress
     [CreateAssetMenu(menuName = "Progress/RaceRewardsScheme", fileName = "RaceRewardsScheme", order = 1)]
     public class RaceRewardsScheme : SerializedScriptableObject
     {
+        [SerializeField] private float _scoresFactorDrift = 1.0f;
+        [SerializeField] private float _availableDriftPause = 5f;
+        [SerializeField] private float _scoresFactorOpponentHit = 100f;
+        [SerializeField] private float _scoresFactorCrashHit = 100f;
+        [Space(20)]
         [SerializeField]
         [DictionaryDrawerSettings(KeyLabel = "Place", ValueLabel = "Reward")]
         private Dictionary<PositionInRace, RaceReward> _scheme = new Dictionary<PositionInRace, RaceReward>()
@@ -24,7 +29,7 @@ namespace RaceManager.Progress
             { PositionInRace.Sixth, new RaceReward() },
             { PositionInRace.DNF, new RaceReward() }
         };
-
+        [Space(20)]
         [SerializeField]
         [DictionaryDrawerSettings(KeyLabel = "Chest Rarity", ValueLabel = "Probability To Get (%)")]
         private Dictionary<Rarity, float> GetChestProbabilities = new Dictionary<Rarity, float>()
@@ -35,6 +40,11 @@ namespace RaceManager.Progress
             { Rarity.Epic, 3f },
             { Rarity.Legendary, 1f }
         };
+
+        public float DriftFactor => _scoresFactorDrift;
+        public float AvailableDriftPause => _availableDriftPause;
+        public float OpponentHitFactor => _scoresFactorOpponentHit;
+        public float CrashHitFactor => _scoresFactorCrashHit;
 
         public RaceReward GetRewardFor(PositionInRace position) => _scheme[position];
 

@@ -1,14 +1,16 @@
 ﻿using RaceManager.Root;
 using RaceManager.Tools;
 using RaceManager.Cars;
+using RaceManager.Cameras;
+using RaceManager.Progress;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 using RaceManager.Waypoints;
 using RaceManager.UI;
 using Zenject;
-using RaceManager.Progress;
 using UniRx;
+using UniRx.Triggers;
 using RaceManager.Effects;
 using IInitializable = RaceManager.Root.IInitializable;
 
@@ -23,14 +25,15 @@ namespace RaceManager.Race
         private CarsDepot _playerCarsDepot;
         private GameSettingsContainer _settingsContainer;
         private RaceSceneHandler _sceneHandler;
-        private Profiler _profiler;
-        private RaceUI _raceUI;
-        private InRacePositionsHandler _positionsHandler;
-        private InRaceLootboxHandler _lootboxHandler;
+        private RaceScoresCouner _scoresCouner;
         private RaceLevelInitializer _raceLevelInitializer;
         private RaceLineHandler _lineHandler;
         private IRaceLevel _raceLevel;
         private RewardsHandler _rewardsHandler;
+        private Profiler _profiler;
+        private RaceUI _raceUI;
+        private InRacePositionsHandler _positionsHandler;
+        private InRaceLootboxHandler _lootboxHandler;
         private GameEvents _gameEvents;
 
         private WaypointTrack _waypointTrackMain;
@@ -84,6 +87,14 @@ namespace RaceManager.Race
 
             _positionsHandler.StartHandling(_waypointsTrackersList);
 
+            this.FixedUpdateAsObservable()
+                .Subscribe(_ => 
+                {
+                    _lootboxHandler.Handle();
+                    _scoresCouner.CountDriftScores();
+                })
+                .AddTo(this);
+
             _rewardsHandler.OnRaceRewardLootboxAdded += NotifyRaceUI;
         }
 
@@ -95,11 +106,6 @@ namespace RaceManager.Race
             _raceStarted = true;
 
             EventsHub<RaceEvent>.BroadcastNotification(RaceEvent.COUNTDOWN);
-        }
-
-        private void FixedUpdate()
-        {
-            _lootboxHandler.Handle();
         }
 
         private void InitDrivers()
@@ -144,6 +150,9 @@ namespace RaceManager.Race
                     }
 
                     _raceUI.Initialize(_raceLevelInitializer, selfRighting.RightCar, GetToCheckpoint);
+
+                    _scoresCouner = new RaceScoresCouner(driver.Car, _rewardsScheme);
+
                     _waypointTrackMain.OnCheckpointPass += MakeGameNotification;
                 }
                 else
@@ -179,6 +188,10 @@ namespace RaceManager.Race
                 case CarState.Finished:
                     _rewardsHandler.RewardForRace(playerDriver.DriverProfile.PositionInRace, out RaceRewardInfo info);
                     _raceUI.SetFinishValues(info.RewardMoneyAmount, info.RewardCupsAmount, info.MoneyTotal, info.GemsTotal);
+                    _lineHandler.StopHandling();
+                    break;
+                case CarState.Stopped:
+                    Singleton<RaceCamerasHandler>.Instance.SetCameraToFinalPosition();
                     break;
             }
 

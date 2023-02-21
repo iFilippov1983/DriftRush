@@ -7,6 +7,6 @@
         CanStart, 
         OnTrack, 
         Finished,
-        Stoped
+        Stopped
     }
 }

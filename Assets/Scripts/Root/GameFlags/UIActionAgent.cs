@@ -13,6 +13,7 @@ using DG.Tweening.Plugins.Options;
 using System;
 using System.Threading.Tasks;
 using static Logger;
+using UnityEngine.Events;
 
 namespace RaceManager.Root
 {
@@ -303,15 +304,6 @@ namespace RaceManager.Root
                 _ => null,
             };
 
-            Action resetAction = type switch
-            {
-                AnimationType.None => null,
-                AnimationType.FadeInOutLoop => () => ResetAlpha(),
-                AnimationType.ScaleUpDownLoop => () => ResetScale(),
-                AnimationType.MoveFromTo => () => ResetPosition(),
-                _ => null,
-            };
-
             if (start)
             {
                 if (currentAnimJob != null)
@@ -333,7 +325,21 @@ namespace RaceManager.Root
                 if (animCoroutine != null)
                     StopCoroutine(animCoroutine);
 
-                resetAction?.Invoke();
+                switch (type)
+                {
+                    case AnimationType.None:
+                        break;
+                    case AnimationType.FadeInOutLoop:
+                        ResetAlpha();
+                        break;
+                    case AnimationType.ScaleUpDownLoop:
+                        ResetScale();
+                        break;
+                    case AnimationType.MoveFromTo:
+                        ResetPosition();
+                        break;
+                }
+
                 SetCurrentJob(null);
             }
 

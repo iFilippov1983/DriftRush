@@ -7,6 +7,7 @@ namespace RaceManager.Waypoints
     {
         public float recomendedSpeed;
         public bool isCheckpoint;
+        public bool isFinishPoint;
 
         [ShowInInspector, ReadOnly] private float _maxHeight;
         [ShowInInspector, ReadOnly] private float _heightAboveRoad;

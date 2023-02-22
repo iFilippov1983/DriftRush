@@ -10,7 +10,7 @@ namespace RaceManager.Race
     public class RaceScoresCouner
     {
         private const int MinDriftDistanceValue = 1;
-        private const int StopCountDriftValue = -1;
+        private const int StopDriftCountValue = -1;
 
         private int _scoresDrift;
         private int _scoresCarHit;
@@ -23,13 +23,15 @@ namespace RaceManager.Race
         private Car _car;
         private RaceRewardsScheme _rewardsScheme;
 
-        public Action<int> OnDriftScoresCount;
-        public Action<int> OnDriftPauseCount;
+        public Subject<(int scores, int timer)> DriftScoresCount;
 
         public RaceScoresCouner(Car car, RaceRewardsScheme rewardsScheme)
         {
             _car = car;
             _rewardsScheme = rewardsScheme;
+            _driftPauseTime = AvailableDriftPause;
+
+            DriftScoresCount = new Subject<(int scores, int timer)>();
         }
 
         private Rigidbody CarRb => _car.RB;
@@ -62,9 +64,9 @@ namespace RaceManager.Race
                 if (_driftDistanceCounter > MinDriftDistanceValue)
                 {
                     int driftValue = Mathf.RoundToInt(_driftDistanceCounter * _rewardsScheme.DriftFactor);
-                    OnDriftScoresCount?.Invoke(driftValue);
+                    DriftScoresCount.OnNext((scores: driftValue, timer: 0));
 
-                    $"Drift value => {driftValue}".Log(Logger.ColorBlue);
+                    //$"Drift value => {driftValue}".Log(Logger.ColorBlue);
                 }
             }
             else
@@ -72,19 +74,19 @@ namespace RaceManager.Race
                 _driftPauseTime -= Time.fixedDeltaTime;
 
                 int pauseTimerValue = Mathf.RoundToInt(_driftPauseTime);
-                OnDriftPauseCount?.Invoke(pauseTimerValue);
-                Debug.Log($"[Drift Pause Timer: {pauseTimerValue}]");
-
                 int lastDriftValue = Mathf.RoundToInt(_driftDistanceCounter * _rewardsScheme.DriftFactor);
 
-                if (_driftPauseTime < 0)
+                DriftScoresCount.OnNext((scores: lastDriftValue, timer: pauseTimerValue));
+                //Debug.Log($"[Drift Pause Timer: {pauseTimerValue}]");
+
+                if (_driftPauseTime < 0 && lastDriftValue > 0)
                 {
                     _scoresDrift += lastDriftValue;
                     _driftDistanceCounter = 0f;
 
-                    OnDriftScoresCount?.Invoke(StopCountDriftValue);
+                    DriftScoresCount.OnNext((scores: _scoresDrift, timer: StopDriftCountValue));
 
-                    $"Drift Scores Value => {_scoresDrift}".Log(Logger.ColorGreen);
+                    //$"Drift Scores Value => {_scoresDrift}".Log(Logger.ColorGreen);
                 }
             }
         }

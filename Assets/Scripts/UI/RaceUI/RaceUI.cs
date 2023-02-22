@@ -1,6 +1,7 @@
 using RaceManager.Cars;
 using RaceManager.Race;
 using RaceManager.Root;
+using RaceManager.Tools;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -16,6 +17,7 @@ namespace RaceManager.UI
         [SerializeField] private FinishUIView _finishUI;
 
         private SpritesContainerRewards _spritesRewards;
+        private UIAnimator _animator;
 
         private float _currentSpeed;
         private float _trackProgress;
@@ -26,11 +28,16 @@ namespace RaceManager.UI
 
         public Action<string> OnButtonPressed;
 
+        private DriftScoresIndicatorView DriftIndicator => _inRaceUI.DriftScoresIndicator;
+
         [Inject]
         private void Construct(SpritesContainerRewards spritesContainer)
         { 
             _spritesRewards = spritesContainer;
+            _animator = new UIAnimator();
         }
+
+        #region Public Functions
 
         public void Initialize(RaceLevelInitializer levelInitializer, UnityAction actionForRespawnButton, UnityAction actionForGetToCheckpointButton)
         {
@@ -40,6 +47,9 @@ namespace RaceManager.UI
             _inRaceUI.RespawnCarButton.AddListener(actionForRespawnButton);
             _inRaceUI.GetToCheckpointButton.AddListener(actionForGetToCheckpointButton);
 
+            DriftIndicator.CurrentScoresRect.SetActive(false);
+            DriftIndicator.TotalScoresRect.SetActive(false);
+
             _finishUI.gameObject.SetActive(false);
             _finishUI.OkButtonFinish.onClick.AddListener(FinalizeRace);
             _finishUI.OkButtonFinish.onClick.AddListener(() => OnButtonPressedMethod(_finishUI.OkButtonFinish));
@@ -48,6 +58,78 @@ namespace RaceManager.UI
             //_finishUI.OkButtonExtraReward.onClick.AddListener(FinalizeRace);
             //_finishUI.OkButtonExtraReward.onClick.AddListener(() => OnButtonPressedMethod(_finishUI.OkButtonExtraReward));
         }
+
+        public void ChangeViewDependingOn(CarState playerCarState)
+        {
+            switch (playerCarState)
+            {
+                case CarState.None:
+                case CarState.CanStart:
+                    break;
+                case CarState.OnTrack:
+                    ShowRaceUI();
+                    break;
+                case CarState.Finished:
+                    ShowFinishUI();
+                    break;
+            }
+        }
+
+        public void SetFinishValues(int moneyReward, int cupsReward, int moneyTotal, int gemsTotal)
+        {
+            _finishUI.MoneyAmount.text = moneyTotal.ToString();
+            _finishUI.GemsAmount.text = gemsTotal.ToString();
+
+            _finishUI.PositionText.text = GetPositionText();
+
+            _finishUI.RewardMoneyAmountText.text = moneyReward.ToString();
+            _finishUI.RewardCupsAmountText.text = cupsReward.ToString();
+
+            if (_showLootbox)
+                _finishUI.GotLootboxPopup.SetActive(true);
+
+            //animate?
+            //_finishUI.FillUpImage.fillAmount = 0.8f;
+            //_finishUI.PersentageProgressText.text = "80" + "%";
+        }
+
+        public void SetLootboxPopupValues(Rarity rarity)
+        {
+            _showLootbox = true;
+            _finishUI.GotLootboxPopup.RarityText.text = rarity.ToString().ToUpper();
+            _finishUI.GotLootboxPopup.LootboxImage.sprite = _spritesRewards.GetLootboxSprite(rarity);
+        }
+
+        public void ShowDriftScores(bool show, int scoresValue = 0)
+        {
+            DriftIndicator.CurrentScoresRect.SetActive(show);
+
+            string text = show ? scoresValue.ToString() : string.Empty;
+            DriftIndicator.CurrentScoresText.text = text;
+        }
+
+        public void ShowDriftPause(bool show, int pauseTime = 0)
+        { 
+            DriftIndicator.PauseTimerText.SetActive(show);
+
+            string text = show ? pauseTime.ToString() : string.Empty;
+            DriftIndicator.PauseTimerText.text = text;
+        }
+
+        public void ShowDriftTotal(bool show, int scoresValue = 0)
+        { 
+            DriftIndicator.TotalScoresRect.SetActive(show);
+
+            string text = show ? scoresValue.ToString() : string.Empty;
+            DriftIndicator.TotalScoresText.text = text;
+
+            if(show)
+                _animator.DoScaleUpDown(DriftIndicator.TotalScoresRect, 2, scaleCycles: 3, onCompleteAction: () => ShowDriftTotal(false));
+        }
+
+        #endregion
+
+        #region Private Functions
 
         private void Update()
         {
@@ -107,48 +189,6 @@ namespace RaceManager.UI
             _inRaceUI.RaceProgressBar.ProgressImage.fillAmount = _trackProgress;
         }
 
-        public void ChangeViewDependingOn(CarState playerCarState)
-        {
-            switch (playerCarState)
-            {
-                case CarState.None:
-                case CarState.CanStart:
-                    break;
-                case CarState.OnTrack:
-                    ShowRaceUI();
-                    break;
-                case CarState.Finished:
-                    ShowFinishUI();
-                    break;
-                
-            }
-        }
-
-        public void SetFinishValues(int moneyReward, int cupsReward, int moneyTotal, int gemsTotal)
-        {
-            _finishUI.MoneyAmount.text = moneyTotal.ToString();
-            _finishUI.GemsAmount.text = gemsTotal.ToString();
-
-            _finishUI.PositionText.text = GetPositionText();
-
-            _finishUI.RewardMoneyAmountText.text = moneyReward.ToString();
-            _finishUI.RewardCupsAmountText.text = cupsReward.ToString();
-
-            if (_showLootbox)
-                _finishUI.GotLootboxPopup.SetActive(true);
-
-            //animate?
-            //_finishUI.FillUpImage.fillAmount = 0.8f;
-            //_finishUI.PersentageProgressText.text = "80" + "%";
-        }
-
-        public void SetLootboxPopupValues(Rarity rarity)
-        {
-            _showLootbox = true;
-            _finishUI.GotLootboxPopup.RarityText.text = rarity.ToString().ToUpper();
-            _finishUI.GotLootboxPopup.LootboxImage.sprite = _spritesRewards.GetLootboxSprite(rarity);
-        }
-
         private void ShowRaceUI()
         {
             _isRaceFinished = false;
@@ -186,7 +226,11 @@ namespace RaceManager.UI
             _finishUI.ExtraRewardPanel.gameObject.SetActive(true);
         }
 
+        #endregion
+
         private void OnButtonPressedMethod(Button button) => OnButtonPressed?.Invoke(button.gameObject.name);
+
+        #region Obsever Functions
 
         public void OnNext(DriverProfile profile)
         {
@@ -197,5 +241,7 @@ namespace RaceManager.UI
 
         public void OnCompleted() => throw new NotImplementedException();
         public void OnError(Exception error) => throw error;
+
+        #endregion
     }
 }

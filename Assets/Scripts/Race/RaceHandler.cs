@@ -25,7 +25,7 @@ namespace RaceManager.Race
         private CarsDepot _playerCarsDepot;
         private GameSettingsContainer _settingsContainer;
         private RaceSceneHandler _sceneHandler;
-        private RaceScoresCouner _scoresCouner;
+        private RaceScoresCouner _scoresCounter;
         private RaceLevelInitializer _raceLevelInitializer;
         private RaceLineHandler _lineHandler;
         private IRaceLevel _raceLevel;
@@ -84,18 +84,9 @@ namespace RaceManager.Race
             _lootboxHandler = new InRaceLootboxHandler(_profiler);
 
             InitDrivers();
+            MakeSubscriptions();
 
             _positionsHandler.StartHandling(_waypointsTrackersList);
-
-            this.FixedUpdateAsObservable()
-                .Subscribe(_ => 
-                {
-                    _lootboxHandler.Handle();
-                    _scoresCouner.CountDriftScores();
-                })
-                .AddTo(this);
-
-            _rewardsHandler.OnRaceRewardLootboxAdded += NotifyRaceUI;
         }
 
         private void Update()
@@ -106,6 +97,49 @@ namespace RaceManager.Race
             _raceStarted = true;
 
             EventsHub<RaceEvent>.BroadcastNotification(RaceEvent.COUNTDOWN);
+        }
+
+        private void MakeSubscriptions()
+        {
+            this.FixedUpdateAsObservable()
+                    .Subscribe(_ =>
+                    {
+                        _lootboxHandler.Handle();
+                        _scoresCounter.CountDriftScores();
+                    })
+                    .AddTo(this);
+
+            _scoresCounter.DriftScoresCount
+                .Where(t => t.scores > 0 && t.timer == 0)
+                .Subscribe(t =>
+                {
+                    _raceUI.ShowDriftTotal(false);
+                    _raceUI.ShowDriftPause(false);
+                    _raceUI.ShowDriftScores(true, t.scores);
+                })
+                .AddTo(this);
+
+            _scoresCounter.DriftScoresCount
+                .Where(t => t.scores > 0 && t.timer > 0)
+                .Subscribe(t =>
+                {
+                    _raceUI.ShowDriftPause(true, t.timer);
+                    _raceUI.ShowDriftScores(true, t.scores);
+                })
+                .AddTo(this);
+
+            _scoresCounter.DriftScoresCount
+                .Where(t => t.scores > 0 && t.timer < 0)
+                .Subscribe(t => 
+                {
+                    _raceUI.ShowDriftPause(false);
+                    _raceUI.ShowDriftScores(false);
+                    _raceUI.ShowDriftTotal(true, t.scores);
+                })
+                .AddTo(this);
+
+            _rewardsHandler.OnRaceRewardLootboxAdded += NotifyRaceUI;
+            _waypointTrackMain.OnCheckpointPass += MakeGameNotification;
         }
 
         private void InitDrivers()
@@ -151,9 +185,7 @@ namespace RaceManager.Race
 
                     _raceUI.Initialize(_raceLevelInitializer, selfRighting.RightCar, GetToCheckpoint);
 
-                    _scoresCouner = new RaceScoresCouner(driver.Car, _rewardsScheme);
-
-                    _waypointTrackMain.OnCheckpointPass += MakeGameNotification;
+                    _scoresCounter = new RaceScoresCouner(driver.Car, _rewardsScheme);
                 }
                 else
                 {

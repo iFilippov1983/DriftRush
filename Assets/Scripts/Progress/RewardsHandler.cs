@@ -21,6 +21,10 @@ namespace RaceManager.Progress
         public Action<Lootbox> OnRaceRewardLootboxAdded;
         public Action OnProgressReward;
 
+        private int _moneyRewardDrift;
+        private int _moneyRewardBump;
+        private int _moneyRewardCrush;
+
         [Inject]
         private void Construct
             (
@@ -42,7 +46,7 @@ namespace RaceManager.Progress
             _profiler.OnLootboxOpen += HandleLootboxOpen;
         }
 
-        public void RewardForRace(PositionInRace positionInRace, out RaceHandler.RaceRewardInfo info)
+        public void RewardForRace(PositionInRace positionInRace, out RaceRewardInfo info)
         {
             RaceReward reward = _raceRewardsScheme.GetRewardFor(positionInRace);
             reward.Reward(_profiler);
@@ -75,12 +79,13 @@ namespace RaceManager.Progress
             }
                 
 
-            info = new RaceHandler.RaceRewardInfo()
+            info = new RaceRewardInfo()
             {
-                RewardMoneyAmount = reward.Money,
-                RewardCupsAmount = reward.Cups,
-                MoneyTotal = _playerProfile.Money,
-                GemsTotal = _playerProfile.Gems
+                MoneyRewardFinishPos = reward.Money,
+                MoneyRewardDrift = _moneyRewardDrift,
+                MoneyRewardBump = _moneyRewardBump,
+                MoneyRewardCrush = _moneyRewardCrush,
+                CupsRewardAmount = reward.Cups,
             };
             _saveManager.Save();
         }
@@ -95,6 +100,25 @@ namespace RaceManager.Progress
 
             OnProgressReward?.Invoke();
             _saveManager.Save();
+        }
+
+        public void SetMoneyReward(RaceScoresType type, int value)
+        {
+            switch (type)
+            {
+                case RaceScoresType.Drift:
+                    _moneyRewardDrift = value;
+                    break;
+                case RaceScoresType.Bump:
+                    _moneyRewardBump = value;
+                    break;
+                case RaceScoresType.Crush:
+                    _moneyRewardCrush = value;
+                    break;
+                case RaceScoresType.Finish:
+                default:
+                    break;
+            }
         }
 
         private void HandleLootboxOpen(Lootbox lootbox)

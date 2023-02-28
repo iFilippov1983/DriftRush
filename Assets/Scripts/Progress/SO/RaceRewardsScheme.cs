@@ -12,10 +12,13 @@ namespace RaceManager.Progress
     [CreateAssetMenu(menuName = "Progress/RaceRewardsScheme", fileName = "RaceRewardsScheme", order = 1)]
     public class RaceRewardsScheme : SerializedScriptableObject
     {
+        [Title("Scores Count Sceme")]
         [SerializeField] private float _scoresFactorDrift = 1.0f;
         [SerializeField] private float _availableDriftPause = 5f;
-        [SerializeField] private float _scoresFactorOpponentHit = 100f;
-        [SerializeField] private float _scoresFactorCrashHit = 100f;
+        [Space]
+        [SerializeField] private float _scoresForBump = 100f;
+        [SerializeField] private float _scoresForCrush = 100f;
+        [SerializeField] private float _minCollisionInterval = 0.1f;
         [Space(20)]
         [SerializeField]
         [DictionaryDrawerSettings(KeyLabel = "Place", ValueLabel = "Reward")]
@@ -43,8 +46,9 @@ namespace RaceManager.Progress
 
         public float DriftFactor => _scoresFactorDrift;
         public float AvailableDriftPause => _availableDriftPause;
-        public float OpponentHitFactor => _scoresFactorOpponentHit;
-        public float CrashHitFactor => _scoresFactorCrashHit;
+        public float BumpScores => _scoresForBump;
+        public float MinCollisionInterval => _minCollisionInterval;
+        public float CrushScores => _scoresForCrush;
 
         public RaceReward GetRewardFor(PositionInRace position) => _scheme[position];
 

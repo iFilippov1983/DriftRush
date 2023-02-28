@@ -18,6 +18,12 @@ namespace RaceManager.Waypoints
             _raceLine.SpawnSegments(mainTrack);
         }
 
+        public void StopHandling()
+        {
+            _handle = false;
+            _raceLine.OnRaceFinish?.Invoke();
+        }
+
         public void OnNext(DriverProfile profile)
         {
             if (!_handle) return;

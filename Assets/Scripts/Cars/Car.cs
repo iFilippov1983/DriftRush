@@ -32,6 +32,7 @@ namespace RaceManager.Cars
         [SerializeField] Transform COM;
         [SerializeField] Transform _cameraLookTarget;
         [SerializeField] Transform _cameraFollowTarget;
+        [SerializeField] Transform _cameraFinalTarget;
         [SerializeField] Transform _cameraFinalPosition;
         [SerializeField] private CarConfig _carConfig;
 
@@ -111,6 +112,7 @@ namespace RaceManager.Cars
         public CarSelfRighting CarSelfRighting => _carSelfRighting;
         public Transform CameraLookTarget => _cameraLookTarget;
         public Transform CameraFollowTarget => _cameraFollowTarget;
+        public Transform CameraFinalTarget => _cameraFinalTarget;
         public Transform CameraFinalPosition => _cameraFinalPosition;
 
         /// <summary>

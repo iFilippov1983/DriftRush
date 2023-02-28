@@ -69,7 +69,6 @@ namespace RaceManager.Waypoints
             PresetTrack();
         }
 
-        [Button]
         private void Start()
         {
             SetWaypoints();
@@ -118,9 +117,6 @@ namespace RaceManager.Waypoints
                     wp.Number = i;
                     _waypoints.Add(wp);
 
-                    if (i == _distances.Length - 2)
-                        wp.isFinishLine = true;
-
                     if (i != 0)
                         _waypoints[i - 1].NextWaypoint = wp;
 
@@ -132,7 +128,9 @@ namespace RaceManager.Waypoints
                         {
                             wp.isCheckpoint = true;
                             wp.OnCheckpointPass += OnChepointPassed;
-                        }   
+                        }
+
+                        wp.isFinishLine = node.isFinishPoint;
                     }
                 }
 

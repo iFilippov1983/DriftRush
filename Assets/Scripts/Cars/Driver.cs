@@ -3,6 +3,7 @@ using RaceManager.Race;
 using RaceManager.Root;
 using RaceManager.Waypoints;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
@@ -14,6 +15,8 @@ namespace RaceManager.Cars
     /// </summary>
     public class Driver : MonoBehaviour, IObservable<DriverProfile>
     {
+        private const float StopSpeedThreshold = 1f;
+
         public DriverType DriverType;
 
         private Profiler _profiler;
@@ -32,6 +35,7 @@ namespace RaceManager.Cars
         public Car Car => _car;
         public Transform CarCameraLookTarget => _car.CameraLookTarget;
         public Transform CarCameraFollowTarget => _car.CameraFollowTarget;
+        public Transform CameraFinalTarget => _car.CameraFinalTarget;
         public Transform CameraFinalPosition => _car.CameraFinalPosition;
         public WaypointsTracker WaypointsTracker => _waypointsTracker;
 
@@ -68,6 +72,11 @@ namespace RaceManager.Cars
             EventsHub<RaceEvent>.Unsunscribe(RaceEvent.START, StartRace);
         }
 
+        private void OnDestroy()
+        {
+            StopAllCoroutines();
+        }
+
         private void Update()
         {
             UpdateProfile();
@@ -99,7 +108,7 @@ namespace RaceManager.Cars
                 case CarState.Finished:
                     StopRace();
                     break;
-                case CarState.Stoped:
+                case CarState.Stopped:
                     break;
             }
         }
@@ -130,7 +139,17 @@ namespace RaceManager.Cars
                 EventsHub<RaceEvent>.BroadcastNotification(RaceEvent.FINISH);
             }
 
+            StartCoroutine(WaitForCarStop());
+
             $"{gameObject.name} FINISHED".Log(Logger.ColorYellow);
+        }
+
+        private IEnumerator WaitForCarStop()
+        {
+            while (_car.CurrentSpeed > StopSpeedThreshold)
+                yield return null;
+            
+            _driverProfile.CarState.Value = CarState.Stopped;
         }
 
         private void NotifyObservers()

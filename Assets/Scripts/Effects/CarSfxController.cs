@@ -131,6 +131,8 @@ namespace RaceManager.Effects
             }
         }
 
+        public void StopHandling() => _sfxObject.SetActive(false);
+
         #endregion
 
         #region Private Functions

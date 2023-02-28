@@ -33,6 +33,7 @@ namespace RaceManager.Waypoints
 
         public Action<float> OnSpeedChange;
         public Action<float> OnDistanceChange;
+        public Action OnRaceFinish;
 
         public void SpawnSegments(WaypointTrack mainTrack)
         {
@@ -61,6 +62,7 @@ namespace RaceManager.Waypoints
                 //OnDistanceChange += segment.CheckDistance;
                 OnSpeedChange += segment.SpeedCheck;
                 OnDistanceChange += segment.DistanceCheck;
+                OnRaceFinish += () => Destroy(segment.gameObject);
 
                 _currentDistance += _segmentSpawnInterval;
             }
@@ -94,7 +96,8 @@ namespace RaceManager.Waypoints
             //OnSpeedChange -= segment.CheckSpeed;
             //OnDistanceChange -= segment.CheckDistance;
             OnSpeedChange -= segment.SpeedCheck;
-            OnDistanceChange -= segment.DistanceCheck;
+            OnDistanceChange -= segment.DistanceCheck; 
+            OnRaceFinish -= () => Destroy(segment.gameObject);
 
             segment.OnDestroyAction -= SegmentDestroy;
         }

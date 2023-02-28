@@ -29,8 +29,8 @@ namespace RaceManager.Race
         public int BumpScoresTotal => _scoresBump;
         public int CrushScoresTotal => _scoresCrush;
 
-        public Subject<RaceScoresInfo> ScoresCount;
-        public Subject<RaceScoresInfo> ExtraScoresCount;
+        public Subject<RaceScoresData> ScoresCount;
+        public Subject<RaceScoresData> ExtraScoresCount;
 
         public RaceScoresCounter(Car car, RaceRewardsScheme rewardsScheme)
         {
@@ -38,8 +38,8 @@ namespace RaceManager.Race
             _rewardsScheme = rewardsScheme;
             _driftPauseTime = AvailableDriftPause;
 
-            ScoresCount = new Subject<RaceScoresInfo>();
-            ExtraScoresCount = new Subject<RaceScoresInfo>();
+            ScoresCount = new Subject<RaceScoresData>();
+            ExtraScoresCount = new Subject<RaceScoresData>();
 
             _car.CollisionAction += CountExtraScores;
         }
@@ -66,7 +66,7 @@ namespace RaceManager.Race
 
         public void CountScores()
         {
-            RaceScoresInfo info;
+            RaceScoresData data;
 
             if (CarIsSlipping)
             {
@@ -77,15 +77,15 @@ namespace RaceManager.Race
                 {
                     int scoresValue = Mathf.RoundToInt(_driftDistanceCounter * DriftFactor);
 
-                    info = new RaceScoresInfo() 
-                    { 
+                    data = new RaceScoresData()
+                    {
                         ScoresType = RaceScoresType.Drift,
                         CurrentScoresValue = scoresValue,
                         TotalScoresValue = _scoresDrift,
                         Timer = 0
                     };
 
-                    ScoresCount.OnNext(info);
+                    ScoresCount.OnNext(data);
                 }
             }
             else
@@ -95,11 +95,10 @@ namespace RaceManager.Race
                 int pauseTimerValue = Mathf.RoundToInt(_driftPauseTime);
                 int lastDriftValue = Mathf.RoundToInt(_driftDistanceCounter * DriftFactor);
 
-                info = new RaceScoresInfo()
+                data = new RaceScoresData()
                 {
                     ScoresType = RaceScoresType.Drift,
-                    CurrentScoresValue = lastDriftValue,
-                    TotalScoresValue = _scoresDrift
+                    CurrentScoresValue = lastDriftValue
                 };
 
                 if (_driftPauseTime < 0 && lastDriftValue > 0)
@@ -107,15 +106,16 @@ namespace RaceManager.Race
                     _scoresDrift += lastDriftValue;
                     _driftDistanceCounter = 0f;
 
-                    info.TotalScoresValue = _scoresDrift;
-                    info.Timer = StopDriftCountValue;
+                    data.Timer = StopDriftCountValue;
                 }
                 else
                 {
-                    info.Timer = pauseTimerValue;
+                    data.Timer = pauseTimerValue;
                 }
 
-                ScoresCount.OnNext(info);
+                data.TotalScoresValue = _scoresDrift;
+
+                ScoresCount.OnNext(data);
             }
         }
 
@@ -136,14 +136,14 @@ namespace RaceManager.Race
                 int colLayer = countable.Layer;
                 int carLayer = car.Layer;
                 int scores = 0;
-                RaceScoresInfo info = default;
+                RaceScoresData data = default;
 
                 if (colLayer == carLayer)
                 {
                     scores = Mathf.RoundToInt(BumpScores);
                     _scoresBump += scores;
 
-                    info = new RaceScoresInfo()
+                    data = new RaceScoresData()
                     {
                         ScoresType = RaceScoresType.Bump,
                         CurrentScoresValue = scores,
@@ -155,7 +155,7 @@ namespace RaceManager.Race
                     scores = Mathf.RoundToInt(CrushScores);
                     _scoresCrush += scores;
 
-                    info = new RaceScoresInfo()
+                    data = new RaceScoresData()
                     {
                         ScoresType = RaceScoresType.Crush,
                         CurrentScoresValue = scores,
@@ -164,7 +164,7 @@ namespace RaceManager.Race
                 }
 
                 if(scores != 0)
-                    ExtraScoresCount.OnNext(info);
+                    ExtraScoresCount.OnNext(data);
 
                 _collidingObects[countable.ID] = Time.time;
             }

@@ -11,6 +11,8 @@ using UnityEngine.UI;
 using Zenject;
 using DG.Tweening;
 using UniRx;
+using TMPro;
+using UniRx.Triggers;
 
 namespace RaceManager.UI
 {
@@ -37,6 +39,7 @@ namespace RaceManager.UI
         private Stack<ExtraScoresIndicatorView> _extraScoresStack = new Stack<ExtraScoresIndicatorView>();
 
         public Action<string> OnButtonPressed;
+        public Action OnAdsInit;
 
         private ScoresIndicatorView ScoresIndicator => _inRaceUI.ScoresIndicator;
         private GameObject ExtraScoresPrefab
@@ -91,7 +94,12 @@ namespace RaceManager.UI
 
                     if(t.isFinal)
                         StartCoroutine(FinalizeRace());
-                });
+                })
+                .AddTo(this);
+
+            _finishUIHandler.OnWatchAds
+                .Subscribe(t => OnAdsInit?.Invoke())
+                .AddTo(this);
 
             _finishUI.gameObject.SetActive(false);
         }
@@ -201,6 +209,11 @@ namespace RaceManager.UI
             StartCoroutine(HandleAccelerationRepresentation(accelerating));
         }
 
+        public void OnAdsRewardAction()
+        {
+            _finishUIHandler.OnWatchAdsSuccess();
+        }
+
         #endregion
 
         #region Private Functions
@@ -262,7 +275,20 @@ namespace RaceManager.UI
             }
         }
 
-        
+        private void ScrambleText(int targetValue, Text intermediateText, TMP_Text tmpText, float duration)
+        {
+            string text = string.Empty;
+
+            intermediateText.DOText(targetValue.ToString(), duration, true, ScrambleMode.Numerals);
+            intermediateText.UpdateAsObservable()
+                .Where(_ => text != intermediateText.text)
+                .Subscribe(_ =>
+                {
+                    text = intermediateText.text;
+                    tmpText.text = text;
+                });
+        }
+
         private void ShowRaceUI()
         {
             _isRaceFinished = false;

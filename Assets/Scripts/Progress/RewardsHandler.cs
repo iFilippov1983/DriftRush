@@ -17,6 +17,8 @@ namespace RaceManager.Progress
         private SaveManager _saveManager;
         private GameEvents _gameEvents;
 
+        private RaceReward _raceReward;
+
         public Action<List<CarCardReward>> OnLootboxOpen;
         public Action<Lootbox> OnRaceRewardLootboxAdded;
         public Action OnProgressReward;
@@ -46,10 +48,25 @@ namespace RaceManager.Progress
             _profiler.OnLootboxOpen += HandleLootboxOpen;
         }
 
-        public void RewardForRace(PositionInRace positionInRace, out RaceRewardInfo info)
+        public void RewardForRaceInit(PositionInRace positionInRace, out RaceRewardInfo info)
         {
-            RaceReward reward = _raceRewardsScheme.GetRewardFor(positionInRace);
-            reward.Reward(_profiler);
+            _raceReward = _raceRewardsScheme.GetRewardFor(positionInRace);
+
+            info = new RaceRewardInfo()
+            {
+                MoneyRewardFinishPos = _raceReward.Money,
+                MoneyRewardDrift = _moneyRewardDrift,
+                MoneyRewardBump = _moneyRewardBump,
+                MoneyRewardCrush = _moneyRewardCrush,
+                MoneyMultiplyer = _raceRewardsScheme.MoneyMultiplyer,
+
+                CupsRewardAmount = _raceReward.Cups,
+                CupsTotalAmount = _playerProfile.Cups
+            };
+
+            int extraMoney = _moneyRewardDrift + _moneyRewardBump + _moneyRewardCrush;
+            _raceReward.AddMoney(extraMoney);
+            _raceReward.Reward(_profiler);
 
             if (_playerProfile.CanGetLootbox)
             {
@@ -77,17 +94,18 @@ namespace RaceManager.Progress
                 _gameEvents.RaceWin.OnNext();
                 Debugger.Log($"Victories count: {_playerProfile.VictoriesTotalCounter}");
             }
-                
 
-            info = new RaceRewardInfo()
-            {
-                MoneyRewardFinishPos = reward.Money,
-                MoneyRewardDrift = _moneyRewardDrift,
-                MoneyRewardBump = _moneyRewardBump,
-                MoneyRewardCrush = _moneyRewardCrush,
-                CupsRewardAmount = reward.Cups,
-            };
             _saveManager.Save();
+        }
+
+        public void RewardForRaceMoneyMultiplyed()
+        { 
+            if(_raceReward is null)
+                _raceReward = _raceRewardsScheme.GetRewardFor(PositionInRace.DNF);
+
+            _raceReward.Unreward(_profiler);
+            _raceReward.MultiplyMoney(_raceRewardsScheme.MoneyMultiplyer);
+            _raceReward.Reward(_profiler);
         }
 
         public void RewardForProgress(int cupsAmountLevel)

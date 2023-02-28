@@ -16,11 +16,22 @@ namespace RaceManager.Progress
         public int Cups => _cups;
         public RewardType Type => RewardType.RaceReward;
 
+        public void MultiplyMoney(int multiplyer) => _money *= multiplyer;
+        public void AddMoney(int value) => _money += value;
+        public void AddCups(int value) => _cups += value;
+
         public void Reward(Profiler profiler)
         {
             profiler.AddMoney(Money);
             profiler.AddCups(Cups);
             IsReceived = true;
+        }
+
+        public void Unreward(Profiler profiler)
+        { 
+            profiler.AddMoney(-Money);
+            profiler.AddCups(-Cups);
+            IsReceived = false;
         }
     }
 

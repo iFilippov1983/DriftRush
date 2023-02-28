@@ -19,6 +19,8 @@ namespace RaceManager.Progress
         [SerializeField] private float _scoresForBump = 100f;
         [SerializeField] private float _scoresForCrush = 100f;
         [SerializeField] private float _minCollisionInterval = 0.1f;
+        [Space]
+        [SerializeField] private int _moneyMultiplyerForAds = 3;
         [Space(20)]
         [SerializeField]
         [DictionaryDrawerSettings(KeyLabel = "Place", ValueLabel = "Reward")]
@@ -49,8 +51,18 @@ namespace RaceManager.Progress
         public float BumpScores => _scoresForBump;
         public float MinCollisionInterval => _minCollisionInterval;
         public float CrushScores => _scoresForCrush;
+        public int MoneyMultiplyer => _moneyMultiplyerForAds;
 
-        public RaceReward GetRewardFor(PositionInRace position) => _scheme[position];
+        public RaceReward GetRewardFor(PositionInRace position)
+        {
+            RaceReward blank = _scheme[position];
+            RaceReward reward = new RaceReward();
+            reward.IsReceived = blank.IsReceived;
+            reward.AddMoney(blank.Money);
+            reward.AddCups(blank.Cups);
+
+            return reward;
+        }
 
         public bool TryLuckWithNotCommonLootbox(out Rarity rarity)
         {
@@ -88,6 +100,7 @@ namespace RaceManager.Progress
             }
         }
 
+        [Title("TEST")]
         [ShowInInspector, ReadOnly]
         private int _counter = 0;
 

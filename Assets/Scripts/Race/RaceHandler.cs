@@ -13,6 +13,7 @@ using UniRx;
 using UniRx.Triggers;
 using RaceManager.Effects;
 using IInitializable = RaceManager.Root.IInitializable;
+using System.Threading.Tasks;
 
 namespace RaceManager.Race
 {
@@ -92,12 +93,12 @@ namespace RaceManager.Race
         private void MakeSubscriptions()
         {
             this.FixedUpdateAsObservable()
-                    .Subscribe(_ =>
-                    {
-                        _lootboxHandler.Handle();
-                        _scoresCounter.CountScores();
-                    })
-                    .AddTo(this);
+                .Subscribe(_ =>
+                {
+                    _lootboxHandler.Handle();
+                    _scoresCounter.CountScores();
+                })
+                .AddTo(this);
 
             this.UpdateAsObservable()
                 .Where(_ => _raceUI.RaceFinished == false)
@@ -136,26 +137,32 @@ namespace RaceManager.Race
                 .AddTo(this);
 
             _scoresCounter.ScoresCount
-                .Where(info => info.CurrentScoresValue > 0)
-                .Subscribe(info =>
+                .Where(data => data.CurrentScoresValue > 0)
+                .Subscribe(data =>
                 {
-                    bool showPause = info.Timer > 0;
-                    bool showScores = info.Timer >= 0;
+                    bool showPause = data.Timer > 0;
+                    bool showScores = data.Timer >= 0;
 
-                    _raceUI.ShowPause(showPause, info.Timer);
-                    _raceUI.ShowScores(showScores, info.CurrentScoresValue);
-                    _rewardsHandler.SetMoneyReward(info.ScoresType, info.TotalScoresValue);
+                    _raceUI.ShowPause(showPause, data.Timer);
+                    _raceUI.ShowScores(showScores, data.CurrentScoresValue);
+
+                    int totalScores = data.CurrentScoresValue > data.TotalScoresValue
+                    ? data.CurrentScoresValue 
+                    : data.TotalScoresValue;
+
+                    _rewardsHandler.SetMoneyReward(data.ScoresType, totalScores);
                 })
                 .AddTo(this);
 
             _scoresCounter.ExtraScoresCount
-                .Subscribe(info =>
+                .Subscribe(data =>
                 {
-                    _raceUI.ShowExtraScores(info.ScoresType, info.CurrentScoresValue);
-                    _rewardsHandler.SetMoneyReward(info.ScoresType, info.TotalScoresValue);
+                    _raceUI.ShowExtraScores(data.ScoresType, data.CurrentScoresValue);
+                    _rewardsHandler.SetMoneyReward(data.ScoresType, data.TotalScoresValue);
                 })
                 .AddTo(this);
 
+            _raceUI.OnAdsInit += ShowAds;
             _rewardsHandler.OnRaceRewardLootboxAdded += SetRaceUI;
             _waypointTrackMain.OnCheckpointPass += MakeCheckpointNotification;
         }
@@ -236,7 +243,7 @@ namespace RaceManager.Race
                 case CarState.OnTrack:
                     break;
                 case CarState.Finished:
-                    _rewardsHandler.RewardForRace(playerDriver.DriverProfile.PositionInRace, out RaceRewardInfo info);
+                    _rewardsHandler.RewardForRaceInit(playerDriver.DriverProfile.PositionInRace, out RaceRewardInfo info);
                     _raceUI.SetFinishValues(info);
                     _lineHandler.StopHandling();
                     break;
@@ -250,12 +257,23 @@ namespace RaceManager.Race
             return Disposable.Empty;
         }
 
+        private async void ShowAds()
+        {
+            //TODO: implement cases: complete/fail
+
+            await Task.Delay(1000);
+
+            _rewardsHandler.RewardForRaceMoneyMultiplyed();
+            _raceUI.OnAdsRewardAction();
+        }
+
         private void SetRaceUI(Lootbox lootbox) => _raceUI.SetLootboxToGrant(lootbox.Rarity);
 
         private void MakeCheckpointNotification() => _gameEvents.Notification.OnNext(NotificationType.Checkpoint.ToString());
 
         private void OnDestroy()
         {
+            _raceUI.OnAdsInit -= ShowAds;
             _rewardsHandler.OnRaceRewardLootboxAdded -= SetRaceUI;
             _waypointTrackMain.OnCheckpointPass -= MakeCheckpointNotification;
 

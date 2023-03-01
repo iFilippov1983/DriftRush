@@ -279,16 +279,5 @@ namespace RaceManager.Race
 
             _scoresCounter.Dispose();
         }
-
-        //public struct RaceRewardInfo
-        //{
-        //    public int MoneyRewardFinishPos;
-        //    public int MoneyRewardDrift;
-        //    public int MoneyRewardBump;
-        //    public int MoneyRewardCrush;
-        //    public int CupsRewardAmount;
-        //    //public int MoneyTotal;
-        //    //public int GemsTotal;
-        //}
     }
 }

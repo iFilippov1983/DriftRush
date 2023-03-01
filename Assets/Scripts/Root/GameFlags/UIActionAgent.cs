@@ -373,7 +373,11 @@ namespace RaceManager.Root
 
                 while (tween.IsActive())
                 {
-                    if (_isDead) tween.Kill();
+                    if (_isDead)
+                    {
+                        tween.Kill();
+                        break;
+                    }
                     yield return null;
                 }
 
@@ -408,7 +412,11 @@ namespace RaceManager.Root
 
                 while (tween.IsActive())
                 {
-                    if (_isDead) tween.Kill();
+                    if (_isDead)
+                    {
+                        tween.Kill();
+                        break;
+                    }
                     yield return null;
                 }
             }
@@ -429,7 +437,11 @@ namespace RaceManager.Root
 
                 while (tween.IsActive())
                 {
-                    if (_isDead) tween.Kill();
+                    if (_isDead)
+                    {
+                        tween.Kill();
+                        break;
+                    }
                     yield return null;
                 }
 
@@ -510,7 +522,6 @@ namespace RaceManager.Root
             if (found)
             {
                 _originalAlpha = _text.alpha;
-
 
                 Type = AgentType.Text;
 

@@ -1,5 +1,4 @@
-﻿using RaceManager.Cars;
-using RaceManager.Race;
+﻿using RaceManager.Race;
 using RaceManager.Root;
 using System;
 using System.Collections.Generic;

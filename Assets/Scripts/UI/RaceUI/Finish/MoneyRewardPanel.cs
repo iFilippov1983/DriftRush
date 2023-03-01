@@ -8,7 +8,6 @@ namespace RaceManager.UI
     public class MoneyRewardPanel : MonoBehaviour, IAnimatablePanel
     {
         [SerializeField] private TMP_Text _moneyTotalText;
-        [SerializeField] private Text _intermediateScoresText;
         [SerializeField] private RectTransform _titlePosition;
         [SerializeField] private Button _continueButton;
         [SerializeField] private MultiplyRewardAnimPanel _multiplyRewardPanel;
@@ -18,7 +17,6 @@ namespace RaceManager.UI
         [SerializeField] private List<RewardAnimatablePanel> _rewardPanels = new List<RewardAnimatablePanel>();
 
         public TMP_Text MoneyTotalText => _moneyTotalText;
-        public Text IntermediateText => _intermediateScoresText;
         public RectTransform TitlePosition => _titlePosition;
         public Button ContinueButton => _continueButton;
         public MultiplyRewardAnimPanel MultiplyRewardPanel => _multiplyRewardPanel;

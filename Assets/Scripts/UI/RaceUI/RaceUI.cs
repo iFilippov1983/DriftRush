@@ -26,16 +26,17 @@ namespace RaceManager.UI
         private FinishUIHandler _finishUIHandler;
         private SpritesContainerRewards _spritesRewards;
 
+        private RaceRewardInfo _rewardInfo;
+
         private float _currentSpeed;
         private float _trackProgress;
+
         private int _currentPosition;
         private int _currentScores;
         private int _currentExtraScores;
-        private int _targetExtraScores;
 
         private bool _isRaceFinished;
 
-        private Stack<IEnumerator> _jobsStack = new Stack<IEnumerator>();
         private Stack<ExtraScoresIndicatorView> _extraScoresStack = new Stack<ExtraScoresIndicatorView>();
 
         public Action<string> OnButtonPressed;
@@ -66,7 +67,6 @@ namespace RaceManager.UI
         {
             StopAllCoroutines();
             _extraScoresStack.Clear();
-            _jobsStack.Clear();
         }
 
         #region Public Functions
@@ -117,6 +117,9 @@ namespace RaceManager.UI
                 case CarState.Finished:
                     ShowFinishUI();
                     break;
+                case CarState.Stopped:
+                    ShowRewards();
+                    break;
             }
         }
 
@@ -125,7 +128,7 @@ namespace RaceManager.UI
             _finishUI.FinishTitleText.text = TextConstant.Finished.ToUpper();
             _finishUI.PositionText.text = GetPositionText().ToUpper();
 
-            _finishUIHandler.ShowMoneyRewardPanel(info);
+            _rewardInfo = info;
         }
 
         public void SetLootboxToGrant(Rarity rarity)
@@ -145,11 +148,6 @@ namespace RaceManager.UI
             if (!show)
             {
                 _currentExtraScores = 0;
-                _targetExtraScores = 0;
-                foreach (var job in _jobsStack)
-                    StopCoroutine(job);
-
-                _jobsStack.Clear();
             }
         }
 
@@ -173,7 +171,6 @@ namespace RaceManager.UI
             { 
                 indicator = _extraScoresStack.Pop();
                 indicator.SetActive(true);
-                indicator.transform.position = ScoresIndicator.ExtraScoresRect.transform.position;
             }
 
             string titleText = scoresType.ToString().ToUpper();
@@ -220,17 +217,17 @@ namespace RaceManager.UI
 
         private void AnimateExtraScores(ExtraScoresIndicatorView indicator, int scoresValue)
         {
+            float duration = _extraScoresAnimDuration;
+
             if (ScoresIndicator.ScoresRect.gameObject.activeSelf)
             {
-                IEnumerator job = ExtrapolateExtraScores(scoresValue);
-                _jobsStack.Push(job);
-                StartCoroutine(job);
+                _currentExtraScores += scoresValue;
+                ScoresIndicator.ScoresText.DOText(_currentScores.ToString(), duration / 3, true, ScrambleMode.Numerals);
             }
 
             Vector3 initialScale = indicator.Rect.localScale;
             Color initialTextColor = indicator.ExtraScoresText.color;
 
-            float duration = _extraScoresAnimDuration;
             Sequence sequence = DOTween.Sequence();
             sequence.Append(indicator.Rect.DOMove(ScoresIndicator.ScoresRect.transform.position, duration));
             sequence.Insert(duration / 2, indicator.ExtraScoresText.DOFade(0f, duration / 2));
@@ -242,19 +239,9 @@ namespace RaceManager.UI
                 indicator.Rect.localScale = initialScale;
                 indicator.ExtraScoresText.color = initialTextColor;
                 indicator.ExtraScoresTitle.color = initialTextColor;
+                indicator.transform.position = ScoresIndicator.ExtraScoresRect.transform.position;
                 indicator.SetActive(false);
                 _extraScoresStack.Push(indicator);
-            }
-        }
-
-        private IEnumerator ExtrapolateExtraScores(int extraScoresValue)
-        {
-            _targetExtraScores += extraScoresValue;
-
-            while (_currentExtraScores < _targetExtraScores) 
-            {
-                _currentExtraScores += _jobsStack.Count + 1;
-                yield return null;
             }
         }
 
@@ -300,6 +287,11 @@ namespace RaceManager.UI
             _isRaceFinished = true;
             _inRaceUI.gameObject.SetActive(false);
             _finishUI.gameObject.SetActive(true);
+        }
+
+        private void ShowRewards()
+        {
+            _finishUIHandler.ShowMoneyRewardPanel(_rewardInfo);
         }
 
         private IEnumerator FinalizeRace()

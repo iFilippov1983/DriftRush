@@ -8,6 +8,7 @@ using RaceManager.Cars;
 using RaceManager.Race;
 using Random = UnityEngine.Random;
 using AudioType = RaceManager.Effects.AudioType;
+using UniRx.Triggers;
 
 namespace RaceManager.Root
 {
@@ -46,6 +47,24 @@ namespace RaceManager.Root
             EffectsController.InstallSettings(_settingsContainer);
             StartPlayingRandomRaceTrack();
 
+            this.UpdateAsObservable()
+                .Where(_ => _raceUI.RaceFinished == false)
+                .Subscribe(_ =>
+                {
+                    if (Input.GetMouseButtonDown(0))
+                        _gameEvents.ScreenTaped.OnNext();
+
+                    if (Input.GetMouseButton(0))
+                        _gameEvents.ScreenTapHold.OnNext();
+
+                    if (Input.GetMouseButtonUp(0))
+                        _gameEvents.ScreenTapReleased.OnNext();
+
+                    HandleWheels();
+                    HandleCarSpeed();
+                })
+                .AddTo(this);
+
             EventsHub<RaceEvent>.Subscribe(RaceEvent.START, SendStartNotification);
             _raceUI.OnButtonPressed += PlayButtonPressedEffect;
         }
@@ -70,24 +89,24 @@ namespace RaceManager.Root
 
         #endregion
 
-        #region Unity Functions
+        //#region Unity Functions
 
-        private void Update()
-        {
-            if (Input.GetMouseButtonDown(0))
-                _gameEvents.ScreenTaped.OnNext();
+        //private void Update()
+        //{
+        //    if (Input.GetMouseButtonDown(0))
+        //        _gameEvents.ScreenTaped.OnNext();
 
-            if (Input.GetMouseButton(0))
-                _gameEvents.ScreenTapHold.OnNext();
+        //    if (Input.GetMouseButton(0))
+        //        _gameEvents.ScreenTapHold.OnNext();
 
-            if (Input.GetMouseButtonUp(0))
-                _gameEvents.ScreenTapReleased.OnNext();
+        //    if (Input.GetMouseButtonUp(0))
+        //        _gameEvents.ScreenTapReleased.OnNext();
 
-            HandleWheels();
-            HandleCarSpeed();
-        }
+        //    HandleWheels();
+        //    HandleCarSpeed();
+        //}
 
-        #endregion
+        //#endregion
 
         #region Private Functions
 

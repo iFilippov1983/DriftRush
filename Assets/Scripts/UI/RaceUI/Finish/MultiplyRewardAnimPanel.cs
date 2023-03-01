@@ -8,12 +8,10 @@ namespace RaceManager.UI
     {
         [SerializeField] private TMP_Text _multiplyerValueText;
         [SerializeField] private TMP_Text _rewardTotalText;
-        [SerializeField] private Text _intermediateScoresText;
         [SerializeField] private Button _watchAdsButton;
 
         public TMP_Text MultiplyerValueText => _multiplyerValueText;
         public TMP_Text RewardTotalText => _rewardTotalText;
-        public Text IntermediateText => _intermediateScoresText;
         public Button WatchAdsButton => _watchAdsButton;
     }
 }

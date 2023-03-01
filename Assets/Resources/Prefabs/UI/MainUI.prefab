@@ -1523,8 +1523,8 @@ MonoBehaviour:
   m_ChildAlignment: 7
   m_StartCorner: 2
   m_StartAxis: 1
-  m_CellSize: {x: 1070, y: 800}
-  m_Spacing: {x: 0, y: -400}
+  m_CellSize: {x: 1070, y: 400}
+  m_Spacing: {x: 0, y: 0}
   m_Constraint: 1
   m_ConstraintCount: 1
 --- !u!1 &219694169730992175
@@ -17290,8 +17290,8 @@ MonoBehaviour:
   m_ChildAlignment: 1
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 440, y: 300}
-  m_Spacing: {x: 50, y: 35}
+  m_CellSize: {x: 560, y: 340}
+  m_Spacing: {x: -60, y: 0}
   m_Constraint: 1
   m_ConstraintCount: 2
 --- !u!1 &3742929860730958333
@@ -20846,8 +20846,8 @@ MonoBehaviour:
   m_ChildAlignment: 1
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 880, y: 500}
-  m_Spacing: {x: 0, y: 100}
+  m_CellSize: {x: 1080, y: 600}
+  m_Spacing: {x: 0, y: 0}
   m_Constraint: 1
   m_ConstraintCount: 1
 --- !u!1 &4911034401625522853
@@ -36158,6 +36158,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3590853905777873510}
     m_Modifications:
+    - target: {fileID: 3097059844726720282, guid: 5c795d81dfc834048841ed5a2b7eb417,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 86.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3097059844726720282, guid: 5c795d81dfc834048841ed5a2b7eb417,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 56.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3097059844726720282, guid: 5c795d81dfc834048841ed5a2b7eb417,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 661
+      objectReference: {fileID: 0}
+    - target: {fileID: 3097059844726720282, guid: 5c795d81dfc834048841ed5a2b7eb417,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -368
+      objectReference: {fileID: 0}
     - target: {fileID: 5409360716835021680, guid: 5c795d81dfc834048841ed5a2b7eb417,
         type: 3}
       propertyPath: m_Pivot.x
@@ -36268,6 +36288,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: OfferPanelNoAds
       objectReference: {fileID: 0}
+    - target: {fileID: 8773867980549769542, guid: 5c795d81dfc834048841ed5a2b7eb417,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: db58936ff7a1bbf4fade67da18e55c4d,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5c795d81dfc834048841ed5a2b7eb417, type: 3}
 --- !u!224 &479266630197492980 stripped

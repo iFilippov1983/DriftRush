@@ -10,7 +10,6 @@ namespace RaceManager.Race
 {
     public class RaceScoresCounter : IDisposable
     {
-        private const int MinDriftDistanceValue = 1;
         private const int StopDriftCountValue = -1;
 
         private int _scoresDrift;
@@ -25,10 +24,6 @@ namespace RaceManager.Race
 
         private Dictionary<string, float> _collidingObects = new Dictionary<string, float>();
 
-        public int DriftScoresTotal => _scoresDrift;
-        public int BumpScoresTotal => _scoresBump;
-        public int CrushScoresTotal => _scoresCrush;
-
         public Subject<RaceScoresData> ScoresCount;
         public Subject<RaceScoresData> ExtraScoresCount;
 
@@ -42,20 +37,21 @@ namespace RaceManager.Race
             ExtraScoresCount = new Subject<RaceScoresData>();
 
             _car.CollisionAction += CountExtraScores;
+            _car.CollisionStayAction += ResetCollisionTimer;
         }
 
         private float DriftFactor => _rewardsScheme.DriftFactor;
         private float AvailableDriftPause => _rewardsScheme.AvailableDriftPause;
+        private float MinDriftDistanceValue => _rewardsScheme.MinDriftDistanceValue;
         private float BumpScores => _rewardsScheme.BumpScores;
         private float MinCollisionInterval => _rewardsScheme.MinCollisionInterval;
         private float CrushScores => _rewardsScheme.CrushScores;
-        private Wheel[] CarWheels => _car.Wheels;
 
         private bool CarIsSlipping
         {
             get 
             {
-                foreach (var w in CarWheels)
+                foreach (var w in _car.Wheels)
                 { 
                     if(w.HasSideSlip)
                         return true;
@@ -92,7 +88,7 @@ namespace RaceManager.Race
             {
                 _driftPauseTime -= Time.fixedDeltaTime;
 
-                int pauseTimerValue = Mathf.RoundToInt(_driftPauseTime);
+                int pauseTimerValue = Mathf.CeilToInt(_driftPauseTime);
                 int lastDriftValue = Mathf.RoundToInt(_driftDistanceCounter * DriftFactor);
 
                 data = new RaceScoresData()
@@ -130,7 +126,7 @@ namespace RaceManager.Race
                 }
                 else
                 {
-                    _collidingObects.Add(countable.ID, 0);
+                    _collidingObects.Add(countable.ID, 0f);
                 }
 
                 int colLayer = countable.Layer;
@@ -170,9 +166,18 @@ namespace RaceManager.Race
             }
         }
 
+        private void ResetCollisionTimer(Car car, Collision collision)
+        {
+            if (collision.gameObject.TryGetComponent(out ICountableCollision countable))
+            {
+                _collidingObects[countable.ID] = Time.time;
+            }
+        }
+
         public void Dispose()
         {
             _car.CollisionAction -= CountExtraScores;
+            _car.CollisionStayAction -= ResetCollisionTimer;
         }
     }
 }

@@ -97,8 +97,11 @@ namespace RaceManager.UI
 
                     previouseGoal = stepView.GoalCupsAmount;
 
-                    _yOffset += _progressStepsContent.cellSize.y;
-                    _yOffset += _progressStepsContent.spacing.y;
+                    if (stepView.GoalCupsAmount == cupsAmount)
+                    {
+                        _yOffset += _progressStepsContent.cellSize.y;
+                        _yOffset += _progressStepsContent.spacing.y;
+                    }
                     continue;
                 }
 
@@ -122,6 +125,7 @@ namespace RaceManager.UI
             }
 
             _yOffset += _progressStepsContent.spacing.y;
+            _yOffset -= _progressStepsContent.cellSize.y;
             _offsetPos = _progressStepsContent.transform.localPosition;
             _offsetPos.y -= _yOffset;
             OffsetContent();

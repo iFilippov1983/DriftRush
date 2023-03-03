@@ -11,22 +11,11 @@ namespace RaceManager.Root
     [Serializable]
     public class TutorialSteps : SerializedMonoBehaviour, ISaveable
     {
-        public enum TutorialEventType
-        { 
-            PressButton,
-            GetReward,
-            WaitForNotification,
-            TapScreen,
-            HoldScreenTap,
-            ReleaseScreenTap,
-            WinRace
-        }
-
         [Serializable]
         public class TutorialStep
         {
             public int Number;
-            public TutorialEventType Type;
+            public GameEventType Type;
             public string EventFilter;
             public int Count;
 
@@ -71,7 +60,7 @@ namespace RaceManager.Root
             {
                 switch (step.Type)
                 {
-                    case TutorialEventType.PressButton:
+                    case GameEventType.PressButton:
                         _gameEvents.ButtonPressed
                             .Where(s => s.ToLower() == step.EventFilter.ToLower()) // Check button name
                             .Take(step.Count)
@@ -79,7 +68,7 @@ namespace RaceManager.Root
                             .Subscribe(s => OnTrigger(step));
                         break;
 
-                    case TutorialEventType.GetReward:
+                    case GameEventType.GetReward:
                         _gameEvents.GotReward
                             .Where(r => r.Type.ToString().ToLower() == step.EventFilter.ToLower()) // Check Reward Type
                             .Take(step.Count)
@@ -87,7 +76,7 @@ namespace RaceManager.Root
                             .Subscribe(r => OnTrigger(step));
                         break;
 
-                    case TutorialEventType.WaitForNotification:
+                    case GameEventType.WaitForNotification:
                         _gameEvents.Notification
                             .Where(s => s.ToLower() == step.EventFilter.ToLower())
                             .Take(step.Count)
@@ -95,28 +84,28 @@ namespace RaceManager.Root
                             .Subscribe(s => OnTrigger(step));
                         break;
 
-                    case TutorialEventType.TapScreen:
+                    case GameEventType.TapScreen:
                         _gameEvents.ScreenTaped
                             .Take(step.Count)
                             .Last()
                             .Subscribe(u => OnTrigger(step));
                         break;
 
-                    case TutorialEventType.HoldScreenTap:
+                    case GameEventType.HoldScreenTap:
                         _gameEvents.ScreenTapHold
                             .Take(step.Count)
                             .Last()
                             .Subscribe(u => OnTrigger(step));
                         break;
 
-                    case TutorialEventType.ReleaseScreenTap:
+                    case GameEventType.ReleaseScreenTap:
                         _gameEvents.ScreenTapReleased
                             .Take(step.Count)
                             .Last()
                             .Subscribe(u => OnTrigger(step));
                         break;
 
-                    case TutorialEventType.WinRace:
+                    case GameEventType.WinRace:
                         _gameEvents.RaceWin
                             .Take(step.Count)
                             .Last()

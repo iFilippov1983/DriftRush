@@ -3308,21 +3308,6 @@ MonoBehaviour:
     toPosition: {fileID: 0}
     moveDurationFactor: 1
     loopMove: 0
-  useToRemind: 0
-  _reminderAction:
-    key: 0
-    actions: 
-    animationTypes: 
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
 --- !u!1 &828197348082596793
 GameObject:
   m_ObjectHideFlags: 0
@@ -3488,21 +3473,6 @@ MonoBehaviour:
   - key: 23
     actions: 04000000
     animationTypes: 01000000
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
-  useToRemind: 0
-  _reminderAction:
-    key: 0
-    actions: 
-    animationTypes: 
     animationDuration: 1
     actionStartDelay: 0
     minAlpha: 0
@@ -4711,21 +4681,6 @@ MonoBehaviour:
     toPosition: {fileID: 0}
     moveDurationFactor: 1
     loopMove: 0
-  useToRemind: 0
-  _reminderAction:
-    key: 0
-    actions: 
-    animationTypes: 
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
 --- !u!1 &919296512103863421
 GameObject:
   m_ObjectHideFlags: 0
@@ -5262,21 +5217,6 @@ MonoBehaviour:
   - key: 27
     actions: 0400000000000000
     animationTypes: 01000000
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
-  useToRemind: 0
-  _reminderAction:
-    key: 0
-    actions: 
-    animationTypes: 
     animationDuration: 1
     actionStartDelay: 0
     minAlpha: 0
@@ -5845,8 +5785,7 @@ GameObject:
   - component: {fileID: 919296512693602730}
   - component: {fileID: 919296512693602731}
   - component: {fileID: 6312822283638279582}
-  - component: {fileID: 7111838995286819156}
-  - component: {fileID: 3730646542782770513}
+  - component: {fileID: 816293765834134134}
   m_Layer: 5
   m_Name: ButtonCars
   m_TagString: Untagged
@@ -6033,13 +5972,23 @@ MonoBehaviour:
     toPosition: {fileID: 0}
     moveDurationFactor: 1
     loopMove: 0
-  useToRemind: 1
-  _reminderAction:
-    key: 0
-    actions: 03000000
+--- !u!114 &816293765834134134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919296512693602729}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef8003195d4300a459ebac90276c4b56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _agentActions:
+  - ConditionType: 2
+    actions: 02000000
     animationTypes: 01000000
-    animationDuration: 0.7
-    actionStartDelay: 0
+    animationDuration: 1
     minAlpha: 0.3
     maxAlpha: 1
     minScale: 1
@@ -6048,34 +5997,18 @@ MonoBehaviour:
     toPosition: {fileID: 0}
     moveDurationFactor: 1
     loopMove: 0
---- !u!114 &7111838995286819156
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 919296512693602729}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef8003195d4300a459ebac90276c4b56, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _conditionType: 2
-  _actionType: 3
---- !u!114 &3730646542782770513
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 919296512693602729}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef8003195d4300a459ebac90276c4b56, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _conditionType: 3
-  _actionType: 3
+  - ConditionType: 3
+    actions: 02000000
+    animationTypes: 01000000
+    animationDuration: 1
+    minAlpha: 0.3
+    maxAlpha: 1
+    minScale: 1
+    maxScale: 1.05
+    fromPosition: {fileID: 0}
+    toPosition: {fileID: 0}
+    moveDurationFactor: 1
+    loopMove: 0
 --- !u!1 &919296512816492616
 GameObject:
   m_ObjectHideFlags: 0
@@ -6126,7 +6059,7 @@ GameObject:
   - component: {fileID: 919296512888175424}
   - component: {fileID: 919296512888175425}
   - component: {fileID: 5333930907960551273}
-  - component: {fileID: 8800031067355099648}
+  - component: {fileID: 8640570294565449251}
   m_Layer: 5
   m_Name: ButtonCustom
   m_TagString: Untagged
@@ -6378,22 +6311,7 @@ MonoBehaviour:
     toPosition: {fileID: 0}
     moveDurationFactor: 1
     loopMove: 0
-  useToRemind: 1
-  _reminderAction:
-    key: 0
-    actions: 00000000
-    animationTypes: 
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
---- !u!114 &8800031067355099648
+--- !u!114 &8640570294565449251
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6405,8 +6323,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef8003195d4300a459ebac90276c4b56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _conditionType: 1
-  _actionType: 0
+  _agentActions:
+  - ConditionType: 1
+    actions: 00000000
+    animationTypes: 
+    animationDuration: 1
+    minAlpha: 0
+    maxAlpha: 1
+    minScale: 1
+    maxScale: 1.05
+    fromPosition: {fileID: 0}
+    toPosition: {fileID: 0}
+    moveDurationFactor: 1
+    loopMove: 0
 --- !u!1 &919296512935932457
 GameObject:
   m_ObjectHideFlags: 0
@@ -7789,21 +7718,6 @@ MonoBehaviour:
     toPosition: {fileID: 0}
     moveDurationFactor: 1
     loopMove: 0
-  useToRemind: 0
-  _reminderAction:
-    key: 0
-    actions: 
-    animationTypes: 
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
 --- !u!1 &919296513716384995
 GameObject:
   m_ObjectHideFlags: 0
@@ -8401,21 +8315,6 @@ MonoBehaviour:
   - key: 22
     actions: 04000000
     animationTypes: 03000000
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
-  useToRemind: 0
-  _reminderAction:
-    key: 0
-    actions: 
-    animationTypes: 
     animationDuration: 1
     actionStartDelay: 0
     minAlpha: 0
@@ -9049,21 +8948,6 @@ MonoBehaviour:
     moveDurationFactor: 1
     loopMove: 0
   - key: 0
-    actions: 
-    animationTypes: 
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
-  useToRemind: 0
-  _reminderAction:
-    key: 0
     actions: 
     animationTypes: 
     animationDuration: 1
@@ -11054,21 +10938,6 @@ MonoBehaviour:
     toPosition: {fileID: 0}
     moveDurationFactor: 1
     loopMove: 0
-  useToRemind: 0
-  _reminderAction:
-    key: 0
-    actions: 
-    animationTypes: 
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
 --- !u!1 &1869549992871168625
 GameObject:
   m_ObjectHideFlags: 0
@@ -11309,21 +11178,6 @@ MonoBehaviour:
   - key: 1
     actions: 04000000
     animationTypes: 03000000
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
-  useToRemind: 0
-  _reminderAction:
-    key: 0
-    actions: 
-    animationTypes: 
     animationDuration: 1
     actionStartDelay: 0
     minAlpha: 0
@@ -11694,21 +11548,6 @@ MonoBehaviour:
   - key: 27
     actions: 04000000
     animationTypes: 01000000
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
-  useToRemind: 0
-  _reminderAction:
-    key: 0
-    actions: 
-    animationTypes: 
     animationDuration: 1
     actionStartDelay: 0
     minAlpha: 0
@@ -12127,21 +11966,6 @@ MonoBehaviour:
     toPosition: {fileID: 0}
     moveDurationFactor: 1
     loopMove: 0
-  useToRemind: 0
-  _reminderAction:
-    key: 0
-    actions: 
-    animationTypes: 
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
 --- !u!1 &2213300535893889916
 GameObject:
   m_ObjectHideFlags: 0
@@ -12258,21 +12082,6 @@ MonoBehaviour:
     moveDurationFactor: 1
     loopMove: 0
   - key: 0
-    actions: 
-    animationTypes: 
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
-  useToRemind: 0
-  _reminderAction:
-    key: 0
     actions: 
     animationTypes: 
     animationDuration: 1
@@ -13660,21 +13469,6 @@ MonoBehaviour:
     toPosition: {fileID: 0}
     moveDurationFactor: 1
     loopMove: 0
-  useToRemind: 0
-  _reminderAction:
-    key: 0
-    actions: 
-    animationTypes: 
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
 --- !u!1 &2784107977063204195
 GameObject:
   m_ObjectHideFlags: 0
@@ -14149,21 +13943,6 @@ MonoBehaviour:
     toPosition: {fileID: 0}
     moveDurationFactor: 1
     loopMove: 0
-  useToRemind: 0
-  _reminderAction:
-    key: 0
-    actions: 
-    animationTypes: 
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
 --- !u!114 &8653516942286434833
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14283,21 +14062,6 @@ MonoBehaviour:
   - key: 10
     actions: 04000000
     animationTypes: 03000000
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
-  useToRemind: 0
-  _reminderAction:
-    key: 0
-    actions: 
-    animationTypes: 
     animationDuration: 1
     actionStartDelay: 0
     minAlpha: 0
@@ -15233,21 +14997,6 @@ MonoBehaviour:
     toPosition: {fileID: 0}
     moveDurationFactor: 1
     loopMove: 0
-  useToRemind: 0
-  _reminderAction:
-    key: 0
-    actions: 
-    animationTypes: 
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
 --- !u!1 &3221011055106839499
 GameObject:
   m_ObjectHideFlags: 0
@@ -15526,21 +15275,6 @@ MonoBehaviour:
   - key: 26
     actions: 04000000
     animationTypes: 01000000
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
-  useToRemind: 0
-  _reminderAction:
-    key: 0
-    actions: 
-    animationTypes: 
     animationDuration: 1
     actionStartDelay: 0
     minAlpha: 0
@@ -16174,21 +15908,6 @@ MonoBehaviour:
     toPosition: {fileID: 0}
     moveDurationFactor: 1
     loopMove: 0
-  useToRemind: 0
-  _reminderAction:
-    key: 0
-    actions: 
-    animationTypes: 
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
 --- !u!1 &3396392118122233231
 GameObject:
   m_ObjectHideFlags: 0
@@ -16413,21 +16132,6 @@ MonoBehaviour:
     loopMove: 0
   - key: 23
     actions: 01000000
-    animationTypes: 
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
-  useToRemind: 0
-  _reminderAction:
-    key: 0
-    actions: 
     animationTypes: 
     animationDuration: 1
     actionStartDelay: 0
@@ -17823,21 +17527,6 @@ MonoBehaviour:
     toPosition: {fileID: 0}
     moveDurationFactor: 1
     loopMove: 0
-  useToRemind: 0
-  _reminderAction:
-    key: 0
-    actions: 
-    animationTypes: 
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
 --- !u!1 &3977239601728420535
 GameObject:
   m_ObjectHideFlags: 0
@@ -18080,21 +17769,6 @@ MonoBehaviour:
   - key: 19
     actions: 04000000
     animationTypes: 01000000
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
-  useToRemind: 0
-  _reminderAction:
-    key: 0
-    actions: 
-    animationTypes: 
     animationDuration: 1
     actionStartDelay: 0
     minAlpha: 0
@@ -20488,7 +20162,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -7}
+  m_AnchoredPosition: {x: 0, y: -501}
   m_SizeDelta: {x: 1000, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7818056702186446002
@@ -20618,21 +20292,6 @@ MonoBehaviour:
   - key: 31
     actions: 04000000
     animationTypes: 01000000
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
-  useToRemind: 0
-  _reminderAction:
-    key: 0
-    actions: 
-    animationTypes: 
     animationDuration: 1
     actionStartDelay: 0
     minAlpha: 0
@@ -21680,21 +21339,6 @@ MonoBehaviour:
     toPosition: {fileID: 6738799860140317719}
     moveDurationFactor: 1
     loopMove: 1
-  useToRemind: 0
-  _reminderAction:
-    key: 0
-    actions: 
-    animationTypes: 
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
 --- !u!1 &5147969398005704222
 GameObject:
   m_ObjectHideFlags: 0
@@ -22456,21 +22100,6 @@ MonoBehaviour:
     toPosition: {fileID: 0}
     moveDurationFactor: 1
     loopMove: 0
-  useToRemind: 0
-  _reminderAction:
-    key: 0
-    actions: 
-    animationTypes: 
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
 --- !u!1 &5387147824951755102
 GameObject:
   m_ObjectHideFlags: 0
@@ -22587,21 +22216,6 @@ MonoBehaviour:
     moveDurationFactor: 1
     loopMove: 0
   - key: 0
-    actions: 
-    animationTypes: 
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
-  useToRemind: 0
-  _reminderAction:
-    key: 0
     actions: 
     animationTypes: 
     animationDuration: 1
@@ -22952,21 +22566,6 @@ MonoBehaviour:
     toPosition: {fileID: 0}
     moveDurationFactor: 1
     loopMove: 0
-  useToRemind: 0
-  _reminderAction:
-    key: 0
-    actions: 
-    animationTypes: 
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
 --- !u!1 &5661095571220210893
 GameObject:
   m_ObjectHideFlags: 0
@@ -23072,21 +22671,6 @@ MonoBehaviour:
   - key: 26
     actions: 04000000
     animationTypes: 03000000
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
-  useToRemind: 0
-  _reminderAction:
-    key: 0
-    actions: 
-    animationTypes: 
     animationDuration: 1
     actionStartDelay: 0
     minAlpha: 0
@@ -23798,21 +23382,6 @@ MonoBehaviour:
     toPosition: {fileID: 0}
     moveDurationFactor: 1
     loopMove: 0
-  useToRemind: 0
-  _reminderAction:
-    key: 0
-    actions: 
-    animationTypes: 
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
 --- !u!1 &5954410684591258435
 GameObject:
   m_ObjectHideFlags: 0
@@ -24165,21 +23734,6 @@ MonoBehaviour:
   - key: 10
     actions: 04000000
     animationTypes: 0100000002000000
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
-  useToRemind: 0
-  _reminderAction:
-    key: 0
-    actions: 
-    animationTypes: 
     animationDuration: 1
     actionStartDelay: 0
     minAlpha: 0
@@ -25672,21 +25226,6 @@ MonoBehaviour:
     toPosition: {fileID: 0}
     moveDurationFactor: 1
     loopMove: 0
-  useToRemind: 0
-  _reminderAction:
-    key: 0
-    actions: 
-    animationTypes: 
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
 --- !u!1 &6380283256146140711
 GameObject:
   m_ObjectHideFlags: 0
@@ -25792,21 +25331,6 @@ MonoBehaviour:
   - key: 27
     actions: 04000000
     animationTypes: 03000000
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
-  useToRemind: 0
-  _reminderAction:
-    key: 0
-    actions: 
-    animationTypes: 
     animationDuration: 1
     actionStartDelay: 0
     minAlpha: 0
@@ -26180,21 +25704,6 @@ MonoBehaviour:
     moveDurationFactor: 1
     loopMove: 0
   - key: 0
-    actions: 
-    animationTypes: 
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
-  useToRemind: 0
-  _reminderAction:
-    key: 0
     actions: 
     animationTypes: 
     animationDuration: 1
@@ -26721,21 +26230,6 @@ MonoBehaviour:
     loopMove: 0
   - key: 23
     actions: 01000000
-    animationTypes: 
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
-  useToRemind: 0
-  _reminderAction:
-    key: 0
-    actions: 
     animationTypes: 
     animationDuration: 1
     actionStartDelay: 0
@@ -29072,21 +28566,6 @@ MonoBehaviour:
     toPosition: {fileID: 0}
     moveDurationFactor: 1
     loopMove: 0
-  useToRemind: 0
-  _reminderAction:
-    key: 0
-    actions: 
-    animationTypes: 
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
 --- !u!1 &7386139425337790820
 GameObject:
   m_ObjectHideFlags: 0
@@ -30418,21 +29897,6 @@ MonoBehaviour:
     toPosition: {fileID: 0}
     moveDurationFactor: 1
     loopMove: 0
-  useToRemind: 0
-  _reminderAction:
-    key: 0
-    actions: 
-    animationTypes: 
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
 --- !u!1 &7772114082715202337
 GameObject:
   m_ObjectHideFlags: 0
@@ -31101,21 +30565,6 @@ MonoBehaviour:
     moveDurationFactor: 1
     loopMove: 0
   - key: 0
-    actions: 
-    animationTypes: 
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
-  useToRemind: 0
-  _reminderAction:
-    key: 0
     actions: 
     animationTypes: 
     animationDuration: 1
@@ -31875,21 +31324,6 @@ MonoBehaviour:
     toPosition: {fileID: 0}
     moveDurationFactor: 1
     loopMove: 0
-  useToRemind: 0
-  _reminderAction:
-    key: 0
-    actions: 
-    animationTypes: 
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
 --- !u!1 &8319575639349533864
 GameObject:
   m_ObjectHideFlags: 0
@@ -32611,21 +32045,6 @@ MonoBehaviour:
     toPosition: {fileID: 0}
     moveDurationFactor: 1
     loopMove: 0
-  useToRemind: 0
-  _reminderAction:
-    key: 0
-    actions: 
-    animationTypes: 
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
 --- !u!1 &8491926238703077133
 GameObject:
   m_ObjectHideFlags: 0
@@ -33215,21 +32634,6 @@ MonoBehaviour:
   - key: 10
     actions: 04000000
     animationTypes: 0100000002000000
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
-  useToRemind: 0
-  _reminderAction:
-    key: 0
-    actions: 
-    animationTypes: 
     animationDuration: 1
     actionStartDelay: 0
     minAlpha: 0
@@ -34347,21 +33751,6 @@ MonoBehaviour:
     toPosition: {fileID: 0}
     moveDurationFactor: 1
     loopMove: 0
-  useToRemind: 0
-  _reminderAction:
-    key: 0
-    actions: 
-    animationTypes: 
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
 --- !u!1 &8819674619870826860
 GameObject:
   m_ObjectHideFlags: 0
@@ -34602,21 +33991,6 @@ MonoBehaviour:
   - key: 23
     actions: 04000000
     animationTypes: 03000000
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
-  useToRemind: 0
-  _reminderAction:
-    key: 0
-    actions: 
-    animationTypes: 
     animationDuration: 1
     actionStartDelay: 0
     minAlpha: 0
@@ -35002,21 +34376,6 @@ MonoBehaviour:
     loopMove: 0
   - key: 10
     actions: 01000000
-    animationTypes: 
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
-  useToRemind: 0
-  _reminderAction:
-    key: 0
-    actions: 
     animationTypes: 
     animationDuration: 1
     actionStartDelay: 0

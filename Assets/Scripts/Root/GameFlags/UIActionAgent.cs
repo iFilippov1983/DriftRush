@@ -13,7 +13,6 @@ using DG.Tweening.Plugins.Options;
 using System;
 using System.Threading.Tasks;
 using static Logger;
-using UnityEngine.Events;
 
 namespace RaceManager.Root
 {
@@ -76,32 +75,10 @@ namespace RaceManager.Root
                 animationTypes.Contains(AnimationType.MoveFromTo) && NeedToSetAnimations;
 
             #endregion
-
-            #region Debug fields
-
-            //[Header("Only for debug")]
-            //[ShowInInspector, ReadOnly]
-            [HideInInspector]
-            public IEnumerator CurrentFadeJob;
-            //[ShowInInspector, ReadOnly]
-            [HideInInspector]
-            public IEnumerator CurrentScaleJob;
-            //[ShowInInspector, ReadOnly]
-            [HideInInspector]
-            public IEnumerator CurrentMoveJob;
-
-            #endregion
         }
 
         [Header("Flags Actions")]
         [SerializeField] private List<AgentAction> _agentActions = new List<AgentAction>();
-
-        public bool useToRemind;
-
-        [ShowIf("useToRemind")]
-        [Header("Reminder Actions")]
-        [SerializeField]
-        private AgentAction _reminderAction = new AgentAction();
         
         private GameFlagsHandler _flagsHandler;
         private Button _button;
@@ -112,7 +89,7 @@ namespace RaceManager.Root
         private Vector3 _originalPosition = default;
         private float _originalAlpha = default;
 
-        private bool _isDead = false;
+        public Subject<AnimationType> StopAnimationSubject = new Subject<AnimationType>(); 
 
         public AgentType Type { get; private set; }
 
@@ -155,103 +132,83 @@ namespace RaceManager.Root
             }
         }
 
-        public async Task Click()
-        {
-            await ClickAgent(_reminderAction.actionStartDelay);
-        }
-
-        public async Task ButtonInteractable(bool interactable)
-        {
-            await MakeButtonInteractable(interactable, _reminderAction.actionStartDelay);
-        }
-
-        public async Task StartAnimation()
-        {
-            await ToggleAnimationsStatus(true, _reminderAction, _reminderAction.actionStartDelay);
-        }
-
-        public async Task StopAnimation()
-        {
-            await ToggleAnimationsStatus(false, _reminderAction, _reminderAction.actionStartDelay);
-        }
-
         private bool TimeForAction(GameFlagType key) => _flagsHandler.HasFlag(key);
 
         private bool IsLastKey(GameFlagType key) => _flagsHandler.IsLast(key);
 
-        private async void ClickOnFlag(AgentAction aAction)
+        private void ClickOnFlag(AgentAction aAction)
         {
             if (Type != AgentType.Button)
             {
-                $"UI Flag Agent [{gameObject.name}] has no any Button component, but you whant to click it!".Log(ColorRed);
+                $"UI Action Agent [{gameObject.name}] has no any Button component, but you whant to click it!".Log(ColorRed);
                 return;
             }
 
             if (TimeForAction(aAction.key))
             { 
                 if(IsLastKey(aAction.key))
-                    await ClickAgent(aAction.actionStartDelay);
+                    ClickAgent(aAction.actionStartDelay);
 
                 return;
             }
 
             _flagsHandler
-                .Subscribe(aAction.key, async () => await ClickAgent(aAction.actionStartDelay))
+                .Subscribe(aAction.key, () => ClickAgent(aAction.actionStartDelay))
                 .AddTo(this);
 
             $"ClickOnFlag subscribed => Key: [{aAction.key}] => Object: [{gameObject.name}]".Log(ColorBlue);
         }
 
-        private async void InteractableOnFlag(bool interactable, AgentAction aAction)
+        private void InteractableOnFlag(bool interactable, AgentAction aAction)
         {
             if (Type != AgentType.Button)
             {
-                $"UI Flag Agent [{gameObject.name}] has no any Button component, but you whant to set its Interactable to True!".Log(ColorRed);
+                $"UI Action Agent [{gameObject.name}] has no any Button component, but you whant to set its Interactable!".Log(ColorRed);
                 return;
             }
 
             if (TimeForAction(aAction.key))
             {
                 if (IsLastKey(aAction.key))
-                    await MakeButtonInteractable(interactable);
+                    MakeButtonInteractable(interactable);
 
                 return;
             }
 
             _flagsHandler
-                .Subscribe(aAction.key, async () => await MakeButtonInteractable(interactable))
+                .Subscribe(aAction.key, () => MakeButtonInteractable(interactable))
                 .AddTo(this);
 
             $"InteractableOnFlag ({interactable}) subscribed => Key: [{aAction.key}] => Object: [{gameObject.name}]".Log(ColorBlue);
         }
 
-        private async void ToggleAnimationOnFlag(bool start, AgentAction aAction)
+        private void ToggleAnimationOnFlag(bool start, AgentAction aAction)
         {
             bool incorrectAnimationTypes =
                 aAction.animationTypes.Count == 0 || aAction.animationTypes.Contains(AnimationType.None);
 
             if (start && incorrectAnimationTypes)
             {
-                $"You're trying to animate UI Flag Agent [{gameObject.name}] but you haven't assigned correct animation type!".Log(ColorRed);
+                $"You're trying to animate UI Action Agent [{gameObject.name}] but you haven't assigned correct animation type!".Log(ColorRed);
                 return;
             }
 
             if (TimeForAction(aAction.key))
             {
                 if (IsLastKey(aAction.key))
-                    await ToggleAnimationsStatus(start, aAction);
+                    ToggleAnimationsStatus(start, aAction);
 
                 return;
             }
 
             _flagsHandler
-                .Subscribe(aAction.key, async () => await ToggleAnimationsStatus(start, aAction))
+                .Subscribe(aAction.key, () => ToggleAnimationsStatus(start, aAction))
                 .AddTo(this);
 
             $"ToggleAnimationOnFlag ({start}) subscribed => Key: [{aAction.key}] => Object: [{gameObject.name}]".Log(ColorBlue);
         }
 
-        private async Task ClickAgent(float actionDelaySeconds = 0)
+        private async void ClickAgent(float actionDelaySeconds = 0)
         {
             int delay = Convert.ToInt32(actionDelaySeconds * 1000);
             await Task.Delay(delay);
@@ -259,7 +216,7 @@ namespace RaceManager.Root
             _button.onClick?.Invoke();
         }
 
-        private async Task MakeButtonInteractable(bool interactable, float actionDelaySeconds = 0)
+        private async void MakeButtonInteractable(bool interactable, float actionDelaySeconds = 0)
         {
             int delay = Convert.ToInt32(actionDelaySeconds * 1000);
             await Task.Delay(delay);
@@ -267,34 +224,20 @@ namespace RaceManager.Root
             _button.interactable = interactable;
         }
 
-        private async Task ToggleAnimationsStatus(bool start, AgentAction aAction, float actionDelaySeconds = 0)
+        private async void ToggleAnimationsStatus(bool start, AgentAction aAction, float actionDelaySeconds = 0)
         {
             int delay = Convert.ToInt32(actionDelaySeconds * 1000);
             await Task.Delay(delay);
 
             foreach (var animationType in aAction.animationTypes)
             {
-                if (animationType == AnimationType.None)
-                {
-                    $"AnimationType [None] detected on UI Flag Agent [{gameObject.name}] => Key [{aAction.key}]".Log(ColorYellow);
-                    continue;
-                }
-
-                StartAnimation(start, animationType, aAction);
+                if (animationType != AnimationType.None)
+                    StartAnimation(start, animationType, aAction);
             }
         }
 
         private async void StartAnimation(bool start, AnimationType type, AgentAction aAction)
         {
-            IEnumerator currentAnimJob = type switch
-            {
-                AnimationType.None => null,
-                AnimationType.FadeInOutLoop => aAction.CurrentFadeJob,
-                AnimationType.ScaleUpDownLoop => aAction.CurrentScaleJob,
-                AnimationType.MoveFromTo => aAction.CurrentMoveJob,
-                _ => null,
-            };
-
             IEnumerator animCoroutine = type switch
             {
                 AnimationType.None => null,
@@ -306,53 +249,36 @@ namespace RaceManager.Root
 
             if (start)
             {
-                if (currentAnimJob != null)
-                    return;
-
                 while (!gameObject.activeInHierarchy)
                     await Task.Yield();
 
 #pragma warning disable CS4014 
                 StartCoroutine(animCoroutine);
 #pragma warning restore CS4014 
-                SetCurrentJob(animCoroutine);
             }
             else
             {
-                if (currentAnimJob != null)
-                    StopCoroutine(currentAnimJob);
+                StopAnimationSubject.OnNext(type);
 
                 if (animCoroutine != null)
+                {
                     StopCoroutine(animCoroutine);
-
-                switch (type)
-                {
-                    case AnimationType.None:
-                        break;
-                    case AnimationType.FadeInOutLoop:
-                        ResetAlpha();
-                        break;
-                    case AnimationType.ScaleUpDownLoop:
-                        ResetScale();
-                        break;
-                    case AnimationType.MoveFromTo:
-                        ResetPosition();
-                        break;
                 }
-
-                SetCurrentJob(null);
-            }
-
-            void SetCurrentJob(IEnumerator enumerator)
-            {
-                _ = type switch
-                {
-                    AnimationType.None => null,
-                    AnimationType.FadeInOutLoop => aAction.CurrentFadeJob = enumerator,
-                    AnimationType.ScaleUpDownLoop => aAction.CurrentScaleJob = enumerator,
-                    AnimationType.MoveFromTo => aAction.CurrentMoveJob = enumerator,
-                    _ => null,
-                };
+                    
+                //switch (type)
+                //{
+                //    case AnimationType.None:
+                //        break;
+                //    case AnimationType.FadeInOutLoop:
+                //        //ResetAlpha();
+                //        break;
+                //    case AnimationType.ScaleUpDownLoop:
+                //        //ResetScale();
+                //        break;
+                //    case AnimationType.MoveFromTo:
+                //        //ResetPosition();
+                //        break;
+                //}
             }
         }
 
@@ -361,23 +287,37 @@ namespace RaceManager.Root
             yield return new WaitForSeconds(aAction.actionStartDelay);
 
             bool fade = true;
+            float targetAlpha;
+            TweenerCore<Color, Color, ColorOptions> tween = null;
+
+            StopAnimationSubject
+                .Where(t => t == AnimationType.FadeInOutLoop)
+                .Subscribe(t => 
+                {
+                    tween?.Kill();
+                    tween = null;
+                    targetAlpha = _originalAlpha;
+                    tween = DoFade(targetAlpha, aAction.animationDuration);
+                    //ResetAlpha();
+                })
+                .AddTo(this);
 
             while (true)
             {
-                float targetAlpha = fade ? aAction.minAlpha : aAction.maxAlpha;
+                targetAlpha = fade ? aAction.minAlpha : aAction.maxAlpha;
 
-                var tween = DoFade(targetAlpha, aAction.animationDuration);
-                tween.OnComplete(() => fade = !fade);
+                tween = DoFade(targetAlpha, aAction.animationDuration);
+                tween.OnComplete(() => 
+                {
+                    fade = !fade;
+                    tween = null;
+                });
+                
 
                 tween.onUpdate += () => ToggleActivity(tween);
 
                 while (tween.IsActive())
                 {
-                    if (_isDead)
-                    {
-                        tween.Kill();
-                        break;
-                    }
                     yield return null;
                 }
 
@@ -402,21 +342,31 @@ namespace RaceManager.Root
             yield return new WaitForSeconds(aAction.actionStartDelay);
 
             bool scaleDown = false;
+            float targetScale;
+            TweenerCore<Vector3, Vector3, VectorOptions> tween = null;
+
+            StopAnimationSubject
+                .Where(t => t == AnimationType.ScaleUpDownLoop)
+                .Subscribe(t => 
+                { 
+                    tween?.Kill();
+                    tween = null;
+                    targetScale = _originalScale.x;
+                    tween = transform.DOScale(targetScale, aAction.animationDuration);
+
+                    //ResetScale();
+                })
+                .AddTo(this);
 
             while (true)
             {
-                float targetScale = scaleDown ? aAction.minScale : aAction.maxScale;
+                targetScale = scaleDown ? aAction.minScale : aAction.maxScale;
 
-                var tween = transform.DOScale(targetScale, aAction.animationDuration)
-                                     .OnComplete(() => scaleDown = !scaleDown);
+                tween = transform.DOScale(targetScale, aAction.animationDuration)
+                    .OnComplete(() => scaleDown = !scaleDown);
 
                 while (tween.IsActive())
                 {
-                    if (_isDead)
-                    {
-                        tween.Kill();
-                        break;
-                    }
                     yield return null;
                 }
             }
@@ -426,33 +376,44 @@ namespace RaceManager.Root
         {
             yield return new WaitForSeconds(aAction.actionStartDelay);
 
+            Vector3 originPos = transform.position;
             Vector3 fromPosition = aAction.fromPosition.position;
             Vector3 toPosition = aAction.toPosition.position;
+
+            TweenerCore<Vector3, Vector3, VectorOptions> tween = null;
+
+            StopAnimationSubject
+                .Where(t => t == AnimationType.MoveFromTo)
+                .Subscribe(t => 
+                {
+                    tween?.Kill();
+                    tween = null;
+                    //tween = transform.DOMove(originPos, aAction.animationDuration * aAction.moveDurationFactor);
+                    transform.position = originPos;
+                    //ResetPosition();
+                })
+                .AddTo(this);
 
             while (true)
             {
                 transform.position = fromPosition;
 
-                var tween = transform.DOMove(toPosition, aAction.animationDuration * aAction.moveDurationFactor);
+                tween = transform.DOMove(toPosition, aAction.animationDuration * aAction.moveDurationFactor);
 
                 while (tween.IsActive())
                 {
-                    if (_isDead)
-                    {
-                        tween.Kill();
-                        break;
-                    }
                     yield return null;
                 }
 
+                
                 if (!aAction.loopMove) break;
             }
         }
 
         private void ToggleActivity(TweenerCore<Color, Color, ColorOptions> tween)
         {
-            if (gameObject.activeSelf)
-                tween.Play();
+            if (gameObject.activeSelf && !tween.IsPlaying())
+                tween.Restart();
             else
                 tween.Pause();
         }
@@ -488,6 +449,8 @@ namespace RaceManager.Root
             Color color = GetColor(Type);
             color.a = _originalAlpha;
             SetColor(Type, color);
+
+            Debug.Log($"Alpha is set to {color.a} for [{gameObject.name}]");
         }
 
         private void ResetScale() => transform.localScale = _originalScale;
@@ -534,7 +497,6 @@ namespace RaceManager.Root
 
         private void OnDestroy()
         {
-            _isDead = true;
             StopAllCoroutines();
         }
     }

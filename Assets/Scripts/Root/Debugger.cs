@@ -59,7 +59,7 @@ namespace RaceManager.Root
             get 
             {
                 if (_settingsContainer == null)
-                    _settingsContainer = ResourcesLoader.LoadObject<GameSettingsContainer>(ResourcePath.EffectsSettingsContainer);
+                    _settingsContainer = ResourcesLoader.LoadObject<GameSettingsContainer>(ResourcePath.GameSettingsContainer);
                 return _settingsContainer;
             }
         }

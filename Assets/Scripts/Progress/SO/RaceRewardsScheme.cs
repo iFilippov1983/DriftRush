@@ -14,7 +14,6 @@ namespace RaceManager.Progress
     {
         [Title("Scores Count Sceme")]
         [SerializeField] private float _scoresFactorDrift = 1.0f;
-        [SerializeField] private float _availableDriftPause = 5f;
         [SerializeField] private float _minDriftDistanceValue = 1f;
         [Space]
         [SerializeField] private float _scoresForBump = 100f;
@@ -22,6 +21,7 @@ namespace RaceManager.Progress
         [SerializeField] private float _minCollisionInterval = 0.1f;
         [Space]
         [SerializeField] private int _moneyMultiplyerForAds = 3;
+        [SerializeField] private float _scoresCountPauseDutation = 5f;
         [Space(20)]
         [SerializeField]
         [DictionaryDrawerSettings(KeyLabel = "Place", ValueLabel = "Reward")]
@@ -48,7 +48,7 @@ namespace RaceManager.Progress
         };
 
         public float DriftFactor => _scoresFactorDrift;
-        public float AvailableDriftPause => _availableDriftPause;
+        public float CountPauseDuration => _scoresCountPauseDutation;
         public float MinDriftDistanceValue => _minDriftDistanceValue;
         public float BumpScores => _scoresForBump;
         public float MinCollisionInterval => _minCollisionInterval;

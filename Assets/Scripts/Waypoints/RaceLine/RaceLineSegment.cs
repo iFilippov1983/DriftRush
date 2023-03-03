@@ -145,7 +145,6 @@ namespace RaceManager.Waypoints
                     color.a = MeshMaterial.color.a;
                     targetColor.a = MeshMaterial.color.a;
                     MeshMaterial.color = color;
-                    
 
                     await Task.Yield();
                 }
@@ -161,77 +160,77 @@ namespace RaceManager.Waypoints
 
         #region Using Coroutines implementation 
 
-        public void CheckDistance(float distance)
-        {
-            _checkDistance = distance + _checkOffset;
-            bool isPassed = _checkDistance > _distanceFromStart;
+        //public void CheckDistance(float distance)
+        //{
+        //    _checkDistance = distance + _checkOffset;
+        //    bool isPassed = _checkDistance > _distanceFromStart;
 
-            if (isPassed == _isVisible && _currentFadeJob == null)
-            {
-                //if (_currentFadeJob != null && !isPassed)
-                //    StopCoroutine(_currentFadeJob);
+        //    if (isPassed == _isVisible && _currentFadeJob == null)
+        //    {
+        //        //if (_currentFadeJob != null && !isPassed)
+        //        //    StopCoroutine(_currentFadeJob);
 
-                _currentFadeJob = ChangeVisibility(isPassed);
-                StartCoroutine(_currentFadeJob);
-            }
-        }
+        //        _currentFadeJob = ChangeVisibility(isPassed);
+        //        StartCoroutine(_currentFadeJob);
+        //    }
+        //}
 
-        public void CheckSpeed(float speed)
-        {
-            if (!_isVisible) return;
+        //public void CheckSpeed(float speed)
+        //{
+        //    if (!_isVisible) return;
 
-            bool isInRange = _checkDistance * _checkDistanceFactor > _distanceFromStart;
-            bool isOverspeed = speed >= _recomendedSpeed;
+        //    bool isInRange = _checkDistance * _checkDistanceFactor > _distanceFromStart;
+        //    bool isOverspeed = speed >= _recomendedSpeed;
 
-            if (isOverspeed != _isWarning && _currentColorTask == null && isInRange)
-            {
-                //if (_currentColorJob != null)
-                //    StopCoroutine(_currentColorJob);
+        //    if (isOverspeed != _isWarning && _currentColorTask == null && isInRange)
+        //    {
+        //        //if (_currentColorJob != null)
+        //        //    StopCoroutine(_currentColorJob);
 
-                _currentColorJob = ChangeColor(isOverspeed);
-                StartCoroutine(_currentColorJob);
-            }
-        }
+        //        _currentColorJob = ChangeColor(isOverspeed);
+        //        StartCoroutine(_currentColorJob);
+        //    }
+        //}
 
-        private IEnumerator ChangeVisibility(bool fade)
-        {
-            Color color = MeshMaterial.color;
+        //private IEnumerator ChangeVisibility(bool fade)
+        //{
+        //    Color color = MeshMaterial.color;
 
-            float maxAlphaValue = _isWarning
-                ? _warningColor.a
-                : _baseColor.a;
+        //    float maxAlphaValue = _isWarning
+        //        ? _warningColor.a
+        //        : _baseColor.a;
 
-            float targetAlpha = fade ? 0 : maxAlphaValue;
+        //    float targetAlpha = fade ? 0 : maxAlphaValue;
 
-            while (!Mathf.Approximately(color.a, targetAlpha))
-            {
-                color.a = Mathf.Lerp(color.a, targetAlpha, Time.deltaTime * _fadeSpeed);
-                MeshMaterial.color = color;
+        //    while (!Mathf.Approximately(color.a, targetAlpha))
+        //    {
+        //        color.a = Mathf.Lerp(color.a, targetAlpha, Time.deltaTime * _fadeSpeed);
+        //        MeshMaterial.color = color;
 
-                yield return null;
-            }
+        //        yield return null;
+        //    }
 
-            _isVisible = !fade;
-            _currentFadeJob = null;
-        }
+        //    _isVisible = !fade;
+        //    _currentFadeJob = null;
+        //}
 
-        private IEnumerator ChangeColor(bool warning)
-        {
-            Color color = MeshMaterial.color;
-            Color targetColor = warning ? _warningColor : _baseColor;
-            targetColor.a = color.a;
+        //private IEnumerator ChangeColor(bool warning)
+        //{
+        //    Color color = MeshMaterial.color;
+        //    Color targetColor = warning ? _warningColor : _baseColor;
+        //    targetColor.a = color.a;
 
-            while (!Equals(color, targetColor))
-            {
-                color = Color.Lerp(color, targetColor, Time.deltaTime * _colorTransitionSpeed);
-                MeshMaterial.color = color;
+        //    while (!Equals(color, targetColor))
+        //    {
+        //        color = Color.Lerp(color, targetColor, Time.deltaTime * _colorTransitionSpeed);
+        //        MeshMaterial.color = color;
 
-                yield return null;
-            }
+        //        yield return null;
+        //    }
 
-            _isWarning = warning;
-            _currentColorTask = null;
-        }
+        //    _isWarning = warning;
+        //    _currentColorTask = null;
+        //}
 
         #endregion
 

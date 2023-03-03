@@ -1,11 +1,20 @@
 ﻿using RaceManager.Tools;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace RaceManager.Waypoints
 {
     public class RaceLine : MonoBehaviour
     {
+        [Serializable]
+        public struct LinePoint
+        {
+            public float distanceFromStart;
+            public Vector3 position;
+            public Vector3 direction;
+        }
+
         private GameObject _segmentPrefab;
 
         [Tooltip("The distance offset wich will be used to check each line segment")]
@@ -13,12 +22,17 @@ namespace RaceManager.Waypoints
         [Space]
         [SerializeField] private Color _baseColor = Color.blue;
         [SerializeField] private Color _warningColor = Color.red;
-        [SerializeField] private float _segmentFadeSpeed = 1f;
-        [SerializeField] private float _segmentColorTransitionSpeed = 1f;
+        [SerializeField] private float _segmentFadeSpeed = 15f;
+        [SerializeField] private float _segmentColorTransitionSpeed = 15f;
         [Space]
         [SerializeField] private float _segmentSpawnInterval = 1f;
+        [SerializeField] private int _segmentsMaxAmount = 50;
 
         private float _currentDistance = 0;
+        private int _currentIndex = 0;
+
+        private Queue<RaceLineSegment> _segments;
+        private Dictionary<int, LinePoint> _linePoints;
 
         private GameObject SegmentPrefab
         {
@@ -35,36 +49,61 @@ namespace RaceManager.Waypoints
         public Action<float> OnDistanceChange;
         public Action OnRaceFinish;
 
-        public void SpawnSegments(WaypointTrack mainTrack)
+        public void PrepareSelf(WaypointTrack mainTrack)
         {
+            _segments = new Queue<RaceLineSegment>();
+            _linePoints = new Dictionary<int, LinePoint>();
+
             var disArray = mainTrack.Distances;
             while (_currentDistance < disArray[disArray.Length - 1])
             {
                 RoutePoint point = mainTrack.GetRoutePoint(_currentDistance);
-                GameObject go = Instantiate(SegmentPrefab, point.position, Quaternion.LookRotation(point.direction), transform);
 
-                RaceLineSegment segment = go.GetComponent<RaceLineSegment>();
-                segment.DistanceFromStart = _currentDistance;
+                GameObject pointGo = Instantiate
+                    (
+                    new GameObject($"Point [index: {_currentIndex}; dist: {_currentDistance}]"),
+                    point.position,
+                    Quaternion.LookRotation(point.direction),
+                    transform
+                    );
 
-                segment.Initiallize(new RaceLineSegmentData()
+                LinePoint linePoint = new LinePoint()
                 {
-                    recomendedSpeed = GetRecomendedSpeed(mainTrack, segment),
-                    fadeSpeed = _segmentFadeSpeed,
-                    colorTransitionSpeed = _segmentColorTransitionSpeed,
-                    baseColor = _baseColor,
-                    warningColor = _warningColor,
-                    checkOffset = _segmentCheckOffset                    
-                });
+                    distanceFromStart = _currentDistance,
+                    position = point.position,
+                    direction = point.direction
+                };
 
-                segment.OnDestroyAction += SegmentDestroy;
+                _linePoints.Add(_currentIndex, linePoint);
 
-                //OnSpeedChange += segment.CheckSpeed;
-                //OnDistanceChange += segment.CheckDistance;
-                OnSpeedChange += segment.SpeedCheck;
-                OnDistanceChange += segment.DistanceCheck;
-                OnRaceFinish += () => Destroy(segment.gameObject);
+                if (_segments.Count <= _segmentsMaxAmount)
+                {
+                    GameObject segmentGo = Instantiate(SegmentPrefab, point.position, Quaternion.LookRotation(point.direction), transform);
+
+                    RaceLineSegment segment = segmentGo.GetComponent<RaceLineSegment>();
+                    segment.DistanceFromStart = _currentDistance;
+
+                    segment.Initiallize(new RaceLineSegmentData()
+                    {
+                        recomendedSpeed = GetRecomendedSpeed(mainTrack, segment),
+                        fadeSpeed = _segmentFadeSpeed,
+                        colorTransitionSpeed = _segmentColorTransitionSpeed,
+                        baseColor = _baseColor,
+                        warningColor = _warningColor,
+                        checkOffset = _segmentCheckOffset
+                    });
+
+                    segment.OnDestroyAction += SegmentDestroy;
+
+                    //OnSpeedChange += segment.CheckSpeed; //Coroutine
+                    //OnDistanceChange += segment.CheckDistance; //Coroutine
+                    OnSpeedChange += segment.SpeedCheck; //Task
+                    OnDistanceChange += segment.DistanceCheck; //Task
+                    OnRaceFinish += () => Destroy(segment.gameObject);
+                }
 
                 _currentDistance += _segmentSpawnInterval;
+                _currentIndex++;
             }
         }
 

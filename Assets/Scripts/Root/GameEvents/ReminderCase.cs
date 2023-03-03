@@ -10,16 +10,11 @@ namespace RaceManager.Root
     public class ReminderCase
     {
         public readonly ProgressConditionType Condition;
-
-        public IReward Reward;
-        public List<CarName> CarNames;
-
-        public Subject<ReminderCase> OnReminder = new Subject<ReminderCase>();
+        public Subject<Unit> MakeReminder = new Subject<Unit>();
 
         public ReminderCase(ProgressConditionType condition)
         {
             Condition = condition;
         }
     }
-
 }

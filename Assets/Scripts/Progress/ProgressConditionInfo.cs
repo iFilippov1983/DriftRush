@@ -1,6 +1,5 @@
 ﻿using RaceManager.Cars;
 using RaceManager.Root;
-using System.Collections.Generic;
 using Zenject;
 
 namespace RaceManager.Progress
@@ -32,9 +31,9 @@ namespace RaceManager.Progress
             &&
             !_carUpgradesHandler.CurrentCarHasMaxFactorsUpgrade();
 
-        public bool HasRankUpgradableCars(out List<CarName> cars)
+        public bool HasRankUpgradableCars()
         {
-            cars = new List<CarName>();
+            //cars = new List<CarName>();
             bool hasUpgradeable = false;
 
             foreach (var profile in _playerCarDepot.CarProfiles)
@@ -54,7 +53,7 @@ namespace RaceManager.Progress
 
                 if (canUpgrade)
                 {
-                    cars.Add(profile.CarName);
+                    //cars.Add(profile.CarName);
                     hasUpgradeable = true;
                 } 
             }
@@ -62,9 +61,9 @@ namespace RaceManager.Progress
             return hasUpgradeable;
         }
 
-        public bool HasUlockableCars(out List<CarName> cars)
+        public bool HasUlockableCars()
         {
-            cars = new List<CarName>();
+            //cars = new List<CarName>();
             bool hasUlockable = false;
 
             foreach (var profile in _playerCarDepot.CarProfiles)
@@ -83,7 +82,7 @@ namespace RaceManager.Progress
 
                 if (canUnlock)
                 {
-                    cars.Add(profile.CarName);
+                    //cars.Add(profile.CarName);
                     hasUlockable = true;
                 }
             }
@@ -91,10 +90,10 @@ namespace RaceManager.Progress
             return hasUlockable;
         }
 
-        public bool HasIapSpecialOffer(out IReward reward)
+        public bool HasIapSpecialOffer()
         {
             //TODO: Implement function
-            reward = null;
+            //reward = null;
             return false;
         }
     }

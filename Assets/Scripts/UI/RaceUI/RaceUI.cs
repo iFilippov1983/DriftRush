@@ -21,12 +21,16 @@ namespace RaceManager.UI
         [SerializeField] private RaceUIView _inRaceUI;
         [SerializeField] private FinishUIView _finishUI;
         [SerializeField] private float _extraScoresAnimDuration = 0.7f;
+        [SerializeField] private bool _showDriftPauseTimer;
 
         private GameObject _extraScoresIndicatorPrefab;
         private FinishUIHandler _finishUIHandler;
         private SpritesContainerRewards _spritesRewards;
 
+        private Tweener _currentShakeTween;
+
         private RaceRewardInfo _rewardInfo;
+        private Vector3 _scoresInitialPos;
 
         private float _currentSpeed;
         private float _trackProgress;
@@ -34,6 +38,7 @@ namespace RaceManager.UI
         private int _currentPosition;
         private int _currentScores;
         private int _currentExtraScores;
+        private int _previousScores;
 
         private bool _isRaceFinished;
 
@@ -79,6 +84,7 @@ namespace RaceManager.UI
             _inRaceUI.RespawnCarButton.AddListener(actionForRespawnButton);
             _inRaceUI.GetToCheckpointButton.AddListener(actionForGetToCheckpointButton);
 
+            _scoresInitialPos = ScoresIndicator.ScoresRect.position;
             ScoresIndicator.ScoresRect.SetActive(false);
             ScoresIndicator.ExtraScoresRect.SetActive(false);
 
@@ -145,7 +151,20 @@ namespace RaceManager.UI
             string text = show ? _currentScores.ToString() : string.Empty;
             ScoresIndicator.ScoresText.text = text;
 
-            if (!show)
+            Vector3 shakeStrength = _previousScores != _currentScores
+                ? new Vector3(3f, 2f, 0)
+                : new Vector3(2f, 1f, 0f);
+
+            if (show)
+            {
+                if (_currentShakeTween == null || !_currentShakeTween.IsPlaying())
+                    _currentShakeTween = ScoresIndicator.ScoresRect
+                        .DOShakeAnchorPos(0.2f, shakeStrength, 10, 45, false, true, ShakeRandomnessMode.Harmonic)
+                        .OnComplete(() => { ScoresIndicator.ScoresRect.position = _scoresInitialPos; });
+
+                _previousScores = _currentScores;
+            }
+            else
             {
                 _currentExtraScores = 0;
             }
@@ -153,6 +172,12 @@ namespace RaceManager.UI
 
         public void ShowPause(bool show, int pauseTime = 0)
         {
+            if (!_showDriftPauseTimer)
+            {
+                ScoresIndicator.PauseTimerText.SetActive(false);
+                return;
+            } 
+
             ScoresIndicator.PauseTimerText.SetActive(show);
 
             string text = show ? pauseTime.ToString() : string.Empty;

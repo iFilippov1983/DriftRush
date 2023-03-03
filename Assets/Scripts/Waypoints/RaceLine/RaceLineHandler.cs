@@ -15,7 +15,7 @@ namespace RaceManager.Waypoints
             if(!_handle) return;
 
             _raceLine = raceLine;
-            _raceLine.SpawnSegments(mainTrack);
+            _raceLine.PrepareSelf(mainTrack);
         }
 
         public void StopHandling()

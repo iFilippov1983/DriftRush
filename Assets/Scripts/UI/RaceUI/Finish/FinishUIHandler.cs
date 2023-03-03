@@ -71,7 +71,6 @@ namespace RaceManager.UI
             _rewardInfo = info;
             HasJob = true;
             _moneyRewardPanel.SetActive(true);
-            _moneyRewardPanel.ContinueButton.interactable = false;
             _moneyRewardPanel.MultiplyRewardPanel.WatchAdsButton.interactable = false;
             _moneyRewardPanel.MultiplyRewardPanel.MultiplyerValueText.text = string.Concat("x", info.MoneyMultiplyer.ToString());
 
@@ -112,7 +111,7 @@ namespace RaceManager.UI
 
             appearSequence.AppendCallback(() =>
             {
-                _moneyRewardPanel.ContinueButton.interactable = true;
+                //_moneyRewardPanel.ContinueButton.interactable = true;
                 _moneyRewardPanel.MultiplyRewardPanel.WatchAdsButton.interactable = true;
                 HasJob = false;
             });
@@ -121,7 +120,15 @@ namespace RaceManager.UI
         private void HideMoneyRewardPanel()
         {
             HasJob = true;
-            _moneyRewardPanel.ContinueButton.interactable = false;
+            _moneyRewardPanel.ContinueButton.onClick.RemoveAllListeners();
+            _moneyRewardPanel.ContinueButton.onClick.AddListener(() => 
+            {
+                _moneyRewardPanel.ContinueButton.interactable = false;
+                _moneyRewardPanel.SetActive(false);
+                HasJob = false;
+                ShowCupsRewardPanel();
+            });
+
             _moneyRewardPanel.MultiplyRewardPanel.WatchAdsButton.interactable = false;
 
             Sequence disappearSequence = DOTween.Sequence();
@@ -165,7 +172,6 @@ namespace RaceManager.UI
         {
             HasJob = true;
             _cupsRewardPanel.SetActive(true);
-            _cupsRewardPanel.ContinueButton.interactable = false;
 
             _cupsRewardPanel.CupsRewardText.text = _rewardInfo.CupsRewardAmount.ToString();
             _cupsRewardPanel.CupsTotalText.text = _rewardInfo.CupsTotalAmount.ToString();
@@ -189,7 +195,6 @@ namespace RaceManager.UI
             appearSequence.AppendCallback(() =>
             {
                 _cupsRewardPanel.CupsRewardText.SetActive(false);
-                _cupsRewardPanel.ContinueButton.interactable = true;
                 HasJob = false;
             });
         }
@@ -197,7 +202,25 @@ namespace RaceManager.UI
         private void HideCupsRewardPanel()
         {
             HasJob = true;
-            _cupsRewardPanel.ContinueButton.interactable = false;
+            bool final = !_grantLootbox;
+
+            _cupsRewardPanel.ContinueButton.onClick.RemoveAllListeners();
+
+            _cupsRewardPanel.ContinueButton.onClick.AddListener(() => 
+            { 
+                _cupsRewardPanel.SetActive(false);
+
+                HasJob = false;
+
+                if (_grantLootbox)
+                    ShowLootboxRewardPanel();
+
+                OnButtonPressed.OnNext
+                ((
+                    bName: _cupsRewardPanel.ContinueButton.name,
+                    isFinal: final
+                ));
+            });
 
             Sequence disappearSequence = DOTween.Sequence();
 
@@ -222,7 +245,6 @@ namespace RaceManager.UI
                     ShowLootboxRewardPanel();
             });
 
-            bool final = !_grantLootbox;
             OnButtonPressed.OnNext
                 ((
                     bName: _cupsRewardPanel.ContinueButton.name,
@@ -234,7 +256,6 @@ namespace RaceManager.UI
         {
             HasJob = true;
             _lootboxRewardPanel.SetActive(true);
-            _lootboxRewardPanel.ClaimButton.interactable = false;
 
             Sequence titleSequence = DOTween.Sequence();
             float initialScale = _titleRect.localScale.x;
@@ -264,7 +285,6 @@ namespace RaceManager.UI
 
             appearSequence.AppendCallback(() =>
             {
-                _lootboxRewardPanel.ClaimButton.interactable = true;
                 HasJob = false;
             });
 
@@ -274,14 +294,25 @@ namespace RaceManager.UI
             rotateSequence.Append(_lootboxRewardPanel.EffectImage.rectTransform.DORotate(Vector3.zero, d, RotateMode.FastBeyond360));
             rotateSequence.AppendCallback(() =>
             {
-                rotateSequence.Restart();
+                if(_lootboxRewardPanel.EffectImage != null)
+                    rotateSequence.Restart();
             });
         }
 
         private void HideLootboxRewardPanel() 
         {
             HasJob = true;
-            _lootboxRewardPanel.ClaimButton.interactable = false;
+            _lootboxRewardPanel.ClaimButton.onClick.RemoveAllListeners();
+
+            _lootboxRewardPanel.ClaimButton.onClick.AddListener(() => 
+            { 
+                HasJob = false;
+                OnButtonPressed.OnNext
+                ((
+                    bName: _lootboxRewardPanel.ClaimButton.name,
+                    isFinal: true
+                ));
+            });
 
             Sequence disappearSequence = DOTween.Sequence();
 

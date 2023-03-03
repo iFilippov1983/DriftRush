@@ -2,11 +2,11 @@
 {
     public enum ProgressConditionType
     { 
-        None,
+        None = 0,
 
-        CanUpgradeFactors,
-        CanUpgradeRank,
-        CanUnlockCar,
-        HasSpecialIapOffer
+        CanUpgradeFactors = 1,
+        CanUpgradeRank = 2,
+        CanUnlockCar = 3,
+        HasSpecialIapOffer = 4,
     }
 }

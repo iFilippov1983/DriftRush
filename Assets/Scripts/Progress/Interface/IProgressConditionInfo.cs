@@ -6,8 +6,8 @@ namespace RaceManager.Progress
     public interface IProgressConditionInfo
     {
         public bool CanUpgradeCurrentCarFactors();
-        public bool HasRankUpgradableCars(out List<CarName> cars);
-        public bool HasUlockableCars(out List<CarName> cars);
-        public bool HasIapSpecialOffer(out IReward reward);
+        public bool HasRankUpgradableCars();
+        public bool HasUlockableCars();
+        public bool HasIapSpecialOffer();
     }
 }

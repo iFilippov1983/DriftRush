@@ -31,7 +31,7 @@ namespace RaceManager.Race
         {
             _car = car;
             _rewardsScheme = rewardsScheme;
-            _driftPauseTime = AvailableDriftPause;
+            _driftPauseTime = PauseDuration;
 
             ScoresCount = new Subject<RaceScoresData>();
             ExtraScoresCount = new Subject<RaceScoresData>();
@@ -41,7 +41,7 @@ namespace RaceManager.Race
         }
 
         private float DriftFactor => _rewardsScheme.DriftFactor;
-        private float AvailableDriftPause => _rewardsScheme.AvailableDriftPause;
+        private float PauseDuration => _rewardsScheme.CountPauseDuration;
         private float MinDriftDistanceValue => _rewardsScheme.MinDriftDistanceValue;
         private float BumpScores => _rewardsScheme.BumpScores;
         private float MinCollisionInterval => _rewardsScheme.MinCollisionInterval;
@@ -66,7 +66,7 @@ namespace RaceManager.Race
 
             if (CarIsSlipping)
             {
-                _driftPauseTime = AvailableDriftPause;
+                _driftPauseTime = PauseDuration;
                 _driftDistanceCounter += _car.CurrentSpeed * Time.fixedDeltaTime;
 
                 if (_driftDistanceCounter > MinDriftDistanceValue)
@@ -159,8 +159,12 @@ namespace RaceManager.Race
                     };
                 }
 
-                if(scores != 0)
+                if (scores != 0)
+                {
+                    _driftPauseTime = PauseDuration;
                     ExtraScoresCount.OnNext(data);
+                }
+                    
 
                 _collidingObects[countable.ID] = Time.time;
             }

@@ -127,7 +127,7 @@ namespace RaceManager.Race
                 .AddTo(this);
 
             this.UpdateAsObservable()
-                .Where(_ => !_raceStarted || CanStartImmediate)
+                .Where(_ => !_raceStarted && CanStartImmediate)
                 .Take(1)
                 .Subscribe(_ =>
                 {

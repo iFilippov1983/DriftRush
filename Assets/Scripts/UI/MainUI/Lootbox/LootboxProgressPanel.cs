@@ -9,7 +9,7 @@ namespace RaceManager.UI
 {
     public class LootboxProgressPanel : MonoBehaviour
     {
-        [ShowInInspector, ReadOnly] private const float MarksFadeSpeed = 2.7f;
+        [ShowInInspector, ReadOnly] private const float MarksFadeSpeed = 5f;
         [SerializeField] private TMP_Text _moreWinsText;
         [SerializeField] private GameObject _lootboxImage;
         [SerializeField] private Image[] _images = new Image[3];

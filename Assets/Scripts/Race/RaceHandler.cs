@@ -162,6 +162,14 @@ namespace RaceManager.Race
                 })
                 .AddTo(this);
 
+            _gameEvents.Notification
+                .Where(s => s == NotificationType.Checkpoint.ToString())
+                .Subscribe(s => 
+                {
+                    _lineHandler.StartHandling();
+                })
+                .AddTo(this);
+
             _raceUI.OnAdsInit += ShowAds;
             _rewardsHandler.OnRaceRewardLootboxAdded += SetRaceUI;
             _waypointTrackMain.OnCheckpointPass += MakeCheckpointNotification;

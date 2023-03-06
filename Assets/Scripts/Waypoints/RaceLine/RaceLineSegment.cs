@@ -12,9 +12,10 @@ namespace RaceManager.Waypoints
     public class RaceLineSegment : MonoBehaviour
     {
         [SerializeField] private MeshRenderer _mesh;
-        [SerializeField] private float _checkDistanceFactor = 2f;
+        //[SerializeField] private float _checkDistanceFactor = 2f;
 
-        private float _distanceFromStart;
+        //private float _distanceFromStart;
+        [ShowInInspector, ReadOnly]
         private float _recomendedSpeed;
         private float _fadeSpeed;
         private float _colorTransitionSpeed;
@@ -31,26 +32,28 @@ namespace RaceManager.Waypoints
         [ShowInInspector, ReadOnly]
         private bool _isWarning = false;
 
-        [ShowInInspector, ReadOnly]
-        private IEnumerator _currentFadeJob;
-        [ShowInInspector, ReadOnly]
-        private IEnumerator _currentColorJob;
+        //[ShowInInspector, ReadOnly]
+        //private IEnumerator _currentFadeJob;
+        //[ShowInInspector, ReadOnly]
+        //private IEnumerator _currentColorJob;
 
+        [ShowInInspector, ReadOnly]
         private Task<bool> _currentFadeTask;
+        [ShowInInspector, ReadOnly]
         private Task<bool> _currentColorTask;
+
         private CancellationTokenSource _cancelTokenFade = new CancellationTokenSource();
         private CancellationTokenSource _cancelTokenColor = new CancellationTokenSource();
 
         private Material MeshMaterial => _mesh.material;
 
-        public Action<RaceLineSegment> OnDestroyAction;
+        public Subject<(bool isVisible, RaceLineSegment segment)> OnVisibilityChange = new Subject<(bool isVisible, RaceLineSegment segment)>();
 
         [ShowInInspector, ReadOnly]
-        public float DistanceFromStart
-        { 
-            get => _distanceFromStart; 
-            set { _distanceFromStart = value; } 
-        }
+        public float DistanceFromStart { get; set; }
+
+        [ShowInInspector, ReadOnly]
+        public int CurrentIndex { get; set; }
 
         public void Initiallize(RaceLineSegmentData data)
         {
@@ -61,6 +64,8 @@ namespace RaceManager.Waypoints
             _warningColor = data.warningColor;
             _checkOffset = data.checkOffset;
 
+            _isVisible = true;
+            _isWarning = false;
             MeshMaterial.color = _baseColor;
         }
 
@@ -69,13 +74,21 @@ namespace RaceManager.Waypoints
         public async void DistanceCheck(float distance)
         {
             _checkDistance = distance + _checkOffset;
-            bool isPassed = _checkDistance >= _distanceFromStart;
+            bool isPassed = _checkDistance >= DistanceFromStart;
 
             if (isPassed == _isVisible && (_currentFadeTask == null || _currentFadeTask.IsCompleted))
             {
                 _currentFadeTask = VisibilityChange(isPassed, _cancelTokenFade.Token);
                 await _currentFadeTask;
+
+                while (!_currentFadeTask.IsCompleted)
+                {
+                    _cancelTokenFade.Token.ThrowIfCancellationRequested();
+                    await Task.Yield();
+                }
+
                 _isVisible = _currentFadeTask.Result;
+                OnVisibilityChange?.OnNext((isVisible: _isVisible, segment: this));
             }
         }
 
@@ -83,13 +96,21 @@ namespace RaceManager.Waypoints
         {
             if (!_isVisible) return;
 
-            bool isInRange = _checkDistance * _checkDistanceFactor >= _distanceFromStart;
+            //bool isInRange = _checkDistance * _checkDistanceFactor >= DistanceFromStart;
             bool isOverspeed = speed >= _recomendedSpeed;
 
-            if (isOverspeed != _isWarning && isInRange && (_currentColorTask == null || _currentColorTask.IsCompleted))
+            //if (isOverspeed != _isWarning && isInRange && (_currentColorTask == null || _currentColorTask.IsCompleted))
+            if (isOverspeed != _isWarning && (_currentColorTask == null || _currentColorTask.IsCompleted))
             {
                 _currentColorTask = ColorChange(isOverspeed, _cancelTokenColor.Token);
                 await _currentColorTask;
+
+                while (!_currentColorTask.IsCompleted)
+                {
+                    _cancelTokenColor.Token.ThrowIfCancellationRequested();
+                    await Task.Yield();
+                }
+
                 _isWarning = _currentColorTask.Result;
             }
         }
@@ -240,8 +261,6 @@ namespace RaceManager.Waypoints
             _cancelTokenColor.Cancel();
 
             StopAllCoroutines();
-
-            OnDestroyAction?.Invoke(this);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using RaceManager.Cars;
+using RaceManager.Root;
 using System;
 
 namespace RaceManager.Waypoints
@@ -16,20 +17,28 @@ namespace RaceManager.Waypoints
 
             _raceLine = raceLine;
             _raceLine.PrepareSelf(mainTrack);
+            
+        }
+
+        public void StartHandling()
+        {
+            if(!_handle) return;
+
+            _raceLine.ShowLine?.OnNext();
         }
 
         public void StopHandling()
         {
             _handle = false;
-            _raceLine.OnRaceFinish?.Invoke();
+            _raceLine.RaceFinish?.OnNext();
         }
 
         public void OnNext(DriverProfile profile)
         {
             if (!_handle) return;
 
-            _raceLine.OnSpeedChange?.Invoke(profile.CarCurrentSpeed);
-            _raceLine.OnDistanceChange?.Invoke(profile.DistanceFromStart);
+            _raceLine.SpeedChange?.OnNext(profile.CarCurrentSpeed);
+            _raceLine.DistanceChange?.OnNext(profile.DistanceFromStart);
         }
 
         public void OnCompleted() => throw new NotImplementedException();

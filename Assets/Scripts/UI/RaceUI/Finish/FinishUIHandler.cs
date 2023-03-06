@@ -140,10 +140,10 @@ namespace RaceManager.UI
                 Vector3 pos = hPanel.ShowRect.position;
                 disappearSequence.Append(hPanel.ShowRect.DOMove(hPanel.HideRect.position, _duration / 2f));
                 disappearSequence.AppendCallback(() =>
-                    {
-                        hPanel.ShowRect.position = pos;
-                        hPanel.SetActive(false);
-                    });
+                {
+                    hPanel.ShowRect.position = pos;
+                    hPanel.SetActive(false);
+                });
             }
 
             foreach (var rPanel in _moneyRewardPanel.RewardPanels)
@@ -294,7 +294,7 @@ namespace RaceManager.UI
             rotateSequence.Append(_lootboxRewardPanel.EffectImage.rectTransform.DORotate(Vector3.zero, d, RotateMode.FastBeyond360));
             rotateSequence.AppendCallback(() =>
             {
-                if(_lootboxRewardPanel.EffectImage != null)
+                if(_lootboxRewardPanel != null)
                     rotateSequence.Restart();
             });
         }
@@ -307,6 +307,8 @@ namespace RaceManager.UI
             _lootboxRewardPanel.ClaimButton.onClick.AddListener(() => 
             { 
                 HasJob = false;
+                _lootboxRewardPanel.SetActive(false);
+
                 OnButtonPressed.OnNext
                 ((
                     bName: _lootboxRewardPanel.ClaimButton.name,

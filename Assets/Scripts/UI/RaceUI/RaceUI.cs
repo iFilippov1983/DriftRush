@@ -160,7 +160,11 @@ namespace RaceManager.UI
                 if (_currentShakeTween == null || !_currentShakeTween.IsPlaying())
                     _currentShakeTween = ScoresIndicator.ScoresRect
                         .DOShakeAnchorPos(0.2f, shakeStrength, 10, 45, false, true, ShakeRandomnessMode.Harmonic)
-                        .OnComplete(() => { ScoresIndicator.ScoresRect.position = _scoresInitialPos; });
+                        .OnComplete(() =>
+                        {
+                            ScoresIndicator.ScoresRect.position = _scoresInitialPos;
+                            _currentShakeTween = null;
+                        });
 
                 _previousScores = _currentScores;
             }

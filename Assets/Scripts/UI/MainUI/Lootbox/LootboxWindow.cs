@@ -44,7 +44,7 @@ namespace RaceManager.UI
             _okButton.onClick.AddListener(Cleanup);
         }
 
-        public async void RepresentLootbox(List<CarCardReward> list)
+        public async void RepresentLootbox(int moneyAmount, List<CarCardReward> list)
         { 
             foreach (var card in list)
             {

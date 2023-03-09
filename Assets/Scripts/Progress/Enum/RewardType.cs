@@ -9,6 +9,7 @@
         Lootbox,
         CarCard,
         RaceMap,
-        IncomeBonus
+        IncomeBonus,
+        CarParts
     }
 }

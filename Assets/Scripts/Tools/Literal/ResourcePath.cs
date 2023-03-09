@@ -26,6 +26,7 @@ namespace RaceManager.Tools
         public const string CarCardViewPrefab = "Prefabs/UI/CarCard";
         public const string ImageAnimationTrailPrefab = "Prefabs/UI/ImageTrail";
         public const string ExtraScoresIndicatorViewPrefab = "Prefabs/UI/ExtraScoresIndicator";
+        public const string AnimatableCurrencyPrefab = "Prefabs/UI/AnimatableCurrency";
 
         private const string LootboxModelsFolder = "SO/LootboxModels/";
         private const string CommonLootboxName = "0-LootboxCommon";

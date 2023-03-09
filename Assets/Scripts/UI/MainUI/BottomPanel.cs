@@ -1,12 +1,12 @@
-﻿using System;
-using UnityEngine;
-using UnityEngine.Events;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace RaceManager.UI
 {
-    public class BottomPanel : MonoBehaviour
+    public class BottomPanel : AnimatableSubject
     {
+        [Space(20)]
+        [Header("Main Fields")]
         [SerializeField] private Button _shopButton;
         [SerializeField] private Image _iapShopPressedImage;
         [Space]

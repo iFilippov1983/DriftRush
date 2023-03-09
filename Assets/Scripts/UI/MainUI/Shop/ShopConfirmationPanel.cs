@@ -1,4 +1,5 @@
 ﻿using RaceManager.Progress;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using TMPro;
@@ -7,7 +8,7 @@ using UnityEngine.UI;
 
 namespace RaceManager.UI
 {
-    public class ShopConfirmationPanel : MonoBehaviour
+    public class ShopConfirmationPanel : AnimatableSubject
     {
         [Serializable]
         public class ConfirmPopup
@@ -19,6 +20,8 @@ namespace RaceManager.UI
             public TMP_Text rewardCost;
         }
 
+        [Space(20)]
+        [Title("Main Fields")]
         [SerializeField] private Button _confirmButton;
         [SerializeField] private Button _backButton;
         [SerializeField] private Button _closeWindowButton;

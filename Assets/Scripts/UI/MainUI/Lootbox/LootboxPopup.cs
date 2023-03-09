@@ -1,12 +1,14 @@
-﻿using RaceManager.Cars;
+﻿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace RaceManager.UI
 {
-    public class LootboxPopup : MonoBehaviour
+    public class LootboxPopup : AnimatableSubject
     {
+        [Space(20)]
+        [Header("Main Fields")]
         [SerializeField] private Button _closePopupButton;
         [SerializeField] private Button _closePopupWindowButton;
         [SerializeField] private Button _timerOpenButton;
@@ -34,7 +36,8 @@ namespace RaceManager.UI
         public TMP_Text TimeToOpenText => _timeToOpenText;
         public TMP_Text LootboxRarityText => _lootboxRarityText;
         public Image LootboxImage => _lootboxImage;
-        
+
+
         public void InitiallizeView(PopupInfo info, bool addFree = false)
         {
             string rarityText = $"{info.lootboxRarity.ToString().ToUpper()} LOOTBOX";

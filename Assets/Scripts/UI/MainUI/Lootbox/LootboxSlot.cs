@@ -11,6 +11,8 @@ namespace RaceManager.UI
     [Serializable]
     public class LootboxSlot : MonoBehaviour
     {
+        [SerializeField] private RectTransform _mainRect;
+        [Space]
         [SerializeField] private Button _slotButton;
         [Space]
         [SerializeField] private Image _lootboxImage;
@@ -35,6 +37,7 @@ namespace RaceManager.UI
         [ReadOnly]
         public string CurrentLootboxId;
 
+        public RectTransform MainRect => _mainRect;
         public Button SlotButton => _slotButton;
         public Image LootboxImage => _lootboxImage;
         public Image ImageTimerPassive => _imageTimerPassive;

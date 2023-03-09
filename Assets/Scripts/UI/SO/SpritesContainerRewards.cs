@@ -29,11 +29,21 @@ namespace RaceManager.UI
 
         [Space(20)]
         [SerializeField]
-        private List<SimpleRewardSpriteHolder> _simpleRewardSprites = new List<SimpleRewardSpriteHolder>()
+        private List<RewardSpriteHolder> _simpleRewardSprites = new List<RewardSpriteHolder>()
         {
-            { new SimpleRewardSpriteHolder() { RewardType = RewardType.Money, RewardSprite = null } },
-            { new SimpleRewardSpriteHolder() { RewardType = RewardType.Gems, RewardSprite = null } },
-            { new SimpleRewardSpriteHolder() { RewardType = RewardType.Cups, RewardSprite = null } }
+            { new RewardSpriteHolder() { RewardType = RewardType.Money, RewardSprite = null } },
+            { new RewardSpriteHolder() { RewardType = RewardType.Gems, RewardSprite = null } },
+            { new RewardSpriteHolder() { RewardType = RewardType.Cups, RewardSprite = null } }
+        };
+
+        [Space(20)]
+        [SerializeField]
+        private List<RewardSpriteHolder> _coloredRewardSprites = new List<RewardSpriteHolder>()
+        {
+            { new RewardSpriteHolder() { RewardType = RewardType.Money, RewardSprite = null } },
+            { new RewardSpriteHolder() { RewardType = RewardType.Gems, RewardSprite = null } },
+            { new RewardSpriteHolder() { RewardType = RewardType.Cups, RewardSprite = null } },
+            { new RewardSpriteHolder() { RewardType = RewardType.CarParts, RewardSprite = null } }
         };
 
         [Space(20)]
@@ -64,6 +74,12 @@ namespace RaceManager.UI
         public Sprite GetSimpleRewardSprite(RewardType rewardType)
         {
             var holder = _simpleRewardSprites.Find(h => h.RewardType == rewardType);
+            return holder.RewardSprite;
+        }
+
+        public Sprite GetColoredRewardSprite(RewardType rewardType)
+        {
+            var holder = _coloredRewardSprites.Find(h => h.RewardType == rewardType);
             return holder.RewardSprite;
         }
 
@@ -103,7 +119,7 @@ namespace RaceManager.UI
             public Sprite LevelSprite;
         }
 
-        public class SimpleRewardSpriteHolder
+        public class RewardSpriteHolder
         {
             public RewardType RewardType;
             public Sprite RewardSprite;

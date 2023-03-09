@@ -2,6 +2,7 @@
 using RaceManager.Root;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 using Zenject;
 
 namespace RaceManager.Progress
@@ -18,7 +19,7 @@ namespace RaceManager.Progress
 
         private RaceReward _raceReward;
 
-        public Action<List<CarCardReward>> OnLootboxOpen;
+        public Action<int, List<CarCardReward>> OnLootboxOpen;
         public Action<Lootbox> OnRaceRewardLootboxAdded;
         public Action OnProgressReward;
 
@@ -146,7 +147,12 @@ namespace RaceManager.Progress
                 _profiler.AddCarCards(reward.CarName, reward.CardsAmount);
             }
 
-            OnLootboxOpen?.Invoke(list);
+            int moneyAmount = UnityEngine.Random.Range(lootbox.MoneyAmountMin, lootbox.MoneyAmountMax + 1);
+            int remain = moneyAmount % 10;
+            moneyAmount -= remain;
+            _profiler.AddMoney(moneyAmount);
+
+            OnLootboxOpen?.Invoke(moneyAmount, list);
             _saveManager.Save();
         }
 

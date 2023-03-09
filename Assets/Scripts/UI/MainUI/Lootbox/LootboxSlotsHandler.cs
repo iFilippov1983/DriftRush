@@ -1,10 +1,8 @@
-﻿using RaceManager.Cars;
-using RaceManager.Progress;
+﻿using RaceManager.Progress;
 using RaceManager.Root;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -194,6 +192,7 @@ namespace RaceManager.UI
             _lootboxPopup.GetFreeLootboxButton.SetActive(false);
 
             _lootboxPopup.SetActive(true);
+            _lootboxPopup.Appear(moveFromRect: slot.MainRect)?.AddTo(this);
             OnPopupIsActive.Invoke(true);
         }
 
@@ -202,8 +201,10 @@ namespace RaceManager.UI
             Rarity rarity = Rarity.Common;
             float timeLeft = -1f;
 
-            Lootbox lootbox = new Lootbox(rarity, timeLeft);
-            lootbox.OpenTimerActivated = true;
+            Lootbox lootbox = new Lootbox(rarity, timeLeft)
+            {
+                OpenTimerActivated = true
+            };
 
             Sprite sprite = _spritesRewards.GetLootboxSprite(rarity);
 
@@ -231,6 +232,7 @@ namespace RaceManager.UI
             _lootboxPopup.GetFreeLootboxButton.onClick.AddListener(CloseLootboxPopup);
 
             _lootboxPopup.SetActive(true);
+            _lootboxPopup.Appear()?.AddTo(this);
             OnPopupIsActive.Invoke(true);
         }
 

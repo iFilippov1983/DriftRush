@@ -32,6 +32,9 @@ namespace RaceManager.UI
         [Space]
         [SerializeField] private SettingsPopup _settingsPopup;
         [SerializeField] private ShopPanel _shopPanel;
+        [Space]
+        [SerializeField] private HelperRectsView _helperRects;
+        [SerializeField] private float _defaultUiAnimDuration = 0.25f;
 
         private PlayerProfile _playerProfile;
         private RewardsHandler _rewardsHandler;
@@ -171,7 +174,7 @@ namespace RaceManager.UI
             _podium.SetActive(!active);
         }
 
-        private void ActivateLootboxWindow(List<CarCardReward> list)
+        private void ActivateLootboxWindow(int moneyAmount, List<CarCardReward> list)
         {
             _lootboxWindow.SetActive(true);
             UpdatePodiumActivity(true);
@@ -179,12 +182,32 @@ namespace RaceManager.UI
 
         private void ActivateCarWindow(bool active)
         {
-            _carsCollectionPanel.CarWindow.SetActive(active);
+            _carsCollectionPanel.CarWindow.AnimationInterrupt?.OnNext();
+            _bottomPanel.AnimationInterrupt?.OnNext();
 
-            _bottomPanel.SetActive(!active);
+            if (active)
+            {
+                _carsCollectionPanel.CarWindow.SetActive(true);
+                _carsCollectionPanel.CarWindow.Appear(moveFromRect: _helperRects.AppearBottomRect)?.AddTo(this);
+
+                _bottomPanel.Disappear(moveToRect: _helperRects.AppearBottomRect)?.AddTo(this);
+            }
+            else
+            {
+                _carsCollectionPanel.CarWindow.Disappear(moveToRect: _helperRects.AppearBottomRect)?.AddTo(this);
+
+                _bottomPanel.SetActive(true);
+                _bottomPanel.Appear(moveFromRect: _helperRects.AppearBottomRect)?.AddTo(this);
+            }
         }
 
-        private void ActivateSettingsPopup(bool active) => _settingsPopup.SetActive(active);
+        private void ActivateSettingsPopup(bool active)
+        {
+            _settingsPopup.SetActive(active);
+
+            if(active)
+                _settingsPopup.Appear(animationDuration: _defaultUiAnimDuration, moveFromRect: _settingsButton.GetComponent<RectTransform>())?.AddTo(this);
+        }
 
         #endregion
 
@@ -263,7 +286,7 @@ namespace RaceManager.UI
             _rewardsHandler.OnProgressReward += UpdateCurrencyAmountPanels;
             _rewardsHandler.OnLootboxOpen += ActivateLootboxWindow;
             _rewardsHandler.OnLootboxOpen += _lootboxWindow.RepresentLootbox;
-            _rewardsHandler.OnLootboxOpen += (List<CarCardReward> list) => UpdateCurrencyAmountPanels();
+            _rewardsHandler.OnLootboxOpen += (int moneyAmount, List<CarCardReward> list) => UpdateCurrencyAmountPanels();
 
             _gameProgressPanel.OnButtonPressed += OnButtonPressedMethod;
         }
@@ -374,7 +397,7 @@ namespace RaceManager.UI
             _rewardsHandler.OnProgressReward -= UpdateCurrencyAmountPanels;
             _rewardsHandler.OnLootboxOpen -= ActivateLootboxWindow;
             _rewardsHandler.OnLootboxOpen -= _lootboxWindow.RepresentLootbox;
-            _rewardsHandler.OnLootboxOpen -= (List<CarCardReward> list) => UpdateCurrencyAmountPanels();
+            _rewardsHandler.OnLootboxOpen -= (int moneyAmount, List<CarCardReward> list) => UpdateCurrencyAmountPanels();
 
             _gameProgressPanel.ClearProgressSteps();
             InitializeGameProgressPanel();
@@ -531,7 +554,7 @@ namespace RaceManager.UI
             _rewardsHandler.OnProgressReward -= UpdateCurrencyAmountPanels;
             _rewardsHandler.OnLootboxOpen -= ActivateLootboxWindow;
             _rewardsHandler.OnLootboxOpen -= _lootboxWindow.RepresentLootbox;
-            _rewardsHandler.OnLootboxOpen -= (List<CarCardReward> list) => UpdateCurrencyAmountPanels();
+            _rewardsHandler.OnLootboxOpen -= (int moneyAmount, List<CarCardReward> list) => UpdateCurrencyAmountPanels();
 
             _gameProgressPanel.OnButtonPressed -= OnButtonPressedMethod;
 

@@ -5,6 +5,13 @@
         None,
         FadeInOutLoop,
         ScaleUpDownLoop,
-        MoveFromTo
+        MoveFromTo,
+
+        FadeIn,
+        FadeOut,
+        MoveIn,
+        MoveOut,
+        ScaleFromZero,
+        ScaleToZero
     }
 }

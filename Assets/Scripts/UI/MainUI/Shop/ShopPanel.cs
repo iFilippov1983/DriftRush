@@ -2,6 +2,7 @@
 using RaceManager.Shop;
 using System;
 using System.Collections.Generic;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -79,6 +80,7 @@ namespace RaceManager.UI
             }
 
             _confirmationPanel.SetActive(true);
+            _confirmationPanel.Appear()?.AddTo(this);
         }
 
         public void DeactivateConfirmationPanel()

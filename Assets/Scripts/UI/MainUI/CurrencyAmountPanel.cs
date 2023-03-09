@@ -1,7 +1,4 @@
-﻿using System;
-using TMPro;
-using UniRx;
-using UniRx.Triggers;
+﻿using TMPro;
 using UnityEngine;
 
 namespace RaceManager.UI

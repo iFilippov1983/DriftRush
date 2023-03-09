@@ -13,6 +13,7 @@ namespace RaceManager.Infrastructure
     public class MenuSceneInstaller : BaseInstaller
     {
         [SerializeField] private MainUI _mainUI;
+        [SerializeField] private CurrencyAnimator _currencyAnimator;
         [SerializeField] private PodiumView _podium;
         [SerializeField] private MenuCamerasHandler _menuCamerasHandler;
         [SerializeField] private ShedHandler _shedHandler;
@@ -61,6 +62,7 @@ namespace RaceManager.Infrastructure
             Bind(_raceRewardsScheme);
             Bind(_carUpgradeScheme);
             Bind(_mainUI);
+            Bind(_currencyAnimator);
             Bind(_menuCamerasHandler);
             Bind(_shedHandler);
             Bind(_shopHandler);

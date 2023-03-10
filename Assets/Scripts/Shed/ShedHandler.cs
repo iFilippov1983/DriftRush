@@ -22,7 +22,7 @@ namespace RaceManager.Shed
         private CarVisual _carVisual;
         private SaveManager _saveManager;
         private GameEvents _gameEvents;
-        private CarDestroyer _carDestroyer;
+        //private CarDestroyer _carDestroyer;
 
         [Inject]
         private void Construct
@@ -127,9 +127,6 @@ namespace RaceManager.Shed
                 {
                     UpdateCarInfo(t.name, !t.rankUpdate);
                 });
-
-            //_upgradesHandler.OnCarRankUpdate += UpdateCarInfo;
-            //_upgradesHandler.OnCarFactorsUpgrade += UpdateCarInfo;
         }
 
         private void ChangeCar(CarName newCarName)

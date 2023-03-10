@@ -182,7 +182,7 @@ namespace RaceManager.Root
             saveManager.Save();
 
             if(_mainUI != null)
-                _mainUI.UpdateCurrencyAmountPanels();
+                _mainUI.UpdateCurrencyAmountPanels(RewardType.Gems);
         }
 
         [Button]
@@ -193,7 +193,7 @@ namespace RaceManager.Root
             saveManager.Save();
 
             if (_mainUI != null)
-                _mainUI.UpdateCurrencyAmountPanels();
+                _mainUI.UpdateCurrencyAmountPanels(RewardType.Money);
         }
 
         [Button]

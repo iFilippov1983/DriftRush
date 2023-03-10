@@ -1,4 +1,5 @@
 ﻿using RaceManager.Progress;
+using RaceManager.Root;
 using RaceManager.Tools;
 using System;
 using System.Collections.Generic;
@@ -33,6 +34,8 @@ namespace RaceManager.UI
         private List<ProgressStepView> _progressSteps = new List<ProgressStepView>();
 
         public Action<Button> OnButtonPressed;
+
+        private UIAnimator Animator => Singleton<UIAnimator>.Instance;
 
         private GameObject ProgressStepPrefab
         {
@@ -145,10 +148,12 @@ namespace RaceManager.UI
 
         private void UpdateStepStatus(ProgressStep step, ProgressStepView stepView)
         {
+            bool received = step.RewardsReceived;
+
             if (step.IsReached)
             {
                 stepView.ClaimButton.SetActive(true);
-                stepView.ClaimButton.SetActive(!step.RewardsReceived);
+                stepView.ClaimButton.SetActive(!received);
             }
             else
             {
@@ -157,11 +162,17 @@ namespace RaceManager.UI
 
             if (step.BigPrefab)
             {
-                stepView.StepWindowBig.ClaimedImage.SetActive(step.RewardsReceived);
+                stepView.StepWindowBig.ClaimedImage.SetActive(received);
+
+                if (received)
+                    Animator.AppearImage(stepView.StepWindowBig.ClaimedImage);
             }
             else
             {
-                stepView.StepWindow.ClaimedImage.SetActive(step.RewardsReceived);
+                stepView.StepWindow.ClaimedImage.SetActive(received);
+
+                if (received)
+                    Animator.AppearImage(stepView.StepWindow.ClaimedImage);
             }
 
             MenuColorName colorName = step.IsReached ? _reachedColor : _notReachedColor;

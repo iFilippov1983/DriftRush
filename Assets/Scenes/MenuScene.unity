@@ -3072,8 +3072,120 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 592d3f51ac734b64d99e777c122ec1d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _objToSpawnMin: 10
-  _objToSpawnMax: 20
-  _spreadFactor: 200
-  _inOutDuration: 0.15
-  _moveDuration: 0.75
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _rectSizes
+      Entry: 7
+      Data: 0|System.Collections.Generic.Dictionary`2[[RaceManager.Progress.RewardType,
+        Assembly-CSharp],[UnityEngine.Vector2, UnityEngine.CoreModule]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 1|System.Collections.Generic.EnumEqualityComparer`1[[RaceManager.Progress.RewardType,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 3
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 1
+    - Name: $v
+      Entry: 7
+      Data: UnityEngine.Vector2, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 100
+    - Name: 
+      Entry: 4
+      Data: 100
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 3
+    - Name: $v
+      Entry: 7
+      Data: UnityEngine.Vector2, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 100
+    - Name: 
+      Entry: 4
+      Data: 100
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 8
+    - Name: $v
+      Entry: 7
+      Data: UnityEngine.Vector2, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 60
+    - Name: 
+      Entry: 4
+      Data: 60
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: InterruptAnimation
+      Entry: 7
+      Data: 2|UniRx.Subject`1[[System.String, mscorlib]], UniRx
+    - Name: 
+      Entry: 8
+      Data: 
+  _currencyToSpawnMin: 10
+  _currencyToSpawnMax: 20
+  _currencySpreadFactor: 200
+  _currencyInOutDuration: 0.25
+  _currencyMoveDuration: 0.85
+  _currencyScrambleDuration: 0.75
+  _currencyScrambleMode: 4
+  _imageInOutDuration: 0.5
+  _imageScaleMax: 1.5
+  _cardInOutSpeed: 0.25
+  _cardMessageDuration: 1
+  _cardMoveDuration: 1
+  _durationRandomizationFactor: 2

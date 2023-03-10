@@ -195,7 +195,7 @@ namespace RaceManager.UI
 
             _lootboxPopup.SetActive(true);
 
-            Animator.Appear(_lootboxPopup).AddTo(this);
+            Animator.AppearSubject(_lootboxPopup, slot.transform).AddTo(this);
 
             OnPopupIsActive.Invoke(true);
         }
@@ -237,7 +237,7 @@ namespace RaceManager.UI
 
             _lootboxPopup.SetActive(true);
 
-            Animator.Appear(_lootboxPopup).AddTo(this);
+            Animator.AppearSubject(_lootboxPopup, _lootboxProgress.transform).AddTo(this);
 
             OnPopupIsActive.Invoke(true);
         }
@@ -321,6 +321,7 @@ namespace RaceManager.UI
                 _profiler.AddOrOpenLootbox(lootbox);
                 _profiler.ResetVictoriesCounter();
 
+                emptySlot.SlotButton.onClick.RemoveAllListeners();
                 emptySlot.SlotButton.onClick.AddListener(() => OnLootboxSlotClicked(emptySlot));
                 emptySlot.SlotButton.onClick.AddListener(() => OnButtonPressedMethod(emptySlot.SlotButton));
 

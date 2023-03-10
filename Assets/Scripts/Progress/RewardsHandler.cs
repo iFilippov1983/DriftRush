@@ -21,7 +21,6 @@ namespace RaceManager.Progress
 
         public Action<int, List<CarCardReward>> OnLootboxOpen;
         public Action<Lootbox> OnRaceRewardLootboxAdded;
-        public Action<List<IReward>> OnProgressReward;
 
         private int _moneyRewardDrift;
         private int _moneyRewardBump;
@@ -116,7 +115,6 @@ namespace RaceManager.Progress
                 reward.Reward(_profiler);
             }
 
-            OnProgressReward?.Invoke(step.Rewards);
             _saveManager.Save();
         }
 

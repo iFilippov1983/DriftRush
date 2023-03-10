@@ -27,6 +27,7 @@ namespace RaceManager.Shop
 
         private ShopPanel ShopPanel => _mainUI.ShopPanel;
         private ShopConfirmationPanel ConfirmationPanel => _mainUI.ShopPanel.ConfirmationPanel;
+        private UIAnimator Animator => Singleton<UIAnimator>.Instance;
 
         [Inject]
         private void Construct
@@ -210,15 +211,49 @@ namespace RaceManager.Shop
         private void AddMoney(int moneyAmount)
         { 
             _profiler.AddMoney(moneyAmount);
-            _mainUI.UpdateCurrencyAmountPanels();
             $"[Shop Handler] Money added: {moneyAmount}".Log(Logger.ColorYellow);
+
+            if (ShopPanel.TryGetPanelTransform(ShopOfferType.ExchangeGems, out Transform panelTransform))
+            {
+                Animator.SpawnGroupOnAndMoveTo
+                (
+                    RewardType.Money, 
+                    _mainUI.CurrencyPanel.transform, 
+                    panelTransform, 
+                    _mainUI.CurrencyPanel.MoneyImage.transform, 
+                    () => 
+                {
+                    _mainUI.UpdateCurrencyAmountPanels(RewardType.Money);
+                    
+                });
+                return;
+            }
+
+            _mainUI.UpdateCurrencyAmountPanels(RewardType.Money);
         }
 
         private void AddGems(int gemsAmount)
         { 
             _profiler.AddGems(gemsAmount);
-            _mainUI.UpdateCurrencyAmountPanels();
-            $"[Shop Handler] Gems added: {gemsAmount}".Log(Logger.ColorYellow);
+            $"[Shop Handler] Money added: {gemsAmount}".Log(Logger.ColorYellow);
+
+            if (ShopPanel.TryGetPanelTransform(ShopOfferType.BuyGems, out Transform panelTransform))
+            {
+                Animator.SpawnGroupOnAndMoveTo
+                (
+                    RewardType.Gems, 
+                    _mainUI.CurrencyPanel.transform, 
+                    panelTransform, 
+                    _mainUI.CurrencyPanel.GemsImage.transform, 
+                    () =>
+                {
+                    _mainUI.UpdateCurrencyAmountPanels(RewardType.Gems);
+                    
+                });
+                return;
+            }
+
+            _mainUI.UpdateCurrencyAmountPanels(RewardType.Gems);
         }
 
         private void CloseConfirmationPanel(string buttonName)

@@ -1,5 +1,4 @@
 ﻿using RaceManager.Progress;
-using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using TMPro;
@@ -21,7 +20,7 @@ namespace RaceManager.UI
         }
 
         [Space(20)]
-        [Title("Main Fields")]
+        [Header("Main Fields")]
         [SerializeField] private Button _confirmButton;
         [SerializeField] private Button _backButton;
         [SerializeField] private Button _closeWindowButton;

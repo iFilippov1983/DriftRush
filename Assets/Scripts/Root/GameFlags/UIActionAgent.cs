@@ -250,7 +250,9 @@ namespace RaceManager.Root
             if (start)
             {
                 while (!gameObject.activeInHierarchy)
+                {
                     await Task.Yield();
+                }
 
 #pragma warning disable CS4014 
                 StartCoroutine(animCoroutine);
@@ -297,8 +299,7 @@ namespace RaceManager.Root
                     tween?.Kill();
                     tween = null;
                     targetAlpha = _originalAlpha;
-                    tween = DoFade(targetAlpha, aAction.animationDuration);
-                    //ResetAlpha();
+                    tween = DoFade(targetAlpha, 0);
                 })
                 .AddTo(this);
 

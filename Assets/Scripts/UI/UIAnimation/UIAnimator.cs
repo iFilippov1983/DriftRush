@@ -1,18 +1,27 @@
 ﻿using DG.Tweening;
 using RaceManager.Progress;
 using RaceManager.Tools;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using TMPro;
 using UniRx;
 using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
 using Random = UnityEngine.Random;
 
 namespace RaceManager.UI
 {
-    public class UIAnimator : MonoBehaviour
+    public class UIAnimator : SerializedMonoBehaviour
     {
+        [Serializable]
+        public struct RewardSpriteSizeData
+        { 
+            public RewardType type;
+            public Vector2 size;
+        }
+
         [Header("Currency anim settings")]
         [SerializeField] private int _currencyToSpawnMin = 10;
         [SerializeField] private int _currencyToSpawnMax = 20;
@@ -21,17 +30,19 @@ namespace RaceManager.UI
         [SerializeField] private float _currencyMoveDuration = 1f;
         [SerializeField] private float _currencyScrambleDuration = 0.75f;
         [SerializeField] private ScrambleMode _currencyScrambleMode = ScrambleMode.Numerals;
+        [DictionaryDrawerSettings(KeyLabel = "Reward Type", ValueLabel = "Rect Size")]
+        [SerializeField] private Dictionary<RewardType, Vector2> _rectSizes = new Dictionary<RewardType, Vector2>();
         [Space]
-        [Header("UI marks anim settings")]
-        [SerializeField] private float _markInOutDuration = 1f;
-        [SerializeField] private float _markScaleMax = 2f;
+        [Header("Common images anim settings")]
+        [SerializeField] private float _imageInOutDuration = 1f;
+        [SerializeField] private float _imageScaleMax = 2f;
         [Space]
         [Header("Cards representation anim settings")]
         [SerializeField] private float _cardInOutSpeed = 0.25f;
         [SerializeField] private float _cardMessageDuration = 1f;
         [SerializeField] private float _cardMoveDuration = 1f;
         [Space]
-        [SerializeField] private float _durationRandFactor = 2f;
+        [SerializeField] private float _durationRandomizationFactor = 2f;
 
         private int _counter;
 
@@ -40,6 +51,7 @@ namespace RaceManager.UI
 
         private Stack<AnimatableImage> _currenciesStack = new Stack<AnimatableImage>();
 
+        [HideInInspector]
         public Subject<string> InterruptAnimation = new Subject<string>();
 
         private GameObject AnimCurrencyPrefab
@@ -56,12 +68,24 @@ namespace RaceManager.UI
         private void Construct(SpritesContainerRewards spritesContainer)
         { 
             _spritesContainer = spritesContainer;
+            InterruptAnimation = new Subject<string>();
         }
 
-        public IDisposable SpawnCurrencyOnAndMoveTo(RewardType type, Transform parent, Transform spawnOnTransform, Transform moveToTransform, TweenCallback callback = null)
+        public IDisposable SpawnGroupOnAndMoveTo(RewardType type, Transform parent, Transform spawnOnTransform, Transform moveToTransform, TweenCallback callback = null)
         {
+            switch (type)
+            {
+                case RewardType.Money:
+                case RewardType.Gems:
+                case RewardType.CarParts:
+                    break;
+                default:
+                    return Disposable.Empty;
+            }
+
             _counter++;
             float factor = 1f;
+            Vector2 size = _rectSizes[type];
             Sprite sprite = _spritesContainer.GetColoredRewardSprite(type);
             List<Sequence> sequences = new List<Sequence>();
 
@@ -82,6 +106,9 @@ namespace RaceManager.UI
                     image = imageGo.GetComponent<AnimatableImage>();
                 }
 
+                
+                image.Rect.DOSizeDelta(size, 0f);
+
                 image.SetActive(true);
                 image.Image.sprite = sprite;
                 image.transform.SetParent(parent, false);
@@ -98,7 +125,7 @@ namespace RaceManager.UI
                 spawnSequence.Join(image.transform.DOScale(0f, _currencyInOutDuration).From());
                 spawnSequence.AppendInterval(_currencyInOutDuration / 2);
                 spawnSequence.Append(image.transform.DOMove(moveToTransform.position, _currencyMoveDuration * factor));
-                spawnSequence.Insert(_currencyMoveDuration / 2, image.transform.DOScale(initialScale / 2, _currencyMoveDuration / 2));
+                spawnSequence.Insert(_currencyMoveDuration * 0.75f, image.transform.DOScale(initialScale / 2, _currencyMoveDuration * 0.25f));
                 spawnSequence.AppendCallback(i == 0 ? callback : null);
                 spawnSequence.Append(image.transform.DOScale(0f, _currencyInOutDuration));
                 spawnSequence.AppendCallback(() => 
@@ -111,8 +138,19 @@ namespace RaceManager.UI
                 sequences.Add(spawnSequence);
                 spawnSequence.Play();
 
-                factor += Time.deltaTime * _durationRandFactor;
+                factor += Time.deltaTime * _durationRandomizationFactor;
             }
+
+            InterruptAnimation
+                .Where(s => s == type.ToString() && sequences != null)
+                .Take(1)
+                .Subscribe(i =>
+                {
+                    foreach (var s in sequences)
+                        s.Complete();
+                    sequences.Clear();
+                })
+                .AddTo(this);
 
             return Disposable.Create(() =>
             { 
@@ -125,10 +163,45 @@ namespace RaceManager.UI
         {
             Tween tween = textToScramble.DOText(endTextValue, _currencyScrambleDuration, true, _currencyScrambleMode);
 
+            InterruptAnimation
+                .Where(s => s == textToScramble?.name && tween != null)
+                .Take(1)
+                .Subscribe(i => 
+                { 
+                    tween.Complete();
+                    tween = null;
+                })
+                .AddTo(this);
+
             return Disposable.Create(() => tween?.Kill());
         }
 
-        public IDisposable Appear(IAnimatableSubject subject, Transform moveFromTransform = null, TweenCallback finishCallback = null)
+        public IDisposable AppearImage(Image image, TweenCallback finishCallBack = null)
+        { 
+            Sequence appearSequence = DOTween.Sequence();
+
+            Vector3 targetScale = image.transform.localScale * _imageScaleMax;
+
+            appearSequence.Append(image.transform.DOPunchScale(targetScale, _imageInOutDuration / 2));
+            appearSequence.Append(image.transform.DOShakeScale(_imageInOutDuration / 2));
+
+            if(finishCallBack != null)
+                appearSequence.AppendCallback(finishCallBack);
+
+            InterruptAnimation
+                .Where(s => s == image?.name && appearSequence != null)
+                .Take(1)
+                .Subscribe(x =>
+                {
+                    appearSequence.Complete();
+                    appearSequence = null;
+                })
+                .AddTo(this);
+
+            return Disposable.Create(() => appearSequence?.Kill());
+        }
+
+        public IDisposable AppearSubject(IAnimatableSubject subject, Transform moveFromTransform = null, TweenCallback finishCallback = null)
         {
             Sequence appearSequence = DOTween.Sequence();
 
@@ -180,18 +253,19 @@ namespace RaceManager.UI
                 appearSequence.AppendCallback(finishCallback);
 
             InterruptAnimation
-                .Where(s => s == subject.Name)
+                .Where(s => s == subject?.Name && appearSequence != null)
                 .Take(1)
                 .Subscribe(_ =>
                 { 
                     appearSequence.Complete(true);
                     appearSequence = null;
-                });
+                })
+                .AddTo(this);
 
             return Disposable.Create(() => appearSequence?.Kill());
         }
 
-        public IDisposable Disappear(IAnimatableSubject subject, Transform moveToTransform = null, bool resetOnComplete = true, TweenCallback finishCallback = null)
+        public IDisposable DisappearSubject(IAnimatableSubject subject, Transform moveToTransform = null, bool resetOnComplete = true, TweenCallback finishCallback = null)
         {
             Sequence disappearSequence = DOTween.Sequence();
 
@@ -267,13 +341,14 @@ namespace RaceManager.UI
                 disappearSequence.AppendCallback(finishCallback);
 
             InterruptAnimation
-                .Where(s => s == subject.Name)
+                .Where(s => s == subject?.Name && disappearSequence != null)
                 .Take(1)
                 .Subscribe(_ =>
                 { 
                     disappearSequence.Complete(true);
                     disappearSequence = null;
-                });
+                })
+                .AddTo(this);
 
             return Disposable.Create(() => disappearSequence?.Kill());
         }

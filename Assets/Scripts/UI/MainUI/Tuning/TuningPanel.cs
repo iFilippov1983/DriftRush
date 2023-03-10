@@ -2,7 +2,6 @@
 using RaceManager.Progress;
 using RaceManager.Root;
 using System;
-using System.Linq;
 using TMPro;
 using UniRx;
 using UnityEngine;
@@ -66,6 +65,7 @@ namespace RaceManager.UI
 
         public TMP_Text UpgradeCostText => _upgradeWindow.CostText;
         public TMP_Text PartsAmountText => _upgradeWindow.PartsAmountText;
+        public TMP_Text FactorsPointsAvailableText => _factorPointsAvailableText;
 
         public Action OnButtonPressed;
 
@@ -148,8 +148,10 @@ namespace RaceManager.UI
 
         public void UpdateCurrentInfoValues(int available, bool scrambleText = false)
         {
+            Animator.InterruptAnimation.OnNext(_factorPointsAvailableText.name);
+
             if(scrambleText)
-                Animator.ScrambleNumeralsText(_factorPointsAvailableText, available.ToString());
+                Animator.ScrambleNumeralsText(_factorPointsAvailableText, available.ToString()).AddTo(this);
             else
                 _factorPointsAvailableText.text = available.ToString();
 
@@ -168,7 +170,7 @@ namespace RaceManager.UI
 
             if (animateFactors)
             {
-                Animator.SpawnCurrencyOnAndMoveTo
+                Animator.SpawnGroupOnAndMoveTo
                         (
                         RewardType.CarParts, transform,
                         _upgradeWindow.UpgradeButton.transform,

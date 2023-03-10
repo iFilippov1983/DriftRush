@@ -59,6 +59,20 @@ namespace RaceManager.UI
             return false;
         }
 
+        public bool TryGetPanelTransform(ShopOfferType offerType, out Transform panelTransform)
+        {
+            var panel = _panels.Find(p => p.Type == offerType);
+            if (panel != null)
+            {
+                panelTransform = panel.GameObject.transform;
+                return true;
+            }
+
+            $"Panel with Type [{offerType}] was not found!".Log(Logger.ColorRed);
+            panelTransform = null;
+            return false;
+        }
+
         public void ActivateConfirmationPanel
             (
             RewardType type, 
@@ -84,8 +98,7 @@ namespace RaceManager.UI
 
             _confirmationPanel.SetActive(true);
 
-            Animator.Appear(_confirmationPanel).AddTo(this);
-            //_confirmationPanel.Appear()?.AddTo(this);
+            Animator.AppearSubject(_confirmationPanel).AddTo(this);
         }
 
         public void DeactivateConfirmationPanel()

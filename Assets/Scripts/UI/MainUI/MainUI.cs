@@ -79,6 +79,7 @@ namespace RaceManager.UI
         #region Other properties
 
         public ShopPanel ShopPanel => _shopPanel;
+        public CurrencyAmountPanel CurrencyPanel => _currencyAmount;
 
         private UIAnimator Animator => Singleton<UIAnimator>.Instance;
 
@@ -182,27 +183,20 @@ namespace RaceManager.UI
         {
             Animator.InterruptAnimation?.OnNext(_carsCollectionPanel.CarWindow.name);
             Animator.InterruptAnimation?.OnNext(_bottomPanel.name);
-            //_carsCollectionPanel.CarWindow.InterruptAnimation?.OnNext();
-            //_bottomPanel.InterruptAnimation?.OnNext();
 
             if (active)
             {
                 _carsCollectionPanel.CarWindow.SetActive(true);
-                Animator.Appear(_carsCollectionPanel.CarWindow, _helperRects.AppearBottomRect)?.AddTo(this);
-                //_carsCollectionPanel.CarWindow.Appear(moveFromRect: _helperRects.AppearBottomRect)?.AddTo(this);
+                Animator.AppearSubject(_carsCollectionPanel.CarWindow, _helperRects.AppearBottomRect)?.AddTo(this);
 
-                Animator.Disappear(_bottomPanel, _helperRects.AppearBottomRect)?.AddTo(this);
-                //_bottomPanel.Disappear(moveToTransform: _helperRects.AppearBottomRect)?.AddTo(this);
+                Animator.DisappearSubject(_bottomPanel, _helperRects.AppearBottomRect)?.AddTo(this);
             }
             else
             {
-                Animator.Disappear(_carsCollectionPanel.CarWindow, _helperRects.AppearBottomRect)?.AddTo(this);
-                //_carsCollectionPanel.CarWindow.Disappear(moveToTransform: _helperRects.AppearBottomRect)?.AddTo(this);
+                Animator.DisappearSubject(_carsCollectionPanel.CarWindow, _helperRects.AppearBottomRect)?.AddTo(this);
 
                 _bottomPanel.SetActive(true);
-
-                Animator.Appear(_bottomPanel, _helperRects.AppearBottomRect)?.AddTo(this);
-                //_bottomPanel.Appear(moveFromRect: _helperRects.AppearBottomRect)?.AddTo(this);
+                Animator.AppearSubject(_bottomPanel, _helperRects.AppearBottomRect)?.AddTo(this);
             }
         }
 
@@ -211,8 +205,7 @@ namespace RaceManager.UI
             _settingsPopup.SetActive(active);
 
             if(active)
-                Animator.Appear(_settingsPopup, _settingsButton.GetComponent<RectTransform>())?.AddTo(this);
-                //_settingsPopup.Appear(moveFromRect: _settingsButton.GetComponent<RectTransform>())?.AddTo(this);
+                Animator.AppearSubject(_settingsPopup, _settingsButton.GetComponent<RectTransform>())?.AddTo(this);
         }
 
         #endregion
@@ -293,7 +286,6 @@ namespace RaceManager.UI
 
             InitializeCupsProgressPanel(globalCupsAmountGoal);
 
-            //_rewardsHandler.OnProgressReward += (List<IReward> rewards) => UpdateCurrencyAmountPanels(rewards, _gameProgressPanel.GetProgressStepView(_playerProfile.Cups).transform);
             _rewardsHandler.OnLootboxOpen += ActivateLootboxWindow;
             _rewardsHandler.OnLootboxOpen += _lootboxWindow.RepresentLootbox;
             _rewardsHandler.OnLootboxOpen += (int moneyAmount, List<CarCardReward> list) => UpdateCurrencyAmountPanels();
@@ -394,12 +386,28 @@ namespace RaceManager.UI
             _carsCollectionPanel.SetCarWindow(carRarity, cost, isUpgraded, isAvailable);
         }
 
+        public void UpdateCurrencyAmountPanels(RewardType type)
+        {
+            switch (type)
+            {
+                case RewardType.Money:
+                case RewardType.Gems:
+                    ScrambleCurrencyText(type);
+                    break;
+                default:
+                    return;
+            }
+        }
+
         public void UpdateCurrencyAmountPanels(List<IReward> rewards = null, Transform callerTransform = null)
         {
             if (rewards == null)
             {
-                ScrambleCurrencyText(RewardType.Money);
-                ScrambleCurrencyText(RewardType.Gems);
+                _currencyAmount.MoneyAmount.text = _playerProfile.Money.ToString();
+                _gameProgressPanel.MoneyAmountText.text = _playerProfile.Money.ToString();
+
+                _currencyAmount.GemsAmount.text = _playerProfile.Gems.ToString();
+                _gameProgressPanel.gemsAmountText.text = _playerProfile.Gems.ToString();
             }
             else
             {
@@ -411,33 +419,30 @@ namespace RaceManager.UI
                         RewardType.Gems => _currencyAmount.GemsImage.transform,
                         _ => null,
                     };
-                    Animator.SpawnCurrencyOnAndMoveTo(reward.Type, _animParent, callerTransform, moveToTransform, () => ScrambleCurrencyText(reward.Type)).AddTo(this);
+                    Animator.SpawnGroupOnAndMoveTo(reward.Type, _animParent, callerTransform, moveToTransform, () => ScrambleCurrencyText(reward.Type)).AddTo(this);
                 }
             }
 
-            void ScrambleCurrencyText(RewardType type)
+            
+        }
+
+        private void ScrambleCurrencyText(RewardType type)
+        {
+            switch (type)
             {
-                switch (type)
-                {
-                    case RewardType.Money:
-                        if(_currencyAmount.MoneyAmount.isActiveAndEnabled)
-                            Animator.ScrambleNumeralsText(_currencyAmount.MoneyAmount, _playerProfile.Money.ToString()).AddTo(this);
-                        if(_gameProgressPanel.MoneyAmountText.isActiveAndEnabled)
-                            Animator.ScrambleNumeralsText(_gameProgressPanel.MoneyAmountText, _playerProfile.Money.ToString()).AddTo(this);
-                        break;
-                    case RewardType.Gems:
-                        if (_currencyAmount.MoneyAmount.isActiveAndEnabled)
-                            Animator.ScrambleNumeralsText(_currencyAmount.GemsAmount, _playerProfile.Gems.ToString()).AddTo(this);
-                        if (_gameProgressPanel.MoneyAmountText.isActiveAndEnabled)
-                            Animator.ScrambleNumeralsText(_gameProgressPanel.gemsAmountText, _playerProfile.Gems.ToString()).AddTo(this);
-                        break;
-                }
+                case RewardType.Money:
+                    Animator.ScrambleNumeralsText(_currencyAmount.MoneyAmount, _playerProfile.Money.ToString()).AddTo(this);
+                    Animator.ScrambleNumeralsText(_gameProgressPanel.MoneyAmountText, _playerProfile.Money.ToString()).AddTo(this);
+                    break;
+                case RewardType.Gems:
+                    Animator.ScrambleNumeralsText(_currencyAmount.GemsAmount, _playerProfile.Gems.ToString()).AddTo(this);
+                    Animator.ScrambleNumeralsText(_gameProgressPanel.gemsAmountText, _playerProfile.Gems.ToString()).AddTo(this);
+                    break;
             }
         }
 
         public void UpdateGameProgressPanel()
         {
-            //_rewardsHandler.OnProgressReward -= (List<IReward> rewards) => UpdateCurrencyAmountPanels(rewards, _gameProgressPanel.GetProgressStepView(_playerProfile.Cups).transform);
             _rewardsHandler.OnLootboxOpen -= ActivateLootboxWindow;
             _rewardsHandler.OnLootboxOpen -= _lootboxWindow.RepresentLootbox;
             _rewardsHandler.OnLootboxOpen -= (int moneyAmount, List<CarCardReward> list) => UpdateCurrencyAmountPanels();
@@ -594,7 +599,6 @@ namespace RaceManager.UI
             _carsCollectionPanel.OnCarWindowOpen -= InitializeCarWindow;
             _carsCollectionPanel.OnButtonPressed -= OnButtonPressedMethod;
 
-            //_rewardsHandler.OnProgressReward -= (List<IReward> rewards) => UpdateCurrencyAmountPanels(rewards, _gameProgressPanel.GetProgressStepView(_playerProfile.Cups).transform);
             _rewardsHandler.OnLootboxOpen -= ActivateLootboxWindow;
             _rewardsHandler.OnLootboxOpen -= _lootboxWindow.RepresentLootbox;
             _rewardsHandler.OnLootboxOpen -= (int moneyAmount, List<CarCardReward> list) => UpdateCurrencyAmountPanels();

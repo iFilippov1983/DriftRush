@@ -13,18 +13,20 @@ namespace RaceManager.UI
         [SerializeField] private TMP_Text _cardsAmount;
         [Space]
         [SerializeField] private Image _moneyImage;
-        [SerializeField] private TMP_Text _moneyAmount;
+        [SerializeField] private TMP_Text _moneyAmountText;
 
         [ReadOnly]
         public CarName CarName;
         [ReadOnly]
         public Rarity CarRarity;
+        [ReadOnly]
+        public int MoneyAmount = 0;
 
         public Image CardCarImage => _cardCarImage;
         public Image FrameImage => _frameImage;
         public TMP_Text CardsAmount => _cardsAmount;
         public Image MoneyImage => _moneyImage;
-        public TMP_Text MoneyAmount => _moneyAmount;    
+        public TMP_Text MoneyAmountText => _moneyAmountText;    
     }
 }
 

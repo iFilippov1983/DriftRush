@@ -1,6 +1,7 @@
 ﻿using RaceManager.Cars;
 using RaceManager.Root;
 using System;
+using UniRx;
 using UnityEngine;
 using Zenject;
 
@@ -15,6 +16,7 @@ namespace RaceManager.Progress
 
         public Action<CarName> OnCarRankUpdate;
         public Action<CarName> OnCarFactorsUpgrade;
+        public Subject<(CarName name, bool rankUpdate)> OnCarUpdate = new Subject<(CarName name, bool rankUpdate)>();
 
         public CarsUpgradeScheme.CarUpgrade CurrentUpgrade
         {
@@ -69,7 +71,10 @@ namespace RaceManager.Progress
                 UpdateCarMaxFactorsCurrent(carProfile);
                 _carsDepot.UpdateProfile(carProfile);
 
-                OnCarRankUpdate?.Invoke(carProfile.CarName);
+                //OnCarRankUpdate?.Invoke(carProfile.CarName);
+
+                OnCarUpdate.OnNext((name: carProfile.CarName, rankUpdate: true));
+
                 _saveManager.Save();
 
                 return true;
@@ -90,8 +95,11 @@ namespace RaceManager.Progress
             {
                 carProfile.CarCharacteristics.CurrentFactorsProgress += Mathf.RoundToInt(upgrade.StatsToAdd);
                 _carsDepot.UpdateProfile(carProfile);
-                
-                OnCarFactorsUpgrade?.Invoke(carProfile.CarName);
+
+                OnCarUpdate.OnNext((name: carProfile.CarName, rankUpdate: false));
+
+                //OnCarFactorsUpgrade?.Invoke(carProfile.CarName);
+
                 _saveManager.Save();
 
                 return true;
@@ -140,7 +148,9 @@ namespace RaceManager.Progress
                     return;
             }
 
-            OnCarRankUpdate?.Invoke(carName);
+            OnCarUpdate.OnNext((name: carName, rankUpdate: true));
+
+            //OnCarRankUpdate?.Invoke(carName);
             _saveManager.Save();
         }
 
@@ -159,7 +169,9 @@ namespace RaceManager.Progress
                 _profiler.TryBuyWithCards(carName, carRank.PointsForAccess);
                 UpdateCarMaxFactorsCurrent(profile);
 
-                OnCarRankUpdate?.Invoke(carName);
+                OnCarUpdate.OnNext((name: carName, rankUpdate: true));
+
+                //OnCarRankUpdate?.Invoke(carName);
                 _saveManager.Save();
                 return true;
             }

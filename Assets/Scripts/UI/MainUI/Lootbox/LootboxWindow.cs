@@ -1,5 +1,6 @@
 ﻿using RaceManager.Cars;
 using RaceManager.Progress;
+using RaceManager.Root;
 using RaceManager.Tools;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -23,6 +24,8 @@ namespace RaceManager.UI
 
         private List<CarCardView> _cardsList = new List<CarCardView>();
         private Stack<CarCardView> _cardsStack = new Stack<CarCardView>();
+
+        private UIAnimator Animator => Singleton<UIAnimator>.Instance;
 
         private GameObject CarCardPrefab
         {

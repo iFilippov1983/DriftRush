@@ -1,7 +1,10 @@
 ﻿using RaceManager.Cars;
+using RaceManager.Progress;
+using RaceManager.Root;
 using System;
 using System.Linq;
 using TMPro;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -45,6 +48,7 @@ namespace RaceManager.UI
         [SerializeField] private Image _tuneCarStatsActiveImage;
         [SerializeField] private Image _tuneWheelsActiveImage;
         [SerializeField] private Image _tuneCarViewActiveImage;
+        [SerializeField] private Image _carPartImage;
 
         public Slider SpeedSlider => _speedSlider;
         public Slider MobilitySlider => _mobilitySlider;
@@ -64,6 +68,8 @@ namespace RaceManager.UI
         public TMP_Text PartsAmountText => _upgradeWindow.PartsAmountText;
 
         public Action OnButtonPressed;
+
+        private UIAnimator Animator => Singleton<UIAnimator>.Instance;
 
         private void OnEnable()
         {
@@ -140,9 +146,12 @@ namespace RaceManager.UI
             }
         }
 
-        public void UpdateCurrentInfoValues(int available)
+        public void UpdateCurrentInfoValues(int available, bool scrambleText = false)
         {
-            _factorPointsAvailableText.text = available.ToString();
+            if(scrambleText)
+                Animator.ScrambleNumeralsText(_factorPointsAvailableText, available.ToString());
+            else
+                _factorPointsAvailableText.text = available.ToString();
 
             _speedPointsText.text = SpeedSlider.value.ToString();
             _mobilityPointsText.text = MobilitySlider.value.ToString();
@@ -150,14 +159,25 @@ namespace RaceManager.UI
             _accelerationPointsText.text = AccelerationSlider.value.ToString();
         }
 
-        public void UpdateAllSlidersValues(int speed, int mobility, int durability, int acceleration, int fatorsAvailable)
+        public void UpdateAllSlidersValues(int speed, int mobility, int durability, int acceleration, int factorsAvailable, bool animateFactors = false)
         {
             SpeedSlider.value = speed;
             MobilitySlider.value = mobility;
             DurabilitySlider.value = durability;
             AccelerationSlider.value = acceleration;
 
-            UpdateCurrentInfoValues(fatorsAvailable);
+            if (animateFactors)
+            {
+                Animator.SpawnCurrencyOnAndMoveTo
+                        (
+                        RewardType.CarParts, transform,
+                        _upgradeWindow.UpgradeButton.transform,
+                        _carPartImage.transform,
+                        () => UpdateCurrentInfoValues(factorsAvailable, true)
+                        ).AddTo(this);
+            }  
+            else
+                UpdateCurrentInfoValues(factorsAvailable);
         }
 
         public void UpdateCarStatsProgress(string carName, int currentValue)

@@ -1,4 +1,5 @@
 ﻿using RaceManager.Progress;
+using RaceManager.Root;
 using RaceManager.Shop;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,8 @@ namespace RaceManager.UI
 
         public Button GetFreeLootboxButton => _getFreeLootboxButton;
         public ShopConfirmationPanel ConfirmationPanel => _confirmationPanel;
+
+        private UIAnimator Animator => Singleton<UIAnimator>.Instance;
         
         public void InstallAllPanels(List<OfferPanelInstaller> installers)
         {
@@ -80,7 +83,9 @@ namespace RaceManager.UI
             }
 
             _confirmationPanel.SetActive(true);
-            _confirmationPanel.Appear()?.AddTo(this);
+
+            Animator.Appear(_confirmationPanel).AddTo(this);
+            //_confirmationPanel.Appear()?.AddTo(this);
         }
 
         public void DeactivateConfirmationPanel()

@@ -839,7 +839,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mainUI: {fileID: 919296512459299362}
-  _currencyAnimator: {fileID: 1611365390}
   _podium: {fileID: 489873253}
   _menuCamerasHandler: {fileID: 1757313831}
   _shedHandler: {fileID: 547222125}
@@ -1554,7 +1553,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 21085089126225796}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1574383760
 MonoBehaviour:
@@ -1590,51 +1589,6 @@ MonoBehaviour:
   m_FirstSelected: {fileID: 0}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
---- !u!1 &1611365388
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1611365389}
-  - component: {fileID: 1611365390}
-  m_Layer: 0
-  m_Name: CurrencyAnimator
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1611365389
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1611365388}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 21085089126225796}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1611365390
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1611365388}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 592d3f51ac734b64d99e777c122ec1d6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _objToSpawnMin: 0
-  _objToSpawnMax: 0
 --- !u!1 &1613960492
 GameObject:
   m_ObjectHideFlags: 0
@@ -2067,7 +2021,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1032034925}
-  - {fileID: 1611365389}
   - {fileID: 1574383759}
   m_Father: {fileID: 0}
   m_RootOrder: 2
@@ -3099,6 +3052,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 21085089126225796}
+  - component: {fileID: 4445969633934001293}
   m_Layer: 0
   m_Name: UI
   m_TagString: Untagged
@@ -3106,3 +3060,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &4445969633934001293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4445969633934001292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 592d3f51ac734b64d99e777c122ec1d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _objToSpawnMin: 10
+  _objToSpawnMax: 20
+  _spreadFactor: 200
+  _inOutDuration: 0.15
+  _moveDuration: 0.75

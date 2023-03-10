@@ -34,6 +34,8 @@ namespace RaceManager.UI
         public Action<bool> OnPopupIsActive;
         public Action<Button> OnButtonPressed;
 
+        private UIAnimator Animator => Singleton<UIAnimator>.Instance;
+
         [Inject]
         private void Construct(Profiler profiler, SpritesContainerRewards spritesRewards, GameEvents gameEvents)
         {
@@ -192,7 +194,9 @@ namespace RaceManager.UI
             _lootboxPopup.GetFreeLootboxButton.SetActive(false);
 
             _lootboxPopup.SetActive(true);
-            _lootboxPopup.Appear(moveFromRect: slot.MainRect)?.AddTo(this);
+
+            Animator.Appear(_lootboxPopup).AddTo(this);
+
             OnPopupIsActive.Invoke(true);
         }
 
@@ -232,7 +236,9 @@ namespace RaceManager.UI
             _lootboxPopup.GetFreeLootboxButton.onClick.AddListener(CloseLootboxPopup);
 
             _lootboxPopup.SetActive(true);
-            _lootboxPopup.Appear()?.AddTo(this);
+
+            Animator.Appear(_lootboxPopup).AddTo(this);
+
             OnPopupIsActive.Invoke(true);
         }
 

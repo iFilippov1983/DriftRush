@@ -1,11 +1,8 @@
 ﻿using RaceManager.Progress;
-using RaceManager.Root;
 using RaceManager.Tools;
-using Sirenix.Utilities;
 using System;
 using System.Collections.Generic;
 using TMPro;
-using UniRx;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -196,6 +193,8 @@ namespace RaceManager.UI
 
             UpdateStepStatus(step, stepView);
         }
+
+        public ProgressStepView GetProgressStepView(int goalCupsAmount) => _progressSteps.Find(s => s.GoalCupsAmount == goalCupsAmount);
 
         public void ClearProgressSteps()
         {

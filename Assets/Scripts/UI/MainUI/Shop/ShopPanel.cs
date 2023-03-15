@@ -75,7 +75,7 @@ namespace RaceManager.UI
 
         public void ActivateConfirmationPanel
             (
-            RewardType type, 
+            GameUnitType type, 
             Sprite popupSprite, 
             string rewardText, 
             string rewardCostText

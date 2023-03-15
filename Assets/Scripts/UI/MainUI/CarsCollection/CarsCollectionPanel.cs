@@ -84,7 +84,7 @@ namespace RaceManager.UI
             card.LockedImage.SetActive(!isAvailable);
 
             string text = noGoal
-                ? progressCurrent.ToString()
+                ? "MAX"
                 : $"{progressCurrent}/{progressTotal}";
 
             card.ProgressText.text = text;
@@ -113,7 +113,7 @@ namespace RaceManager.UI
             card.UseCarButton.interactable = isAvailable;
 
             string text = noGoal
-                ? cardsProgressCurrent.ToString()
+                ? "MAX"
                 : $"{cardsProgressCurrent}/{progressTotal}";
 
             card.ProgressText.text = text;

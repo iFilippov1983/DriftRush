@@ -15,6 +15,7 @@ namespace RaceManager.Root
     {
         public const int VictoriesCycle = 3;
         public const int LootboxesAmountMax = 4;
+        public const int HowToOpenLootboxTutorThreshold = 6;
         public const int UnlockLootboxForRaceThreshold = 10;
 
         [JsonProperty, ShowInInspector, ReadOnly]

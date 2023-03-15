@@ -1,4 +1,5 @@
-﻿using RaceManager.Race;
+﻿using RaceManager.Cars;
+using RaceManager.Race;
 using RaceManager.Root;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace RaceManager.Progress
     {
         private GameProgressScheme _gameProgressScheme;
         private RaceRewardsScheme _raceRewardsScheme;
+        private CarsDepot _carsDepot;
 
         private PlayerProfile _playerProfile;
         private Profiler _profiler;
@@ -34,6 +36,7 @@ namespace RaceManager.Progress
             SaveManager saveManager, 
             GameProgressScheme gameProgressScheme, 
             RaceRewardsScheme raceRewardsScheme,
+            CarsDepot carsDepot,
             GameEvents gameEvents
             )
         {
@@ -42,6 +45,7 @@ namespace RaceManager.Progress
             _saveManager = saveManager;
             _gameProgressScheme = gameProgressScheme;
             _raceRewardsScheme = raceRewardsScheme;
+            _carsDepot = carsDepot;
             _gameEvents = gameEvents;
 
             _profiler.OnLootboxOpen += HandleLootboxOpen;
@@ -69,8 +73,6 @@ namespace RaceManager.Progress
 
             if (_playerProfile.CanGetLootbox)
             {
-                _profiler.CountVictoryCycle();
-
                 Rarity rarity = Rarity.Common;
                 bool isLucky = 
                     _playerProfile.WillGetLootboxForVictiories == false 
@@ -90,6 +92,8 @@ namespace RaceManager.Progress
 
             if (positionInRace == PositionInRace.First)
             {
+                _profiler.CountVictoryCycle();
+
                 _gameEvents.RaceWin.OnNext();
                 Debugger.Log($"Victories count: {_playerProfile.VictoriesTotalCounter}");
             }
@@ -142,16 +146,63 @@ namespace RaceManager.Progress
             List<CarCardReward> list = lootbox.CardsList;
             foreach (var reward in list)
             {
-                _profiler.AddCarCards(reward.CarName, reward.CardsAmount);
+                if (ValidReward(reward))
+                {
+                    reward.Reward(_profiler);
+                }
+                else
+                {
+                    IReward r = ExchangeCards(reward);
+                    r?.Reward(_profiler);
+
+                    reward.ReplacementInfo = GetReplacementInfo(r);
+                }
             }
 
-            int moneyAmount = UnityEngine.Random.Range(lootbox.MoneyAmountMin, lootbox.MoneyAmountMax + 1);
-            int remain = moneyAmount % 10;
-            moneyAmount -= remain;
-            _profiler.AddMoney(moneyAmount);
+            int lootboxMoney = UnityEngine.Random.Range(lootbox.MoneyAmountMin, lootbox.MoneyAmountMax + 1);
+            int remain = lootboxMoney % 10;
+            lootboxMoney -= remain;
+            _profiler.AddMoney(lootboxMoney);
 
-            OnLootboxOpen?.Invoke(moneyAmount, list);
+            OnLootboxOpen?.Invoke(lootboxMoney, list);
             _saveManager.Save();
+        }
+
+        private bool ValidReward(CarCardReward reward)
+        {
+            var profile = _carsDepot.GetProfile(reward.CarName);
+            int goalPoints = profile.RankingScheme.RankPointsTotalForCar;
+            int curPoints = _playerProfile.CarCardsAmount(reward.CarName);
+            bool allRanksAreReached = profile.RankingScheme.AllRanksReached;
+
+            //Debug.Log($"Car name: {reward.CarName}; Goal: {goalPoints}; Current: {curPoints}; Valid: {goalPoints > curPoints}");
+
+            return goalPoints > curPoints && !allRanksAreReached;
+        }
+
+        private IReward ExchangeCards(CarCardReward reward)
+        {
+            var eData = _gameProgressScheme.GetExchangeRateFor(reward.Type);
+
+            IReward r = eData.AltRewardType switch
+            {
+                GameUnitType.Money => new Money(eData.OneUnitRate * reward.CardsAmount),
+                _ => null,
+            };
+
+            return r;
+        }
+
+        private UnitReplacementInfo? GetReplacementInfo(IReward reward)
+        {
+            UnitReplacementInfo? info = reward.Type switch
+            {
+                GameUnitType.Money => new UnitReplacementInfo() { Type = GameUnitType.Money, Amount = ((Money)reward).MoneyAmount },
+                GameUnitType.Gems => new UnitReplacementInfo() { Type = GameUnitType.Gems, Amount = ((Gems)reward).GemsAmount },
+                _ => null,
+            };
+
+            return info;
         }
 
         public void Dispose()

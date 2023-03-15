@@ -11,9 +11,12 @@ namespace RaceManager.UI
 
         [Title("Animation Settings")]
         [ShowIf("Animate")]
+        [SerializeField] private AnimationSettings _settings;
+        [ShowIf("Animate")]
         [SerializeField] private List<AnimationData> _animationsData;
 
         public string Name => gameObject.name;
+        public AnimationSettings Settings => _settings;
         public List<AnimationData> AnimationDataList => _animationsData;
     }
 }

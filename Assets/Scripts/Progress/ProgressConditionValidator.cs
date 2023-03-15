@@ -4,7 +4,7 @@ using Zenject;
 
 namespace RaceManager.Progress
 {
-    public class ProgressConditionInfo : IProgressConditionInfo
+    public class ProgressConditionValidator : IProgressConditionInfo
     {
         private PlayerProfile _playerProfile;
         private TutorialSteps _tutorialSteps;
@@ -33,10 +33,9 @@ namespace RaceManager.Progress
 
         public bool HasRankUpgradableCars()
         {
-            //cars = new List<CarName>();
             bool hasUpgradeable = false;
 
-            foreach (var profile in _playerCarDepot.CarProfiles)
+            foreach (var profile in _playerCarDepot.ProfilesList)
             {
                 var scheme = profile.RankingScheme;
 
@@ -53,7 +52,6 @@ namespace RaceManager.Progress
 
                 if (canUpgrade)
                 {
-                    //cars.Add(profile.CarName);
                     hasUpgradeable = true;
                 } 
             }
@@ -63,10 +61,9 @@ namespace RaceManager.Progress
 
         public bool HasUlockableCars()
         {
-            //cars = new List<CarName>();
             bool hasUlockable = false;
 
-            foreach (var profile in _playerCarDepot.CarProfiles)
+            foreach (var profile in _playerCarDepot.ProfilesList)
             {
                 var scheme = profile.RankingScheme;
                 var curRank = scheme.CurrentRank;
@@ -82,7 +79,6 @@ namespace RaceManager.Progress
 
                 if (canUnlock)
                 {
-                    //cars.Add(profile.CarName);
                     hasUlockable = true;
                 }
             }

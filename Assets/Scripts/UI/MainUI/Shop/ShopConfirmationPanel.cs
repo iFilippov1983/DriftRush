@@ -12,7 +12,7 @@ namespace RaceManager.UI
         [Serializable]
         public class ConfirmPopup
         {
-            public RewardType Type;
+            public GameUnitType Type;
             public RectTransform popupRect;
             public Image popupImage;
             public TMP_Text rewardText;

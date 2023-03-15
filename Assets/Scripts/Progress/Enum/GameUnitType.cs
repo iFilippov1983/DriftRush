@@ -1,6 +1,6 @@
 ﻿namespace RaceManager.Progress
 {
-    public enum RewardType
+    public enum GameUnitType
     { 
         RaceReward = 0,
         Money,

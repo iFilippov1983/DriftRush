@@ -1,8 +1,8 @@
-﻿using RaceManager.Cars;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using RaceManager.Waypoints;
 using System;
+using System.Diagnostics;
 
 namespace RaceManager.Race
 {

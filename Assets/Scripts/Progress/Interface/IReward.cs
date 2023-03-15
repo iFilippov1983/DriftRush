@@ -3,7 +3,8 @@
     public interface IReward
     {
         bool IsReceived { get; set; }
-        RewardType Type { get; }
+        GameUnitType Type { get; }
+        UnitReplacementInfo? ReplacementInfo { get; }
         void Reward(Profiler profiler);
     }
 }

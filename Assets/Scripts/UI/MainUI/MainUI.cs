@@ -168,6 +168,7 @@ namespace RaceManager.UI
         private void ActivateGameProgressPanel(bool active)
         {
             _gameProgressPanel.SetActive(active);
+            Animator.AppearSubject(_gameProgressPanel);
 
             _bottomPanel.SetActive(!active);
             _podium.SetActive(!active);
@@ -181,8 +182,8 @@ namespace RaceManager.UI
 
         private void ActivateCarWindow(bool active)
         {
-            Animator.InterruptAnimation?.OnNext(_carsCollectionPanel.CarWindow.name);
-            Animator.InterruptAnimation?.OnNext(_bottomPanel.name);
+            Animator.ForceCompleteAnimation?.OnNext(_carsCollectionPanel.CarWindow.name);
+            Animator.ForceCompleteAnimation?.OnNext(_bottomPanel.name);
 
             if (active)
             {
@@ -223,7 +224,7 @@ namespace RaceManager.UI
 
         private void InitializeCarsCollectionPanel()
         {
-            foreach (var profile in _playerCarDepot.CarProfiles)
+            foreach (var profile in _playerCarDepot.ProfilesList)
             {
                 _carsCollectionPanel.AddCollectionCard
                     (
@@ -263,7 +264,7 @@ namespace RaceManager.UI
 
         private void InitializeGameProgressPanel()
         {
-            foreach (var stepData in _gameProgressScheme.ProgressSteps)
+            foreach (var stepData in _gameProgressScheme.Steps)
             {
                 int goalCupsAmount = stepData.Key;
                 ProgressStep step = stepData.Value;
@@ -278,7 +279,7 @@ namespace RaceManager.UI
 
             _gameProgressPanel.SetCupsAmountSlider(_playerProfile.Cups);
 
-            var closestGlobalGoal = _gameProgressScheme.ProgressSteps.First(p => p.Value.BigPrefab && p.Value.IsReached == false || p.Value.IsLast);
+            var closestGlobalGoal = _gameProgressScheme.Steps.First(p => p.Value.BigPrefab && p.Value.IsReached == false || p.Value.IsLast);
             int globalCupsAmountGoal = closestGlobalGoal.Key > _playerProfile.Cups
                 ? closestGlobalGoal.Key
                 : _gameProgressScheme.LastGlobalGoal.Key;
@@ -288,7 +289,7 @@ namespace RaceManager.UI
 
             _rewardsHandler.OnLootboxOpen += ActivateLootboxWindow;
             _rewardsHandler.OnLootboxOpen += _lootboxWindow.RepresentLootbox;
-            _rewardsHandler.OnLootboxOpen += (int moneyAmount, List<CarCardReward> list) => UpdateCurrencyAmountPanels();
+            _rewardsHandler.OnLootboxOpen += (int moneyAmount, List<CarCardReward> list) => UpdateCurrencyAmountPanels(GameUnitType.Money);
 
             _gameProgressPanel.OnButtonPressed += OnButtonPressedMethod;
         }
@@ -313,6 +314,7 @@ namespace RaceManager.UI
             _lootboxSlotsHandler.Initialize(_playerProfile);
 
             _lootboxSlotsHandler.OnPopupIsActive += UpdatePodiumActivity;
+            _lootboxSlotsHandler.OnInstantLootboxOpen += () => UpdateCurrencyAmountPanels(GameUnitType.Gems);
             _lootboxSlotsHandler.OnButtonPressed += OnButtonPressedMethod;
         }
         #endregion
@@ -358,7 +360,7 @@ namespace RaceManager.UI
 
         public void UpdateCarsCollectionCards(CarName carName)
         {
-            CarProfile profile = _playerCarDepot.CarProfiles.Find(p => p.CarName == carName);
+            CarProfile profile = _playerCarDepot.GetProfile(carName);
 
             _carsCollectionPanel.UpdateCard
                     (
@@ -386,12 +388,12 @@ namespace RaceManager.UI
             _carsCollectionPanel.SetCarWindow(carRarity, cost, isUpgraded, isAvailable);
         }
 
-        public void UpdateCurrencyAmountPanels(RewardType type)
+        public void UpdateCurrencyAmountPanels(GameUnitType type)
         {
             switch (type)
             {
-                case RewardType.Money:
-                case RewardType.Gems:
+                case GameUnitType.Money:
+                case GameUnitType.Gems:
                     ScrambleCurrencyText(type);
                     break;
                 default:
@@ -415,8 +417,8 @@ namespace RaceManager.UI
                 {
                     Transform moveToTransform = reward.Type switch
                     {
-                        RewardType.Money => _currencyAmount.MoneyImage.transform,
-                        RewardType.Gems => _currencyAmount.GemsImage.transform,
+                        GameUnitType.Money => _currencyAmount.MoneyImage.transform,
+                        GameUnitType.Gems => _currencyAmount.GemsImage.transform,
                         _ => null,
                     };
                     Animator.SpawnGroupOnAndMoveTo(reward.Type, _animParent, callerTransform, moveToTransform, () => ScrambleCurrencyText(reward.Type)).AddTo(this);
@@ -426,17 +428,17 @@ namespace RaceManager.UI
             
         }
 
-        private void ScrambleCurrencyText(RewardType type)
+        private void ScrambleCurrencyText(GameUnitType type)
         {
             switch (type)
             {
-                case RewardType.Money:
-                    Animator.ScrambleNumeralsText(_currencyAmount.MoneyAmount, _playerProfile.Money.ToString()).AddTo(this);
-                    Animator.ScrambleNumeralsText(_gameProgressPanel.MoneyAmountText, _playerProfile.Money.ToString()).AddTo(this);
+                case GameUnitType.Money:
+                    Animator.ScrambleNumeralsText(_currencyAmount.MoneyAmount, _playerProfile.Money.ToString())?.AddTo(this);
+                    Animator.ScrambleNumeralsText(_gameProgressPanel.MoneyAmountText, _playerProfile.Money.ToString())?.AddTo(this);
                     break;
-                case RewardType.Gems:
-                    Animator.ScrambleNumeralsText(_currencyAmount.GemsAmount, _playerProfile.Gems.ToString()).AddTo(this);
-                    Animator.ScrambleNumeralsText(_gameProgressPanel.gemsAmountText, _playerProfile.Gems.ToString()).AddTo(this);
+                case GameUnitType.Gems:
+                    Animator.ScrambleNumeralsText(_currencyAmount.GemsAmount, _playerProfile.Gems.ToString())?.AddTo(this);
+                    Animator.ScrambleNumeralsText(_gameProgressPanel.gemsAmountText, _playerProfile.Gems.ToString())?.AddTo(this);
                     break;
             }
         }
@@ -445,7 +447,7 @@ namespace RaceManager.UI
         {
             _rewardsHandler.OnLootboxOpen -= ActivateLootboxWindow;
             _rewardsHandler.OnLootboxOpen -= _lootboxWindow.RepresentLootbox;
-            _rewardsHandler.OnLootboxOpen -= (int moneyAmount, List<CarCardReward> list) => UpdateCurrencyAmountPanels();
+            _rewardsHandler.OnLootboxOpen -= (int moneyAmount, List<CarCardReward> list) => UpdateCurrencyAmountPanels(GameUnitType.Money);
 
             _gameProgressPanel.ClearProgressSteps();
             InitializeGameProgressPanel();
@@ -484,7 +486,7 @@ namespace RaceManager.UI
         {
             if (_upgradesHandler.TryUpgradeCurrentCarRank())
             {
-                UpdateCurrencyAmountPanels();
+                UpdateCurrencyAmountPanels(GameUnitType.Money);
                 //TODO: Visualize upgrade success
             }
             else
@@ -497,7 +499,7 @@ namespace RaceManager.UI
         {
             if (_upgradesHandler.TryUpgradeCurrentCarFactors())
             {
-                UpdateCurrencyAmountPanels();
+                UpdateCurrencyAmountPanels(GameUnitType.Money);
                 //TODO: Visualize upgrade success
             }
             else
@@ -601,11 +603,12 @@ namespace RaceManager.UI
 
             _rewardsHandler.OnLootboxOpen -= ActivateLootboxWindow;
             _rewardsHandler.OnLootboxOpen -= _lootboxWindow.RepresentLootbox;
-            _rewardsHandler.OnLootboxOpen -= (int moneyAmount, List<CarCardReward> list) => UpdateCurrencyAmountPanels();
+            _rewardsHandler.OnLootboxOpen -= (int moneyAmount, List<CarCardReward> list) => UpdateCurrencyAmountPanels(GameUnitType.Money);
 
             _gameProgressPanel.OnButtonPressed -= OnButtonPressedMethod;
 
             _lootboxSlotsHandler.OnPopupIsActive -= UpdatePodiumActivity;
+            _lootboxSlotsHandler.OnInstantLootboxOpen -= () => UpdateCurrencyAmountPanels(GameUnitType.Gems);
             _lootboxSlotsHandler.OnButtonPressed -= OnButtonPressedMethod;
         }
 

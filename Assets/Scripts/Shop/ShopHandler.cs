@@ -116,7 +116,7 @@ namespace RaceManager.Shop
             string text = lootboxRarity.ToString();
             string cost = lootboxCost.ToString();
 
-            ShopPanel.ActivateConfirmationPanel(RewardType.Lootbox, sprite, text, cost);
+            ShopPanel.ActivateConfirmationPanel(GameUnitType.Lootbox, sprite, text, cost);
 
             ConfirmationPanel.ConfirmButton.onClick.RemoveAllListeners();
             ConfirmationPanel.ConfirmButton.onClick.AddListener(() => TryBuyLootbox(lootboxCost, lootboxRarity));
@@ -141,11 +141,11 @@ namespace RaceManager.Shop
 
         private void ConfirmExchangeGemsToMoney(int gemsAmount, int moneyAmount)
         {
-            Sprite sprite = _rewardSpritesContainer.GetShopSprite(RewardType.Money, moneyAmount);
+            Sprite sprite = _rewardSpritesContainer.GetShopSprite(GameUnitType.Money, moneyAmount);
             string text = moneyAmount.ToString();
             string cost = gemsAmount.ToString();
 
-            ShopPanel.ActivateConfirmationPanel(RewardType.Money, sprite, text, cost);
+            ShopPanel.ActivateConfirmationPanel(GameUnitType.Money, sprite, text, cost);
 
             ConfirmationPanel.ConfirmButton.onClick.RemoveAllListeners();
             ConfirmationPanel.ConfirmButton.onClick.AddListener(() => TryExchangeGemsToMoney(gemsAmount, moneyAmount));
@@ -175,24 +175,24 @@ namespace RaceManager.Shop
                 {
                     switch (bonus.Type)
                     {
-                        case RewardType.Money:
+                        case GameUnitType.Money:
                             AddMoney(bonus.Amount);
                             break;
                        
-                        case RewardType.Gems:
+                        case GameUnitType.Gems:
                             AddGems(bonus.Amount);
                             break;
 
-                        case RewardType.Lootbox:
+                        case GameUnitType.Lootbox:
                             break;
 
-                        case RewardType.CarCard:
+                        case GameUnitType.CarCard:
                             break;
 
-                        case RewardType.RaceReward:
-                        case RewardType.Cups:
-                        case RewardType.RaceMap:
-                        case RewardType.IncomeBonus:
+                        case GameUnitType.RaceReward:
+                        case GameUnitType.Cups:
+                        case GameUnitType.RaceMap:
+                        case GameUnitType.IncomeBonus:
                         default:
                             break;
                     }
@@ -217,19 +217,19 @@ namespace RaceManager.Shop
             {
                 Animator.SpawnGroupOnAndMoveTo
                 (
-                    RewardType.Money, 
+                    GameUnitType.Money, 
                     _mainUI.CurrencyPanel.transform, 
                     panelTransform, 
                     _mainUI.CurrencyPanel.MoneyImage.transform, 
                     () => 
                 {
-                    _mainUI.UpdateCurrencyAmountPanels(RewardType.Money);
+                    _mainUI.UpdateCurrencyAmountPanels(GameUnitType.Money);
                     
                 });
                 return;
             }
 
-            _mainUI.UpdateCurrencyAmountPanels(RewardType.Money);
+            _mainUI.UpdateCurrencyAmountPanels(GameUnitType.Money);
         }
 
         private void AddGems(int gemsAmount)
@@ -241,19 +241,16 @@ namespace RaceManager.Shop
             {
                 Animator.SpawnGroupOnAndMoveTo
                 (
-                    RewardType.Gems, 
+                    GameUnitType.Gems, 
                     _mainUI.CurrencyPanel.transform, 
                     panelTransform, 
                     _mainUI.CurrencyPanel.GemsImage.transform, 
-                    () =>
-                {
-                    _mainUI.UpdateCurrencyAmountPanels(RewardType.Gems);
-                    
-                });
+                    () => _mainUI.UpdateCurrencyAmountPanels(GameUnitType.Gems)
+                );
                 return;
             }
 
-            _mainUI.UpdateCurrencyAmountPanels(RewardType.Gems);
+            _mainUI.UpdateCurrencyAmountPanels(GameUnitType.Gems);
         }
 
         private void CloseConfirmationPanel(string buttonName)

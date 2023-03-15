@@ -46,6 +46,19 @@ namespace RaceManager.Cars
 
         public int CurrentRankPointsForAccess => CurrentRank.PointsForAccess;
 
+        public int RankPointsTotalForCar
+        {
+            get 
+            {
+                int result = 0;
+                foreach (CarRank rank in _ranks) 
+                { 
+                    result += rank.PointsForAccess;
+                }
+                return result;
+            }
+        }
+
         public bool CarIsAvailable
         {
             get
@@ -71,6 +84,8 @@ namespace RaceManager.Cars
         }
 
         public bool AllRanksGranted => _ranks.TrueForAll(r => r.IsGranted == true);
+
+        public bool AllRanksReached => _ranks.TrueForAll(r => r.IsReached == true);
 
         [Serializable]
         public class CarRank

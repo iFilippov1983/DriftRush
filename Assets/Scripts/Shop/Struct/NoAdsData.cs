@@ -12,7 +12,7 @@ namespace RaceManager.Shop
         [Serializable]
         public struct BonusContent
         {
-            public RewardType Type;
+            public GameUnitType Type;
             public int Amount;
         }
 

@@ -18,7 +18,7 @@ namespace RaceManager.UI
         [Serializable]
         public struct RewardSpriteSizeData
         { 
-            public RewardType type;
+            public GameUnitType type;
             public Vector2 size;
         }
 
@@ -31,18 +31,14 @@ namespace RaceManager.UI
         [SerializeField] private float _currencyScrambleDuration = 0.75f;
         [SerializeField] private ScrambleMode _currencyScrambleMode = ScrambleMode.Numerals;
         [DictionaryDrawerSettings(KeyLabel = "Reward Type", ValueLabel = "Rect Size")]
-        [SerializeField] private Dictionary<RewardType, Vector2> _rectSizes = new Dictionary<RewardType, Vector2>();
+        [SerializeField] private Dictionary<GameUnitType, Vector2> _rectSizes = new Dictionary<GameUnitType, Vector2>();
         [Space]
-        [Header("Common images anim settings")]
-        [SerializeField] private float _imageInOutDuration = 1f;
-        [SerializeField] private float _imageScaleMax = 2f;
-        [Space]
-        [Header("Cards representation anim settings")]
-        [SerializeField] private float _cardInOutSpeed = 0.25f;
-        [SerializeField] private float _cardMessageDuration = 1f;
-        [SerializeField] private float _cardMoveDuration = 1f;
+        [Header("Common rect anim settings")]
+        [SerializeField] private float _rectAnimDuration = 0.5f;
+        [SerializeField] private float _rectScaleMax = 2f;
         [Space]
         [SerializeField] private float _durationRandomizationFactor = 2f;
+        [SerializeField] private float _defaultDuration = 1f;
 
         private int _counter;
 
@@ -52,7 +48,9 @@ namespace RaceManager.UI
         private Stack<AnimatableImage> _currenciesStack = new Stack<AnimatableImage>();
 
         [HideInInspector]
-        public Subject<string> InterruptAnimation = new Subject<string>();
+        public Subject<string> ForceCompleteAnimation = new Subject<string>();
+
+        public float DefaultDuration => _defaultDuration;
 
         private GameObject AnimCurrencyPrefab
         {
@@ -68,16 +66,16 @@ namespace RaceManager.UI
         private void Construct(SpritesContainerRewards spritesContainer)
         { 
             _spritesContainer = spritesContainer;
-            InterruptAnimation = new Subject<string>();
+            ForceCompleteAnimation = new Subject<string>();
         }
 
-        public IDisposable SpawnGroupOnAndMoveTo(RewardType type, Transform parent, Transform spawnOnTransform, Transform moveToTransform, TweenCallback callback = null)
+        public IDisposable SpawnGroupOnAndMoveTo(GameUnitType type, Transform parent, Transform spawnOnTransform, Transform moveToTransform, TweenCallback callback = null)
         {
             switch (type)
             {
-                case RewardType.Money:
-                case RewardType.Gems:
-                case RewardType.CarParts:
+                case GameUnitType.Money:
+                case GameUnitType.Gems:
+                case GameUnitType.CarParts:
                     break;
                 default:
                     return Disposable.Empty;
@@ -141,13 +139,13 @@ namespace RaceManager.UI
                 factor += Time.deltaTime * _durationRandomizationFactor;
             }
 
-            InterruptAnimation
+            ForceCompleteAnimation
                 .Where(s => s == type.ToString() && sequences != null)
                 .Take(1)
                 .Subscribe(i =>
                 {
                     foreach (var s in sequences)
-                        s.Complete();
+                        s.Complete(true);
                     sequences.Clear();
                 })
                 .AddTo(this);
@@ -159,16 +157,96 @@ namespace RaceManager.UI
             });
         }
 
+        public IDisposable SpawnGroupOn(GameUnitType type, Transform parent, Transform spawnOnTransform, TweenCallback callback = null)
+        {
+            switch (type)
+            {
+                case GameUnitType.Money:
+                case GameUnitType.Gems:
+                case GameUnitType.CarParts:
+                    break;
+                default:
+                    return Disposable.Empty;
+            }
+
+            _counter++;
+            Vector2 size = _rectSizes[type];
+            Sprite sprite = _spritesContainer.GetColoredRewardSprite(type);
+            List<Sequence> sequences = new List<Sequence>();
+
+            int amount = Random.Range(_currencyToSpawnMin, _currencyToSpawnMax);
+            for (int i = 0; i < amount; i++)
+            {
+                AnimatableImage image;
+
+                if (_currenciesStack.Count > 0)
+                {
+                    image = _currenciesStack.Pop();
+                }
+                else
+                {
+                    GameObject imageGo = Instantiate(AnimCurrencyPrefab, gameObject.transform);
+                    imageGo.name = $"image [{_counter}]";
+
+                    image = imageGo.GetComponent<AnimatableImage>();
+                }
+
+
+                image.Rect.DOSizeDelta(size, 0f);
+
+                image.SetActive(true);
+                image.Image.sprite = sprite;
+                image.transform.SetParent(parent, false);
+                image.transform.position = spawnOnTransform.position;
+
+                Vector3 initialScale = image.transform.localScale;
+
+                Vector3 shiftPos = Random.insideUnitCircle * _currencySpreadFactor;
+                shiftPos += spawnOnTransform.position;
+
+                Sequence spawnSequence = DOTween.Sequence();
+
+                spawnSequence.Append(image.transform.DOMove(shiftPos, _currencyInOutDuration));
+                spawnSequence.Join(image.transform.DOScale(0f, _currencyInOutDuration).From());
+                spawnSequence.AppendCallback(i == 0 ? callback : null);
+
+                spawnSequence.AppendCallback(() =>
+                {
+                    _currenciesStack.Push(image);
+                });
+
+                sequences.Add(spawnSequence);
+                spawnSequence.Play();
+            }
+
+            ForceCompleteAnimation
+                .Where(s => s == type.ToString() && sequences != null)
+                .Take(1)
+                .Subscribe(i =>
+                {
+                    foreach (var s in sequences)
+                        s.Complete(true);
+                    sequences.Clear();
+                })
+                .AddTo(this);
+
+            return Disposable.Create(() =>
+            {
+                foreach (var s in sequences)
+                    s?.Kill();
+            });
+        }
+
         public IDisposable ScrambleNumeralsText(TMP_Text textToScramble, string endTextValue)
         {
             Tween tween = textToScramble.DOText(endTextValue, _currencyScrambleDuration, true, _currencyScrambleMode);
 
-            InterruptAnimation
+            ForceCompleteAnimation
                 .Where(s => s == textToScramble?.name && tween != null)
                 .Take(1)
                 .Subscribe(i => 
                 { 
-                    tween.Complete();
+                    tween.Complete(true);
                     tween = null;
                 })
                 .AddTo(this);
@@ -176,29 +254,47 @@ namespace RaceManager.UI
             return Disposable.Create(() => tween?.Kill());
         }
 
-        public IDisposable AppearImage(Image image, TweenCallback finishCallBack = null)
+        public IDisposable AnimateRect(RectTransform rect, TweenCallback finishCallBack = null, params AnimationType[] animationsSequence)
         { 
-            Sequence appearSequence = DOTween.Sequence();
+            Sequence animSequence = DOTween.Sequence();
 
-            Vector3 targetScale = image.transform.localScale * _imageScaleMax;
+            Vector3 targetScale = rect.transform.localScale * _rectScaleMax;
+            Vector3 initialScale = rect.transform.localScale;
 
-            appearSequence.Append(image.transform.DOPunchScale(targetScale, _imageInOutDuration / 2));
-            appearSequence.Append(image.transform.DOShakeScale(_imageInOutDuration / 2));
+            foreach (var animation in animationsSequence)
+            {
+                Tween tween = animation switch
+                {
+                    AnimationType.ScaleFromZero => rect.transform.DOScale(0f, _rectAnimDuration).From(),
+                    AnimationType.ScaleToZero => rect.transform.DOScale(0f, _rectAnimDuration),
+                    AnimationType.PunchScale => rect.transform.DOPunchScale(targetScale, _rectAnimDuration),
+                    AnimationType.ShakeScale => rect.transform.DOShakeScale(_rectAnimDuration),
+                    _ => null,
+                };
+
+                if(tween != null)
+                    animSequence.Append(tween);
+            }
+
+            //appearSequence.Append(rect.transform.DOPunchScale(targetScale, _imageInOutDuration / 2));
+            //appearSequence.Append(rect.transform.DOShakeScale(_imageInOutDuration / 2));
 
             if(finishCallBack != null)
-                appearSequence.AppendCallback(finishCallBack);
+                animSequence.AppendCallback(finishCallBack);
 
-            InterruptAnimation
-                .Where(s => s == image?.name && appearSequence != null)
+            animSequence.AppendCallback(() => rect.transform.localScale = initialScale);
+
+            ForceCompleteAnimation
+                .Where(s => s == rect.name && animSequence != null)
                 .Take(1)
                 .Subscribe(x =>
                 {
-                    appearSequence.Complete();
-                    appearSequence = null;
+                    animSequence.Complete(true);
+                    animSequence = null;
                 })
                 .AddTo(this);
 
-            return Disposable.Create(() => appearSequence?.Kill());
+            return Disposable.Create(() => animSequence?.Kill());
         }
 
         public IDisposable AppearSubject(IAnimatableSubject subject, Transform moveFromTransform = null, TweenCallback finishCallback = null)
@@ -252,7 +348,7 @@ namespace RaceManager.UI
             if (finishCallback != null)
                 appearSequence.AppendCallback(finishCallback);
 
-            InterruptAnimation
+            ForceCompleteAnimation
                 .Where(s => s == subject?.Name && appearSequence != null)
                 .Take(1)
                 .Subscribe(_ =>
@@ -291,16 +387,17 @@ namespace RaceManager.UI
                     };
 
                     if (tween != null)
+                    {
                         disappearSequence.Join(tween);
+                        if (resetOnComplete)
+                            disappearSequence.AppendCallback(() =>
+                            {
+                                rect.transform.position = initialPos;
+                                rect.transform.localScale = initialScale;
+                            });
 
-                    if (resetOnComplete)
-                        disappearSequence.AppendCallback(() =>
-                        {
-                            rect.transform.position = initialPos;
-                            rect.transform.localScale = initialScale;
-                        });
-
-                    disappearSequence.AppendCallback(() => rect.SetActive(false));
+                        disappearSequence.AppendCallback(() => rect.SetActive(false));
+                    }
                 }
 
                 foreach (var image in data.imagesToAnimate)
@@ -323,29 +420,32 @@ namespace RaceManager.UI
                     }; ;
 
                     if (tween != null)
+                    {
                         disappearSequence.Join(tween);
 
-                    if (resetOnComplete)
-                        disappearSequence.AppendCallback(() =>
-                        {
-                            image.transform.position = initialPos;
-                            image.transform.localScale = initialScale;
-                            image.color = initialColor;
-                        });
+                        if (resetOnComplete)
+                            disappearSequence.AppendCallback(() =>
+                            {
+                                image.transform.position = initialPos;
+                                image.transform.localScale = initialScale;
+                                image.color = initialColor;
+                            });
 
-                    disappearSequence.AppendCallback(() => image.SetActive(false));
+                        disappearSequence.AppendCallback(() => image.SetActive(false));
+                    }
                 }
             }
 
             if (finishCallback != null)
                 disappearSequence.AppendCallback(finishCallback);
 
-            InterruptAnimation
+            ForceCompleteAnimation
                 .Where(s => s == subject?.Name && disappearSequence != null)
                 .Take(1)
                 .Subscribe(_ =>
                 { 
                     disappearSequence.Complete(true);
+                    Debug.Log("[Sequence completed whith callbacks]");
                     disappearSequence = null;
                 })
                 .AddTo(this);

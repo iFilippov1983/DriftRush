@@ -7,7 +7,7 @@ using Zenject;
 
 namespace RaceManager.Progress
 {
-    public class CarUpgradesHandler : IDisposable//, Root.IInitializable
+    public class CarUpgradesHandler : IDisposable
     {
         private Profiler _profiler;
         private CarsDepot _carsDepot;
@@ -27,7 +27,7 @@ namespace RaceManager.Progress
                 var ranksScheme = carProfile.RankingScheme;
 
                 var upgradesList = _upgradeScheme.UpgradesSceme[characteristics.Rarity];
-                var upgrade = upgradesList?.Find(r => r.NecesseryRank == ranksScheme.CurrentRank.Rank);
+                var upgrade = upgradesList?.Find(u => u.NecesseryRank == ranksScheme.CurrentRank.Rank);
                 return upgrade;
             }
         }
@@ -47,11 +47,6 @@ namespace RaceManager.Progress
             _profiler.OnCarCardsAmountChange += UpdateRankProgress;
         }
 
-        //public void Initialize()
-        //{
-        //    InitializeProfiles();
-        //}
-
         public bool TryUpgradeCurrentCarRank()
         {
             CarProfile carProfile = _carsDepot.CurrentCarProfile;
@@ -67,6 +62,7 @@ namespace RaceManager.Progress
             if (canUpgrade)
             {
                 scheme.CurrentRank.IsGranted = true;
+                scheme.CurrentRank.IsReached = true;
                 UpdateRankProgress(carProfile.CarName, _profiler.GetCardsAmount(carProfile.CarName));
                 UpdateCarMaxFactorsCurrent(carProfile);
                 _carsDepot.UpdateProfile(carProfile);
@@ -114,22 +110,19 @@ namespace RaceManager.Progress
             var upgrade = CurrentUpgrade;
 
             int unusedFactors = characteristics.FactorsMaxCurrent - characteristics.CurrentFactorsProgress;
-            
-            if(upgrade != null && unusedFactors / upgrade.StatsToAdd >= 1f)
-                return true;
 
-            return false;
+            return upgrade != null && (unusedFactors / upgrade.StatsToAdd) >= 1f;
         }
 
         public bool CurrentCarHasMaxFactorsUpgrade()
         {
             var characteristics = _carsDepot.CurrentCarProfile.CarCharacteristics;
-            return characteristics.FactorsMaxCurrent <= characteristics.CurrentFactorsProgress;
+            return characteristics.FactorsMaxTotal <= characteristics.CurrentFactorsProgress;
         }
 
         private void InitializeProfiles()
         {
-            foreach (CarProfile carProfile in _carsDepot.CarProfiles)
+            foreach (CarProfile carProfile in _carsDepot.ProfilesList)
             {
                 if(carProfile.CarCharacteristics.FactorsMaxCurrent == 0)
                     UpdateCarMaxFactorsCurrent(carProfile);
@@ -138,7 +131,7 @@ namespace RaceManager.Progress
 
         private void UpdateRankProgress(CarName carName, int cardsAmount = 0)
         {
-            CarProfile profile = _carsDepot.CarProfiles.Find(p => p.CarName == carName);
+            CarProfile profile = _carsDepot.GetProfile(carName);
             var carRank = profile.RankingScheme.CurrentRank;
 
             if (cardsAmount >= carRank.PointsForAccess)

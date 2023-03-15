@@ -33,6 +33,7 @@ namespace RaceManager.UI
 
         public Action<bool> OnPopupIsActive;
         public Action<Button> OnButtonPressed;
+        public Action OnInstantLootboxOpen;
 
         private UIAnimator Animator => Singleton<UIAnimator>.Instance;
 
@@ -69,12 +70,15 @@ namespace RaceManager.UI
                 _lootboxProgress.Images[i].SetActive(true);
 
             string text = string.Empty;
-            if (counter == _lootboxProgress.Images.Length)
+            //if (counter == _lootboxProgress.Images.Length)
+            if(_playerProfile.WillGetLootboxForVictiories && _playerProfile.CanGetLootbox)
             {
-                if (_playerProfile.CanGetLootbox)
-                {
-                    GrantCommonLootbox();
-                }
+                GrantCommonLootbox();
+
+                //if (_playerProfile.CanGetLootbox)
+                //{
+                //    GrantCommonLootbox();
+                //}
             }
             else
             {
@@ -131,6 +135,7 @@ namespace RaceManager.UI
                     slot.SetStatusClosed(sprite, lootbox.InitialTimeToOpen, lootbox.GemsToOpen, lootbox.Id);
                 }
 
+                slot.SlotButton.onClick.RemoveAllListeners();
                 slot.SlotButton.onClick.AddListener(() => OnLootboxSlotClicked(slot));
                 slot.SlotButton.onClick.AddListener(() => OnButtonPressedMethod(slot.SlotButton));
             }
@@ -271,6 +276,8 @@ namespace RaceManager.UI
                 HandleSlotTimer();
                 _profiler.AddOrOpenLootbox(lootbox);
 
+                OnInstantLootboxOpen?.Invoke();
+
                 slot.SetStatusEmpty();
             }
         }
@@ -313,7 +320,8 @@ namespace RaceManager.UI
 
                     _gameEvents.Notification.OnNext(NotificationType.FirstLootbox.ToString());
                 }
-                if (_profiler.GetVictoriesTotalCount() == 6)
+
+                if (_profiler.GetVictoriesTotalCount() == PlayerProfile.HowToOpenLootboxTutorThreshold)
                 {
                     _gameEvents.Notification.OnNext(NotificationType.SecondLootbox.ToString());
                 }

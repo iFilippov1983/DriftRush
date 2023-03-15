@@ -237,7 +237,7 @@ namespace RaceManager.UI
 
         public void OnAdsRewardAction()
         {
-            _finishUIHandler.OnWatchAdsSuccess();
+            _finishUIHandler.OnWatchAdsSuccess()?.AddTo(this);
         }
 
         #endregion
@@ -320,7 +320,7 @@ namespace RaceManager.UI
 
         private void ShowRewards()
         {
-            _finishUIHandler.ShowMoneyRewardPanel(_rewardInfo);
+            _finishUIHandler.ShowMoneyRewardPanel(_rewardInfo)?.AddTo(this);
         }
 
         private IEnumerator FinalizeRace()

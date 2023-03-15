@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 namespace RaceManager.UI
 {
-    public class TuningPanel : MonoBehaviour
+    public class TuningPanel : AnimatableSubject
     {
         [SerializeField] private UpgradeWindowTuner _upgradeWindow;
         [Space]
@@ -148,10 +148,10 @@ namespace RaceManager.UI
 
         public void UpdateCurrentInfoValues(int available, bool scrambleText = false)
         {
-            Animator.InterruptAnimation.OnNext(_factorPointsAvailableText.name);
+            Animator.ForceCompleteAnimation?.OnNext(_factorPointsAvailableText.name);
 
             if(scrambleText)
-                Animator.ScrambleNumeralsText(_factorPointsAvailableText, available.ToString()).AddTo(this);
+                Animator.ScrambleNumeralsText(_factorPointsAvailableText, available.ToString())?.AddTo(this);
             else
                 _factorPointsAvailableText.text = available.ToString();
 
@@ -172,7 +172,7 @@ namespace RaceManager.UI
             {
                 Animator.SpawnGroupOnAndMoveTo
                         (
-                        RewardType.CarParts, transform,
+                        GameUnitType.CarParts, transform,
                         _upgradeWindow.UpgradeButton.transform,
                         _carPartImage.transform,
                         () => UpdateCurrentInfoValues(factorsAvailable, true)

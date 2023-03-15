@@ -7788,6 +7788,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Animate: 1
+  _settings:
+    appearAnimDuration: 0
+    disappearAnimDuration: 0
+    stateAnimDuration: 0
+    animPauseDuration: 0
+    maxScale: 0
+    minScale: 0
   _animationsData:
   - animationType: 6
     animationDuration: 0.25
@@ -8430,6 +8437,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78468e193f291ef46a7df7a2ff9ffa9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Animate: 1
+  _settings:
+    appearAnimDuration: 1
+    disappearAnimDuration: 1
+    stateAnimDuration: 1
+    animPauseDuration: 1
+    maxScale: 2
+    minScale: 0
+  _animationsData:
+  - animationType: 6
+    animationDuration: 0.3
+    useRects: 1
+    useImages: 0
+    useMoveFromToTransform: 1
+    moveFromToTransform: {fileID: 6102273850750037498}
+    rectsToAnimate:
+    - {fileID: 1314968753104754007}
+    imagesToAnimate: []
   _backButton: {fileID: 7630874646923130897}
   _moneyAmountText: {fileID: 8275956607220366068}
   _gemsAmountText: {fileID: 7707221066465289392}
@@ -16176,6 +16201,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Animate: 1
+  _settings:
+    appearAnimDuration: 0
+    disappearAnimDuration: 0
+    stateAnimDuration: 0
+    animPauseDuration: 0
+    maxScale: 0
+    minScale: 0
   _animationsData:
   - animationType: 8
     animationDuration: 0.25
@@ -18653,6 +18685,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Animate: 1
+  _settings:
+    appearAnimDuration: 0
+    disappearAnimDuration: 0
+    stateAnimDuration: 0
+    animPauseDuration: 0
+    maxScale: 0
+    minScale: 0
   _animationsData:
   - animationType: 8
     animationDuration: 0.25
@@ -19300,6 +19339,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Animate: 1
+  _settings:
+    appearAnimDuration: 0
+    disappearAnimDuration: 0
+    stateAnimDuration: 0
+    animPauseDuration: 0
+    maxScale: 0
+    minScale: 0
   _animationsData:
   - animationType: 6
     animationDuration: 0.25
@@ -19496,6 +19542,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Animate: 1
+  _settings:
+    appearAnimDuration: 0
+    disappearAnimDuration: 0
+    stateAnimDuration: 0
+    animPauseDuration: 0
+    maxScale: 0
+    minScale: 0
   _animationsData:
   - animationType: 8
     animationDuration: 0.25
@@ -34826,6 +34879,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 919296512579563710}
     m_Modifications:
+    - target: {fileID: 6224901554263615339, guid: e9d1e6e243ffb6a4c891157a14409f6f,
+        type: 3}
+      propertyPath: _agentActions.Array.data[0].key
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 8192742952264221768, guid: e9d1e6e243ffb6a4c891157a14409f6f,
         type: 3}
       propertyPath: m_Name

@@ -99,7 +99,7 @@ namespace RaceManager.Root
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.F))
-                WinRace();
+                FinishRace();
 
             HandleSoundtrackTest();
             HandleSfxTest();
@@ -115,12 +115,12 @@ namespace RaceManager.Root
 
         [Button]
         [ShowIf("IsRaceScene", true)]
-        public void WinRace()
+        public void FinishRace()
         {
             var drivers = FindObjectsOfType<Driver>();
             var list = new List<Driver>(drivers);
             var playerDriver = list.Find(d => d.DriverType == DriverType.Player);
-            playerDriver.DriverProfile.PositionInRace = PositionInRace.First;
+            //playerDriver.DriverProfile.PositionInRace = PositionInRace.First;
             playerDriver.DriverProfile.CarState.Value = CarState.Finished;
 
             saveManager.Save();
@@ -182,7 +182,7 @@ namespace RaceManager.Root
             saveManager.Save();
 
             if(_mainUI != null)
-                _mainUI.UpdateCurrencyAmountPanels(RewardType.Gems);
+                _mainUI.UpdateCurrencyAmountPanels(GameUnitType.Gems);
         }
 
         [Button]
@@ -193,7 +193,7 @@ namespace RaceManager.Root
             saveManager.Save();
 
             if (_mainUI != null)
-                _mainUI.UpdateCurrencyAmountPanels(RewardType.Money);
+                _mainUI.UpdateCurrencyAmountPanels(GameUnitType.Money);
         }
 
         [Button]

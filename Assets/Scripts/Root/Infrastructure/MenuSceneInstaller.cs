@@ -81,7 +81,7 @@ namespace RaceManager.Infrastructure
             Bind<Profiler>();
             Bind<RewardsHandler>();
             Bind<CarUpgradesHandler>();
-            Bind<ProgressConditionInfo>();
+            Bind<ProgressConditionValidator>();
         }
 
         public override void Start()

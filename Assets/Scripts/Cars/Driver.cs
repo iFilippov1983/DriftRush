@@ -37,6 +37,8 @@ namespace RaceManager.Cars
         public Transform CarCameraFollowTarget => _car.CameraFollowTarget;
         public Transform CameraFinalTarget => _car.CameraFinalTarget;
         public Transform CameraFinalPosition => _car.CameraFinalPosition;
+        public Transform StartCameraTarget => _car.StartCameraTarget;
+        public Transform StartCameraPosition => _car.StartCameraPosition;
         public WaypointsTracker WaypointsTracker => _waypointsTracker;
 
         public void Initialize

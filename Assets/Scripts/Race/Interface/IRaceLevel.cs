@@ -10,8 +10,6 @@ namespace RaceManager.Race
         public WaypointTrack WaypointTrackMain { get; }
         public WaypointTrack WaypointTrackEven { get; }
         public WaypointTrack WaypointTrackOdd { get; }
-        public Vector3 FollowCamInitialPosition { get; }
-        public Vector3 StartCamInitialPosition { get; }
         public Vector3 FinishCamInitialPosition { get; }
     }
 }

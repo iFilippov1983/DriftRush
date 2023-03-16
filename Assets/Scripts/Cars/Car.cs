@@ -32,11 +32,20 @@ namespace RaceManager.Cars
         [SerializeField] Wheel FrontRightWheel;
         [SerializeField] Wheel RearLeftWheel;
         [SerializeField] Wheel RearRightWheel;
+
+        [Space]
         [SerializeField] Transform COM;
+
         [SerializeField] Transform _cameraLookTarget;
         [SerializeField] Transform _cameraFollowTarget;
+
         [SerializeField] Transform _cameraFinalTarget;
         [SerializeField] Transform _cameraFinalPosition;
+
+        [SerializeField] Transform _startCameraTarget;
+        [SerializeField] Transform _startCameraPosition;
+        
+        [Space]
         [SerializeField] private CarConfig _carConfig;
 
         private CarSelfRighting _carSelfRighting;
@@ -118,6 +127,8 @@ namespace RaceManager.Cars
         public Transform CameraFollowTarget => _cameraFollowTarget;
         public Transform CameraFinalTarget => _cameraFinalTarget;
         public Transform CameraFinalPosition => _cameraFinalPosition;
+        public Transform StartCameraTarget => _startCameraTarget;
+        public Transform StartCameraPosition => _startCameraPosition;
 
         /// <summary>
         /// All gears (Reverce, neutral and all forward).

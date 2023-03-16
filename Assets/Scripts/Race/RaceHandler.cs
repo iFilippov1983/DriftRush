@@ -201,7 +201,7 @@ namespace RaceManager.Race
                         _settingsContainer.PlaySounds
                         );
 
-                    _sceneHandler.HandleEffectsFor(driver, _raceLevel);
+                    _sceneHandler.HandleSceneFor(driver, _raceLevel);
 
                     driver.Subscribe(_raceUI);
                     driver.Subscribe(_lineHandler);

@@ -70,15 +70,13 @@ namespace RaceManager.UI
                 _lootboxProgress.Images[i].SetActive(true);
 
             string text = string.Empty;
-            //if (counter == _lootboxProgress.Images.Length)
-            if(_playerProfile.WillGetLootboxForVictiories && _playerProfile.CanGetLootbox)
+            if (counter == _lootboxProgress.Images.Length)
+            //if(_playerProfile.WillGetLootboxForVictiories)
             {
-                GrantCommonLootbox();
-
-                //if (_playerProfile.CanGetLootbox)
-                //{
-                //    GrantCommonLootbox();
-                //}
+                if (_playerProfile.CanGetLootbox)
+                {
+                    GrantCommonLootbox();
+                }
             }
             else
             {

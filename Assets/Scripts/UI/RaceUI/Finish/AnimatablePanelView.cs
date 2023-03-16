@@ -11,16 +11,12 @@ namespace RaceManager.UI
         [SerializeField] private RectTransform _hideRect;
         private RectTransform _showRect;
 
-        public RectTransform ShowRect
-        {
-            get 
-            { 
-                if(_showRect is null)
-                    _showRect = GetComponent<RectTransform>();
-                return _showRect;
-            }
-        }
-
+        public RectTransform ShowRect => _showRect;
         public RectTransform HideRect => _hideRect;
+
+        private void Awake()
+        {
+            _showRect = GetComponent<RectTransform>();
+        }
     }
 }

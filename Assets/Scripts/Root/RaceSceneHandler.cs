@@ -69,21 +69,22 @@ namespace RaceManager.Root
             _raceUI.OnButtonPressed += PlayButtonPressedEffect;
         }
 
-        public void HandleEffectsFor(Driver driver, IRaceLevel raceLevel)
+        public void HandleSceneFor(Driver driver, IRaceLevel raceLevel)
         {
             _playerDriver = driver;
             _gameEvents.ScreenTaped.Subscribe((u) => SetImmediateStart());
 
-            CamerasHandler.SetTargets
-                (
-                driver.CarCameraFollowTarget, 
-                driver.CarCameraLookTarget, 
-                driver.CameraFinalTarget,
-                driver.CameraFinalPosition
-                );
+            CamerasHandler.SetTargets(new CamerasData()
+            {
+                cameraFollowTarget = driver.CarCameraFollowTarget,
+                cameraLookTarget = driver.CarCameraLookTarget,
+                cameraFinalTarget = driver.CameraFinalTarget,
+                cameraFinalPosition = driver.CameraFinalPosition,
+                startCameraTarget = driver.StartCameraTarget,
+                startCameraPosition = driver.StartCameraPosition
+            });
 
-            CamerasHandler.FollowCam.position = raceLevel.FollowCamInitialPosition;
-            CamerasHandler.StartCam.position = raceLevel.StartCamInitialPosition;
+            CamerasHandler.StartCam.position = driver.StartCameraPosition.position;
             CamerasHandler.FinishCam.position = raceLevel.FinishCamInitialPosition;
         }
 
@@ -191,6 +192,8 @@ namespace RaceManager.Root
         }
 
         #endregion
+
+
     }
 }
 

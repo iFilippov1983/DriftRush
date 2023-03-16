@@ -61,7 +61,7 @@ namespace RaceManager.UI
         [SerializeField]
         private List<LevelSpriteHolder> _levelSprites = new List<LevelSpriteHolder>()
         {
-            { new LevelSpriteHolder() { LevelName = LevelName.Level_0_test, LevelSprite = null } }
+            { new LevelSpriteHolder() { LevelName = LevelName.RookyTrack, LevelSprite = null } }
         };
 
         [Space(20)]

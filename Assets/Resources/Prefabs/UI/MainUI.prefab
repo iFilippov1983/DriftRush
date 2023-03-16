@@ -28356,6 +28356,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56028cffea3a3f84299f1c6ac054400c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Animate: 0
+  _settings:
+    appearAnimDuration: 0
+    disappearAnimDuration: 0
+    stateAnimDuration: 0
+    animPauseDuration: 0
+    maxScale: 0
+    minScale: 0
+  _animationsData: []
   _upgradeWindow: {fileID: 6576471684906656592}
   _tuneStatsButton: {fileID: 4619534041388740049}
   _tuneWheelsViewButton: {fileID: 8418291872062147046}
@@ -34879,11 +34888,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 919296512579563710}
     m_Modifications:
-    - target: {fileID: 6224901554263615339, guid: e9d1e6e243ffb6a4c891157a14409f6f,
-        type: 3}
-      propertyPath: _agentActions.Array.data[0].key
-      value: 25
-      objectReference: {fileID: 0}
     - target: {fileID: 8192742952264221768, guid: e9d1e6e243ffb6a4c891157a14409f6f,
         type: 3}
       propertyPath: m_Name

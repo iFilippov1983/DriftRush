@@ -20,6 +20,9 @@ namespace RaceManager.UI
         private CupsRewardPanel _cupsRewardPanel;
         private LootboxRewardPanel _lootboxRewardPanel;
 
+        private Sequence _appearSequence;
+        private Sequence _disappearSequence;
+
         private RaceRewardInfo _rewardInfo;
         private bool _grantLootbox = false;
         private float _duration;
@@ -91,19 +94,19 @@ namespace RaceManager.UI
 
             Tween titleTween = _titleRect.DOMove(_moneyRewardPanel.TitlePosition.position, _duration);
 
-            Sequence appearSequence = DOTween.Sequence();
+            _appearSequence = DOTween.Sequence();
 
             foreach (var sPanel in _moneyRewardPanel.ShowPanels)
             {
                 sPanel.SetActive(true);
-                appearSequence.Append(sPanel.ShowRect.DOMove(sPanel.HideRect.position, _duration / 2f).From());
+                _appearSequence.Append(sPanel.ShowRect.DOMove(sPanel.HideRect.position, _duration / 2f).From());
             }
 
-            float d = appearSequence.Duration();
+            float d = _appearSequence.Duration();
 
             foreach (var rPanel in _moneyRewardPanel.RewardPanels)
             {
-                appearSequence
+                _appearSequence
                     .Insert(d, rPanel.ShowRect.DOMove(rPanel.HideRect.position, _duration).From())
                     .AppendCallback(() => ScrambleScoresTotal(rPanel.ScoreType)
                     ?.AddTo(rPanel.ShowRect));
@@ -111,35 +114,34 @@ namespace RaceManager.UI
                 d += _duration;
             }
 
-            appearSequence.AppendCallback(() =>
+            _appearSequence.AppendCallback(() =>
             {
-                //_moneyRewardPanel.ContinueButton.interactable = true;
                 _moneyRewardPanel.MultiplyRewardPanel.WatchAdsButton.interactable = true;
                 HasJob = false;
             });
 
             return Disposable.Create(() =>
             {
-                appearSequence.Complete();
-                appearSequence = null;
+                _appearSequence.Complete(true);
+                _appearSequence = null;
 
-                titleTween.Complete();
+                titleTween.Complete(true);
                 titleTween = null;
             });
         }
 
-        private IDisposable HideMoneyRewardPanel(Tween tweenInterrupt = null)
+        private IDisposable HideMoneyRewardPanel()
         {
+            _appearSequence?.Complete();
+            _appearSequence = null;
+
             HasJob = true;
             _moneyRewardPanel.ContinueButton.onClick.RemoveAllListeners();
             _moneyRewardPanel.ContinueButton.onClick.AddListener(() => 
             {
-                if (tweenInterrupt != null)
-                {
-                    tweenInterrupt.Complete();
-                    tweenInterrupt = null;
-                }
-                    
+                _disappearSequence?.Complete();
+                _disappearSequence = null;
+
                 _moneyRewardPanel.ContinueButton.interactable = false;
                 _moneyRewardPanel.SetActive(false);
                 HasJob = false;
@@ -148,28 +150,28 @@ namespace RaceManager.UI
 
             _moneyRewardPanel.MultiplyRewardPanel.WatchAdsButton.interactable = false;
 
-            Sequence disappearSequence = DOTween.Sequence();
+            _disappearSequence = DOTween.Sequence();
 
             float d = 0f;
 
             foreach (var hPanel in _moneyRewardPanel.HidePanels)
             {
-                Vector3 pos = hPanel.ShowRect.position;
-                disappearSequence.Append(hPanel.ShowRect.DOMove(hPanel.HideRect.position, _duration / 2f));
-                disappearSequence.AppendCallback(() =>
+                Vector3 pos = hPanel.ShowRect.transform.position;
+                _disappearSequence.Append(hPanel.ShowRect.DOMove(hPanel.HideRect.transform.position, _duration / 2f));
+                _disappearSequence.AppendCallback(() =>
                 {
-                    hPanel.ShowRect.position = pos;
+                    hPanel.ShowRect.transform.position = pos;
                     hPanel.SetActive(false);
                 });
             }
 
             foreach (var rPanel in _moneyRewardPanel.RewardPanels)
             {
-                disappearSequence.Insert(d, rPanel.ShowRect.DOMove(rPanel.HideRect.position, _duration / 2));
+                _disappearSequence.Insert(d, rPanel.ShowRect.DOMove(rPanel.HideRect.position, _duration / 2));
                 d += _duration / 4;
             }
 
-            disappearSequence.AppendCallback(() => 
+            _disappearSequence.AppendCallback(() => 
             {
                 _moneyRewardPanel.SetActive(false);
 
@@ -186,8 +188,8 @@ namespace RaceManager.UI
 
             return Disposable.Create(() =>
             {
-                disappearSequence.Complete();
-                disappearSequence = null;
+                _disappearSequence.Complete(true);
+                _disappearSequence = null;
             });
         }
 
@@ -201,21 +203,21 @@ namespace RaceManager.UI
 
             Tween titleTween = _titleRect.DOJump(_cupsRewardPanel.TitlePosition.position, _duration, 1, _duration * 2);
 
-            Sequence appearSequence = DOTween.Sequence();
+            _appearSequence = DOTween.Sequence();
 
             foreach (var sPanel in _cupsRewardPanel.ShowPanels)
             {
                 sPanel.SetActive(true);
-                appearSequence.Append(sPanel.ShowRect.DOMove(sPanel.HideRect.position, _duration / 2f).From());
+                _appearSequence.Append(sPanel.ShowRect.DOMove(sPanel.HideRect.position, _duration / 2f).From());
             }
 
-            appearSequence.AppendInterval(_duration);
+            _appearSequence.AppendInterval(_duration);
 
             int newTotal = _rewardInfo.CupsRewardAmount + _rewardInfo.CupsTotalAmount;
-            appearSequence.Append(_cupsRewardPanel.CupsRewardText.DOText("0", _duration, true, ScrambleMode.Numerals));
-            appearSequence.Join(_cupsRewardPanel.CupsTotalText.DOText(newTotal.ToString(), _duration, true, ScrambleMode.Numerals));
+            _appearSequence.Append(_cupsRewardPanel.CupsRewardText.DOText("0", _duration, true, ScrambleMode.Numerals));
+            _appearSequence.Join(_cupsRewardPanel.CupsTotalText.DOText(newTotal.ToString(), _duration, true, ScrambleMode.Numerals));
 
-            appearSequence.AppendCallback(() =>
+            _appearSequence.AppendCallback(() =>
             {
                 _cupsRewardPanel.CupsRewardText.SetActive(false);
                 HasJob = false;
@@ -223,16 +225,19 @@ namespace RaceManager.UI
 
             return Disposable.Create(() =>
             {
-                appearSequence.Complete();
-                appearSequence = null;
+                _appearSequence.Complete(true);
+                _appearSequence = null;
 
                 titleTween.Complete();
                 titleTween = null;
             });
         }
 
-        private IDisposable HideCupsRewardPanel(Tween tweenToInterrupt = null)
+        private IDisposable HideCupsRewardPanel()
         {
+            _appearSequence?.Complete();
+            _appearSequence = null;
+
             HasJob = true;
             bool final = !_grantLootbox;
 
@@ -240,11 +245,8 @@ namespace RaceManager.UI
 
             _cupsRewardPanel.ContinueButton.onClick.AddListener(() => 
             {
-                if (tweenToInterrupt != null)
-                { 
-                    tweenToInterrupt.Complete();
-                    tweenToInterrupt = null;
-                }
+                this._disappearSequence?.Complete();
+                this._disappearSequence = null;
 
                 _cupsRewardPanel.SetActive(false);
 
@@ -260,20 +262,20 @@ namespace RaceManager.UI
                 ));
             });
 
-            Sequence disappearSequence = DOTween.Sequence();
+            _disappearSequence = DOTween.Sequence();
 
             foreach (var hPanel in _cupsRewardPanel.HidePanels)
             {
                 Vector3 pos = hPanel.ShowRect.position;
-                disappearSequence.Append(hPanel.ShowRect.DOMove(hPanel.HideRect.position, _duration / 4f));
-                disappearSequence.AppendCallback(() =>
+                _disappearSequence.Append(hPanel.ShowRect.DOMove(hPanel.HideRect.position, _duration / 4f));
+                _disappearSequence.AppendCallback(() =>
                 {
                     hPanel.ShowRect.position = pos;
                     hPanel.SetActive(false);
                 });
             }
 
-            disappearSequence.AppendCallback(() =>
+            _disappearSequence.AppendCallback(() =>
             {
                 _cupsRewardPanel.SetActive(false);
 
@@ -291,8 +293,8 @@ namespace RaceManager.UI
 
             return Disposable.Create(() =>
             {
-                disappearSequence.Complete();
-                disappearSequence = null;
+                _disappearSequence.Complete(true);
+                _disappearSequence = null;
             });
         }
 
@@ -316,18 +318,18 @@ namespace RaceManager.UI
 
             titleSequence.Play();
 
-            Sequence appearSequence = DOTween.Sequence();
+            _appearSequence = DOTween.Sequence();
 
             foreach (var sPanel in _lootboxRewardPanel.ShowPanels)
             {
                 sPanel.SetActive(true);
-                appearSequence.Append(sPanel.ShowRect.DOMove(sPanel.HideRect.position, _duration / 2).From());
+                _appearSequence.Append(sPanel.ShowRect.DOMove(sPanel.HideRect.position, _duration / 2).From());
             }
 
-            appearSequence.Append(_lootboxRewardPanel.LootboxImage.rectTransform.DOScale(Vector3.zero, _duration / 2).From());
-            appearSequence.Join(_lootboxRewardPanel.EffectImage.rectTransform.DOScale(Vector3.zero, _duration / 2).From());
+            _appearSequence.Append(_lootboxRewardPanel.LootboxImage.rectTransform.DOScale(Vector3.zero, _duration / 2).From());
+            _appearSequence.Join(_lootboxRewardPanel.EffectImage.rectTransform.DOScale(Vector3.zero, _duration / 2).From());
 
-            appearSequence.AppendCallback(() =>
+            _appearSequence.AppendCallback(() =>
             {
                 HasJob = false;
             });
@@ -347,26 +349,26 @@ namespace RaceManager.UI
                 titleSequence.Complete();
                 titleSequence = null;
 
-                appearSequence.Complete();
-                appearSequence = null;
+                _appearSequence.Complete(true);
+                _appearSequence = null;
 
                 rotateSequence.Complete();
                 rotateSequence = null;
             });
         }
 
-        private IDisposable HideLootboxRewardPanel(Tween tweenToInterrupt = null) 
+        private IDisposable HideLootboxRewardPanel() 
         {
+            _appearSequence?.Complete();
+            _appearSequence = null;
+
             HasJob = true;
             _lootboxRewardPanel.ClaimButton.onClick.RemoveAllListeners();
 
             _lootboxRewardPanel.ClaimButton.onClick.AddListener(() => 
             {
-                if (tweenToInterrupt != null)
-                { 
-                    tweenToInterrupt.Complete();
-                    tweenToInterrupt = null;
-                }
+                this._disappearSequence?.Complete();
+                this._disappearSequence = null;
 
                 HasJob = false;
                 _lootboxRewardPanel.SetActive(false);
@@ -378,23 +380,23 @@ namespace RaceManager.UI
                 ));
             });
 
-            Sequence disappearSequence = DOTween.Sequence();
+            _disappearSequence = DOTween.Sequence();
 
             foreach (var hPanel in _lootboxRewardPanel.HidePanels)
             {
                 Vector3 pos = hPanel.ShowRect.position;
-                disappearSequence.Append(hPanel.ShowRect.DOMove(hPanel.HideRect.position, _duration / 5));
-                disappearSequence.AppendCallback(() =>
+                _disappearSequence.Append(hPanel.ShowRect.DOMove(hPanel.HideRect.position, _duration / 5));
+                _disappearSequence.AppendCallback(() =>
                 { 
                     hPanel.ShowRect.position = pos;
                     hPanel.SetActive(false);
                 });
             }
 
-            disappearSequence.Append(_lootboxRewardPanel.LootboxImage.rectTransform.DOScale(Vector3.zero, _duration / 5));
-            disappearSequence.Join(_lootboxRewardPanel.EffectImage.rectTransform.DOScale(Vector3.zero, _duration / 5));
+            _disappearSequence.Append(_lootboxRewardPanel.LootboxImage.rectTransform.DOScale(Vector3.zero, _duration / 5));
+            _disappearSequence.Join(_lootboxRewardPanel.EffectImage.rectTransform.DOScale(Vector3.zero, _duration / 5));
 
-            disappearSequence.AppendCallback(() =>
+            _disappearSequence.AppendCallback(() =>
             {
                 HasJob = false;
             });
@@ -407,8 +409,8 @@ namespace RaceManager.UI
 
             return Disposable.Create(() =>
             {
-                disappearSequence.Complete();
-                disappearSequence = null;
+                _disappearSequence.Complete(true);
+                _disappearSequence = null;
             });
         }
 

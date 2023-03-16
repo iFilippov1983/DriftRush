@@ -62,7 +62,6 @@ namespace RaceManager.Progress
             if (canUpgrade)
             {
                 scheme.CurrentRank.IsGranted = true;
-                scheme.CurrentRank.IsReached = true;
                 UpdateRankProgress(carProfile.CarName, _profiler.GetCardsAmount(carProfile.CarName));
                 UpdateCarMaxFactorsCurrent(carProfile);
                 _carsDepot.UpdateProfile(carProfile);

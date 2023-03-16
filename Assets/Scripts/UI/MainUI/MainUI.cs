@@ -15,7 +15,7 @@ namespace RaceManager.UI
 {
     public class MainUI : MonoBehaviour, IInitializable
     {
-        [SerializeField] private Button _startButton;
+        [SerializeField] private StartButtonView _startButton;
         [SerializeField] private Button _gameProgressButton;
         [SerializeField] private Button _settingsButton;
         [Space]
@@ -28,6 +28,7 @@ namespace RaceManager.UI
         [SerializeField] private BottomPanel _bottomPanel;
         [Space]
         [SerializeField] private LootboxSlotsHandler _lootboxSlotsHandler;
+        [SerializeField] private LootboxProgressPanel _lootboxProgressPanel;
         [SerializeField] private LootboxWindow _lootboxWindow;
         [Space]
         [SerializeField] private SettingsPopup _settingsPopup;
@@ -45,6 +46,8 @@ namespace RaceManager.UI
         private PodiumView _podium;
         private GameProgressScheme _gameProgressScheme;
 
+        public MainUIStatus Status { get; private set; }
+
         public Action<bool> OnMainMenuActivityChange;
         public Action<CarName> OnCarProfileChange;
 
@@ -52,6 +55,7 @@ namespace RaceManager.UI
         /// string = Button name
         /// </summary>
         public Action<string> OnButtonPressed;
+        public readonly Subject<MainUIStatus> OnStatusChange = new Subject<MainUIStatus>();
 
         #region Car tuning properties
 
@@ -80,7 +84,6 @@ namespace RaceManager.UI
 
         public ShopPanel ShopPanel => _shopPanel;
         public CurrencyAmountPanel CurrencyPanel => _currencyAmount;
-
         private UIAnimator Animator => Singleton<UIAnimator>.Instance;
 
         #endregion
@@ -120,10 +123,18 @@ namespace RaceManager.UI
 
             UpdateCurrencyAmountPanels();
             UpdateTuningPanelValues();
+
+            OnStatusChange
+                .Where(s => s != Status)
+                .Subscribe(s =>
+                {
+                    ActivateStatus(s);
+                });
         }
 
         private void Awake()
         {
+            Status = MainUIStatus.ActiveMainUI;
             ActivateMainMenu(true);
         }
 
@@ -131,47 +142,156 @@ namespace RaceManager.UI
 
         #region Activate Functions
 
-        private void ActivateMainMenu(bool active)
+        private void ActivateStatus(MainUIStatus newStatus)
         {
-            _bottomPanel.SetActive(active);
-            _startButton.SetActive(active);
-            _lootboxSlotsHandler.SetActive(active);
-            _cupsProgress.SetActive(active);
+            Action disablePreviouse = Status switch
+            {
+                MainUIStatus.ActiveMainUI => () => ActivateMainMenu(false, newStatus),
+                MainUIStatus.ActiveTuningPanel => () => ActivateTuningPanel(false),
+                MainUIStatus.ActiveCarsCollection => () => ActivateCarsCollectionPanel(false),
+                MainUIStatus.ActiveShop => () => ActivateShopPanel(false),
+                MainUIStatus.ActiveGameProgress => () => ActivateGameProgressPanel(false),
+                _ => null,
+            };
 
-            OnMainMenuActivityChange?.Invoke(active);
+            disablePreviouse?.Invoke();
+
+            Action enableNew = newStatus switch
+            {
+                MainUIStatus.ActiveMainUI => () => ActivateMainMenu(true, newStatus),
+                MainUIStatus.ActiveTuningPanel => () => ActivateTuningPanel(true),
+                MainUIStatus.ActiveCarsCollection => () => ActivateCarsCollectionPanel(true),
+                MainUIStatus.ActiveShop => () => ActivateShopPanel(true),
+                MainUIStatus.ActiveGameProgress => () => ActivateGameProgressPanel(true),
+                _ => null,
+            };
+
+            enableNew?.Invoke();
+
+            Status = newStatus;
+        }
+
+        private void ActivateMainMenu(bool active, MainUIStatus newStatus = MainUIStatus.ActiveMainUI)
+        {
+            //Debug.Log($"Main UI Status: <b>{Status}</b> => New status: <b>{newStatus}</b>");
+            Animator.ForceCompleteAnimation?.OnNext(_cupsProgress.Name);
+            Animator.ForceCompleteAnimation?.OnNext(_lootboxProgressPanel.Name);
+            Animator.ForceCompleteAnimation?.OnNext(_lootboxSlotsHandler.Name);
+            Animator.ForceCompleteAnimation?.OnNext(_startButton.Name);
+
+            Transform t;
+            MainUIStatus s = active ? Status : newStatus;
+            t = s switch
+             {
+                 MainUIStatus.ActiveMainUI => null,
+                 MainUIStatus.ActiveTuningPanel => _helperRects.AppearLeftRect.transform,
+                 MainUIStatus.ActiveCarsCollection => _helperRects.ApearRightRect.transform,
+                 MainUIStatus.ActiveShop => _helperRects.AppearTopRect.transform,
+                 MainUIStatus.ActiveGameProgress => _helperRects.AppearBottomRect.transform,
+                 _ => null,
+             };
+
+            if (t != null)
+            {
+                if (active)
+                {
+                    Activate(t);
+                }
+                else
+                {
+                    Deactivate(t);
+                }
+            }
+
+            //OnMainMenuActivityChange?.Invoke(active);
+
+            void Activate(Transform appearTransform)
+            {
+                _cupsProgress.SetActive(true);
+                Animator.AppearSubject(_cupsProgress, _helperRects.AppearTopRect.transform)?.AddTo(this);
+
+                _lootboxProgressPanel.SetActive(true);
+                Animator.AppearSubject(_lootboxProgressPanel, appearTransform)?.AddTo(this);
+
+                _lootboxSlotsHandler.SetActive(true);
+                Animator.AppearSubject(_lootboxSlotsHandler, appearTransform)?.AddTo(this);
+
+                _startButton.SetActive(true);
+                Animator.AppearSubject(_startButton, _helperRects.AppearBottomRect.transform)?.AddTo(this);
+            }
+
+            void Deactivate(Transform disappearTransform)
+            {
+                Animator.DisappearSubject(_cupsProgress, _helperRects.AppearTopRect.transform, true, true)?.AddTo(this);
+
+                Animator.DisappearSubject(_lootboxProgressPanel, disappearTransform, true, true);
+
+                Animator.DisappearSubject(_lootboxSlotsHandler, disappearTransform, true, true);
+
+                Animator.DisappearSubject(_startButton, _helperRects.AppearBottomRect.transform, true, true);
+            }
         }
 
         private void ActivateTuningPanel(bool active)
         {
-            _tuningPanel.SetActive(active);
+            Animator.ForceCompleteAnimation?.OnNext(_tuningPanel.Name);
 
-            _bottomPanel.SetActive(active);
+            if (active)
+            {
+                _tuningPanel.SetActive(active);
+                Animator.AppearSubject(_tuningPanel).AddTo(this);
+            }
+            else
+            { 
+                Animator.DisappearSubject(_tuningPanel, null, true, false, () => _tuningPanel.SetActive(active)).AddTo(this);
+            }
+
             _bottomPanel.TuningPressedImage.SetActive(active);
         }
 
         private void ActivateCarsCollectionPanel(bool active)
         {
-            _carsCollectionPanel.SetActive(active);
+            Animator.ForceCompleteAnimation?.OnNext(_carsCollectionPanel.Name);
 
-            _bottomPanel.SetActive(active);
+            if (active)
+            {
+                _carsCollectionPanel.SetActive(active);
+                Animator.AppearSubject(_carsCollectionPanel).AddTo(this);
+            }
+            else
+            {
+                Animator.DisappearSubject(_carsCollectionPanel, null, true, false, () => _carsCollectionPanel.SetActive(active)).AddTo(this);
+            }
+
             _bottomPanel.CarsCollectionPressedImage.SetActive(active);
         }
 
         private void ActivateShopPanel(bool active)
         {
-            _shopPanel.SetActive(active);
+            Animator.ForceCompleteAnimation?.OnNext(_shopPanel.Name);
 
-            _bottomPanel.SetActive(active);
-            _bottomPanel.IapSopPressedImage.SetActive(active);
+            if (active)
+            {
+                _shopPanel.SetActive(active);
+                Animator.AppearSubject(_shopPanel, _helperRects.AppearBottomRect.transform);
+            }
+            else
+            {
+                Animator.DisappearSubject(_shopPanel, _helperRects.AppearBottomRect.transform, true, true);
+            }
+
+            _bottomPanel.IapShopPressedImage.SetActive(active);
         }
 
         private void ActivateGameProgressPanel(bool active)
         {
-            _gameProgressPanel.SetActive(active);
-            Animator.AppearSubject(_gameProgressPanel);
+            if (active)
+            {
+                Status = MainUIStatus.ActiveGameProgress;
+                Animator.AppearSubject(_gameProgressPanel);
+            }
 
-            _bottomPanel.SetActive(!active);
-            _podium.SetActive(!active);
+            _gameProgressPanel.SetActive(active);
         }
 
         private void ActivateLootboxWindow(int moneyAmount, List<CarCardReward> list)
@@ -190,14 +310,14 @@ namespace RaceManager.UI
                 _carsCollectionPanel.CarWindow.SetActive(true);
                 Animator.AppearSubject(_carsCollectionPanel.CarWindow, _helperRects.AppearBottomRect)?.AddTo(this);
 
-                Animator.DisappearSubject(_bottomPanel, _helperRects.AppearBottomRect)?.AddTo(this);
+                Animator.DisappearSubject(_bottomPanel, null, true, true)?.AddTo(this);
             }
             else
             {
-                Animator.DisappearSubject(_carsCollectionPanel.CarWindow, _helperRects.AppearBottomRect)?.AddTo(this);
+                Animator.DisappearSubject(_carsCollectionPanel.CarWindow, _helperRects.AppearBottomRect, true, true)?.AddTo(this);
 
                 _bottomPanel.SetActive(true);
-                Animator.AppearSubject(_bottomPanel, _helperRects.AppearBottomRect)?.AddTo(this);
+                Animator.AppearSubject(_bottomPanel)?.AddTo(this);
             }
         }
 
@@ -358,7 +478,7 @@ namespace RaceManager.UI
                 );
         }
 
-        public void UpdateCarsCollectionCards(CarName carName)
+        public void UpdateCarsCollectionCard(CarName carName)
         {
             CarProfile profile = _playerCarDepot.GetProfile(carName);
 
@@ -424,8 +544,6 @@ namespace RaceManager.UI
                     Animator.SpawnGroupOnAndMoveTo(reward.Type, _animParent, callerTransform, moveToTransform, () => ScrambleCurrencyText(reward.Type)).AddTo(this);
                 }
             }
-
-            
         }
 
         private void ScrambleCurrencyText(GameUnitType type)
@@ -518,31 +636,19 @@ namespace RaceManager.UI
 
         private void RegisterButtonsListeners()
         {
-            _startButton.onClick.AddListener(StartRace);
-            _startButton.onClick.AddListener(() => OnButtonPressedMethod(_startButton));
+            _startButton.Button.onClick.AddListener(StartRace);
+            _startButton.Button.onClick.AddListener(() => OnButtonPressedMethod(_startButton.Button));
 
-            _bottomPanel.TuneButton.onClick.AddListener(() => ActivateMainMenu(false));
-            _bottomPanel.TuneButton.onClick.AddListener(() => ActivateCarsCollectionPanel(false));
-            _bottomPanel.TuneButton.onClick.AddListener(() => ActivateShopPanel(false));
-            _bottomPanel.TuneButton.onClick.AddListener(() => ActivateTuningPanel(true));
+            _bottomPanel.TuneButton.onClick.AddListener(() => OnStatusChange?.OnNext(MainUIStatus.ActiveTuningPanel));
             _bottomPanel.TuneButton.onClick.AddListener(() => OnButtonPressedMethod(_bottomPanel.TuneButton));
 
-            _bottomPanel.MainMenuButton.onClick.AddListener(() => ActivateTuningPanel(false));
-            _bottomPanel.MainMenuButton.onClick.AddListener(() => ActivateCarsCollectionPanel(false));
-            _bottomPanel.MainMenuButton.onClick.AddListener(() => ActivateShopPanel(false));
-            _bottomPanel.MainMenuButton.onClick.AddListener(() => ActivateMainMenu(true));
+            _bottomPanel.MainMenuButton.onClick.AddListener(() => OnStatusChange?.OnNext(MainUIStatus.ActiveMainUI));
             _bottomPanel.MainMenuButton.onClick.AddListener(() => OnButtonPressedMethod(_bottomPanel.MainMenuButton));
 
-            _bottomPanel.CarsCollectionButton.onClick.AddListener(() => ActivateMainMenu(false));
-            _bottomPanel.CarsCollectionButton.onClick.AddListener(() => ActivateTuningPanel(false));
-            _bottomPanel.CarsCollectionButton.onClick.AddListener(() => ActivateShopPanel(false));
-            _bottomPanel.CarsCollectionButton.onClick.AddListener(() => ActivateCarsCollectionPanel(true));
+            _bottomPanel.CarsCollectionButton.onClick.AddListener(() => OnStatusChange?.OnNext(MainUIStatus.ActiveCarsCollection));
             _bottomPanel.CarsCollectionButton.onClick.AddListener(() => OnButtonPressedMethod(_bottomPanel.CarsCollectionButton));
 
-            _bottomPanel.ShopButton.onClick.AddListener(() => ActivateTuningPanel(false));
-            _bottomPanel.ShopButton.onClick.AddListener(() => ActivateMainMenu(false));
-            _bottomPanel.ShopButton.onClick.AddListener(() => ActivateCarsCollectionPanel(false));
-            _bottomPanel.ShopButton.onClick.AddListener(() => ActivateShopPanel(true));
+            _bottomPanel.ShopButton.onClick.AddListener(() => OnStatusChange?.OnNext(MainUIStatus.ActiveShop));
             _bottomPanel.ShopButton.onClick.AddListener(() => OnButtonPressedMethod(_bottomPanel.ShopButton));
 
             _tuningPanel.RegisterButtonsListeners();
@@ -551,30 +657,26 @@ namespace RaceManager.UI
             _tuningPanel.TuneWeelsViewButton.onClick.AddListener(() => OnButtonPressedMethod(_tuningPanel.TuneWeelsViewButton));
             _tuningPanel.TuneCarViewButton.onClick.AddListener(() => OnButtonPressedMethod(_tuningPanel.TuneCarViewButton));
 
-            _tuningPanel.ClosePanelButton.onClick.AddListener(() => ActivateTuningPanel(false));
-            _tuningPanel.ClosePanelButton.onClick.AddListener(() => ActivateMainMenu(true));
+            _tuningPanel.ClosePanelButton.onClick.AddListener(() => OnStatusChange?.OnNext(MainUIStatus.ActiveMainUI));
             _tuningPanel.ClosePanelButton.onClick.AddListener(() => OnButtonPressedMethod(_tuningPanel.ClosePanelButton));
 
-            _tuningPanel.ClosePanelWindowButton.onClick.AddListener(() => ActivateTuningPanel(false));
-            _tuningPanel.ClosePanelWindowButton.onClick.AddListener(() => ActivateMainMenu(true));
+            _tuningPanel.ClosePanelWindowButton.onClick.AddListener(() => OnStatusChange?.OnNext(MainUIStatus.ActiveMainUI));
             _tuningPanel.ClosePanelWindowButton.onClick.AddListener(() => OnButtonPressedMethod(_tuningPanel.ClosePanelWindowButton));
 
             _tuningPanel.UpgradeButton.onClick.AddListener(CarFactorsUpgrade);
             _tuningPanel.UpgradeButton.onClick.AddListener(() => OnButtonPressedMethod(_tuningPanel.UpgradeButton));
 
-            _carsCollectionPanel.CloseButton.onClick.AddListener(() => ActivateCarsCollectionPanel(false));
-            _carsCollectionPanel.CloseButton.onClick.AddListener(() => ActivateMainMenu(true));
+            _carsCollectionPanel.CloseButton.onClick.AddListener(() => OnStatusChange?.OnNext(MainUIStatus.ActiveMainUI));
             _carsCollectionPanel.CloseButton.onClick.AddListener(() => OnButtonPressedMethod(_carsCollectionPanel.CloseButton));
 
-            _carsCollectionPanel.ClosePanelWindowButton.onClick.AddListener(() => ActivateCarsCollectionPanel(false));
-            _carsCollectionPanel.ClosePanelWindowButton.onClick.AddListener(() => ActivateMainMenu(true));
+            _carsCollectionPanel.ClosePanelWindowButton.onClick.AddListener(() => OnStatusChange?.OnNext(MainUIStatus.ActiveMainUI));
             _carsCollectionPanel.ClosePanelWindowButton.onClick.AddListener(() => OnButtonPressedMethod(_carsCollectionPanel.ClosePanelWindowButton));
 
-            _gameProgressPanel.BackButton.onClick.AddListener(() => ActivateGameProgressPanel(false));
+            _gameProgressPanel.BackButton.onClick.AddListener(() => OnStatusChange?.OnNext(MainUIStatus.ActiveMainUI));
             _gameProgressPanel.BackButton.onClick.AddListener(() => UpdateHasRewardsImage(_gameProgressScheme.HasUnreceivedRewards));
             _gameProgressPanel.BackButton.onClick.AddListener(() => OnButtonPressedMethod(_gameProgressPanel.BackButton));
 
-            _gameProgressButton.onClick.AddListener(() => ActivateGameProgressPanel(true));
+            _gameProgressButton.onClick.AddListener(() => OnStatusChange?.OnNext(MainUIStatus.ActiveGameProgress));
             _gameProgressButton.onClick.AddListener(_gameProgressPanel.OffsetContent);
             _gameProgressButton.onClick.AddListener(() => OnButtonPressedMethod(_gameProgressButton));
 

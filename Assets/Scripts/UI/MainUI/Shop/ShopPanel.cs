@@ -9,8 +9,10 @@ using UnityEngine.UI;
 
 namespace RaceManager.UI
 {
-    public class ShopPanel : MonoBehaviour
+    public class ShopPanel : AnimatableSubject
     {
+        [Space]
+        [Header("Main Fields")]
         [SerializeField] private Button _getFreeLootboxButton;
         [SerializeField] private RectTransform _contentRect;
         [SerializeField] private ShopConfirmationPanel _confirmationPanel;

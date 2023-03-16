@@ -37,8 +37,18 @@ namespace RaceManager.UI
         private bool CanUseRects => Animatable && !NeedToFade;
         private bool HaveToAnimateRects => CanUseRects && useRects;
         private bool CanSelectTransform => Animatable && (useRects || useImages) && NeedToMove;
-        private bool NeedToMove => animationType == AnimationType.MoveOut || animationType == AnimationType.MoveIn || animationType == AnimationType.MoveFromTo;
-        private bool NeedToFade => animationType == AnimationType.FadeOut || animationType == AnimationType.FadeIn || animationType == AnimationType.FadeInOutLoop;
+        private bool NeedToMove =>
+            animationType == AnimationType.MoveOut
+            || animationType == AnimationType.MoveIn
+            || animationType == AnimationType.MoveFromTo
+            || animationType == AnimationType.MoveInX
+            || animationType == AnimationType.MoveOutX
+            || animationType == AnimationType.MoveInY
+            || animationType == AnimationType.MoveOutY;
+        private bool NeedToFade => 
+            animationType == AnimationType.FadeOut 
+            || animationType == AnimationType.FadeIn 
+            || animationType == AnimationType.FadeInOutLoop;
 
         #endregion
     }

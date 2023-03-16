@@ -11,8 +11,10 @@ using Zenject;
 
 namespace RaceManager.UI
 {
-    public class CarsCollectionPanel : MonoBehaviour
+    public class CarsCollectionPanel : AnimatableSubject
     {
+        [Space(20)]
+        [Header("Main Fields")]
         [SerializeField] private Button _closePanelButton;
         [SerializeField] private Button _closePanelWindowButton;
         [Space]

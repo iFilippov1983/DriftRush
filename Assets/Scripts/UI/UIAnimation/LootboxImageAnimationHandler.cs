@@ -8,7 +8,7 @@ namespace RaceManager.UI
     {
         private readonly float Duration = 1f;
         private readonly Vector3 ScaleVectorBig = new Vector3(1.5f, 1.5f, 1.5f);
-        private readonly Vector3 ScaleVectorSmall = new Vector3(0.85f, 0.85f, 0.85f);
+        private readonly Vector3 ScaleVectorSmall = new Vector3(1f, 1f, 1f);
 
         private GameObject _imageToAnimate;
         private Vector3 _initialPos;

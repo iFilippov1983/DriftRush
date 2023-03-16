@@ -9,10 +9,12 @@ using Zenject;
 
 namespace RaceManager.UI
 {
-    public class LootboxSlotsHandler : MonoBehaviour
+    public class LootboxSlotsHandler : AnimatableSubject
     {
         private const int LootboxesListCapacity = 4;
 
+        [Space]
+        [Header("Main Fields")]
         [SerializeField] private LootboxProgressPanel _lootboxProgress;
         [SerializeField] private LootboxPopup _lootboxPopup;
         [SerializeField] private List<LootboxSlot> _lootboxSlots = new List<LootboxSlot>(LootboxesListCapacity);
@@ -400,15 +402,15 @@ namespace RaceManager.UI
             HandleSlotTimer();
         }
 
-        private void OnEnable()
-        {
-            _lootboxProgress.SetActive(true);
-        }
+        //private void OnEnable()
+        //{
+        //    _lootboxProgress.SetActive(true);
+        //}
 
-        private void OnDisable()
-        {
-            _lootboxProgress.SetActive(false);
-        }
+        //private void OnDisable()
+        //{
+        //    _lootboxProgress.SetActive(false);
+        //}
 
         private void OnDestroy()
         {

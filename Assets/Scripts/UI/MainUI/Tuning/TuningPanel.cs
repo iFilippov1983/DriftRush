@@ -1,4 +1,5 @@
-﻿using RaceManager.Cars;
+﻿using DG.Tweening;
+using RaceManager.Cars;
 using RaceManager.Progress;
 using RaceManager.Root;
 using System;
@@ -11,6 +12,8 @@ namespace RaceManager.UI
 {
     public class TuningPanel : AnimatableSubject
     {
+        [Space]
+        [Header("Main Fields")]
         [SerializeField] private UpgradeWindowTuner _upgradeWindow;
         [Space]
         [SerializeField] private Button _tuneStatsButton;

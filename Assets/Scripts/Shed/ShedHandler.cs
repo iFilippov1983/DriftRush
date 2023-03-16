@@ -140,7 +140,7 @@ namespace RaceManager.Shed
         private void UpdateCarInfo(CarName carName, bool addFactors = false)
         {
             _mainUI.UpdateTuningPanelValues(addFactors);
-            _mainUI.UpdateCarsCollectionCards(carName);
+            _mainUI.UpdateCarsCollectionCard(carName);
             _mainUI.UpdateCarsCollectionInfo();
             _mainUI.UpdateCarWindow();
 

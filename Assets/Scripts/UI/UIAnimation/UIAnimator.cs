@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using TMPro;
 using UniRx;
 using UnityEngine;
-using UnityEngine.UI;
 using Zenject;
 using Random = UnityEngine.Random;
 
@@ -276,9 +275,6 @@ namespace RaceManager.UI
                     animSequence.Append(tween);
             }
 
-            //appearSequence.Append(rect.transform.DOPunchScale(targetScale, _imageInOutDuration / 2));
-            //appearSequence.Append(rect.transform.DOShakeScale(_imageInOutDuration / 2));
-
             if(finishCallBack != null)
                 animSequence.AppendCallback(finishCallBack);
 
@@ -313,9 +309,14 @@ namespace RaceManager.UI
                         ? data.moveFromToTransform.position
                         : rect.transform.position;
 
+                    Vector3 yEqual = new Vector3(position.x, rect.transform.position.y, position.z);
+                    Vector3 xEqual = new Vector3(rect.transform.position.x, position.y, position.z);
+
                     Tween tween = data.animationType switch
                     {
                         AnimationType.MoveIn => rect.DOMove(position, duration).From(),
+                        AnimationType.MoveInX => rect.DOMove(yEqual, duration).From(),
+                        AnimationType.MoveInY => rect.DOMove(xEqual, duration).From(),
                         AnimationType.ScaleFromZero => rect.DOScale(Vector3.zero, duration).From(),
                         _ => null,
                     };
@@ -332,10 +333,15 @@ namespace RaceManager.UI
                         ? data.moveFromToTransform.position
                         : image.transform.position;
 
+                    Vector3 yEqual = new Vector3(position.x, image.rectTransform.transform.position.y, position.z);
+                    Vector3 xEqual = new Vector3(image.rectTransform.transform.position.x, position.y, position.z);
+
                     Tween tween = data.animationType switch
                     {
                         AnimationType.FadeIn => image.DOFade(0f, duration).From(),
                         AnimationType.MoveIn => image.rectTransform.DOMove(position, duration).From(),
+                        AnimationType.MoveInX => image.rectTransform.DOMove(yEqual, duration).From(),
+                        AnimationType.MoveInY => image.rectTransform.DOMove(xEqual, duration).From(),
                         AnimationType.ScaleFromZero => image.rectTransform.DOScale(Vector3.zero, duration).From(),
                         _ => null,
                     };
@@ -361,7 +367,7 @@ namespace RaceManager.UI
             return Disposable.Create(() => appearSequence?.Kill());
         }
 
-        public IDisposable DisappearSubject(IAnimatableSubject subject, Transform moveToTransform = null, bool resetOnComplete = true, TweenCallback finishCallback = null)
+        public IDisposable DisappearSubject(IAnimatableSubject subject, Transform moveToTransform = null, bool resetOnComplete = true, bool disableOnComplete = false, TweenCallback finishCallback = null)
         {
             Sequence disappearSequence = DOTween.Sequence();
 
@@ -379,9 +385,14 @@ namespace RaceManager.UI
                         ? data.moveFromToTransform.position
                         : rect.transform.position;
 
+                    Vector3 yEqual = new Vector3(position.x, rect.transform.position.y, position.z);
+                    Vector3 xEqual = new Vector3(rect.transform.position.x, position.y, position.z);
+
                     Tween tween = data.animationType switch
                     {
                         AnimationType.MoveOut => rect.DOMove(position, duration),
+                        AnimationType.MoveOutX => rect.DOMove(yEqual, duration),
+                        AnimationType.MoveOutY => rect.DOMove(xEqual, duration),
                         AnimationType.ScaleToZero => rect.DOScale(Vector3.zero, duration),
                         _ => null,
                     };
@@ -396,7 +407,8 @@ namespace RaceManager.UI
                                 rect.transform.localScale = initialScale;
                             });
 
-                        disappearSequence.AppendCallback(() => rect.SetActive(false));
+                        if(disableOnComplete)
+                            disappearSequence.AppendCallback(() => rect.SetActive(false));
                     }
                 }
 
@@ -411,10 +423,15 @@ namespace RaceManager.UI
                         ? data.moveFromToTransform.position
                         : image.transform.position;
 
+                    Vector3 yEqual = new Vector3(position.x, image.rectTransform.transform.position.y, position.z);
+                    Vector3 xEqual = new Vector3(image.rectTransform.transform.position.x, position.y, position.z);
+
                     Tween tween = data.animationType switch
                     {
                         AnimationType.FadeOut => image.DOFade(0f, duration),
                         AnimationType.MoveOut => image.rectTransform.DOMove(position, duration),
+                        AnimationType.MoveOutX => image.rectTransform.DOMove(yEqual, duration),
+                        AnimationType.MoveOutY => image.rectTransform.DOMove(xEqual, duration),
                         AnimationType.ScaleToZero => image.rectTransform.DOScale(Vector3.zero, duration),
                         _ => null,
                     }; ;

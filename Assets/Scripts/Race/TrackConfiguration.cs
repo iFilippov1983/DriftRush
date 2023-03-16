@@ -28,7 +28,6 @@ namespace RaceManager.Race
         public WaypointTrack WaypointTrackEven => _waypointTrackEven;
         public WaypointTrack WaypointTrackOdd => _waypointTrackOdd;
         public Vector3 FollowCamInitialPosition => _followCamInitialPoint.position;
-        public Vector3 StartCamInitialPosition => _startCamInitialPoint.position;
         public Vector3 FinishCamInitialPosition => _finishCamInitialPoint.position;
         public List<GameObject> Actives => _activeObjects;
         public List<GameObject> Inactives => _inactiveObjects;

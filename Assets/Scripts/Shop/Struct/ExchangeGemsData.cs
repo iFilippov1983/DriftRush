@@ -8,7 +8,7 @@ namespace RaceManager.Shop
     public class ExchangeGemsData
     {
         [ReadOnly]
-        public readonly RewardType Type = RewardType.Money;
+        public readonly GameUnitType Type = GameUnitType.Money;
         public int exchangeCostInGems;
         public int moneyAmount;
     }

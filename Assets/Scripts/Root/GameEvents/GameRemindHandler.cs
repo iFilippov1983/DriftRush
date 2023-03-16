@@ -1,13 +1,8 @@
 ﻿using RaceManager.Progress;
-using RaceManager.UI;
 using Sirenix.OdinInspector;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Threading;
-using System.Threading.Tasks;
 using UniRx;
 using UnityEngine;
 using Zenject;
@@ -16,15 +11,13 @@ namespace RaceManager.Root
 {
     public class GameRemindHandler : SerializedMonoBehaviour, IInitializable
     {
-        private const int _maxAttempts = 10;
-
         private IProgressConditionInfo _conditionInfo;
         private GameEvents _gameEvents;
 
         [SerializeField]
         private List<ProgressConditionType> _conditionsToRemind = new List<ProgressConditionType>();
         [ShowInInspector, ReadOnly]
-        private Dictionary<ProgressConditionType, ReminderCase> _cases = new Dictionary<ProgressConditionType, ReminderCase>();
+        private Dictionary<ProgressConditionType, (ReminderCase Case, bool Reminded)> _cases = new Dictionary<ProgressConditionType, (ReminderCase Case, bool Reminded)>();
 
         [Inject]
         private void Construct(IProgressConditionInfo conditionInfo, GameEvents gameEvents)
@@ -35,83 +28,107 @@ namespace RaceManager.Root
 
         public void Initialize()
         {
-            MakeCases();
+            MakeReminderCases();
         }
 
         public void RunRemindersSequence()
         {
             foreach (var p in _cases)
             {
-                ReminderCase reminder = p.Value;
-                reminder.OnReminder.OnNext(reminder);
-                //Debugger.Log(reminder.Condition.ToString());
-                break;
+                ReminderCase reminder = p.Value.Case;
+                reminder.MakeReminder.OnNext();
+                return;
             }
         }
 
-        public bool HasCondition(ProgressConditionType conditionType) => _cases.ContainsKey(conditionType);
+        public bool HasCondition(ProgressConditionType condition) => _cases.ContainsKey(condition);
 
-        public void Subscribe(ProgressConditionType condition, Action<ReminderCase> startCallback, GameObject sender = null)
+        public int MaxConditionValue()
+        { 
+            int max = 0;
+            foreach (var c in _cases) 
+            { 
+                if ((int)c.Key > max)
+                    max = (int)c.Key;
+            }
+            return max;
+        }
+
+        public void Subscribe(ProgressConditionType condition, Action makeReminderCallback, GameObject agentGo = null)
         {
             if (HasCondition(condition))
             {
-                ReminderCase reminder = _cases[condition];
+                ReminderCase reminder = _cases[condition].Case;
 
-                reminder.OnReminder
-                    .Subscribe(r => startCallback?.Invoke(r))
+                reminder.MakeReminder
+                    .Take(1)
+                    .Subscribe(_ => makeReminderCallback?.Invoke())
                     .AddTo(this);
 
-                if (sender != null)
-                    $"Reminder Agent subscribed: {sender.name}".Log();
+                _gameEvents.ReminderDone
+                    .Where(t => t == condition)
+                    .Subscribe(t => 
+                    { 
+                        NextReminder(t);
+                    })
+                    .AddTo(this);
+
+                if (agentGo != null)
+                    $"Reminder Agent subscribed: {agentGo.name}".Log();
             }
         }
 
-        private void MakeCases()
+        private void MakeReminderCases()
         {
             foreach (var condition in _conditionsToRemind)
-            { 
-                ReminderCase reminder = new ReminderCase(condition);
-
+            {
                 bool add = condition switch
                 {
                     ProgressConditionType.None => false,
                     ProgressConditionType.CanUpgradeFactors => _conditionInfo.CanUpgradeCurrentCarFactors(),
-                    ProgressConditionType.CanUpgradeRank => _conditionInfo.HasRankUpgradableCars(out reminder.CarNames),
-                    ProgressConditionType.CanUnlockCar => _conditionInfo.HasUlockableCars(out reminder.CarNames),
-                    ProgressConditionType.HasSpecialIapOffer => _conditionInfo.HasIapSpecialOffer(out reminder.Reward),
+                    ProgressConditionType.CanUpgradeRank => _conditionInfo.HasRankUpgradableCars(),
+                    ProgressConditionType.CanUnlockCar => _conditionInfo.HasUlockableCars(),
+                    ProgressConditionType.HasSpecialIapOffer => _conditionInfo.HasIapSpecialOffer(),
                     _ => false,
                 };
 
                 if (add)
                 {
-                    _cases.Add(condition, reminder);
-                    _gameEvents.Reminder
-                        .Where(r => r.Condition == reminder.Condition)
-                        .Subscribe(r => NextReminder(r.Condition))
-                        .AddTo(this);
-
-                    reminder.OnReminder
-                    .Subscribe(r => Debugger.Log(r.Condition.ToString()))
-                    .AddTo(this);
+                    ReminderCase rCase = new ReminderCase(condition);
+                    _cases.Add(condition, (Case: rCase, Reminded: false));
                 }
             }
         }
 
         private void NextReminder(ProgressConditionType conditionType)
         {
-            do
-            {
-                conditionType++;
-            }
-            while (!HasCondition(conditionType) && (int)conditionType <= _maxAttempts);
-
             if (HasCondition(conditionType))
             {
-                ReminderCase reminderCase = _cases[conditionType];
-                reminderCase.OnReminder.OnNext(reminderCase);
-
-                Debug.Log($"Next reminder condition: {reminderCase.Condition}");
+                var value = _cases[conditionType];
+                value.Reminded = true;
+                _cases[conditionType] = value;
             }
+
+            if (TryGetConditionNotReminded(out ReminderCase rCase))
+            {
+                rCase.MakeReminder.OnNext();
+
+                Debug.Log($"Next reminder condition: {rCase.Condition}");
+            }
+        }
+
+        public bool TryGetConditionNotReminded(out ReminderCase rCase)
+        {
+            foreach (var p in _cases)
+            {
+                if (p.Value.Reminded) continue;
+
+                rCase = p.Value.Case;
+                return true;
+            }
+
+            rCase = null;
+            return false;
         }
     }
 }

@@ -26,7 +26,7 @@ namespace RaceManager.Effects
         [SerializeField] private List<GroundSounds> _groundSounds = new List<GroundSounds>();
         [Space]
 		[Header("Collision sounds")]
-        [SerializeField] private float _minTimeBetweenCollisions = 0.1f;
+        //[SerializeField] private float _minTimeBetweenCollisions = 0.1f;
         [SerializeField] private float _defaultMagnitudeDivider = 20;
         [SerializeField] private AudioSource _collisionSource;
         [SerializeField] private CollisionEvent _defaultCollisionEvent;
@@ -46,7 +46,7 @@ namespace RaceManager.Effects
         private CollisionEvent _currentFrictionEvent;
         private FrictionSoundData _currentFrictionSoundData;
         private float _currentFrictionVolume;
-        private float _lastColTime;
+        //private float _lastColTime;
 
 		private float MaxRPM => _car.GetMaxRPM;
 		private float EngineRPM =>_car.EngineRPM; 
@@ -213,9 +213,9 @@ namespace RaceManager.Effects
 
             if (!car.IsVisible
                 || collision == null
-                || !isActiveAndEnabled
+                || !isActiveAndEnabled)
                 //|| collision.transform.parent.gameObject.GetInstanceID() == car.gameObject.GetInstanceID()
-                || Time.time - _lastColTime < _minTimeBetweenCollisions)
+                //|| Time.time - _lastColTime < _minTimeBetweenCollisions)
                 return;
 
             //if (!car.IsVisible) return;

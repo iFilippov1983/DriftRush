@@ -3,8 +3,6 @@ using RaceManager.Race;
 using RaceManager.Root;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Zenject.ReflectionBaking.Mono.Cecil.Cil;
 
 namespace RaceManager.Progress
 {

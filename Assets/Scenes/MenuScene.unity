@@ -851,8 +851,6 @@ MonoBehaviour:
   _playerCarDepot: {fileID: 11400000, guid: d7530e18444d4cb429bf15b4d12e6caf, type: 2}
   _spritesContainerCars: {fileID: 11400000, guid: 478aa8c14aa9a7342960a63db034ac7b,
     type: 2}
-  _spritesContainerCards: {fileID: 11400000, guid: 7a1a2da7cb05ee844b09404c049584d7,
-    type: 2}
   _spritesContainerRewards: {fileID: 11400000, guid: 0844653bf283a2f4daf4bf2b4726e92f,
     type: 2}
   _gameProgressScheme: {fileID: 11400000, guid: 6d536a2d406b1da42a89312821126091,
@@ -885,7 +883,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1057542198}
-  m_LocalRotation: {x: 0.31985706, y: 0.000000016302456, z: -0.0000000055035807, w: 0.94746584}
+  m_LocalRotation: {x: 0.31985706, y: -0.00000001630246, z: 0.0000000055035816, w: 0.94746584}
   m_LocalPosition: {x: -0, y: 8.7, z: -18.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -3054,6 +3052,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 21085089126225796}
+  - component: {fileID: 4445969633934001293}
   m_Layer: 0
   m_Name: UI
   m_TagString: Untagged
@@ -3061,3 +3060,130 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &4445969633934001293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4445969633934001292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 592d3f51ac734b64d99e777c122ec1d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _rectSizes
+      Entry: 7
+      Data: 0|System.Collections.Generic.Dictionary`2[[RaceManager.Progress.GameUnitType,
+        Assembly-CSharp],[UnityEngine.Vector2, UnityEngine.CoreModule]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 1|System.Collections.Generic.EnumEqualityComparer`1[[RaceManager.Progress.GameUnitType,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 3
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 1
+    - Name: $v
+      Entry: 7
+      Data: UnityEngine.Vector2, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 100
+    - Name: 
+      Entry: 4
+      Data: 100
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 3
+    - Name: $v
+      Entry: 7
+      Data: UnityEngine.Vector2, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 100
+    - Name: 
+      Entry: 4
+      Data: 100
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 8
+    - Name: $v
+      Entry: 7
+      Data: UnityEngine.Vector2, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 60
+    - Name: 
+      Entry: 4
+      Data: 60
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: ForceCompleteAnimation
+      Entry: 7
+      Data: 2|UniRx.Subject`1[[System.String, mscorlib]], UniRx
+    - Name: 
+      Entry: 8
+      Data: 
+  _currencyToSpawnMin: 10
+  _currencyToSpawnMax: 20
+  _currencySpreadFactor: 200
+  _currencyInOutDuration: 0.25
+  _currencyMoveDuration: 0.85
+  _currencyScrambleDuration: 0.75
+  _currencyScrambleMode: 4
+  _rectAnimDuration: 0.5
+  _rectScaleMax: 2
+  _durationRandomizationFactor: 2
+  _defaultDuration: 1

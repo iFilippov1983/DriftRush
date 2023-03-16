@@ -9,7 +9,7 @@ namespace RaceManager.Shop
     public class BuyGemsData
     {
         [ReadOnly]
-        public readonly RewardType Type = RewardType.Gems;
+        public readonly GameUnitType Type = GameUnitType.Gems;
         public float offerCost;
         public int gemsAmount;
     }

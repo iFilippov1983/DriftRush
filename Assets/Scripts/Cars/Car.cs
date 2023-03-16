@@ -1,4 +1,5 @@
-﻿using RaceManager.Tools;
+﻿using RaceManager.Race;
+using RaceManager.Tools;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
@@ -13,10 +14,12 @@ namespace RaceManager.Cars
     /// </summary>
 
     [RequireComponent(typeof(Rigidbody))]
-	public class Car : MonoBehaviour
+	public class Car : MonoBehaviour, ICountableCollision
 	{
         [ShowInInspector, ReadOnly]
         private string _id;
+        [ShowInInspector, ReadOnly]
+        private int _layer;
 
         [ShowInInspector, ReadOnly, FoldoutGroup("Default effects settings")] 
         private const float SlipFoorGenerateParticles = 0.3f;
@@ -29,11 +32,20 @@ namespace RaceManager.Cars
         [SerializeField] Wheel FrontRightWheel;
         [SerializeField] Wheel RearLeftWheel;
         [SerializeField] Wheel RearRightWheel;
+
+        [Space]
         [SerializeField] Transform COM;
+
         [SerializeField] Transform _cameraLookTarget;
         [SerializeField] Transform _cameraFollowTarget;
+
         [SerializeField] Transform _cameraFinalTarget;
         [SerializeField] Transform _cameraFinalPosition;
+
+        [SerializeField] Transform _startCameraTarget;
+        [SerializeField] Transform _startCameraPosition;
+        
+        [Space]
         [SerializeField] private CarConfig _carConfig;
 
         private CarSelfRighting _carSelfRighting;
@@ -108,12 +120,15 @@ namespace RaceManager.Cars
         #endregion //Properties of drift Settings
 
         public string ID => _id;
+        public int Layer => _layer;
         public CarConfig CarConfig => _carConfig;
         public CarSelfRighting CarSelfRighting => _carSelfRighting;
         public Transform CameraLookTarget => _cameraLookTarget;
         public Transform CameraFollowTarget => _cameraFollowTarget;
         public Transform CameraFinalTarget => _cameraFinalTarget;
         public Transform CameraFinalPosition => _cameraFinalPosition;
+        public Transform StartCameraTarget => _startCameraTarget;
+        public Transform StartCameraPosition => _startCameraPosition;
 
         /// <summary>
         /// All gears (Reverce, neutral and all forward).
@@ -174,6 +189,7 @@ namespace RaceManager.Cars
             _carSelfRighting = GetComponent<CarSelfRighting>();
             _carBody = GetComponentInChildren<CarBody>();
             _id = MakeId();
+            _layer = gameObject.layer;
 
             RB.centerOfMass = COM.localPosition;
 

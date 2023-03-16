@@ -4,8 +4,9 @@ using UnityEngine.UI;
 
 namespace RaceManager.UI
 {
-    public class CarWindow : MonoBehaviour
+    public class CarWindow : AnimatableSubject
     {
+        [Header("Main Fields")]
         [SerializeField] private Image _cardsImage;
         [SerializeField] private Image _progressBarImage;
         [Space]

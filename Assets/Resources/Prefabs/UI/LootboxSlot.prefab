@@ -469,7 +469,6 @@ GameObject:
   - component: {fileID: 3567069260355562924}
   - component: {fileID: 457146468593861718}
   - component: {fileID: 5317777244209192607}
-  - component: {fileID: 6224901554263615339}
   m_Layer: 5
   m_Name: Slot_0_Button
   m_TagString: Untagged
@@ -578,47 +577,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &6224901554263615339
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5361283153105465855}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8aef664a87f689942bf25bac194dbb7c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _agentActions:
-  - key: 26
-    actions: 00000000
-    animationTypes: 
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
-  useToRemind: 0
-  _reminderAction:
-    key: 0
-    actions: 
-    animationTypes: 
-    animationDuration: 1
-    actionStartDelay: 0
-    minAlpha: 0
-    maxAlpha: 1
-    minScale: 1
-    maxScale: 1.05
-    fromPosition: {fileID: 0}
-    toPosition: {fileID: 0}
-    moveDurationFactor: 1
-    loopMove: 0
 --- !u!1 &5826828371073703164
 GameObject:
   m_ObjectHideFlags: 0
@@ -1174,6 +1132,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e28b5eaa5868b94b92cca9ec3f580cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _mainRect: {fileID: 8192742952264221771}
   _slotButton: {fileID: 5317777244209192607}
   _lootboxImage: {fileID: 2856697877396469626}
   _imageTimerPassive: {fileID: 2895708063712750903}

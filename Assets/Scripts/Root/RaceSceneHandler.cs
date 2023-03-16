@@ -8,6 +8,7 @@ using RaceManager.Cars;
 using RaceManager.Race;
 using Random = UnityEngine.Random;
 using AudioType = RaceManager.Effects.AudioType;
+using UniRx.Triggers;
 
 namespace RaceManager.Root
 {
@@ -46,48 +47,67 @@ namespace RaceManager.Root
             EffectsController.InstallSettings(_settingsContainer);
             StartPlayingRandomRaceTrack();
 
+            this.UpdateAsObservable()
+                .Where(_ => _raceUI.RaceFinished == false)
+                .Subscribe(_ =>
+                {
+                    if (Input.GetMouseButtonDown(0))
+                        _gameEvents.ScreenTaped.OnNext();
+
+                    if (Input.GetMouseButton(0))
+                        _gameEvents.ScreenTapHold.OnNext();
+
+                    if (Input.GetMouseButtonUp(0))
+                        _gameEvents.ScreenTapReleased.OnNext();
+
+                    HandleWheels();
+                    HandleCarSpeed();
+                })
+                .AddTo(this);
+
             EventsHub<RaceEvent>.Subscribe(RaceEvent.START, SendStartNotification);
             _raceUI.OnButtonPressed += PlayButtonPressedEffect;
         }
 
-        public void HandleEffectsFor(Driver driver, IRaceLevel raceLevel)
+        public void HandleSceneFor(Driver driver, IRaceLevel raceLevel)
         {
             _playerDriver = driver;
             _gameEvents.ScreenTaped.Subscribe((u) => SetImmediateStart());
 
-            CamerasHandler.SetTargets
-                (
-                driver.CarCameraFollowTarget, 
-                driver.CarCameraLookTarget, 
-                driver.CameraFinalTarget,
-                driver.CameraFinalPosition
-                );
+            CamerasHandler.SetTargets(new CamerasData()
+            {
+                cameraFollowTarget = driver.CarCameraFollowTarget,
+                cameraLookTarget = driver.CarCameraLookTarget,
+                cameraFinalTarget = driver.CameraFinalTarget,
+                cameraFinalPosition = driver.CameraFinalPosition,
+                startCameraTarget = driver.StartCameraTarget,
+                startCameraPosition = driver.StartCameraPosition
+            });
 
-            CamerasHandler.FollowCam.position = raceLevel.FollowCamInitialPosition;
-            CamerasHandler.StartCam.position = raceLevel.StartCamInitialPosition;
+            CamerasHandler.StartCam.position = driver.StartCameraPosition.position;
             CamerasHandler.FinishCam.position = raceLevel.FinishCamInitialPosition;
         }
 
         #endregion
 
-        #region Unity Functions
+        //#region Unity Functions
 
-        private void Update()
-        {
-            if (Input.GetMouseButtonDown(0))
-                _gameEvents.ScreenTaped.OnNext();
+        //private void Update()
+        //{
+        //    if (Input.GetMouseButtonDown(0))
+        //        _gameEvents.ScreenTaped.OnNext();
 
-            if (Input.GetMouseButton(0))
-                _gameEvents.ScreenTapHold.OnNext();
+        //    if (Input.GetMouseButton(0))
+        //        _gameEvents.ScreenTapHold.OnNext();
 
-            if (Input.GetMouseButtonUp(0))
-                _gameEvents.ScreenTapReleased.OnNext();
+        //    if (Input.GetMouseButtonUp(0))
+        //        _gameEvents.ScreenTapReleased.OnNext();
 
-            HandleWheels();
-            HandleCarSpeed();
-        }
+        //    HandleWheels();
+        //    HandleCarSpeed();
+        //}
 
-        #endregion
+        //#endregion
 
         #region Private Functions
 
@@ -172,6 +192,8 @@ namespace RaceManager.Root
         }
 
         #endregion
+
+
     }
 }
 

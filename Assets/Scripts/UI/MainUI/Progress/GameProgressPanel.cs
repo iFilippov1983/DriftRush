@@ -1,7 +1,6 @@
 ﻿using RaceManager.Progress;
 using RaceManager.Root;
 using RaceManager.Tools;
-using Sirenix.Utilities;
 using System;
 using System.Collections.Generic;
 using TMPro;
@@ -13,7 +12,7 @@ using Zenject;
 
 namespace RaceManager.UI
 {
-    public class GameProgressPanel : MonoBehaviour
+    public class GameProgressPanel : AnimatableSubject
     {
         [SerializeField] private Button _backButton;
         [Space]
@@ -36,6 +35,8 @@ namespace RaceManager.UI
         private List<ProgressStepView> _progressSteps = new List<ProgressStepView>();
 
         public Action<Button> OnButtonPressed;
+
+        private UIAnimator Animator => Singleton<UIAnimator>.Instance;
 
         private GameObject ProgressStepPrefab
         {
@@ -97,8 +98,11 @@ namespace RaceManager.UI
 
                     previouseGoal = stepView.GoalCupsAmount;
 
-                    _yOffset += _progressStepsContent.cellSize.y;
-                    _yOffset += _progressStepsContent.spacing.y;
+                    if (stepView.GoalCupsAmount == cupsAmount)
+                    {
+                        _yOffset += _progressStepsContent.cellSize.y;
+                        _yOffset += _progressStepsContent.spacing.y;
+                    }
                     continue;
                 }
 
@@ -122,6 +126,7 @@ namespace RaceManager.UI
             }
 
             _yOffset += _progressStepsContent.spacing.y;
+            _yOffset -= _progressStepsContent.cellSize.y;
             _offsetPos = _progressStepsContent.transform.localPosition;
             _offsetPos.y -= _yOffset;
             OffsetContent();
@@ -144,10 +149,12 @@ namespace RaceManager.UI
 
         private void UpdateStepStatus(ProgressStep step, ProgressStepView stepView)
         {
+            bool received = step.RewardsReceived;
+
             if (step.IsReached)
             {
                 stepView.ClaimButton.SetActive(true);
-                stepView.ClaimButton.SetActive(!step.RewardsReceived);
+                stepView.ClaimButton.SetActive(!received);
             }
             else
             {
@@ -156,11 +163,25 @@ namespace RaceManager.UI
 
             if (step.BigPrefab)
             {
-                stepView.StepWindowBig.ClaimedImage.SetActive(step.RewardsReceived);
+                stepView.StepWindowBig.ClaimedImage.SetActive(received);
+
+                if (received)
+                    Animator.AnimateRect(stepView.StepWindowBig.ClaimedImage.rectTransform, animationsSequence: new AnimationType[] 
+                    { 
+                        AnimationType.PunchScale,
+                        AnimationType.ShakeScale
+                    })?.AddTo(this);
             }
             else
             {
-                stepView.StepWindow.ClaimedImage.SetActive(step.RewardsReceived);
+                stepView.StepWindow.ClaimedImage.SetActive(received);
+
+                if (received)
+                    Animator.AnimateRect(stepView.StepWindow.ClaimedImage.rectTransform, animationsSequence: new AnimationType[]
+                    {
+                        AnimationType.PunchScale,
+                        AnimationType.ShakeScale
+                    })?.AddTo(this);
             }
 
             MenuColorName colorName = step.IsReached ? _reachedColor : _notReachedColor;
@@ -193,6 +214,8 @@ namespace RaceManager.UI
             UpdateStepStatus(step, stepView);
         }
 
+        public ProgressStepView GetProgressStepView(int goalCupsAmount) => _progressSteps.Find(s => s.GoalCupsAmount == goalCupsAmount);
+
         public void ClearProgressSteps()
         {
             foreach (var step in _progressSteps)
@@ -215,7 +238,7 @@ namespace RaceManager.UI
             {
                 switch (reward.Type)
                 {
-                    case RewardType.Money:
+                    case GameUnitType.Money:
                         Money money = (Money)reward;
                         window.RewardCards.SetActive(false);
                         window.RewardLootbox.SetActive(false);
@@ -223,7 +246,7 @@ namespace RaceManager.UI
                         window.RewardSimple.RewardAmountText.text = money.MoneyAmount.ToString();
                         window.RewardSimple.RewardImage.sprite = _spritesRewards.GetSimpleRewardSprite(money.Type);
                         break;
-                    case RewardType.Gems:
+                    case GameUnitType.Gems:
                         Gems gems = (Gems)reward;
                         window.RewardCards.SetActive(false);
                         window.RewardLootbox.SetActive(false);
@@ -231,14 +254,14 @@ namespace RaceManager.UI
                         window.RewardSimple.RewardAmountText.text = gems.GemsAmount.ToString();
                         window.RewardSimple.RewardImage.sprite = _spritesRewards.GetSimpleRewardSprite(gems.Type);
                         break;
-                    case RewardType.Lootbox:
+                    case GameUnitType.Lootbox:
                         LootboxReward lootbox = (LootboxReward)reward;
                         window.RewardCards.SetActive(false);
                         window.RewardSimple.SetActive(false);
                         window.RewardLootbox.SetActive(true);
                         window.RewardLootbox.LootboxImage.sprite = _spritesRewards.GetLootboxSprite(lootbox.Rarity);
                         break;
-                    case RewardType.CarCard:
+                    case GameUnitType.CarCard:
                         CarCardReward card = (CarCardReward)reward;
                         window.RewardSimple.SetActive(false);
                         window.RewardLootbox.SetActive(false);
@@ -246,10 +269,10 @@ namespace RaceManager.UI
                         window.RewardCards.CarImage.sprite = _spritesCars.GetCarSprite(card.CarName);
                         window.RewardCards.CardAmountText.text = card.CardsAmount.ToString();
                         break;
-                    case RewardType.RaceReward:
-                    case RewardType.Cups:
-                    case RewardType.RaceMap:
-                    case RewardType.IncomeBonus:
+                    case GameUnitType.RaceReward:
+                    case GameUnitType.Cups:
+                    case GameUnitType.RaceMap:
+                    case GameUnitType.IncomeBonus:
                         window.SetActive(false);
                         Debug.LogError($"Incorrect ProgressStep.Rewards settings in Scheme! Goal Cups Amount: {goalCupsAmount}");
                         break;
@@ -271,31 +294,31 @@ namespace RaceManager.UI
             {
                 switch (reward.Type)
                 {
-                    case RewardType.Money:
+                    case GameUnitType.Money:
                         Money money = (Money)reward;
                         bigWindow.RewardSimple.RewardAmountText.text = money.MoneyAmount.ToString();
                         bigWindow.RewardSimple.RewardImage.sprite = _spritesRewards.GetSimpleRewardSprite(money.Type);
                         break;
-                    case RewardType.RaceMap:
+                    case GameUnitType.RaceMap:
                         RaceMap raceMap = (RaceMap)reward;
                         bigWindow.LevelName.text = raceMap.LevelName.ToString();
                         bigWindow.LevelRepresentationImage.sprite = _spritesRewards.GetLevelSprite(raceMap.LevelName);
                         break;
-                    case RewardType.IncomeBonus:
+                    case GameUnitType.IncomeBonus:
                         IncomeBonus incomeBonus = (IncomeBonus)reward;
                         string t = incomeBonus.BonusValue.ToString();
                         bigWindow.IncomeBonusText.text = $"+ {t}%";
                         bigWindow.IncomeBonusWindow.SetActive(true);
                         break;
-                    case RewardType.Gems:
+                    case GameUnitType.Gems:
                         Gems gems = (Gems)reward;
                         bigWindow.RewardSimple.RewardAmountText.text = gems.GemsAmount.ToString();
                         bigWindow.RewardSimple.RewardImage.sprite = _spritesRewards.GetSimpleRewardSprite(gems.Type);
                         break;
-                    case RewardType.RaceReward:
-                    case RewardType.Cups:
-                    case RewardType.Lootbox:
-                    case RewardType.CarCard:
+                    case GameUnitType.RaceReward:
+                    case GameUnitType.Cups:
+                    case GameUnitType.Lootbox:
+                    case GameUnitType.CarCard:
                         bigWindow.SetActive(false);
                         Debug.LogError($"Incorrect ProgressStep.Rewards settings in Scheme! Goal Cups Amount: {goalCupsAmount}");
                         break;

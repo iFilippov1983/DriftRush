@@ -7,18 +7,20 @@ using UnityEngine.UI;
 
 namespace RaceManager.UI
 {
-    public class ShopConfirmationPanel : MonoBehaviour
+    public class ShopConfirmationPanel : AnimatableSubject
     {
         [Serializable]
         public class ConfirmPopup
         {
-            public RewardType Type;
+            public GameUnitType Type;
             public RectTransform popupRect;
             public Image popupImage;
             public TMP_Text rewardText;
             public TMP_Text rewardCost;
         }
 
+        [Space(20)]
+        [Header("Main Fields")]
         [SerializeField] private Button _confirmButton;
         [SerializeField] private Button _backButton;
         [SerializeField] private Button _closeWindowButton;

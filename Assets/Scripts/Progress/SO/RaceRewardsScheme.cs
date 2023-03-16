@@ -12,10 +12,16 @@ namespace RaceManager.Progress
     [CreateAssetMenu(menuName = "Progress/RaceRewardsScheme", fileName = "RaceRewardsScheme", order = 1)]
     public class RaceRewardsScheme : SerializedScriptableObject
     {
+        [Title("Scores Count Sceme")]
         [SerializeField] private float _scoresFactorDrift = 1.0f;
-        [SerializeField] private float _availableDriftPause = 5f;
-        [SerializeField] private float _scoresFactorOpponentHit = 100f;
-        [SerializeField] private float _scoresFactorCrashHit = 100f;
+        [SerializeField] private float _minDriftDistanceValue = 1f;
+        [Space]
+        [SerializeField] private float _scoresForBump = 100f;
+        [SerializeField] private float _scoresForCrush = 100f;
+        [SerializeField] private float _minCollisionInterval = 0.1f;
+        [Space]
+        [SerializeField] private int _moneyMultiplyerForAds = 3;
+        [SerializeField] private float _scoresCountPauseDutation = 5f;
         [Space(20)]
         [SerializeField]
         [DictionaryDrawerSettings(KeyLabel = "Place", ValueLabel = "Reward")]
@@ -42,11 +48,24 @@ namespace RaceManager.Progress
         };
 
         public float DriftFactor => _scoresFactorDrift;
-        public float AvailableDriftPause => _availableDriftPause;
-        public float OpponentHitFactor => _scoresFactorOpponentHit;
-        public float CrashHitFactor => _scoresFactorCrashHit;
+        public float CountPauseDuration => _scoresCountPauseDutation;
+        public float MinDriftDistanceValue => _minDriftDistanceValue;
+        public float BumpScores => _scoresForBump;
+        public float MinCollisionInterval => _minCollisionInterval;
+        public float CrushScores => _scoresForCrush;
+        public int MoneyMultiplyer => _moneyMultiplyerForAds;
 
-        public RaceReward GetRewardFor(PositionInRace position) => _scheme[position];
+        public RaceReward GetRewardFor(PositionInRace position)
+        {
+            $"Position {position}".Log();
+            RaceReward blank = _scheme[position];
+            RaceReward reward = new RaceReward();
+            reward.IsReceived = blank.IsReceived;
+            reward.AddMoney(blank.Money);
+            reward.AddCups(blank.Cups);
+
+            return reward;
+        }
 
         public bool TryLuckWithNotCommonLootbox(out Rarity rarity)
         {
@@ -84,6 +103,7 @@ namespace RaceManager.Progress
             }
         }
 
+        [Title("TEST")]
         [ShowInInspector, ReadOnly]
         private int _counter = 0;
 

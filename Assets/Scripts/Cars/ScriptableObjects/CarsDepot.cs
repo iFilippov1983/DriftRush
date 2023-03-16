@@ -13,8 +13,11 @@ namespace RaceManager.Cars
     {
         public DriverType DriverType;
         public CarName CurrentCarName;
-        public List<CarProfile> CarProfiles;
+        [SerializeField]
+        private List<CarProfile> CarProfiles;
 
+        public IReadOnlyList<CarProfile> ProfilesList => CarProfiles;
+        public CarProfile GetProfile(CarName carName) => CarProfiles.Find(p => p.CarName == carName);
         public CarProfile CurrentCarProfile => CarProfiles.Find(c => c.CarName == CurrentCarName);
 
         public void UpdateProfile(CarProfile newCP)

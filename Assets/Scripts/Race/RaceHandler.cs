@@ -13,6 +13,7 @@ using UniRx;
 using UniRx.Triggers;
 using RaceManager.Effects;
 using IInitializable = RaceManager.Root.IInitializable;
+using System.Threading.Tasks;
 
 namespace RaceManager.Race
 {
@@ -25,7 +26,7 @@ namespace RaceManager.Race
         private CarsDepot _playerCarsDepot;
         private GameSettingsContainer _settingsContainer;
         private RaceSceneHandler _sceneHandler;
-        private RaceScoresCouner _scoresCouner;
+        private RaceScoresCounter _scoresCounter;
         private RaceLevelInitializer _raceLevelInitializer;
         private RaceLineHandler _lineHandler;
         private IRaceLevel _raceLevel;
@@ -84,28 +85,94 @@ namespace RaceManager.Race
             _lootboxHandler = new InRaceLootboxHandler(_profiler);
 
             InitDrivers();
+            MakeSubscriptions();
 
             _positionsHandler.StartHandling(_waypointsTrackersList);
+        }
 
+        private void MakeSubscriptions()
+        {
             this.FixedUpdateAsObservable()
-                .Subscribe(_ => 
+                .Subscribe(_ =>
                 {
                     _lootboxHandler.Handle();
-                    _scoresCouner.CountDriftScores();
+                    _scoresCounter.CountScores();
                 })
                 .AddTo(this);
 
-            _rewardsHandler.OnRaceRewardLootboxAdded += NotifyRaceUI;
-        }
+            this.UpdateAsObservable()
+                .Where(_ => _raceUI.RaceFinished == false)
+                .Subscribe(_ => 
+                {
+                    _raceUI.ShowSpeed();
+                    _raceUI.HandlePositionIndication();
+                    _raceUI.HandleProgressBar();
+                })
+                .AddTo(this);
 
-        private void Update()
-        {
-            if (_raceStarted || !CanStartImmediate)
-                return;
+            this.UpdateAsObservable()
+                .Where(_ => Input.GetMouseButton(0) && _raceUI.RaceFinished == false)
+                .Subscribe(_ => 
+                {
+                    _raceUI.HandleAcceleration(true);
+                })
+                .AddTo(this);
 
-            _raceStarted = true;
+            this.UpdateAsObservable()
+                .Where(_ => Input.GetMouseButtonUp(0) && _raceUI.RaceFinished == false)
+                .Subscribe(_ =>
+                {
+                    _raceUI.HandleAcceleration(false);
+                })
+                .AddTo(this);
 
-            EventsHub<RaceEvent>.BroadcastNotification(RaceEvent.COUNTDOWN);
+            this.UpdateAsObservable()
+                .Where(_ => !_raceStarted && CanStartImmediate)
+                .Take(1)
+                .Subscribe(_ =>
+                {
+                    _raceStarted = true;
+                    EventsHub<RaceEvent>.BroadcastNotification(RaceEvent.COUNTDOWN);
+                })
+                .AddTo(this);
+
+            _scoresCounter.ScoresCount
+                .Where(data => data.CurrentScoresValue > 0)
+                .Subscribe(data =>
+                {
+                    bool showPause = data.Timer > 0;
+                    bool showScores = data.Timer >= 0;
+
+                    _raceUI.ShowPause(showPause, data.Timer);
+                    _raceUI.ShowScores(showScores, data.CurrentScoresValue);
+
+                    int totalScores = data.CurrentScoresValue > data.TotalScoresValue
+                    ? data.CurrentScoresValue 
+                    : data.TotalScoresValue;
+
+                    _rewardsHandler.SetMoneyReward(data.ScoresType, totalScores);
+                })
+                .AddTo(this);
+
+            _scoresCounter.ExtraScoresCount
+                .Subscribe(data =>
+                {
+                    _raceUI.ShowExtraScores(data.ScoresType, data.CurrentScoresValue);
+                    _rewardsHandler.SetMoneyReward(data.ScoresType, data.TotalScoresValue);
+                })
+                .AddTo(this);
+
+            _gameEvents.Notification
+                .Where(s => s == NotificationType.Checkpoint.ToString())
+                .Subscribe(s => 
+                {
+                    _lineHandler.StartHandling();
+                })
+                .AddTo(this);
+
+            _raceUI.OnAdsInit += ShowAds;
+            _rewardsHandler.OnRaceRewardLootboxAdded += SetRaceUI;
+            _waypointTrackMain.OnCheckpointPass += MakeCheckpointNotification;
         }
 
         private void InitDrivers()
@@ -134,7 +201,7 @@ namespace RaceManager.Race
                         _settingsContainer.PlaySounds
                         );
 
-                    _sceneHandler.HandleEffectsFor(driver, _raceLevel);
+                    _sceneHandler.HandleSceneFor(driver, _raceLevel);
 
                     driver.Subscribe(_raceUI);
                     driver.Subscribe(_lineHandler);
@@ -151,9 +218,7 @@ namespace RaceManager.Race
 
                     _raceUI.Initialize(_raceLevelInitializer, selfRighting.RightCar, GetToCheckpoint);
 
-                    _scoresCouner = new RaceScoresCouner(driver.Car, _rewardsScheme);
-
-                    _waypointTrackMain.OnCheckpointPass += MakeGameNotification;
+                    _scoresCounter = new RaceScoresCounter(driver.Car, _rewardsScheme);
                 }
                 else
                 {
@@ -186,8 +251,8 @@ namespace RaceManager.Race
                 case CarState.OnTrack:
                     break;
                 case CarState.Finished:
-                    _rewardsHandler.RewardForRace(playerDriver.DriverProfile.PositionInRace, out RaceRewardInfo info);
-                    _raceUI.SetFinishValues(info.RewardMoneyAmount, info.RewardCupsAmount, info.MoneyTotal, info.GemsTotal);
+                    _rewardsHandler.RewardForRaceInit(playerDriver.DriverProfile.PositionInRace, out RaceRewardInfo info);
+                    _raceUI.SetFinishValues(info);
                     _lineHandler.StopHandling();
                     break;
                 case CarState.Stopped:
@@ -200,22 +265,27 @@ namespace RaceManager.Race
             return Disposable.Empty;
         }
 
-        private void NotifyRaceUI(Lootbox lootbox) => _raceUI.SetLootboxPopupValues(lootbox.Rarity);
+        private async void ShowAds()
+        {
+            //TODO: implement cases: complete/fail
 
-        private void MakeGameNotification() => _gameEvents.Notification.OnNext(NotificationType.Checkpoint.ToString());
+            await Task.Delay(1000);
+
+            _rewardsHandler.RewardForRaceMoneyMultiplyed();
+            _raceUI.OnAdsRewardAction();
+        }
+
+        private void SetRaceUI(Lootbox lootbox) => _raceUI.SetLootboxToGrant(lootbox.Rarity);
+
+        private void MakeCheckpointNotification() => _gameEvents.Notification.OnNext(NotificationType.Checkpoint.ToString());
 
         private void OnDestroy()
         {
-            _rewardsHandler.OnRaceRewardLootboxAdded -= NotifyRaceUI;
-            _waypointTrackMain.OnCheckpointPass -= MakeGameNotification;
-        }
+            _raceUI.OnAdsInit -= ShowAds;
+            _rewardsHandler.OnRaceRewardLootboxAdded -= SetRaceUI;
+            _waypointTrackMain.OnCheckpointPass -= MakeCheckpointNotification;
 
-        public struct RaceRewardInfo
-        {
-            public int RewardMoneyAmount;
-            public int RewardCupsAmount;
-            public int MoneyTotal;
-            public int GemsTotal;
+            _scoresCounter.Dispose();
         }
     }
 }

@@ -16,15 +16,20 @@ MonoBehaviour:
     SerializedFormat: 2
     SerializedBytes: 
     ReferencedUnityObjects:
-    - {fileID: 21300000, guid: aae3f799fd30c44aa9eaae531a12e0c3, type: 3}
-    - {fileID: 21300000, guid: 12a56c3648ee34c5ea06294a5b21120c, type: 3}
+    - {fileID: 21300000, guid: db58936ff7a1bbf4fade67da18e55c4d, type: 3}
+    - {fileID: 21300000, guid: 06a3e8dd1b28a2f42b5c43e710a239c0, type: 3}
+    - {fileID: 21300000, guid: c081c48c6a9cf5541af6369dc4f244e7, type: 3}
+    - {fileID: 21300000, guid: 5cf67cbd2be22aa4696a03bd34620d39, type: 3}
     - {fileID: 21300000, guid: 32e1bd35332eab14c8b72c6d9481919e, type: 3}
     - {fileID: 21300000, guid: e447681b4eb39ad41bc48c25a1797e07, type: 3}
-    - {fileID: 21300000, guid: 5aeeead8a00b62d4b9491834514e237b, type: 3}
     - {fileID: 21300000, guid: d6d5e9c5a2b343649a0fb4d8c1de1ea8, type: 3}
+    - {fileID: 21300000, guid: 829d7293fad193043b82944ef0ff0266, type: 3}
     - {fileID: 21300000, guid: 3893b8c0e8057884d82986d3d3b54ae6, type: 3}
     - {fileID: 21300000, guid: 6529b3090cd8e4847b7a742d5ee969fe, type: 3}
     - {fileID: 21300000, guid: a08c0b4f13c4e914dbf560672478db5e, type: 3}
+    - {fileID: 21300000, guid: aae3f799fd30c44aa9eaae531a12e0c3, type: 3}
+    - {fileID: 21300000, guid: 6a87262ec8ccc0749a81357913f4c05d, type: 3}
+    - {fileID: 21300000, guid: 81ab1124b5e325e44a092ae952e2e67a, type: 3}
     - {fileID: 21300000, guid: cb8737cc65eb27f4896f1092c55005a3, type: 3}
     - {fileID: 21300000, guid: a8708a3ce3fd48947a531089008184a4, type: 3}
     - {fileID: 21300000, guid: 2688f73c91e2ed243b87a477c825fc4d, type: 3}
@@ -93,7 +98,7 @@ MonoBehaviour:
       Data: 25000
     - Name: RewardSprite
       Entry: 10
-      Data: 1
+      Data: 2
     - Name: 
       Entry: 8
       Data: 
@@ -111,7 +116,7 @@ MonoBehaviour:
       Data: 900000
     - Name: RewardSprite
       Entry: 10
-      Data: 1
+      Data: 3
     - Name: 
       Entry: 8
       Data: 
@@ -129,7 +134,7 @@ MonoBehaviour:
       Data: 100
     - Name: RewardSprite
       Entry: 10
-      Data: 2
+      Data: 4
     - Name: 
       Entry: 8
       Data: 
@@ -147,7 +152,7 @@ MonoBehaviour:
       Data: 1500
     - Name: RewardSprite
       Entry: 10
-      Data: 3
+      Data: 5
     - Name: 
       Entry: 8
       Data: 
@@ -165,7 +170,7 @@ MonoBehaviour:
       Data: 7000
     - Name: RewardSprite
       Entry: 10
-      Data: 4
+      Data: 6
     - Name: 
       Entry: 8
       Data: 
@@ -183,7 +188,7 @@ MonoBehaviour:
       Data: 100000
     - Name: RewardSprite
       Entry: 10
-      Data: 5
+      Data: 7
     - Name: 
       Entry: 8
       Data: 
@@ -195,44 +200,44 @@ MonoBehaviour:
       Data: 
     - Name: _simpleRewardSprites
       Entry: 7
-      Data: 9|System.Collections.Generic.List`1[[RaceManager.UI.SpritesContainerRewards+SimpleRewardSpriteHolder,
+      Data: 9|System.Collections.Generic.List`1[[RaceManager.UI.SpritesContainerRewards+RewardSpriteHolder,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
       Data: 3
     - Name: 
       Entry: 7
-      Data: 10|RaceManager.UI.SpritesContainerRewards+SimpleRewardSpriteHolder, Assembly-CSharp
+      Data: 10|RaceManager.UI.SpritesContainerRewards+RewardSpriteHolder, Assembly-CSharp
     - Name: RewardType
       Entry: 3
       Data: 1
     - Name: RewardSprite
       Entry: 10
-      Data: 6
+      Data: 8
     - Name: 
       Entry: 8
       Data: 
     - Name: 
       Entry: 7
-      Data: 11|RaceManager.UI.SpritesContainerRewards+SimpleRewardSpriteHolder, Assembly-CSharp
+      Data: 11|RaceManager.UI.SpritesContainerRewards+RewardSpriteHolder, Assembly-CSharp
     - Name: RewardType
       Entry: 3
       Data: 3
     - Name: RewardSprite
       Entry: 10
-      Data: 7
+      Data: 9
     - Name: 
       Entry: 8
       Data: 
     - Name: 
       Entry: 7
-      Data: 12|RaceManager.UI.SpritesContainerRewards+SimpleRewardSpriteHolder, Assembly-CSharp
+      Data: 12|RaceManager.UI.SpritesContainerRewards+RewardSpriteHolder, Assembly-CSharp
     - Name: RewardType
       Entry: 3
       Data: 2
     - Name: RewardSprite
       Entry: 10
-      Data: 8
+      Data: 10
     - Name: 
       Entry: 8
       Data: 
@@ -242,44 +247,20 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-    - Name: _lootboxSrites
+    - Name: _coloredRewardSprites
       Entry: 7
-      Data: 13|System.Collections.Generic.List`1[[RaceManager.UI.SpritesContainerRewards+LootboxSriteHolder,
+      Data: 13|System.Collections.Generic.List`1[[RaceManager.UI.SpritesContainerRewards+RewardSpriteHolder,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
-      Data: 5
+      Data: 4
     - Name: 
       Entry: 7
-      Data: 14|RaceManager.UI.SpritesContainerRewards+LootboxSriteHolder, Assembly-CSharp
-    - Name: Rarity
-      Entry: 3
-      Data: 0
-    - Name: LootboxSprite
-      Entry: 10
-      Data: 9
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 15|RaceManager.UI.SpritesContainerRewards+LootboxSriteHolder, Assembly-CSharp
-    - Name: Rarity
+      Data: 14|RaceManager.UI.SpritesContainerRewards+RewardSpriteHolder, Assembly-CSharp
+    - Name: RewardType
       Entry: 3
       Data: 1
-    - Name: LootboxSprite
-      Entry: 10
-      Data: 10
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 16|RaceManager.UI.SpritesContainerRewards+LootboxSriteHolder, Assembly-CSharp
-    - Name: Rarity
-      Entry: 3
-      Data: 2
-    - Name: LootboxSprite
+    - Name: RewardSprite
       Entry: 10
       Data: 11
     - Name: 
@@ -287,11 +268,11 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 17|RaceManager.UI.SpritesContainerRewards+LootboxSriteHolder, Assembly-CSharp
-    - Name: Rarity
+      Data: 15|RaceManager.UI.SpritesContainerRewards+RewardSpriteHolder, Assembly-CSharp
+    - Name: RewardType
       Entry: 3
       Data: 3
-    - Name: LootboxSprite
+    - Name: RewardSprite
       Entry: 10
       Data: 12
     - Name: 
@@ -299,11 +280,23 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 18|RaceManager.UI.SpritesContainerRewards+LootboxSriteHolder, Assembly-CSharp
-    - Name: Rarity
+      Data: 16|RaceManager.UI.SpritesContainerRewards+RewardSpriteHolder, Assembly-CSharp
+    - Name: RewardType
       Entry: 3
-      Data: 4
-    - Name: LootboxSprite
+      Data: 2
+    - Name: RewardSprite
+      Entry: 10
+      Data: 10
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 17|RaceManager.UI.SpritesContainerRewards+RewardSpriteHolder, Assembly-CSharp
+    - Name: RewardType
+      Entry: 3
+      Data: 8
+    - Name: RewardSprite
       Entry: 10
       Data: 13
     - Name: 
@@ -315,70 +308,143 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-    - Name: _levelSprites
+    - Name: _lootboxSrites
       Entry: 7
-      Data: 19|System.Collections.Generic.List`1[[RaceManager.UI.SpritesContainerRewards+LevelSpriteHolder,
+      Data: 18|System.Collections.Generic.List`1[[RaceManager.UI.SpritesContainerRewards+LootboxSriteHolder,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
       Data: 5
     - Name: 
       Entry: 7
-      Data: 20|RaceManager.UI.SpritesContainerRewards+LevelSpriteHolder, Assembly-CSharp
+      Data: 19|RaceManager.UI.SpritesContainerRewards+LootboxSriteHolder, Assembly-CSharp
+    - Name: Rarity
+      Entry: 3
+      Data: 0
+    - Name: LootboxSprite
+      Entry: 10
+      Data: 14
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 20|RaceManager.UI.SpritesContainerRewards+LootboxSriteHolder, Assembly-CSharp
+    - Name: Rarity
+      Entry: 3
+      Data: 1
+    - Name: LootboxSprite
+      Entry: 10
+      Data: 15
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 21|RaceManager.UI.SpritesContainerRewards+LootboxSriteHolder, Assembly-CSharp
+    - Name: Rarity
+      Entry: 3
+      Data: 2
+    - Name: LootboxSprite
+      Entry: 10
+      Data: 16
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 22|RaceManager.UI.SpritesContainerRewards+LootboxSriteHolder, Assembly-CSharp
+    - Name: Rarity
+      Entry: 3
+      Data: 3
+    - Name: LootboxSprite
+      Entry: 10
+      Data: 17
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 23|RaceManager.UI.SpritesContainerRewards+LootboxSriteHolder, Assembly-CSharp
+    - Name: Rarity
+      Entry: 3
+      Data: 4
+    - Name: LootboxSprite
+      Entry: 10
+      Data: 18
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _levelSprites
+      Entry: 7
+      Data: 24|System.Collections.Generic.List`1[[RaceManager.UI.SpritesContainerRewards+LevelSpriteHolder,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 5
+    - Name: 
+      Entry: 7
+      Data: 25|RaceManager.UI.SpritesContainerRewards+LevelSpriteHolder, Assembly-CSharp
     - Name: LevelName
       Entry: 3
       Data: 1
     - Name: LevelSprite
       Entry: 10
-      Data: 14
+      Data: 19
     - Name: 
       Entry: 8
       Data: 
     - Name: 
       Entry: 7
-      Data: 21|RaceManager.UI.SpritesContainerRewards+LevelSpriteHolder, Assembly-CSharp
+      Data: 26|RaceManager.UI.SpritesContainerRewards+LevelSpriteHolder, Assembly-CSharp
     - Name: LevelName
       Entry: 3
       Data: 2
     - Name: LevelSprite
       Entry: 10
-      Data: 14
+      Data: 19
     - Name: 
       Entry: 8
       Data: 
     - Name: 
       Entry: 7
-      Data: 22|RaceManager.UI.SpritesContainerRewards+LevelSpriteHolder, Assembly-CSharp
+      Data: 27|RaceManager.UI.SpritesContainerRewards+LevelSpriteHolder, Assembly-CSharp
     - Name: LevelName
       Entry: 3
       Data: 3
     - Name: LevelSprite
       Entry: 10
-      Data: 14
+      Data: 19
     - Name: 
       Entry: 8
       Data: 
     - Name: 
       Entry: 7
-      Data: 23|RaceManager.UI.SpritesContainerRewards+LevelSpriteHolder, Assembly-CSharp
+      Data: 28|RaceManager.UI.SpritesContainerRewards+LevelSpriteHolder, Assembly-CSharp
     - Name: LevelName
       Entry: 3
       Data: 4
     - Name: LevelSprite
       Entry: 10
-      Data: 14
+      Data: 19
     - Name: 
       Entry: 8
       Data: 
     - Name: 
       Entry: 7
-      Data: 24|RaceManager.UI.SpritesContainerRewards+LevelSpriteHolder, Assembly-CSharp
+      Data: 29|RaceManager.UI.SpritesContainerRewards+LevelSpriteHolder, Assembly-CSharp
     - Name: LevelName
       Entry: 3
       Data: 5
     - Name: LevelSprite
       Entry: 10
-      Data: 14
+      Data: 19
     - Name: 
       Entry: 8
       Data: 
@@ -390,14 +456,14 @@ MonoBehaviour:
       Data: 
     - Name: _menuColors
       Entry: 7
-      Data: 25|System.Collections.Generic.List`1[[RaceManager.UI.SpritesContainerRewards+MenuColorHolder,
+      Data: 30|System.Collections.Generic.List`1[[RaceManager.UI.SpritesContainerRewards+MenuColorHolder,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
       Data: 5
     - Name: 
       Entry: 7
-      Data: 26|RaceManager.UI.SpritesContainerRewards+MenuColorHolder, Assembly-CSharp
+      Data: 31|RaceManager.UI.SpritesContainerRewards+MenuColorHolder, Assembly-CSharp
     - Name: Name
       Entry: 3
       Data: 0
@@ -424,7 +490,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 27|RaceManager.UI.SpritesContainerRewards+MenuColorHolder, Assembly-CSharp
+      Data: 32|RaceManager.UI.SpritesContainerRewards+MenuColorHolder, Assembly-CSharp
     - Name: Name
       Entry: 3
       Data: 1
@@ -451,7 +517,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 28|RaceManager.UI.SpritesContainerRewards+MenuColorHolder, Assembly-CSharp
+      Data: 33|RaceManager.UI.SpritesContainerRewards+MenuColorHolder, Assembly-CSharp
     - Name: Name
       Entry: 3
       Data: 2
@@ -478,7 +544,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 29|RaceManager.UI.SpritesContainerRewards+MenuColorHolder, Assembly-CSharp
+      Data: 34|RaceManager.UI.SpritesContainerRewards+MenuColorHolder, Assembly-CSharp
     - Name: Name
       Entry: 3
       Data: 3
@@ -505,7 +571,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 30|RaceManager.UI.SpritesContainerRewards+MenuColorHolder, Assembly-CSharp
+      Data: 35|RaceManager.UI.SpritesContainerRewards+MenuColorHolder, Assembly-CSharp
     - Name: Name
       Entry: 3
       Data: 4

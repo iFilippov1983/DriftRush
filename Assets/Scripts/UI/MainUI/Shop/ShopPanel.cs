@@ -1,7 +1,9 @@
 ﻿using RaceManager.Progress;
+using RaceManager.Root;
 using RaceManager.Shop;
 using System;
 using System.Collections.Generic;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,6 +20,8 @@ namespace RaceManager.UI
 
         public Button GetFreeLootboxButton => _getFreeLootboxButton;
         public ShopConfirmationPanel ConfirmationPanel => _confirmationPanel;
+
+        private UIAnimator Animator => Singleton<UIAnimator>.Instance;
         
         public void InstallAllPanels(List<OfferPanelInstaller> installers)
         {
@@ -55,9 +59,23 @@ namespace RaceManager.UI
             return false;
         }
 
+        public bool TryGetPanelTransform(ShopOfferType offerType, out Transform panelTransform)
+        {
+            var panel = _panels.Find(p => p.Type == offerType);
+            if (panel != null)
+            {
+                panelTransform = panel.GameObject.transform;
+                return true;
+            }
+
+            $"Panel with Type [{offerType}] was not found!".Log(Logger.ColorRed);
+            panelTransform = null;
+            return false;
+        }
+
         public void ActivateConfirmationPanel
             (
-            RewardType type, 
+            GameUnitType type, 
             Sprite popupSprite, 
             string rewardText, 
             string rewardCostText
@@ -79,6 +97,8 @@ namespace RaceManager.UI
             }
 
             _confirmationPanel.SetActive(true);
+
+            Animator.AppearSubject(_confirmationPanel).AddTo(this);
         }
 
         public void DeactivateConfirmationPanel()

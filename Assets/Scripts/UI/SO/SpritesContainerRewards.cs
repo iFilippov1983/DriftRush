@@ -16,24 +16,34 @@ namespace RaceManager.UI
         [SerializeField]
         List<ShopRewardSpriteHolder> _shopRewardSprites = new List<ShopRewardSpriteHolder>()
         {
-            { new ShopRewardSpriteHolder() { RewardType = RewardType.Money, RewardSprite = null } },
-            { new ShopRewardSpriteHolder() { RewardType = RewardType.Money, RewardSprite = null } },
-            { new ShopRewardSpriteHolder() { RewardType = RewardType.Money, RewardSprite = null } },
-            { new ShopRewardSpriteHolder() { RewardType = RewardType.Money, RewardSprite = null } },
+            { new ShopRewardSpriteHolder() { RewardType = GameUnitType.Money, RewardSprite = null } },
+            { new ShopRewardSpriteHolder() { RewardType = GameUnitType.Money, RewardSprite = null } },
+            { new ShopRewardSpriteHolder() { RewardType = GameUnitType.Money, RewardSprite = null } },
+            { new ShopRewardSpriteHolder() { RewardType = GameUnitType.Money, RewardSprite = null } },
 
-            { new ShopRewardSpriteHolder() { RewardType = RewardType.Gems, RewardSprite = null } },
-            { new ShopRewardSpriteHolder() { RewardType = RewardType.Gems, RewardSprite = null } },
-            { new ShopRewardSpriteHolder() { RewardType = RewardType.Gems, RewardSprite = null } },
-            { new ShopRewardSpriteHolder() { RewardType = RewardType.Gems, RewardSprite = null } },
+            { new ShopRewardSpriteHolder() { RewardType = GameUnitType.Gems, RewardSprite = null } },
+            { new ShopRewardSpriteHolder() { RewardType = GameUnitType.Gems, RewardSprite = null } },
+            { new ShopRewardSpriteHolder() { RewardType = GameUnitType.Gems, RewardSprite = null } },
+            { new ShopRewardSpriteHolder() { RewardType = GameUnitType.Gems, RewardSprite = null } },
         };
 
         [Space(20)]
         [SerializeField]
-        private List<SimpleRewardSpriteHolder> _simpleRewardSprites = new List<SimpleRewardSpriteHolder>()
+        private List<RewardSpriteHolder> _simpleRewardSprites = new List<RewardSpriteHolder>()
         {
-            { new SimpleRewardSpriteHolder() { RewardType = RewardType.Money, RewardSprite = null } },
-            { new SimpleRewardSpriteHolder() { RewardType = RewardType.Gems, RewardSprite = null } },
-            { new SimpleRewardSpriteHolder() { RewardType = RewardType.Cups, RewardSprite = null } }
+            { new RewardSpriteHolder() { RewardType = GameUnitType.Money, RewardSprite = null } },
+            { new RewardSpriteHolder() { RewardType = GameUnitType.Gems, RewardSprite = null } },
+            { new RewardSpriteHolder() { RewardType = GameUnitType.Cups, RewardSprite = null } }
+        };
+
+        [Space(20)]
+        [SerializeField]
+        private List<RewardSpriteHolder> _coloredRewardSprites = new List<RewardSpriteHolder>()
+        {
+            { new RewardSpriteHolder() { RewardType = GameUnitType.Money, RewardSprite = null } },
+            { new RewardSpriteHolder() { RewardType = GameUnitType.Gems, RewardSprite = null } },
+            { new RewardSpriteHolder() { RewardType = GameUnitType.Cups, RewardSprite = null } },
+            { new RewardSpriteHolder() { RewardType = GameUnitType.CarParts, RewardSprite = null } }
         };
 
         [Space(20)]
@@ -51,7 +61,7 @@ namespace RaceManager.UI
         [SerializeField]
         private List<LevelSpriteHolder> _levelSprites = new List<LevelSpriteHolder>()
         {
-            { new LevelSpriteHolder() { LevelName = LevelName.Level_0_test, LevelSprite = null } }
+            { new LevelSpriteHolder() { LevelName = LevelName.RookyTrack, LevelSprite = null } }
         };
 
         [Space(20)]
@@ -61,9 +71,15 @@ namespace RaceManager.UI
             { new MenuColorHolder() { Name = MenuColorName.Default, Color = Color.gray } }
         };
 
-        public Sprite GetSimpleRewardSprite(RewardType rewardType)
+        public Sprite GetSimpleRewardSprite(GameUnitType rewardType)
         {
             var holder = _simpleRewardSprites.Find(h => h.RewardType == rewardType);
+            return holder.RewardSprite;
+        }
+
+        public Sprite GetColoredRewardSprite(GameUnitType rewardType)
+        {
+            var holder = _coloredRewardSprites.Find(h => h.RewardType == rewardType);
             return holder.RewardSprite;
         }
 
@@ -79,7 +95,7 @@ namespace RaceManager.UI
             return holder.LevelSprite;
         }
 
-        public Sprite GetShopSprite(RewardType rewardType, int rewardsAmount)
+        public Sprite GetShopSprite(GameUnitType rewardType, int rewardsAmount)
         {
             var holder = _shopRewardSprites.Find
                 (
@@ -103,9 +119,9 @@ namespace RaceManager.UI
             public Sprite LevelSprite;
         }
 
-        public class SimpleRewardSpriteHolder
+        public class RewardSpriteHolder
         {
-            public RewardType RewardType;
+            public GameUnitType RewardType;
             public Sprite RewardSprite;
         }
 
@@ -117,7 +133,7 @@ namespace RaceManager.UI
 
         public class ShopRewardSpriteHolder
         {
-            public RewardType RewardType;
+            public GameUnitType RewardType;
             public int MinAmountThreshold;
             public int MaxAmountThreshold;
             public Sprite RewardSprite;

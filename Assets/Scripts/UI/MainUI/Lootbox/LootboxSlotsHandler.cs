@@ -1,10 +1,8 @@
-﻿using RaceManager.Cars;
-using RaceManager.Progress;
+﻿using RaceManager.Progress;
 using RaceManager.Root;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -35,6 +33,9 @@ namespace RaceManager.UI
 
         public Action<bool> OnPopupIsActive;
         public Action<Button> OnButtonPressed;
+        public Action OnInstantLootboxOpen;
+
+        private UIAnimator Animator => Singleton<UIAnimator>.Instance;
 
         [Inject]
         private void Construct(Profiler profiler, SpritesContainerRewards spritesRewards, GameEvents gameEvents)
@@ -70,6 +71,7 @@ namespace RaceManager.UI
 
             string text = string.Empty;
             if (counter == _lootboxProgress.Images.Length)
+            //if(_playerProfile.WillGetLootboxForVictiories)
             {
                 if (_playerProfile.CanGetLootbox)
                 {
@@ -131,6 +133,7 @@ namespace RaceManager.UI
                     slot.SetStatusClosed(sprite, lootbox.InitialTimeToOpen, lootbox.GemsToOpen, lootbox.Id);
                 }
 
+                slot.SlotButton.onClick.RemoveAllListeners();
                 slot.SlotButton.onClick.AddListener(() => OnLootboxSlotClicked(slot));
                 slot.SlotButton.onClick.AddListener(() => OnButtonPressedMethod(slot.SlotButton));
             }
@@ -194,6 +197,9 @@ namespace RaceManager.UI
             _lootboxPopup.GetFreeLootboxButton.SetActive(false);
 
             _lootboxPopup.SetActive(true);
+
+            Animator.AppearSubject(_lootboxPopup, slot.transform).AddTo(this);
+
             OnPopupIsActive.Invoke(true);
         }
 
@@ -202,8 +208,10 @@ namespace RaceManager.UI
             Rarity rarity = Rarity.Common;
             float timeLeft = -1f;
 
-            Lootbox lootbox = new Lootbox(rarity, timeLeft);
-            lootbox.OpenTimerActivated = true;
+            Lootbox lootbox = new Lootbox(rarity, timeLeft)
+            {
+                OpenTimerActivated = true
+            };
 
             Sprite sprite = _spritesRewards.GetLootboxSprite(rarity);
 
@@ -231,6 +239,9 @@ namespace RaceManager.UI
             _lootboxPopup.GetFreeLootboxButton.onClick.AddListener(CloseLootboxPopup);
 
             _lootboxPopup.SetActive(true);
+
+            Animator.AppearSubject(_lootboxPopup, _lootboxProgress.transform).AddTo(this);
+
             OnPopupIsActive.Invoke(true);
         }
 
@@ -262,6 +273,8 @@ namespace RaceManager.UI
                 CloseLootboxPopup();
                 HandleSlotTimer();
                 _profiler.AddOrOpenLootbox(lootbox);
+
+                OnInstantLootboxOpen?.Invoke();
 
                 slot.SetStatusEmpty();
             }
@@ -305,7 +318,8 @@ namespace RaceManager.UI
 
                     _gameEvents.Notification.OnNext(NotificationType.FirstLootbox.ToString());
                 }
-                if (_profiler.GetVictoriesTotalCount() == 6)
+
+                if (_profiler.GetVictoriesTotalCount() == PlayerProfile.HowToOpenLootboxTutorThreshold)
                 {
                     _gameEvents.Notification.OnNext(NotificationType.SecondLootbox.ToString());
                 }
@@ -313,6 +327,7 @@ namespace RaceManager.UI
                 _profiler.AddOrOpenLootbox(lootbox);
                 _profiler.ResetVictoriesCounter();
 
+                emptySlot.SlotButton.onClick.RemoveAllListeners();
                 emptySlot.SlotButton.onClick.AddListener(() => OnLootboxSlotClicked(emptySlot));
                 emptySlot.SlotButton.onClick.AddListener(() => OnButtonPressedMethod(emptySlot.SlotButton));
 
@@ -331,8 +346,10 @@ namespace RaceManager.UI
                     _hours = _activeTimerLootbox.TimeToOpenLeft / 3600f;
                     //_hoursRounded = Mathf.RoundToInt(_hours);
                     _hoursRounded = Mathf.Floor(_hours);
+
                     _minutes = Mathf.Floor((_hours - _hoursRounded) * 60f);
                     if (_minutes >= 60) _minutes = 59;
+                    if (_minutes < 1) _minutes = 1;
 
                     _activeTimerSlot.TimerText.text = _hoursRounded.ToString("00") + "h." + _minutes.ToString("00") + "m.";
                 }

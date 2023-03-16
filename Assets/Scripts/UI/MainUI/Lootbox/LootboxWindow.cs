@@ -1,7 +1,8 @@
-﻿using RaceManager.Cars;
-using RaceManager.Progress;
+﻿using RaceManager.Progress;
+using RaceManager.Root;
 using RaceManager.Tools;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,12 +18,20 @@ namespace RaceManager.UI
         [Space]
         [SerializeField] private RectTransform _receivedCardsRect;
         [SerializeField] private GridLayoutGroup _receivedCardsContent;
+        [Space]
+        [SerializeField] private RectTransform _moveOutRect;
 
+        private CardRepresenter _representer;
         private GameObject _carCardPrefab;
         private SpritesContainerCarCollection _spritesCarsCollection;
+        private SpritesContainerRewards _spritesReward;
 
-        private List<CarCardView> _cardsList = new List<CarCardView>();
+        CancellationTokenSource _tokenSource;
+
+        private Queue<CarCardView> _cardsQueue = new Queue<CarCardView>();
         private Stack<CarCardView> _cardsStack = new Stack<CarCardView>();
+
+        private UIAnimator Animator => Singleton<UIAnimator>.Instance;
 
         private GameObject CarCardPrefab
         {
@@ -37,27 +46,58 @@ namespace RaceManager.UI
         public Button OkButton => _okButton;
 
         [Inject]
-        private void Construct(SpritesContainerCarCollection spritesContainerCars)
+        private void Construct(SpritesContainerCarCollection spritesContainerCars, SpritesContainerRewards spritesReward)
         {
             _spritesCarsCollection = spritesContainerCars;
-            
+            _spritesReward = spritesReward;
+
+            _tokenSource = new CancellationTokenSource();
+            _representer = new CardRepresenter(_representationCard, Animator);
+
             _okButton.onClick.AddListener(Cleanup);
         }
 
-        public async void RepresentLootbox(List<CarCardReward> list)
+        public async void RepresentLootbox(int lootboxMoney, List<CarCardReward> list)
         { 
-            foreach (var card in list)
+            ResetCarCards();
+
+            foreach (var reward in list)
             {
-                AddCarCard(card.CarName, card.Rarity, card.CardsAmount);
+                CarCardView card = AddCarCard(reward);
+
+                if (reward.ReplacementInfo != null)
+                    MakeAltCard(reward.ReplacementInfo, card);
             }
 
+            MakeAltCard(new UnitReplacementInfo() 
+            { 
+                Type = GameUnitType.Money,
+                Amount = lootboxMoney 
+            });
+
             //Debug.Log($"List: {_cardsList.Count}; Stack: {_cardsStack.Count}");
-            
+
             while (await RepresentReceivedCards() == false)
+            {
+                _tokenSource.Token.ThrowIfCancellationRequested();
                 await Task.Yield();
+            }
+                
         }
 
-        private void AddCarCard(CarName carName, Rarity carRarity, int amount)
+        private void ResetCarCards()
+        {
+            if (_cardsStack.Count != 0)
+            {
+                foreach (var card in _cardsStack)
+                { 
+                    card.CardsAmount = 0;
+                    card.ReplacementInfo = null;
+                }
+            }
+        }
+
+        private CarCardView AddCarCard(CarCardReward reward)
         {
             CarCardView cardView;
             if (_cardsStack.Count != 0)
@@ -71,17 +111,70 @@ namespace RaceManager.UI
                 cardView = cardGo.GetComponent<CarCardView>();
             }
 
-            Color color = _spritesCarsCollection.GetCarRarityColor(carRarity);
-            cardView.CardsAmount.color = color;
+            Color color = _spritesCarsCollection.GetCarRarityColor(reward.Rarity);
+            cardView.CardsAmountText.SetActive(true);
+            cardView.CardsAmountText.color = color;
+
+            cardView.FrameImage.SetActive(true);
             cardView.FrameImage.color = color;
 
-            cardView.CarName = carName;
-            cardView.CarRarity = carRarity;
-            cardView.CardCarImage.sprite = _spritesCarsCollection.GetCarSprite(carName);
-            cardView.CardsAmount.text = amount.ToString();
-            
+            cardView.CarName = reward.CarName;
+            cardView.CarRarity = reward.Rarity;
 
-            _cardsList.Add(cardView);
+            cardView.CardCarImage.SetActive(true);
+            cardView.CardCarImage.sprite = _spritesCarsCollection.GetCarSprite(reward.CarName);
+
+            cardView.CardsAmountText.SetActive(true);
+            cardView.CardsAmountText.text = reward.CardsAmount.ToString();
+            
+            cardView.CardsAmount = reward.CardsAmount;
+
+            cardView.ReplacementInfo = reward.ReplacementInfo;
+
+            cardView.AlternativeImage.SetActive(false);
+            cardView.AlternativeAmountText.SetActive(false);
+
+            _cardsQueue.Enqueue(cardView);
+
+            return cardView;
+        }
+
+        private void MakeAltCard(UnitReplacementInfo? info, CarCardView card = null)
+        {
+            CarCardView cardView;
+            if (card != null)
+            {
+                cardView = card;
+            }
+            else if (_cardsStack.Count != 0)
+            {
+                cardView = _cardsStack.Pop();
+                cardView.SetActive(true);
+            }
+            else
+            {
+                GameObject cardGo = Instantiate(CarCardPrefab, _receivedCardsContent.transform, false);
+                cardView = cardGo.GetComponent<CarCardView>();
+            }
+
+            cardView.CardsAmountText.SetActive(false);
+
+            cardView.FrameImage.SetActive(false);
+
+            cardView.CardCarImage.SetActive(false);
+
+            cardView.CardsAmountText.SetActive(false);
+
+            cardView.ReplacementInfo = info;
+
+            cardView.AlternativeImage.SetActive(true);
+            cardView.AlternativeImage.sprite = _spritesReward.GetColoredRewardSprite(info.Value.Type);
+
+            cardView.AlternativeAmountText.SetActive(true);
+            cardView.AlternativeAmountText.text = info.Value.Amount.ToString();
+
+            if(card == null)
+                _cardsQueue.Enqueue(cardView);
         }
 
         private async Task<bool> RepresentReceivedCards()
@@ -89,36 +182,16 @@ namespace RaceManager.UI
             _okButton.SetActive(false);
             _receivedCardsRect.SetActive(false);
 
-            foreach (CarCardView cardView in _cardsList)
+            foreach (CarCardView cardView in _cardsQueue)
             {
-                _representationCard.SetActive(true);
-                _representationCard.IsVisible = true;
-                _representationCard.IsAppearing = true;
-
-                string name = cardView.CarName.ToString().SplitByUppercaseWith(" ");
-                _representationCard.CarName.text = name.ToUpper();
-
-                //Color color = _spritesCarsCollection.GetCarRarityColor(cardView.CarRarity);
-                _representationCard.FrameImage.color = cardView.FrameImage.color;
-                _representationCard.CardAmount.text = cardView.CardsAmount.text;
-                _representationCard.CarImage.sprite = cardView.CardCarImage.sprite;
-                _representationCard.Animator.SetBool(AnimParameter.Taped, false);
-
-                while (_representationCard.IsVisible)
+                while (await _representer.Represent(cardView, _tokenSource) == false)
                 {
+                    _tokenSource.Token.ThrowIfCancellationRequested();
                     await Task.Yield();
-                    if (Input.GetMouseButtonDown(0))
-                    {
-                        if (_representationCard.IsAppearing)
-                            _representationCard.IsVisible = false;
-
-                        _representationCard.Animator.SetBool(AnimParameter.Taped, true);
-                    }
                 }
-
-                _representationCard.SetActive(false);
             }
 
+            _representationCard.CardRect.SetActive(false);
             _receivedCardsRect.SetActive(true);
             _okButton.SetActive(true);
 
@@ -127,17 +200,21 @@ namespace RaceManager.UI
 
         private void Cleanup()
         {
-            foreach (CarCardView card in _cardsList)
-                _cardsStack.Push(card);
-
-            _cardsList.Clear();
-
-            //Debug.Log($"List: {_cardsList.Count}; Stack: {_cardsStack.Count}");
+            while(_cardsQueue.Count > 0)
+            {
+                CarCardView cardView = _cardsQueue.Dequeue();
+                cardView.CardsAmount = 0;
+                cardView.ReplacementInfo = null;
+                _cardsStack.Push(cardView);
+            }
+ 
+            _cardsQueue.Clear();
         }
 
         private void OnDestroy()
         {
-            _okButton.onClick.RemoveAllListeners();
+            Cleanup();
+            _tokenSource.Cancel();
         }
     }
 }

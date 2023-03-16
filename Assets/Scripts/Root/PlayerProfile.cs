@@ -15,6 +15,7 @@ namespace RaceManager.Root
     {
         public const int VictoriesCycle = 3;
         public const int LootboxesAmountMax = 4;
+        public const int HowToOpenLootboxTutorThreshold = 6;
         public const int UnlockLootboxForRaceThreshold = 10;
 
         [JsonProperty, ShowInInspector, ReadOnly]
@@ -45,7 +46,7 @@ namespace RaceManager.Root
         private Currency _currency = new Currency();
 
         [JsonProperty, SerializeField]
-        private LevelName _nextLevelPrefabToLoad = LevelName.Level_0_Igora_test;
+        private LevelName _nextLevelPrefabToLoad = LevelName.RookyTrack;
 
         [JsonProperty, SerializeField]
         private PositionInRace _lastInRacePosition = PositionInRace.DNF;
@@ -54,7 +55,7 @@ namespace RaceManager.Root
         private List<Lootbox> _lootboxes = new List<Lootbox>();
 
         [JsonProperty, SerializeField]
-        private List<LevelName> _availableLevels = new List<LevelName>() { LevelName.Level_0_Igora_test };
+        private List<LevelName> _availableLevels = new List<LevelName>() { LevelName.RookyTrack };
 
         #region Boolean Properties
 

@@ -22,7 +22,7 @@ namespace RaceManager.Shed
         private CarVisual _carVisual;
         private SaveManager _saveManager;
         private GameEvents _gameEvents;
-        private CarDestroyer _carDestroyer;
+        //private CarDestroyer _carDestroyer;
 
         [Inject]
         private void Construct
@@ -121,9 +121,12 @@ namespace RaceManager.Shed
         }
 
         private void InitializeHandler()
-        { 
-            _upgradesHandler.OnCarRankUpdate += UpdateCarInfo;
-            _upgradesHandler.OnCarFactorsUpgrade += UpdateCarInfo;
+        {
+            _upgradesHandler.OnCarUpdate
+                .Subscribe(t => 
+                {
+                    UpdateCarInfo(t.name, !t.rankUpdate);
+                });
         }
 
         private void ChangeCar(CarName newCarName)
@@ -134,9 +137,9 @@ namespace RaceManager.Shed
             _saveManager.Save();
         }
 
-        private void UpdateCarInfo(CarName carName)
+        private void UpdateCarInfo(CarName carName, bool addFactors = false)
         {
-            _mainUI.UpdateTuningPanelValues();
+            _mainUI.UpdateTuningPanelValues(addFactors);
             _mainUI.UpdateCarsCollectionCards(carName);
             _mainUI.UpdateCarsCollectionInfo();
             _mainUI.UpdateCarWindow();
@@ -161,8 +164,8 @@ namespace RaceManager.Shed
             _mainUI.OnCarProfileChange -= ChangeCar;
             _carTuner.OnCurrentCarChanged -= InitializeNewCar;
 
-            _upgradesHandler.OnCarRankUpdate -= UpdateCarInfo;
-            _upgradesHandler.OnCarFactorsUpgrade -= UpdateCarInfo;
+            //_upgradesHandler.OnCarRankUpdate -= UpdateCarInfo;
+            //_upgradesHandler.OnCarFactorsUpgrade -= UpdateCarInfo;
         }
 
         /// <summary>

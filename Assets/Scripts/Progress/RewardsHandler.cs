@@ -3,6 +3,7 @@ using RaceManager.Race;
 using RaceManager.Root;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 using Zenject;
 
 namespace RaceManager.Progress
@@ -11,15 +12,21 @@ namespace RaceManager.Progress
     {
         private GameProgressScheme _gameProgressScheme;
         private RaceRewardsScheme _raceRewardsScheme;
+        private CarsDepot _carsDepot;
 
         private PlayerProfile _playerProfile;
         private Profiler _profiler;
         private SaveManager _saveManager;
         private GameEvents _gameEvents;
 
-        public Action<List<CarCardReward>> OnLootboxOpen;
+        private RaceReward _raceReward;
+
+        public Action<int, List<CarCardReward>> OnLootboxOpen;
         public Action<Lootbox> OnRaceRewardLootboxAdded;
-        public Action OnProgressReward;
+
+        private int _moneyRewardDrift;
+        private int _moneyRewardBump;
+        private int _moneyRewardCrush;
 
         [Inject]
         private void Construct
@@ -29,6 +36,7 @@ namespace RaceManager.Progress
             SaveManager saveManager, 
             GameProgressScheme gameProgressScheme, 
             RaceRewardsScheme raceRewardsScheme,
+            CarsDepot carsDepot,
             GameEvents gameEvents
             )
         {
@@ -37,20 +45,34 @@ namespace RaceManager.Progress
             _saveManager = saveManager;
             _gameProgressScheme = gameProgressScheme;
             _raceRewardsScheme = raceRewardsScheme;
+            _carsDepot = carsDepot;
             _gameEvents = gameEvents;
 
             _profiler.OnLootboxOpen += HandleLootboxOpen;
         }
 
-        public void RewardForRace(PositionInRace positionInRace, out RaceHandler.RaceRewardInfo info)
+        public void RewardForRaceInit(PositionInRace positionInRace, out RaceRewardInfo info)
         {
-            RaceReward reward = _raceRewardsScheme.GetRewardFor(positionInRace);
-            reward.Reward(_profiler);
+            _raceReward = _raceRewardsScheme.GetRewardFor(positionInRace);
+
+            info = new RaceRewardInfo()
+            {
+                MoneyRewardFinishPos = _raceReward.Money,
+                MoneyRewardDrift = _moneyRewardDrift,
+                MoneyRewardBump = _moneyRewardBump,
+                MoneyRewardCrush = _moneyRewardCrush,
+                MoneyMultiplyer = _raceRewardsScheme.MoneyMultiplyer,
+
+                CupsRewardAmount = _raceReward.Cups,
+                CupsTotalAmount = _playerProfile.Cups
+            };
+
+            int extraMoney = _moneyRewardDrift + _moneyRewardBump + _moneyRewardCrush;
+            _raceReward.AddMoney(extraMoney);
+            _raceReward.Reward(_profiler);
 
             if (_playerProfile.CanGetLootbox)
             {
-                _profiler.CountVictoryCycle();
-
                 Rarity rarity = Rarity.Common;
                 bool isLucky = 
                     _playerProfile.WillGetLootboxForVictiories == false 
@@ -70,19 +92,23 @@ namespace RaceManager.Progress
 
             if (positionInRace == PositionInRace.First)
             {
+                _profiler.CountVictoryCycle();
+
                 _gameEvents.RaceWin.OnNext();
                 Debugger.Log($"Victories count: {_playerProfile.VictoriesTotalCounter}");
             }
-                
 
-            info = new RaceHandler.RaceRewardInfo()
-            {
-                RewardMoneyAmount = reward.Money,
-                RewardCupsAmount = reward.Cups,
-                MoneyTotal = _playerProfile.Money,
-                GemsTotal = _playerProfile.Gems
-            };
             _saveManager.Save();
+        }
+
+        public void RewardForRaceMoneyMultiplyed()
+        { 
+            if(_raceReward is null)
+                _raceReward = _raceRewardsScheme.GetRewardFor(PositionInRace.DNF);
+
+            _raceReward.Unreward(_profiler);
+            _raceReward.MultiplyMoney(_raceRewardsScheme.MoneyMultiplyer);
+            _raceReward.Reward(_profiler);
         }
 
         public void RewardForProgress(int cupsAmountLevel)
@@ -93,8 +119,26 @@ namespace RaceManager.Progress
                 reward.Reward(_profiler);
             }
 
-            OnProgressReward?.Invoke();
             _saveManager.Save();
+        }
+
+        public void SetMoneyReward(RaceScoresType type, int value)
+        {
+            switch (type)
+            {
+                case RaceScoresType.Drift:
+                    _moneyRewardDrift = value;
+                    break;
+                case RaceScoresType.Bump:
+                    _moneyRewardBump = value;
+                    break;
+                case RaceScoresType.Crush:
+                    _moneyRewardCrush = value;
+                    break;
+                case RaceScoresType.Finish:
+                default:
+                    break;
+            }
         }
 
         private void HandleLootboxOpen(Lootbox lootbox)
@@ -102,11 +146,63 @@ namespace RaceManager.Progress
             List<CarCardReward> list = lootbox.CardsList;
             foreach (var reward in list)
             {
-                _profiler.AddCarCards(reward.CarName, reward.CardsAmount);
+                if (ValidReward(reward))
+                {
+                    reward.Reward(_profiler);
+                }
+                else
+                {
+                    IReward r = ExchangeCards(reward);
+                    r?.Reward(_profiler);
+
+                    reward.ReplacementInfo = GetReplacementInfo(r);
+                }
             }
 
-            OnLootboxOpen?.Invoke(list);
+            int lootboxMoney = UnityEngine.Random.Range(lootbox.MoneyAmountMin, lootbox.MoneyAmountMax + 1);
+            int remain = lootboxMoney % 10;
+            lootboxMoney -= remain;
+            _profiler.AddMoney(lootboxMoney);
+
+            OnLootboxOpen?.Invoke(lootboxMoney, list);
             _saveManager.Save();
+        }
+
+        private bool ValidReward(CarCardReward reward)
+        {
+            var profile = _carsDepot.GetProfile(reward.CarName);
+            int goalPoints = profile.RankingScheme.RankPointsTotalForCar;
+            int curPoints = _playerProfile.CarCardsAmount(reward.CarName);
+            bool allRanksAreReached = profile.RankingScheme.AllRanksReached;
+
+            //Debug.Log($"Car name: {reward.CarName}; Goal: {goalPoints}; Current: {curPoints}; Valid: {goalPoints > curPoints}");
+
+            return goalPoints > curPoints && !allRanksAreReached;
+        }
+
+        private IReward ExchangeCards(CarCardReward reward)
+        {
+            var eData = _gameProgressScheme.GetExchangeRateFor(reward.Type);
+
+            IReward r = eData.AltRewardType switch
+            {
+                GameUnitType.Money => new Money(eData.OneUnitRate * reward.CardsAmount),
+                _ => null,
+            };
+
+            return r;
+        }
+
+        private UnitReplacementInfo? GetReplacementInfo(IReward reward)
+        {
+            UnitReplacementInfo? info = reward.Type switch
+            {
+                GameUnitType.Money => new UnitReplacementInfo() { Type = GameUnitType.Money, Amount = ((Money)reward).MoneyAmount },
+                GameUnitType.Gems => new UnitReplacementInfo() { Type = GameUnitType.Gems, Amount = ((Gems)reward).GemsAmount },
+                _ => null,
+            };
+
+            return info;
         }
 
         public void Dispose()

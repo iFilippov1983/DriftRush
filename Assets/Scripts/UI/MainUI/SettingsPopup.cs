@@ -1,10 +1,15 @@
-﻿using UnityEngine;
+﻿using DG.Tweening;
+using System;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace RaceManager.UI
 {
-    public class SettingsPopup : MonoBehaviour
+    public class SettingsPopup : AnimatableSubject
     {
+        [Space(20)]
+        [Header("Main Fields")]
         [SerializeField] private Button _okButton;
         [SerializeField] private Button _closePopupWindowButton;
         [SerializeField] private Slider _soundToggleSlider;

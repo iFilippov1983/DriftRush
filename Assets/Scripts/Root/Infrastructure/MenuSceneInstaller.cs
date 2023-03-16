@@ -47,6 +47,7 @@ namespace RaceManager.Infrastructure
         private void BindSingletons()
         {
             Bind(Singleton<Resolver>.Instance);
+            Bind(Singleton<UIAnimator>.Instance);
         }
 
         private void BindObjects()
@@ -80,7 +81,7 @@ namespace RaceManager.Infrastructure
             Bind<Profiler>();
             Bind<RewardsHandler>();
             Bind<CarUpgradesHandler>();
-            Bind<ProgressConditionInfo>();
+            Bind<ProgressConditionValidator>();
         }
 
         public override void Start()

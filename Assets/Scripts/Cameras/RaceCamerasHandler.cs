@@ -11,6 +11,9 @@ namespace RaceManager.Cameras
         private const int MajorPriority = 10;
         private const int MinorPriority = 0;
 
+        private const float DefaultBlendTime = 0.5f;
+        private const float CountdownBlendTime = 3f;
+
         [Header("Speed effect settings")]
         [Tooltip("If TRUE, values change for speed effects will depend on Car current speed")]
         [SerializeField] private bool _useSpeedFactor = true;
@@ -32,14 +35,10 @@ namespace RaceManager.Cameras
         [Range(0f, 10f)]
         [SerializeField] private float _shakeSpeedForOffRoad = 2f;
         [Space]
+        [SerializeField] private CinemachineBrain _cinemachineBrain;
         [SerializeField] private CinemachineVirtualCamera _followCamera;
         [SerializeField] private CinemachineVirtualCamera _finishCamera;
         [SerializeField] private CinemachineVirtualCamera _startCamera;
-
-        //[SerializeField] private FollowCamera _followGroupCamera;
-        //[SerializeField] private WaypointTrack _pointsTrack;
-        //[SerializeField] private CinemachineSmoothPath _path;
-        //[SerializeField] private CinemachineDollyCart _cart;
 
         private IEnumerator _currentShakeJob;
         private IEnumerator _currentFovJob;
@@ -68,21 +67,17 @@ namespace RaceManager.Cameras
         public Transform FollowCam => _followCamera.transform;
         public Transform FinishCam => _finishCamera.transform;
         public Transform StartCam => _startCamera.transform;
-        
+
 
         #region Public Functions
 
-        public void SetTargets(Transform followTransform, Transform lookAtTransform, Transform cameraFinalTarget, Transform cameraFinalPosition)
+        public void SetTargets(CamerasData data)
         {
-            //_followGroupCamera.TargetGroup.m_Targets = new CinemachineTargetGroup.Target[0];
-            //_followGroupCamera.TargetGroup.AddMember(carTransform, 1f, 0f);
-            //_followGroupCamera.TargetGroup.AddMember(followTarget, 1f, 0f);
-            //_followGroupCamera.SetTargetGroup();
-            _followCamera.LookAt = lookAtTransform;
-            _followCamera.Follow = followTransform;
+            _followCamera.LookAt = data.cameraLookTarget; 
+            _followCamera.Follow = data.cameraFollowTarget;
 
-            _startCamera.LookAt = lookAtTransform;
-            _finishCamera.LookAt = followTransform;
+            _startCamera.LookAt = data.startCameraTarget; 
+            _finishCamera.LookAt = data.cameraFollowTarget;
 
             _transposer = _followCamera.GetCinemachineComponent<CinemachineTransposer>();
             _composer = _followCamera.GetCinemachineComponent<CinemachineComposer>();
@@ -90,11 +85,12 @@ namespace RaceManager.Cameras
             _defaultMainCamFov = CurrentCamFov;
             _defaultCamAimOffset = CameraAimOffset;
 
-            _cameraFinalTarget = cameraFinalTarget;
-            _cameraFinalPosition = cameraFinalPosition;
+            _cameraFinalTarget = data.cameraFinalTarget;
+            _cameraFinalPosition = data.cameraFinalPosition;
 
-            EventsHub<RaceEvent>.Subscribe(RaceEvent.COUNTDOWN, SetStartCamera);
-            EventsHub<RaceEvent>.Subscribe(RaceEvent.START, SetFollowCamera);
+            SetStartCamera();
+
+            EventsHub<RaceEvent>.Subscribe(RaceEvent.COUNTDOWN, SetFollowCamera);
             EventsHub<RaceEvent>.Subscribe(RaceEvent.FINISH, SetFinishCamera);
         }
 
@@ -229,38 +225,23 @@ namespace RaceManager.Cameras
 
         private void SetFinishCamera()
         {
+            _cinemachineBrain.m_DefaultBlend.m_Time = DefaultBlendTime;
             SetCameraState(MajorPriority, true, _finishCamera);
             SetCameraState(MinorPriority, false, _startCamera, _followCamera);
-
-            //_finishCamera.Priority = MajorPriority;
-
-            //_startCamera.Priority = MinorPriority;
-                //_followGroupCamera.Camera.Priority = MinorPriority;
-            //_followCamera.Priority = MinorPriority;
         }
 
         private void SetFollowCamera()
         {
+            _cinemachineBrain.m_DefaultBlend.m_Time = CountdownBlendTime;
             SetCameraState(MajorPriority, true, _followCamera);
             SetCameraState(MinorPriority, false, _finishCamera, _startCamera);
-
-            //_followCamera.Priority = MajorPriority;
-                //_followGroupCamera.Camera.Priority = MajorPriority;
-
-            //_finishCamera.Priority = MinorPriority;
-            //_startCamera.Priority = MinorPriority;
         }
 
         private void SetStartCamera()
         {
+            _cinemachineBrain.m_DefaultBlend.m_Time = DefaultBlendTime;
             SetCameraState(MajorPriority, true, _startCamera);
             SetCameraState(MinorPriority, false, _followCamera, _finishCamera);
-
-            //_startCamera.Priority = MajorPriority;
-
-            //_followCamera.Priority = MinorPriority;
-                //_followGroupCamera.Camera.Priority = MinorPriority;
-            //_finishCamera.Priority = MinorPriority;
         }
 
         private void SetCameraState(int priority, bool isActive, params CinemachineVirtualCamera[] cameras)
@@ -268,24 +249,12 @@ namespace RaceManager.Cameras
             foreach (var cam in cameras)
             {
                 cam.Priority = priority;
-                cam.SetActive(isActive);
             }
         }
-
-        //[Button]
-        //private void MakePath()
-        //{
-        //    _path.m_Waypoints = new CinemachineSmoothPath.Waypoint[_pointsTrack.Waypoints.Length];
-        //    for (int i = 0; i < _pointsTrack.Waypoints.Length; i++)
-        //    { 
-        //        _path.m_Waypoints[i].position = _pointsTrack.waypointList.items[i].position;
-        //    }
-        //}
 
         private void OnDestroy()
         {
             EventsHub<RaceEvent>.Unsunscribe(RaceEvent.COUNTDOWN, SetStartCamera);
-            EventsHub<RaceEvent>.Unsunscribe(RaceEvent.START, SetFollowCamera);
             EventsHub<RaceEvent>.Unsunscribe(RaceEvent.FINISH, SetFinishCamera);
         }
 

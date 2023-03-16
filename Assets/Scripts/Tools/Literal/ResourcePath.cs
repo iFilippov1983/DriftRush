@@ -9,7 +9,7 @@ namespace RaceManager.Tools
         public const string LevelsPrefabsFolder = "Prefabs/Levels/";
 
         public const string MaterialsContainer = "SO/Containers/MaterialsContainer";
-        public const string EffectsSettingsContainer = "SO/Containers/EffectsSettingsContainer";
+        public const string GameSettingsContainer = "SO/Containers/GameSettingsContainer";
 
         public const string GameProgressScheme = "SO/Schemes/GameProgressScheme";
         public const string CarDepotPlayer = "SO/Depots/CarsDepotPlayer";
@@ -25,6 +25,8 @@ namespace RaceManager.Tools
         public const string ProgressStepPrefab = "Prefabs/UI/ProgressStep";
         public const string CarCardViewPrefab = "Prefabs/UI/CarCard";
         public const string ImageAnimationTrailPrefab = "Prefabs/UI/ImageTrail";
+        public const string ExtraScoresIndicatorViewPrefab = "Prefabs/UI/ExtraScoresIndicator";
+        public const string AnimatableCurrencyPrefab = "Prefabs/UI/AnimatableCurrency";
 
         private const string LootboxModelsFolder = "SO/LootboxModels/";
         private const string CommonLootboxName = "0-LootboxCommon";

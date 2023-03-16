@@ -13,7 +13,11 @@ namespace RaceManager.Progress
     {
         [SerializeField]
         [DictionaryDrawerSettings(KeyLabel = "Cups To Reach", ValueLabel = "Progress Step")]
-        public Dictionary<int, ProgressStep> ProgressSteps = new Dictionary<int, ProgressStep>();
+        private Dictionary<int, ProgressStep> ProgressSteps = new Dictionary<int, ProgressStep>();
+
+        [SerializeField]
+        [DictionaryDrawerSettings(KeyLabel = "Reward To Eaxchange", ValueLabel = "One Unit Rate")]
+        private Dictionary<GameUnitType, ExchangeRateData> RewardExchangeScheme = new Dictionary<GameUnitType, ExchangeRateData>();
 
         public bool HasUnreceivedRewards
         {
@@ -28,9 +32,34 @@ namespace RaceManager.Progress
             }
         }
 
+        public IReadOnlyDictionary<int, ProgressStep> Steps => ProgressSteps;
+
         public KeyValuePair<int, ProgressStep> LastGlobalGoal => ProgressSteps.First(p => p.Value.IsLast == true);
 
-        public ProgressStep GetStepWhithGoal(int goalCupsAmount) => ProgressSteps[goalCupsAmount];
+        public ProgressStep GetStepWhithGoal(int goalCupsAmount)
+        {
+            if (ProgressSteps.ContainsKey(goalCupsAmount))
+            {
+                return ProgressSteps[goalCupsAmount];
+            }
+            else
+            {
+                return ProgressSteps.Last().Value;
+            }
+        }
+
+        public ExchangeRateData GetExchangeRateFor(GameUnitType type)
+        {
+            if (RewardExchangeScheme.ContainsKey(type))
+            {
+                return RewardExchangeScheme[type];
+            }
+            else
+            {
+                return new ExchangeRateData() { AltRewardType = type, OneUnitRate = 1 };
+            }
+        }
+
         public Type DataType() => typeof(SaveData);
 
         public void Load(object data)
@@ -93,6 +122,13 @@ namespace RaceManager.Progress
             public int GoalCupsAmount;
             public bool StepReached;
             public bool StepRewardsReceived;
+        }
+
+        [Serializable]
+        public class ExchangeRateData
+        {
+            public GameUnitType AltRewardType;
+            public int OneUnitRate;
         }
     }
 }

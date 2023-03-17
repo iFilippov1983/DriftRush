@@ -274,7 +274,7 @@ namespace RaceManager.UI
             animSequence.AppendCallback(() => rect.transform.localScale = initialScale);
 
             ForceCompleteAnimation
-                .Where(s => s == rect.name && animSequence != null)
+                .Where(s => s == rect?.name && animSequence != null)
                 .Take(1)
                 .Subscribe(x =>
                 {
@@ -301,7 +301,7 @@ namespace RaceManager.UI
                 sequence.AppendCallback(() => rect.transform.SetActive(false));
 
             ForceCompleteAnimation
-                .Where(s => s == rect.name && sequence != null)
+                .Where(s => s == rect?.name && sequence != null)
                 .Take(1)
                 .Subscribe(s =>
                 {
@@ -318,7 +318,7 @@ namespace RaceManager.UI
             Tween tween = rect.DOMove(moveFromPos.position, _rectAnimDuration).From();
 
             ForceCompleteAnimation
-                .Where(s => s == rect.name && tween != null)
+                .Where(s => s == rect?.name && tween != null)
                 .Take(1)
                 .Subscribe(s =>
                 {

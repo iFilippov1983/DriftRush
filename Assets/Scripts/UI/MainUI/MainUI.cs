@@ -203,7 +203,7 @@ namespace RaceManager.UI
                 }
             }
 
-            //OnMainMenuActivityChange?.Invoke(active);
+            OnMainMenuActivityChange?.Invoke(active);
 
             void Activate(Transform appearTransform)
             {

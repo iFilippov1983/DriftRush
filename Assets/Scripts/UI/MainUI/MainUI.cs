@@ -242,7 +242,8 @@ namespace RaceManager.UI
                 Animator.AppearSubject(_tuningPanel).AddTo(this);
             }
             else
-            { 
+            {
+                _tuningPanel.DeactivateAllPanels();
                 Animator.DisappearSubject(_tuningPanel, null, true, false, () => _tuningPanel.SetActive(active)).AddTo(this);
             }
 
@@ -312,7 +313,7 @@ namespace RaceManager.UI
 
                 Animator.DisappearSubject(_bottomPanel, null, true, true)?.AddTo(this);
             }
-            else
+            else if(!_bottomPanel.isActiveAndEnabled)
             {
                 Animator.DisappearSubject(_carsCollectionPanel.CarWindow, _helperRects.AppearBottomRect, true, true)?.AddTo(this);
 

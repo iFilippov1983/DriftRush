@@ -81,12 +81,12 @@ namespace RaceManager.UI
 
         private void OnEnable()
         {
-            OpenPanel(_statsValuesPanel, _tuneCarStatsActiveImage);
+            OpenPanel(_statsValuesPanel, _tuneCarStatsActiveImage, false);
         }
 
         private void OnDisable()
         {
-            DeactivateAllPanels();
+            //DeactivateAllPanels();
             DeactivetaAllPanelActiveImages();
             ActiveRect = null;
             ActiveImage = null;
@@ -94,11 +94,11 @@ namespace RaceManager.UI
 
         public void RegisterButtonsListeners()
         {
-            _tuneStatsButton.onClick.AddListener(() => OpenPanel(_statsValuesPanel, _tuneCarStatsActiveImage));
+            _tuneStatsButton.onClick.AddListener(() => OpenPanel(_statsValuesPanel, _tuneCarStatsActiveImage, true));
 
-            _tuneWheelsViewButton.onClick.AddListener(() => OpenPanel(_tuneWheelsViewPanel, _tuneWheelsActiveImage));
+            _tuneWheelsViewButton.onClick.AddListener(() => OpenPanel(_tuneWheelsViewPanel, _tuneWheelsActiveImage, true));
 
-            _tuneCarViewButton.onClick.AddListener(() => OpenPanel(_tuneCarViewPanel, _tuneCarViewActiveImage));
+            _tuneCarViewButton.onClick.AddListener(() => OpenPanel(_tuneCarViewPanel, _tuneCarViewActiveImage, true));
         }
 
         public void SetBorderValues(CharacteristicType characteristics, int minValue, int maxValue)
@@ -198,7 +198,7 @@ namespace RaceManager.UI
             _carStatsProgressText.text = currentValue.ToString();
         }
 
-        public void OpenPanel(RectTransform panel, Image properImage)
+        public void OpenPanel(RectTransform panel, Image properImage, bool animate)
         {
             string name = ActiveRect == null
                 ? string.Empty
@@ -209,12 +209,14 @@ namespace RaceManager.UI
                 if (ActiveRect != null)
                 {
                     Animator.ForceCompleteAnimation?.OnNext(ActiveRect.name);
-                    Animator.RectMoveTo(ActiveRect, _movePoint, true, true);
+                    if (animate)
+                        Animator.RectMoveTo(ActiveRect, _movePoint, true, true);
                 }
 
                 Animator.ForceCompleteAnimation?.OnNext(panel.name);
                 panel.SetActive(true);
-                Animator.RectMoveFrom(panel, _movePoint);
+                if (animate)
+                    Animator.RectMoveFrom(panel, _movePoint);
             }
 
             ActiveRect = panel;
@@ -226,8 +228,13 @@ namespace RaceManager.UI
 
         public void DeactivateAllPanels()
         {
+            Animator.ForceCompleteAnimation?.OnNext(_statsValuesPanel.name);
             _statsValuesPanel.SetActive(false);
+
+            Animator.ForceCompleteAnimation?.OnNext(_tuneWheelsViewPanel.name);
             _tuneWheelsViewPanel.SetActive(false);
+
+            Animator.ForceCompleteAnimation?.OnNext(_tuneCarViewPanel.name);
             _tuneCarViewPanel.SetActive(false);
         }
 

@@ -1,5 +1,4 @@
-﻿using RaceManager.Cars;
-using RaceManager.Tools;
+﻿using RaceManager.Tools;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
@@ -308,5 +307,7 @@ namespace RaceManager.Waypoints
 
             }
         }
+
+        public void SetDrawColor(Color newColor) => _drawColor = newColor;
     }
 }

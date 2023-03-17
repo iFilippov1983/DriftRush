@@ -200,6 +200,7 @@ namespace RaceManager.UI
 
             _lootboxPopup.SetActive(true);
 
+            _lootboxPopup.LastAppearTransform = slot.transform;
             Animator.AppearSubject(_lootboxPopup, slot.transform).AddTo(this);
 
             OnPopupIsActive.Invoke(true);
@@ -242,6 +243,7 @@ namespace RaceManager.UI
 
             _lootboxPopup.SetActive(true);
 
+            _lootboxPopup.LastAppearTransform = _lootboxProgress.transform;
             Animator.AppearSubject(_lootboxPopup, _lootboxProgress.transform).AddTo(this);
 
             OnPopupIsActive.Invoke(true);
@@ -293,7 +295,7 @@ namespace RaceManager.UI
             _lootboxPopup.InstantOpenButton.onClick.RemoveAllListeners();
             _lootboxPopup.SpeedupButton.onClick.RemoveAllListeners();
             _lootboxPopup.GetFreeLootboxButton.onClick.RemoveAllListeners();
- 
+
             _lootboxPopup.SetActive(false);
 
             OnPopupIsActive.Invoke(false);

@@ -14,13 +14,6 @@ namespace RaceManager.UI
 {
     public class UIAnimator : SerializedMonoBehaviour
     {
-        [Serializable]
-        public struct RewardSpriteSizeData
-        { 
-            public GameUnitType type;
-            public Vector2 size;
-        }
-
         [Header("Currency anim settings")]
         [SerializeField] private int _currencyToSpawnMin = 10;
         [SerializeField] private int _currencyToSpawnMax = 20;
@@ -253,7 +246,7 @@ namespace RaceManager.UI
             return Disposable.Create(() => tween?.Kill());
         }
 
-        public IDisposable AnimateRect(RectTransform rect, TweenCallback finishCallBack = null, params AnimationType[] animationsSequence)
+        public IDisposable RectAnimate(RectTransform rect, TweenCallback finishCallBack = null, params AnimationType[] animationsSequence)
         { 
             Sequence animSequence = DOTween.Sequence();
 
@@ -291,6 +284,49 @@ namespace RaceManager.UI
                 .AddTo(this);
 
             return Disposable.Create(() => animSequence?.Kill());
+        }
+
+        public IDisposable RectMoveTo(RectTransform rect, Transform moveToPos, bool resetOnFinish = true, bool disableOnFinish = true)
+        {
+            Vector3 initialPos = rect.transform.position;
+
+            Sequence sequence = DOTween.Sequence();
+
+            sequence.Append(rect.DOMove(moveToPos.position, _rectAnimDuration));
+
+            if (resetOnFinish)
+                sequence.AppendCallback(() => rect.transform.position = initialPos);
+
+            if (disableOnFinish)
+                sequence.AppendCallback(() => rect.transform.SetActive(false));
+
+            ForceCompleteAnimation
+                .Where(s => s == rect.name && sequence != null)
+                .Take(1)
+                .Subscribe(s =>
+                {
+                    sequence.Complete(true);
+                    sequence = null;
+                })
+                .AddTo(this);
+
+            return Disposable.Create(() => sequence?.Kill());
+        }
+
+        public IDisposable RectMoveFrom(RectTransform rect, Transform moveFromPos)
+        {
+            Tween tween = rect.DOMove(moveFromPos.position, _rectAnimDuration).From();
+
+            ForceCompleteAnimation
+                .Where(s => s == rect.name && tween != null)
+                .Take(1)
+                .Subscribe(s =>
+                {
+                    tween.Complete(true);
+                    tween = null;
+                });
+
+            return Disposable.Create(() => tween?.Kill());
         }
 
         public IDisposable AppearSubject(IAnimatableSubject subject, Transform moveFromTransform = null, TweenCallback finishCallback = null)
@@ -462,7 +498,6 @@ namespace RaceManager.UI
                 .Subscribe(_ =>
                 { 
                     disappearSequence.Complete(true);
-                    Debug.Log("[Sequence completed whith callbacks]");
                     disappearSequence = null;
                 })
                 .AddTo(this);

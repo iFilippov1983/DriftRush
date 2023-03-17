@@ -670,6 +670,7 @@ namespace RaceManager.UI
             _carsCollectionPanel.CloseButton.onClick.AddListener(() => OnButtonPressedMethod(_carsCollectionPanel.CloseButton));
 
             _carsCollectionPanel.ClosePanelWindowButton.onClick.AddListener(() => OnStatusChange?.OnNext(MainUIStatus.ActiveMainUI));
+            _carsCollectionPanel.ClosePanelWindowButton.onClick.AddListener(() => ActivateCarWindow(false));
             _carsCollectionPanel.ClosePanelWindowButton.onClick.AddListener(() => OnButtonPressedMethod(_carsCollectionPanel.ClosePanelWindowButton));
 
             _gameProgressPanel.BackButton.onClick.AddListener(() => OnStatusChange?.OnNext(MainUIStatus.ActiveMainUI));

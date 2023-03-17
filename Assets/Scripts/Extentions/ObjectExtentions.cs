@@ -1,5 +1,4 @@
-﻿using RaceManager.UI;
-using UnityEngine;
+﻿using UnityEngine;
 
 public static class ObjectExtentions
 {

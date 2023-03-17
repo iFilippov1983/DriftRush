@@ -130,6 +130,7 @@ namespace RaceManager.Shop
                 Lootbox lootbox = new Lootbox(lootboxRarity, -1);
                 _profiler.AddOrOpenLootbox(lootbox);
 
+                _mainUI.UpdateCurrencyAmountPanels(GameUnitType.Gems);
                 $"[Shop Handler] Got lootbox => {lootboxRarity}".Log(Logger.ColorYellow);
             }
             else 
@@ -157,6 +158,8 @@ namespace RaceManager.Shop
             {
                 CloseConfirmationPanel(ConfirmationPanel.ConfirmButton.name);
                 AddMoney(moneyAmount);
+
+                _mainUI.UpdateCurrencyAmountPanels(GameUnitType.Gems);
             }
             else
             {
@@ -221,11 +224,8 @@ namespace RaceManager.Shop
                     _mainUI.CurrencyPanel.transform, 
                     panelTransform, 
                     _mainUI.CurrencyPanel.MoneyImage.transform, 
-                    () => 
-                {
-                    _mainUI.UpdateCurrencyAmountPanels(GameUnitType.Money);
-                    
-                });
+                    () => _mainUI.UpdateCurrencyAmountPanels(GameUnitType.Money)
+                );
                 return;
             }
 

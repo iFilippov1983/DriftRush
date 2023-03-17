@@ -37,6 +37,7 @@ namespace RaceManager.UI
         public TMP_Text LootboxRarityText => _lootboxRarityText;
         public Image LootboxImage => _lootboxImage;
 
+        public Transform LastAppearTransform { get; set; }
 
         public void InitiallizeView(PopupInfo info, bool addFree = false)
         {

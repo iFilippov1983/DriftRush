@@ -1,4 +1,5 @@
-﻿using RaceManager.Cars;
+﻿using DG.Tweening;
+using RaceManager.Cars;
 using RaceManager.Progress;
 using RaceManager.Root;
 using System;
@@ -11,6 +12,8 @@ namespace RaceManager.UI
 {
     public class TuningPanel : AnimatableSubject
     {
+        [Space]
+        [Header("Main Fields")]
         [SerializeField] private UpgradeWindowTuner _upgradeWindow;
         [Space]
         [SerializeField] private Button _tuneStatsButton;
@@ -48,6 +51,10 @@ namespace RaceManager.UI
         [SerializeField] private Image _tuneWheelsActiveImage;
         [SerializeField] private Image _tuneCarViewActiveImage;
         [SerializeField] private Image _carPartImage;
+        [Space]
+        [SerializeField] private Transform _movePoint;
+
+        private Subject<string> InterruptAnimation = new Subject<string>();
 
         public Slider SpeedSlider => _speedSlider;
         public Slider MobilitySlider => _mobilitySlider;
@@ -65,34 +72,33 @@ namespace RaceManager.UI
 
         public TMP_Text UpgradeCostText => _upgradeWindow.CostText;
         public TMP_Text PartsAmountText => _upgradeWindow.PartsAmountText;
-        public TMP_Text FactorsPointsAvailableText => _factorPointsAvailableText;
 
         public Action OnButtonPressed;
 
         private UIAnimator Animator => Singleton<UIAnimator>.Instance;
+        private Image ActiveImage { get; set; }
+        private RectTransform ActiveRect { get; set; }
 
         private void OnEnable()
         {
-            OpenStatsValuesPanel();
+            OpenPanel(_statsValuesPanel, _tuneCarStatsActiveImage, false);
         }
 
         private void OnDisable()
         {
-            DeactivateAllPanels();
+            //DeactivateAllPanels();
             DeactivetaAllPanelActiveImages();
+            ActiveRect = null;
+            ActiveImage = null;
         }
 
         public void RegisterButtonsListeners()
         {
-            _tuneStatsButton.onClick.AddListener(OpenStatsValuesPanel);
+            _tuneStatsButton.onClick.AddListener(() => OpenPanel(_statsValuesPanel, _tuneCarStatsActiveImage, true));
 
-            _tuneWheelsViewButton.onClick.AddListener(OpenTuneWheelsViewPanel);
+            _tuneWheelsViewButton.onClick.AddListener(() => OpenPanel(_tuneWheelsViewPanel, _tuneWheelsActiveImage, true));
 
-            _tuneCarViewButton.onClick.AddListener(OpenTuneCarViewPanel);
-
-            _closePanelButton.onClick.AddListener(DeactivateAllPanels);
-
-            _closePanelWindowButton.onClick.AddListener(DeactivateAllPanels);
+            _tuneCarViewButton.onClick.AddListener(() => OpenPanel(_tuneCarViewPanel, _tuneCarViewActiveImage, true));
         }
 
         public void SetBorderValues(CharacteristicType characteristics, int minValue, int maxValue)
@@ -177,9 +183,11 @@ namespace RaceManager.UI
                         _carPartImage.transform,
                         () => UpdateCurrentInfoValues(factorsAvailable, true)
                         ).AddTo(this);
-            }  
+            }
             else
+            {
                 UpdateCurrentInfoValues(factorsAvailable);
+            }
         }
 
         public void UpdateCarStatsProgress(string carName, int currentValue)
@@ -187,45 +195,51 @@ namespace RaceManager.UI
             string name = carName.SplitByUppercaseWith(" ");
 
             _carNameText.text = name.ToUpper();
-            _carStatsProgressText.text = $"{currentValue}";
+            _carStatsProgressText.text = currentValue.ToString();
         }
 
-        public void OpenStatsValuesPanel()
+        public void OpenPanel(RectTransform panel, Image properImage, bool animate)
         {
-            DeactivateAllPanels();
-            _statsValuesPanel.SetActive(true);
+            string name = ActiveRect == null
+                ? string.Empty
+                : ActiveRect.name;
 
-            DeactivetaAllPanelActiveImages();
-            _tuneCarStatsActiveImage.SetActive(true);
-        }
+            if (name != panel.name)
+            {
+                if (ActiveRect != null)
+                {
+                    Animator.ForceCompleteAnimation?.OnNext(ActiveRect.name);
+                    if (animate)
+                        Animator.RectMoveTo(ActiveRect, _movePoint, true, true);
+                }
 
-        public void OpenTuneWheelsViewPanel()
-        {
-            DeactivateAllPanels();
-            _tuneWheelsViewPanel.SetActive(true);
+                Animator.ForceCompleteAnimation?.OnNext(panel.name);
+                panel.SetActive(true);
+                if (animate)
+                    Animator.RectMoveFrom(panel, _movePoint);
+            }
 
-            DeactivetaAllPanelActiveImages();
-            _tuneWheelsActiveImage.SetActive(true);
-        }
+            ActiveRect = panel;
 
-        public void OpenTuneCarViewPanel()
-        {
-            DeactivateAllPanels();
-            _tuneCarViewPanel.SetActive(true);
-
-            DeactivetaAllPanelActiveImages();
-            _tuneCarViewActiveImage.SetActive(true);
+            ActiveImage?.SetActive(false);
+            properImage.SetActive(true);
+            ActiveImage = properImage;
         }
 
         public void DeactivateAllPanels()
         {
+            Animator.ForceCompleteAnimation?.OnNext(_statsValuesPanel.name);
             _statsValuesPanel.SetActive(false);
+
+            Animator.ForceCompleteAnimation?.OnNext(_tuneWheelsViewPanel.name);
             _tuneWheelsViewPanel.SetActive(false);
+
+            Animator.ForceCompleteAnimation?.OnNext(_tuneCarViewPanel.name);
             _tuneCarViewPanel.SetActive(false);
         }
 
         public void DeactivetaAllPanelActiveImages()
-        { 
+        {
             _tuneCarStatsActiveImage.SetActive(false);
             _tuneWheelsActiveImage.SetActive(false);
             _tuneCarViewActiveImage.SetActive(false);

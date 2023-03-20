@@ -9,10 +9,12 @@ using Zenject;
 
 namespace RaceManager.UI
 {
-    public class LootboxSlotsHandler : MonoBehaviour
+    public class LootboxSlotsHandler : AnimatableSubject
     {
         private const int LootboxesListCapacity = 4;
 
+        [Space]
+        [Header("Main Fields")]
         [SerializeField] private LootboxProgressPanel _lootboxProgress;
         [SerializeField] private LootboxPopup _lootboxPopup;
         [SerializeField] private List<LootboxSlot> _lootboxSlots = new List<LootboxSlot>(LootboxesListCapacity);
@@ -198,6 +200,7 @@ namespace RaceManager.UI
 
             _lootboxPopup.SetActive(true);
 
+            _lootboxPopup.LastAppearTransform = slot.transform;
             Animator.AppearSubject(_lootboxPopup, slot.transform).AddTo(this);
 
             OnPopupIsActive.Invoke(true);
@@ -240,6 +243,7 @@ namespace RaceManager.UI
 
             _lootboxPopup.SetActive(true);
 
+            _lootboxPopup.LastAppearTransform = _lootboxProgress.transform;
             Animator.AppearSubject(_lootboxPopup, _lootboxProgress.transform).AddTo(this);
 
             OnPopupIsActive.Invoke(true);
@@ -291,7 +295,7 @@ namespace RaceManager.UI
             _lootboxPopup.InstantOpenButton.onClick.RemoveAllListeners();
             _lootboxPopup.SpeedupButton.onClick.RemoveAllListeners();
             _lootboxPopup.GetFreeLootboxButton.onClick.RemoveAllListeners();
- 
+
             _lootboxPopup.SetActive(false);
 
             OnPopupIsActive.Invoke(false);
@@ -400,15 +404,15 @@ namespace RaceManager.UI
             HandleSlotTimer();
         }
 
-        private void OnEnable()
-        {
-            _lootboxProgress.SetActive(true);
-        }
+        //private void OnEnable()
+        //{
+        //    _lootboxProgress.SetActive(true);
+        //}
 
-        private void OnDisable()
-        {
-            _lootboxProgress.SetActive(false);
-        }
+        //private void OnDisable()
+        //{
+        //    _lootboxProgress.SetActive(false);
+        //}
 
         private void OnDestroy()
         {

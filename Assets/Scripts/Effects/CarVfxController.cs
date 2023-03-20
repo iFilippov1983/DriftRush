@@ -3,6 +3,7 @@ using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UniRx.Triggers;
 using static UnityEngine.ParticleSystem;
 
 namespace RaceManager.Effects
@@ -15,6 +16,9 @@ namespace RaceManager.Effects
 		[SerializeField] private float _minTimeBetweenCollisions = 0.1f;
 		[SerializeField] private TrailRenderer _trailPrefab;
 		[SerializeField] private ParticleSystem _defaultColisionParticle;
+        [Space]
+        [SerializeField] private MeshRenderer[] _stopLights;
+        [Space]
 		[SerializeField] private List<CollisionParticles> _collisionParticles = new List<CollisionParticles>();
 		[SerializeField] private List<ParticleSystem> _backFireParticles = new List<ParticleSystem>();
 
@@ -71,6 +75,7 @@ namespace RaceManager.Effects
         private void Update()
         {
             HandleWheels();
+            HandleStopLights();
         }
 
         private void OnDestroy()
@@ -133,6 +138,14 @@ namespace RaceManager.Effects
 
                 //Emit trail
                 UpdateTrail(wheel, wheel.IsGrounded && hasSlip);
+            }
+        }
+
+        private void HandleStopLights()
+        {
+            for (int i = 0; i < _stopLights.Length; i++)
+            {
+                _stopLights[i]?.SetActive(_car.IsBraking);
             }
         }
 

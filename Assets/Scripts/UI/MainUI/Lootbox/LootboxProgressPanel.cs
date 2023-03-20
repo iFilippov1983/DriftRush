@@ -7,8 +7,10 @@ using UnityEngine.UI;
 
 namespace RaceManager.UI
 {
-    public class LootboxProgressPanel : MonoBehaviour
+    public class LootboxProgressPanel : AnimatableSubject
     {
+        [Space]
+        [Header("Main Fields")]
         [ShowInInspector, ReadOnly] private const float MarksFadeSpeed = 5f;
         [SerializeField] private TMP_Text _moreWinsText;
         [SerializeField] private GameObject _lootboxImage;

@@ -15,6 +15,11 @@
         ScaleToZero,
 
         PunchScale,
-        ShakeScale
+        ShakeScale,
+
+        MoveInX,
+        MoveOutX,
+        MoveInY,
+        MoveOutY
     }
 }

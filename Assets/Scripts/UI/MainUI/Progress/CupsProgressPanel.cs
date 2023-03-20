@@ -4,8 +4,10 @@ using UnityEngine.UI;
 
 namespace RaceManager.UI
 {
-    public class CupsProgressPanel : MonoBehaviour
+    public class CupsProgressPanel : AnimatableSubject
     {
+        [Space]
+        [Header("Main Fields")]
         [SerializeField] private Image _fillImage;
         [SerializeField] private Image _hasUnreceivedRewardsImage;
         [SerializeField] private TMP_Text _cupsAmountOwned;

@@ -166,7 +166,7 @@ namespace RaceManager.UI
                 stepView.StepWindowBig.ClaimedImage.SetActive(received);
 
                 if (received)
-                    Animator.AnimateRect(stepView.StepWindowBig.ClaimedImage.rectTransform, animationsSequence: new AnimationType[] 
+                    Animator.RectAnimate(stepView.StepWindowBig.ClaimedImage.rectTransform, animationsSequence: new AnimationType[] 
                     { 
                         AnimationType.PunchScale,
                         AnimationType.ShakeScale
@@ -177,7 +177,7 @@ namespace RaceManager.UI
                 stepView.StepWindow.ClaimedImage.SetActive(received);
 
                 if (received)
-                    Animator.AnimateRect(stepView.StepWindow.ClaimedImage.rectTransform, animationsSequence: new AnimationType[]
+                    Animator.RectAnimate(stepView.StepWindow.ClaimedImage.rectTransform, animationsSequence: new AnimationType[]
                     {
                         AnimationType.PunchScale,
                         AnimationType.ShakeScale

@@ -28,7 +28,7 @@ namespace RaceManager.UI
         public Button TuneButton => _tuningButton;
         public Button SoonButton => _soonButton;
 
-        public Image IapSopPressedImage => _iapShopPressedImage;
+        public Image IapShopPressedImage => _iapShopPressedImage;
         public Image CarsCollectionPressedImage => _carsCollectionPressedImage;
         public Image MainMenuPressedImage => _mainMenuPressedImage;
         public Image TuningPressedImage => _tuningPressedImage;

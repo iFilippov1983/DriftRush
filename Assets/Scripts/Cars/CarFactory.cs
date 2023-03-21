@@ -30,7 +30,7 @@ namespace RaceManager.Cars
 
             _carProfile = _driverType == DriverType.Player
                 ? _carsDepot.CurrentCarProfile
-                : GetOpponentsProfile();
+                : GetRandomProfile();
         }
 
         public CarFactory(CarsDepot carsDepot, MaterialsContainer materialsContainer, Transform spawnPoint)
@@ -118,13 +118,10 @@ namespace RaceManager.Cars
             return go;
         }
 
-        private CarProfile GetOpponentsProfile()
+        private CarProfile GetRandomProfile()
         {
-            //TODO: make settings generation depending on Player's progress level
-            
             CarProfile carProfile = _carsDepot.ProfilesList[Random.Range(0, _carsDepot.ProfilesList.Count)];
             //carProfile.CarConfigVisual.CurrentMaterialsSetType = (MaterialSetType)Random.Range(0, 2);
-
 
             return carProfile;
         }

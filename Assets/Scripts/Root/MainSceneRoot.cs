@@ -2,6 +2,7 @@ using RaceManager.Cameras;
 using RaceManager.Shed;
 using RaceManager.UI;
 using System;
+using UniRx;
 using UnityEngine;
 using Zenject;
 
@@ -51,7 +52,7 @@ namespace RaceManager.Root
         {
             _menuCamerasHandler.LookAt(_podium.CarPlace);
 
-            _mainUI.OnMainMenuActivityChange += _menuCamerasHandler.ToggleCamPriorities;
+            _mainUI.OnStatusChange.Subscribe(s => _menuCamerasHandler.ToggleCamPriorities(s)).AddTo(this);
         }
 
         private void RegisterSavebles()
@@ -107,8 +108,6 @@ namespace RaceManager.Root
             var disposables = Singleton<Resolver>.Instance.ResolveAll<IDisposable>();
             foreach (var d in disposables)
                 d.Dispose();
-
-            _mainUI.OnMainMenuActivityChange -= _menuCamerasHandler.ToggleCamPriorities;
         }
 
         private void OnApplicationQuit()

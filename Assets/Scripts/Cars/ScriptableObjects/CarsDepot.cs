@@ -23,7 +23,8 @@ namespace RaceManager.Cars
         public void UpdateProfile(CarProfile newCP)
         {
             CarProfile currentCP = CarProfiles.Find(c => c.CarName == newCP.CarName);
-            CarProfiles.Remove(currentCP);
+            if(currentCP != null)
+                CarProfiles.Remove(currentCP);
             CarProfiles.Add(newCP);
             CarProfiles.Sort((a, b) => a.CarCharacteristics.Rarity.CompareTo(b.CarCharacteristics.Rarity));
         }

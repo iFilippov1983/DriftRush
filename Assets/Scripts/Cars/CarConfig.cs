@@ -26,13 +26,13 @@ namespace RaceManager.Cars
 		[Tooltip("Cruise Speed Settings (for Player)")]
 		public float CruiseSpeed = 20f;
 
-		[Tooltip("Represents Max percentage range of Speed AI will use")]
-		[Range(0.01f, 1f)]
-		public float CruiseSpeedPercentMax = 0.8f;
+		//[Tooltip("Represents Max percentage range of Speed AI will use")]
+		//[Range(0.01f, 1f)]
+		//public float CruiseSpeedPercentMax = 0.8f;
 
-		[Tooltip("Represents Min percentage range of Speed AI will use")]
-		[Range(0.01f, 1f)]
-		public float CruiseSpeedPercentMin = 0.7f;
+		//[Tooltip("Represents Min percentage range of Speed AI will use")]
+		//[Range(0.01f, 1f)]
+		//public float CruiseSpeedPercentMin = 0.7f;
 
 		//==========================================
 		[Title("Mobility")]
@@ -215,8 +215,8 @@ namespace RaceManager.Cars
 
 			MaxSpeed = 200;
 			CruiseSpeed = 20f;
-			CruiseSpeedPercentMax = 0.8f;
-			CruiseSpeedPercentMin = 0.7f;
+			//CruiseSpeedPercentMax = 0.8f;
+			//CruiseSpeedPercentMin = 0.7f;
 			RPMToNextGearPercent = 0.9f;
 			MaxSteerAngle = 42;
 			HelpSteerPower = 0.2f;  //0.2

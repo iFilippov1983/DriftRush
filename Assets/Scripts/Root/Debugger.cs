@@ -15,9 +15,11 @@ namespace RaceManager.Root
     public class Debugger : MonoBehaviour
     {
         private static CarsDepot _playerCarDepot;
+        private static CarsDepot _opponentsCarDepot;
         private static GameProgressScheme _gameProgressScheme;
         private static GameSettingsContainer _settingsContainer;
         private static TutorialSteps _tutorial;
+        private static OpponentsTuneScheme _opponentsTuneScheme;
 
         [SerializeField]
         private MainUI _mainUI;
@@ -44,6 +46,16 @@ namespace RaceManager.Root
             }
         }
 
+        private static CarsDepot OpponentsCarDepot
+        {
+            get
+            {
+                if (_opponentsCarDepot == null)
+                    _opponentsCarDepot = ResourcesLoader.LoadObject<CarsDepot>(ResourcePath.CarDepotOpponents);
+                return _opponentsCarDepot;
+            }
+        }
+
         private static GameProgressScheme GameProgressScheme
         {
             get
@@ -61,6 +73,16 @@ namespace RaceManager.Root
                 if (_settingsContainer == null)
                     _settingsContainer = ResourcesLoader.LoadObject<GameSettingsContainer>(ResourcePath.GameSettingsContainer);
                 return _settingsContainer;
+            }
+        }
+
+        private static OpponentsTuneScheme OpponentsTuneScheme
+        {
+            get
+            {
+                if (_opponentsTuneScheme == null)
+                    _opponentsTuneScheme = ResourcesLoader.LoadObject<OpponentsTuneScheme>(ResourcePath.OpponentsTuneScheme);
+                return _opponentsTuneScheme;
             }
         }
 
@@ -157,6 +179,7 @@ namespace RaceManager.Root
             PlayerCarDepot.ResetCars();
             GameProgressScheme.ResetAllSteps();
             SettingsContainer.ResetToDefault();
+            OpponentsTuneScheme.ResetScheme();
             
             SaveManager.RemoveSave();
         }

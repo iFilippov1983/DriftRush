@@ -48,7 +48,6 @@ namespace RaceManager.UI
 
         public MainUIStatus Status { get; private set; }
 
-        public Action<bool> OnMainMenuActivityChange;
         public Action<CarName> OnCarProfileChange;
 
         /// <summary>
@@ -202,8 +201,6 @@ namespace RaceManager.UI
                     Deactivate(t);
                 }
             }
-
-            OnMainMenuActivityChange?.Invoke(active);
 
             void Activate(Transform appearTransform)
             {

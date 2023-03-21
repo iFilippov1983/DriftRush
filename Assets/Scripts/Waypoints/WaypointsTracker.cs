@@ -2,6 +2,7 @@ using RaceManager.Cars;
 using RaceManager.Tools;
 using Sirenix.OdinInspector;
 using System;
+using UniRx;
 using UnityEngine;
 
 namespace RaceManager.Waypoints
@@ -40,6 +41,8 @@ namespace RaceManager.Waypoints
         public float TimeAtLastWaypoint => _timeAtLastPassedWaypoint;
 
         public Action<WaypointsTracker> OnPassedWaypoint;
+        public Subject<float> OnRecommendedSpeedChange;
+        
 
         private void Start()
         {
@@ -60,6 +63,7 @@ namespace RaceManager.Waypoints
             _lapsToComplete = _waypointTrack.LapsToComplete;
             _progressDistance = 0;
 
+            OnRecommendedSpeedChange = new Subject<float>();
             //if (_target == null)
             //{
             //    _target = new GameObject(name + " Waypoint Target").transform;
@@ -88,13 +92,18 @@ namespace RaceManager.Waypoints
             {
                 _speed = Mathf.Lerp(_speed, (_lastPosition - transform.position).magnitude / Time.deltaTime, Time.deltaTime);
             }
-            _target.position =
-                _waypointTrack.GetRoutePoint(_progressDistance + _lookAheadForTargetOffset + _lookAheadForTargetFactor * _speed).position;
-            _target.rotation =
-                Quaternion.LookRotation(_waypointTrack.GetRoutePoint(_progressDistance + _lookAheadForSpeedOffset + _lookAheadForSpeedFactor * _speed).direction);
+
+            RoutePoint routePointForPos = _waypointTrack.GetRoutePoint(_progressDistance + _lookAheadForTargetOffset + _lookAheadForTargetFactor * _speed);
+            _target.position = routePointForPos.position;
+
+            RoutePoint routePointForRot = _waypointTrack.GetRoutePoint(_progressDistance + _lookAheadForSpeedOffset + _lookAheadForSpeedFactor * _speed);
+            _target.rotation = Quaternion.LookRotation(routePointForRot.direction);
 
             // get our current progress along the route
             ProgressPoint = _waypointTrack.GetRoutePoint(_progressDistance);
+
+            OnRecommendedSpeedChange?.OnNext(ProgressPoint.recomendedSpeed);
+
             Vector3 progressDelta = ProgressPoint.position - transform.position;
             if (Vector3.Dot(progressDelta, ProgressPoint.direction) < 0)
             {
@@ -148,7 +157,7 @@ namespace RaceManager.Waypoints
             {
                 Gizmos.color = Color.green;
                 Gizmos.DrawLine(transform.position, _target.position);
-                Gizmos.DrawWireSphere(_waypointTrack.GetRoutePosition(_progressDistance), 1);
+                Gizmos.DrawWireSphere(_waypointTrack.GetRoutePosition(_progressDistance, out _), 1);
                 Gizmos.color = Color.yellow;
                 Gizmos.DrawLine(_target.position, _target.position + _target.forward);
             }

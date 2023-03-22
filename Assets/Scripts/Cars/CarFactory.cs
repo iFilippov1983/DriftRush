@@ -1,6 +1,9 @@
 ﻿using RaceManager.Effects;
 using RaceManager.Waypoints;
+using Sirenix.OdinInspector.Editor.Internal;
+using Sirenix.Utilities.Editor;
 using UnityEngine;
+using Zenject;
 
 namespace RaceManager.Cars
 {
@@ -121,9 +124,13 @@ namespace RaceManager.Cars
         private CarProfile GetRandomProfile()
         {
             CarProfile carProfile = _carsDepot.ProfilesList[Random.Range(0, _carsDepot.ProfilesList.Count)];
+            CarProfile newCarProfile = new CarProfile();
+
+            FastDeepCopier.DeepCopyFromToClass(carProfile, newCarProfile);
+
             //carProfile.CarConfigVisual.CurrentMaterialsSetType = (MaterialSetType)Random.Range(0, 2);
 
-            return carProfile;
+            return newCarProfile;
         }
     }
 }

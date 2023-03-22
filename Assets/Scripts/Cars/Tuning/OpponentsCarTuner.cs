@@ -8,6 +8,7 @@ namespace RaceManager.Cars
     {
         private CarTuner _tuner;
         private CarsDepot _playerCarDepot;
+        private CarsDepot _opponentsCarDepot;
         private OpponentsTuneScheme _opponentsTuneScheme;
 
         //Injected
@@ -20,20 +21,24 @@ namespace RaceManager.Cars
         public bool CanAdjust => _opponentsTuneScheme.AdjustFromStart;
         public int CanAdjustThreshold => _opponentsTuneScheme.VictoriesThreshold;
 
-        public void AdjustOpponentsCarDepot(CarsDepot opponentsCarDepot, bool gradePercentage)
+        public void Initialize(CarsDepot opponentsCarDepot, bool gradePercentage)
         {
             GradePercentage(gradePercentage);
 
+            _opponentsCarDepot = opponentsCarDepot;
+            _tuner = new CarTuner(_opponentsCarDepot);
+        }
+
+        public void AdjustOpponentsCarDepot()
+        {
+            CarProfile pProfile = _playerCarDepot.CurrentCarProfile;
             bool randomizeView = _opponentsTuneScheme.RandomizeOpponentsView;
 
-            _tuner = new CarTuner(opponentsCarDepot);
-            CarProfile pProfile = _playerCarDepot.CurrentCarProfile;
-
-            for (int i = 0; i < opponentsCarDepot.ProfilesList.Count; i++)
+            for (int i = 0; i < _opponentsCarDepot.ProfilesList.Count; i++)
             {
-                CarProfile oProfile = opponentsCarDepot.ProfilesList[i];
+                CarProfile oProfile = _opponentsCarDepot.ProfilesList[i];
 
-                opponentsCarDepot.CurrentCarName = oProfile.CarName;
+                _opponentsCarDepot.CurrentCarName = oProfile.CarName;
                 _tuner.SetCarProfile();
 
                 if (_opponentsTuneScheme.UseSpeedAdjust)
@@ -47,7 +52,11 @@ namespace RaceManager.Cars
                             _opponentsTuneScheme.SpeedPercentageValueRange
                         );
 
-                    _tuner.OnCharacteristicValueChanged?.Invoke(CharacteristicType.Speed, speedFactor, !randomizeView);
+                    //Debug.Log($"Speed factor: {speedFactor}");
+
+                    float speedValue = oProfile.CarCharacteristics.MaxSpeedFactor * speedFactor;
+
+                    _tuner.OnCharacteristicValueChanged?.Invoke(CharacteristicType.Speed, speedValue, !randomizeView);
                 }
 
 
@@ -62,7 +71,11 @@ namespace RaceManager.Cars
                             _opponentsTuneScheme.MobilityPercentageValueRange
                         );
 
-                    _tuner.OnCharacteristicValueChanged?.Invoke(CharacteristicType.Mobility, mobilityFactor, !randomizeView);
+                    //Debug.Log($"Mobility factor: {mobilityFactor}");
+
+                    float mobilityValue = oProfile.CarCharacteristics.MaxMobilityFactor * mobilityFactor;
+
+                    _tuner.OnCharacteristicValueChanged?.Invoke(CharacteristicType.Mobility, mobilityValue, !randomizeView);
                 }
 
                 if (_opponentsTuneScheme.UseDurabilityAdjust)
@@ -76,7 +89,11 @@ namespace RaceManager.Cars
                             _opponentsTuneScheme.DurabilityPercentageValueRange
                         );
 
-                    _tuner.OnCharacteristicValueChanged?.Invoke(CharacteristicType.Durability, durabilityFactor, !randomizeView);
+                    //Debug.Log($"Durability factor: {durabilityFactor}");
+
+                    float durabilityValue = oProfile.CarCharacteristics.MaxDurabilityFactor * durabilityFactor;
+
+                    _tuner.OnCharacteristicValueChanged?.Invoke(CharacteristicType.Durability, durabilityValue, !randomizeView);
                 }
 
                 if (_opponentsTuneScheme.UseAccelerationAdjust)
@@ -90,7 +107,11 @@ namespace RaceManager.Cars
                             _opponentsTuneScheme.AccelerationPercentageValueRange
                         );
 
-                    _tuner.OnCharacteristicValueChanged?.Invoke(CharacteristicType.Acceleration, accelerationFactor, !randomizeView);
+                    //Debug.Log($"Acceleration factor: {accelerationFactor}");
+
+                    float accelerationValue = oProfile.CarCharacteristics.MaxAccelerationFactor * accelerationFactor;
+
+                    _tuner.OnCharacteristicValueChanged?.Invoke(CharacteristicType.Acceleration, accelerationValue, !randomizeView);
                 }
             }
         }

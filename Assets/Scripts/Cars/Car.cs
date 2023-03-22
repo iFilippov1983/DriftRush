@@ -15,7 +15,7 @@ namespace RaceManager.Cars
 
     [RequireComponent(typeof(Rigidbody))]
 	public class Car : MonoBehaviour, ICountableCollision
-	{
+    {
         [ShowInInspector, ReadOnly]
         private string _id;
         [ShowInInspector, ReadOnly]

@@ -37,8 +37,8 @@ MonoBehaviour:
         IsGranted: 1
         IsReached: 1
     Speed:
-      Max: 190
-      Min: 230
+      Max: 230
+      Min: 190
     Mobility:
       f_frictionForward_Max: 0.7
       f_frictionForward_Min: 0.4
@@ -86,19 +86,17 @@ MonoBehaviour:
       CarName: 1
       SpeedType: 1
       DriveType: 2
-      MaxSpeed: 203
+      MaxSpeed: 212.1706
       CruiseSpeed: 40
-      CruiseSpeedPercentMax: 0.5
-      CruiseSpeedPercentMin: 0.4
-      FWheelsForwardFriction: 0.55
-      FWheelsSidewaysFriction: 0.5
-      RWheelsForwardFriction: 0.59999996
-      RWheelsSidewaysFriction: 0.075
-      MaxSteerAngle: 70
-      HelpSteerPower: 0.75
-      SteerAngleChangeSpeed: 200
-      MaxMotorTorque: 500
-      RPMToNextGearPercent: 0.7
+      FWheelsForwardFriction: 0.5877858
+      FWheelsSidewaysFriction: 0.52519053
+      RWheelsForwardFriction: 0.6251905
+      RWheelsSidewaysFriction: 0.09389288
+      MaxSteerAngle: 75.0381
+      HelpSteerPower: 0.73740476
+      SteerAngleChangeSpeed: 225.1905
+      MaxMotorTorque: 513.24774
+      RPMToNextGearPercent: 0.72649556
       MaxBrakeTorque: 2000
       Durability: 15
       ProbabilityBackfire: 0.1
@@ -168,12 +166,12 @@ MonoBehaviour:
       MaxRPM: 7000
       CutOffTime: 0.1
     CarConfigVisual:
-      DriverType: 0
+      DriverType: 1
       CarName: 1
       CurrentMaterialsSetType: 0
       _availableMaterialSets: 00000000
       CurrentWheelsSetType: 0
       CurrentWheelsLevel: 1
-      CurrentSuspentionLevel: 1
-      CurrentBumpersLevel: 1
-      CurrentBodyKitsLevel: 1
+      CurrentSuspentionLevel: 2
+      CurrentBumpersLevel: 2
+      CurrentBodyKitsLevel: 0

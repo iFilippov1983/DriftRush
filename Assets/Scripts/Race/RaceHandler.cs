@@ -45,6 +45,7 @@ namespace RaceManager.Race
         private List<WaypointsTracker> _waypointsTrackersList;
 
         private bool _raceStarted;
+        private bool _adjustOpponents;
 
         private bool CanStartImmediate => _profiler.CanStartImmediate;
 
@@ -87,20 +88,20 @@ namespace RaceManager.Race
             _lineHandler = new RaceLineHandler(_raceLevel.WaypointTrackMain, _raceLevel.RaceLine, _settingsContainer.UseRaceLine);
             _lootboxHandler = new InRaceLootboxHandler(_profiler);
             
-            AdjustOpponents();
+            InitOpponentsTuner();
             InitDrivers();
             MakeSubscriptions();
 
             _positionsHandler.StartHandling(_waypointsTrackersList);
         }
 
-        private void AdjustOpponents()
+        private void InitOpponentsTuner()
         {
+            _adjustOpponents = _opponentsCarTuner.CanAdjust || _opponentsCarTuner.CanAdjustThreshold > _profiler.GetVictoriesTotalCount();
             bool needPercentageGrade = _profiler.GetLastInRacePosition() == PositionInRace.First;
-            if (_opponentsCarTuner.CanAdjust || _opponentsCarTuner.CanAdjustThreshold > _profiler.GetVictoriesTotalCount())
-            {
-                _opponentsCarTuner.AdjustOpponentsCarDepot(_opponentsCarsDepot, needPercentageGrade);
-            }
+            
+            if (_adjustOpponents)
+                _opponentsCarTuner.Initialize(_opponentsCarsDepot, needPercentageGrade);
         }
 
         private void InitDrivers()
@@ -144,13 +145,17 @@ namespace RaceManager.Race
                         tracker.ResetTargetToCashedValues();
                     }
 
-                    _raceUI.Initialize(_raceLevelInitializer, selfRighting.RightCar, GetToCheckpoint);
+                    //_raceUI.Initialize(_raceLevelInitializer, selfRighting.RightCar, GetToCheckpoint);
+                    _raceUI.Initialize(selfRighting.RightCar, GetToCheckpoint);
 
                     _scoresCounter = new RaceScoresCounter(driver.Car, _rewardsScheme);
                 }
                 else
                 {
                     WaypointTrack track = (i % 2) == 0 ? _waypointTrackEven : _waypointTrackOdd;
+
+                    if (_adjustOpponents)
+                        _opponentsCarTuner.AdjustOpponentsCarDepot();
 
                     driver.Initialize
                         (

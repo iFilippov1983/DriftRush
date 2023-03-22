@@ -129,25 +129,25 @@ namespace RaceManager.Cars
         {
             UseSpeedAdjust = true;
             MaxSpeedPercentage = 1f;
-            MinSpeedPercentage = 0.5f;
+            MinSpeedPercentage = 0.1f;
             SpeedPercentageValueRange = 0.1f;
             MinSpeedPercentageCurrent = MinSpeedPercentage;
 
             UseMobilityAdjust = true;
             MaxMobilityPercentage = 1f;
-            MinMobilityPercentage = 0.5f;
+            MinMobilityPercentage = 0.1f;
             MobilityPercentageValueRange = 0.1f;
             MinMobilityPercentageCurrent = MinMobilityPercentage;
 
             UseDurabilityAdjust = false;
             MaxDurabilityPercentage = 1f;
-            MinDurabilityPercentage = 0.5f;
+            MinDurabilityPercentage = 0.1f;
             DurabilityPercentageValueRange = 0.1f;
             MinDurabilityPercentageCurrent = MinDurabilityPercentage;
 
             UseAccelerationAdjust = true;
             MaxAccelerationPercentage = 1f;
-            MinAccelerationPercentage = 0.5f;
+            MinAccelerationPercentage = 0.1f;
             AccelerationPercentageValueRange = 0.1f;
             MinAccelerationPercentageCurrent = MinAccelerationPercentage;
 

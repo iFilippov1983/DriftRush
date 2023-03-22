@@ -76,10 +76,11 @@ namespace RaceManager.UI
 
         #region Public Functions
 
-        public void Initialize(RaceLevelInitializer levelInitializer, UnityAction actionForRespawnButton, UnityAction actionForGetToCheckpointButton)
+        //public void Initialize(RaceLevelInitializer levelInitializer, UnityAction actionForRespawnButton, UnityAction actionForGetToCheckpointButton)
+        public void Initialize(UnityAction actionForRespawnButton, UnityAction actionForGetToCheckpointButton)
         {
             _inRaceUI.gameObject.SetActive(true);
-            _inRaceUI.RaceProgressBar.LevelText.text = ("LEVEL " + levelInitializer.LevelName).ToUpper();
+            //_inRaceUI.RaceProgressBar.LevelText.text = ("LEVEL " + levelInitializer.LevelName).ToUpper();
 
             _inRaceUI.RespawnCarButton.AddListener(actionForRespawnButton);
             _inRaceUI.GetToCheckpointButton.AddListener(actionForGetToCheckpointButton);

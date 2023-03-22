@@ -70,10 +70,10 @@ namespace RaceManager.UI
 
         #region Settings change properties
 
-        public IObservable<float> OnSoundsSettingChange => _settingsPopup.SoundToggleSlider.onValueChanged.AsObservable();
-        public IObservable<float> OnMusicSettingChange => _settingsPopup.MusicToggleSlider.onValueChanged.AsObservable();
-        public IObservable<float> OnVibroSettingChange => _settingsPopup.VibrationToggleSlider.onValueChanged.AsObservable();
-        public IObservable<float> OnRaceLineSettingsChange => _settingsPopup.RaceLineToggleSlider.onValueChanged.AsObservable();
+        public IObservable<bool> OnSoundsSettingChange => _settingsPopup.SoundToggle.onValueChanged.AsObservable();
+        public IObservable<bool> OnMusicSettingChange => _settingsPopup.MusicToggle.onValueChanged.AsObservable();
+        public IObservable<bool> OnVibroSettingChange => _settingsPopup.VibrationToggle.onValueChanged.AsObservable();
+        public IObservable<bool> OnRaceLineSettingsChange => _settingsPopup.RaceLineToggle.onValueChanged.AsObservable();
 
         public IObserver<SettingsData> OnSettingsInitialize => Observer.Create((SettingsData sd) => SetSettingsPopupValues(sd));
 
@@ -584,10 +584,10 @@ namespace RaceManager.UI
 
         private void SetSettingsPopupValues(SettingsData sd)
         {
-            _settingsPopup.SoundToggleSlider.value = sd.playSounds ? 1f : 0f;
-            _settingsPopup.MusicToggleSlider.value = sd.playMusic ? 1f : 0f;
-            _settingsPopup.VibrationToggleSlider.value = sd.useHaptics ? 1f : 0f;
-            _settingsPopup.RaceLineToggleSlider.value = sd.useRaceLine ? 1f : 0f;
+            _settingsPopup.SoundToggle.isOn = sd.playSounds;// ? 1f : 0f;
+            _settingsPopup.MusicToggle.isOn = sd.playMusic;// ? 1f : 0f;
+            _settingsPopup.VibrationToggle.isOn = sd.useHaptics;// ? 1f : 0f;
+            _settingsPopup.RaceLineToggle.isOn = sd.useRaceLine;// ? 1f : 0f;
         }
 
         private void ChangeCar(CarName newCarName)

@@ -51,7 +51,7 @@ namespace RaceManager.Root
             Subscribe(steps.ToArray());
 
             string color = steps.Count == 0 ? ColorRed : ColorGreen;
-            $"Step {CurrentStep} subscribers count => {steps.Count}".Log(color);
+            Debug.Log($"Step [{CurrentStep}] => Subscribers count [{steps.Count}]");
         }
 
         private void Subscribe(params TutorialStep[] steps)
@@ -130,7 +130,7 @@ namespace RaceManager.Root
 
         private void SetFlag(TutorialStep step)
         {
-            $"Flag is set to => {step.FlagType}".Log(ColorGreen);
+            Debug.Log($"Flag is set to => [{step.FlagType}]");
             _flagsHandler.Add(step.FlagType);
         }
 

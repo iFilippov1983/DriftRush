@@ -65,7 +65,7 @@ namespace RaceManager.Root
             }
             catch (Exception e)
             {
-                $"[Saveables] Need to fix: {e}".Error();
+                Debug.LogError($"[Saveables] Need to fix => {e}");
             }
         }
 
@@ -79,7 +79,7 @@ namespace RaceManager.Root
             }
             catch (Exception e)
             {
-                $"[Initializables] Need to fix: {e}".Error();
+                Debug.LogError($"[Initializables] Need to fix => {e}");
             }
         }
 
@@ -93,7 +93,7 @@ namespace RaceManager.Root
             }
             catch (Exception e)
             {
-                $"[Late Initializables] Need to fix: {e}".Error();
+                Debug.LogError($"[Late Initializables] Need to fix: {e}");
             }
         }
 

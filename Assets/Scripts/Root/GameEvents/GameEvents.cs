@@ -26,10 +26,6 @@ namespace RaceManager.Root
             ScreenTapHold = new Subject<Unit>();
             ScreenTapReleased = new Subject<Unit>();
             RaceWin = new Subject<Unit>();
-
-            Notification.Subscribe(s => DebugLog(s));
         }
-
-        private void DebugLog(string s) => Debugger.Log($"Notification: " + s);
     }
 }

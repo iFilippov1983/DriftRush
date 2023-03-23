@@ -1,10 +1,9 @@
 ﻿using System;
-using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace RaceManager.Cars
 {
-    public class OpponentsCarTuner
+    public class OpponentsCarTuner : IDisposable
     {
         private CarTuner _tuner;
         private CarsDepot _playerCarDepot;
@@ -204,6 +203,11 @@ namespace RaceManager.Cars
                         _opponentsTuneScheme.MinAccelerationPercentageCurrent = _opponentsTuneScheme.MinAccelerationPercentage;
                 }
             }
+        }
+
+        public void Dispose()
+        {
+            _tuner.Dispose();
         }
     }
 }

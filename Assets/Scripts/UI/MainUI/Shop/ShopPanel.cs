@@ -40,7 +40,7 @@ namespace RaceManager.UI
             }
             catch (Exception e)
             {
-                $"Error: OfferPanels amount doesn't match with installers amount! |or| {e.Message}".Error();
+                Debug.LogError($"OfferPanels amount doesn't match with installers amount! |or| {e.Message}");
             }
 
             _confirmationPanel.BackButton.onClick.AddListener(DeactivateConfirmationPanel);
@@ -57,7 +57,7 @@ namespace RaceManager.UI
                 return true;
             }
 
-            $"Panel with Type [{offerType}] was not found!".Log(Logger.ColorRed);
+            Debug.LogWarning($"Panel with Type [{offerType}] was not found!");
             return false;
         }
 
@@ -70,7 +70,7 @@ namespace RaceManager.UI
                 return true;
             }
 
-            $"Panel with Type [{offerType}] was not found!".Log(Logger.ColorRed);
+            Debug.LogWarning($"Panel with Type [{offerType}] was not found!");
             panelTransform = null;
             return false;
         }

@@ -64,10 +64,6 @@ namespace RaceManager.Waypoints
             _progressDistance = 0;
 
             OnRecommendedSpeedChange = new Subject<float>();
-            //if (_target == null)
-            //{
-            //    _target = new GameObject(name + " Waypoint Target").transform;
-            //}
         }
 
         public void SetInRacePosition(int position) => _carPosition = position;
@@ -115,9 +111,6 @@ namespace RaceManager.Waypoints
 
         private void OnTriggerEnter(Collider other)
         {
-            //if (_raceFinished)
-            //    return;
-
             if (other.CompareTag(Tag.Waypoint))
             {
                 Waypoint waypoint = other.GetComponent<Waypoint>();

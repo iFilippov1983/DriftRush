@@ -126,12 +126,6 @@ namespace RaceManager.Root
             HandleSoundtrackTest();
             HandleSfxTest();
         }
-
-        public static void Log(string text)
-        { 
-            Debug.Log(text);
-        }
-
 #endif
 
 
@@ -142,7 +136,7 @@ namespace RaceManager.Root
             var drivers = FindObjectsOfType<Driver>();
             var list = new List<Driver>(drivers);
             var playerDriver = list.Find(d => d.DriverType == DriverType.Player);
-            //playerDriver.DriverProfile.PositionInRace = PositionInRace.First;
+
             playerDriver.DriverProfile.CarState.Value = CarState.Finished;
 
             saveManager.Save();
@@ -156,14 +150,14 @@ namespace RaceManager.Root
 
             if (level != null)
             {
-                $"Next level to play: {nextLevelToPlay}".Log(Logger.ColorYellow);
+                Debug.Log($"Next level to play => {nextLevelToPlay}");
                 profiler.SetNextLevel(nextLevelToPlay);
                 saveManager.Save();
-                $"SAVE - {this}".Log();
+                Debug.Log($"SAVE - {this}");
             }
             else
             { 
-                $"Prefab whith name '{nextLevelToPlay}' was not found!".Log(Logger.ColorRed);
+                Debug.LogError($"Prefab whith name '{nextLevelToPlay}' was not found!");
             }
         }
 
@@ -242,7 +236,7 @@ namespace RaceManager.Root
             profiler.SetAdsOn();
             saveManager.Save();
 
-            $"GotSpecialOffer = false".Log();
+            Debug.Log("GotSpecialOffer is set to => False");
         }
 
         #region Test Functions

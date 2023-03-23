@@ -156,7 +156,7 @@ namespace RaceManager.Cars
 
             StartCoroutine(WaitForCarStop());
 
-            $"{gameObject.name} FINISHED".Log(Logger.ColorYellow);
+            Debug.Log($"{gameObject.name} => FINISHED"); 
         }
 
         private IEnumerator WaitForCarStop()

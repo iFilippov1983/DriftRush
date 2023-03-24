@@ -140,7 +140,7 @@ namespace RaceManager.Root
         {
             if (Type != AgentType.Button)
             {
-                $"UI Action Agent [{gameObject.name}] has no any Button component, but you whant to click it!".Log(ColorRed);
+                Debug.LogError($"UI Action Agent [{gameObject.name}] has no any Button component, but you whant to click it!");
                 return;
             }
 
@@ -156,14 +156,14 @@ namespace RaceManager.Root
                 .Subscribe(aAction.key, () => ClickAgent(aAction.actionStartDelay))
                 .AddTo(this);
 
-            $"ClickOnFlag subscribed => Key: [{aAction.key}] => Object: [{gameObject.name}]".Log(ColorBlue);
+            Debug.Log($"ClickOnFlag subscribed => Key: [{aAction.key}] => Object: [{gameObject.name}]");
         }
 
         private void InteractableOnFlag(bool interactable, AgentAction aAction)
         {
             if (Type != AgentType.Button)
             {
-                $"UI Action Agent [{gameObject.name}] has no any Button component, but you whant to set its Interactable!".Log(ColorRed);
+                Debug.LogError($"UI Action Agent [{gameObject.name}] has no any Button component, but you whant to set its Interactable!");
                 return;
             }
 
@@ -179,7 +179,7 @@ namespace RaceManager.Root
                 .Subscribe(aAction.key, () => MakeButtonInteractable(interactable))
                 .AddTo(this);
 
-            $"InteractableOnFlag ({interactable}) subscribed => Key: [{aAction.key}] => Object: [{gameObject.name}]".Log(ColorBlue);
+            Debug.Log($"InteractableOnFlag ({interactable}) subscribed => Key: [{aAction.key}] => Object: [{gameObject.name}]");
         }
 
         private void ToggleAnimationOnFlag(bool start, AgentAction aAction)
@@ -189,7 +189,7 @@ namespace RaceManager.Root
 
             if (start && incorrectAnimationTypes)
             {
-                $"You're trying to animate UI Action Agent [{gameObject.name}] but you haven't assigned correct animation type!".Log(ColorRed);
+                Debug.LogError($"You're trying to animate UI Action Agent [{gameObject.name}] but you haven't assigned correct animation type!");
                 return;
             }
 
@@ -205,7 +205,7 @@ namespace RaceManager.Root
                 .Subscribe(aAction.key, () => ToggleAnimationsStatus(start, aAction))
                 .AddTo(this);
 
-            $"ToggleAnimationOnFlag ({start}) subscribed => Key: [{aAction.key}] => Object: [{gameObject.name}]".Log(ColorBlue);
+            Debug.Log($"ToggleAnimationOnFlag ({start}) subscribed => Key: [{aAction.key}] => Object: [{gameObject.name}]");
         }
 
         private async void ClickAgent(float actionDelaySeconds = 0)

@@ -47,6 +47,7 @@ namespace RaceManager.Waypoints
 
         private GameObject _waypointPrefab;
         private List<Waypoint> _waypoints;
+        private TrackNode[] _trackNodes;
 
         public Action OnCheckpointPass;
 
@@ -75,7 +76,7 @@ namespace RaceManager.Waypoints
 
         private void PresetTrack()
         {
-            AdjustWaypointsPositions();
+            AdjustWaypointNodes();
 
             if (Waypoints.Length > 1)
             {
@@ -85,14 +86,17 @@ namespace RaceManager.Waypoints
             _numPoints = Waypoints.Length;
         }
 
-        private void AdjustWaypointsPositions()
+        private void AdjustWaypointNodes()
         {
+            _trackNodes = new TrackNode[Waypoints.Length];
+
             for (int i = 0; i < Waypoints.Length; i++)
             {
                 var node = Waypoints[i].GetComponent<TrackNode>();
                 if (node != null)
                 {
                     node.UpdatePositionHeight(MaxHeight, HeightAboveRoad);
+                    _trackNodes[i] = node;
                 }
             }
         }
@@ -119,7 +123,7 @@ namespace RaceManager.Waypoints
                     if (i != 0)
                         _waypoints[i - 1].NextWaypoint = wp;
 
-                    var node = Waypoints[i].GetComponent<TrackNode>();
+                    var node = _trackNodes[i]; //Waypoints[i].GetComponent<TrackNode>();
                     if (node != null)
                     {
                         wp.RecomendedSpeed = node.recomendedSpeed;
@@ -148,13 +152,18 @@ namespace RaceManager.Waypoints
         public RoutePoint GetRoutePoint(float dist)
         {
             // position and direction
-            Vector3 p1 = GetRoutePosition(dist);
-            Vector3 p2 = GetRoutePosition(dist + DeltaStep);
+            Vector3 p1 = GetRoutePosition(dist, out int index1);
+            Vector3 p2 = GetRoutePosition(dist + DeltaStep, out int index2);
             Vector3 delta = p2 - p1;
-            return new RoutePoint(p1, delta.normalized);
+
+            float s1 = _trackNodes[index1].recomendedSpeed;
+            float s2 = _trackNodes[index2].recomendedSpeed;
+            float rSpeed = (s1 + s2) / 2f;
+
+            return new RoutePoint(p1, delta.normalized, rSpeed);
         }
 
-        public virtual Vector3 GetRoutePosition(float dist)
+        public virtual Vector3 GetRoutePosition(float dist, out int index)
         {
             int point = 0;
 
@@ -170,6 +179,7 @@ namespace RaceManager.Waypoints
                 ++point;
             }
 
+            index = point;
 
             // get nearest two points,
             p1n = point - 1;
@@ -280,7 +290,7 @@ namespace RaceManager.Waypoints
                         dist++;
                         if(dist >= Length)
                             dist = Length;
-                        Vector3 next = GetRoutePosition(dist);
+                        Vector3 next = GetRoutePosition(dist, out _);
                         Gizmos.DrawLine(prev, next);
                         prev = next;
                     }

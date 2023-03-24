@@ -23,6 +23,7 @@ namespace RaceManager.Race
         [SerializeField] private RaceRewardsScheme _rewardsScheme;
         [SerializeField] private CarsDepot _opponentsCarsDepot;
 
+        private OpponentsCarTuner _opponentsCarTuner;
         private CarsDepot _playerCarsDepot;
         private GameSettingsContainer _settingsContainer;
         private RaceSceneHandler _sceneHandler;
@@ -44,23 +45,26 @@ namespace RaceManager.Race
         private List<WaypointsTracker> _waypointsTrackersList;
 
         private bool _raceStarted;
+        private bool _adjustOpponents;
 
         private bool CanStartImmediate => _profiler.CanStartImmediate;
 
         [Inject]
         private void Construct
             (
-            RaceLevelInitializer levelInitializer, 
-            RewardsHandler rewardsHandler, 
-            InRacePositionsHandler positionsHandler, 
-            RaceUI raceUI, 
-            CarsDepot playerCarsDepot, 
+            OpponentsCarTuner opponentsCarTuner,
+            CarsDepot playerCarsDepot,
             GameSettingsContainer settingsContainer,
             RaceSceneHandler sceneHandler,
             Profiler profiler,
+            InRacePositionsHandler positionsHandler,
+            RaceUI raceUI,
+            RaceLevelInitializer levelInitializer, 
+            RewardsHandler rewardsHandler,
             GameEvents gameEvents
             )
         {
+            _opponentsCarTuner = opponentsCarTuner;
             _playerCarsDepot = playerCarsDepot;
             _settingsContainer = settingsContainer;
             _sceneHandler = sceneHandler;
@@ -83,96 +87,21 @@ namespace RaceManager.Race
 
             _lineHandler = new RaceLineHandler(_raceLevel.WaypointTrackMain, _raceLevel.RaceLine, _settingsContainer.UseRaceLine);
             _lootboxHandler = new InRaceLootboxHandler(_profiler);
-
+            
+            InitOpponentsTuner();
             InitDrivers();
             MakeSubscriptions();
 
             _positionsHandler.StartHandling(_waypointsTrackersList);
         }
 
-        private void MakeSubscriptions()
+        private void InitOpponentsTuner()
         {
-            this.FixedUpdateAsObservable()
-                .Subscribe(_ =>
-                {
-                    _lootboxHandler.Handle();
-                    _scoresCounter.CountScores();
-                })
-                .AddTo(this);
-
-            this.UpdateAsObservable()
-                .Where(_ => _raceUI.RaceFinished == false)
-                .Subscribe(_ => 
-                {
-                    _raceUI.ShowSpeed();
-                    _raceUI.HandlePositionIndication();
-                    _raceUI.HandleProgressBar();
-                })
-                .AddTo(this);
-
-            this.UpdateAsObservable()
-                .Where(_ => Input.GetMouseButton(0) && _raceUI.RaceFinished == false)
-                .Subscribe(_ => 
-                {
-                    _raceUI.HandleAcceleration(true);
-                })
-                .AddTo(this);
-
-            this.UpdateAsObservable()
-                .Where(_ => Input.GetMouseButtonUp(0) && _raceUI.RaceFinished == false)
-                .Subscribe(_ =>
-                {
-                    _raceUI.HandleAcceleration(false);
-                })
-                .AddTo(this);
-
-            this.UpdateAsObservable()
-                .Where(_ => !_raceStarted && CanStartImmediate)
-                .Take(1)
-                .Subscribe(_ =>
-                {
-                    _raceStarted = true;
-                    EventsHub<RaceEvent>.BroadcastNotification(RaceEvent.COUNTDOWN);
-                })
-                .AddTo(this);
-
-            _scoresCounter.ScoresCount
-                .Where(data => data.CurrentScoresValue > 0)
-                .Subscribe(data =>
-                {
-                    bool showPause = data.Timer > 0;
-                    bool showScores = data.Timer >= 0;
-
-                    _raceUI.ShowPause(showPause, data.Timer);
-                    _raceUI.ShowScores(showScores, data.CurrentScoresValue);
-
-                    int totalScores = data.CurrentScoresValue > data.TotalScoresValue
-                    ? data.CurrentScoresValue 
-                    : data.TotalScoresValue;
-
-                    _rewardsHandler.SetMoneyReward(data.ScoresType, totalScores);
-                })
-                .AddTo(this);
-
-            _scoresCounter.ExtraScoresCount
-                .Subscribe(data =>
-                {
-                    _raceUI.ShowExtraScores(data.ScoresType, data.CurrentScoresValue);
-                    _rewardsHandler.SetMoneyReward(data.ScoresType, data.TotalScoresValue);
-                })
-                .AddTo(this);
-
-            _gameEvents.Notification
-                .Where(s => s == NotificationType.Checkpoint.ToString())
-                .Subscribe(s => 
-                {
-                    _lineHandler.StartHandling();
-                })
-                .AddTo(this);
-
-            _raceUI.OnAdsInit += ShowAds;
-            _rewardsHandler.OnRaceRewardLootboxAdded += SetRaceUI;
-            _waypointTrackMain.OnCheckpointPass += MakeCheckpointNotification;
+            _adjustOpponents = _opponentsCarTuner.CanAdjust || _opponentsCarTuner.CanAdjustThreshold > _profiler.GetVictoriesTotalCount();
+            bool needPercentageGrade = _profiler.GetLastInRacePosition() == PositionInRace.First;
+            
+            if (_adjustOpponents)
+                _opponentsCarTuner.Initialize(_opponentsCarsDepot, needPercentageGrade);
         }
 
         private void InitDrivers()
@@ -216,13 +145,17 @@ namespace RaceManager.Race
                         tracker.ResetTargetToCashedValues();
                     }
 
-                    _raceUI.Initialize(_raceLevelInitializer, selfRighting.RightCar, GetToCheckpoint);
+                    //_raceUI.Initialize(_raceLevelInitializer, selfRighting.RightCar, GetToCheckpoint);
+                    _raceUI.Initialize(selfRighting.RightCar, GetToCheckpoint);
 
                     _scoresCounter = new RaceScoresCounter(driver.Car, _rewardsScheme);
                 }
                 else
                 {
                     WaypointTrack track = (i % 2) == 0 ? _waypointTrackEven : _waypointTrackOdd;
+
+                    if (_adjustOpponents)
+                        _opponentsCarTuner.AdjustOpponentsCarDepot();
 
                     driver.Initialize
                         (
@@ -234,12 +167,101 @@ namespace RaceManager.Race
                         _settingsContainer.PlaySounds
                         );
 
+                    driver.TrackRecommendedSpeed();
+
+                    _opponentsCarTuner.AdjustOpponentsCarView(driver.CarVisual);
+
                     driverGo.name += $"_{i + 1}";
                 }
 
                 driverGo.transform.SetParent(parent.transform, false);
                 _waypointsTrackersList.Add(driver.WaypointsTracker);
             }
+        }
+
+        private void MakeSubscriptions()
+        {
+            this.FixedUpdateAsObservable()
+                .Subscribe(_ =>
+                {
+                    _lootboxHandler.Handle();
+                    _scoresCounter.CountScores();
+                })
+                .AddTo(this);
+
+            this.UpdateAsObservable()
+                .Where(_ => _raceUI.RaceFinished == false)
+                .Subscribe(_ =>
+                {
+                    _raceUI.ShowSpeed();
+                    _raceUI.HandlePositionIndication();
+                    _raceUI.HandleProgressBar();
+                })
+                .AddTo(this);
+
+            this.UpdateAsObservable()
+                .Where(_ => Input.GetMouseButton(0) && _raceUI.RaceFinished == false)
+                .Subscribe(_ =>
+                {
+                    _raceUI.HandleAcceleration(true);
+                })
+                .AddTo(this);
+
+            this.UpdateAsObservable()
+                .Where(_ => Input.GetMouseButtonUp(0) && _raceUI.RaceFinished == false)
+                .Subscribe(_ =>
+                {
+                    _raceUI.HandleAcceleration(false);
+                })
+                .AddTo(this);
+
+            this.UpdateAsObservable()
+                .Where(_ => !_raceStarted && CanStartImmediate)
+                .Take(1)
+                .Subscribe(_ =>
+                {
+                    _raceStarted = true;
+                    EventsHub<RaceEvent>.BroadcastNotification(RaceEvent.COUNTDOWN);
+                })
+                .AddTo(this);
+
+            _scoresCounter.ScoresCount
+                .Where(data => data.CurrentScoresValue > 0)
+                .Subscribe(data =>
+                {
+                    bool showPause = data.Timer > 0;
+                    bool showScores = data.Timer >= 0;
+
+                    _raceUI.ShowPause(showPause, data.Timer);
+                    _raceUI.ShowScores(showScores, data.CurrentScoresValue);
+
+                    int totalScores = data.CurrentScoresValue > data.TotalScoresValue
+                    ? data.CurrentScoresValue
+                    : data.TotalScoresValue;
+
+                    _rewardsHandler.SetMoneyReward(data.ScoresType, totalScores);
+                })
+                .AddTo(this);
+
+            _scoresCounter.ExtraScoresCount
+                .Subscribe(data =>
+                {
+                    _raceUI.ShowExtraScores(data.ScoresType, data.CurrentScoresValue);
+                    _rewardsHandler.SetMoneyReward(data.ScoresType, data.TotalScoresValue);
+                })
+                .AddTo(this);
+
+            _gameEvents.Notification
+                .Where(s => s == NotificationType.Checkpoint.ToString())
+                .Subscribe(s =>
+                {
+                    _lineHandler.StartHandling();
+                })
+                .AddTo(this);
+
+            _raceUI.OnAdsInit += ShowAds;
+            _rewardsHandler.OnRaceRewardLootboxAdded += SetRaceUI;
+            _waypointTrackMain.OnCheckpointPass += MakeCheckpointNotification;
         }
 
         private IDisposable HandlePlayerCarState(CarState playerCarState, Driver playerDriver)
@@ -286,6 +308,8 @@ namespace RaceManager.Race
             _waypointTrackMain.OnCheckpointPass -= MakeCheckpointNotification;
 
             _scoresCounter.Dispose();
+
+            //Destroy(_opponentsCarsDepot);
         }
     }
 }

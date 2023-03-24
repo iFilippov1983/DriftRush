@@ -11,8 +11,11 @@ namespace RaceManager.Tools
         public const string MaterialsContainer = "SO/Containers/MaterialsContainer";
         public const string GameSettingsContainer = "SO/Containers/GameSettingsContainer";
 
+        public const string OpponentsTuneScheme = "SO/Schemes/OpponentsTuneScheme";
         public const string GameProgressScheme = "SO/Schemes/GameProgressScheme";
+
         public const string CarDepotPlayer = "SO/Depots/CarsDepotPlayer";
+        public const string CarDepotOpponents = "SO/Depots/CarsDepotOpponents";
 
         public const string WaypointPrefab = "Prefabs/Waypoint";
         public const string RaceLineSegmentPrefab = "Prefabs/RaceLineSegment";

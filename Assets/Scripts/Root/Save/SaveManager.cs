@@ -37,11 +37,11 @@ namespace RaceManager.Root
             if (File.Exists(path))
             {
                 File.Delete(path);
-                $"File located in {path} - DELETED".Log(Logger.ColorGreen);
+                Debug.Log($"File located in [{path}] - DELETED");
                 return;
             }
              
-            $"No Save data to delete".Log(Logger.ColorYellow);
+            Debug.Log("= No Save data to delete =");
         }
 
         public void RegisterSavable(ISaveable savable)
@@ -95,7 +95,7 @@ namespace RaceManager.Root
             string path = Path.Combine(Application.persistentDataPath, FileName);
             bool fileExists = File.Exists(path);
 
-            $"Load from => {path};\n File exists => {fileExists}".Log(Logger.ColorGreen);
+            Debug.Log($"<color=green>Load from => {path};</color>\n File exists => {fileExists}");
 
             if (!fileExists)
             {

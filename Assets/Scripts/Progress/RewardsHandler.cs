@@ -95,7 +95,6 @@ namespace RaceManager.Progress
                 _profiler.CountVictoryCycle();
 
                 _gameEvents.RaceWin.OnNext();
-                Debugger.Log($"Victories count: {_playerProfile.VictoriesTotalCounter}");
             }
 
             _saveManager.Save();

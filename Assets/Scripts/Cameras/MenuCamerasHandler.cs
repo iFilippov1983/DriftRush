@@ -1,34 +1,42 @@
 ﻿using Cinemachine;
+using RaceManager.UI;
+using Sirenix.OdinInspector;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace RaceManager.Cameras
 {
-    public class MenuCamerasHandler : MonoBehaviour
+    public class MenuCamerasHandler : SerializedMonoBehaviour
     {
         private const int MajorPriority = 10;
         private const int MinorPriority = 0;
 
         [SerializeField] private CinemachineVirtualCamera _closeCamera;
+        [SerializeField] private CinemachineVirtualCamera _midCamera;
         [SerializeField] private CinemachineVirtualCamera _farCamera;
 
-        private void Awake()
-        {
-            _closeCamera.Priority = MajorPriority;
-            _farCamera.Priority = MinorPriority;
-        }
+        [DictionaryDrawerSettings(KeyLabel = "Status", ValueLabel = "Camera")]
+        [SerializeField] private Dictionary<MainUIStatus, CinemachineVirtualCamera> _camScheme = new Dictionary<MainUIStatus, CinemachineVirtualCamera>();
 
         public void LookAt(Transform lookAtTransform)
         {
             _closeCamera.LookAt = lookAtTransform;
+            _midCamera.LookAt = lookAtTransform;
             _farCamera.LookAt = lookAtTransform;
         }
 
-        public void ToggleCamPriorities(bool isMainMenuActive)
+        public void ToggleCamPriorities(MainUIStatus status)
         {
-            _closeCamera.Priority = isMainMenuActive ? MajorPriority : MinorPriority;
-            _farCamera.Priority = isMainMenuActive ? MinorPriority : MajorPriority;
+            foreach (var cam in _camScheme.Values)
+            {
+                cam.Priority = MinorPriority;
+            }
 
-            //Debug.Log($"Close cam: {_closeCamera.Priority}; Far cam: {_farCamera.Priority}");
+            var majorCam = _camScheme[status];
+            if(majorCam != null)
+                majorCam.Priority = MajorPriority;
+
+            //Debug.Log($"Status [{status}] => Close cam: {_closeCamera.Priority} | Mid cam: {_midCamera.Priority} | Far cam: {_farCamera.Priority}");
         }
     }
 }

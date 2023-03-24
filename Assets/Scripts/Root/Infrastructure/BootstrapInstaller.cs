@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Globalization;
 using RaceManager.Root;
 using SaveData = System.Collections.Generic.Dictionary<string, Newtonsoft.Json.Linq.JObject>;
-using RaceManager.Effects;
 
 namespace RaceManager.Infrastructure
 {

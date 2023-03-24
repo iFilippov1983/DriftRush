@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.Events;
+using Random = UnityEngine.Random;
 
 namespace RaceManager.Cars
 {
@@ -11,48 +12,61 @@ namespace RaceManager.Cars
         private const int Threshold_2 = 75;
         private const int Threshold_3 = 100;
 
-        private CarsDepot _playerCarDepot;
-        private CarProfile _carProfile;
-        private CarVisual _carVisual;
+        protected CarsDepot _carDepot;
+        protected CarProfile _carProfile;
+        protected CarVisual _carVisual;
 
         public Action OnCurrentCarChanged;
-        public Func<CharacteristicType, float, int> OnCharacteristicValueChanged;
+        public Func<CharacteristicType, float, bool, int> OnCharacteristicValueChanged;
         public UnityEvent<TuneData> OnCharValueLimit = new UnityEvent<TuneData>();
 
-        public CarTuner(CarsDepot playerCarDepot)
+        //Injected
+        public CarTuner(CarsDepot carDepot)
         {
-            _playerCarDepot = playerCarDepot;
+            _carDepot = carDepot;
             SetCarProfile();
 
             OnCharacteristicValueChanged += TuneCar;
         }
 
         public void SetTuner(CarVisual carVisual) => _carVisual = carVisual;
-        public void SetCarProfile() => _carProfile = _playerCarDepot.CurrentCarProfile;
+        public void SetCarProfile() => _carProfile = _carDepot.CurrentCarProfile;
 
-        private int TuneCar(CharacteristicType characteristics, float value)
+        public void SetRandomCarView()
+        {
+            TuneVisualRandom(CharacteristicType.Speed);
+            TuneVisualRandom(CharacteristicType.Mobility);
+            TuneVisualRandom(CharacteristicType.Durability);
+            TuneVisualRandom(CharacteristicType.Acceleration);
+        }
+
+        private int TuneCar(CharacteristicType characteristics, float value, bool tuneVisual)
         {
             switch (characteristics)
             {
                 case CharacteristicType.Speed:
-                    TuneVisual(CharacteristicType.Speed, value);
+                    if(tuneVisual)
+                        TuneVisual(CharacteristicType.Speed, value);
                     TuneSpeed(value);
                     break;
                 case CharacteristicType.Mobility:
-                    TuneVisual(CharacteristicType.Mobility, value);
+                    if(tuneVisual)
+                        TuneVisual(CharacteristicType.Mobility, value);
                     TuneMobility(value);
                     break;
                 case CharacteristicType.Durability:
-                    TuneVisual(CharacteristicType.Durability, value);
+                    if(tuneVisual)
+                        TuneVisual(CharacteristicType.Durability, value);
                     TuneDurability(value);
                     break;
                 case CharacteristicType.Acceleration:
-                    TuneVisual(CharacteristicType.Acceleration, value);
+                    if(tuneVisual)
+                        TuneVisual(CharacteristicType.Acceleration, value);
                     TuneAcceleration(value);
                     break;
             }
 
-            _playerCarDepot.UpdateProfile(_carProfile);
+            _carDepot.UpdateProfile(_carProfile);
 
             return _carProfile.CarCharacteristics.AvailableFactorsToUse;
         }
@@ -169,7 +183,7 @@ namespace RaceManager.Cars
                 _ => throw new NotImplementedException()
             };
 
-            (PartType, PartLevel) d = cType switch
+            (PartType type, PartLevel level) = cType switch
             {
                 CharacteristicType.Speed => (PartType.Wheel, currentLevel),
                 CharacteristicType.Mobility => (PartType.Suspention, currentLevel),
@@ -179,7 +193,35 @@ namespace RaceManager.Cars
             };
 
             WheelsSetType wst = carConfigVisual.CurrentWheelsSetType;
-            _carVisual.SetPartsVisual(d.Item1, d.Item2, wst);
+            _carVisual.SetPartsVisual(type, level, wst);
+        }
+
+        private void TuneVisualRandom(CharacteristicType cType)
+        {
+            PartLevel newLevel = GetPartLevelRandom(cType);
+
+            var carConfigVisual = _carProfile.CarConfigVisual;
+
+            PartLevel currentLevel = cType switch
+            {
+                CharacteristicType.Speed => carConfigVisual.CurrentWheelsLevel = newLevel,
+                CharacteristicType.Mobility => carConfigVisual.CurrentSuspentionLevel = newLevel,
+                CharacteristicType.Durability => carConfigVisual.CurrentBumpersLevel = newLevel,
+                CharacteristicType.Acceleration => carConfigVisual.CurrentBodyKitsLevel = newLevel,
+                _ => throw new NotImplementedException()
+            };
+
+            (PartType type, PartLevel level) = cType switch
+            {
+                CharacteristicType.Speed => (PartType.Wheel, currentLevel),
+                CharacteristicType.Mobility => (PartType.Suspention, currentLevel),
+                CharacteristicType.Durability => (PartType.Bumper, currentLevel),
+                CharacteristicType.Acceleration => (PartType.BodyKit, currentLevel),
+                _ => throw new NotImplementedException()
+            };
+
+            WheelsSetType wst = carConfigVisual.CurrentWheelsSetType;
+            _carVisual.SetPartsVisual(type, level, wst);
         }
 
         private bool CanSetValue(int oldValue, int newValue, int maxDifference, out int outValue)
@@ -221,9 +263,28 @@ namespace RaceManager.Cars
             return pLevel;
         }
 
+        private PartLevel GetPartLevelRandom(CharacteristicType characteristics)
+        {
+            int randomPercentage = Mathf.RoundToInt(Random.value * 100);
+
+            PartLevel pLevel = PartLevel.Zero;
+            if (randomPercentage <= Threshold_0)
+                pLevel = PartLevel.Zero;
+            else if (Threshold_0 < randomPercentage && randomPercentage <= Threshold_1)
+                pLevel = PartLevel.First;
+            else if (Threshold_1 < randomPercentage && randomPercentage <= Threshold_2)
+                pLevel = PartLevel.Second;
+            else if (Threshold_2 < randomPercentage && randomPercentage <= Threshold_3)
+                pLevel = PartLevel.Third;
+
+            //Debug.Log($"[Random view] CHAR: {characteristics} => PERCENTAGE: {randomPercentage} => LEVEL: {pLevel}");
+
+            return pLevel;
+        }
+
         public void ChangeCar()
         {
-            _playerCarDepot.UpdateProfile(_carProfile);
+            _carDepot.UpdateProfile(_carProfile);
             SetCarProfile();
 
             OnCurrentCarChanged?.Invoke();

@@ -98,9 +98,9 @@ namespace RaceManager.Root
             //$"Button pressed notification => [{buttonName}]".Log();
         }
 
-        private void ToggleEffectSetting(float toggleValue, EffectType type)
+        private void ToggleEffectSetting(bool toggleValue, EffectType type)
         {
-            bool use = toggleValue > 0.5f ? true : false;
+            bool use = toggleValue;// > 0.5f ? true : false;
 
             switch (type)
             {
@@ -119,9 +119,9 @@ namespace RaceManager.Root
             _saveManager.Save();
         }
 
-        private void ToggleSettings(float toggleValue, SettingsType settingsType)
+        private void ToggleSettings(bool toggleValue, SettingsType settingsType)
         {
-            bool use = toggleValue > 0.5f ? true : false;
+            bool use = toggleValue;// > 0.5f ? true : false;
 
             switch (settingsType)
             {
@@ -171,7 +171,9 @@ namespace RaceManager.Root
             if (_mainUI != null)
             {
                 _mainUI.OnButtonPressed -= HandleButton;
-            } 
+            }
+
+            _gameEvents.ScreenTaped.OnNext();
         }
 
         #endregion

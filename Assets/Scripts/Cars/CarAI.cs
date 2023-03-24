@@ -49,7 +49,7 @@ namespace RaceManager.Cars
                 if (value)
                     DesiredSpeed = _car.CarConfig.CruiseSpeed;
                 else
-                    DesiredSpeed = _car.CarConfig.MaxSpeed * Random.Range(_car.CarConfig.CruiseSpeedPercentMin, _car.CarConfig.CruiseSpeedPercentMax);
+                    DesiredSpeed = _car.CarConfig.MaxSpeed; // * Random.Range(_car.CarConfig.CruiseSpeedPercentMin, _car.CarConfig.CruiseSpeedPercentMax);
                 _playerDriving = value;
                 //Debug.Log($"{gameObject.name} speed: {DesiredSpeed}");
             }
@@ -62,10 +62,10 @@ namespace RaceManager.Cars
                 if (value)
                     DesiredSpeed = 0;
                 else
-                { 
+                {
                     DesiredSpeed = PlayerDriving
                         ? _car.CarConfig.CruiseSpeed
-                        : _car.CarConfig.MaxSpeed * Random.Range(_car.CarConfig.CruiseSpeedPercentMin, _car.CarConfig.CruiseSpeedPercentMax);
+                        : _car.CarConfig.MaxSpeed; // * Random.Range(_car.CarConfig.CruiseSpeedPercentMin, _car.CarConfig.CruiseSpeedPercentMax);
                 }
 
                 _isStopping = value;

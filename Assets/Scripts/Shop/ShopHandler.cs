@@ -103,7 +103,7 @@ namespace RaceManager.Shop
                     AddGems(Amount_14000);
                     break;
                 default:
-                    $"ShopHandler can't identify product Id!".Log(Logger.ColorYellow);
+                    Debug.LogError("ShopHandler can't identify product Id!");
                     break;
             }
 
@@ -131,12 +131,12 @@ namespace RaceManager.Shop
                 _profiler.AddOrOpenLootbox(lootbox);
 
                 _mainUI.UpdateCurrencyAmountPanels(GameUnitType.Gems);
-                $"[Shop Handler] Got lootbox => {lootboxRarity}".Log(Logger.ColorYellow);
+                Debug.Log($"[Shop Handler] Got lootbox => {lootboxRarity}");
             }
             else 
             {
                 HandleButtonClick(ConfirmationPanel.ConfirmButton.name);
-                $"[Shop Handler] Can't buy lootbox => {lootboxRarity}".Log(Logger.ColorRed);
+                Debug.Log($"[Shop Handler] Can't buy lootbox => {lootboxRarity}");
             }
         }
 
@@ -164,7 +164,7 @@ namespace RaceManager.Shop
             else
             {
                 HandleButtonClick(ConfirmationPanel.ConfirmButton.name);
-                $"[Shop Handler] Not anough gems to exchange!".Log(Logger.ColorRed);
+                Debug.Log($"[Shop Handler] Not anough gems to exchange!");
             }
         }
 
@@ -207,14 +207,14 @@ namespace RaceManager.Shop
             }
             else
             { 
-                $"Installer type of [{ShopOfferType.NoAds}] wasn't found!".Log(Logger.ColorYellow);
+                Debug.LogError($"Installer type of [{ShopOfferType.NoAds}] wasn't found!");
             }
         }
 
         private void AddMoney(int moneyAmount)
         { 
             _profiler.AddMoney(moneyAmount);
-            $"[Shop Handler] Money added: {moneyAmount}".Log(Logger.ColorYellow);
+            Debug.Log($"[Shop Handler] Money added: {moneyAmount}");
 
             if (ShopPanel.TryGetPanelTransform(ShopOfferType.ExchangeGems, out Transform panelTransform))
             {
@@ -235,7 +235,7 @@ namespace RaceManager.Shop
         private void AddGems(int gemsAmount)
         { 
             _profiler.AddGems(gemsAmount);
-            $"[Shop Handler] Money added: {gemsAmount}".Log(Logger.ColorYellow);
+            Debug.Log($"[Shop Handler] Money added: {gemsAmount}");
 
             if (ShopPanel.TryGetPanelTransform(ShopOfferType.BuyGems, out Transform panelTransform))
             {

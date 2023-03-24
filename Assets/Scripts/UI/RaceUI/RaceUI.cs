@@ -13,6 +13,7 @@ using DG.Tweening;
 using UniRx;
 using TMPro;
 using UniRx.Triggers;
+using System.Threading.Tasks;
 
 namespace RaceManager.UI
 {
@@ -76,10 +77,11 @@ namespace RaceManager.UI
 
         #region Public Functions
 
-        public void Initialize(RaceLevelInitializer levelInitializer, UnityAction actionForRespawnButton, UnityAction actionForGetToCheckpointButton)
+        //public void Initialize(RaceLevelInitializer levelInitializer, UnityAction actionForRespawnButton, UnityAction actionForGetToCheckpointButton)
+        public void Initialize(UnityAction actionForRespawnButton, UnityAction actionForGetToCheckpointButton)
         {
             _inRaceUI.gameObject.SetActive(true);
-            _inRaceUI.RaceProgressBar.LevelText.text = ("LEVEL " + levelInitializer.LevelName).ToUpper();
+            //_inRaceUI.RaceProgressBar.LevelText.text = ("LEVEL " + levelInitializer.LevelName).ToUpper();
 
             _inRaceUI.RespawnCarButton.AddListener(actionForRespawnButton);
             _inRaceUI.GetToCheckpointButton.AddListener(actionForGetToCheckpointButton);
@@ -99,7 +101,7 @@ namespace RaceManager.UI
                     OnButtonPressed?.Invoke(t.bName);
 
                     if(t.isFinal)
-                        StartCoroutine(FinalizeRace());
+                        FinalizeRace();
                 })
                 .AddTo(this);
 
@@ -323,10 +325,10 @@ namespace RaceManager.UI
             _finishUIHandler.ShowMoneyRewardPanel(_rewardInfo)?.AddTo(this);
         }
 
-        private IEnumerator FinalizeRace()
+        private async void FinalizeRace()
         {
             while (_finishUIHandler.HasJob)
-                yield return null;
+                await Task.Yield();
 
             EventsHub<RaceEvent>.BroadcastNotification(RaceEvent.QUIT);
         }

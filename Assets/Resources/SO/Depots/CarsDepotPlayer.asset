@@ -22,8 +22,8 @@ MonoBehaviour:
         PointsForAccess: 30
         AccessCost: 0
         AvailableTunePercentage: 0
-        IsGranted: 0
-        IsReached: 0
+        IsGranted: 1
+        IsReached: 1
     Speed:
       Max: 200
       Min: 160
@@ -76,8 +76,6 @@ MonoBehaviour:
       DriveType: 2
       MaxSpeed: 180
       CruiseSpeed: 40
-      CruiseSpeedPercentMax: 0.8
-      CruiseSpeedPercentMin: 0.7
       FWheelsForwardFriction: 0.53400004
       FWheelsSidewaysFriction: 0.53400004
       RWheelsForwardFriction: 0.634
@@ -178,17 +176,17 @@ MonoBehaviour:
         PointsForAccess: 30
         AccessCost: 1000
         AvailableTunePercentage: 0.9
-        IsGranted: 0
-        IsReached: 0
+        IsGranted: 1
+        IsReached: 1
       - Rank: 3
         PointsForAccess: 30
         AccessCost: 1000
         AvailableTunePercentage: 1
-        IsGranted: 0
-        IsReached: 0
+        IsGranted: 1
+        IsReached: 1
     Speed:
-      Max: 190
-      Min: 230
+      Max: 230
+      Min: 190
     Mobility:
       f_frictionForward_Max: 0.7
       f_frictionForward_Min: 0.4
@@ -218,17 +216,17 @@ MonoBehaviour:
       Rarity: 0
       _factorsMaxTotal: 400
       _initialFactorsProgress: 0
-      FactorsMaxCurrent: 260
-      CurrentFactorsProgress: 260
+      FactorsMaxCurrent: 400
+      CurrentFactorsProgress: 400
       MinSpeedFactor: 1
       MaxSpeedFactor: 120
-      CurrentSpeedFactor: 70
+      CurrentSpeedFactor: 58
       MinMobilityFactor: 1
       MaxMobilityFactor: 100
-      CurrentMobilityFactor: 50
+      CurrentMobilityFactor: 100
       MinDurabilityFactor: 1
       MaxDurabilityFactor: 80
-      CurrentDurabilityFactor: 40
+      CurrentDurabilityFactor: 80
       MinAccelerationFactor: 1
       MaxAccelerationFactor: 100
       CurrentAccelerationFactor: 100
@@ -236,10 +234,8 @@ MonoBehaviour:
       CarName: 1
       SpeedType: 1
       DriveType: 2
-      MaxSpeed: 190
+      MaxSpeed: 209.33333
       CruiseSpeed: 40
-      CruiseSpeedPercentMax: 0.8
-      CruiseSpeedPercentMin: 0.7
       FWheelsForwardFriction: 0.7
       FWheelsSidewaysFriction: 0.6
       RWheelsForwardFriction: 0.7
@@ -250,7 +246,7 @@ MonoBehaviour:
       MaxMotorTorque: 550
       RPMToNextGearPercent: 0.8
       MaxBrakeTorque: 2000
-      Durability: 19.75
+      Durability: 20
       ProbabilityBackfire: 0.1
       MaxForwardSlipToBlockChangeGear: 0.25
       RpmEngineToRpmWheelsLerpSpeed: 15
@@ -323,9 +319,9 @@ MonoBehaviour:
       CurrentMaterialsSetType: 0
       _availableMaterialSets: 00000000
       CurrentWheelsSetType: 0
-      CurrentWheelsLevel: 2
+      CurrentWheelsLevel: 1
       CurrentSuspentionLevel: 3
-      CurrentBumpersLevel: 1
+      CurrentBumpersLevel: 3
       CurrentBodyKitsLevel: 3
   - CarName: 3
     RankingScheme:
@@ -388,8 +384,6 @@ MonoBehaviour:
       DriveType: 2
       MaxSpeed: 194.08
       CruiseSpeed: 40
-      CruiseSpeedPercentMax: 0.8
-      CruiseSpeedPercentMin: 0.7
       FWheelsForwardFriction: 0.5248
       FWheelsSidewaysFriction: 0.5248
       RWheelsForwardFriction: 0.6248
@@ -538,8 +532,6 @@ MonoBehaviour:
       DriveType: 0
       MaxSpeed: 199.2
       CruiseSpeed: 40
-      CruiseSpeedPercentMax: 0.8
-      CruiseSpeedPercentMin: 0.7
       FWheelsForwardFriction: 0.6144
       FWheelsSidewaysFriction: 0.7144
       RWheelsForwardFriction: 0.7608
@@ -634,8 +626,8 @@ MonoBehaviour:
         PointsForAccess: 20
         AccessCost: 0
         AvailableTunePercentage: 0
-        IsGranted: 0
-        IsReached: 0
+        IsGranted: 1
+        IsReached: 1
     Speed:
       Max: 250
       Min: 200
@@ -688,8 +680,6 @@ MonoBehaviour:
       DriveType: 2
       MaxSpeed: 225
       CruiseSpeed: 40
-      CruiseSpeedPercentMax: 0.8
-      CruiseSpeedPercentMin: 0.7
       FWheelsForwardFriction: 0.55
       FWheelsSidewaysFriction: 0.5
       RWheelsForwardFriction: 0.6
@@ -838,8 +828,6 @@ MonoBehaviour:
       DriveType: 2
       MaxSpeed: 270
       CruiseSpeed: 40
-      CruiseSpeedPercentMax: 0.8
-      CruiseSpeedPercentMin: 0.7
       FWheelsForwardFriction: 0.6
       FWheelsSidewaysFriction: 0.7
       RWheelsForwardFriction: 0.75
@@ -988,8 +976,6 @@ MonoBehaviour:
       DriveType: 0
       MaxSpeed: 382.85715
       CruiseSpeed: 20
-      CruiseSpeedPercentMax: 0.8
-      CruiseSpeedPercentMin: 0.7
       FWheelsForwardFriction: 0.55314285
       FWheelsSidewaysFriction: 0.65314287
       RWheelsForwardFriction: 0.71485716
@@ -1138,8 +1124,6 @@ MonoBehaviour:
       DriveType: 2
       MaxSpeed: 200
       CruiseSpeed: 20
-      CruiseSpeedPercentMax: 0.8
-      CruiseSpeedPercentMin: 0.7
       FWheelsForwardFriction: 0.4
       FWheelsSidewaysFriction: 0.4
       RWheelsForwardFriction: 0.4

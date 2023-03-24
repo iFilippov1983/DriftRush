@@ -74,7 +74,7 @@ namespace RaceManager.Root
                     .AddTo(this);
 
                 if (agentGo != null)
-                    $"Reminder Agent subscribed: {agentGo.name}".Log();
+                    Debug.Log($"Reminder Agent [{agentGo.name}] subscribed");
             }
         }
 

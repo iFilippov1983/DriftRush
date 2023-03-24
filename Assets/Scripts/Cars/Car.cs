@@ -15,7 +15,7 @@ namespace RaceManager.Cars
 
     [RequireComponent(typeof(Rigidbody))]
 	public class Car : MonoBehaviour, ICountableCollision
-	{
+    {
         [ShowInInspector, ReadOnly]
         private string _id;
         [ShowInInspector, ReadOnly]
@@ -167,8 +167,10 @@ namespace RaceManager.Cars
         public Wheel[] RearAxis { get; private set; }
         public float CurrentMaxSlip { get; private set; }                       //Max slip of all wheels.
         public int CurrentMaxSlipWheelIndex { get; private set; }               //Max slip wheel index.
+        [ShowInInspector, ReadOnly]
         public float CurrentSpeed { get; private set; }                         //Speed, magnitude of velocity.
         public int VehicleDirection { get { return CurrentSpeed < 1 ? 0 : (VelocityAngle.Abs() < 90 ? 1 : -1); } }
+        [ShowInInspector, ReadOnly]
         public float SpeedInDesiredUnits => _carConfig.SpeedType == SpeedType.KPH ? CurrentSpeed * C.KPHFactor : CurrentSpeed * C.MPHFactor;
         public int CarDirection { get { return CurrentSpeed < 1 ? 0 : (VelocityAngle < 90 && VelocityAngle > -90 ? 1 : -1); } }
         public bool IsVisible => _carBody.IsVisible;
@@ -547,7 +549,7 @@ namespace RaceManager.Cars
                 {
                     CurrentBrake = 0;
 
-                    float motorTorqueFromRpm = MotorTorqueFromRpmCurve.Evaluate(EngineRPM * 0.001f);
+                    float motorTorqueFromRpm = MotorTorqueFromRpmCurve.Evaluate(EngineRPM * 0.001f); //0.001f
                     var motorTorque = CurrentAcceleration * (motorTorqueFromRpm * (MaxMotorTorque * AllGearsRatio[CurrentGearIndex]));
                     if (Mathf.Abs(minRPM) * AllGearsRatio[CurrentGearIndex] > MaxRPM)
                     {

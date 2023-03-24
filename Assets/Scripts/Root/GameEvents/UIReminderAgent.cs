@@ -148,7 +148,7 @@ namespace RaceManager.Root
         {
             if (Type != AgentType.Button)
             {
-                $"You're trying to make a click reminder on UIReminderAgent without Button component. Subscription denied! => [{gameObject.name}]".Log(ColorRed);
+                Debug.LogError($"You're trying to make a click reminder on UIReminderAgent without Button component. Subscription denied! => [{gameObject.name}]");
                 return;
             }
 
@@ -164,7 +164,7 @@ namespace RaceManager.Root
         {
             if (_button == null)
             {
-                $"You're trying to make an interactable reminder on UIReminderAgent [{gameObject.name}] without Button component. Subscription denied!".Log(ColorRed);
+                Debug.LogError($"You're trying to make an interactable reminder on UIReminderAgent [{gameObject.name}] without Button component. Subscription denied!");
                 return;
             }
 
@@ -195,7 +195,7 @@ namespace RaceManager.Root
 
             if (startAnimation && incorrectAnimationTypes)
             {
-                $"You're trying to toggle UIReminderAgent [{gameObject.name}] animation but you haven't assigned correct animation type!".Log(ColorRed);
+                Debug.LogError($"You're trying to toggle UIReminderAgent [{gameObject.name}] animation but you haven't assigned correct animation type!");
                 return;
             }
 

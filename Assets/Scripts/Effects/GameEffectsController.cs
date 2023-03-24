@@ -308,13 +308,13 @@ namespace RaceManager.Effects
         private void Log(string msg)
         { 
             if(!debug) return;
-            $"[Audio Controller]: {msg}".Log();
+            Debug.Log($"[Audio Controller]: {msg}");
         }
 
         private void LogWarning(string msg)
         {
             if (!debug) return;
-            $"[Audio Controller]: {msg}".Warning();
+            Debug.LogWarning($"[Audio Controller]: {msg}");
         }
 
         #endregion

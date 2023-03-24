@@ -286,7 +286,7 @@ namespace RaceManager.UI
 
         private void SlotSpeedupTimer(LootboxSlot slot)
         {
-            "Speedup not implemented".Log(Logger.ColorYellow);
+            Debug.LogWarning("Speedup not implemented");
         }
 
         private void CloseLootboxPopup()

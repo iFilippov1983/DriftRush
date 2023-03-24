@@ -226,6 +226,8 @@ namespace RaceManager.Progress
 
         public int GetVictoriesTotalCount() => _playerProfile.VictoriesTotalCounter;
 
+        public PositionInRace GetLastInRacePosition() => _playerProfile.LastInRacePosition;
+
         public void RemoveLootboxWithId(string Id)
         {
             _playerProfile.GiveLootboxesTo(this);

@@ -57,7 +57,7 @@ namespace RaceManager.Progress
 
         public RaceReward GetRewardFor(PositionInRace position)
         {
-            $"Position {position}".Log();
+            Debug.Log($"Player position => {position}");
             RaceReward blank = _scheme[position];
             RaceReward reward = new RaceReward();
             reward.IsReceived = blank.IsReceived;

@@ -27,7 +27,7 @@ namespace RaceManager.Waypoints
             }
         }
 
-        public override Vector3 GetRoutePosition(float dist)
+        public override Vector3 GetRoutePosition(float dist, out int index)
         {
             int point = 0;
 
@@ -43,6 +43,7 @@ namespace RaceManager.Waypoints
                 ++point;
             }
 
+            index = point;
 
             // get nearest two points, ensuring points wrap-around start & end of circuit
             p1n = ((point - 1) + _numPoints) % _numPoints;
@@ -102,7 +103,7 @@ namespace RaceManager.Waypoints
                 {
                     for (float dist = 0; dist < Length; dist += Length/editorVisualisationSubsteps)
                     {
-                        Vector3 next = GetRoutePosition(dist + 1);
+                        Vector3 next = GetRoutePosition(dist + 1, out _);
                         Gizmos.DrawLine(prev, next);
                         prev = next;
                     }

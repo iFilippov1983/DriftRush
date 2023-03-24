@@ -40,6 +40,7 @@ namespace RaceManager.Cars
         public Transform StartCameraTarget => _car.StartCameraTarget;
         public Transform StartCameraPosition => _car.StartCameraPosition;
         public WaypointsTracker WaypointsTracker => _waypointsTracker;
+        public CarVisual CarVisual => _carVisual;
 
         public void Initialize
             (
@@ -62,6 +63,18 @@ namespace RaceManager.Cars
             _driverProfile.CarState.Subscribe(s => OnCarStateChange(s));
 
             _observersList = new List<IObserver<DriverProfile>>();
+        }
+
+        public void TrackRecommendedSpeed()
+        {
+            WaypointsTracker.OnRecommendedSpeedChange
+                .Subscribe(s => 
+                {
+                    _carAI.DesiredSpeed = s < _car.SpeedInDesiredUnits
+                    ?  s
+                    : _car.CarConfig.MaxSpeed;
+                })
+                .AddTo(this);
         }
 
         private void OnEnable()
@@ -143,7 +156,7 @@ namespace RaceManager.Cars
 
             StartCoroutine(WaitForCarStop());
 
-            $"{gameObject.name} FINISHED".Log(Logger.ColorYellow);
+            Debug.Log($"{gameObject.name} => FINISHED"); 
         }
 
         private IEnumerator WaitForCarStop()

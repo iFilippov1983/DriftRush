@@ -1,6 +1,9 @@
 ﻿using RaceManager.Effects;
 using RaceManager.Waypoints;
+using Sirenix.OdinInspector.Editor.Internal;
+using Sirenix.Utilities.Editor;
 using UnityEngine;
+using Zenject;
 
 namespace RaceManager.Cars
 {
@@ -30,7 +33,7 @@ namespace RaceManager.Cars
 
             _carProfile = _driverType == DriverType.Player
                 ? _carsDepot.CurrentCarProfile
-                : GetOpponentsProfile();
+                : GetRandomProfile();
         }
 
         public CarFactory(CarsDepot carsDepot, MaterialsContainer materialsContainer, Transform spawnPoint)
@@ -118,15 +121,18 @@ namespace RaceManager.Cars
             return go;
         }
 
-        private CarProfile GetOpponentsProfile()
+        private CarProfile GetRandomProfile()
         {
-            //TODO: make settings generation depending on Player's progress level
-            
             CarProfile carProfile = _carsDepot.ProfilesList[Random.Range(0, _carsDepot.ProfilesList.Count)];
+
+            //CarProfile newCarProfile = carProfile.DeepClone();
+
+            CarProfile newCarProfile = new CarProfile();
+            FastDeepCopier.DeepCopyFromToClass(carProfile, newCarProfile);
+
             //carProfile.CarConfigVisual.CurrentMaterialsSetType = (MaterialSetType)Random.Range(0, 2);
 
-
-            return carProfile;
+            return newCarProfile;
         }
     }
 }

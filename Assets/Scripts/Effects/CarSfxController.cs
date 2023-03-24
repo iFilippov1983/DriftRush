@@ -152,7 +152,7 @@ namespace RaceManager.Effects
 
                 if (groundSounds == null)
                 {
-                    $"GroundSounds doesn't contain sounds for layer: {LayerMask.LayerToName(layer)}".Log(Logger.ColorYellow);
+                    Debug.LogWarning($"GroundSounds doesn't contain sounds for layer: {LayerMask.LayerToName(layer)}");
                     continue;
                 }
 

@@ -20,6 +20,7 @@ namespace RaceManager.Infrastructure
         [Space]
         [SerializeField] private GameProgressScheme _gameProgressScheme;
         [SerializeField] private RaceRewardsScheme _raceRewardsScheme;
+        [SerializeField] private OpponentsTuneScheme _opponentsTuneScheme;
         [Space]
         [SerializeField] private SpritesContainerRewards _spritesContainerRewards;
         [SerializeField] private GameSettingsContainer _settingsContainer;
@@ -46,6 +47,7 @@ namespace RaceManager.Infrastructure
             Bind(_playerCarDepot);
             Bind(_gameProgressScheme);
             Bind(_raceRewardsScheme);
+            Bind(_opponentsTuneScheme);
             Bind(_spritesContainerRewards);
             Bind(_effectsHandler);
             Bind(_gameFlagsHandler);
@@ -61,6 +63,7 @@ namespace RaceManager.Infrastructure
             Bind<RaceLevelInitializer>();
             Bind<Profiler>();
             Bind<RewardsHandler>();
+            Bind<OpponentsCarTuner>();
         }
 
         public override void Start()

@@ -274,7 +274,7 @@ namespace RaceManager.UI
             animSequence.AppendCallback(() => rect.transform.localScale = initialScale);
 
             ForceCompleteAnimation
-                .Where(s => s == rect?.name && animSequence != null)
+                .Where(s => rect != null && animSequence != null && s == rect.name)
                 .Take(1)
                 .Subscribe(x =>
                 {

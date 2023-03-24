@@ -57,7 +57,7 @@ namespace RaceManager.UI
 
             AddButtonsListeners();
 
-            _lootboxAnimationHandler.OnAnimationFinish += OnLootboxAnimationFinish;
+            _lootboxAnimationHandler.OnAnimationFinish += _lootboxProgress.OnAnimationFinish;
 
             _lootboxProgress.OnImagesDisableComplete += InitializeLootboxProgressPanel;
         }
@@ -72,8 +72,9 @@ namespace RaceManager.UI
                 _lootboxProgress.Images[i].SetActive(true);
 
             string text = string.Empty;
-            if (counter == _lootboxProgress.Images.Length)
-            //if(_playerProfile.WillGetLootboxForVictiories)
+
+            //if (counter == _lootboxProgress.Images.Length)
+            if(_playerProfile.WillGetLootboxForVictiories)
             {
                 if (_playerProfile.CanGetLootbox)
                 {
@@ -376,12 +377,6 @@ namespace RaceManager.UI
             }
         }
 
-        private void OnLootboxAnimationFinish()
-        {
-            if (_lootboxProgress.gameObject.activeSelf)
-                _lootboxProgress.OnAnimationFinish();
-        }
-
         private void OnButtonPressedMethod(Button button) => OnButtonPressed?.Invoke(button);
 
         private void AddButtonsListeners()
@@ -404,22 +399,13 @@ namespace RaceManager.UI
             HandleSlotTimer();
         }
 
-        //private void OnEnable()
-        //{
-        //    _lootboxProgress.SetActive(true);
-        //}
-
-        //private void OnDisable()
-        //{
-        //    _lootboxProgress.SetActive(false);
-        //}
-
         private void OnDestroy()
         {
-            _lootboxAnimationHandler.OnAnimationFinish -= OnLootboxAnimationFinish;
+            _lootboxAnimationHandler.OnAnimationFinish -= _lootboxProgress.OnAnimationFinish;
 
             _lootboxProgress.OnImagesDisableComplete -= InitializeLootboxProgressPanel;
         }
+
         #endregion
     }
 }

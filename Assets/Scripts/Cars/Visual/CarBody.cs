@@ -24,6 +24,9 @@ namespace RaceManager.Cars
                     _isVisible = false;
                     foreach (var renderer in _allMeshRenderers)
                     {
+                        if (renderer is null)
+                            continue;
+
                         if (renderer.isVisible)
                         { 
                             _isVisible = true;

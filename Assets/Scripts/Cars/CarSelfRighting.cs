@@ -14,6 +14,8 @@ namespace RaceManager.Cars
 
         [SerializeField] private float _waitTimeStuck = 1f;             // time to wait before self righting
         [SerializeField] private float _velocityThreshold = 0.5f;       // the velocity below which the car is considered stationary for self-righting
+        [ShowInInspector, ReadOnly]
+        private string _autoSelfRightLayer = Layer.OffTrack;
         private float _stuckTimer;
 
         private CarAI _carAI;
@@ -45,7 +47,7 @@ namespace RaceManager.Cars
 
         private void OnCollisionEnter(Collision collision)
         {
-            if (collision.gameObject.layer == LayerMask.NameToLayer(Layer.OffTrack))
+            if (collision.gameObject.layer == LayerMask.NameToLayer(_autoSelfRightLayer))
             {
                 RightCar();
             }

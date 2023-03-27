@@ -2,6 +2,7 @@
 using RaceManager.Tools;
 using Sirenix.OdinInspector;
 using System;
+using System.Runtime.Serialization;
 using UnityEngine;
 
 namespace RaceManager.Cars

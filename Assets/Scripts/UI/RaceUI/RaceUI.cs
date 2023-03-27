@@ -100,8 +100,11 @@ namespace RaceManager.UI
                 {
                     OnButtonPressed?.Invoke(t.bName);
 
-                    if(t.isFinal)
+                    if (t.isFinal)
+                    {
                         FinalizeRace();
+                    }
+                        
                 })
                 .AddTo(this);
 

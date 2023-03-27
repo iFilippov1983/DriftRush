@@ -124,15 +124,9 @@ namespace RaceManager.Cars
         private CarProfile GetRandomProfile()
         {
             CarProfile carProfile = _carsDepot.ProfilesList[Random.Range(0, _carsDepot.ProfilesList.Count)];
+            CarProfile newCarProfile = carProfile.DeepCloneJson();
 
-            //CarProfile newCarProfile = carProfile.DeepClone();
-
-            CarProfile newCarProfile = new CarProfile();
-            FastDeepCopier.DeepCopyFromToClass(carProfile, newCarProfile);
-
-            //carProfile.CarConfigVisual.CurrentMaterialsSetType = (MaterialSetType)Random.Range(0, 2);
-
-            return newCarProfile;
+            return  newCarProfile;
         }
     }
 }

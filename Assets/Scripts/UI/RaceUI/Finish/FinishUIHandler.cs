@@ -372,6 +372,8 @@ namespace RaceManager.UI
             _lootboxRewardPanel.ClaimButton.onClick.RemoveAllListeners();
             _lootboxRewardPanel.ClaimButton.onClick.AddListener(() => 
             {
+                _lootboxRewardPanel.ClaimButton.onClick.RemoveAllListeners();
+
                 _disappearSequence?.Complete(true);
                 _disappearSequence = null;
 

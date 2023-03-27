@@ -10,6 +10,7 @@ namespace RaceManager.UI
         private readonly Vector3 ScaleVectorBig = new Vector3(1.5f, 1.5f, 1.5f);
         private readonly Vector3 ScaleVectorSmall = new Vector3(1f, 1f, 1f);
 
+        private Tween _tween;
         private GameObject _imageToAnimate;
         private Vector3 _initialPos;
 
@@ -35,12 +36,18 @@ namespace RaceManager.UI
         public void InitializeAnimationWithTarget(GameObject target, Vector3 targetPosOffset)
         {
             OnAnimationInitialize?.Invoke();
-            _imageToAnimate.transform.DOScale(ScaleVectorBig, Duration / 2).OnComplete(() =>
+            _tween = _imageToAnimate.transform.DOScale(ScaleVectorBig, Duration / 2).OnComplete(() =>
             {
                 _imageToAnimate.transform.DOMove(target.transform.position + targetPosOffset, Duration);
                 _imageToAnimate.transform.DOScale(ScaleVectorSmall, Duration)
                 .OnComplete(FinishAnimation);
             });
+        }
+
+        public void InterruptAnimation()
+        { 
+            _tween?.Complete(true);
+            _tween = null;
         }
 
         private void FinishAnimation()

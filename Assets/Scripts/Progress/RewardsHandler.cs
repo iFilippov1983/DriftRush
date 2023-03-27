@@ -71,6 +71,13 @@ namespace RaceManager.Progress
             _raceReward.AddMoney(extraMoney);
             _raceReward.Reward(_profiler);
 
+            if (positionInRace == PositionInRace.First)
+            {
+                _profiler.CountVictoryCycle();
+
+                _gameEvents.RaceWin.OnNext();
+            }
+
             if (_playerProfile.CanGetLootbox)
             {
                 Rarity rarity = Rarity.Common;
@@ -88,13 +95,6 @@ namespace RaceManager.Progress
 
                     OnRaceRewardLootboxAdded?.Invoke(lootbox);
                 }
-            }
-
-            if (positionInRace == PositionInRace.First)
-            {
-                _profiler.CountVictoryCycle();
-
-                _gameEvents.RaceWin.OnNext();
             }
 
             _saveManager.Save();

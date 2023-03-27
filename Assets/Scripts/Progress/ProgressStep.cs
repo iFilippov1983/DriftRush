@@ -1,5 +1,4 @@
-﻿using RaceManager.Cars;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,7 +10,6 @@ namespace RaceManager.Progress
         [SerializeField] private bool _needsBigPrefab;
         [SerializeField] private bool _isLast;
         private bool _rewardsReceived;
-
 
         public List<IReward> Rewards = new List<IReward>();
 

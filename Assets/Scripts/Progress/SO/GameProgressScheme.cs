@@ -1,4 +1,5 @@
-﻿using RaceManager.Root;
+﻿using RaceManager.Race;
+using RaceManager.Root;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace RaceManager.Progress
         [DictionaryDrawerSettings(KeyLabel = "Cups To Reach", ValueLabel = "Progress Step")]
         private Dictionary<int, ProgressStep> ProgressSteps = new Dictionary<int, ProgressStep>();
 
+        [Space(20)]
         [SerializeField]
         [DictionaryDrawerSettings(KeyLabel = "Reward To Eaxchange", ValueLabel = "One Unit Rate")]
         private Dictionary<GameUnitType, ExchangeRateData> RewardExchangeScheme = new Dictionary<GameUnitType, ExchangeRateData>();

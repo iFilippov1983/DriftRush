@@ -151,7 +151,7 @@ namespace RaceManager.Root
             if (level != null)
             {
                 Debug.Log($"Next level to play => {nextLevelToPlay}");
-                profiler.SetNextLevel(nextLevelToPlay);
+                profiler.SetNextLevelToLoad(nextLevelToPlay);
                 saveManager.Save();
                 Debug.Log($"SAVE - {this}");
             }

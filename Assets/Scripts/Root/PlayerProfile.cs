@@ -54,8 +54,8 @@ namespace RaceManager.Root
         [JsonProperty, SerializeField]
         private List<Lootbox> _lootboxes = new List<Lootbox>();
 
-        [JsonProperty, SerializeField]
-        private List<LevelName> _availableLevels = new List<LevelName>() { LevelName.RookyTrack };
+        //[JsonProperty, SerializeField]
+        //private List<LevelName> _availableLevels = new List<LevelName>() { LevelName.RookyTrack };
 
         #region Boolean Properties
 
@@ -106,8 +106,8 @@ namespace RaceManager.Root
         public float IncomeFactor => _currency.IncomeFactor;
 
         public DateTime LastSaveTime => _lastSaveTime;
-        public LevelName NextLevelPrefabToLoad => _nextLevelPrefabToLoad;
         public PositionInRace LastInRacePosition => _lastInRacePosition;
+        public LevelName NextLevelPrefabToLoad { get => _nextLevelPrefabToLoad; set { _nextLevelPrefabToLoad = value; } }
 
         #endregion
 
@@ -116,7 +116,7 @@ namespace RaceManager.Root
         public void AddGems(IProfiler profiler) => _currency.Gems += profiler.Gems;
         public void AddLootbox(IProfiler profiler) => _lootboxes.Add(profiler.LootboxToAdd);
         public void AddCards(IProfiler profiler) => _currency.CarCards[profiler.CarName] += profiler.CardsAmount;
-        public void AddLevel(IProfiler profiler) => _availableLevels.Add(profiler.LevelName);
+        //public void AddLevel(IProfiler profiler) => _availableLevels.Add(profiler.LevelName);
         public void AddRaceCount(IProfiler profiler)
         {
             _racesTotalCounter++;
@@ -129,16 +129,13 @@ namespace RaceManager.Root
         public void SubstractGems(IProfiler profiler) => _currency.Gems -= profiler.GemsCost;
 
         public void SetIcomeFactor(IProfiler profiler) => _currency.IncomeFactor = profiler.IncomeFactor;
-        public void SetNextLevelFrom(IProfiler profiler) => _nextLevelPrefabToLoad = profiler.LevelName;
+        //public void SetNextLevelFrom(IProfiler profiler) => _nextLevelPrefabToLoad = profiler.NextLevelToLoad;
         public void SetLastInRacePosition(IProfiler profiler) => _lastInRacePosition = profiler.LastInRacePosition;
         public void SetVictoryCycleCounter(IProfiler profiler) => _victoriesCycleCounter = profiler.VictoriesCycleCounter;
         public void SetCardsAmount(IProfiler profiler) => _currency.CarCards[profiler.CarName] = profiler.CardsAmount;
 
         public void GiveLootboxesTo(IProfiler profiler) => profiler.SetLootboxList(_lootboxes);
         public void TakeLooboxesFrom(IProfiler profiler) => _lootboxes = profiler.Lootboxes;
-
-        public void GiveLevelsTo(IProfiler profiler) => profiler.SetLevelsList(_availableLevels);
-        public void TakeLevelsFrom(IProfiler profiler) => _availableLevels = profiler.AvailableLevels;
 
         public int CarCardsAmount(CarName carName) => _currency.CarCards[carName];
 
@@ -160,7 +157,7 @@ namespace RaceManager.Root
             _racesTotalCounter = saveData.racesTotalCounter;
 
             _lastSaveTime = ParseDateTime(saveData.lastSaveDateTimeString, DateTime.UtcNow);
-            _availableLevels = saveData.availableLevels;
+            //_availableLevels = saveData.availableLevels;
 
             foreach (var lootboxData in saveData.lootboxesData)
             {
@@ -204,7 +201,7 @@ namespace RaceManager.Root
                 racesTotalCounter = RacesTotalCounter,
                 lastSaveDateTimeString = _lastSaveTime.ToString("u", CultureInfo.InvariantCulture),
 
-                availableLevels = _availableLevels,
+                //availableLevels = _availableLevels,
                 lootboxesData = lootboxesDataList
             };
         }

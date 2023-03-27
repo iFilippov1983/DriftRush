@@ -1,4 +1,5 @@
 ﻿using RaceManager.Waypoints;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace RaceManager.Race
@@ -23,5 +24,12 @@ namespace RaceManager.Race
         public Vector3 FollowCamInitialPosition => _followCamInitialPoint.position;
         public Vector3 StartCamInitialPosition => _startCamInitialPoint.position;
         public Vector3 FinishCamInitialPosition => _finishCamInitialPoint.position;
+
+        public List<TrackConfiguration> Configurations => throw new System.NotImplementedException();
+
+        public void SetCurrentConfiguration(TrackConfiguration configuration)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

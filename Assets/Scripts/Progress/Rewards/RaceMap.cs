@@ -16,7 +16,7 @@ namespace RaceManager.Progress
 
         public void Reward(Profiler profiler)
         {
-            profiler.AddLevel(_levelName);
+            profiler.SetNextLevelToLoad(_levelName);
             IsReceived = true;
         }
     }

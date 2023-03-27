@@ -46,16 +46,15 @@ namespace RaceManager.Progress
         public int CardsAmount => _cardsAmount;
 
         public CarName CarName => _carName;
-        public LevelName LevelName => _levelName;
         public PositionInRace LastInRacePosition => _positionInRace;
         public Lootbox LootboxToAdd => _lootboxToAdd;
         public List<Lootbox> Lootboxes => _lootboxes;
-        public List<LevelName> AvailableLevels
+        public LevelName NextLevelToLoad
         {
             get 
             {
-                _playerProfile.GiveLevelsTo(this);
-                return _levels;
+                _levelName = _playerProfile.NextLevelPrefabToLoad;
+                return _levelName;
             }
         }
 
@@ -72,6 +71,23 @@ namespace RaceManager.Progress
         public void SetImmediateStart() => _playerProfile.CanStartImmediate = true;
         public void SetNoAds() => _playerProfile.GotSpecialOffer = true;
         public void SetAdsOn() => _playerProfile.GotSpecialOffer = false;
+        public void SetNextLevelToLoad(LevelName levelName)
+        {
+            _levelName = levelName;
+            _playerProfile.NextLevelPrefabToLoad = _levelName;
+        }
+
+        public void SetInRacePosition(PositionInRace positionInRace)
+        {
+            _positionInRace = positionInRace;
+            _playerProfile.SetLastInRacePosition(this);
+            _playerProfile.AddRaceCount(this);
+
+            if (_playerProfile.VictoriesTotalCounter >= PlayerProfile.UnlockLootboxForRaceThreshold)
+            {
+                _playerProfile.LootboxForRaceEnabled = true;
+            }
+        }
 
         public void AddMoney(int money, bool ignorIncomeFactor = false)
         { 
@@ -106,12 +122,6 @@ namespace RaceManager.Progress
             OnCarCardsAmountChange?.Invoke(carName, _playerProfile.CarCardsAmount(carName));
         }
 
-        public void AddLevel(LevelName levelName)
-        {
-            _levelName = levelName;
-            _playerProfile.AddLevel(this);
-        }
-
         public void AddOrOpenLootbox(Lootbox lootbox)
         {
             if (lootbox.IsOpen && _playerProfile.GotFirstFreeLootbox)
@@ -139,24 +149,6 @@ namespace RaceManager.Progress
         {
             _incomeFactor = _playerProfile.IncomeFactor + incomeBonusInPercents / 100f;
             _playerProfile.SetIcomeFactor(this);
-        }
-
-        public void SetNextLevel(LevelName levelName)
-        {
-            _levelName = levelName;
-            _playerProfile.SetNextLevelFrom(this);
-        }
-
-        public void SetInRacePosition(PositionInRace positionInRace)
-        {
-            _positionInRace = positionInRace;
-            _playerProfile.SetLastInRacePosition(this);
-            _playerProfile.AddRaceCount(this);
-
-            if (_playerProfile.VictoriesTotalCounter >= PlayerProfile.UnlockLootboxForRaceThreshold)
-            {
-                _playerProfile.LootboxForRaceEnabled = true;
-            }
         }
 
         public bool TryBuyWithMoney(int cost)

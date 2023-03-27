@@ -12,12 +12,16 @@ namespace RaceManager.Race
 
         public LevelName LevelName { get; private set; }
 
+        public RaceLevelInitializer(IProfiler profiler)
+        {
+            _profiler = profiler;
+        }
+
         public IRaceLevel GetRaceLevel()
         {
             if (_raceLevel == null)
             {
-                List<LevelName> levels = _profiler.AvailableLevels;
-                LevelName = levels[Random.Range(0, levels.Count)];
+                LevelName = _profiler.NextLevelToLoad;
                 string path = LevelName.ToString();
 
                 _raceLevel = InitializeLevel(path);
@@ -25,41 +29,56 @@ namespace RaceManager.Race
             return _raceLevel;
         }
 
-        public RaceLevelInitializer(IProfiler profiler)
-        {
-            _profiler = profiler;
-        }
-
         private IRaceLevel InitializeLevel(string path)
         {
             IRaceLevel level = ResourcesLoader.LoadAndInstantiate<IRaceLevel>(path, new GameObject("Level").transform);
 
-            //TODO: Refactoring is needed after Level version finnaly approved
-            if (level.GetType().Equals(typeof(RaceLevel)))
-            {
-                RaceLevel raceLevel = (RaceLevel)level;
-                var configurations = raceLevel.Configurations;
+            var configurations = level.Configurations;
 
-                foreach (var trackConfiguration in configurations)
-                    trackConfiguration.SetActive(false);
+            foreach (var trackConfiguration in configurations)
+                trackConfiguration.SetActive(false);
 
-                TrackConfiguration c = configurations[Random.Range(0, configurations.Count)];
+            TrackConfiguration c = configurations[Random.Range(0, configurations.Count)];
 
-                foreach (var active in c.Actives)
-                    active.SetActive(true);
+            foreach (var active in c.Actives)
+                active.SetActive(true);
 
-                foreach (var inactive in c.Inactives)
-                    inactive.SetActive(false);
+            foreach (var inactive in c.Inactives)
+                inactive.SetActive(false);
 
-                c.SetActive(true);
-                raceLevel.SetCurrentConfiguration(c);
+            c.SetActive(true);
+            level.SetCurrentConfiguration(c);
 
-                Debug.Log($"Race level configuration loaded => [{c.name}]");
-
-                return raceLevel;
-            }
+            Debug.Log($"Race level configuration loaded => [{c.name}]");
 
             return level;
+
+            //TODO: Refactoring is needed after Level version finnaly approved
+            //if (level.GetType().Equals(typeof(RaceLevel)))
+            //{
+            //    RaceLevel raceLevel = (RaceLevel)level;
+            //    var configurations = raceLevel.Configurations;
+
+            //    foreach (var trackConfiguration in configurations)
+            //        trackConfiguration.SetActive(false);
+
+            //    TrackConfiguration c = configurations[Random.Range(0, configurations.Count)];
+
+            //    foreach (var active in c.Actives)
+            //        active.SetActive(true);
+
+            //    foreach (var inactive in c.Inactives)
+            //        inactive.SetActive(false);
+
+            //    c.SetActive(true);
+            //    raceLevel.SetCurrentConfiguration(c);
+
+            //    Debug.Log($"Race level configuration loaded => [{c.name}]");
+
+            //    return raceLevel;
+            //}
+
+            //return level;
         }
     }
 }

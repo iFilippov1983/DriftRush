@@ -57,7 +57,7 @@ namespace RaceManager.Cars
         }
 
         [Button]
-        public void ResetCars(CarName defaultCarName = CarName.FordMustang)
+        public void ResetCars(CarName defaultCarName = CarName.SuperBull)
         {
             foreach (var profile in CarProfiles)
             {
@@ -82,7 +82,7 @@ namespace RaceManager.Cars
                 c.FactorsMaxCurrent = 0;
             }
 
-            Debug.Log($"All cars ranks IsReached and IsGranted properties are set to False (exept default car - {CarName.FordMustang}) | All CurrentFactors amount are set to Max/2");
+            Debug.Log($"All cars ranks IsReached and IsGranted properties are set to False (exept default car - {CarName.BlinkGoat}) | All CurrentFactors amount are set to Max/2");
         }
     }
 }

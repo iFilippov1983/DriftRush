@@ -81,6 +81,8 @@ namespace RaceManager.UI
             card.LockedImage.sprite = _spritesCarsCollection.GetCarSprite(carName, true);
             
             string name = carName.ToString().SplitByUppercaseWith(" ");
+            name = name.Replace('_', ' ');
+
             card.CarNameText.text = name.ToUpper();
             card.CashedCarName = carName;
             card.LockedImage.SetActive(!isAvailable);
@@ -131,6 +133,7 @@ namespace RaceManager.UI
         public void UpdateStatsProgress(string carName, int currentValue) //, int maxValue)
         {
             string name = carName.SplitByUppercaseWith(" ");
+            name = name.Replace('_', ' ');
 
             _carNameText.text = name.ToUpper();
             _carStatsProgressText.text = $"{currentValue}"; //  /{maxValue}";

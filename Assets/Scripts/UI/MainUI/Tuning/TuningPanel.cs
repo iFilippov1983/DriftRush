@@ -193,6 +193,7 @@ namespace RaceManager.UI
         public void UpdateCarStatsProgress(string carName, int currentValue)
         {
             string name = carName.SplitByUppercaseWith(" ");
+            name = name.Replace('_', ' ');
 
             _carNameText.text = name.ToUpper();
             _carStatsProgressText.text = currentValue.ToString();

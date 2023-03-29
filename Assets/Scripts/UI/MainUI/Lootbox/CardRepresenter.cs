@@ -141,6 +141,7 @@ namespace RaceManager.UI
         private void SetRepresentationCard(CarCardView cardView)
         {
             string name = cardView.CarName.ToString().SplitByUppercaseWith(" ");
+            name = name.Replace('_', ' ');
             _representationCard.CarNameText.SetActive(true);
             _representationCard.CarNameText.text = name.ToUpper();
 

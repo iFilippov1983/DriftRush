@@ -252,7 +252,7 @@ namespace RaceManager.Race
                 .AddTo(this);
 
             _gameEvents.Notification
-                .Where(s => s == NotificationType.Checkpoint.ToString())
+                .Where(s => s == NotificationType.RaceLine.ToString())
                 .Subscribe(s =>
                 {
                     _lineHandler.StartHandling();
@@ -261,7 +261,7 @@ namespace RaceManager.Race
 
             _raceUI.OnAdsInit += ShowAds;
             _rewardsHandler.OnRaceRewardLootboxAdded += SetRaceUI;
-            _waypointTrackMain.OnCheckpointPass += MakeCheckpointNotification;
+            _waypointTrackMain.OnWaypointPassedNotification += MakeNotification;
         }
 
         private IDisposable HandlePlayerCarState(CarState playerCarState, Driver playerDriver)
@@ -298,14 +298,13 @@ namespace RaceManager.Race
         }
 
         private void SetRaceUI(Lootbox lootbox) => _raceUI.SetLootboxToGrant(lootbox.Rarity);
-
-        private void MakeCheckpointNotification() => _gameEvents.Notification.OnNext(NotificationType.Checkpoint.ToString());
+        private void MakeNotification(NotificationType notification) => _gameEvents.Notification.OnNext(notification.ToString());
 
         private void OnDestroy()
         {
             _raceUI.OnAdsInit -= ShowAds;
             _rewardsHandler.OnRaceRewardLootboxAdded -= SetRaceUI;
-            _waypointTrackMain.OnCheckpointPass -= MakeCheckpointNotification;
+            _waypointTrackMain.OnWaypointPassedNotification -= MakeNotification;
 
             _scoresCounter.Dispose();
 

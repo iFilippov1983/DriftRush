@@ -1,4 +1,5 @@
-﻿using RaceManager.Tools;
+﻿using RaceManager.Root;
+using RaceManager.Tools;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
@@ -49,7 +50,7 @@ namespace RaceManager.Waypoints
         private List<Waypoint> _waypoints;
         private TrackNode[] _trackNodes;
 
-        public Action OnCheckpointPass;
+        public Action<NotificationType> OnWaypointPassedNotification;
 
         public float Length { get; protected set; }
         public Transform[] Waypoints => waypointList.items;
@@ -127,10 +128,11 @@ namespace RaceManager.Waypoints
                     if (node != null)
                     {
                         wp.RecomendedSpeed = node.recomendedSpeed;
-                        if (node.isCheckpoint)
+                        if (node.isCheckpoint || node.isRaceLinePoint)
                         {
-                            wp.isCheckpoint = true;
-                            wp.OnCheckpointPass += OnChepointPassed;
+                            wp.isCheckpoint = node.isCheckpoint;
+                            wp.isRaceLinePoint = node.isRaceLinePoint;
+                            wp.OnPassed += OnWaypointPassed;
                         }
 
                         wp.isFinishLine = node.isFinishPoint;
@@ -264,10 +266,20 @@ namespace RaceManager.Waypoints
 
         private void OnDrawGizmosSelected() => DrawGizmos(true);
 
-        private void OnChepointPassed(Waypoint waypoint)
+        private void OnWaypointPassed(Waypoint wp)
         { 
-            OnCheckpointPass?.Invoke();
-            waypoint.OnCheckpointPass -= OnChepointPassed;
+            if(wp.isCheckpoint)
+                OnWaypointPassedNotification?.Invoke(NotificationType.Checkpoint);
+
+            if(wp.isRaceLinePoint)
+                OnWaypointPassedNotification?.Invoke(NotificationType.RaceLine);
+
+            wp.OnPassed -= OnWaypointPassed;
+        }
+
+        private void OnRaceLinePointPassed()
+        { 
+            
         }
 
         protected virtual void DrawGizmos(bool selected)

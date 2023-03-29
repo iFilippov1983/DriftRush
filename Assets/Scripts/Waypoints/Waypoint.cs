@@ -13,6 +13,7 @@ namespace RaceManager.Waypoints
         public int Number;
         public bool isFinishLine = false;
         public bool isCheckpoint = false;
+        public bool isRaceLinePoint = false;
         [ReadOnly]
         public Waypoint NextWaypoint;
 
@@ -25,7 +26,7 @@ namespace RaceManager.Waypoints
         private List<string> _carIDs = new List<string>();
         private List<IObserver<string>> _observers = new List<IObserver<string>>();
 
-        public Action<Waypoint> OnCheckpointPass;
+        public Action<Waypoint> OnPassed;
 
         private void OnTriggerEnter(Collider other)
         {
@@ -35,7 +36,7 @@ namespace RaceManager.Waypoints
                 return;
 
             SetRespawnPosition(car);
-            SetCheckpointPosition(car, other);
+            SetAndNotify(car, other);
         }
 
         private void SetRespawnPosition(Car car)
@@ -59,15 +60,19 @@ namespace RaceManager.Waypoints
             }
         }
 
-        private void SetCheckpointPosition(Car car, Collider other)
+        private void SetAndNotify(Car car, Collider other)
         {
             if (isCheckpoint)
             {
                 car.CarSelfRighting.LastCheckpoint = transform;
+            }
 
+            if (isCheckpoint || isRaceLinePoint)
+            {
                 bool isPlayer = other.TryGetComponent(out PlayerControl playerControl);
+
                 if (isPlayer)
-                    OnCheckpointPass?.Invoke(this);
+                    OnPassed?.Invoke(this);
             }
         }
 

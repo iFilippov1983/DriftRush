@@ -13,6 +13,7 @@ namespace RaceManager.Cars
         [SerializeField] private SuspentionSet _suspentionSet = new SuspentionSet();
         [SerializeField] private BumperSet _bumpersSet = new BumperSet();
         [SerializeField] private BodyKitSet _bodyKitsSet = new BodyKitSet();
+        [Space(20)]
 
         private CarConfigVisual _carConfigVisual;
         private MaterialsContainer _materialsContainer;
@@ -51,6 +52,7 @@ namespace RaceManager.Cars
             CarBody.SetMaterial(_carConfigVisual.GetCurrentMaterial());
         }
 
+        [Title("Test")]
         [Button]
         public void SetPartsVisual(PartType partType, PartLevel partLevel, WheelsSetType wheelsSetType = WheelsSetType.Default)
         {

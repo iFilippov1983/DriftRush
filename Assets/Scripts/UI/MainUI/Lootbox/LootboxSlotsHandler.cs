@@ -357,6 +357,7 @@ namespace RaceManager.UI
                     if (_minutes < 1) _minutes = 1;
 
                     _activeTimerSlot.TimerText.text = _hoursRounded.ToString("00") + "h." + _minutes.ToString("00") + "m.";
+                    _activeTimerSlot.FastOpenCostText.text = _activeTimerLootbox.GemsToOpen.ToString();
                 }
                 else
                 {
@@ -374,6 +375,7 @@ namespace RaceManager.UI
             if (_hasActiveTimerSlot)
             {
                 _activeTimerLootbox.TimeToOpenLeft -= Time.deltaTime;
+                _activeTimerLootbox.RecalculateGemsToOpen();
             }
         }
 

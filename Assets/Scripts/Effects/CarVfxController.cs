@@ -262,7 +262,12 @@ namespace RaceManager.Effects
 
         private void PlayCollisionParticles(Car car, Collision collision)
         {
-            if (!car.IsVisible || collision == null || Time.time - _lastCollisionTime < _minTimeBetweenCollisions)
+            if (
+                this.enabled == false 
+                || !car.IsVisible 
+                || collision == null 
+                || Time.time - _lastCollisionTime < _minTimeBetweenCollisions
+               )
             {
                 return;
             }

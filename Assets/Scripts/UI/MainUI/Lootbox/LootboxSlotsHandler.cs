@@ -204,7 +204,7 @@ namespace RaceManager.UI
             _lootboxPopup.LastAppearTransform = slot.transform;
             Animator.AppearSubject(_lootboxPopup, slot.transform).AddTo(this);
 
-            OnPopupIsActive.Invoke(true);
+            OnPopupIsActive?.Invoke(true);
         }
 
         public void OpenFreeLootboxPopup()
@@ -299,7 +299,7 @@ namespace RaceManager.UI
 
             _lootboxPopup.SetActive(false);
 
-            OnPopupIsActive.Invoke(false);
+            OnPopupIsActive?.Invoke(false);
         }
 
         private void GrantCommonLootbox()

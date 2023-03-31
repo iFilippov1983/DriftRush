@@ -431,7 +431,7 @@ namespace RaceManager.UI
         {
             _lootboxSlotsHandler.Initialize(_playerProfile);
 
-            _lootboxSlotsHandler.OnPopupIsActive += UpdatePodiumActivity;
+            //_lootboxSlotsHandler.OnPopupIsActive += UpdatePodiumActivity;
             _lootboxSlotsHandler.OnInstantLootboxOpen += () => UpdateCurrencyAmountPanels(GameUnitType.Gems);
             _lootboxSlotsHandler.OnButtonPressed += OnButtonPressedMethod;
         }
@@ -708,7 +708,7 @@ namespace RaceManager.UI
 
             _gameProgressPanel.OnButtonPressed -= OnButtonPressedMethod;
 
-            _lootboxSlotsHandler.OnPopupIsActive -= UpdatePodiumActivity;
+            //_lootboxSlotsHandler.OnPopupIsActive -= UpdatePodiumActivity;
             _lootboxSlotsHandler.OnInstantLootboxOpen -= () => UpdateCurrencyAmountPanels(GameUnitType.Gems);
             _lootboxSlotsHandler.OnButtonPressed -= OnButtonPressedMethod;
         }

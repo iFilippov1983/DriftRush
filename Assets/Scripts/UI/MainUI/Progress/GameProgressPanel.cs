@@ -3,6 +3,8 @@ using RaceManager.Root;
 using RaceManager.Tools;
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using TMPro;
 using UniRx;
 using UnityEngine;
@@ -22,6 +24,8 @@ namespace RaceManager.UI
         [SerializeField] private GridLayoutGroup _progressStepsContent;
         [SerializeField] private RectTransform _progressStepsContentRect;
         [Space]
+        [SerializeField] private CardsWindow _cardsWindow;
+        [Space]
         [SerializeField] private MenuColorName _notReachedColor = MenuColorName.PurpleDark;
         [SerializeField] private MenuColorName _reachedColor = MenuColorName.PinkBright;
 
@@ -31,6 +35,7 @@ namespace RaceManager.UI
         private GameObject _progressStepPrefab;
         private SpritesContainerCarCollection _spritesCars;
         private SpritesContainerRewards _spritesRewards;
+        private CancellationTokenSource _tokenSource;
 
         private List<ProgressStepView> _progressSteps = new List<ProgressStepView>();
 
@@ -57,9 +62,24 @@ namespace RaceManager.UI
         { 
             _spritesCars = spritesContainerCars;
             _spritesRewards = spritesContainerRewards;
+
+            _tokenSource = new CancellationTokenSource();
         }
 
-        public void SetCupsAmountSlider(int cupsAmount)
+        public void Initialize(int cupsAmount)
+        {
+            _cardsWindow.SetActive(false);
+
+            _cardsWindow.OkButton.onClick.RemoveAllListeners();
+            _cardsWindow.OkButton.onClick.AddListener(() => OnButtonPressedMethod(_cardsWindow.OkButton));
+
+            SetCupsAmountSlider(cupsAmount);
+        }
+
+        public ProgressStepView GetProgressStepView(int goalCupsAmount) => _progressSteps.Find(s => s.GoalCupsAmount == goalCupsAmount);
+        public void OffsetContent() => _progressStepsContent.transform.localPosition = _offsetPos;
+
+        private void SetCupsAmountSlider(int cupsAmount)
         {
             _yOffset = 0f;
             int previouseGoal = 0;
@@ -132,7 +152,52 @@ namespace RaceManager.UI
             OffsetContent();
         }
 
-        public void OffsetContent() => _progressStepsContent.transform.localPosition = _offsetPos;
+        public void AddProgressStep(int goalCupsAmount, ProgressStep step, UnityAction claimButtonAction)
+        {
+            GameObject stepGo = Instantiate(ProgressStepPrefab, _progressStepsContent.transform, false);
+            ProgressStepView stepView = stepGo.GetComponent<ProgressStepView>();
+            _progressSteps.Add(stepView);
+
+            stepView.GoalCupsAmount = goalCupsAmount;
+            stepView.IsLast = step.IsLast;
+
+            stepView.ClaimButton.SetActive(step.IsReached);
+            stepView.ClaimButton.onClick.RemoveAllListeners();
+            stepView.ClaimButton.onClick.AddListener(claimButtonAction);
+            stepView.ClaimButton.onClick.AddListener(() => UpdateStepStatus(step, stepView));
+            stepView.ClaimButton.onClick.AddListener(() => OnButtonPressedMethod(stepView.ClaimButton));
+
+
+            if (step.BigPrefab)
+                SetBigPrefab(goalCupsAmount, stepView, step);
+            else
+                SetPrefab(goalCupsAmount, stepView, step);
+
+            UpdateStepStatus(step, stepView);
+        }
+
+        public void ClearProgressSteps()
+        {
+            foreach (var step in _progressSteps)
+                if (step)
+                    Destroy(step.gameObject);
+
+            _progressSteps.Clear();
+        }
+
+        public async void RepresentCards(CarCardReward reward)
+        {
+            _cardsWindow.SetActive(true);
+
+            while (await _cardsWindow.RepresentCards(reward, _tokenSource) == false)
+            { 
+                _tokenSource.Token.ThrowIfCancellationRequested();
+                await Task.Yield();
+            }
+
+            _cardsWindow.SetActive(false);
+        }
+
         private void OnButtonPressedMethod(Button button) => OnButtonPressed?.Invoke(button);
 
         private void ActivateLevelImageAndPlaceToEdge(ProgressStepView stepView, int cupsAmount, bool toZero)
@@ -161,68 +226,52 @@ namespace RaceManager.UI
                 stepView.ClaimButton.SetActive(false);
             }
 
-            if (step.BigPrefab)
-            {
-                stepView.StepWindowBig.ClaimedImage.SetActive(received);
+            Image image = step.BigPrefab 
+                ? stepView.StepWindowBig.ClaimedImage 
+                : stepView.StepWindow.ClaimedImage;
 
-                if (received)
-                    Animator.RectAnimate(stepView.StepWindowBig.ClaimedImage.rectTransform, animationsSequence: new AnimationType[] 
-                    { 
-                        AnimationType.PunchScale,
-                        AnimationType.ShakeScale
-                    })?.AddTo(this);
-            }
-            else
-            {
-                stepView.StepWindow.ClaimedImage.SetActive(received);
+            image.SetActive(received);
 
-                if (received)
-                    Animator.RectAnimate(stepView.StepWindow.ClaimedImage.rectTransform, animationsSequence: new AnimationType[]
-                    {
-                        AnimationType.PunchScale,
-                        AnimationType.ShakeScale
-                    })?.AddTo(this);
+            if (received) 
+            {
+                RectTransform rect = step.BigPrefab
+                ? stepView.StepWindowBig.ClaimedImage.rectTransform
+                : stepView.StepWindow.ClaimedImage.rectTransform;
+
+                Animator.RectAnimate(rect, animationsSequence: new AnimationType[]
+                {
+                    AnimationType.PunchScale,
+                    AnimationType.ShakeScale
+                })?.AddTo(this);
             }
+
+            //if (step.BigPrefab)
+            //{
+            //    stepView.StepWindowBig.ClaimedImage.SetActive(received);
+
+            //    if (received)
+            //        Animator.RectAnimate(stepView.StepWindowBig.ClaimedImage.rectTransform, animationsSequence: new AnimationType[] 
+            //        { 
+            //            AnimationType.PunchScale,
+            //            AnimationType.ShakeScale
+            //        })?.AddTo(this);
+            //}
+            //else
+            //{
+            //    stepView.StepWindow.ClaimedImage.SetActive(received);
+
+            //    if (received)
+            //        Animator.RectAnimate(stepView.StepWindow.ClaimedImage.rectTransform, animationsSequence: new AnimationType[]
+            //        {
+            //            AnimationType.PunchScale,
+            //            AnimationType.ShakeScale
+            //        })?.AddTo(this);
+            //}
 
             MenuColorName colorName = step.IsReached ? _reachedColor : _notReachedColor;
             Color color = _spritesRewards.GetMenuColor(colorName);
             stepView.StepWindow.TitleImage.color = color;
             stepView.StepWindowBig.TitleImage.color = color;
-        }
-
-        public void AddProgressStep(int goalCupsAmount, ProgressStep step, UnityAction claimButtonAction)
-        {
-            GameObject stepGo = Instantiate(ProgressStepPrefab, _progressStepsContent.transform, false);
-            ProgressStepView stepView = stepGo.GetComponent<ProgressStepView>();
-            _progressSteps.Add(stepView);
-
-            stepView.GoalCupsAmount = goalCupsAmount;
-            stepView.IsLast = step.IsLast;
-
-            stepView.ClaimButton.SetActive(step.IsReached);
-            stepView.ClaimButton.onClick.RemoveAllListeners();
-            stepView.ClaimButton.onClick.AddListener(claimButtonAction);
-            stepView.ClaimButton.onClick.AddListener(() => UpdateStepStatus(step, stepView));
-            stepView.ClaimButton.onClick.AddListener(() => OnButtonPressedMethod(stepView.ClaimButton));
-
-
-            if (step.BigPrefab)
-                SetBigPrefab(goalCupsAmount, stepView, step);
-            else
-                SetPrefab(goalCupsAmount, stepView, step);
-
-            UpdateStepStatus(step, stepView);
-        }
-
-        public ProgressStepView GetProgressStepView(int goalCupsAmount) => _progressSteps.Find(s => s.GoalCupsAmount == goalCupsAmount);
-
-        public void ClearProgressSteps()
-        {
-            foreach (var step in _progressSteps)
-                if(step)
-                    Destroy(step.gameObject);
-
-            _progressSteps.Clear();
         }
 
         private void SetPrefab(int goalCupsAmount, ProgressStepView stepView, ProgressStep step)
@@ -324,6 +373,11 @@ namespace RaceManager.UI
                         break;
                 }
             }
+        }
+
+        private void OnDestroy()
+        {
+            _tokenSource.Cancel();
         }
     }
 }

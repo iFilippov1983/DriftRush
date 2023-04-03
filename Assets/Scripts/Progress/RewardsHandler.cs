@@ -22,6 +22,7 @@ namespace RaceManager.Progress
         private RaceReward _raceReward;
 
         public Action<int, List<CarCardReward>> OnLootboxOpen;
+        public Action<CarCardReward> OnCarCardsReward;
         public Action<Lootbox> OnRaceRewardLootboxAdded;
 
         private int _moneyRewardDrift;
@@ -115,6 +116,25 @@ namespace RaceManager.Progress
             ProgressStep step = _gameProgressScheme.GetStepWhithGoal(cupsAmountLevel);
             foreach (var reward in step.Rewards)
             {
+                if (reward.Type == GameUnitType.CarCard)
+                {
+                    CarCardReward cardsReward = (CarCardReward)reward;
+                    if (ValidCardsReward(cardsReward))
+                    {
+                        cardsReward.Reward(_profiler);
+                    }
+                    else
+                    {
+                        IReward r = ExchangeCards(cardsReward);
+                        r?.Reward(_profiler);
+
+                        cardsReward.ReplacementInfo = GetReplacementInfo(r);
+                    }
+
+                    OnCarCardsReward?.Invoke(cardsReward);
+                    continue;
+                }
+
                 reward.Reward(_profiler);
             }
 
@@ -145,7 +165,7 @@ namespace RaceManager.Progress
             List<CarCardReward> list = lootbox.CardsList;
             foreach (var reward in list)
             {
-                if (ValidReward(reward))
+                if (ValidCardsReward(reward))
                 {
                     reward.Reward(_profiler);
                 }
@@ -167,7 +187,7 @@ namespace RaceManager.Progress
             _saveManager.Save();
         }
 
-        private bool ValidReward(CarCardReward reward)
+        private bool ValidCardsReward(CarCardReward reward)
         {
             var profile = _carsDepot.GetProfile(reward.CarName);
             int goalPoints = profile.RankingScheme.RankPointsTotalForCar;

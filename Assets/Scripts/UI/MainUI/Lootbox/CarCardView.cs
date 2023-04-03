@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace RaceManager.UI
 {
-    public class CarCardView : MonoBehaviour
+    public class CarCardView : MonoBehaviour, ICarCardsInfo
     {
         [SerializeField] private Image _cardCarImage;
         [SerializeField] private Image _frameImage;
@@ -16,20 +16,23 @@ namespace RaceManager.UI
         [SerializeField] private Image _altImage;
         [SerializeField] private TMP_Text _altAmountText;
 
-        [ReadOnly]
-        public CarName CarName;
-        [ReadOnly]
-        public Rarity CarRarity;
-        [ReadOnly]
-        public int CardsAmount;
-        [ReadOnly]
-        public UnitReplacementInfo? ReplacementInfo = null;
+        [ShowInInspector, ReadOnly]
+        public CarName CarName { get; set; }
+        [ShowInInspector, ReadOnly]
+        public Rarity CarRarity { get; set; }
+        [ShowInInspector, ReadOnly]
+        public int CardsAmount { get; set; }
+        [ShowInInspector, ReadOnly]
+        public UnitReplacementInfo? ReplacementInfo { get; set; } = null;
 
         public Image CardCarImage => _cardCarImage;
         public Image FrameImage => _frameImage;
         public TMP_Text CardsAmountText => _cardsAmount;
         public Image AlternativeImage => _altImage;
-        public TMP_Text AlternativeAmountText => _altAmountText;    
+        public TMP_Text AlternativeAmountText => _altAmountText;
+
+        public Color CardColor => FrameImage.color;
+        public Sprite CarSprite => CardCarImage.sprite;
     }
 }
 

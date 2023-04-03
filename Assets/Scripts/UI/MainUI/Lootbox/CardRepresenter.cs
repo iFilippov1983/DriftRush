@@ -18,15 +18,18 @@ namespace RaceManager.UI
             _animator = animator;
         }
 
-        public async Task<bool> Represent(CarCardView cardView, CancellationTokenSource tokenSource = null)
+        public async Task<bool> Represent(ICarCardsInfo cardsInfo, Subject<bool> interruption, CancellationTokenSource tokenSource = null)
         {
+            bool cancel = false;
+            interruption?.Subscribe(a => cancel = a);
+
             _representationCard.SetActive(true);
             _representationCard.ReplaceableRect.SetActive(true);
             _representationCard.CardRect.SetActive(true);
             _representationCard.IsVisible = true;
             _representationCard.IsAppearing = true;
 
-            SetRepresentationCard(cardView);
+            SetRepresentationCard(cardsInfo);
 
             Tween appearTween = _representationCard.CardRect.DOScale(0f, _representationCard.Settings.appearAnimDuration).From();
             appearTween.OnComplete(() => 
@@ -39,7 +42,7 @@ namespace RaceManager.UI
                 tokenSource?.Token.ThrowIfCancellationRequested();
                 await Task.Yield();
 
-                if (Input.GetMouseButtonDown(0))
+                if(cancel)
                 {
                     appearTween.Complete(true);
                     appearTween = null;
@@ -55,6 +58,7 @@ namespace RaceManager.UI
 
             if (_representationCard.IsReplaceable)
             {
+                cancel = false;
                 _representationCard.IsReplacing = true;
                 Vector3 initialScale = _representationCard.ReplaceableRect.localScale;
                 initialPos = _representationCard.MaxCardsText.transform.position;
@@ -92,7 +96,7 @@ namespace RaceManager.UI
                 tokenSource?.Token.ThrowIfCancellationRequested();
                 await Task.Yield();
 
-                if (Input.GetMouseButtonDown(0))
+                if(cancel)
                 {
                     replaceSequence?.Complete(true);
                     replaceSequence = null;
@@ -104,7 +108,7 @@ namespace RaceManager.UI
                 }
             }
 
-            while (!Input.GetMouseButtonDown(0))
+            while (!cancel)
             {
                 tokenSource?.Token.ThrowIfCancellationRequested();
                 await Task.Yield();
@@ -122,12 +126,14 @@ namespace RaceManager.UI
                 _representationCard.IsVisible = false;
             });
 
+            cancel = false;
+
             while (_representationCard.IsVisible)
             {
                 tokenSource?.Token.ThrowIfCancellationRequested();
                 await Task.Yield();
 
-                if (Input.GetMouseButtonDown(0))
+                if (cancel)
                 {
                     disappearSequence.Complete(true);
                     disappearSequence = null;
@@ -138,39 +144,39 @@ namespace RaceManager.UI
             return true;
         }
 
-        private void SetRepresentationCard(CarCardView cardView)
+        private void SetRepresentationCard(ICarCardsInfo cardsInfo)
         {
-            string name = cardView.CarName.ToString().SplitByUppercaseWith(" ");
+            string name = cardsInfo.CarName.ToString().SplitByUppercaseWith(" ");
             name = name.Replace('_', ' ');
             _representationCard.CarNameText.SetActive(true);
             _representationCard.CarNameText.text = name.ToUpper();
 
             _representationCard.FrameImage.SetActive(true);
-            _representationCard.FrameImage.color = cardView.FrameImage.color;
+            _representationCard.FrameImage.color = cardsInfo.CardColor;
 
             _representationCard.CardAmountText.SetActive(true);
-            _representationCard.CardAmountText.text = cardView.CardsAmountText.text;
+            _representationCard.CardAmountText.text = cardsInfo.CardsAmount.ToString();
 
             _representationCard.CarImage.SetActive(true);
-            _representationCard.CarImage.sprite = cardView.CardCarImage.sprite;
+            _representationCard.CarImage.sprite = cardsInfo.CarSprite;
 
             _representationCard.AlternativeAmountText.SetActive(false);
 
             _representationCard.IsReplaceable = false;
             _representationCard.ReplacementInfo = null;
 
-            if (cardView.ReplacementInfo is null)
+            if (cardsInfo.ReplacementInfo is null)
             {
                 return;
             }
-            else if (cardView.CardsAmount > 0)
+            else if (cardsInfo.CardsAmount > 0)
             { 
                 _representationCard.IsReplaceable = true;
-                _representationCard.ReplacementInfo = cardView.ReplacementInfo;
+                _representationCard.ReplacementInfo = cardsInfo.ReplacementInfo;
             }
             else
             {
-                ActivateAlternativeView(cardView.ReplacementInfo);
+                ActivateAlternativeView(cardsInfo.ReplacementInfo);
             }
         }
 

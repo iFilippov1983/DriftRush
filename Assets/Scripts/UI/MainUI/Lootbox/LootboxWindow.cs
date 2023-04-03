@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
+using UniRx.Triggers;
+using UniRx;
 
 namespace RaceManager.UI
 {
@@ -26,12 +28,14 @@ namespace RaceManager.UI
         private SpritesContainerCarCollection _spritesCarsCollection;
         private SpritesContainerRewards _spritesReward;
 
-        CancellationTokenSource _tokenSource;
+        private CancellationTokenSource _tokenSource;
 
         private Queue<CarCardView> _cardsQueue = new Queue<CarCardView>();
         private Stack<CarCardView> _cardsStack = new Stack<CarCardView>();
 
         private UIAnimator Animator => Singleton<UIAnimator>.Instance;
+
+        private Subject<bool> _mousePressedSubject = new Subject<bool>();
 
         private GameObject CarCardPrefab
         {
@@ -53,6 +57,14 @@ namespace RaceManager.UI
 
             _tokenSource = new CancellationTokenSource();
             _representer = new CardRepresenter(_representationCard, Animator);
+
+            this.UpdateAsObservable()
+                .Subscribe(_ => 
+                { 
+                    if(Input.GetMouseButtonDown(0))
+                        _mousePressedSubject.OnNext(true);
+                })
+                ?.AddTo(this);
 
             _okButton.onClick.AddListener(Cleanup);
         }
@@ -184,7 +196,7 @@ namespace RaceManager.UI
 
             foreach (CarCardView cardView in _cardsQueue)
             {
-                while (await _representer.Represent(cardView, _tokenSource) == false)
+                while (await _representer.Represent(cardView, _mousePressedSubject, _tokenSource) == false)
                 {
                     _tokenSource.Token.ThrowIfCancellationRequested();
                     await Task.Yield();

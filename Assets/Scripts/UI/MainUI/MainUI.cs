@@ -395,7 +395,7 @@ namespace RaceManager.UI
                 });
             }
 
-            _gameProgressPanel.SetCupsAmountSlider(_playerProfile.Cups);
+            _gameProgressPanel.Initialize(_playerProfile.Cups);
 
             var closestGlobalGoal = _gameProgressScheme.Steps.First(p => p.Value.BigPrefab && p.Value.IsReached == false || p.Value.IsLast);
             int globalCupsAmountGoal = closestGlobalGoal.Key > _playerProfile.Cups
@@ -408,6 +408,8 @@ namespace RaceManager.UI
             _rewardsHandler.OnLootboxOpen += ActivateLootboxWindow;
             _rewardsHandler.OnLootboxOpen += _lootboxWindow.RepresentLootbox;
             _rewardsHandler.OnLootboxOpen += (int moneyAmount, List<CarCardReward> list) => UpdateCurrencyAmountPanels(GameUnitType.Money);
+
+            _rewardsHandler.OnCarCardsReward += _gameProgressPanel.RepresentCards;
 
             _gameProgressPanel.OnButtonPressed += OnButtonPressedMethod;
         }
@@ -705,6 +707,8 @@ namespace RaceManager.UI
             _rewardsHandler.OnLootboxOpen -= ActivateLootboxWindow;
             _rewardsHandler.OnLootboxOpen -= _lootboxWindow.RepresentLootbox;
             _rewardsHandler.OnLootboxOpen -= (int moneyAmount, List<CarCardReward> list) => UpdateCurrencyAmountPanels(GameUnitType.Money);
+
+            _rewardsHandler.OnCarCardsReward -= _gameProgressPanel.RepresentCards;
 
             _gameProgressPanel.OnButtonPressed -= OnButtonPressedMethod;
 

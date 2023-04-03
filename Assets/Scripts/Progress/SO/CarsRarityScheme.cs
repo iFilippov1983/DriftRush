@@ -16,31 +16,31 @@ namespace RaceManager.Progress
             { 
                 Rarity.Common, new List<CarName>() 
                 { 
-                    CarName.ToyotaSupra,
-                    CarName.FordMustang
+                    CarName.SuperBull,
+                    CarName.BlinkGoat
                 } 
             },
 
             { 
                 Rarity.Uncommon, new List<CarName>()
                 { 
-                    CarName.DodgeTrx,
-                    CarName.NissanSilvia
+                    CarName.HyperWolf,
+                    CarName.ThaurenG86
                 }
             },
 
             { 
                 Rarity.Rare, new List<CarName>()
                 { 
-                    CarName.Porche911,
-                    CarName.Ferrari488
+                    CarName.ChivalryS1,
+                    CarName.Mosquito_3
                 }
             },
 
             { 
                 Rarity.Epic, new List<CarName>()
                 { 
-                    CarName.TeslaRoadster
+                    CarName.BearRod
                 }
             },
 

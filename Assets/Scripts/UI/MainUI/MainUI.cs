@@ -431,7 +431,7 @@ namespace RaceManager.UI
         {
             _lootboxSlotsHandler.Initialize(_playerProfile);
 
-            _lootboxSlotsHandler.OnPopupIsActive += UpdatePodiumActivity;
+            //_lootboxSlotsHandler.OnPopupIsActive += UpdatePodiumActivity;
             _lootboxSlotsHandler.OnInstantLootboxOpen += () => UpdateCurrencyAmountPanels(GameUnitType.Gems);
             _lootboxSlotsHandler.OnButtonPressed += OnButtonPressedMethod;
         }
@@ -658,8 +658,8 @@ namespace RaceManager.UI
             _tuningPanel.ClosePanelButton.onClick.AddListener(() => OnStatusChange?.OnNext(MainUIStatus.ActiveMainUI));
             _tuningPanel.ClosePanelButton.onClick.AddListener(() => OnButtonPressedMethod(_tuningPanel.ClosePanelButton));
 
-            _tuningPanel.ClosePanelWindowButton.onClick.AddListener(() => OnStatusChange?.OnNext(MainUIStatus.ActiveMainUI));
-            _tuningPanel.ClosePanelWindowButton.onClick.AddListener(() => OnButtonPressedMethod(_tuningPanel.ClosePanelWindowButton));
+            //_tuningPanel.ClosePanelWindowButton.onClick.AddListener(() => OnStatusChange?.OnNext(MainUIStatus.ActiveMainUI));
+            //_tuningPanel.ClosePanelWindowButton.onClick.AddListener(() => OnButtonPressedMethod(_tuningPanel.ClosePanelWindowButton));
 
             _tuningPanel.UpgradeButton.onClick.AddListener(CarFactorsUpgrade);
             _tuningPanel.UpgradeButton.onClick.AddListener(() => OnButtonPressedMethod(_tuningPanel.UpgradeButton));
@@ -667,9 +667,9 @@ namespace RaceManager.UI
             _carsCollectionPanel.CloseButton.onClick.AddListener(() => OnStatusChange?.OnNext(MainUIStatus.ActiveMainUI));
             _carsCollectionPanel.CloseButton.onClick.AddListener(() => OnButtonPressedMethod(_carsCollectionPanel.CloseButton));
 
-            _carsCollectionPanel.ClosePanelWindowButton.onClick.AddListener(() => OnStatusChange?.OnNext(MainUIStatus.ActiveMainUI));
-            _carsCollectionPanel.ClosePanelWindowButton.onClick.AddListener(() => ActivateCarWindow(false));
-            _carsCollectionPanel.ClosePanelWindowButton.onClick.AddListener(() => OnButtonPressedMethod(_carsCollectionPanel.ClosePanelWindowButton));
+            //_carsCollectionPanel.ClosePanelWindowButton.onClick.AddListener(() => OnStatusChange?.OnNext(MainUIStatus.ActiveMainUI));
+            //_carsCollectionPanel.ClosePanelWindowButton.onClick.AddListener(() => ActivateCarWindow(false));
+            //_carsCollectionPanel.ClosePanelWindowButton.onClick.AddListener(() => OnButtonPressedMethod(_carsCollectionPanel.ClosePanelWindowButton));
 
             _gameProgressPanel.BackButton.onClick.AddListener(() => OnStatusChange?.OnNext(MainUIStatus.ActiveMainUI));
             _gameProgressPanel.BackButton.onClick.AddListener(() => UpdateHasRewardsImage(_gameProgressScheme.HasUnreceivedRewards));
@@ -708,7 +708,7 @@ namespace RaceManager.UI
 
             _gameProgressPanel.OnButtonPressed -= OnButtonPressedMethod;
 
-            _lootboxSlotsHandler.OnPopupIsActive -= UpdatePodiumActivity;
+            //_lootboxSlotsHandler.OnPopupIsActive -= UpdatePodiumActivity;
             _lootboxSlotsHandler.OnInstantLootboxOpen -= () => UpdateCurrencyAmountPanels(GameUnitType.Gems);
             _lootboxSlotsHandler.OnButtonPressed -= OnButtonPressedMethod;
         }

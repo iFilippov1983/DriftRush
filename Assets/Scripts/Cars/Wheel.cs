@@ -163,9 +163,9 @@ namespace RaceManager.Cars
 			Vector3 pos;
 			Quaternion quat;
 			WheelCollider.GetWorldPose(out pos, out quat);
-			WheelView.position = pos;
-			WheelView.rotation = quat;
-		}
+            WheelView.position = pos;
+            WheelView.rotation = quat;
+        }
 
         public void OnResetAction()
         {

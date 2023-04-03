@@ -204,7 +204,7 @@ namespace RaceManager.UI
             _lootboxPopup.LastAppearTransform = slot.transform;
             Animator.AppearSubject(_lootboxPopup, slot.transform).AddTo(this);
 
-            OnPopupIsActive.Invoke(true);
+            OnPopupIsActive?.Invoke(true);
         }
 
         public void OpenFreeLootboxPopup()
@@ -299,7 +299,7 @@ namespace RaceManager.UI
 
             _lootboxPopup.SetActive(false);
 
-            OnPopupIsActive.Invoke(false);
+            OnPopupIsActive?.Invoke(false);
         }
 
         private void GrantCommonLootbox()
@@ -357,6 +357,7 @@ namespace RaceManager.UI
                     if (_minutes < 1) _minutes = 1;
 
                     _activeTimerSlot.TimerText.text = _hoursRounded.ToString("00") + "h." + _minutes.ToString("00") + "m.";
+                    _activeTimerSlot.FastOpenCostText.text = _activeTimerLootbox.GemsToOpen.ToString();
                 }
                 else
                 {
@@ -374,6 +375,7 @@ namespace RaceManager.UI
             if (_hasActiveTimerSlot)
             {
                 _activeTimerLootbox.TimeToOpenLeft -= Time.deltaTime;
+                _activeTimerLootbox.RecalculateGemsToOpen();
             }
         }
 

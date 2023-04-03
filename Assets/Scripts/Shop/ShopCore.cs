@@ -169,7 +169,7 @@ namespace RaceManager.Shop
 
         public void OnInitializeFailed(InitializationFailureReason error, string message)
         {
-            Debug.Log($"[Shop Core] OnInitializeFailed InitializationFailureReason: { error}; Message: {message}");
+            Debug.Log($"[Shop Core] OnInitializeFailed InitializationFailureReason: {error}; Message: {message}");
         }
 
         public void OnInitializeFailed(InitializationFailureReason error)

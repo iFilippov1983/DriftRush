@@ -51,7 +51,7 @@ namespace RaceManager.Root
             Subscribe(steps.ToArray());
 
             string color = steps.Count == 0 ? ColorRed : ColorGreen;
-            Debug.Log($"Step [{CurrentStep}] => Subscribers count [{steps.Count}]");
+            $"Step [{CurrentStep}] => Subscribers count [{steps.Count}]".Log(color);
         }
 
         private void Subscribe(params TutorialStep[] steps)

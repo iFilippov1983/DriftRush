@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using UniRx;
+using UniRx.Triggers;
 using UnityEngine;
 
 namespace RaceManager.Cars
@@ -33,6 +35,16 @@ namespace RaceManager.Cars
                     _lastCheckTime = Time.time;
                 }
                 return _isVisible;
+            }
+        }
+
+        private void Awake()
+        {
+            foreach (var renderer in _allMeshRenderers)
+            {
+                renderer.OnDestroyAsObservable()
+                    .Take(1)
+                    .Subscribe(u => _allMeshRenderers.Remove(renderer));
             }
         }
 

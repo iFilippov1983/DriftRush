@@ -202,6 +202,8 @@ namespace RaceManager.Effects
 
         private void PlayCollisionSound(Car car, Collision collision)
         {
+            if (this.enabled == false)
+                return;
             //$"Col ENTER => {collision.gameObject.name}".Log();
 
             //List<ContactPoint> contactPoints = new List<ContactPoint>();

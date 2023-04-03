@@ -121,6 +121,8 @@ namespace RaceManager.Waypoints
                     _numberOfPassedWaypoints++;
                     _timeAtLastPassedWaypoint = Time.time;
 
+                    OnPassedWaypoint?.Invoke(this);
+
                     if (waypoint.isFinishLine)
                     {
                         _passedWaypointNumber = 0;
@@ -132,8 +134,6 @@ namespace RaceManager.Waypoints
                             _driverProfile.CarState.Value = CarState.Finished;
                         }
                     }
-
-                    OnPassedWaypoint?.Invoke(this);
                 }
 
                 if (waypoint.isCheckpoint)

@@ -96,8 +96,8 @@ namespace RaceManager.Cars
             carVisual.Initialize(_carProfile.CarConfigVisual, _materialsContainer);
 
             var car = go.GetComponent<Car>();
-            for (int i = 0; i < car.Wheels.Length; i++)
-                car.Wheels[i].enabled = false;
+            //for (int i = 0; i < car.Wheels.Length; i++)
+            //    car.Wheels[i].enabled = false;
             car.enabled = false;
 
             var carAI = go.GetComponent<CarAI>();

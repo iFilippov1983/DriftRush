@@ -8,6 +8,7 @@
         Start,
         Checkpoint,
         Finish,
-        SecondLootbox
+        SecondLootbox,
+        RaceLine
     }
 }

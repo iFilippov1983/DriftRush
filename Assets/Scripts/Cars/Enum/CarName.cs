@@ -5,13 +5,13 @@ namespace RaceManager.Cars
     [Serializable]
     public enum CarName
     { 
-        ToyotaSupra = 0,    //Common
-        FordMustang = 1,    //Common
-        Ferrari488 = 2,     //Uncommon
-        NissanSilvia = 3,   //Uncommon
-        Porche911 = 4,      //Rare
-        TeslaRoadster = 5,  //Rare
-        DodgeTrx = 6,       //Legendary
-        DodgeCharger = 7,   //Legendary
+        SuperBull = 0,          //Common
+        BlinkGoat = 1,          //Common
+        Mosquito_3 = 2,          //Uncommon
+        ThaurenG86 = 3,         //Uncommon
+        ChivalryS1 = 4,         //Rare Ford
+        BearRod = 5,            //Rare
+        HyperWolf = 6,          //Epic
+        StealthRider = 7,       //Epic
     }
 }

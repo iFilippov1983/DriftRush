@@ -16,13 +16,11 @@ namespace RaceManager.Root
         public int VictoriesCycleCounter { get; }
         public int CardsAmount { get; }
         public CarName CarName { get; }
-        public LevelName LevelName { get; }
+        public LevelName NextLevelToLoad { get; }
         public PositionInRace LastInRacePosition { get; }
         public Lootbox LootboxToAdd { get; }
         public List<Lootbox> Lootboxes { get; }
-        public List<LevelName> AvailableLevels { get; }
         public void SetLootboxList(List<Lootbox> lootboxes);
-        public void SetLevelsList(List<LevelName> levels);
     }
 }
 

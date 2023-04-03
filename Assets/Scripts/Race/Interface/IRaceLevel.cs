@@ -1,4 +1,5 @@
 ﻿using RaceManager.Waypoints;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace RaceManager.Race
@@ -11,5 +12,7 @@ namespace RaceManager.Race
         public WaypointTrack WaypointTrackEven { get; }
         public WaypointTrack WaypointTrackOdd { get; }
         public Vector3 FinishCamInitialPosition { get; }
+        public List<TrackConfiguration> Configurations { get; }
+        public void SetCurrentConfiguration(TrackConfiguration configuration);
     }
 }

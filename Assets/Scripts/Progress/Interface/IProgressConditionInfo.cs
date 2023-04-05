@@ -1,10 +1,8 @@
-﻿using RaceManager.Cars;
-using System.Collections.Generic;
-
-namespace RaceManager.Progress
+﻿namespace RaceManager.Progress
 {
     public interface IProgressConditionInfo
     {
+        public bool RemindersAllowed(int frequency);
         public bool CanUpgradeCurrentCarFactors();
         public bool HasRankUpgradableCars();
         public bool HasUlockableCars();

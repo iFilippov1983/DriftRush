@@ -4,6 +4,7 @@ using Sirenix.OdinInspector;
 using Sirenix.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -148,13 +149,22 @@ namespace RaceManager.UI
             _carWindow.UpgradeButton.interactable = isAvailable;
         }
 
+        public async void OpenCarWindow(CarName carName)
+        {
+            CollectionCard card = _collectionCards.Find(c => c.CashedCarName == carName);
+
+            await Task.Delay((int)(Settings.appearAnimDuration * 500));
+            card.UseCarButton.onClick?.Invoke();
+            card.UseCarButton.onClick?.Invoke();
+        }
+
         private void HandleClick(CollectionCard card)
         {
             bool openCarWindow = card.CashedCarName == UsedCarName;
 
             if (openCarWindow)
             {
-                OnCarWindowOpen.Invoke();
+                OnCarWindowOpen?.Invoke();
 
                 UpdateCarWindow(card);
             }

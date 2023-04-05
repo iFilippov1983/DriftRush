@@ -34,32 +34,32 @@ namespace RaceManager.UI
         public Image TuningPressedImage => _tuningPressedImage;
         public Image SoonPressedImage => _soonPressedImage;
 
-        private void Start()
-        {
-            DeactivateAllPressedImages();
+        //private void Start()
+        //{
+        //    DeactivateAllPressedImages();
 
-            ShopButton.onClick.AddListener(() => TogglePressedImageActivity(_iapShopPressedImage));
-            CarsCollectionButton.onClick.AddListener(() => TogglePressedImageActivity(_carsCollectionPressedImage));
-            MainMenuButton.onClick.AddListener(() => TogglePressedImageActivity(_mainMenuPressedImage));
-            TuneButton.onClick.AddListener(() => TogglePressedImageActivity(_tuningPressedImage));
-        }
+        //    ShopButton.onClick.AddListener(() => TogglePressedImageActivity(_iapShopPressedImage));
+        //    CarsCollectionButton.onClick.AddListener(() => TogglePressedImageActivity(_carsCollectionPressedImage));
+        //    MainMenuButton.onClick.AddListener(() => TogglePressedImageActivity(_mainMenuPressedImage));
+        //    TuneButton.onClick.AddListener(() => TogglePressedImageActivity(_tuningPressedImage));
+        //}
 
-        private void TogglePressedImageActivity(Image pressedImage)
-        {
-            DeactivateAllPressedImages();
+        //private void TogglePressedImageActivity(Image pressedImage)
+        //{
+        //    DeactivateAllPressedImages();
 
-            bool active = pressedImage.IsActive() ? false : true;
-            pressedImage.SetActive(active);
-        }
+        //    bool active = pressedImage.IsActive() ? false : true;
+        //    pressedImage.SetActive(active);
+        //}
 
-        private void DeactivateAllPressedImages()
-        { 
-            _iapShopPressedImage.SetActive(false);
-            _carsCollectionPressedImage.SetActive(false);
-            _mainMenuPressedImage.SetActive(false);
-            _tuningPressedImage.SetActive(false);
-            _soonPressedImage.SetActive(false);
-        }
+        //private void DeactivateAllPressedImages()
+        //{ 
+        //    _iapShopPressedImage.SetActive(false);
+        //    _carsCollectionPressedImage.SetActive(false);
+        //    _mainMenuPressedImage.SetActive(false);
+        //    _tuningPressedImage.SetActive(false);
+        //    _soonPressedImage.SetActive(false);
+        //}
     }
 }
 

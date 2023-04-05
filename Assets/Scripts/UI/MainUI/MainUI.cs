@@ -2,6 +2,7 @@ using RaceManager.Cars;
 using RaceManager.Progress;
 using RaceManager.Root;
 using RaceManager.Shed;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,7 @@ namespace RaceManager.UI
         [SerializeField] private LootboxProgressPanel _lootboxProgressPanel;
         [SerializeField] private LootboxWindow _lootboxWindow;
         [Space]
+        [SerializeField] private NotificationPopup _notificationPopup;
         [SerializeField] private SettingsPopup _settingsPopup;
         [SerializeField] private ShopPanel _shopPanel;
         [Space]
@@ -45,6 +47,8 @@ namespace RaceManager.UI
         private CarProfile _currentCarProfile;
         private PodiumView _podium;
         private GameProgressScheme _gameProgressScheme;
+        [ShowInInspector]
+        private NotificationsHandler _notificationsHandler;
 
         public MainUIStatus Status { get; private set; }
 
@@ -98,7 +102,8 @@ namespace RaceManager.UI
             CarUpgradesHandler upgradesHandler,
             SaveManager saveManager,
             CarsDepot playerCarDepot,
-            PodiumView podium
+            PodiumView podium,
+            NotificationsHandler notificationsHandler
             )
         {
             _playerProfile = playerProfile;
@@ -108,6 +113,7 @@ namespace RaceManager.UI
             _saveManager = saveManager;
             _playerCarDepot = playerCarDepot;
             _podium = podium;
+            _notificationsHandler = notificationsHandler;
 
             RegisterButtonsListeners();
         }
@@ -119,6 +125,7 @@ namespace RaceManager.UI
             InitializeCarsCollectionPanel();
             InitializeGameProgressPanel();
             InitializeLootboxSlotsHandler();
+            InitializeUINotifications();
 
             UpdateCurrencyAmountPanels();
             UpdateTuningPanelValues();
@@ -150,6 +157,7 @@ namespace RaceManager.UI
                 MainUIStatus.ActiveCarsCollection => () => ActivateCarsCollectionPanel(false),
                 MainUIStatus.ActiveShop => () => ActivateShopPanel(false),
                 MainUIStatus.ActiveGameProgress => () => ActivateGameProgressPanel(false),
+                MainUIStatus.ActiveNotification => () => ActivateNotificationPopup(false),
                 _ => null,
             };
 
@@ -162,6 +170,7 @@ namespace RaceManager.UI
                 MainUIStatus.ActiveCarsCollection => () => ActivateCarsCollectionPanel(true),
                 MainUIStatus.ActiveShop => () => ActivateShopPanel(true),
                 MainUIStatus.ActiveGameProgress => () => ActivateGameProgressPanel(true),
+                MainUIStatus.ActiveNotification => () => ActivateNotificationPopup(true),
                 _ => null,
             };
 
@@ -179,14 +188,15 @@ namespace RaceManager.UI
             Animator.ForceCompleteAnimation?.OnNext(_startButton.Name);
 
             Transform t;
-            MainUIStatus s = active ? Status : newStatus;
-            t = s switch
+            MainUIStatus status = active ? Status : newStatus;
+            t = status switch
              {
                  MainUIStatus.ActiveMainUI => null,
                  MainUIStatus.ActiveTuningPanel => _helperRects.AppearLeftRect.transform,
                  MainUIStatus.ActiveCarsCollection => _helperRects.ApearRightRect.transform,
                  MainUIStatus.ActiveShop => _helperRects.AppearTopRect.transform,
                  MainUIStatus.ActiveGameProgress => _helperRects.AppearBottomRect.transform,
+                 MainUIStatus.ActiveNotification => _helperRects.AppearBottomRect,
                  _ => null,
              };
 
@@ -202,6 +212,8 @@ namespace RaceManager.UI
                 }
             }
 
+            _bottomPanel.MainMenuPressedImage.SetActive(active);
+
             void Activate(Transform appearTransform)
             {
                 _cupsProgress.SetActive(true);
@@ -214,7 +226,7 @@ namespace RaceManager.UI
                 Animator.AppearSubject(_lootboxSlotsHandler, appearTransform)?.AddTo(this);
 
                 _startButton.SetActive(true);
-                Animator.AppearSubject(_startButton, _helperRects.AppearBottomRect.transform)?.AddTo(this);
+                Animator.AppearSubject(_startButton, _helperRects.AppearBottomRect.transform, _notificationsHandler.NotifyIfNeeded)?.AddTo(this);
             }
 
             void Deactivate(Transform disappearTransform)
@@ -283,13 +295,13 @@ namespace RaceManager.UI
 
         private void ActivateGameProgressPanel(bool active)
         {
+            _gameProgressPanel.SetActive(active);
+
             if (active)
             {
-                Status = MainUIStatus.ActiveGameProgress;
+                //Status = MainUIStatus.ActiveGameProgress;
                 Animator.AppearSubject(_gameProgressPanel);
             }
-
-            _gameProgressPanel.SetActive(active);
         }
 
         private void ActivateLootboxWindow(int moneyAmount, List<CarCardReward> list)
@@ -324,7 +336,24 @@ namespace RaceManager.UI
             _settingsPopup.SetActive(active);
 
             if(active)
-                Animator.AppearSubject(_settingsPopup, _settingsButton.GetComponent<RectTransform>())?.AddTo(this);
+                Animator.AppearSubject(_settingsPopup, _settingsButton.transform)?.AddTo(this);
+        }
+
+        private void ActivateNotificationPopup(CarName carName)
+        {
+            _notificationPopup.UpgradeCarButton.onClick.RemoveAllListeners();
+            _notificationPopup.UpgradeCarButton.onClick.AddListener(() => _bottomPanel.CarsCollectionButton.onClick?.Invoke());
+            _notificationPopup.UpgradeCarButton.onClick.AddListener(() => _carsCollectionPanel.OpenCarWindow(carName));
+
+            OnStatusChange?.OnNext(MainUIStatus.ActiveNotification);
+        }
+
+        private void ActivateNotificationPopup(bool active)
+        {
+            _notificationPopup.SetActive(active);
+
+            if (active)
+                Animator.AppearSubject(_notificationPopup, _carsCollectionPanel.transform)?.AddTo(this);
         }
 
         #endregion
@@ -433,10 +462,16 @@ namespace RaceManager.UI
         {
             _lootboxSlotsHandler.Initialize(_playerProfile);
 
-            //_lootboxSlotsHandler.OnPopupIsActive += UpdatePodiumActivity;
             _lootboxSlotsHandler.OnInstantLootboxOpen += () => UpdateCurrencyAmountPanels(GameUnitType.Gems);
             _lootboxSlotsHandler.OnButtonPressed += OnButtonPressedMethod;
         }
+
+        private void InitializeUINotifications()
+        {
+            _notificationsHandler.Initialize(_notificationPopup);
+            _notificationsHandler.OnNotification += ActivateNotificationPopup;
+        }
+
         #endregion
 
         #region Update Data Functions
@@ -496,14 +531,15 @@ namespace RaceManager.UI
                 _carsCollectionPanel.UsedCarName = profile.CarName;
         }
 
-        public void UpdateCarWindow()
+        public void UpdateCarWindow(CarProfile carProfile = null)
         {
-            var rank = _currentCarProfile.RankingScheme.CurrentRank;
+            CarProfile profile = carProfile ?? _currentCarProfile;
+            var rank = profile.RankingScheme.CurrentRank;
             int cost = rank.AccessCost;
             bool isUpgraded = rank.IsGranted;
             bool isAvailable = rank.IsReached;
 
-            Rarity carRarity = _currentCarProfile.CarCharacteristics.Rarity;
+            Rarity carRarity = profile.CarCharacteristics.Rarity;
 
             _carsCollectionPanel.SetCarWindow(carRarity, cost, isUpgraded, isAvailable);
         }
@@ -567,6 +603,10 @@ namespace RaceManager.UI
             _rewardsHandler.OnLootboxOpen -= _lootboxWindow.RepresentLootbox;
             _rewardsHandler.OnLootboxOpen -= (int moneyAmount, List<CarCardReward> list) => UpdateCurrencyAmountPanels(GameUnitType.Money);
 
+            _rewardsHandler.OnCarCardsReward -= _gameProgressPanel.RepresentCards;
+
+            _gameProgressPanel.OnButtonPressed -= OnButtonPressedMethod;
+
             _gameProgressPanel.ClearProgressSteps();
             InitializeGameProgressPanel();
         }
@@ -602,7 +642,7 @@ namespace RaceManager.UI
 
         private void CarRankUpgrade()
         {
-            if (_upgradesHandler.TryUpgradeCurrentCarRank())
+            if (_upgradesHandler.TryUpgradeCarRank())
             {
                 UpdateCurrencyAmountPanels(GameUnitType.Money);
                 //TODO: Visualize upgrade success
@@ -682,9 +722,21 @@ namespace RaceManager.UI
             _gameProgressButton.onClick.AddListener(() => OnButtonPressedMethod(_gameProgressButton));
 
             _lootboxWindow.OkButton.onClick.AddListener(() => _lootboxWindow.SetActive(false));
+            _lootboxWindow.OkButton.onClick.AddListener(() => OnStatusChange?.OnNext(MainUIStatus.ActiveMainUI));
             _lootboxWindow.OkButton.onClick.AddListener(() => _lootboxSlotsHandler.InitializeLootboxProgressPanel());
             _lootboxWindow.OkButton.onClick.AddListener(() => UpdatePodiumActivity(false));
             _lootboxWindow.OkButton.onClick.AddListener(() => OnButtonPressedMethod(_lootboxWindow.OkButton));
+
+            //_notificationPopup.OkButton.onClick.AddListener(() => ActivateNotificationPopup(false));
+            _notificationPopup.OkButton.onClick.AddListener(() => OnStatusChange?.OnNext(MainUIStatus.ActiveMainUI));
+            _notificationPopup.OkButton.onClick.AddListener(() => OnButtonPressedMethod(_notificationPopup.OkButton));
+
+            //_notificationPopup.ClosePopupWindowButton.onClick.AddListener(() => ActivateNotificationPopup(false));
+            _notificationPopup.ClosePopupWindowButton.onClick.AddListener(() => OnStatusChange?.OnNext(MainUIStatus.ActiveMainUI));
+            _notificationPopup.ClosePopupWindowButton.onClick.AddListener(() => OnButtonPressedMethod(_notificationPopup.ClosePopupWindowButton));
+
+            //_notificationPopup.OpenCollectionButton.onClick.AddListener(() => ActivateNotificationPopup(false));
+            _notificationPopup.OpenCollectionButton.onClick.AddListener(() => _bottomPanel.CarsCollectionButton.onClick?.Invoke());
 
             _settingsButton.onClick.AddListener(() => ActivateSettingsPopup(true));
             _settingsButton.onClick.AddListener(() => OnButtonPressedMethod(_settingsButton));
@@ -715,6 +767,8 @@ namespace RaceManager.UI
             //_lootboxSlotsHandler.OnPopupIsActive -= UpdatePodiumActivity;
             _lootboxSlotsHandler.OnInstantLootboxOpen -= () => UpdateCurrencyAmountPanels(GameUnitType.Gems);
             _lootboxSlotsHandler.OnButtonPressed -= OnButtonPressedMethod;
+
+            _notificationsHandler.OnNotification -= ActivateNotificationPopup;
         }
 
         #endregion

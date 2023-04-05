@@ -9,8 +9,8 @@ namespace RaceManager.UI
 {
     public class CardRepresenter
     {
-        private readonly RepresentationCard _representationCard;
-        private readonly UIAnimator _animator;
+        private RepresentationCard _representationCard;
+        private UIAnimator _animator;
 
         public CardRepresenter(RepresentationCard representationCard, UIAnimator animator)
         {

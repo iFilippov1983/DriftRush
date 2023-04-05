@@ -15,6 +15,8 @@ namespace RaceManager.Root
         private GameEvents _gameEvents;
 
         [SerializeField]
+        private int _reminersFrequency = 3;
+        [SerializeField]
         private List<ProgressConditionType> _conditionsToRemind = new List<ProgressConditionType>();
         [ShowInInspector, ReadOnly]
         private Dictionary<ProgressConditionType, (ReminderCase Case, bool Reminded)> _cases = new Dictionary<ProgressConditionType, (ReminderCase Case, bool Reminded)>();
@@ -62,7 +64,11 @@ namespace RaceManager.Root
 
                 reminder.MakeReminder
                     .Take(1)
-                    .Subscribe(_ => makeReminderCallback?.Invoke())
+                    .Subscribe(_ => 
+                    {
+                        if(_conditionInfo.RemindersAllowed(_reminersFrequency))
+                            makeReminderCallback?.Invoke();
+                    })
                     .AddTo(this);
 
                 _gameEvents.ReminderDone

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,14 +8,6 @@ using UnityEngine;
 #pragma warning disable 649
 namespace RaceManager.Cars
 {
-    [Serializable]
-    public enum Rank
-    {
-        Rank_1 = 1,
-        Rank_2 = 2,
-        Rank_3 = 3,
-    }
-
     [Serializable]
     public class CarRankingScheme
     {
@@ -27,6 +20,7 @@ namespace RaceManager.Cars
         [JsonIgnore]
         public List<CarRank> Ranks => _ranks;
 
+        [ShowInInspector, ReadOnly]
         public CarRank CurrentRank
         {
             get
@@ -90,13 +84,22 @@ namespace RaceManager.Cars
         [Serializable]
         public class CarRank
         {
+            [Space(15)]
             public Rank Rank;
+            [Space(15)]
             public int PointsForAccess;
             public int AccessCost;
             [Range(0f, 1f)]
             public float AvailableTunePercentage;
             public bool IsGranted;
             public bool IsReached;
+            [Space(15)]
+            public int UpgradeCostBase;
+            public int UpgradeCostCurrent;
+            public float StatsToAddPerUpgrade;
+            [Range(0f, 1f)]
+            public float CurrentCostGrowth;
         }
     }
+
 }

@@ -170,7 +170,7 @@ namespace RaceManager.UI
         {
             Lootbox lootbox = _profiler.GetLootboxWithId(slot.CurrentLootboxId);
 
-            LootboxPopup.PopupInfo info = new LootboxPopup.PopupInfo()
+            LootboxPopup.LootboxPopupInfo info = new LootboxPopup.LootboxPopupInfo()
             {
                 lootboxRarity = lootbox.Rarity,
                 lootboxSprite = slot.LootboxImage.sprite,
@@ -219,7 +219,7 @@ namespace RaceManager.UI
 
             Sprite sprite = _spritesRewards.GetLootboxSprite(rarity);
 
-            LootboxPopup.PopupInfo info = new LootboxPopup.PopupInfo()
+            LootboxPopup.LootboxPopupInfo info = new LootboxPopup.LootboxPopupInfo()
             {
                 lootboxRarity = lootbox.Rarity,
                 lootboxSprite = sprite,
@@ -247,7 +247,7 @@ namespace RaceManager.UI
             _lootboxPopup.LastAppearTransform = _lootboxProgress.transform;
             Animator.AppearSubject(_lootboxPopup, _lootboxProgress.transform).AddTo(this);
 
-            OnPopupIsActive.Invoke(true);
+            OnPopupIsActive?.Invoke(true);
         }
 
         private void SlotStartTimer(LootboxSlot slot)

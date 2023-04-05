@@ -41,10 +41,12 @@ namespace RaceManager.Cars
 
         public object Save()
         {
-            SaveData saveData = new SaveData();
-            saveData.driverType = DriverType;
-            saveData.currentCarName = CurrentCarName;
-            saveData.carProfiles = CarProfiles;
+            SaveData saveData = new SaveData
+            {
+                driverType = DriverType,
+                currentCarName = CurrentCarName,
+                carProfiles = CarProfiles
+            };
 
             return saveData;
         }
@@ -65,6 +67,7 @@ namespace RaceManager.Cars
                 {
                     r.IsGranted = false;
                     r.IsReached = false;
+                    r.UpgradeCostCurrent = r.UpgradeCostBase;
                 }
 
                 if (profile.CarName == defaultCarName)

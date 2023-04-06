@@ -55,7 +55,10 @@ namespace RaceManager.Root
                 }
             }
 
-            _profiler.OnCarCardsAmountChange += UpdateCarInfo;
+            //_profiler.OnCarCardsAmountChange += UpdateCarInfo;
+            _profiler.OnCarCardsAmountChange
+                .AsObservable()
+                .Subscribe(t => UpdateCarInfo(t.Item1, t.Item2));
         }
 
         public void NotifyIfNeeded()
@@ -133,7 +136,7 @@ namespace RaceManager.Root
 
         public void Dispose()
         {
-            _profiler.OnCarCardsAmountChange -= UpdateCarInfo;
+           // _profiler.OnCarCardsAmountChange -= UpdateCarInfo;
         }
 
         private struct CarInfo

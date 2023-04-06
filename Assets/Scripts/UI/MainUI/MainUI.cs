@@ -47,6 +47,7 @@ namespace RaceManager.UI
         private CarProfile _currentCarProfile;
         private PodiumView _podium;
         private GameProgressScheme _gameProgressScheme;
+        [Title("Debug only")]
         [ShowInInspector]
         private NotificationsHandler _notificationsHandler;
 

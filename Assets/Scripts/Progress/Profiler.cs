@@ -3,6 +3,7 @@ using RaceManager.Race;
 using RaceManager.Root;
 using System;
 using System.Collections.Generic;
+using UnityEngine.Events;
 
 namespace RaceManager.Progress
 {
@@ -59,11 +60,13 @@ namespace RaceManager.Progress
         }
 
         public Action<Lootbox> OnLootboxOpen;
-        public Action<CarName, int> OnCarCardsAmountChange;
+        //public Action<CarName, int> OnCarCardsAmountChange;
+        public UnityEvent<CarName, int> OnCarCardsAmountChange;
 
         public Profiler(PlayerProfile playerProfile)
         {
             _playerProfile = playerProfile;
+            OnCarCardsAmountChange = new UnityEvent<CarName, int>();
         }
 
         public void SetLootboxList(List<Lootbox> lootboxes) => _lootboxes = lootboxes;

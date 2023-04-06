@@ -50,7 +50,10 @@ namespace RaceManager.Progress
             _saveManager = saveManager;
 
             InitializeProfiles();
-            _profiler.OnCarCardsAmountChange += UpdateRankProgress;
+            //_profiler.OnCarCardsAmountChange += UpdateRankProgress;
+            _profiler.OnCarCardsAmountChange
+                .AsObservable()
+                .Subscribe(t => UpdateRankProgress(t.Item1, t.Item2));
         }
 
         public bool TryUpgradeCarRank(CarProfile profile = null)
@@ -230,7 +233,7 @@ namespace RaceManager.Progress
 
         public void Dispose()
         {
-            _profiler.OnCarCardsAmountChange -= UpdateRankProgress;
+            //_profiler.OnCarCardsAmountChange -= UpdateRankProgress;
         }
     }
 }

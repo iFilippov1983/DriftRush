@@ -77,7 +77,7 @@ namespace RaceManager.Cars
                 }
 
                 var c = profile.CarCharacteristics;
-                c.CurrentFactorsProgress = c.FactorsMaxTotal / 2;
+                c.CurrentFactorsProgress = c.FactorsMaxTotal / 2; //40%
                 c.CurrentAccelerationFactor = c.MaxAccelerationFactor / 2;
                 c.CurrentDurabilityFactor = c.MaxDurabilityFactor / 2;
                 c.CurrentHandlingFactor = c.MaxHandlingFactor / 2;

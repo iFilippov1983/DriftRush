@@ -187,7 +187,7 @@ namespace RaceManager.Progress
         public bool TryGetLootboxWhithActiveTimer(out Lootbox lootbox)
         {
             _playerProfile.GiveLootboxesTo(this);
-            lootbox = _lootboxes.Find(l => l.OpenTimerActivated == true);
+            lootbox = _lootboxes.Find(l => l.OpenTimerActivated == true && !l.IsOpen);
             return lootbox != null;
         }
 

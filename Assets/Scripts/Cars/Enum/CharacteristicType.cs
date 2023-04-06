@@ -6,8 +6,9 @@ namespace RaceManager.Cars
     public enum CharacteristicType
     { 
         Speed = 0,
-        Mobility = 1,
+        Handling = 1,
         Durability = 2,
         Acceleration = 3,
+        Friction = 4,
     }
 }

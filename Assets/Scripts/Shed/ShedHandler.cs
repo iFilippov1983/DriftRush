@@ -84,20 +84,11 @@ namespace RaceManager.Shed
                     _saveManager.Save();
                 });
 
-            _mainUI.OnMobilityValueChange
+            _mainUI.OnHandlingValueChange
                 .Subscribe((v) =>
                 {
-                    //$"Mobility - On next({v})".Log(ConsoleLog.Color.Yellow);
-                    int availables = (int)_carTuner.OnCharacteristicValueChanged?.Invoke(CharacteristicType.Mobility, v, true);
-                    _mainUI.OnTuneValuesChange?.Invoke(availables);
-                    _saveManager.Save();
-                });
-
-            _mainUI.OnDurabilityValueChange
-                .Subscribe((v) =>
-                {
-                    //$"Durability - On next({v})".Log(ConsoleLog.Color.Yellow);
-                    int availables = (int)_carTuner.OnCharacteristicValueChanged?.Invoke(CharacteristicType.Durability, v, true);
+                    //$"Handling - On next({v})".Log(ConsoleLog.Color.Yellow);
+                    int availables = (int)_carTuner.OnCharacteristicValueChanged?.Invoke(CharacteristicType.Handling, v, true);
                     _mainUI.OnTuneValuesChange?.Invoke(availables);
                     _saveManager.Save();
                 });
@@ -107,6 +98,15 @@ namespace RaceManager.Shed
                 {
                     //$"Acceleration - On next({v})".Log(ConsoleLog.Color.Yellow);
                     int availables = (int)_carTuner.OnCharacteristicValueChanged?.Invoke(CharacteristicType.Acceleration, v, true);
+                    _mainUI.OnTuneValuesChange?.Invoke(availables);
+                    _saveManager.Save();
+                });
+
+            _mainUI.OnFrictionValueChange
+                .Subscribe((v) =>
+                {
+                    //$"Durability - On next({v})".Log(ConsoleLog.Color.Yellow);
+                    int availables = (int)_carTuner.OnCharacteristicValueChanged?.Invoke(CharacteristicType.Friction, v, true);
                     _mainUI.OnTuneValuesChange?.Invoke(availables);
                     _saveManager.Save();
                 });

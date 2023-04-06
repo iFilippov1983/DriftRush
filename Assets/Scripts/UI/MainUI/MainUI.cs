@@ -63,9 +63,9 @@ namespace RaceManager.UI
         #region Car tuning properties
 
         public IObservable<float> OnSpeedValueChange => _tuningPanel.SpeedSlider.onValueChanged.AsObservable();
-        public IObservable<float> OnMobilityValueChange => _tuningPanel.MobilitySlider.onValueChanged.AsObservable();
-        public IObservable<float> OnDurabilityValueChange => _tuningPanel.DurabilitySlider.onValueChanged.AsObservable();
+        public IObservable<float> OnHandlingValueChange => _tuningPanel.HandlingSlider.onValueChanged.AsObservable();
         public IObservable<float> OnAccelerationValueChange => _tuningPanel.AccelerationSlider.onValueChanged.AsObservable();
+        public IObservable<float> OnFrictionValueChange => _tuningPanel.FrictionSlider.onValueChanged.AsObservable();
 
         public IObserver<TuneData> OnCharValueLimit => Observer.Create((TuneData td) => SetTuningPanelValues(td));
         public Action<int> OnTuneValuesChange => (int v) => _tuningPanel.UpdateCurrentInfoValues(v);
@@ -364,9 +364,9 @@ namespace RaceManager.UI
         {
             var c = _currentCarProfile.CarCharacteristics;
             _tuningPanel.SetBorderValues(CharacteristicType.Speed, c.MinSpeedFactor, c.MaxSpeedFactor);
-            _tuningPanel.SetBorderValues(CharacteristicType.Mobility, c.MinMobilityFactor, c.MaxMobilityFactor);
-            _tuningPanel.SetBorderValues(CharacteristicType.Durability, c.MinDurabilityFactor, c.MaxDurabilityFactor);
+            _tuningPanel.SetBorderValues(CharacteristicType.Handling, c.MinHandlingFactor, c.MaxHandlingFactor);
             _tuningPanel.SetBorderValues(CharacteristicType.Acceleration, c.MinAccelerationFactor, c.MaxAccelerationFactor);
+            _tuningPanel.SetBorderValues(CharacteristicType.Friction, c.MinFrictionFactor, c.MaxFrictionFactor);
         }
 
         private void InitializeCarsCollectionPanel()
@@ -486,9 +486,9 @@ namespace RaceManager.UI
             _tuningPanel.UpdateAllSlidersValues
                 (
                 c.CurrentSpeedFactor,
-                c.CurrentMobilityFactor,
-                c.CurrentDurabilityFactor,
+                c.CurrentHandlingFactor,
                 c.CurrentAccelerationFactor,
+                c.CurrentFrictionFactor,
                 c.AvailableFactorsToUse,
                 addFactors
                 );

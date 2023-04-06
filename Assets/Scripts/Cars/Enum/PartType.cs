@@ -9,5 +9,6 @@ namespace RaceManager.Cars
         Suspention = 1,
         Bumper = 2,
         BodyKit = 3,
+        Tire = 4,
     }
 }

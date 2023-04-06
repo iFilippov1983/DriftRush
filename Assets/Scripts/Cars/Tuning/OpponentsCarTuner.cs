@@ -59,40 +59,39 @@ namespace RaceManager.Cars
                 }
 
 
-                if (_opponentsTuneScheme.UseMobilityAdjust)
+                if (_opponentsTuneScheme.UseHandlingAdjust)
                 {
-                    oProfile.Mobility = pProfile.Mobility;
+                    oProfile.Handling = pProfile.Handling;
 
                     float mobilityFactor = CalculateValueFactor
                         (
-                            _opponentsTuneScheme.MaxMobilityPercentage,
-                            _opponentsTuneScheme.MinMobilityPercentageCurrent,
-                            _opponentsTuneScheme.MobilityPercentageValueRange
+                            _opponentsTuneScheme.MaxHandlingPercentage,
+                            _opponentsTuneScheme.MinHandlingPercentageCurrent,
+                            _opponentsTuneScheme.HandlingPercentageValueRange
                         );
 
                     //Debug.Log($"Mobility factor: {mobilityFactor}");
 
-                    float mobilityValue = oProfile.CarCharacteristics.MaxMobilityFactor * mobilityFactor;
+                    float mobilityValue = oProfile.CarCharacteristics.MaxHandlingFactor * mobilityFactor;
 
-                    _tuner.OnCharacteristicValueChanged?.Invoke(CharacteristicType.Mobility, mobilityValue, !randomizeView);
+                    _tuner.OnCharacteristicValueChanged?.Invoke(CharacteristicType.Handling, mobilityValue, !randomizeView);
                 }
 
-                if (_opponentsTuneScheme.UseDurabilityAdjust)
-                {
-                    oProfile.Durability = pProfile.Durability;
-
-                    float durabilityFactor = CalculateValueFactor
+                if (_opponentsTuneScheme.UseFrictionAdjust)
+                { 
+                    oProfile.Friction = pProfile.Friction;
+                    float gripFactor = CalculateValueFactor
                         (
-                            _opponentsTuneScheme.MaxDurabilityPercentage,
-                            _opponentsTuneScheme.MinDurabilityPercentageCurrent,
-                            _opponentsTuneScheme.DurabilityPercentageValueRange
+                            _opponentsTuneScheme.MaxFrictionPercentage,
+                            _opponentsTuneScheme.MinFrictionPercentage,
+                            _opponentsTuneScheme.FrictionPercentageValueRange
                         );
 
-                    //Debug.Log($"Durability factor: {durabilityFactor}");
+                    //Debug.Log($"Grip factor: {mobilityFactor}");
 
-                    float durabilityValue = oProfile.CarCharacteristics.MaxDurabilityFactor * durabilityFactor;
+                    float gripValue = oProfile.CarCharacteristics.MaxFrictionFactor * gripFactor;
 
-                    _tuner.OnCharacteristicValueChanged?.Invoke(CharacteristicType.Durability, durabilityValue, !randomizeView);
+                    _tuner.OnCharacteristicValueChanged?.Invoke(CharacteristicType.Friction, gripValue, !randomizeView);
                 }
 
                 if (_opponentsTuneScheme.UseAccelerationAdjust)
@@ -111,6 +110,24 @@ namespace RaceManager.Cars
                     float accelerationValue = oProfile.CarCharacteristics.MaxAccelerationFactor * accelerationFactor;
 
                     _tuner.OnCharacteristicValueChanged?.Invoke(CharacteristicType.Acceleration, accelerationValue, !randomizeView);
+                }
+
+                if (_opponentsTuneScheme.UseDurabilityAdjust)
+                {
+                    oProfile.Durability = pProfile.Durability;
+
+                    float durabilityFactor = CalculateValueFactor
+                        (
+                            _opponentsTuneScheme.MaxDurabilityPercentage,
+                            _opponentsTuneScheme.MinDurabilityPercentageCurrent,
+                            _opponentsTuneScheme.DurabilityPercentageValueRange
+                        );
+
+                    //Debug.Log($"Durability factor: {durabilityFactor}");
+
+                    float durabilityValue = oProfile.CarCharacteristics.MaxDurabilityFactor * durabilityFactor;
+
+                    _tuner.OnCharacteristicValueChanged?.Invoke(CharacteristicType.Durability, durabilityValue, !randomizeView);
                 }
             }
         }
@@ -156,19 +173,19 @@ namespace RaceManager.Cars
                 }
             }
 
-            if (_opponentsTuneScheme.UseMobilityAdjust)
+            if (_opponentsTuneScheme.UseHandlingAdjust)
             {
                 if (grade)
                 {
-                    _opponentsTuneScheme.MinMobilityPercentageCurrent += _opponentsTuneScheme.VictoryPercentageStep;
-                    if (_opponentsTuneScheme.MinMobilityPercentageCurrent > _opponentsTuneScheme.MaxMobilityPercentage)
-                        _opponentsTuneScheme.MinMobilityPercentageCurrent = _opponentsTuneScheme.MaxMobilityPercentage;
+                    _opponentsTuneScheme.MinHandlingPercentageCurrent += _opponentsTuneScheme.VictoryPercentageStep;
+                    if (_opponentsTuneScheme.MinHandlingPercentageCurrent > _opponentsTuneScheme.MaxHandlingPercentage)
+                        _opponentsTuneScheme.MinHandlingPercentageCurrent = _opponentsTuneScheme.MaxHandlingPercentage;
                 }
                 else
                 {
-                    _opponentsTuneScheme.MinMobilityPercentageCurrent -= _opponentsTuneScheme.LoosePercentageStep;
-                    if (_opponentsTuneScheme.MinMobilityPercentageCurrent < _opponentsTuneScheme.MinMobilityPercentage)
-                        _opponentsTuneScheme.MinMobilityPercentageCurrent = _opponentsTuneScheme.MinMobilityPercentage;
+                    _opponentsTuneScheme.MinHandlingPercentageCurrent -= _opponentsTuneScheme.LoosePercentageStep;
+                    if (_opponentsTuneScheme.MinHandlingPercentageCurrent < _opponentsTuneScheme.MinHandlingPercentage)
+                        _opponentsTuneScheme.MinHandlingPercentageCurrent = _opponentsTuneScheme.MinHandlingPercentage;
                 }
             }
 

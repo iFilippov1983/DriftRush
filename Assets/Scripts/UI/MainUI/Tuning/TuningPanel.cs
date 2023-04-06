@@ -27,9 +27,9 @@ namespace RaceManager.UI
         [SerializeField] private RectTransform _tuneCarViewPanel;
         [Space]
         [SerializeField] private Slider _speedSlider;
-        [SerializeField] private Slider _mobilitySlider;
-        [SerializeField] private Slider _durabilitySlider;
+        [SerializeField] private Slider _handlingSlider;
         [SerializeField] private Slider _accelerationSlider;
+        [SerializeField] private Slider _frictionSlider;
         [Space]
         [SerializeField] private TMP_Text _carNameText;
         [SerializeField] private TMP_Text _carStatsProgressText;
@@ -38,14 +38,14 @@ namespace RaceManager.UI
         [SerializeField] private TMP_Text _speedPointsText;
         //[SerializeField] private TMP_Text _speedPointsMaxText;
         [Space]
-        [SerializeField] private TMP_Text _mobilityPointsText;
+        [SerializeField] private TMP_Text _handlingPointsText;
         //[SerializeField] private TMP_Text _mobilityPointsMaxText;
-        [Space]
-        [SerializeField] private TMP_Text _durabilityPointsText;
-        //[SerializeField] private TMP_Text _durabilityPointsMaxText;
         [Space]
         [SerializeField] private TMP_Text _accelerationPointsText;
         //[SerializeField] private TMP_Text _accelerationPointsMaxText;
+        [Space]
+        [SerializeField] private TMP_Text _frictionPointsText;
+        //[SerializeField] private TMP_Text _durabilityPointsMaxText;
         [Space]
         [SerializeField] private Image _tuneCarStatsActiveImage;
         [SerializeField] private Image _tuneWheelsActiveImage;
@@ -57,9 +57,9 @@ namespace RaceManager.UI
         private Subject<string> InterruptAnimation = new Subject<string>();
 
         public Slider SpeedSlider => _speedSlider;
-        public Slider MobilitySlider => _mobilitySlider;
-        public Slider DurabilitySlider => _durabilitySlider;
+        public Slider HandlingSlider => _handlingSlider;
         public Slider AccelerationSlider => _accelerationSlider;
+        public Slider FrictionSlider => _frictionSlider;
 
         public UpgradeWindowTuner UpgradeWindow => _upgradeWindow;
 
@@ -111,20 +111,20 @@ namespace RaceManager.UI
                     SpeedSlider.maxValue = maxValue;
                     //_speedPointsMaxText.text = maxValue.ToString();
                     break;
-                case CharacteristicType.Mobility:
-                    MobilitySlider.minValue = minValue;
-                    MobilitySlider.maxValue = maxValue;
+                case CharacteristicType.Handling:
+                    HandlingSlider.minValue = minValue;
+                    HandlingSlider.maxValue = maxValue;
                     //_mobilityPointsMaxText.text = maxValue.ToString();
-                    break;
-                case CharacteristicType.Durability:
-                    DurabilitySlider.minValue = minValue;
-                    DurabilitySlider.maxValue = maxValue;
-                    //_durabilityPointsMaxText.text = maxValue.ToString();
                     break;
                 case CharacteristicType.Acceleration:
                     AccelerationSlider.minValue = minValue;
                     AccelerationSlider.maxValue = maxValue;
                     //_accelerationPointsMaxText.text = maxValue.ToString();
+                    break;
+                case CharacteristicType.Friction:
+                    FrictionSlider.minValue = minValue;
+                    FrictionSlider.maxValue = maxValue;
+                    //_durabilityPointsMaxText.text = maxValue.ToString();
                     break;
             }
         }
@@ -137,17 +137,17 @@ namespace RaceManager.UI
                     SpeedSlider.value = sliderValue;
                     _speedPointsText.text = sliderValue.ToString();
                     break;
-                case CharacteristicType.Mobility:
-                    MobilitySlider.value = sliderValue;
-                    _mobilityPointsText.text = sliderValue.ToString();
-                    break;
-                case CharacteristicType.Durability:
-                    DurabilitySlider.value = sliderValue;
-                    _durabilityPointsText.text = sliderValue.ToString();
+                case CharacteristicType.Handling:
+                    HandlingSlider.value = sliderValue;
+                    _handlingPointsText.text = sliderValue.ToString();
                     break;
                 case CharacteristicType.Acceleration:
                     AccelerationSlider.value = sliderValue;
                     _accelerationPointsText.text = sliderValue.ToString();
+                    break;
+                case CharacteristicType.Friction:
+                    FrictionSlider.value = sliderValue;
+                    _frictionPointsText.text = sliderValue.ToString();
                     break;
             }
         }
@@ -162,17 +162,17 @@ namespace RaceManager.UI
                 _factorPointsAvailableText.text = available.ToString();
 
             _speedPointsText.text = SpeedSlider.value.ToString();
-            _mobilityPointsText.text = MobilitySlider.value.ToString();
-            _durabilityPointsText.text = DurabilitySlider.value.ToString();
+            _handlingPointsText.text = HandlingSlider.value.ToString();
             _accelerationPointsText.text = AccelerationSlider.value.ToString();
+            _frictionPointsText.text = FrictionSlider.value.ToString();
         }
 
-        public void UpdateAllSlidersValues(int speed, int mobility, int durability, int acceleration, int factorsAvailable, bool animateFactors = false)
+        public void UpdateAllSlidersValues(int speed, int mobility,  int acceleration, int friction, int factorsAvailable, bool animateFactors = false)
         {
             SpeedSlider.value = speed;
-            MobilitySlider.value = mobility;
-            DurabilitySlider.value = durability;
+            HandlingSlider.value = mobility;
             AccelerationSlider.value = acceleration;
+            FrictionSlider.value = friction;
 
             if (animateFactors)
             {

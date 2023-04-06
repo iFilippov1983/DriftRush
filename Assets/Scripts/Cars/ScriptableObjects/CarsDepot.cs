@@ -80,7 +80,7 @@ namespace RaceManager.Cars
                 c.CurrentFactorsProgress = c.FactorsMaxTotal / 2;
                 c.CurrentAccelerationFactor = c.MaxAccelerationFactor / 2;
                 c.CurrentDurabilityFactor = c.MaxDurabilityFactor / 2;
-                c.CurrentMobilityFactor = c.MaxMobilityFactor / 2;
+                c.CurrentHandlingFactor = c.MaxHandlingFactor / 2;
                 c.CurrentSpeedFactor = c.MaxSpeedFactor / 2;
                 c.FactorsMaxCurrent = 0;
             }

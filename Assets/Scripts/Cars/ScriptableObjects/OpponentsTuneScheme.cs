@@ -26,36 +26,20 @@ namespace RaceManager.Cars
         public float MinSpeedPercentageCurrent;
 
         [Space]
-        [Title("MOBILITY")]
-        public bool UseMobilityAdjust;
-        [ShowIf("UseMobilityAdjust")]
+        [Title("HANDLING")]
+        public bool UseHandlingAdjust;
+        [ShowIf("UseHandlingAdjust")]
         [Range(0.01f, 1.1f)]
-        public float MaxMobilityPercentage = 1f;
-        [ShowIf("UseMobilityAdjust")]
+        public float MaxHandlingPercentage = 1f;
+        [ShowIf("UseHandlingAdjust")]
         [Range(0.01f, 1.1f)]
-        public float MinMobilityPercentage = 0.5f;
-        [ShowIf("UseMobilityAdjust")]
+        public float MinHandlingPercentage = 0.5f;
+        [ShowIf("UseHandlingAdjust")]
         [Range(0.01f, 1f)]
-        public float MobilityPercentageValueRange = 0.1f;
-        [ShowIf("UseMobilityAdjust")]
+        public float HandlingPercentageValueRange = 0.1f;
+        [ShowIf("UseHandlingAdjust")]
         [ReadOnly]
-        public float MinMobilityPercentageCurrent;
-
-        [Space]
-        [Title("DURABILITY")]
-        public bool UseDurabilityAdjust;
-        [ShowIf("UseDurabilityAdjust")]
-        [Range(0.01f, 1.1f)]
-        public float MaxDurabilityPercentage = 1f;
-        [ShowIf("UseDurabilityAdjust")]
-        [Range(0.01f, 1.1f)]
-        public float MinDurabilityPercentage = 0.5f;
-        [ShowIf("UseDurabilityAdjust")]
-        [Range(0.01f, 1f)]
-        public float DurabilityPercentageValueRange = 0.1f;
-        [ShowIf("UseDurabilityAdjust")]
-        [ReadOnly]
-        public float MinDurabilityPercentageCurrent;
+        public float MinHandlingPercentageCurrent;
 
         [Space]
         [Title("ACCELERATION")]
@@ -74,6 +58,38 @@ namespace RaceManager.Cars
         public float MinAccelerationPercentageCurrent;
 
         [Space]
+        [Title("FRICTION")]
+        public bool UseFrictionAdjust;
+        [ShowIf("UseFrictionAdjust")]
+        [Range(0.01f, 1.1f)]
+        public float MaxFrictionPercentage = 1f;
+        [ShowIf("UseFrictionAdjust")]
+        [Range(0.01f, 1.1f)]
+        public float MinFrictionPercentage = 0.5f;
+        [ShowIf("UseFrictionAdjust")]
+        [Range(0.01f, 1f)]
+        public float FrictionPercentageValueRange = 0.1f;
+        [ShowIf("UseFrictionAdjust")]
+        [ReadOnly]
+        public float MinFrictionPercentageCurrent;
+
+        [Space]
+        [Title("DURABILITY")]
+        public bool UseDurabilityAdjust;
+        [ShowIf("UseDurabilityAdjust")]
+        [Range(0.01f, 1.1f)]
+        public float MaxDurabilityPercentage = 1f;
+        [ShowIf("UseDurabilityAdjust")]
+        [Range(0.01f, 1.1f)]
+        public float MinDurabilityPercentage = 0.5f;
+        [ShowIf("UseDurabilityAdjust")]
+        [Range(0.01f, 1f)]
+        public float DurabilityPercentageValueRange = 0.1f;
+        [ShowIf("UseDurabilityAdjust")]
+        [ReadOnly]
+        public float MinDurabilityPercentageCurrent;
+
+        [Space]
         [Title("GENERAL")]
         [ShowIf("ShowGenerals")]
         [Range(0.01f, 0.2f)]
@@ -88,7 +104,7 @@ namespace RaceManager.Cars
         [ShowIf("ShowThreshold")]
         public int VictoriesThreshold = 9;
 
-        private bool ShowGenerals => UseSpeedAdjust || UseMobilityAdjust || UseDurabilityAdjust || UseAccelerationAdjust;
+        private bool ShowGenerals => UseSpeedAdjust || UseHandlingAdjust || UseAccelerationAdjust || UseFrictionAdjust || UseDurabilityAdjust;
         private bool ShowThreshold => !AdjustFromStart && ShowGenerals;
 
         public Type DataType() => typeof(SaveData);
@@ -97,9 +113,10 @@ namespace RaceManager.Cars
         {
             SaveData data = (SaveData)dataObject;
             MinSpeedPercentageCurrent = data.minSpeedPercentageCurrent;
-            MinMobilityPercentageCurrent = data.minMobilityPercentageCurrent;
-            MinDurabilityPercentageCurrent = data.minDurabilityPercentageCurrent;
+            MinHandlingPercentageCurrent = data.minHandlingPercentageCurrent;
             MinAccelerationPercentageCurrent = data.minAccelerationPercentageCurrent;
+            MinFrictionPercentageCurrent = data.minFrictionPercentageCurrent;
+            MinDurabilityPercentageCurrent = data.minDurabilityPercentageCurrent;
         }
 
         public object Save()
@@ -107,9 +124,10 @@ namespace RaceManager.Cars
             SaveData saveData = new SaveData()
             { 
                 minSpeedPercentageCurrent = MinSpeedPercentageCurrent,
-                minMobilityPercentageCurrent = MinMobilityPercentageCurrent,
+                minHandlingPercentageCurrent = MinHandlingPercentageCurrent,
+                minAccelerationPercentageCurrent = MinAccelerationPercentageCurrent,
+                minFrictionPercentageCurrent = MinFrictionPercentageCurrent,
                 minDurabilityPercentageCurrent = MinDurabilityPercentageCurrent,
-                minAccelerationPercentageCurrent = MinAccelerationPercentageCurrent
             };
 
             return saveData;
@@ -118,9 +136,10 @@ namespace RaceManager.Cars
         public class SaveData
         {
             public float minSpeedPercentageCurrent;
-            public float minMobilityPercentageCurrent;
-            public float minDurabilityPercentageCurrent;
+            public float minHandlingPercentageCurrent;
             public float minAccelerationPercentageCurrent;
+            public float minFrictionPercentageCurrent;
+            public float minDurabilityPercentageCurrent;
         }
 
         [PropertySpace(20)]
@@ -133,23 +152,29 @@ namespace RaceManager.Cars
             SpeedPercentageValueRange = 0.1f;
             MinSpeedPercentageCurrent = MinSpeedPercentage;
 
-            UseMobilityAdjust = true;
-            MaxMobilityPercentage = 1f;
-            MinMobilityPercentage = 0.1f;
-            MobilityPercentageValueRange = 0.1f;
-            MinMobilityPercentageCurrent = MinMobilityPercentage;
-
-            UseDurabilityAdjust = false;
-            MaxDurabilityPercentage = 1f;
-            MinDurabilityPercentage = 0.1f;
-            DurabilityPercentageValueRange = 0.1f;
-            MinDurabilityPercentageCurrent = MinDurabilityPercentage;
+            UseHandlingAdjust = true;
+            MaxHandlingPercentage = 1f;
+            MinHandlingPercentage = 0.1f;
+            HandlingPercentageValueRange = 0.1f;
+            MinHandlingPercentageCurrent = MinHandlingPercentage;
 
             UseAccelerationAdjust = true;
             MaxAccelerationPercentage = 1f;
             MinAccelerationPercentage = 0.1f;
             AccelerationPercentageValueRange = 0.1f;
             MinAccelerationPercentageCurrent = MinAccelerationPercentage;
+
+            UseFrictionAdjust = true;
+            MaxFrictionPercentage = 1f;
+            MinFrictionPercentage = 0.1f;
+            FrictionPercentageValueRange = 0.1f;
+            MinFrictionPercentageCurrent = MinFrictionPercentage;
+
+            UseDurabilityAdjust = false;
+            MaxDurabilityPercentage = 1f;
+            MinDurabilityPercentage = 0.1f;
+            DurabilityPercentageValueRange = 0.1f;
+            MinDurabilityPercentageCurrent = MinDurabilityPercentage;
 
             VictoryPercentageStep = 0.05f;
             LoosePercentageStep = 0.1f;
@@ -158,9 +183,10 @@ namespace RaceManager.Cars
 
             Debug.Log($"Opponents Tune Scheme has been reset => " +
                 $"[Use Speed Adjust: {UseSpeedAdjust}] " +
-                $"[Use Mobility Adjust: {UseMobilityAdjust}] " +
-                $"[Use Durability Adjust: {UseDurabilityAdjust}] " +
+                $"[Use Handling Adjust: {UseHandlingAdjust}] " +
                 $"[Use Acceleration Adjust: {UseAccelerationAdjust}] " +
+                $"[Use Friction Adjust: {UseFrictionAdjust}]" +
+                $"[Use Durability Adjust: {UseDurabilityAdjust}] " +
                 $"[Adjust from start: {AdjustFromStart}]");
         }
     }

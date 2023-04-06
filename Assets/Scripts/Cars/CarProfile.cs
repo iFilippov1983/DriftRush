@@ -10,11 +10,13 @@ namespace RaceManager.Cars
     [Serializable]
     public class CarProfile
     {
+        [Title("***", titleAlignment: TitleAlignments.Centered)]
         public CarName CarName;
         public CarRankingScheme RankingScheme;
         public Speed Speed;
-        public Mobility Mobility;
+        public Handling Handling;
         public Acceleration Acceleration;
+        public Friction Friction;
         public Durability Durability;
         public Characteristics CarCharacteristics;
         public CarConfig CarConfig;
@@ -57,17 +59,11 @@ namespace RaceManager.Cars
             public int MaxSpeedFactor;
             public int CurrentSpeedFactor;
 
-            [Title("Mobility")]
+            [Title("Handling")]
             [ReadOnly]
-            public int MinMobilityFactor = 1;
-            public int MaxMobilityFactor;
-            public int CurrentMobilityFactor;
-
-            [Title("Durability")]
-            [ReadOnly]
-            public int MinDurabilityFactor = 1;  
-            public int MaxDurabilityFactor;
-            public int CurrentDurabilityFactor;
+            public int MinHandlingFactor = 1;
+            public int MaxHandlingFactor;
+            public int CurrentHandlingFactor;
 
             [Title("Acceleration")]
             [ReadOnly]
@@ -75,8 +71,20 @@ namespace RaceManager.Cars
             public int MaxAccelerationFactor;
             public int CurrentAccelerationFactor;
 
+            [Title("Friction")]
+            [ReadOnly]
+            public int MinFrictionFactor = 1;
+            public int MaxFrictionFactor;
+            public int CurrentFrictionFactor;
+
+            [Title("Durability")]
+            [ReadOnly]
+            public int MinDurabilityFactor = 1;
+            public int MaxDurabilityFactor;
+            public int CurrentDurabilityFactor;
+
             [ReadOnly, ShowInInspector]
-            public int AvailableFactorsToUse => CurrentFactorsProgress - CurrentSpeedFactor - CurrentMobilityFactor - CurrentDurabilityFactor - CurrentAccelerationFactor;
+            public int AvailableFactorsToUse => CurrentFactorsProgress - CurrentSpeedFactor - CurrentHandlingFactor - CurrentAccelerationFactor - CurrentFrictionFactor; //- CurrentDurabilityFactor
 
             public int FactorsMaxTotal => _factorsMaxTotal;
             public int InitialFactorsProgress => _initialFactorsProgress;

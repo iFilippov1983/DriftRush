@@ -40,6 +40,8 @@ namespace RaceManager.Cars
         {
             public Rarity Rarity;
 
+            public float DefaultFactorsPercentage = 0.4f;
+
             [Space]
             [Title("Factors Amount")]
             [JsonProperty]

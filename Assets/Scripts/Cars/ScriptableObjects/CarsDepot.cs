@@ -77,11 +77,12 @@ namespace RaceManager.Cars
                 }
 
                 var c = profile.CarCharacteristics;
-                c.CurrentFactorsProgress = c.FactorsMaxTotal / 2; //40%
-                c.CurrentAccelerationFactor = c.MaxAccelerationFactor / 2;
-                c.CurrentDurabilityFactor = c.MaxDurabilityFactor / 2;
-                c.CurrentHandlingFactor = c.MaxHandlingFactor / 2;
-                c.CurrentSpeedFactor = c.MaxSpeedFactor / 2;
+                c.CurrentFactorsProgress = Mathf.RoundToInt(c.FactorsMaxTotal * c.DefaultFactorsPercentage);
+                c.CurrentAccelerationFactor = Mathf.RoundToInt(c.MaxAccelerationFactor * c.DefaultFactorsPercentage);
+                c.CurrentDurabilityFactor = Mathf.RoundToInt(c.MaxDurabilityFactor * c.DefaultFactorsPercentage);
+                c.CurrentHandlingFactor = Mathf.RoundToInt(c.MaxHandlingFactor * c.DefaultFactorsPercentage);
+                c.CurrentSpeedFactor = Mathf.RoundToInt(c.MaxSpeedFactor * c.DefaultFactorsPercentage);
+                c.CurrentFrictionFactor = Mathf.RoundToInt(c.MaxFrictionFactor * c.DefaultFactorsPercentage);
                 c.FactorsMaxCurrent = 0;
             }
 

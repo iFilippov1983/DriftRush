@@ -123,9 +123,9 @@ namespace RaceManager.Shed
         private void InitializeHandler()
         {
             _upgradesHandler.OnCarUpdate
-                .Subscribe(t => 
+                .Subscribe(d => 
                 {
-                    UpdateCarInfo(t.name, !t.rankUpdate);
+                    UpdateCarInfo(d.carName, !d.gotRankUpdate);
                 });
         }
 
@@ -163,9 +163,6 @@ namespace RaceManager.Shed
         {
             _mainUI.OnCarProfileChange -= ChangeCar;
             _carTuner.OnCurrentCarChanged -= InitializeNewCar;
-
-            //_upgradesHandler.OnCarRankUpdate -= UpdateCarInfo;
-            //_upgradesHandler.OnCarFactorsUpgrade -= UpdateCarInfo;
         }
 
         /// <summary>

@@ -6,14 +6,14 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 using System;
 using UniRx;
-using UniRx.Triggers;
 
 namespace RaceManager.Root
 {
-    public class NotificationsHandler : IDisposable
+    public class NotificationsHandler
     {
         private Profiler _profiler;
         private CarsDepot _playerCarsDepot;
+        private CarUpgradesHandler _upgradesHandler;
         private SpritesContainerCarCollection _carSprites;
         private NotificationPopup _popup;
 
@@ -22,10 +22,11 @@ namespace RaceManager.Root
 
         public Action<CarName> OnNotification;
 
-        public NotificationsHandler(Profiler profiler, CarsDepot carsDepot, SpritesContainerCarCollection carSprites)
+        public NotificationsHandler(Profiler profiler, CarsDepot carsDepot, CarUpgradesHandler upgradesHandler, SpritesContainerCarCollection carSprites)
         {
             _profiler = profiler;
             _playerCarsDepot = carsDepot;
+            _upgradesHandler = upgradesHandler;
             _carSprites = carSprites;
         }
 
@@ -55,10 +56,9 @@ namespace RaceManager.Root
                 }
             }
 
-            //_profiler.OnCarCardsAmountChange += UpdateCarInfo;
-            _profiler.OnCarCardsAmountChange
-                .AsObservable()
-                .Subscribe(t => UpdateCarInfo(t.Item1, t.Item2));
+            _upgradesHandler.OnCarUpdate
+                .Where(d => d.gotRankUpdate == true)
+                .Subscribe(d => UpdateCarInfo(d));
         }
 
         public void NotifyIfNeeded()
@@ -107,36 +107,23 @@ namespace RaceManager.Root
             }
         }
 
-        private void UpdateCarInfo(CarName carName, int cardsAmount)
+        private void UpdateCarInfo(CarUpdateData data)
         {
-            CarInfo carInfo = _cars[carName];
+            CarInfo carInfo = _cars[data.carName];
+            CarRankingScheme scheme = _playerCarsDepot.GetProfile(data.carName).RankingScheme;
 
-            if (carInfo.cashedCardsAmount > cardsAmount)
-            { 
-                carInfo.cashedCardsAmount = cardsAmount;
-                _cars[carName] = carInfo;
-                return;
-            }
+            int cardsAmount = _profiler.GetCardsAmount(data.carName);
+            int cardsAmountToUpgrade = scheme.CurrentRank.PointsForAccess;
 
-            CarRankingScheme scheme = _playerCarsDepot.GetProfile(carName).RankingScheme;
-
-            carInfo.needsNotification =
-                carInfo.isAvailable != scheme.CarIsAvailable
-                || carInfo.isUpgradeable != scheme.CurrentRank.IsReached && !scheme.CurrentRank.IsGranted;
-
-            carInfo.isAvailable = scheme.CarIsAvailable;
-            carInfo.isUpgradeable = scheme.CurrentRank.IsReached && !scheme.CurrentRank.IsGranted;
+            carInfo.needsNotification = data.gotUnlocked || cardsAmount > cardsAmountToUpgrade;
+            carInfo.isAvailable = carInfo.isAvailable != data.gotUnlocked;
+            carInfo.isUpgradeable = cardsAmount > cardsAmountToUpgrade;
             carInfo.isNotified = !carInfo.needsNotification;
             carInfo.cashedCardsAmount = cardsAmount;
 
-            _cars[carName] = carInfo;
+            _cars[data.carName] = carInfo;
 
-            $"Updating car info {carName} => Current rank {scheme.CurrentRank.Rank}".Log();
-        }
-
-        public void Dispose()
-        {
-           // _profiler.OnCarCardsAmountChange -= UpdateCarInfo;
+            $"Updating car info {data.carName} => Current rank {scheme.CurrentRank.Rank} => Cur cards amount: {cardsAmount} => Goal cards amount: {cardsAmountToUpgrade}".Log(Logger.ColorYellow);
         }
 
         private struct CarInfo

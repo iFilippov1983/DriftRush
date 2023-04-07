@@ -90,18 +90,6 @@ namespace RaceManager.Cars
             CarProfile.Characteristics c = _carProfile.CarCharacteristics;
             Handling h = _carProfile.Handling;
 
-            //float newForwardFriction_f = CalculateValue(c.MaxMobilityFactor, c.MinMobilityFactor, m.f_frictionForward_Max, m.f_frictionForward_Min, value);
-            //_carProfile.CarConfig.FWheelsForwardFriction = newForwardFriction_f;
-
-            //float newSidewaysFriction_f = CalculateValue(c.MaxMobilityFactor, c.MinMobilityFactor, m.f_frictionSideway_Max, m.f_frictionSideway_Min, value);
-            //_carProfile.CarConfig.FWheelsSidewaysFriction = newSidewaysFriction_f;
-
-            //float newForwardFriction_r = CalculateValue(c.MaxMobilityFactor, c.MinMobilityFactor, m.r_frictionForward_Max, m.r_frictionForward_Min, value);
-            //_carProfile.CarConfig.RWheelsForwardFriction = newForwardFriction_r;
-
-            //float newSidewaysFriction_r = CalculateValue(c.MaxMobilityFactor, c.MinMobilityFactor, m.r_frictionSideway_Max, m.r_frictionSideway_Min, value);
-            //_carProfile.CarConfig.RWheelsSidewaysFriction = newSidewaysFriction_r;
-
             float newMaxSteerAngle = CalculateValue(c.MaxHandlingFactor, c.MinHandlingFactor, h.steerAngle_Max, h.steerAngle_Min, value);
             _carProfile.CarConfig.MaxSteerAngle = newMaxSteerAngle;
 

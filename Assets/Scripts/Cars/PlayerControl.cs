@@ -1,7 +1,4 @@
-﻿using RaceManager.Root;
-using Sirenix.OdinInspector;
-using UnityEngine;
-using Zenject;
+﻿using UnityEngine;
 
 namespace RaceManager.Cars
 {

@@ -1,4 +1,5 @@
-﻿using RaceManager.Tools;
+﻿using Newtonsoft.Json;
+using RaceManager.Tools;
 using Sirenix.OdinInspector;
 using System;
 using UnityEngine;
@@ -196,6 +197,7 @@ namespace RaceManager.Cars
 
 		public float MaxRPMToNextGearPercent => CutOffRPMFactor - RPMTONextGearVsCutOffDif;
 
+		[JsonIgnore]
 		private readonly static Keyframe[] _kf = new Keyframe[]
 		{
 			new Keyframe(0f, 0.3f),

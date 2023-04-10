@@ -117,7 +117,7 @@ namespace RaceManager.UI
                 {
                     //$"UtcNow: {DateTime.UtcNow}; Last save time: {lastSaveTime}; Seconds passed: {secondsPassed}; LB time left: {lootbox.TimeToOpenLeft}".Log();
 
-                    if (secondsPassed >= lootbox.TimeToOpenLeft)
+                    if (secondsPassed >= lootbox.TimeToOpenLeft || lootbox.IsOpen)
                     {
                         slot.SetStatusLootboxOpen(sprite, lootbox.Id);
                     }
@@ -274,7 +274,7 @@ namespace RaceManager.UI
             if (lootbox != null && _profiler.TryBuyWithGems(lootbox.GemsToOpen))
             {
                 _profiler.RemoveLootboxWithId(lootbox.Id);
-                lootbox.TimeToOpenLeft = 0;
+                lootbox.TimeToOpenLeft = -1;
                 CloseLootboxPopup();
                 HandleSlotTimer();
                 _profiler.AddOrOpenLootbox(lootbox);
@@ -346,7 +346,7 @@ namespace RaceManager.UI
         {
             if (_hasActiveTimerSlot)
             {
-                if (_activeTimerLootbox.TimeToOpenLeft > 0)
+                if (_activeTimerLootbox.TimeToOpenLeft > 0 && !_activeTimerLootbox.IsOpen)
                 {
                     _hours = _activeTimerLootbox.TimeToOpenLeft / 3600f;
                     //_hoursRounded = Mathf.RoundToInt(_hours);

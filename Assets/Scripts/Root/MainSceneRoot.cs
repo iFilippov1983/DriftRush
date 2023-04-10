@@ -52,7 +52,9 @@ namespace RaceManager.Root
         {
             _menuCamerasHandler.LookAt(_podium.CarPlace);
 
-            _mainUI.OnStatusChange.Subscribe(s => _menuCamerasHandler.ToggleCamPriorities(s)).AddTo(this);
+            _mainUI.OnStatusChange
+                .Subscribe(s => _menuCamerasHandler.ToggleCamPriorities(s))
+                .AddTo(this);
         }
 
         private void RegisterSavebles()

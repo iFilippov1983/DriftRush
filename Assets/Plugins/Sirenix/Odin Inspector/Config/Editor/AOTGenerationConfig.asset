@@ -16,8 +16,16 @@ MonoBehaviour:
   deleteDllAfterBuilds: 0
   AutomateForAllAOTPlatforms: 1
   automateForPlatforms: 09000000140000000d000000
-  lastScan: 638167212977407817
+  lastScan: 638167317412588619
   supportSerializedTypes:
+  - TypeName: System.Collections.Generic.List`1[[RaceManager.Root.SaveManager+SaveAction,
+      Assembly-CSharp]], mscorlib
+    IsCustom: 1
+    Emit: 1
+  - TypeName: System.Collections.Generic.List`1[[RaceManager.Root.SaveManager+LoadAction,
+      Assembly-CSharp]], mscorlib
+    IsCustom: 1
+    Emit: 1
   - TypeName: System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[Newtonsoft.Json.Linq.JObject,
       Newtonsoft.Json]], mscorlib
     IsCustom: 1
@@ -78,6 +86,10 @@ MonoBehaviour:
       Assembly-CSharp]], mscorlib]], mscorlib
     IsCustom: 0
     Emit: 1
+  - TypeName: System.Collections.Generic.Dictionary`2[[System.Type, mscorlib],[System.Collections.Generic.List`1[[System.Object,
+      mscorlib]], mscorlib]], mscorlib
+    IsCustom: 0
+    Emit: 1
   - TypeName: System.Collections.Generic.EnumEqualityComparer`1[[RaceManager.Progress.GameUnitType,
       Assembly-CSharp]], mscorlib
     IsCustom: 0
@@ -130,6 +142,10 @@ MonoBehaviour:
       Assembly-CSharp]], mscorlib
     IsCustom: 0
     Emit: 1
+  - TypeName: System.Collections.Generic.IEqualityComparer`1[[System.Type, mscorlib]],
+      mscorlib
+    IsCustom: 0
+    Emit: 1
   - TypeName: RaceManager.Progress.IncomeBonus, Assembly-CSharp
     IsCustom: 0
     Emit: 1
@@ -148,6 +164,9 @@ MonoBehaviour:
     Emit: 1
   - TypeName: System.Collections.Generic.List`1[[RaceManager.Progress.IReward, Assembly-CSharp]],
       mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.List`1[[System.Object, mscorlib]], mscorlib
     IsCustom: 0
     Emit: 1
   - TypeName: System.Collections.Generic.List`1[[RaceManager.UI.SpritesContainerRewards+LevelSpriteHolder,
@@ -180,6 +199,13 @@ MonoBehaviour:
     IsCustom: 0
     Emit: 1
   - TypeName: RaceManager.Progress.Money, Assembly-CSharp
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Object, mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.ObjectEqualityComparer`1[[System.Type, mscorlib]],
+      mscorlib
     IsCustom: 0
     Emit: 1
   - TypeName: RaceManager.Root.PositionInRace, Assembly-CSharp
@@ -221,27 +247,9 @@ MonoBehaviour:
   - TypeName: UniRx.Subject`1[[System.String, mscorlib]], UniRx
     IsCustom: 0
     Emit: 1
-  - TypeName: UnityEngine.Vector2, UnityEngine.CoreModule
-    IsCustom: 0
-    Emit: 1
-  - TypeName: System.Collections.Generic.Dictionary`2[[System.Type, mscorlib],[System.Collections.Generic.List`1[[System.Object,
-      mscorlib]], mscorlib]], mscorlib
-    IsCustom: 0
-    Emit: 1
-  - TypeName: System.Collections.Generic.IEqualityComparer`1[[System.Type, mscorlib]],
-      mscorlib
-    IsCustom: 0
-    Emit: 1
-  - TypeName: System.Collections.Generic.List`1[[System.Object, mscorlib]], mscorlib
-    IsCustom: 0
-    Emit: 1
-  - TypeName: System.Object, mscorlib
-    IsCustom: 0
-    Emit: 1
-  - TypeName: System.Collections.Generic.ObjectEqualityComparer`1[[System.Type, mscorlib]],
-      mscorlib
-    IsCustom: 0
-    Emit: 1
   - TypeName: System.Type, mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: UnityEngine.Vector2, UnityEngine.CoreModule
     IsCustom: 0
     Emit: 1

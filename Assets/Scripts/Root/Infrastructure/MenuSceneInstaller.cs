@@ -30,7 +30,6 @@ namespace RaceManager.Infrastructure
         [Space]
         [SerializeField] private GameProgressScheme _gameProgressScheme;
         [SerializeField] private RaceRewardsScheme _raceRewardsScheme;
-        //[SerializeField] private CarsUpgradeScheme _carUpgradeScheme;
         [SerializeField] private ShopScheme _shopScheme;
         [Space]
         [SerializeField] private GameSettingsContainer _effectsSettings;
@@ -60,7 +59,6 @@ namespace RaceManager.Infrastructure
             Bind(_spritesContainerRewards);
             Bind(_gameProgressScheme);
             Bind(_raceRewardsScheme);
-            //Bind(_carUpgradeScheme);
             Bind(_mainUI);
             Bind(_menuCamerasHandler);
             Bind(_shedHandler);

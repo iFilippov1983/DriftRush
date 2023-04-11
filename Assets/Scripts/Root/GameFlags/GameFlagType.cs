@@ -1,8 +1,5 @@
-﻿using System;
-
-namespace RaceManager.Root
+﻿namespace RaceManager.Root
 {
-    [Serializable]
     public enum GameFlagType
     { 
         None = 0,

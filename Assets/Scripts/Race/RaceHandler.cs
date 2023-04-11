@@ -146,7 +146,7 @@ namespace RaceManager.Race
                     }
 
                     //_raceUI.Initialize(_raceLevelInitializer, selfRighting.RightCar, GetToCheckpoint);
-                    _raceUI.Initialize(selfRighting.RightCar, GetToCheckpoint);
+                    _raceUI.Initialize(_startPoints.Length, selfRighting.RightCar, GetToCheckpoint);
 
                     _scoresCounter = new RaceScoresCounter(driver.Car, _rewardsScheme);
                 }

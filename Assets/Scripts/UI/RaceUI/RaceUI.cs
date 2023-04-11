@@ -40,6 +40,7 @@ namespace RaceManager.UI
         private int _currentScores;
         private int _currentExtraScores;
         private int _previousScores;
+        private int _driversCount;
 
         private bool _isRaceFinished;
 
@@ -78,7 +79,7 @@ namespace RaceManager.UI
         #region Public Functions
 
         //public void Initialize(RaceLevelInitializer levelInitializer, UnityAction actionForRespawnButton, UnityAction actionForGetToCheckpointButton)
-        public void Initialize(UnityAction actionForRespawnButton, UnityAction actionForGetToCheckpointButton)
+        public void Initialize(int initialPositionToShow, UnityAction actionForRespawnButton = null, UnityAction actionForGetToCheckpointButton = null)
         {
             _inRaceUI.gameObject.SetActive(true);
             //_inRaceUI.RaceProgressBar.LevelText.text = ("LEVEL " + levelInitializer.LevelName).ToUpper();
@@ -94,6 +95,12 @@ namespace RaceManager.UI
             {
                 panel.Accept(_finishUIHandler);
             }
+
+            _currentPosition = initialPositionToShow;
+            _driversCount = initialPositionToShow;
+            _inRaceUI.PositionIndicator.PositionText.gameObject.SetActive(true);
+            _inRaceUI.PositionIndicator.PositionText.text = _currentPosition.ToString();
+            _inRaceUI.PositionIndicator.DriverTotalText.text = _driversCount.ToString();
 
             _finishUIHandler.OnButtonPressed
                 .Subscribe(t => 
@@ -224,8 +231,8 @@ namespace RaceManager.UI
 
         public void HandlePositionIndication()
         {
-            bool isActive = _currentPosition > 0 ? true : false;
-            _inRaceUI.PositionIndicator.PositionText.gameObject.SetActive(isActive);
+            //bool isActive = _currentPosition > 0 ? true : false;
+            //_inRaceUI.PositionIndicator.PositionText.gameObject.SetActive(isActive);
             _inRaceUI.PositionIndicator.PositionText.text = _currentPosition.ToString();
         }
 
@@ -356,7 +363,9 @@ namespace RaceManager.UI
         {
             _currentSpeed = profile.CarCurrentSpeed;
             _trackProgress = profile.TrackProgress;
-            _currentPosition = (int)profile.PositionInRace;
+            _currentPosition = profile.PositionInRace == 0 
+                ? _driversCount 
+                : (int)profile.PositionInRace;
         }
 
         public void OnCompleted() => throw new NotImplementedException();

@@ -47,9 +47,18 @@ namespace RaceManager.Root
             EffectsController.InstallSettings(_settingsContainer);
             StartPlayingRandomRaceTrack();
 
-            this.UpdateAsObservable()
+            this.FixedUpdateAsObservable()
                 .Where(_ => _raceUI.RaceFinished == false)
                 .Subscribe(_ =>
+                {
+                    HandleWheels();
+                    HandleCarSpeed();
+                })
+                .AddTo(this);
+
+            this.UpdateAsObservable()
+                .Where(_ => _raceUI.RaceFinished == false)
+                .Subscribe(_ => 
                 {
                     if (Input.GetMouseButtonDown(0))
                         _gameEvents.ScreenTaped.OnNext();
@@ -59,11 +68,7 @@ namespace RaceManager.Root
 
                     if (Input.GetMouseButtonUp(0))
                         _gameEvents.ScreenTapReleased.OnNext();
-
-                    HandleWheels();
-                    HandleCarSpeed();
-                })
-                .AddTo(this);
+                }).AddTo(this);
 
             EventsHub<RaceEvent>.Subscribe(RaceEvent.START, SendStartNotification);
             _raceUI.OnButtonPressed += PlayButtonPressedEffect;

@@ -47,14 +47,14 @@ namespace RaceManager.Root
             EffectsController.InstallSettings(_settingsContainer);
             StartPlayingRandomRaceTrack();
 
-            this.FixedUpdateAsObservable()
-                .Where(_ => _raceUI.RaceFinished == false)
-                .Subscribe(_ =>
-                {
-                    HandleWheels();
-                    HandleCarSpeed();
-                })
-                .AddTo(this);
+            //this.FixedUpdateAsObservable()
+            //    .Where(_ => _raceUI.RaceFinished == false)
+            //    .Subscribe(_ =>
+            //    {
+            //        HandleWheels();
+            //        HandleCarSpeed();
+            //    })
+            //    .AddTo(this);
 
             this.UpdateAsObservable()
                 .Where(_ => _raceUI.RaceFinished == false)
@@ -94,25 +94,6 @@ namespace RaceManager.Root
         }
 
         #endregion
-
-        //#region Unity Functions
-
-        //private void Update()
-        //{
-        //    if (Input.GetMouseButtonDown(0))
-        //        _gameEvents.ScreenTaped.OnNext();
-
-        //    if (Input.GetMouseButton(0))
-        //        _gameEvents.ScreenTapHold.OnNext();
-
-        //    if (Input.GetMouseButtonUp(0))
-        //        _gameEvents.ScreenTapReleased.OnNext();
-
-        //    HandleWheels();
-        //    HandleCarSpeed();
-        //}
-
-        //#endregion
 
         #region Private Functions
 
@@ -197,8 +178,6 @@ namespace RaceManager.Root
         }
 
         #endregion
-
-
     }
 }
 

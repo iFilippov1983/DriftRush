@@ -634,6 +634,7 @@ namespace RaceManager.Cars
                 }
             }
         }
+
         void PlayBackfireWithProbability()
         {
             PlayBackfireWithProbability(CarConfig.ProbabilityBackfire);

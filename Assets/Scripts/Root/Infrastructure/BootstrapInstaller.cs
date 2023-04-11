@@ -63,5 +63,10 @@ namespace RaceManager.Infrastructure
         {
             Debug.LogError(e.Exception);
         }
+
+        private void OnDestroy()
+        {
+            TaskScheduler.UnobservedTaskException -= HandleTaskException;
+        }
     }
 }

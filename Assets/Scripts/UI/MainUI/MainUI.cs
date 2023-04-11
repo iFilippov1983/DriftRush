@@ -2,11 +2,13 @@ using RaceManager.Cars;
 using RaceManager.Progress;
 using RaceManager.Root;
 using RaceManager.Shed;
+using RaceManager.Tools;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UniRx;
+using UniRx.Triggers;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -38,6 +40,14 @@ namespace RaceManager.UI
         [Space]
         [SerializeField] private Transform _animParent;
         [SerializeField] private HelperRectsView _helperRects;
+        [Space]
+        [SerializeField] private bool _showFps;
+        [ShowIf("_showFps")]
+        [SerializeField] private FpsPanelView _fpsPanelView;
+        [ShowIf("_showFps")]
+        [SerializeField] private int _maxFpsToDisplay = 99;
+        [ShowIf("_showFps")]
+        [SerializeField] private Color[] _colors;
 
         private PlayerProfile _playerProfile;
         private RewardsHandler _rewardsHandler;
@@ -47,6 +57,7 @@ namespace RaceManager.UI
         private CarProfile _currentCarProfile;
         private PodiumView _podium;
         private GameProgressScheme _gameProgressScheme;
+        private FpsDisplayer _fpsDisplayer;
         [Title("Debug only")]
         [ShowInInspector]
         private NotificationsHandler _notificationsHandler;
@@ -127,6 +138,7 @@ namespace RaceManager.UI
             InitializeGameProgressPanel();
             InitializeLootboxSlotsHandler();
             InitializeUINotifications();
+            InitializeFpsPanel();
 
             UpdateCurrencyAmountPanels();
             UpdateTuningPanelValues();
@@ -471,6 +483,28 @@ namespace RaceManager.UI
         {
             _notificationsHandler.Initialize(_notificationPopup);
             _notificationsHandler.OnNotification += ActivateNotificationPopup;
+        }
+
+        private void InitializeFpsPanel()
+        {
+            _fpsPanelView.SetActive(_showFps);
+
+            if (_showFps)
+            {
+                _fpsDisplayer = new FpsDisplayer(new FpsDisplayData() 
+                { 
+                    averageText = _fpsPanelView.AverageText,
+                    highestText = _fpsPanelView.HighestText,
+                    lowestText = _fpsPanelView.LowestText,
+                    MaxFpsToDisplay = _maxFpsToDisplay,
+                    Colors = _colors
+                });
+
+                this.UpdateAsObservable().Subscribe(_ => 
+                {
+                    _fpsDisplayer.Display(Time.unscaledDeltaTime);
+                }).AddTo(this);
+            }
         }
 
         #endregion

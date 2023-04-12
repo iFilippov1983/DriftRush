@@ -3,6 +3,7 @@ using RaceManager.Root;
 using System;
 using System.Collections.Generic;
 using UniRx;
+using UniRx.Triggers;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -90,6 +91,15 @@ namespace RaceManager.UI
             _lootboxProgress.MoreWinsText.text = text.ToUpper();
         }
 
+        public void UpdateTimer()
+        {
+            if (_hasActiveTimerSlot)
+            {
+                _activeTimerLootbox.TimeToOpenLeft -= Time.deltaTime;
+                _activeTimerLootbox.RecalculateGemsToOpen();
+            }
+        }
+
         private void InitializeLootboxSlots()
         {
             DateTime lastSaveTime = _playerProfile.LastSaveTime;
@@ -119,6 +129,7 @@ namespace RaceManager.UI
 
                     if (secondsPassed >= lootbox.TimeToOpenLeft || lootbox.IsOpen)
                     {
+                        lootbox.TimeToOpenLeft = -1;
                         slot.SetStatusLootboxOpen(sprite, lootbox.Id);
                     }
                     else
@@ -363,19 +374,13 @@ namespace RaceManager.UI
                 {
                     _activeTimerSlot.SetStatusLootboxOpen();
 
+                    Lootbox lootbox = _profiler.GetLootboxWithId(_activeTimerSlot.CurrentLootboxId);
+                    lootbox.TimeToOpenLeft = -1;
+
                     _hasActiveTimerSlot = false;
                     _activeTimerLootbox = null;
                     _activeTimerSlot = null;
                 }
-            }
-        }
-
-        private void UpdateTimer()
-        {
-            if (_hasActiveTimerSlot)
-            {
-                _activeTimerLootbox.TimeToOpenLeft -= Time.deltaTime;
-                _activeTimerLootbox.RecalculateGemsToOpen();
             }
         }
 
@@ -391,10 +396,10 @@ namespace RaceManager.UI
         }
 
         #region Unity Functions
-        private void FixedUpdate()
-        {
-            UpdateTimer();
-        }
+        //private void FixedUpdate()
+        //{
+        //    UpdateTimer();
+        //}
 
         private void OnGUI()
         {

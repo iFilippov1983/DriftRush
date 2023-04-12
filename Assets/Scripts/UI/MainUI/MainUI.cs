@@ -147,6 +147,13 @@ namespace RaceManager.UI
                 {
                     ActivateStatus(s);
                 });
+
+            this.FixedUpdateAsObservable()
+                .Subscribe(_ => 
+                { 
+                    _lootboxSlotsHandler.UpdateTimer(); 
+                })
+                .AddTo(this);
         }
 
         private void Awake()

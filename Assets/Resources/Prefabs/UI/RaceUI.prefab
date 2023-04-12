@@ -5909,13 +5909,9 @@ MonoBehaviour:
   _finishUI: {fileID: 8363785059092896353}
   _extraScoresAnimDuration: 0.7
   _showDriftPauseTimer: 0
-  _showFps: 1
-  _fpsPanelView: {fileID: 4696033803215555518}
+  _showPerformance: 1
+  _performancePanelView: {fileID: 4696033803215555518}
   _maxFpsToDisplay: 99
-  _colors:
-  - {r: 1, g: 1, b: 1, a: 1}
-  - {r: 1, g: 0.7890277, b: 0, a: 1}
-  - {r: 1, g: 0, b: 0.1333332, a: 1}
 --- !u!114 &3070824557658309256
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10712,7 +10708,7 @@ PrefabInstance:
     - target: {fileID: 5927630092876185846, guid: 46d86a8e2c40bfd42b2b662822cda58e,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 50
+      value: 175
       objectReference: {fileID: 0}
     - target: {fileID: 5927630092876185846, guid: 46d86a8e2c40bfd42b2b662822cda58e,
         type: 3}
@@ -10752,12 +10748,12 @@ PrefabInstance:
     - target: {fileID: 5927630092876185846, guid: 46d86a8e2c40bfd42b2b662822cda58e,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 150
+      value: 175
       objectReference: {fileID: 0}
     - target: {fileID: 5927630092876185846, guid: 46d86a8e2c40bfd42b2b662822cda58e,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 50
+      value: 125
       objectReference: {fileID: 0}
     - target: {fileID: 5927630092876185846, guid: 46d86a8e2c40bfd42b2b662822cda58e,
         type: 3}
@@ -10777,7 +10773,7 @@ PrefabInstance:
     - target: {fileID: 5927630092876185847, guid: 46d86a8e2c40bfd42b2b662822cda58e,
         type: 3}
       propertyPath: m_Name
-      value: FpsPanel
+      value: PerformancePanel
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d86a8e2c40bfd42b2b662822cda58e, type: 3}

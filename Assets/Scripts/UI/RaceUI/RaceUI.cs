@@ -25,18 +25,16 @@ namespace RaceManager.UI
         [SerializeField] private float _extraScoresAnimDuration = 0.7f;
         [SerializeField] private bool _showDriftPauseTimer;
         [Space]
-        [SerializeField] private bool _showFps;
-        [ShowIf("_showFps")]
-        [SerializeField] private FpsPanelView _fpsPanelView;
-        [ShowIf("_showFps")]
+        [SerializeField] private bool _showPerformance;
+        [ShowIf("_showPerformance")]
+        [SerializeField] private PerformacePanelView _performancePanelView;
+        [ShowIf("_showPerformance")]
         [SerializeField] private int _maxFpsToDisplay = 99;
-        [ShowIf("_showFps")]
-        [SerializeField] private Color[] _colors;
 
         private GameObject _extraScoresIndicatorPrefab;
         private FinishUIHandler _finishUIHandler;
         private SpritesContainerRewards _spritesRewards;
-        private FpsDisplayer _fpsDisplayer;
+        private PerformanceDisplayer _fpsDisplayer;
 
         private Tweener _currentShakeTween;
 
@@ -369,17 +367,18 @@ namespace RaceManager.UI
 
         private void InitializeFpsPanel()
         {
-            _fpsPanelView.SetActive(_showFps);
+            _performancePanelView.SetActive(_showPerformance);
 
-            if (_showFps)
+            if (_showPerformance)
             {
-                _fpsDisplayer = new FpsDisplayer(new FpsDisplayData()
+                _fpsDisplayer = new PerformanceDisplayer(new PerformanceDisplayData()
                 {
-                    averageText = _fpsPanelView.AverageText,
-                    highestText = _fpsPanelView.HighestText,
-                    lowestText = _fpsPanelView.LowestText,
+                    averageText = _performancePanelView.AverageText,
+                    highestText = _performancePanelView.HighestText,
+                    lowestText = _performancePanelView.LowestText,
+                    monoUsedText = _performancePanelView.MonoUsedText,
+                    monoHeapText = _performancePanelView.MonoHeapText,
                     MaxFpsToDisplay = _maxFpsToDisplay,
-                    Colors = _colors
                 });
 
                 this.UpdateAsObservable().Subscribe(_ =>

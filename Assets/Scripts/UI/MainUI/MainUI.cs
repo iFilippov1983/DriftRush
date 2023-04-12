@@ -41,13 +41,11 @@ namespace RaceManager.UI
         [SerializeField] private Transform _animParent;
         [SerializeField] private HelperRectsView _helperRects;
         [Space]
-        [SerializeField] private bool _showFps;
-        [ShowIf("_showFps")]
-        [SerializeField] private FpsPanelView _fpsPanelView;
-        [ShowIf("_showFps")]
+        [SerializeField] private bool _showPerformance;
+        [ShowIf("_showPerformance")]
+        [SerializeField] private PerformacePanelView _fpsPanelView;
+        [ShowIf("_showPerformance")]
         [SerializeField] private int _maxFpsToDisplay = 99;
-        [ShowIf("_showFps")]
-        [SerializeField] private Color[] _colors;
 
         private PlayerProfile _playerProfile;
         private RewardsHandler _rewardsHandler;
@@ -57,7 +55,7 @@ namespace RaceManager.UI
         private CarProfile _currentCarProfile;
         private PodiumView _podium;
         private GameProgressScheme _gameProgressScheme;
-        private FpsDisplayer _fpsDisplayer;
+        private PerformanceDisplayer _fpsDisplayer;
         [Title("Debug only")]
         [ShowInInspector]
         private NotificationsHandler _notificationsHandler;
@@ -487,17 +485,18 @@ namespace RaceManager.UI
 
         private void InitializeFpsPanel()
         {
-            _fpsPanelView.SetActive(_showFps);
+            _fpsPanelView.SetActive(_showPerformance);
 
-            if (_showFps)
+            if (_showPerformance)
             {
-                _fpsDisplayer = new FpsDisplayer(new FpsDisplayData() 
+                _fpsDisplayer = new PerformanceDisplayer(new PerformanceDisplayData() 
                 { 
                     averageText = _fpsPanelView.AverageText,
                     highestText = _fpsPanelView.HighestText,
                     lowestText = _fpsPanelView.LowestText,
+                    monoUsedText = _fpsPanelView.MonoUsedText,
+                    monoHeapText = _fpsPanelView.MonoHeapText,
                     MaxFpsToDisplay = _maxFpsToDisplay,
-                    Colors = _colors
                 });
 
                 this.UpdateAsObservable().Subscribe(_ => 

@@ -189,8 +189,10 @@ namespace RaceManager.UI
         {
             _cardsWindow.SetActive(true);
 
-            while (await _cardsWindow.RepresentCards(reward, _tokenSource) == false)
-            { 
+            Task<bool> task = _cardsWindow.RepresentCards(reward, _tokenSource);
+
+            while (!task.IsCompleted)
+            {
                 _tokenSource.Token.ThrowIfCancellationRequested();
                 await Task.Yield();
             }

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -39,7 +38,7 @@ namespace RaceManager.UI
 
         public Transform LastAppearTransform { get; set; }
 
-        public void InitiallizeView(PopupInfo info, bool addFree = false)
+        public void InitiallizeView(LootboxPopupInfo info, bool addFree = false)
         {
             string rarityText = $"{info.lootboxRarity.ToString().ToUpper()} LOOTBOX";
             if (addFree) { rarityText = string.Concat("FREE ", rarityText); }
@@ -52,7 +51,7 @@ namespace RaceManager.UI
             TimeToOpenText.text = $"{info.timeToOpen.ToString()}h.";
         }
 
-        public struct PopupInfo
+        public struct LootboxPopupInfo
         {
             public Rarity lootboxRarity;
             public Sprite lootboxSprite;

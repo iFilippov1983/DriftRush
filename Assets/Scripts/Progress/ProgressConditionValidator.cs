@@ -1,6 +1,6 @@
 ﻿using RaceManager.Cars;
 using RaceManager.Root;
-using Zenject;
+//using Zenject;
 
 namespace RaceManager.Progress
 {
@@ -13,14 +13,42 @@ namespace RaceManager.Progress
 
         private bool LastSceneWasRace => Loader.LastSceneName.Equals(Loader.Scene.RaceScene.ToString());
 
-        [Inject]
-        private void Construct(PlayerProfile playerProfile, TutorialSteps tutorialSteps, CarsDepot playerCarDepot, CarUpgradesHandler carUpgradesHandler)
+        public ProgressConditionValidator
+            (
+            PlayerProfile playerProfile,
+            TutorialSteps tutorialSteps,
+            CarsDepot playerCarDepot,
+            CarUpgradesHandler carUpgradesHandler
+            )
         {
             _playerProfile = playerProfile;
             _tutorialSteps = tutorialSteps;
             _playerCarDepot = playerCarDepot;
             _carUpgradesHandler = carUpgradesHandler;
         }
+
+        //[Inject]
+        //private void Construct
+        //    (
+        //    PlayerProfile playerProfile, 
+        //    TutorialSteps tutorialSteps, 
+        //    CarsDepot playerCarDepot, 
+        //    CarUpgradesHandler carUpgradesHandler
+        //    )
+        //{
+        //    _playerProfile = playerProfile;
+        //    _tutorialSteps = tutorialSteps;
+        //    _playerCarDepot = playerCarDepot;
+        //    _carUpgradesHandler = carUpgradesHandler;
+        //}
+
+        public bool RemindersAllowed(int frequency) =>
+            _tutorialSteps.IsTutorialComplete
+            &&
+            LastSceneWasRace
+            &&
+            _playerProfile.RacesTotalCounter % frequency == 0;
+
 
         public bool CanUpgradeCurrentCarFactors() =>
             _tutorialSteps.IsTutorialComplete

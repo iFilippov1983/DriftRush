@@ -46,6 +46,8 @@ namespace RaceManager.Effects
         {
             public AudioType Type;
             public AudioClip Clip;
+            [Range(0f, 1f)]
+            public float Volume;
         }
 
         [Serializable]
@@ -218,10 +220,10 @@ namespace RaceManager.Effects
                 yield return job.Delay;
 
             AudioTrack track = GetAudioTrack(job.Type);
-            track.Source.clip = GetAudioClipFromAudioTrack(job.Type, track);
+            track.Source.clip = GetAudioClipFromAudioTrack(job.Type, track, out float volume);
 
             float initial = 0f;
-            float target = 1f;
+            float target = volume;
             switch (job.Action)
             {
                 case EffectAction.START:
@@ -231,7 +233,7 @@ namespace RaceManager.Effects
                     track.Source.Stop();
                     break;
                 case EffectAction.STOP:
-                    initial = 1f;
+                    initial = volume;
                     target = 0f;
                     break;
                 case EffectAction.RESTART:
@@ -294,14 +296,18 @@ namespace RaceManager.Effects
             return (AudioTrack)_audioTable[type];
         }
 
-        private AudioClip GetAudioClipFromAudioTrack(AudioType type, AudioTrack track)
+        private AudioClip GetAudioClipFromAudioTrack(AudioType type, AudioTrack track, out float volume)
         {
             foreach(AudioObject aObj in track.Audio)
             {
                 if (aObj.Type == type)
+                {
+                    volume = aObj.Volume;
                     return aObj.Clip;
+                }
             }
 
+            volume = 1f;
             return null;
         }
 

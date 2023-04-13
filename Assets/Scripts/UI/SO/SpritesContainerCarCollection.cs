@@ -25,7 +25,7 @@ namespace RaceManager.UI
                 ? holder.CarLockedSprite
                 : holder.CarSprite;
 
-            return holder.CarSprite;
+            return sprite;
         }
 
         public Color GetCarRarityColor(Rarity carRarity)

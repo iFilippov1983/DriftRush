@@ -6,6 +6,7 @@
         ActiveTuningPanel,
         ActiveCarsCollection,
         ActiveShop,
-        ActiveGameProgress
+        ActiveGameProgress,
+        ActiveNotification
     }
 }

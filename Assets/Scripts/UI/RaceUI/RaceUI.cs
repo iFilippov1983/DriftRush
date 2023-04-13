@@ -14,6 +14,7 @@ using UniRx;
 using TMPro;
 using UniRx.Triggers;
 using System.Threading.Tasks;
+using Sirenix.OdinInspector;
 
 namespace RaceManager.UI
 {
@@ -23,10 +24,17 @@ namespace RaceManager.UI
         [SerializeField] private FinishUIView _finishUI;
         [SerializeField] private float _extraScoresAnimDuration = 0.7f;
         [SerializeField] private bool _showDriftPauseTimer;
+        [Space]
+        [SerializeField] private bool _showPerformance;
+        [ShowIf("_showPerformance")]
+        [SerializeField] private PerformacePanelView _performancePanelView;
+        [ShowIf("_showPerformance")]
+        [SerializeField] private int _maxFpsToDisplay = 99;
 
         private GameObject _extraScoresIndicatorPrefab;
         private FinishUIHandler _finishUIHandler;
         private SpritesContainerRewards _spritesRewards;
+        private PerformanceDisplayer _fpsDisplayer;
 
         private Tweener _currentShakeTween;
 
@@ -40,6 +48,7 @@ namespace RaceManager.UI
         private int _currentScores;
         private int _currentExtraScores;
         private int _previousScores;
+        private int _driversCount;
 
         private bool _isRaceFinished;
 
@@ -78,8 +87,10 @@ namespace RaceManager.UI
         #region Public Functions
 
         //public void Initialize(RaceLevelInitializer levelInitializer, UnityAction actionForRespawnButton, UnityAction actionForGetToCheckpointButton)
-        public void Initialize(UnityAction actionForRespawnButton, UnityAction actionForGetToCheckpointButton)
+        public void Initialize(int initialPositionToShow, UnityAction actionForRespawnButton = null, UnityAction actionForGetToCheckpointButton = null)
         {
+            InitializeFpsPanel();
+
             _inRaceUI.gameObject.SetActive(true);
             //_inRaceUI.RaceProgressBar.LevelText.text = ("LEVEL " + levelInitializer.LevelName).ToUpper();
 
@@ -94,6 +105,12 @@ namespace RaceManager.UI
             {
                 panel.Accept(_finishUIHandler);
             }
+
+            _currentPosition = initialPositionToShow;
+            _driversCount = initialPositionToShow;
+            _inRaceUI.PositionIndicator.PositionText.gameObject.SetActive(true);
+            _inRaceUI.PositionIndicator.PositionText.text = _currentPosition.ToString();
+            _inRaceUI.PositionIndicator.DriverTotalText.text = _driversCount.ToString();
 
             _finishUIHandler.OnButtonPressed
                 .Subscribe(t => 
@@ -224,8 +241,8 @@ namespace RaceManager.UI
 
         public void HandlePositionIndication()
         {
-            bool isActive = _currentPosition > 0 ? true : false;
-            _inRaceUI.PositionIndicator.PositionText.gameObject.SetActive(isActive);
+            //bool isActive = _currentPosition > 0 ? true : false;
+            //_inRaceUI.PositionIndicator.PositionText.gameObject.SetActive(isActive);
             _inRaceUI.PositionIndicator.PositionText.text = _currentPosition.ToString();
         }
 
@@ -348,6 +365,29 @@ namespace RaceManager.UI
                 return string.Concat(_currentPosition, "th");
         }
 
+        private void InitializeFpsPanel()
+        {
+            _performancePanelView.SetActive(_showPerformance);
+
+            if (_showPerformance)
+            {
+                _fpsDisplayer = new PerformanceDisplayer(new PerformanceDisplayData()
+                {
+                    averageText = _performancePanelView.AverageText,
+                    highestText = _performancePanelView.HighestText,
+                    lowestText = _performancePanelView.LowestText,
+                    monoUsedText = _performancePanelView.MonoUsedText,
+                    monoHeapText = _performancePanelView.MonoHeapText,
+                    MaxFpsToDisplay = _maxFpsToDisplay,
+                });
+
+                this.UpdateAsObservable().Subscribe(_ =>
+                {
+                    _fpsDisplayer.Display(Time.unscaledDeltaTime);
+                }).AddTo(this);
+            }
+        }
+
         #endregion
 
         #region Observer Functions
@@ -356,7 +396,9 @@ namespace RaceManager.UI
         {
             _currentSpeed = profile.CarCurrentSpeed;
             _trackProgress = profile.TrackProgress;
-            _currentPosition = (int)profile.PositionInRace;
+            _currentPosition = profile.PositionInRace == 0 
+                ? _driversCount 
+                : (int)profile.PositionInRace;
         }
 
         public void OnCompleted() => throw new NotImplementedException();

@@ -41,10 +41,12 @@ namespace RaceManager.Cars
 
         public object Save()
         {
-            SaveData saveData = new SaveData();
-            saveData.driverType = DriverType;
-            saveData.currentCarName = CurrentCarName;
-            saveData.carProfiles = CarProfiles;
+            SaveData saveData = new SaveData
+            {
+                driverType = DriverType,
+                currentCarName = CurrentCarName,
+                carProfiles = CarProfiles
+            };
 
             return saveData;
         }
@@ -65,6 +67,7 @@ namespace RaceManager.Cars
                 {
                     r.IsGranted = false;
                     r.IsReached = false;
+                    r.UpgradeCostCurrent = r.UpgradeCostBase;
                 }
 
                 if (profile.CarName == defaultCarName)
@@ -74,11 +77,12 @@ namespace RaceManager.Cars
                 }
 
                 var c = profile.CarCharacteristics;
-                c.CurrentFactorsProgress = c.FactorsMaxTotal / 2;
-                c.CurrentAccelerationFactor = c.MaxAccelerationFactor / 2;
-                c.CurrentDurabilityFactor = c.MaxDurabilityFactor / 2;
-                c.CurrentMobilityFactor = c.MaxMobilityFactor / 2;
-                c.CurrentSpeedFactor = c.MaxSpeedFactor / 2;
+                c.CurrentFactorsProgress = Mathf.RoundToInt(c.FactorsMaxTotal * c.DefaultFactorsPercentage);
+                c.CurrentAccelerationFactor = Mathf.RoundToInt(c.MaxAccelerationFactor * c.DefaultFactorsPercentage);
+                c.CurrentDurabilityFactor = Mathf.RoundToInt(c.MaxDurabilityFactor * c.DefaultFactorsPercentage);
+                c.CurrentHandlingFactor = Mathf.RoundToInt(c.MaxHandlingFactor * c.DefaultFactorsPercentage);
+                c.CurrentSpeedFactor = Mathf.RoundToInt(c.MaxSpeedFactor * c.DefaultFactorsPercentage);
+                c.CurrentFrictionFactor = Mathf.RoundToInt(c.MaxFrictionFactor * c.DefaultFactorsPercentage);
                 c.FactorsMaxCurrent = 0;
             }
 

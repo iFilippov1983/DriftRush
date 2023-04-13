@@ -7,49 +7,37 @@ using Zenject;
 
 namespace RaceManager.Progress
 {
-    public class CarUpgradesHandler : IDisposable
+    public class CarUpgradesHandler
     {
         private Profiler _profiler;
         private CarsDepot _carsDepot;
-        private CarsUpgradeScheme _upgradeScheme;
         private SaveManager _saveManager;
 
         public Action<CarName> OnCarRankUpdate;
         public Action<CarName> OnCarFactorsUpgrade;
-        public Subject<(CarName name, bool rankUpdate)> OnCarUpdate = new Subject<(CarName name, bool rankUpdate)>();
+        public Subject<CarUpdateData> OnCarUpdate = new Subject<CarUpdateData>();
 
-        public CarsUpgradeScheme.CarUpgrade CurrentUpgrade
-        {
-            get
-            {
-                CarProfile carProfile = _carsDepot.CurrentCarProfile;
-                var characteristics = carProfile.CarCharacteristics;
-                var ranksScheme = carProfile.RankingScheme;
-
-                var upgradesList = _upgradeScheme.UpgradesSceme[characteristics.Rarity];
-                var upgrade = upgradesList?.Find(u => u.NecesseryRank == ranksScheme.CurrentRank.Rank);
-                return upgrade;
-            }
-        }
-
-        public int CurrentUpgradeCost => CurrentUpgrade.Price;
-        public float CurrentUpgradeStatsToAdd => CurrentUpgrade.StatsToAdd;
+        public CarRankingScheme.CarRank CurrentRank => _carsDepot.CurrentCarProfile.RankingScheme.CurrentRank;
+        public int CurrentUpgradeCost => CurrentRank.UpgradeCostCurrent;
+        public float CurrentUpgradeStatsToAdd => CurrentRank.StatsToAddPerUpgrade;
 
         [Inject]
-        private void Construct(Profiler profiler, CarsDepot playerCarsDepot, CarsUpgradeScheme upgradeScheme, SaveManager saveManager)
+        private void Construct(Profiler profiler, CarsDepot playerCarsDepot, SaveManager saveManager)
         { 
             _profiler = profiler;
             _carsDepot = playerCarsDepot;
-            _upgradeScheme = upgradeScheme;
             _saveManager = saveManager;
 
             InitializeProfiles();
-            _profiler.OnCarCardsAmountChange += UpdateRankProgress;
+
+            _profiler.OnCarCardsAmountChange
+                .AsObservable()
+                .Subscribe(t => UpdateRankProgress(t.Item1, t.Item2));
         }
 
-        public bool TryUpgradeCurrentCarRank()
+        public bool TryUpgradeCarRank(CarProfile profile = null)
         {
-            CarProfile carProfile = _carsDepot.CurrentCarProfile;
+            CarProfile carProfile = profile ?? _carsDepot.CurrentCarProfile;
             var scheme = carProfile.RankingScheme;
 
             bool canUpgrade = 
@@ -61,14 +49,22 @@ namespace RaceManager.Progress
 
             if (canUpgrade)
             {
+                int currentUpgradeCost = scheme.CurrentRank.UpgradeCostCurrent;
+
                 scheme.CurrentRank.IsGranted = true;
                 UpdateRankProgress(carProfile.CarName, _profiler.GetCardsAmount(carProfile.CarName));
                 UpdateCarMaxFactorsCurrent(carProfile);
                 _carsDepot.UpdateProfile(carProfile);
 
-                //OnCarRankUpdate?.Invoke(carProfile.CarName);
+                if (scheme.CurrentRank.UpgradeCostCurrent < currentUpgradeCost)
+                    scheme.CurrentRank.UpgradeCostCurrent = currentUpgradeCost;
 
-                OnCarUpdate.OnNext((name: carProfile.CarName, rankUpdate: true));
+                OnCarUpdate?.OnNext(new CarUpdateData() 
+                { 
+                    carName = carProfile.CarName,
+                    gotRankUpdate = true,
+                    gotUnlocked = false
+                });
 
                 _saveManager.Save();
 
@@ -84,16 +80,21 @@ namespace RaceManager.Progress
                 return false;
 
             CarProfile carProfile = _carsDepot.CurrentCarProfile;
-            var upgrade = CurrentUpgrade;
+            var rank = CurrentRank;
 
-            if (_profiler.TryBuyWithMoney(upgrade.Price) )
+            if (_profiler.TryBuyWithMoney(rank.UpgradeCostCurrent))
             {
-                carProfile.CarCharacteristics.CurrentFactorsProgress += Mathf.RoundToInt(upgrade.StatsToAdd);
+                carProfile.CarCharacteristics.CurrentFactorsProgress += Mathf.RoundToInt(rank.StatsToAddPerUpgrade);
                 _carsDepot.UpdateProfile(carProfile);
 
-                OnCarUpdate.OnNext((name: carProfile.CarName, rankUpdate: false));
+                rank.UpgradeCostCurrent += Mathf.CeilToInt(rank.UpgradeCostBase * rank.CurrentCostGrowth);
 
-                //OnCarFactorsUpgrade?.Invoke(carProfile.CarName);
+                OnCarUpdate?.OnNext(new CarUpdateData() 
+                { 
+                    carName = carProfile.CarName,
+                    gotRankUpdate = false,
+                    gotUnlocked = false
+                });
 
                 _saveManager.Save();
 
@@ -106,11 +107,11 @@ namespace RaceManager.Progress
         public bool CanUpgradeCurrentCarFactors()
         {
             var characteristics = _carsDepot.CurrentCarProfile.CarCharacteristics;
-            var upgrade = CurrentUpgrade;
+            var rank = CurrentRank;
 
             int unusedFactors = characteristics.FactorsMaxCurrent - characteristics.CurrentFactorsProgress;
 
-            return upgrade != null && (unusedFactors / upgrade.StatsToAdd) >= 1f;
+            return rank != null && (unusedFactors / rank.StatsToAddPerUpgrade) >= 1f;
         }
 
         public bool CurrentCarHasMaxFactorsUpgrade()
@@ -136,13 +137,17 @@ namespace RaceManager.Progress
             if (cardsAmount >= carRank.PointsForAccess)
             {
                 carRank.IsReached = true;
-                if(TryUnlockCar(profile))
+                if (TryUnlockCar(profile))
                     return;
             }
 
-            OnCarUpdate.OnNext((name: carName, rankUpdate: true));
+            OnCarUpdate?.OnNext(new CarUpdateData() 
+            { 
+                carName = carName,
+                gotRankUpdate = true,
+                gotUnlocked = false
+            });
 
-            //OnCarRankUpdate?.Invoke(carName);
             _saveManager.Save();
         }
 
@@ -161,9 +166,13 @@ namespace RaceManager.Progress
                 _profiler.TryBuyWithCards(carName, carRank.PointsForAccess);
                 UpdateCarMaxFactorsCurrent(profile);
 
-                OnCarUpdate.OnNext((name: carName, rankUpdate: true));
+                OnCarUpdate?.OnNext(new CarUpdateData()
+                { 
+                    carName = carName,
+                    gotRankUpdate = true,
+                    gotUnlocked = true
+                });
 
-                //OnCarRankUpdate?.Invoke(carName);
                 _saveManager.Save();
                 return true;
             }
@@ -187,11 +196,6 @@ namespace RaceManager.Progress
             int availableFactors = Mathf.RoundToInt(usableFactors * availablePecentage);
 
             characteristics.FactorsMaxCurrent = availableFactors + characteristics.InitialFactorsProgress;
-        }
-
-        public void Dispose()
-        {
-            _profiler.OnCarCardsAmountChange -= UpdateRankProgress;
         }
     }
 }

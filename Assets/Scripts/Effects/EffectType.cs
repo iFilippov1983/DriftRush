@@ -2,38 +2,42 @@
 {
     public enum AudioType
     { 
-        None,
+        None = 0,
 
-        MenuTrack_00,
-        MenuTrack_01,
+        MenuTrack_00 = 100,
+        MenuTrack_01 = 101,
+        MenuTrack_02 = 102,
+        MenuTrack_03 = 103,
 
-        RaceTrack_00,
-        RaceTrack_01,
+        RaceTrack_00 = 200,
+        RaceTrack_01 = 201,
+        RaceTrack_02 = 202,
+        RaceTrack_03 = 203,
 
-        SFX_ButtonPressed,
+        SFX_ButtonPressed = 1000,
 
-        SFX_MetalCollision_Light,
-        SFX_MetalCollision_Medium,
-        SFX_MetalCollision_Heavy,
+        SFX_MetalCollision_Light = 1100,
+        SFX_MetalCollision_Medium = 1101,
+        SFX_MetalCollision_Heavy = 1102,
 
-        SFX_PlasticCollision_Light,
-        SFX_PlasticCollision_Medium,
-        SFX_PlasticCollision_Heavy,
+        SFX_PlasticCollision_Light = 1200,
+        SFX_PlasticCollision_Medium = 1201,
+        SFX_PlasticCollision_Heavy = 1202,
 
-        SFX_StoneCollision_Light,
-        SFX_StoneCollision_Medium,
-        SFX_StoneCollision_Heavy,
+        SFX_StoneCollision_Light = 1300,
+        SFX_StoneCollision_Medium = 1301,
+        SFX_StoneCollision_Heavy = 1302,
 
-        SFX_TreeCollision_Light,
-        SFX_TreeCollision_Medium,
-        SFX_TreeCollision_Heavy,
+        SFX_TreeCollision_Light = 1400,
+        SFX_TreeCollision_Medium = 1401,
+        SFX_TreeCollision_Heavy = 1402,
 
-        SFX_GlassShards_Light,
-        SFX_GlassShards_Medium,
-        SFX_GlassShards_Heavy,
+        SFX_GlassShards_Light = 1500,
+        SFX_GlassShards_Medium = 1501,
+        SFX_GlassShards_Heavy = 1502,
 
-        SFX_DriftGravel,
-        SFX_DriftAsphalt,
+        SFX_DriftGravel = 1600,
+        SFX_DriftAsphalt = 1601,
     }
 
     public enum ParticleType

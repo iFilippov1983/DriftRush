@@ -3,7 +3,6 @@ using RaceManager.Race;
 using RaceManager.Root;
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 using Zenject;
 
 namespace RaceManager.Progress
@@ -121,6 +120,7 @@ namespace RaceManager.Progress
                     CarCardReward cardsReward = (CarCardReward)reward;
                     if (ValidCardsReward(cardsReward))
                     {
+                        cardsReward.ReplacementInfo = null;
                         cardsReward.Reward(_profiler);
                     }
                     else
@@ -167,6 +167,7 @@ namespace RaceManager.Progress
             {
                 if (ValidCardsReward(reward))
                 {
+                    reward.ReplacementInfo = null;
                     reward.Reward(_profiler);
                 }
                 else

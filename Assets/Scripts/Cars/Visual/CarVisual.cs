@@ -70,6 +70,8 @@ namespace RaceManager.Cars
                 case PartType.BodyKit:
                     HandleBodyKitsTune(partLevel);
                     break;
+                case PartType.Tire:
+                    break;
             }
         }
 

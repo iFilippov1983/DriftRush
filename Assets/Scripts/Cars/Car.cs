@@ -174,7 +174,7 @@ namespace RaceManager.Cars
         public float SpeedInDesiredUnits => _carConfig.SpeedType == SpeedType.KPH ? CurrentSpeed * C.KPHFactor : CurrentSpeed * C.MPHFactor;
         public int CarDirection { get { return CurrentSpeed < 1 ? 0 : (VelocityAngle < 90 && VelocityAngle > -90 ? 1 : -1); } }
         public bool IsVisible => _carBody.IsVisible;
-        public bool IsBraking => CurrentAcceleration < 0;
+        public bool IsBraking => CurrentAcceleration <= 0;
 
         float CurrentSteerAngle;
         float CurrentAcceleration;
@@ -634,6 +634,7 @@ namespace RaceManager.Cars
                 }
             }
         }
+
         void PlayBackfireWithProbability()
         {
             PlayBackfireWithProbability(CarConfig.ProbabilityBackfire);

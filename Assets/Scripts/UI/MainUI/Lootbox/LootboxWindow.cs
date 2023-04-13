@@ -94,7 +94,6 @@ namespace RaceManager.UI
                 _tokenSource.Token.ThrowIfCancellationRequested();
                 await Task.Yield();
             }
-                
         }
 
         private void ResetCarCards()

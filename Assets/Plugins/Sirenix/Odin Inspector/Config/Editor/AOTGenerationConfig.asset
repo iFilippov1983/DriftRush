@@ -15,9 +15,48 @@ MonoBehaviour:
   automateBeforeBuilds: 1
   deleteDllAfterBuilds: 0
   AutomateForAllAOTPlatforms: 1
-  automateForPlatforms: 09000000140000000d000000
-  lastScan: 638040469573767742
+  automateForPlatforms: 090000000d000000
+  lastScan: 638167317412588619
   supportSerializedTypes:
+  - TypeName: System.Collections.Generic.IEnumerable`1[[RaceManager.Root.ISaveable,
+      Assembly-CSharp]], mscorlib
+    IsCustom: 1
+    Emit: 1
+  - TypeName: System.Collections.Generic.List`1[[RaceManager.Progress.Lootbox, Assembly-CSharp]],
+      mscorlib
+    IsCustom: 1
+    Emit: 1
+  - TypeName: System.Collections.Generic.Dictionary`2[[RaceManager.Root.GameFlagType,
+      Assembly-CSharp],[RaceManager.Root.GameFlagsListener, Assembly-CSharp]], mscorlib
+    IsCustom: 1
+    Emit: 1
+  - TypeName: System.Collections.Generic.List`1[[RaceManager.Race.LevelName, Assembly-CSharp]],
+      mscorlib
+    IsCustom: 1
+    Emit: 1
+  - TypeName: System.Collections.Generic.List`1[[RaceManager.Root.TutorialSteps+TutorialStep,
+      Assembly-CSharp]], mscorlib
+    IsCustom: 1
+    Emit: 1
+  - TypeName: System.Collections.Generic.HashSet`1[[System.Object, mscorlib]], System.Core
+    IsCustom: 1
+    Emit: 1
+  - TypeName: System.Collections.Generic.HashSet`1[[RaceManager.Root.GameFlagType,
+      Assembly-CSharp]], System.Core
+    IsCustom: 1
+    Emit: 1
+  - TypeName: System.Collections.Generic.List`1[[UnityEngine.Keyframe, UnityEngine.CoreModule]],
+      mscorlib
+    IsCustom: 1
+    Emit: 1
+  - TypeName: System.Collections.Generic.List`1[[RaceManager.Root.SaveManager+SaveAction,
+      Assembly-CSharp]], mscorlib
+    IsCustom: 1
+    Emit: 1
+  - TypeName: System.Collections.Generic.List`1[[RaceManager.Root.SaveManager+LoadAction,
+      Assembly-CSharp]], mscorlib
+    IsCustom: 1
+    Emit: 1
   - TypeName: System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[Newtonsoft.Json.Linq.JObject,
       Newtonsoft.Json]], mscorlib
     IsCustom: 1
@@ -34,15 +73,163 @@ MonoBehaviour:
   - TypeName: RaceManager.Root.SaveManager+SaveAction, Assembly-CSharp
     IsCustom: 1
     Emit: 1
+  - TypeName: System.Boolean, mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: RaceManager.Progress.CarCardReward, Assembly-CSharp
+    IsCustom: 0
+    Emit: 1
+  - TypeName: RaceManager.Cars.CarName, Assembly-CSharp
+    IsCustom: 0
+    Emit: 1
+  - TypeName: Cinemachine.CinemachineVirtualCamera, Cinemachine
+    IsCustom: 0
+    Emit: 1
+  - TypeName: UnityEngine.Color, UnityEngine.CoreModule
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.Dictionary`2[[RaceManager.Progress.GameUnitType,
+      Assembly-CSharp],[RaceManager.Progress.GameProgressScheme+ExchangeRateData,
+      Assembly-CSharp]], mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.Dictionary`2[[RaceManager.Progress.GameUnitType,
+      Assembly-CSharp],[UnityEngine.Vector2, UnityEngine.CoreModule]], mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.Dictionary`2[[System.Int32, mscorlib],[RaceManager.Progress.ProgressStep,
+      Assembly-CSharp]], mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.Dictionary`2[[RaceManager.UI.MainUIStatus,
+      Assembly-CSharp],[Cinemachine.CinemachineVirtualCamera, Cinemachine]], mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.Dictionary`2[[RaceManager.Root.PositionInRace,
+      Assembly-CSharp],[RaceManager.Progress.RaceReward, Assembly-CSharp]], mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.Dictionary`2[[RaceManager.Rarity, Assembly-CSharp],[System.Single,
+      mscorlib]], mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.Dictionary`2[[RaceManager.Rarity, Assembly-CSharp],[System.Collections.Generic.List`1[[RaceManager.Cars.CarName,
+      Assembly-CSharp]], mscorlib]], mscorlib
+    IsCustom: 0
+    Emit: 1
   - TypeName: System.Collections.Generic.Dictionary`2[[System.Type, mscorlib],[System.Collections.Generic.List`1[[System.Object,
       mscorlib]], mscorlib]], mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.EnumEqualityComparer`1[[RaceManager.Progress.GameUnitType,
+      Assembly-CSharp]], mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.EnumEqualityComparer`1[[RaceManager.UI.MainUIStatus,
+      Assembly-CSharp]], mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.EnumEqualityComparer`1[[RaceManager.Root.PositionInRace,
+      Assembly-CSharp]], mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.EnumEqualityComparer`1[[RaceManager.Rarity,
+      Assembly-CSharp]], mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Single, mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: RaceManager.Progress.GameProgressScheme+ExchangeRateData, Assembly-CSharp
+    IsCustom: 0
+    Emit: 1
+  - TypeName: RaceManager.Progress.GameUnitType, Assembly-CSharp
+    IsCustom: 0
+    Emit: 1
+  - TypeName: RaceManager.Progress.Gems, Assembly-CSharp
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.GenericEqualityComparer`1[[System.Int32,
+      mscorlib]], mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.IEqualityComparer`1[[RaceManager.Progress.GameUnitType,
+      Assembly-CSharp]], mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.IEqualityComparer`1[[System.Int32, mscorlib]],
+      mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.IEqualityComparer`1[[RaceManager.UI.MainUIStatus,
+      Assembly-CSharp]], mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.IEqualityComparer`1[[RaceManager.Root.PositionInRace,
+      Assembly-CSharp]], mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.IEqualityComparer`1[[RaceManager.Rarity,
+      Assembly-CSharp]], mscorlib
     IsCustom: 0
     Emit: 1
   - TypeName: System.Collections.Generic.IEqualityComparer`1[[System.Type, mscorlib]],
       mscorlib
     IsCustom: 0
     Emit: 1
+  - TypeName: RaceManager.Progress.IncomeBonus, Assembly-CSharp
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Int32, mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: RaceManager.Progress.IReward, Assembly-CSharp
+    IsCustom: 0
+    Emit: 1
+  - TypeName: RaceManager.Race.LevelName, Assembly-CSharp
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.List`1[[RaceManager.Cars.CarName, Assembly-CSharp]],
+      mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.List`1[[RaceManager.Progress.IReward, Assembly-CSharp]],
+      mscorlib
+    IsCustom: 0
+    Emit: 1
   - TypeName: System.Collections.Generic.List`1[[System.Object, mscorlib]], mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.List`1[[RaceManager.UI.SpritesContainerRewards+LevelSpriteHolder,
+      Assembly-CSharp]], mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.List`1[[RaceManager.UI.SpritesContainerRewards+LootboxSriteHolder,
+      Assembly-CSharp]], mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.List`1[[RaceManager.UI.SpritesContainerRewards+MenuColorHolder,
+      Assembly-CSharp]], mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.List`1[[RaceManager.UI.SpritesContainerRewards+RewardSpriteHolder,
+      Assembly-CSharp]], mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.List`1[[RaceManager.UI.SpritesContainerRewards+ShopRewardSpriteHolder,
+      Assembly-CSharp]], mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: RaceManager.Progress.LootboxReward, Assembly-CSharp
+    IsCustom: 0
+    Emit: 1
+  - TypeName: RaceManager.UI.MainUIStatus, Assembly-CSharp
+    IsCustom: 0
+    Emit: 1
+  - TypeName: RaceManager.UI.MenuColorName, Assembly-CSharp
+    IsCustom: 0
+    Emit: 1
+  - TypeName: RaceManager.Progress.Money, Assembly-CSharp
     IsCustom: 0
     Emit: 1
   - TypeName: System.Object, mscorlib
@@ -52,6 +239,48 @@ MonoBehaviour:
       mscorlib
     IsCustom: 0
     Emit: 1
+  - TypeName: RaceManager.Root.PositionInRace, Assembly-CSharp
+    IsCustom: 0
+    Emit: 1
+  - TypeName: RaceManager.Progress.ProgressStep, Assembly-CSharp
+    IsCustom: 0
+    Emit: 1
+  - TypeName: RaceManager.Progress.RaceMap, Assembly-CSharp
+    IsCustom: 0
+    Emit: 1
+  - TypeName: RaceManager.Progress.RaceReward, Assembly-CSharp
+    IsCustom: 0
+    Emit: 1
+  - TypeName: RaceManager.Rarity, Assembly-CSharp
+    IsCustom: 0
+    Emit: 1
+  - TypeName: UnityEngine.Sprite, UnityEngine.CoreModule
+    IsCustom: 0
+    Emit: 1
+  - TypeName: RaceManager.UI.SpritesContainerRewards+LevelSpriteHolder, Assembly-CSharp
+    IsCustom: 0
+    Emit: 1
+  - TypeName: RaceManager.UI.SpritesContainerRewards+LootboxSriteHolder, Assembly-CSharp
+    IsCustom: 0
+    Emit: 1
+  - TypeName: RaceManager.UI.SpritesContainerRewards+MenuColorHolder, Assembly-CSharp
+    IsCustom: 0
+    Emit: 1
+  - TypeName: RaceManager.UI.SpritesContainerRewards+RewardSpriteHolder, Assembly-CSharp
+    IsCustom: 0
+    Emit: 1
+  - TypeName: RaceManager.UI.SpritesContainerRewards+ShopRewardSpriteHolder, Assembly-CSharp
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.String, mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: UniRx.Subject`1[[System.String, mscorlib]], UniRx
+    IsCustom: 0
+    Emit: 1
   - TypeName: System.Type, mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: UnityEngine.Vector2, UnityEngine.CoreModule
     IsCustom: 0
     Emit: 1

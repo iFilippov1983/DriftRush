@@ -21,33 +21,37 @@ MonoBehaviour:
       - Rank: 1
         PointsForAccess: 30
         AccessCost: 0
-        AvailableTunePercentage: 0.65
+        AvailableTunePercentage: 0.6
         IsGranted: 0
         IsReached: 0
+        UpgradeCostBase: 100
+        UpgradeCostCurrent: 100
+        StatsToAddPerUpgrade: 7
+        CurrentCostGrowth: 0
       - Rank: 2
         PointsForAccess: 30
         AccessCost: 1000
-        AvailableTunePercentage: 0.85
+        AvailableTunePercentage: 0.8
         IsGranted: 0
         IsReached: 0
+        UpgradeCostBase: 100
+        UpgradeCostCurrent: 100
+        StatsToAddPerUpgrade: 7
+        CurrentCostGrowth: 0
       - Rank: 3
         PointsForAccess: 30
         AccessCost: 1000
         AvailableTunePercentage: 1
         IsGranted: 0
         IsReached: 0
+        UpgradeCostBase: 100
+        UpgradeCostCurrent: 100
+        StatsToAddPerUpgrade: 7
+        CurrentCostGrowth: 0
     Speed:
-      Max: 230
+      Max: 240
       Min: 190
-    Mobility:
-      f_frictionForward_Max: 0.7
-      f_frictionForward_Min: 0.4
-      f_frictionSideway_Max: 0.6
-      f_frictionSideway_Min: 0.4
-      r_frictionForward_Max: 0.7
-      r_frictionForward_Min: 0.5
-      r_frictionSideway_Max: 0.15
-      r_frictionSideway_Min: 0
+    Handling:
       steerAngle_Max: 90
       steerAngle_Min: 50
       helpSteerPower_Max: 0.7
@@ -61,43 +65,56 @@ MonoBehaviour:
       brakeTorqueMin: 2000
       rpmToNextGearMax: 0.8
       rpmToNextGearMin: 0.6
+    Friction:
+      f_frictionForward_Max: 0.7
+      f_frictionForward_Min: 0.4
+      f_frictionSideway_Max: 0.6
+      f_frictionSideway_Min: 0.4
+      r_frictionForward_Max: 0.7
+      r_frictionForward_Min: 0.5
+      r_frictionSideway_Max: 0.15
+      r_frictionSideway_Min: 0
     Durability:
-      durabilityMax: 20
-      durabilityMin: 10
+      durabilityMax: 15
+      durabilityMin: 15
     CarCharacteristics:
       Rarity: 0
-      _factorsMaxTotal: 400
+      DefaultFactorsPercentage: 0.4
+      _factorsMaxTotal: 348
       _initialFactorsProgress: 0
       FactorsMaxCurrent: 0
-      CurrentFactorsProgress: 200
+      CurrentFactorsProgress: 139
       MinSpeedFactor: 1
       MaxSpeedFactor: 120
-      CurrentSpeedFactor: 60
-      MinMobilityFactor: 1
-      MaxMobilityFactor: 100
-      CurrentMobilityFactor: 50
-      MinDurabilityFactor: 1
-      MaxDurabilityFactor: 80
-      CurrentDurabilityFactor: 40
+      CurrentSpeedFactor: 48
+      MinHandlingFactor: 1
+      MaxHandlingFactor: 123
+      CurrentHandlingFactor: 49
       MinAccelerationFactor: 1
-      MaxAccelerationFactor: 100
-      CurrentAccelerationFactor: 50
+      MaxAccelerationFactor: 83
+      CurrentAccelerationFactor: 33
+      MinFrictionFactor: 1
+      MaxFrictionFactor: 22
+      CurrentFrictionFactor: 9
+      MinDurabilityFactor: 1
+      MaxDurabilityFactor: 15
+      CurrentDurabilityFactor: 6
     CarConfig:
       CarName: 1
       SpeedType: 1
       DriveType: 2
-      MaxSpeed: 230
+      MaxSpeed: 208.33333
       CruiseSpeed: 40
-      FWheelsForwardFriction: 0.7
-      FWheelsSidewaysFriction: 0.6
-      RWheelsForwardFriction: 0.7
-      RWheelsSidewaysFriction: 0.15
-      MaxSteerAngle: 90
-      HelpSteerPower: 0.7
-      SteerAngleChangeSpeed: 300
-      MaxMotorTorque: 550
-      RPMToNextGearPercent: 0.8
+      MaxSteerAngle: 68
+      HelpSteerPower: 0.755
+      SteerAngleChangeSpeed: 190
+      MaxMotorTorque: 496
+      RPMToNextGearPercent: 0.69200003
       MaxBrakeTorque: 2000
+      FWheelsForwardFriction: 0.535
+      FWheelsSidewaysFriction: 0.49
+      RWheelsForwardFriction: 0.59
+      RWheelsSidewaysFriction: 0.0675
       Durability: 20
       ProbabilityBackfire: 0.1
       MaxForwardSlipToBlockChangeGear: 0.25
@@ -166,48 +183,52 @@ MonoBehaviour:
       MaxRPM: 7000
       CutOffTime: 0.1
     CarConfigVisual:
-      DriverType: 0
       CarName: 1
       CurrentMaterialsSetType: 0
       _availableMaterialSets: 00000000
       CurrentWheelsSetType: 0
-      CurrentWheelsLevel: 3
-      CurrentSuspentionLevel: 0
-      CurrentBumpersLevel: 1
-      CurrentBodyKitsLevel: 3
+      CurrentWheelsLevel: 1
+      CurrentSuspentionLevel: 1
+      CurrentBumpersLevel: 3
+      CurrentBodyKitsLevel: 1
+      CurrentTiresLevel: 1
   - CarName: 0
     RankingScheme:
       _ranks:
       - Rank: 1
         PointsForAccess: 0
         AccessCost: 0
-        AvailableTunePercentage: 0.65
+        AvailableTunePercentage: 0.6
         IsGranted: 1
         IsReached: 1
+        UpgradeCostBase: 100
+        UpgradeCostCurrent: 100
+        StatsToAddPerUpgrade: 6
+        CurrentCostGrowth: 0
       - Rank: 2
         PointsForAccess: 30
         AccessCost: 1000
-        AvailableTunePercentage: 0.85
+        AvailableTunePercentage: 0.8
         IsGranted: 0
         IsReached: 0
+        UpgradeCostBase: 100
+        UpgradeCostCurrent: 100
+        StatsToAddPerUpgrade: 6
+        CurrentCostGrowth: 0
       - Rank: 3
         PointsForAccess: 30
         AccessCost: 1000
         AvailableTunePercentage: 1
         IsGranted: 0
         IsReached: 0
+        UpgradeCostBase: 100
+        UpgradeCostCurrent: 100
+        StatsToAddPerUpgrade: 6
+        CurrentCostGrowth: 0
     Speed:
-      Max: 200
+      Max: 210
       Min: 160
-    Mobility:
-      f_frictionForward_Max: 0.6
-      f_frictionForward_Min: 0.4
-      f_frictionSideway_Max: 0.6
-      f_frictionSideway_Min: 0.4
-      r_frictionForward_Max: 0.7
-      r_frictionForward_Min: 0.5
-      r_frictionSideway_Max: 0.05
-      r_frictionSideway_Min: 0
+    Handling:
       steerAngle_Max: 70
       steerAngle_Min: 50
       helpSteerPower_Max: 0.75
@@ -221,44 +242,57 @@ MonoBehaviour:
       brakeTorqueMin: 2000
       rpmToNextGearMax: 0.8
       rpmToNextGearMin: 0.5
+    Friction:
+      f_frictionForward_Max: 0.6
+      f_frictionForward_Min: 0.4
+      f_frictionSideway_Max: 0.6
+      f_frictionSideway_Min: 0.4
+      r_frictionForward_Max: 0.7
+      r_frictionForward_Min: 0.5
+      r_frictionSideway_Max: 0.05
+      r_frictionSideway_Min: 0
     Durability:
-      durabilityMax: 30
-      durabilityMin: 5
+      durabilityMax: 12
+      durabilityMin: 12
     CarCharacteristics:
       Rarity: 0
-      _factorsMaxTotal: 400
+      DefaultFactorsPercentage: 0.4
+      _factorsMaxTotal: 299
       _initialFactorsProgress: 0
-      FactorsMaxCurrent: 260
-      CurrentFactorsProgress: 230
+      FactorsMaxCurrent: 214
+      CurrentFactorsProgress: 120
       MinSpeedFactor: 1
-      MaxSpeedFactor: 120
-      CurrentSpeedFactor: 60
-      MinMobilityFactor: 1
-      MaxMobilityFactor: 100
-      CurrentMobilityFactor: 50
-      MinDurabilityFactor: 1
-      MaxDurabilityFactor: 80
-      CurrentDurabilityFactor: 40
+      MaxSpeedFactor: 105
+      CurrentSpeedFactor: 42
+      MinHandlingFactor: 1
+      MaxHandlingFactor: 97
+      CurrentHandlingFactor: 39
       MinAccelerationFactor: 1
-      MaxAccelerationFactor: 100
-      CurrentAccelerationFactor: 80
+      MaxAccelerationFactor: 78
+      CurrentAccelerationFactor: 31
+      MinFrictionFactor: 1
+      MaxFrictionFactor: 20
+      CurrentFrictionFactor: 8
+      MinDurabilityFactor: 1
+      MaxDurabilityFactor: 12
+      CurrentDurabilityFactor: 5
     CarConfig:
       CarName: 0
       SpeedType: 1
       DriveType: 2
-      MaxSpeed: 194
+      MaxSpeed: 174
       CruiseSpeed: 40
-      FWheelsForwardFriction: 0.5
-      FWheelsSidewaysFriction: 0.5
-      RWheelsForwardFriction: 0.59999996
-      RWheelsSidewaysFriction: 0.025
-      MaxSteerAngle: 60
-      HelpSteerPower: 0.77500004
-      SteerAngleChangeSpeed: 170
-      MaxMotorTorque: 500
-      RPMToNextGearPercent: 0.8
+      MaxSteerAngle: 56.804123
+      HelpSteerPower: 0.7829897
+      SteerAngleChangeSpeed: 147.62886
+      MaxMotorTorque: 434.6154
+      RPMToNextGearPercent: 0.60384613
       MaxBrakeTorque: 2000
-      Durability: 17.5
+      FWheelsForwardFriction: 0.47
+      FWheelsSidewaysFriction: 0.47
+      RWheelsForwardFriction: 0.57
+      RWheelsSidewaysFriction: 0.017500002
+      Durability: 30.000002
       ProbabilityBackfire: 0.2
       MaxForwardSlipToBlockChangeGear: 0.25
       RpmEngineToRpmWheelsLerpSpeed: 15
@@ -326,40 +360,66 @@ MonoBehaviour:
       MaxRPM: 7000
       CutOffTime: 0.1
     CarConfigVisual:
-      DriverType: 0
       CarName: 0
       CurrentMaterialsSetType: 0
       _availableMaterialSets: 00000000
       CurrentWheelsSetType: 0
       CurrentWheelsLevel: 1
       CurrentSuspentionLevel: 1
-      CurrentBumpersLevel: 1
-      CurrentBodyKitsLevel: 3
+      CurrentBumpersLevel: 3
+      CurrentBodyKitsLevel: 1
+      CurrentTiresLevel: 1
   - CarName: 3
     RankingScheme:
       _ranks:
       - Rank: 1
         PointsForAccess: 25
         AccessCost: 0
-        AvailableTunePercentage: 0.65
+        AvailableTunePercentage: 0.6
         IsGranted: 0
         IsReached: 0
+        UpgradeCostBase: 150
+        UpgradeCostCurrent: 150
+        StatsToAddPerUpgrade: 7
+        CurrentCostGrowth: 0
       - Rank: 2
         PointsForAccess: 25
         AccessCost: 2000
-        AvailableTunePercentage: 0.85
+        AvailableTunePercentage: 0.8
         IsGranted: 0
         IsReached: 0
+        UpgradeCostBase: 150
+        UpgradeCostCurrent: 150
+        StatsToAddPerUpgrade: 7
+        CurrentCostGrowth: 0
       - Rank: 3
         PointsForAccess: 25
         AccessCost: 2000
         AvailableTunePercentage: 1
         IsGranted: 0
         IsReached: 0
+        UpgradeCostBase: 150
+        UpgradeCostCurrent: 150
+        StatsToAddPerUpgrade: 7
+        CurrentCostGrowth: 0
     Speed:
-      Max: 220
+      Max: 230
       Min: 180
-    Mobility:
+    Handling:
+      steerAngle_Max: 70
+      steerAngle_Min: 50
+      helpSteerPower_Max: 0.8
+      helpSteerPower_Min: 0.8
+      steerAngleChangeSpeed_Max: 240
+      steerAngleChangeSpeed_Min: 150
+    Acceleration:
+      torqueMax: 800
+      torqueMin: 700
+      brakeTorqueMax: 2200
+      brakeTorqueMin: 2000
+      rpmToNextGearMax: 0.8
+      rpmToNextGearMin: 0.6
+    Friction:
       f_frictionForward_Max: 0.8
       f_frictionForward_Min: 0.4
       f_frictionSideway_Max: 0.9
@@ -368,57 +428,48 @@ MonoBehaviour:
       r_frictionForward_Min: 0.6
       r_frictionSideway_Max: 0.3
       r_frictionSideway_Min: 0.2
-      steerAngle_Max: 70
-      steerAngle_Min: 50
-      helpSteerPower_Max: 0.8
-      helpSteerPower_Min: 0.8
-      steerAngleChangeSpeed_Max: 240
-      steerAngleChangeSpeed_Min: 150
-    Acceleration:
-      torqueMax: 900
-      torqueMin: 700
-      brakeTorqueMax: 2200
-      brakeTorqueMin: 2000
-      rpmToNextGearMax: 0.8
-      rpmToNextGearMin: 0.6
     Durability:
       durabilityMax: 100
       durabilityMin: 50
     CarCharacteristics:
       Rarity: 1
-      _factorsMaxTotal: 500
+      DefaultFactorsPercentage: 0.4
+      _factorsMaxTotal: 350
       _initialFactorsProgress: 0
       FactorsMaxCurrent: 0
-      CurrentFactorsProgress: 250
+      CurrentFactorsProgress: 140
       MinSpeedFactor: 1
-      MaxSpeedFactor: 125
-      CurrentSpeedFactor: 62
-      MinMobilityFactor: 1
-      MaxMobilityFactor: 125
-      CurrentMobilityFactor: 62
-      MinDurabilityFactor: 1
-      MaxDurabilityFactor: 125
-      CurrentDurabilityFactor: 62
+      MaxSpeedFactor: 115
+      CurrentSpeedFactor: 46
+      MinHandlingFactor: 1
+      MaxHandlingFactor: 96
+      CurrentHandlingFactor: 38
       MinAccelerationFactor: 1
-      MaxAccelerationFactor: 125
-      CurrentAccelerationFactor: 62
+      MaxAccelerationFactor: 110
+      CurrentAccelerationFactor: 44
+      MinFrictionFactor: 1
+      MaxFrictionFactor: 29
+      CurrentFrictionFactor: 12
+      MinDurabilityFactor: 1
+      MaxDurabilityFactor: 12
+      CurrentDurabilityFactor: 5
     CarConfig:
       CarName: 3
       SpeedType: 1
-      DriveType: 0
-      MaxSpeed: 200.48
+      DriveType: 2
+      MaxSpeed: 220
       CruiseSpeed: 40
-      FWheelsForwardFriction: 0.5984
-      FWheelsSidewaysFriction: 0.6984
-      RWheelsForwardFriction: 0.7488
-      RWheelsSidewaysFriction: 0.24960001
-      MaxSteerAngle: 59.920002
+      MaxSteerAngle: 70
       HelpSteerPower: 0.8
-      SteerAngleChangeSpeed: 194.64
-      MaxMotorTorque: 818.4
-      RPMToNextGearPercent: 0.7184
-      MaxBrakeTorque: 2118.4
-      Durability: 74.8
+      SteerAngleChangeSpeed: 240
+      MaxMotorTorque: 900
+      RPMToNextGearPercent: 0.8
+      MaxBrakeTorque: 2200
+      FWheelsForwardFriction: 0.8
+      FWheelsSidewaysFriction: 0.9
+      RWheelsForwardFriction: 0.9
+      RWheelsSidewaysFriction: 0.3
+      Durability: 100
       ProbabilityBackfire: 0.05
       MaxForwardSlipToBlockChangeGear: 0.25
       RpmEngineToRpmWheelsLerpSpeed: 15
@@ -486,48 +537,52 @@ MonoBehaviour:
       MaxRPM: 7000
       CutOffTime: 0.1
     CarConfigVisual:
-      DriverType: 0
       CarName: 3
       CurrentMaterialsSetType: 0
       _availableMaterialSets: 00000000
       CurrentWheelsSetType: 0
-      CurrentWheelsLevel: 2
-      CurrentSuspentionLevel: 1
-      CurrentBumpersLevel: 1
-      CurrentBodyKitsLevel: 2
+      CurrentWheelsLevel: 3
+      CurrentSuspentionLevel: 3
+      CurrentBumpersLevel: 3
+      CurrentBodyKitsLevel: 3
+      CurrentTiresLevel: 1
   - CarName: 2
     RankingScheme:
       _ranks:
       - Rank: 1
         PointsForAccess: 25
         AccessCost: 0
-        AvailableTunePercentage: 0.65
+        AvailableTunePercentage: 0.6
         IsGranted: 0
         IsReached: 0
+        UpgradeCostBase: 150
+        UpgradeCostCurrent: 150
+        StatsToAddPerUpgrade: 7
+        CurrentCostGrowth: 0
       - Rank: 2
         PointsForAccess: 25
         AccessCost: 2000
-        AvailableTunePercentage: 0.85
+        AvailableTunePercentage: 0.8
         IsGranted: 0
         IsReached: 0
+        UpgradeCostBase: 150
+        UpgradeCostCurrent: 150
+        StatsToAddPerUpgrade: 7
+        CurrentCostGrowth: 0
       - Rank: 3
         PointsForAccess: 25
         AccessCost: 2000
         AvailableTunePercentage: 1
         IsGranted: 0
         IsReached: 0
+        UpgradeCostBase: 150
+        UpgradeCostCurrent: 150
+        StatsToAddPerUpgrade: 7
+        CurrentCostGrowth: 0
     Speed:
-      Max: 220
+      Max: 270
       Min: 180
-    Mobility:
-      f_frictionForward_Max: 0.6
-      f_frictionForward_Min: 0.4
-      f_frictionSideway_Max: 0.6
-      f_frictionSideway_Min: 0.4
-      r_frictionForward_Max: 0.7
-      r_frictionForward_Min: 0.5
-      r_frictionSideway_Max: 0.1
-      r_frictionSideway_Min: 0
+    Handling:
       steerAngle_Max: 80
       steerAngle_Min: 60
       helpSteerPower_Max: 0.75
@@ -541,44 +596,57 @@ MonoBehaviour:
       brakeTorqueMin: 2000
       rpmToNextGearMax: 0.8
       rpmToNextGearMin: 0.6
+    Friction:
+      f_frictionForward_Max: 0.6
+      f_frictionForward_Min: 0.4
+      f_frictionSideway_Max: 0.6
+      f_frictionSideway_Min: 0.4
+      r_frictionForward_Max: 0.7
+      r_frictionForward_Min: 0.5
+      r_frictionSideway_Max: 0.1
+      r_frictionSideway_Min: 0
     Durability:
-      durabilityMax: 20
-      durabilityMin: 10
+      durabilityMax: 16
+      durabilityMin: 16
     CarCharacteristics:
       Rarity: 1
-      _factorsMaxTotal: 500
+      DefaultFactorsPercentage: 0.4
+      _factorsMaxTotal: 352
       _initialFactorsProgress: 0
       FactorsMaxCurrent: 0
-      CurrentFactorsProgress: 250
+      CurrentFactorsProgress: 140
       MinSpeedFactor: 1
-      MaxSpeedFactor: 125
-      CurrentSpeedFactor: 62
-      MinMobilityFactor: 1
-      MaxMobilityFactor: 125
-      CurrentMobilityFactor: 62
-      MinDurabilityFactor: 1
-      MaxDurabilityFactor: 125
-      CurrentDurabilityFactor: 62
+      MaxSpeedFactor: 135
+      CurrentSpeedFactor: 54
+      MinHandlingFactor: 1
+      MaxHandlingFactor: 109
+      CurrentHandlingFactor: 43
       MinAccelerationFactor: 1
-      MaxAccelerationFactor: 125
-      CurrentAccelerationFactor: 62
+      MaxAccelerationFactor: 88
+      CurrentAccelerationFactor: 35
+      MinFrictionFactor: 1
+      MaxFrictionFactor: 20
+      CurrentFrictionFactor: 8
+      MinDurabilityFactor: 1
+      MaxDurabilityFactor: 16
+      CurrentDurabilityFactor: 6
     CarConfig:
       CarName: 2
       SpeedType: 1
       DriveType: 2
       MaxSpeed: 220
       CruiseSpeed: 40
+      MaxSteerAngle: 80
+      HelpSteerPower: 0.75
+      SteerAngleChangeSpeed: 260
+      MaxMotorTorque: 600
+      RPMToNextGearPercent: 0.8
+      MaxBrakeTorque: 2000
       FWheelsForwardFriction: 0.6
       FWheelsSidewaysFriction: 0.6
       RWheelsForwardFriction: 0.7
       RWheelsSidewaysFriction: 0.1
-      MaxSteerAngle: 80
-      HelpSteerPower: 0.75
-      SteerAngleChangeSpeed: 260
-      MaxMotorTorque: 531.2
-      RPMToNextGearPercent: 0.6624
-      MaxBrakeTorque: 2000
-      Durability: 12.64
+      Durability: 14.96
       ProbabilityBackfire: 0.2
       MaxForwardSlipToBlockChangeGear: 0.25
       RpmEngineToRpmWheelsLerpSpeed: 15
@@ -646,7 +714,6 @@ MonoBehaviour:
       MaxRPM: 7000
       CutOffTime: 0.1
     CarConfigVisual:
-      DriverType: 0
       CarName: 2
       CurrentMaterialsSetType: 0
       _availableMaterialSets: 00000000
@@ -654,44 +721,49 @@ MonoBehaviour:
       CurrentWheelsLevel: 3
       CurrentSuspentionLevel: 3
       CurrentBumpersLevel: 1
-      CurrentBodyKitsLevel: 1
+      CurrentBodyKitsLevel: 3
+      CurrentTiresLevel: 1
   - CarName: 5
     RankingScheme:
       _ranks:
       - Rank: 1
         PointsForAccess: 20
         AccessCost: 0
-        AvailableTunePercentage: 0.65
+        AvailableTunePercentage: 0.6
         IsGranted: 0
         IsReached: 0
+        UpgradeCostBase: 200
+        UpgradeCostCurrent: 200
+        StatsToAddPerUpgrade: 8
+        CurrentCostGrowth: 0
       - Rank: 2
         PointsForAccess: 20
         AccessCost: 3000
-        AvailableTunePercentage: 0.85
+        AvailableTunePercentage: 0.8
         IsGranted: 0
         IsReached: 0
+        UpgradeCostBase: 200
+        UpgradeCostCurrent: 200
+        StatsToAddPerUpgrade: 8
+        CurrentCostGrowth: 0
       - Rank: 3
         PointsForAccess: 20
         AccessCost: 3000
         AvailableTunePercentage: 1
         IsGranted: 0
         IsReached: 0
+        UpgradeCostBase: 200
+        UpgradeCostCurrent: 200
+        StatsToAddPerUpgrade: 8
+        CurrentCostGrowth: 0
     Speed:
-      Max: 300
+      Max: 270
       Min: 240
-    Mobility:
-      f_frictionForward_Max: 0.8
-      f_frictionForward_Min: 0.4
-      f_frictionSideway_Max: 0.9
-      f_frictionSideway_Min: 0.5
-      r_frictionForward_Max: 0.9
-      r_frictionForward_Min: 0.6
-      r_frictionSideway_Max: 0.3
-      r_frictionSideway_Min: 0.2
+    Handling:
       steerAngle_Max: 90
       steerAngle_Min: 70
-      helpSteerPower_Max: 0.9
-      helpSteerPower_Min: 0.8
+      helpSteerPower_Max: 0.8
+      helpSteerPower_Min: 0.9
       steerAngleChangeSpeed_Max: 300
       steerAngleChangeSpeed_Min: 240
     Acceleration:
@@ -701,44 +773,57 @@ MonoBehaviour:
       brakeTorqueMin: 2000
       rpmToNextGearMax: 0.9
       rpmToNextGearMin: 0.6
+    Friction:
+      f_frictionForward_Max: 0.8
+      f_frictionForward_Min: 0.4
+      f_frictionSideway_Max: 0.9
+      f_frictionSideway_Min: 0.5
+      r_frictionForward_Max: 0.9
+      r_frictionForward_Min: 0.6
+      r_frictionSideway_Max: 0.3
+      r_frictionSideway_Min: 0.2
     Durability:
-      durabilityMax: 20
-      durabilityMin: 10
+      durabilityMax: 21
+      durabilityMin: 21
     CarCharacteristics:
       Rarity: 2
-      _factorsMaxTotal: 600
+      DefaultFactorsPercentage: 0.4
+      _factorsMaxTotal: 402
       _initialFactorsProgress: 0
       FactorsMaxCurrent: 0
-      CurrentFactorsProgress: 300
+      CurrentFactorsProgress: 161
       MinSpeedFactor: 1
-      MaxSpeedFactor: 150
-      CurrentSpeedFactor: 75
-      MinMobilityFactor: 1
-      MaxMobilityFactor: 150
-      CurrentMobilityFactor: 75
-      MinDurabilityFactor: 1
-      MaxDurabilityFactor: 150
-      CurrentDurabilityFactor: 75
+      MaxSpeedFactor: 135
+      CurrentSpeedFactor: 54
+      MinHandlingFactor: 1
+      MaxHandlingFactor: 122
+      CurrentHandlingFactor: 49
       MinAccelerationFactor: 1
-      MaxAccelerationFactor: 150
-      CurrentAccelerationFactor: 75
+      MaxAccelerationFactor: 116
+      CurrentAccelerationFactor: 46
+      MinFrictionFactor: 1
+      MaxFrictionFactor: 29
+      CurrentFrictionFactor: 12
+      MinDurabilityFactor: 1
+      MaxDurabilityFactor: 21
+      CurrentDurabilityFactor: 8
     CarConfig:
       CarName: 5
       SpeedType: 1
-      DriveType: 2
-      MaxSpeed: 276
+      DriveType: 0
+      MaxSpeed: 300
       CruiseSpeed: 40
+      MaxSteerAngle: 90
+      HelpSteerPower: 0.9
+      SteerAngleChangeSpeed: 300
+      MaxMotorTorque: 850
+      RPMToNextGearPercent: 0.9
+      MaxBrakeTorque: 2200
       FWheelsForwardFriction: 0.8
       FWheelsSidewaysFriction: 0.9
       RWheelsForwardFriction: 0.9
       RWheelsSidewaysFriction: 0.3
-      MaxSteerAngle: 90
-      HelpSteerPower: 0.9
-      SteerAngleChangeSpeed: 300
-      MaxMotorTorque: 775
-      RPMToNextGearPercent: 0.75
-      MaxBrakeTorque: 2100
-      Durability: 15
+      Durability: 20
       ProbabilityBackfire: 0.1
       MaxForwardSlipToBlockChangeGear: 0.25
       RpmEngineToRpmWheelsLerpSpeed: 15
@@ -806,48 +891,52 @@ MonoBehaviour:
       MaxRPM: 7000
       CutOffTime: 0.1
     CarConfigVisual:
-      DriverType: 0
       CarName: 5
       CurrentMaterialsSetType: 0
       _availableMaterialSets: 00000000
       CurrentWheelsSetType: 0
-      CurrentWheelsLevel: 2
+      CurrentWheelsLevel: 3
       CurrentSuspentionLevel: 3
-      CurrentBumpersLevel: 1
-      CurrentBodyKitsLevel: 1
+      CurrentBumpersLevel: 3
+      CurrentBodyKitsLevel: 3
+      CurrentTiresLevel: 1
   - CarName: 4
     RankingScheme:
       _ranks:
       - Rank: 1
         PointsForAccess: 20
         AccessCost: 0
-        AvailableTunePercentage: 0.65
+        AvailableTunePercentage: 0.6
         IsGranted: 0
         IsReached: 0
+        UpgradeCostBase: 200
+        UpgradeCostCurrent: 200
+        StatsToAddPerUpgrade: 8
+        CurrentCostGrowth: 0
       - Rank: 2
         PointsForAccess: 20
         AccessCost: 3000
-        AvailableTunePercentage: 0.85
+        AvailableTunePercentage: 0.8
         IsGranted: 0
         IsReached: 0
+        UpgradeCostBase: 200
+        UpgradeCostCurrent: 200
+        StatsToAddPerUpgrade: 8
+        CurrentCostGrowth: 0
       - Rank: 3
         PointsForAccess: 20
         AccessCost: 3000
         AvailableTunePercentage: 1
         IsGranted: 0
         IsReached: 0
+        UpgradeCostBase: 200
+        UpgradeCostCurrent: 200
+        StatsToAddPerUpgrade: 8
+        CurrentCostGrowth: 0
     Speed:
-      Max: 250
+      Max: 290
       Min: 200
-    Mobility:
-      f_frictionForward_Max: 0.7
-      f_frictionForward_Min: 0.4
-      f_frictionSideway_Max: 0.6
-      f_frictionSideway_Min: 0.4
-      r_frictionForward_Max: 0.7
-      r_frictionForward_Min: 0.5
-      r_frictionSideway_Max: 0.15
-      r_frictionSideway_Min: 0
+    Handling:
       steerAngle_Max: 90
       steerAngle_Min: 50
       helpSteerPower_Max: 0.7
@@ -861,44 +950,57 @@ MonoBehaviour:
       brakeTorqueMin: 2000
       rpmToNextGearMax: 0.9
       rpmToNextGearMin: 0.6
+    Friction:
+      f_frictionForward_Max: 0.7
+      f_frictionForward_Min: 0.4
+      f_frictionSideway_Max: 0.6
+      f_frictionSideway_Min: 0.4
+      r_frictionForward_Max: 0.7
+      r_frictionForward_Min: 0.5
+      r_frictionSideway_Max: 0.15
+      r_frictionSideway_Min: 0
     Durability:
-      durabilityMax: 40
-      durabilityMin: 10
+      durabilityMax: 17
+      durabilityMin: 17
     CarCharacteristics:
       Rarity: 2
-      _factorsMaxTotal: 600
+      DefaultFactorsPercentage: 0.4
+      _factorsMaxTotal: 401
       _initialFactorsProgress: 0
       FactorsMaxCurrent: 0
-      CurrentFactorsProgress: 300
+      CurrentFactorsProgress: 160
       MinSpeedFactor: 1
-      MaxSpeedFactor: 150
-      CurrentSpeedFactor: 75
-      MinMobilityFactor: 1
-      MaxMobilityFactor: 150
-      CurrentMobilityFactor: 75
-      MinDurabilityFactor: 1
-      MaxDurabilityFactor: 150
-      CurrentDurabilityFactor: 75
+      MaxSpeedFactor: 145
+      CurrentSpeedFactor: 58
+      MinHandlingFactor: 1
+      MaxHandlingFactor: 123
+      CurrentHandlingFactor: 49
       MinAccelerationFactor: 1
-      MaxAccelerationFactor: 150
-      CurrentAccelerationFactor: 75
+      MaxAccelerationFactor: 111
+      CurrentAccelerationFactor: 44
+      MinFrictionFactor: 1
+      MaxFrictionFactor: 22
+      CurrentFrictionFactor: 9
+      MinDurabilityFactor: 1
+      MaxDurabilityFactor: 17
+      CurrentDurabilityFactor: 7
     CarConfig:
       CarName: 4
       SpeedType: 1
       DriveType: 2
       MaxSpeed: 250
       CruiseSpeed: 40
-      FWheelsForwardFriction: 0.7
-      FWheelsSidewaysFriction: 0.6
-      RWheelsForwardFriction: 0.7
-      RWheelsSidewaysFriction: 0.15
       MaxSteerAngle: 90
       HelpSteerPower: 0.7
       SteerAngleChangeSpeed: 300
       MaxMotorTorque: 800
       RPMToNextGearPercent: 0.9
       MaxBrakeTorque: 2200
-      Durability: 27.800001
+      FWheelsForwardFriction: 0.7
+      FWheelsSidewaysFriction: 0.6
+      RWheelsForwardFriction: 0.7
+      RWheelsSidewaysFriction: 0.15
+      Durability: 40
       ProbabilityBackfire: 0.3
       MaxForwardSlipToBlockChangeGear: 0.25
       RpmEngineToRpmWheelsLerpSpeed: 15
@@ -966,48 +1068,52 @@ MonoBehaviour:
       MaxRPM: 7000
       CutOffTime: 0.1
     CarConfigVisual:
-      DriverType: 0
       CarName: 4
       CurrentMaterialsSetType: 0
       _availableMaterialSets: 00000000
       CurrentWheelsSetType: 0
       CurrentWheelsLevel: 3
       CurrentSuspentionLevel: 3
-      CurrentBumpersLevel: 2
+      CurrentBumpersLevel: 3
       CurrentBodyKitsLevel: 3
+      CurrentTiresLevel: 1
   - CarName: 7
     RankingScheme:
       _ranks:
       - Rank: 1
         PointsForAccess: 15
         AccessCost: 0
-        AvailableTunePercentage: 0.65
+        AvailableTunePercentage: 0.6
         IsGranted: 0
         IsReached: 0
+        UpgradeCostBase: 300
+        UpgradeCostCurrent: 300
+        StatsToAddPerUpgrade: 10
+        CurrentCostGrowth: 0
       - Rank: 2
         PointsForAccess: 15
         AccessCost: 4000
-        AvailableTunePercentage: 0.85
+        AvailableTunePercentage: 0.8
         IsGranted: 0
         IsReached: 0
+        UpgradeCostBase: 300
+        UpgradeCostCurrent: 300
+        StatsToAddPerUpgrade: 10
+        CurrentCostGrowth: 0
       - Rank: 3
         PointsForAccess: 15
         AccessCost: 4000
         AvailableTunePercentage: 1
         IsGranted: 0
         IsReached: 0
+        UpgradeCostBase: 300
+        UpgradeCostCurrent: 300
+        StatsToAddPerUpgrade: 10
+        CurrentCostGrowth: 0
     Speed:
       Max: 350
-      Min: 400
-    Mobility:
-      f_frictionForward_Max: 0.8
-      f_frictionForward_Min: 0.4
-      f_frictionSideway_Max: 0.9
-      f_frictionSideway_Min: 0.5
-      r_frictionForward_Max: 0.9
-      r_frictionForward_Min: 0.6
-      r_frictionSideway_Max: 0.3
-      r_frictionSideway_Min: 0.2
+      Min: 430
+    Handling:
       steerAngle_Max: 90
       steerAngle_Min: 70
       helpSteerPower_Max: 0.9
@@ -1021,44 +1127,57 @@ MonoBehaviour:
       brakeTorqueMin: 2000
       rpmToNextGearMax: 0.97
       rpmToNextGearMin: 0.7
+    Friction:
+      f_frictionForward_Max: 0.8
+      f_frictionForward_Min: 0.4
+      f_frictionSideway_Max: 0.9
+      f_frictionSideway_Min: 0.5
+      r_frictionForward_Max: 0.9
+      r_frictionForward_Min: 0.6
+      r_frictionSideway_Max: 0.3
+      r_frictionSideway_Min: 0.2
     Durability:
-      durabilityMax: 20
-      durabilityMin: 10
+      durabilityMax: 12
+      durabilityMin: 12
     CarCharacteristics:
       Rarity: 3
-      _factorsMaxTotal: 700
+      DefaultFactorsPercentage: 0.4
+      _factorsMaxTotal: 498
       _initialFactorsProgress: 0
       FactorsMaxCurrent: 0
-      CurrentFactorsProgress: 350
+      CurrentFactorsProgress: 199
       MinSpeedFactor: 1
-      MaxSpeedFactor: 175
-      CurrentSpeedFactor: 87
-      MinMobilityFactor: 1
-      MaxMobilityFactor: 175
-      CurrentMobilityFactor: 87
-      MinDurabilityFactor: 1
-      MaxDurabilityFactor: 175
-      CurrentDurabilityFactor: 87
+      MaxSpeedFactor: 215
+      CurrentSpeedFactor: 86
+      MinHandlingFactor: 1
+      MaxHandlingFactor: 121
+      CurrentHandlingFactor: 48
       MinAccelerationFactor: 1
-      MaxAccelerationFactor: 175
-      CurrentAccelerationFactor: 87
+      MaxAccelerationFactor: 133
+      CurrentAccelerationFactor: 53
+      MinFrictionFactor: 1
+      MaxFrictionFactor: 29
+      CurrentFrictionFactor: 12
+      MinDurabilityFactor: 1
+      MaxDurabilityFactor: 12
+      CurrentDurabilityFactor: 5
     CarConfig:
       CarName: 7
       SpeedType: 1
       DriveType: 0
-      MaxSpeed: 382.85715
+      MaxSpeed: 377.14285
       CruiseSpeed: 20
-      FWheelsForwardFriction: 0.8
-      FWheelsSidewaysFriction: 0.9
-      RWheelsForwardFriction: 0.9
-      RWheelsSidewaysFriction: 0.3
-      MaxSteerAngle: 90
-      HelpSteerPower: 0.9
-      SteerAngleChangeSpeed: 300
-      MaxMotorTorque: 934.8571
-      RPMToNextGearPercent: 0.88205713
-      MaxBrakeTorque: 2202.2856
-      Durability: 14.971429
+      MaxSteerAngle: 79.37143
+      HelpSteerPower: 0.84685713
+      SteerAngleChangeSpeed: 268.1143
+      MaxMotorTorque: 1000
+      RPMToNextGearPercent: 0.97
+      MaxBrakeTorque: 2300
+      FWheelsForwardFriction: 0.58742857
+      FWheelsSidewaysFriction: 0.68742853
+      RWheelsForwardFriction: 0.74057144
+      RWheelsSidewaysFriction: 0.24685715
+      Durability: 20
       ProbabilityBackfire: 0.1
       MaxForwardSlipToBlockChangeGear: 0.25
       RpmEngineToRpmWheelsLerpSpeed: 15
@@ -1126,48 +1245,52 @@ MonoBehaviour:
       MaxRPM: 7000
       CutOffTime: 0.1
     CarConfigVisual:
-      DriverType: 0
       CarName: 7
       CurrentMaterialsSetType: 0
       _availableMaterialSets: 00000000
       CurrentWheelsSetType: 0
       CurrentWheelsLevel: 1
-      CurrentSuspentionLevel: 3
+      CurrentSuspentionLevel: 1
       CurrentBumpersLevel: 1
-      CurrentBodyKitsLevel: 2
+      CurrentBodyKitsLevel: 3
+      CurrentTiresLevel: 1
   - CarName: 6
     RankingScheme:
       _ranks:
       - Rank: 1
         PointsForAccess: 15
         AccessCost: 0
-        AvailableTunePercentage: 0.65
+        AvailableTunePercentage: 0.6
         IsGranted: 0
         IsReached: 0
+        UpgradeCostBase: 300
+        UpgradeCostCurrent: 300
+        StatsToAddPerUpgrade: 10
+        CurrentCostGrowth: 0
       - Rank: 2
         PointsForAccess: 15
         AccessCost: 4000
-        AvailableTunePercentage: 0.85
+        AvailableTunePercentage: 0.8
         IsGranted: 0
         IsReached: 0
+        UpgradeCostBase: 300
+        UpgradeCostCurrent: 300
+        StatsToAddPerUpgrade: 10
+        CurrentCostGrowth: 0
       - Rank: 3
         PointsForAccess: 15
         AccessCost: 4000
         AvailableTunePercentage: 1
         IsGranted: 0
         IsReached: 0
+        UpgradeCostBase: 300
+        UpgradeCostCurrent: 300
+        StatsToAddPerUpgrade: 10
+        CurrentCostGrowth: 0
     Speed:
       Max: 350
-      Min: 400
-    Mobility:
-      f_frictionForward_Max: 0.8
-      f_frictionForward_Min: 0.4
-      f_frictionSideway_Max: 0.9
-      f_frictionSideway_Min: 0.5
-      r_frictionForward_Max: 0.9
-      r_frictionForward_Min: 0.6
-      r_frictionSideway_Max: 0.3
-      r_frictionSideway_Min: 0.2
+      Min: 430
+    Handling:
       steerAngle_Max: 90
       steerAngle_Min: 70
       helpSteerPower_Max: 0.9
@@ -1181,44 +1304,57 @@ MonoBehaviour:
       brakeTorqueMin: 2000
       rpmToNextGearMax: 0.97
       rpmToNextGearMin: 0.7
+    Friction:
+      f_frictionForward_Max: 0.9
+      f_frictionForward_Min: 0.5
+      f_frictionSideway_Max: 0.9
+      f_frictionSideway_Min: 0.5
+      r_frictionForward_Max: 0.9
+      r_frictionForward_Min: 0.6
+      r_frictionSideway_Max: 0.3
+      r_frictionSideway_Min: 0.2
     Durability:
-      durabilityMax: 20
-      durabilityMin: 10
+      durabilityMax: 14
+      durabilityMin: 14
     CarCharacteristics:
       Rarity: 3
-      _factorsMaxTotal: 700
+      DefaultFactorsPercentage: 0.4
+      _factorsMaxTotal: 498
       _initialFactorsProgress: 0
       FactorsMaxCurrent: 0
-      CurrentFactorsProgress: 350
+      CurrentFactorsProgress: 199
       MinSpeedFactor: 1
-      MaxSpeedFactor: 175
-      CurrentSpeedFactor: 87
-      MinMobilityFactor: 1
-      MaxMobilityFactor: 175
-      CurrentMobilityFactor: 87
-      MinDurabilityFactor: 1
-      MaxDurabilityFactor: 175
-      CurrentDurabilityFactor: 87
+      MaxSpeedFactor: 215
+      CurrentSpeedFactor: 86
+      MinHandlingFactor: 1
+      MaxHandlingFactor: 121
+      CurrentHandlingFactor: 48
       MinAccelerationFactor: 1
-      MaxAccelerationFactor: 175
-      CurrentAccelerationFactor: 87
+      MaxAccelerationFactor: 133
+      CurrentAccelerationFactor: 53
+      MinFrictionFactor: 1
+      MaxFrictionFactor: 30
+      CurrentFrictionFactor: 12
+      MinDurabilityFactor: 1
+      MaxDurabilityFactor: 14
+      CurrentDurabilityFactor: 6
     CarConfig:
       CarName: 6
       SpeedType: 1
-      DriveType: 0
+      DriveType: 2
       MaxSpeed: 350
       CruiseSpeed: 20
-      FWheelsForwardFriction: 0.8
-      FWheelsSidewaysFriction: 0.9
-      RWheelsForwardFriction: 0.9
-      RWheelsSidewaysFriction: 0.3
       MaxSteerAngle: 90
       HelpSteerPower: 0.9
       SteerAngleChangeSpeed: 300
       MaxMotorTorque: 1000
       RPMToNextGearPercent: 0.97
       MaxBrakeTorque: 2300
-      Durability: 19.314285
+      FWheelsForwardFriction: 0.8
+      FWheelsSidewaysFriction: 0.9
+      RWheelsForwardFriction: 0.9
+      RWheelsSidewaysFriction: 0.3
+      Durability: 20
       ProbabilityBackfire: 0.1
       MaxForwardSlipToBlockChangeGear: 0.25
       RpmEngineToRpmWheelsLerpSpeed: 15
@@ -1286,12 +1422,12 @@ MonoBehaviour:
       MaxRPM: 7000
       CutOffTime: 0.1
     CarConfigVisual:
-      DriverType: 0
       CarName: 6
       CurrentMaterialsSetType: 0
       _availableMaterialSets: 00000000
       CurrentWheelsSetType: 0
       CurrentWheelsLevel: 3
       CurrentSuspentionLevel: 3
-      CurrentBumpersLevel: 2
+      CurrentBumpersLevel: 3
       CurrentBodyKitsLevel: 3
+      CurrentTiresLevel: 1

@@ -21,7 +21,7 @@ namespace RaceManager.UI
         private CardRepresenter _representer;
         private SpritesContainerCarCollection _spritesCarsCollection;
 
-        private Subject<bool> _mouseButtonSubject = new Subject<bool>();
+        private Subject<bool> _mouseButtonSubject;
 
         private UIAnimator Animator => Singleton<UIAnimator>.Instance;
 
@@ -33,6 +33,7 @@ namespace RaceManager.UI
             _spritesCarsCollection = spritesContainerCars;
 
             _representer = new CardRepresenter(_representationCard, Animator);
+            _mouseButtonSubject = new Subject<bool>();
         }
 
         public async Task<bool> RepresentCards(CarCardReward cardsReward, CancellationTokenSource tokenSource)

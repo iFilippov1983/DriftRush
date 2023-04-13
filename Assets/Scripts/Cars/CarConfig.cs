@@ -1,4 +1,5 @@
-﻿using RaceManager.Tools;
+﻿using Newtonsoft.Json;
+using RaceManager.Tools;
 using Sirenix.OdinInspector;
 using System;
 using UnityEngine;
@@ -35,19 +36,7 @@ namespace RaceManager.Cars
 		//public float CruiseSpeedPercentMin = 0.7f;
 
 		//==========================================
-		[Title("Mobility")]
-
-		[Range(0f, 1f)]
-		public float FWheelsForwardFriction = 0.4f;
-
-		[Range(0f, 1f)]
-		public float FWheelsSidewaysFriction = 0.4f;
-
-		[Range(0f, 1f)]
-		public float RWheelsForwardFriction = 0.4f;
-
-		[Range(0f, 1f)]
-		public float RWheelsSidewaysFriction = 0.4f;
+		[Title("Handling")]
 
 		[Range(1f, 90f)]
 		public float MaxSteerAngle = 42;
@@ -68,6 +57,21 @@ namespace RaceManager.Cars
         public float RPMToNextGearPercent = 0.9f;
 
         public float MaxBrakeTorque = 2000;
+
+		//==========================================
+		[Title("Friction")]
+
+        [Range(0f, 1f)]
+        public float FWheelsForwardFriction = 0.4f;
+
+        [Range(0f, 1f)]
+        public float FWheelsSidewaysFriction = 0.4f;
+
+        [Range(0f, 1f)]
+        public float RWheelsForwardFriction = 0.4f;
+
+        [Range(0f, 1f)]
+        public float RWheelsSidewaysFriction = 0.4f;
 
         //==========================================
         [Title("Durability")]
@@ -193,6 +197,7 @@ namespace RaceManager.Cars
 
 		public float MaxRPMToNextGearPercent => CutOffRPMFactor - RPMTONextGearVsCutOffDif;
 
+		[JsonIgnore]
 		private readonly static Keyframe[] _kf = new Keyframe[]
 		{
 			new Keyframe(0f, 0.3f),

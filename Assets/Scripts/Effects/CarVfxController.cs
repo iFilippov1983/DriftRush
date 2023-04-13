@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx.Triggers;
 using static UnityEngine.ParticleSystem;
+using UnityEditor;
 
 namespace RaceManager.Effects
 {
@@ -12,6 +13,7 @@ namespace RaceManager.Effects
 	{
         private const float TrailOffset = 0.05f;
         private const int SpeedDivider = 30;
+        private const float SpeedThresholdDif = 1.5f;
 
 		[SerializeField] private float _minTimeBetweenCollisions = 0.1f;
 		[SerializeField] private TrailRenderer _trailPrefab;
@@ -27,6 +29,7 @@ namespace RaceManager.Effects
         private Queue<TrailRenderer> _freeTrails = new Queue<TrailRenderer>();
 
         private float _lastCollisionTime;
+        private float _lastSpeed;
 
         private Dictionary<Wheel, TrailRenderer> ActiveTrails { get; set; }
 
@@ -47,7 +50,7 @@ namespace RaceManager.Effects
             
             if (!TryGetComponent<Car>(out _car))
             {
-                Debug.LogErrorFormat("[{0}] VehicleVFX without VehicleController in parent", name);
+                Debug.LogErrorFormat("[{0}] CarVfxController whithout Car component in parent", name);
                 enabled = false;
                 return;
             }
@@ -143,9 +146,19 @@ namespace RaceManager.Effects
 
         private void HandleStopLights()
         {
-            for (int i = 0; i < _stopLights.Length; i++)
+            if (_stopLights.Length != 0)
             {
-                _stopLights[i]?.SetActive(_car.IsBraking);
+                for (int i = 0; i < _stopLights.Length; i++)
+                {
+                    bool activate = 
+                        _car.IsBraking 
+                        && _lastSpeed < _car.CarConfig.MaxSpeed - SpeedThresholdDif 
+                        && _lastSpeed >= _car.CarConfig.CruiseSpeed + SpeedThresholdDif;
+
+                    _stopLights[i]?.SetActive(activate);
+                }
+
+                _lastSpeed = _car.SpeedInDesiredUnits;
             }
         }
 

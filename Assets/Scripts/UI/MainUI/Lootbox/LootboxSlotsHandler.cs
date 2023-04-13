@@ -3,6 +3,7 @@ using RaceManager.Root;
 using System;
 using System.Collections.Generic;
 using UniRx;
+using UniRx.Triggers;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -90,6 +91,15 @@ namespace RaceManager.UI
             _lootboxProgress.MoreWinsText.text = text.ToUpper();
         }
 
+        public void UpdateTimer()
+        {
+            if (_hasActiveTimerSlot)
+            {
+                _activeTimerLootbox.TimeToOpenLeft -= Time.deltaTime;
+                _activeTimerLootbox.RecalculateGemsToOpen();
+            }
+        }
+
         private void InitializeLootboxSlots()
         {
             DateTime lastSaveTime = _playerProfile.LastSaveTime;
@@ -117,8 +127,9 @@ namespace RaceManager.UI
                 {
                     //$"UtcNow: {DateTime.UtcNow}; Last save time: {lastSaveTime}; Seconds passed: {secondsPassed}; LB time left: {lootbox.TimeToOpenLeft}".Log();
 
-                    if (secondsPassed >= lootbox.TimeToOpenLeft)
+                    if (secondsPassed >= lootbox.TimeToOpenLeft || lootbox.IsOpen)
                     {
+                        lootbox.TimeToOpenLeft = -1;
                         slot.SetStatusLootboxOpen(sprite, lootbox.Id);
                     }
                     else
@@ -170,7 +181,7 @@ namespace RaceManager.UI
         {
             Lootbox lootbox = _profiler.GetLootboxWithId(slot.CurrentLootboxId);
 
-            LootboxPopup.PopupInfo info = new LootboxPopup.PopupInfo()
+            LootboxPopup.LootboxPopupInfo info = new LootboxPopup.LootboxPopupInfo()
             {
                 lootboxRarity = lootbox.Rarity,
                 lootboxSprite = slot.LootboxImage.sprite,
@@ -219,7 +230,7 @@ namespace RaceManager.UI
 
             Sprite sprite = _spritesRewards.GetLootboxSprite(rarity);
 
-            LootboxPopup.PopupInfo info = new LootboxPopup.PopupInfo()
+            LootboxPopup.LootboxPopupInfo info = new LootboxPopup.LootboxPopupInfo()
             {
                 lootboxRarity = lootbox.Rarity,
                 lootboxSprite = sprite,
@@ -247,7 +258,7 @@ namespace RaceManager.UI
             _lootboxPopup.LastAppearTransform = _lootboxProgress.transform;
             Animator.AppearSubject(_lootboxPopup, _lootboxProgress.transform).AddTo(this);
 
-            OnPopupIsActive.Invoke(true);
+            OnPopupIsActive?.Invoke(true);
         }
 
         private void SlotStartTimer(LootboxSlot slot)
@@ -274,7 +285,7 @@ namespace RaceManager.UI
             if (lootbox != null && _profiler.TryBuyWithGems(lootbox.GemsToOpen))
             {
                 _profiler.RemoveLootboxWithId(lootbox.Id);
-                lootbox.TimeToOpenLeft = 0;
+                lootbox.TimeToOpenLeft = -1;
                 CloseLootboxPopup();
                 HandleSlotTimer();
                 _profiler.AddOrOpenLootbox(lootbox);
@@ -346,7 +357,7 @@ namespace RaceManager.UI
         {
             if (_hasActiveTimerSlot)
             {
-                if (_activeTimerLootbox.TimeToOpenLeft > 0)
+                if (_activeTimerLootbox.TimeToOpenLeft > 0 && !_activeTimerLootbox.IsOpen)
                 {
                     _hours = _activeTimerLootbox.TimeToOpenLeft / 3600f;
                     //_hoursRounded = Mathf.RoundToInt(_hours);
@@ -363,19 +374,13 @@ namespace RaceManager.UI
                 {
                     _activeTimerSlot.SetStatusLootboxOpen();
 
+                    Lootbox lootbox = _profiler.GetLootboxWithId(_activeTimerSlot.CurrentLootboxId);
+                    lootbox.TimeToOpenLeft = -1;
+
                     _hasActiveTimerSlot = false;
                     _activeTimerLootbox = null;
                     _activeTimerSlot = null;
                 }
-            }
-        }
-
-        private void UpdateTimer()
-        {
-            if (_hasActiveTimerSlot)
-            {
-                _activeTimerLootbox.TimeToOpenLeft -= Time.deltaTime;
-                _activeTimerLootbox.RecalculateGemsToOpen();
             }
         }
 
@@ -391,10 +396,10 @@ namespace RaceManager.UI
         }
 
         #region Unity Functions
-        private void FixedUpdate()
-        {
-            UpdateTimer();
-        }
+        //private void FixedUpdate()
+        //{
+        //    UpdateTimer();
+        //}
 
         private void OnGUI()
         {

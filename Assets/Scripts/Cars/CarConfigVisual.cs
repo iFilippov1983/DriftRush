@@ -12,7 +12,6 @@ namespace RaceManager.Cars
         private MaterialsContainer _materialsContainer;
         private Dictionary<MaterialSetType, Material> _materials;
 
-        public DriverType DriverType;
         public CarName CarName;
 
         [FoldoutGroup("Materials Settings")]
@@ -37,6 +36,10 @@ namespace RaceManager.Cars
 
         [FoldoutGroup("Body Kits Settings")]
         public PartLevel CurrentBodyKitsLevel = PartLevel.First;
+
+        [FoldoutGroup("Tires Setting")]
+        [ReadOnly]
+        public PartLevel CurrentTiresLevel = PartLevel.First;
 
         public Material GetCurrentMaterial() => _materials[CurrentMaterialsSetType];
 

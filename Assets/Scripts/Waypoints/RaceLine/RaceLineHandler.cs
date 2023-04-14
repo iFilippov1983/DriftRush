@@ -17,7 +17,6 @@ namespace RaceManager.Waypoints
 
             _raceLine = raceLine;
             _raceLine.PrepareSelf(mainTrack);
-            
         }
 
         public void StartHandling()

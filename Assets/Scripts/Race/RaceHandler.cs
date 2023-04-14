@@ -5,6 +5,7 @@ using RaceManager.Cameras;
 using RaceManager.Progress;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using RaceManager.Waypoints;
 using RaceManager.UI;
@@ -13,7 +14,6 @@ using UniRx;
 using UniRx.Triggers;
 using RaceManager.Effects;
 using IInitializable = RaceManager.Root.IInitializable;
-using System.Threading.Tasks;
 
 namespace RaceManager.Race
 {
@@ -85,14 +85,19 @@ namespace RaceManager.Race
             _waypointTrackEven = _raceLevel.WaypointTrackEven;
             _waypointTrackOdd = _raceLevel.WaypointTrackOdd;
 
-            _lineHandler = new RaceLineHandler(_raceLevel.WaypointTrackMain, _raceLevel.RaceLine, _settingsContainer.UseRaceLine);
             _lootboxHandler = new InRaceLootboxHandler(_profiler);
-            
+
+            InitLineHandler();
             InitOpponentsTuner();
             InitDrivers();
             MakeSubscriptions();
 
             _positionsHandler.StartHandling(_waypointsTrackersList);
+        }
+
+        private void InitLineHandler()
+        {
+            _lineHandler = new RaceLineHandler(_raceLevel.WaypointTrackMain, _raceLevel.RaceLine, _settingsContainer.UseRaceLine);
         }
 
         private void InitOpponentsTuner()

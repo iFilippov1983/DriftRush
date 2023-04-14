@@ -287,7 +287,10 @@ namespace RaceManager.UI
                 _profiler.RemoveLootboxWithId(lootbox.Id);
                 lootbox.TimeToOpenLeft = -1;
                 CloseLootboxPopup();
-                HandleSlotTimer();
+                //HandleSlotTimer();
+                _hasActiveTimerSlot = false;
+                _activeTimerLootbox = null;
+                _activeTimerSlot = null;
                 _profiler.AddOrOpenLootbox(lootbox);
 
                 OnInstantLootboxOpen?.Invoke();

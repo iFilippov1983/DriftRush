@@ -14,35 +14,6 @@ namespace RaceManager.Cars
     [Serializable]
     public struct Handling
     {
-        //[FoldoutGroup("Front wheels")]
-        //[Range(0f, 1f)]
-        //public float f_frictionForward_Max;
-        //[FoldoutGroup("Front wheels")]
-        //[Range(0f, 1f)]
-        //public float f_frictionForward_Min;
-        //[Space]
-        //[FoldoutGroup("Front wheels")]
-        //[Range(0f, 1f)]
-        //public float f_frictionSideway_Max;
-        //[FoldoutGroup("Front wheels")]
-        //[Range(0f, 1f)]
-        //public float f_frictionSideway_Min;
-
-        //[FoldoutGroup("Rear wheels")]
-        //[Range(0f, 1f)]
-        //public float r_frictionForward_Max;
-        //[FoldoutGroup("Rear wheels")]
-        //[Range(0f, 1f)]
-        //public float r_frictionForward_Min;
-        //[Space]
-        //[FoldoutGroup("Rear wheels")]
-        //[Range(0f, 1f)]
-        //public float r_frictionSideway_Max;
-        //[FoldoutGroup("Rear wheels")] 
-        //[Range(0f, 1f)] 
-        //public float r_frictionSideway_Min;
-        //[Space]
-
         [Range(1f, 90f)]
         public float steerAngle_Max;
         [Range(1f, 90f)]

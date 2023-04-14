@@ -157,29 +157,6 @@ namespace RaceManager.Waypoints
             });
         }
 
-        private float GetRecomendedSpeed(WaypointTrack track, RaceLineSegment segment)
-        {
-            TrackNode prev;
-            TrackNode next;
-            var distances = track.Distances;
-            var waypoints = track.Waypoints;
-            for (int i = 1; i < distances.Length; i++)
-            {
-                if (distances[i] > segment.DistanceFromStart || Mathf.Approximately(distances[i], segment.DistanceFromStart))
-                {
-                    prev = waypoints[i - 1].GetComponent<TrackNode>();
-                    next = waypoints[i].GetComponent<TrackNode>();
-                    float speedDif = next.recomendedSpeed - prev.recomendedSpeed;
-                    float distDif = segment.DistanceFromStart - distances[i - 1];
-                    float distFactor = distDif / (distances[i] - distances[i - 1]);
-                    float value = prev.recomendedSpeed + speedDif * distFactor;
-                    return value;
-                }
-            }
-
-            return 0.0f;
-        }
-
         private float GetRecomendedSpeed(WaypointTrack track, float distanceFromStart)
         {
             TrackNode prev;

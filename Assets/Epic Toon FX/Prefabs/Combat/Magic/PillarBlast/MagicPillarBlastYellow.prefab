@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 5976467969535052756}
   - component: {fileID: 19865454}
   - component: {fileID: 19919358}
-  - component: {fileID: 8596216847847033939}
+  - component: {fileID: 2450649747295313122}
+  - component: {fileID: 4370826618402549116}
   m_Layer: 0
   m_Name: Vertical
   m_TagString: Untagged
@@ -157,7 +158,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 3
       scalar: 20
-      minScalar: 6
+      minScalar: 2
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -255,7 +256,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 3
       scalar: 0.6
-      minScalar: 0.45
+      minScalar: 1
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -611,15 +612,15 @@ ParticleSystem:
   ShapeModule:
     serializedVersion: 6
     enabled: 1
-    type: 8
-    angle: 0.3
+    type: 5
+    angle: 1.79
     length: 1.5
     boxThickness: {x: 0, y: 0, z: 0}
     radiusThickness: 1
     donutRadius: 0.2
     m_Position: {x: 0, y: 0, z: 0}
-    m_Rotation: {x: 0, y: 0, z: 0}
-    m_Scale: {x: 1, y: 1, z: 1}
+    m_Rotation: {x: -90, y: 0, z: 0}
+    m_Scale: {x: 2, y: 0.5, z: 2}
     placementMode: 0
     m_MeshMaterialIndex: 0
     m_MeshNormalOffset: 0
@@ -698,7 +699,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 0.3
+      value: 4
       mode: 0
       spread: 0
       speed:
@@ -1323,8 +1324,8 @@ ParticleSystem:
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
-        key1: {r: 1, g: 1, b: 0, a: 1}
-        key2: {r: 1, g: 0.703, b: 0, a: 1}
+        key1: {r: 1, g: 1, b: 0.6556604, a: 1}
+        key2: {r: 1, g: 0.8904918, b: 0.3820755, a: 1}
         key3: {r: 0, g: 0.8352941, b: 1, a: 0}
         key4: {r: 0, g: 0.8352941, b: 1, a: 0}
         key5: {r: 0, g: 0.8352941, b: 1, a: 0}
@@ -2425,7 +2426,7 @@ ParticleSystem:
       m_Bits: 4294967295
     influenceList: []
   ClampVelocityModule:
-    enabled: 1
+    enabled: 0
     x:
       serializedVersion: 2
       minMaxState: 0
@@ -4815,7 +4816,7 @@ ParticleSystemRenderer:
   m_MinParticleSize: 0
   m_MaxParticleSize: 0.5
   m_CameraVelocityScale: 0
-  m_VelocityScale: 0.1
+  m_VelocityScale: 1
   m_LengthScale: 1
   m_SortingFudge: 0
   m_NormalDirection: 1
@@ -4835,7 +4836,15 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
---- !u!114 &8596216847847033939
+--- !u!222 &2450649747295313122
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 109544}
+  m_CullTransparentMesh: 1
+--- !u!114 &4370826618402549116
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4844,23 +4853,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 109544}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 20e8969313b8e4614b498f042e99683a, type: 3}
+  m_Script: {fileID: 11500000, guid: e70922c501db4074fb976872c39ba229, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: c78b5dacb6e1a8343bb1dfe2c4161830, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_ParticleSystem: {fileID: 19865454}
-  m_RenderMode: 1
-  m_StretchedSpeedScale: 1
-  m_StretchedLenghScale: 1
-  m_IgnoreTimescale: 0
-  m_RenderedMesh: {fileID: 0}
+  fixedTime: 1
+  use3dRotation: 0
 --- !u!1 &115696
 GameObject:
   m_ObjectHideFlags: 0
@@ -4872,7 +4877,8 @@ GameObject:
   - component: {fileID: 8894058608389804604}
   - component: {fileID: 19802858}
   - component: {fileID: 19982074}
-  - component: {fileID: 6114400168533486674}
+  - component: {fileID: 1467442388248029387}
+  - component: {fileID: 2644114645236965825}
   m_Layer: 0
   m_Name: Nova
   m_TagString: Untagged
@@ -4887,13 +4893,13 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 115696}
-  m_LocalRotation: {x: 0.70710576, y: -0, z: -0, w: 0.7071079}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 3, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 524996925347910348}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -9687,7 +9693,15 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
---- !u!114 &6114400168533486674
+--- !u!222 &1467442388248029387
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 115696}
+  m_CullTransparentMesh: 1
+--- !u!114 &2644114645236965825
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9696,23 +9710,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 115696}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 20e8969313b8e4614b498f042e99683a, type: 3}
+  m_Script: {fileID: 11500000, guid: e70922c501db4074fb976872c39ba229, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: 9eb479f5a4882b2448c5740a38a0cdc0, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_ParticleSystem: {fileID: 19802858}
-  m_RenderMode: 0
-  m_StretchedSpeedScale: 1
-  m_StretchedLenghScale: 1
-  m_IgnoreTimescale: 0
-  m_RenderedMesh: {fileID: 0}
+  fixedTime: 1
+  use3dRotation: 0
 --- !u!1 &131366
 GameObject:
   m_ObjectHideFlags: 0
@@ -9724,7 +9734,8 @@ GameObject:
   - component: {fileID: 8175666928987337575}
   - component: {fileID: 19803998}
   - component: {fileID: 19904558}
-  - component: {fileID: 954042487296973722}
+  - component: {fileID: 94154493078251601}
+  - component: {fileID: 1420268150473878021}
   m_Layer: 0
   m_Name: CenterGlow
   m_TagString: Untagged
@@ -9905,7 +9916,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 0.8482759, b: 0, a: 1}
+      maxColor: {r: 1, g: 0.9357936, b: 0.5801887, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -14521,7 +14532,15 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
---- !u!114 &954042487296973722
+--- !u!222 &94154493078251601
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 131366}
+  m_CullTransparentMesh: 1
+--- !u!114 &1420268150473878021
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -14530,23 +14549,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 131366}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 20e8969313b8e4614b498f042e99683a, type: 3}
+  m_Script: {fileID: 11500000, guid: e70922c501db4074fb976872c39ba229, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: e653836c30661fe419b8992e230ca189, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_ParticleSystem: {fileID: 19803998}
-  m_RenderMode: 0
-  m_StretchedSpeedScale: 1
-  m_StretchedLenghScale: 1
-  m_IgnoreTimescale: 0
-  m_RenderedMesh: {fileID: 0}
+  fixedTime: 1
+  use3dRotation: 0
 --- !u!1 &183820
 GameObject:
   m_ObjectHideFlags: 0
@@ -14558,7 +14573,8 @@ GameObject:
   - component: {fileID: 5132618715248006894}
   - component: {fileID: 19812078}
   - component: {fileID: 19919544}
-  - component: {fileID: 1733531377377326773}
+  - component: {fileID: 8524066159624197157}
+  - component: {fileID: 4668676747895300844}
   m_Layer: 0
   m_Name: ConeSpikes
   m_TagString: Untagged
@@ -14704,7 +14720,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 3
       scalar: 16
-      minScalar: 7
+      minScalar: 1
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -15158,14 +15174,14 @@ ParticleSystem:
   ShapeModule:
     serializedVersion: 6
     enabled: 1
-    type: 8
-    angle: 45
+    type: 0
+    angle: 1
     length: 1
     boxThickness: {x: 0, y: 0, z: 0}
-    radiusThickness: 0.17
+    radiusThickness: 1
     donutRadius: 0.2
     m_Position: {x: 0, y: 0, z: 0}
-    m_Rotation: {x: 0, y: 0, z: 0}
+    m_Rotation: {x: 180, y: 0, z: 0}
     m_Scale: {x: 1, y: 1, z: 1}
     placementMode: 0
     m_MeshMaterialIndex: 0
@@ -15245,7 +15261,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 0.3
+      value: 3.73
       mode: 0
       spread: 0
       speed:
@@ -19362,8 +19378,8 @@ ParticleSystemRenderer:
   m_MinParticleSize: 0
   m_MaxParticleSize: 0.5
   m_CameraVelocityScale: 0
-  m_VelocityScale: 0.01
-  m_LengthScale: 2
+  m_VelocityScale: 5
+  m_LengthScale: 5
   m_SortingFudge: 0
   m_NormalDirection: 1
   m_ShadowBias: 0
@@ -19382,7 +19398,15 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
---- !u!114 &1733531377377326773
+--- !u!222 &8524066159624197157
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 183820}
+  m_CullTransparentMesh: 1
+--- !u!114 &4668676747895300844
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -19391,23 +19415,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 183820}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 20e8969313b8e4614b498f042e99683a, type: 3}
+  m_Script: {fileID: 11500000, guid: e70922c501db4074fb976872c39ba229, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: c78b5dacb6e1a8343bb1dfe2c4161830, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_ParticleSystem: {fileID: 19812078}
-  m_RenderMode: 1
-  m_StretchedSpeedScale: 1
-  m_StretchedLenghScale: 1
-  m_IgnoreTimescale: 0
-  m_RenderedMesh: {fileID: 0}
+  fixedTime: 1
+  use3dRotation: 0
 --- !u!1 &183926
 GameObject:
   m_ObjectHideFlags: 0
@@ -19419,7 +19439,8 @@ GameObject:
   - component: {fileID: 524996925347910348}
   - component: {fileID: 19832912}
   - component: {fileID: 19934830}
-  - component: {fileID: 1436487615476457926}
+  - component: {fileID: 6910891503014491167}
+  - component: {fileID: 8836163261453846338}
   m_Layer: 0
   m_Name: MagicPillarBlastYellow
   m_TagString: Untagged
@@ -19436,7 +19457,7 @@ RectTransform:
   m_GameObject: {fileID: 183926}
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 100, y: 100, z: 100}
   m_Children:
   - {fileID: 5976467969535052756}
   - {fileID: 8894058608389804604}
@@ -19533,8 +19554,8 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 1.3
-      minScalar: 0.35
+      scalar: 1.5
+      minScalar: 1
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -19666,7 +19687,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0
+      scalar: 0.1
       minScalar: 0.06
       maxCurve:
         serializedVersion: 2
@@ -19970,7 +19991,7 @@ ParticleSystem:
     gravityModifier:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.6
+      scalar: 5
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -20024,13 +20045,13 @@ ParticleSystem:
     serializedVersion: 6
     enabled: 1
     type: 8
-    angle: 11.3
+    angle: 39.11
     length: 1.5
     boxThickness: {x: 0, y: 0, z: 0}
     radiusThickness: 1
     donutRadius: 0.2
     m_Position: {x: 0, y: 0, z: 0}
-    m_Rotation: {x: 0, y: 0, z: 0}
+    m_Rotation: {x: -90, y: 0, z: 0}
     m_Scale: {x: 1, y: 1, z: 1}
     placementMode: 0
     m_MeshMaterialIndex: 0
@@ -24238,7 +24259,15 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
---- !u!114 &1436487615476457926
+--- !u!222 &6910891503014491167
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 183926}
+  m_CullTransparentMesh: 1
+--- !u!114 &8836163261453846338
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -24247,20 +24276,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 183926}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 20e8969313b8e4614b498f042e99683a, type: 3}
+  m_Script: {fileID: 11500000, guid: e70922c501db4074fb976872c39ba229, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: 1bafc7aca6a15ce4a92553883cdf5612, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_ParticleSystem: {fileID: 19832912}
-  m_RenderMode: 0
-  m_StretchedSpeedScale: 1
-  m_StretchedLenghScale: 1
-  m_IgnoreTimescale: 0
-  m_RenderedMesh: {fileID: 0}
+  fixedTime: 1
+  use3dRotation: 0

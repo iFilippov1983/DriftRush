@@ -46,6 +46,8 @@ namespace RaceManager.UI
                 {
                     appearTween.Complete(true);
                     appearTween = null;
+
+                    _representationCard.SetActive(false);
                     return true;
                 }
             }
@@ -104,6 +106,7 @@ namespace RaceManager.UI
                     extraSequence?.Complete(true);
                     extraSequence = null;
 
+                    _representationCard.SetActive(false);
                     return true;
                 }
             }
@@ -137,10 +140,13 @@ namespace RaceManager.UI
                 {
                     disappearSequence.Complete(true);
                     disappearSequence = null;
+
+                    _representationCard.SetActive(false);
                     return true;
                 }
             }
 
+            _representationCard.SetActive(false);
             return true;
         }
 

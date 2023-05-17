@@ -480,7 +480,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 240977099}
-  m_LocalRotation: {x: 0.1869792, y: -0.096782595, z: 0.018514587, w: 0.9774094}
+  m_LocalRotation: {x: 0.18697919, y: -0.096782625, z: 0.01851459, w: 0.9774094}
   m_LocalPosition: {x: 2, y: 2.5, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1414,68 +1414,73 @@ MonoBehaviour:
     Type: 3
     EventFilter: 
     Count: 1
+    FlagType: 34
+  - Number: 12
+    Type: 3
+    EventFilter: 
+    Count: 1
     FlagType: 1
-  - Number: 13
+  - Number: 14
     Type: 2
     EventFilter: FirstLootbox
     Count: 1
     FlagType: 17
-  - Number: 14
+  - Number: 15
     Type: 0
     EventFilter: Slot_0_Button
     Count: 1
     FlagType: 18
-  - Number: 15
+  - Number: 16
     Type: 3
     EventFilter: 
     Count: 1
     FlagType: 21
-  - Number: 16
+  - Number: 17
     Type: 0
     EventFilter: ButtonCars
     Count: 1
     FlagType: 22
-  - Number: 17
+  - Number: 18
     Type: 0
     EventFilter: UseButton
     Count: 1
     FlagType: 23
-  - Number: 18
+  - Number: 19
     Type: 3
     EventFilter: 
     Count: 1
     FlagType: 24
-  - Number: 20
+  - Number: 21
     Type: 3
     EventFilter: 
     Count: 1
     FlagType: 19
-  - Number: 21
+  - Number: 22
     Type: 0
     EventFilter: StartButton
     Count: 1
     FlagType: 20
-  - Number: 24
+  - Number: 25
     Type: 2
     EventFilter: SecondLootbox
     Count: 1
     FlagType: 25
-  - Number: 25
+  - Number: 26
     Type: 0
     EventFilter: Slot_0_Button
     Count: 1
     FlagType: 26
-  - Number: 26
+  - Number: 27
     Type: 3
     EventFilter: 
     Count: 1
     FlagType: 31
-  - Number: 31
+  - Number: 32
     Type: 0
     EventFilter: ButtonShop
     Count: 1
     FlagType: 27
-  - Number: 32
+  - Number: 33
     Type: 0
     EventFilter: GetFreeLootboxButton
     Count: 1
@@ -3413,3 +3418,4 @@ MonoBehaviour:
   _rectScaleMax: 2
   _durationRandomizationFactor: 2
   _defaultDuration: 1
+  _defaultShakeStrength: {x: 3, y: 2, z: 0}

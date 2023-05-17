@@ -60,7 +60,6 @@ namespace RaceManager.Infrastructure
             Bind<GameEvents>();
             Bind<PlayerProfile>();
             Bind<InRacePositionsHandler>();
-            Bind<RaceLevelInitializer>();
             Bind<Profiler>();
             Bind<RewardsHandler>();
             Bind<OpponentsCarTuner>();

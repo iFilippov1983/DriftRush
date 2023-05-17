@@ -1,5 +1,4 @@
-﻿using RaceManager.Cars;
-using RaceManager.Root;
+﻿using RaceManager.Root;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
@@ -13,7 +12,11 @@ namespace RaceManager.Progress
     public class RaceRewardsScheme : SerializedScriptableObject
     {
         [Title("Scores Count Sceme")]
-        [SerializeField] private float _scoresFactorDrift = 1.0f;
+        [SerializeField] private float _driftScoresFactorMin = 1.0f;
+        [SerializeField] private float _driftScoresFactorMax = 5f;
+        [SerializeField] private float _driftScoresFactorIncreaseStep = 0.1f;
+        [SerializeField] private float _driftScoresFactorIncreaseTime = 2f;
+        [SerializeField] private float _driftCountTime = 5f;
         [SerializeField] private float _minDriftDistanceValue = 1f;
         [Space]
         [SerializeField] private float _scoresForBump = 100f;
@@ -21,7 +24,7 @@ namespace RaceManager.Progress
         [SerializeField] private float _minCollisionInterval = 0.1f;
         [Space]
         [SerializeField] private int _moneyMultiplyerForAds = 3;
-        [SerializeField] private float _scoresCountPauseDutation = 5f;
+        [SerializeField] private float _showScoresDuration = 5f;
         [Space(20)]
         [SerializeField]
         [DictionaryDrawerSettings(KeyLabel = "Place", ValueLabel = "Reward")]
@@ -47,13 +50,17 @@ namespace RaceManager.Progress
             { Rarity.Legendary, 1f }
         };
 
-        public float DriftFactor => _scoresFactorDrift;
-        public float CountPauseDuration => _scoresCountPauseDutation;
+        public float DriftFactorMin => _driftScoresFactorMin;
+        public float DriftFactorMax => _driftScoresFactorMax;
+        public float DriftFactorIncreaseStep => _driftScoresFactorIncreaseStep;
+        public float DrifFactorIncreaseTime => _driftScoresFactorIncreaseTime;
+        public float DriftCountTime => _driftCountTime;
         public float MinDriftDistanceValue => _minDriftDistanceValue;
         public float BumpScores => _scoresForBump;
         public float MinCollisionInterval => _minCollisionInterval;
         public float CrushScores => _scoresForCrush;
         public int MoneyMultiplyer => _moneyMultiplyerForAds;
+        public float ShowScoresDuration => _showScoresDuration;
 
         public RaceReward GetRewardFor(PositionInRace position)
         {

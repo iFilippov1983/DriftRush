@@ -8,9 +8,8 @@ using Newtonsoft.Json;
 
 public static class ObjectExtentions
 {
-    
     /// <summary>
-    /// T and its class field types have to be System.Serializable (doesn't fit for UnityEngine.GameObject or UnityEngine.AnimationCurve)
+    /// T and its class field types have to be System.Serializable (e.g. doesn't fit for UnityEngine.GameObject or UnityEngine.AnimationCurve)
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="obj"></param>

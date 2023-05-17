@@ -6,6 +6,8 @@
         InteractableTrue,
         InteractableFalse,
         StartAnimation,
-        StopAnimation
+        StopAnimation,
+        PlayTweenAnimation,
+        StopTweenAnimation
     }
 }

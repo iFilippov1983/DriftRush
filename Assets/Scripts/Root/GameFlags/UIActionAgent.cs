@@ -27,6 +27,9 @@ namespace RaceManager.Root
             [Space]
             [ShowIf("UseAnimations")]
             public List<AnimationType> animationTypes = new List<AnimationType>();
+            [Space]
+            [ShowIf("UseTweenAnimations")]
+            public List<DOTweenAnimation> tweens = new List<DOTweenAnimation>();
             [ShowIf("NeedToSetAnimations")]
             public float animationDuration = 1f;
             [ShowIf("NeedToSetAnimations")]
@@ -73,6 +76,8 @@ namespace RaceManager.Root
                 animationTypes.Contains(AnimationType.ScaleUpDownLoop) && NeedToSetAnimations;
             public bool UseMoveFromTo =>
                 animationTypes.Contains(AnimationType.MoveFromTo) && NeedToSetAnimations;
+            public bool UseTweenAnimations => 
+                actions.Contains(AgentActionType.PlayTweenAnimation) || actions.Contains(AgentActionType.StopTweenAnimation);
 
             #endregion
         }
@@ -126,6 +131,12 @@ namespace RaceManager.Root
                             break;
                         case AgentActionType.StopAnimation:
                             ToggleAnimationOnFlag(false, aAction);
+                            break;
+                        case AgentActionType.PlayTweenAnimation:
+                            ToggleTweenOnFlag(true, aAction);
+                            break;
+                        case AgentActionType.StopTweenAnimation:
+                            ToggleTweenOnFlag(false, aAction);
                             break;
                     }
                 }
@@ -208,6 +219,31 @@ namespace RaceManager.Root
             Debug.Log($"ToggleAnimationOnFlag ({start}) subscribed => Key: [{aAction.key}] => Object: [{gameObject.name}]");
         }
 
+        private void ToggleTweenOnFlag(bool play, AgentAction aAction)
+        { 
+            bool noTweens = aAction.tweens.Count == 0;
+
+            if (play && noTweens) 
+            {
+                Debug.LogError($"DOTweenAnimation List on UI Action Agent [{gameObject.name}] is empty!");
+                return;
+            }
+
+            if (TimeForAction(aAction.key))
+            { 
+                if(IsLastKey(aAction.key))
+                    ToggleTweensStatus(play, aAction);
+
+                return;
+            }
+
+            _flagsHandler
+                .Subscribe(aAction.key, () => ToggleTweensStatus(play, aAction))
+                .AddTo(this);
+
+            Debug.Log($"ToggleTweenOnFlag ({play}) subscribed => Key: [{aAction.key}] => Object: [{gameObject.name}]");
+        }
+
         private async void ClickAgent(float actionDelaySeconds = 0)
         {
             int delay = Convert.ToInt32(actionDelaySeconds * 1000);
@@ -233,6 +269,20 @@ namespace RaceManager.Root
             {
                 if (animationType != AnimationType.None)
                     StartAnimation(start, animationType, aAction);
+            }
+        }
+
+        private async void ToggleTweensStatus(bool play, AgentAction aAction, float actionDelaySeconds = 0)
+        {
+            int delay = Convert.ToInt32(actionDelaySeconds * 1000);
+            await Task.Delay(delay);
+
+            foreach (var tween in aAction.tweens)
+            {
+                if(play)
+                    tween.DOPlay();
+                else
+                    tween.DOKill();
             }
         }
 
@@ -292,10 +342,13 @@ namespace RaceManager.Root
             float targetAlpha;
             TweenerCore<Color, Color, ColorOptions> tween = null;
 
+            bool animate = true;
+
             StopAnimationSubject
                 .Where(t => t == AnimationType.FadeInOutLoop)
                 .Subscribe(t => 
                 {
+                    animate = false;
                     tween?.Kill();
                     tween = null;
                     targetAlpha = _originalAlpha;
@@ -303,7 +356,7 @@ namespace RaceManager.Root
                 })
                 .AddTo(this);
 
-            while (true)
+            while (animate)
             {
                 targetAlpha = fade ? aAction.minAlpha : aAction.maxAlpha;
 
@@ -346,10 +399,13 @@ namespace RaceManager.Root
             float targetScale;
             TweenerCore<Vector3, Vector3, VectorOptions> tween = null;
 
+            bool animate = true;
+
             StopAnimationSubject
                 .Where(t => t == AnimationType.ScaleUpDownLoop)
                 .Subscribe(t => 
                 { 
+                    animate = false;
                     tween?.Kill();
                     tween = null;
                     targetScale = _originalScale.x;
@@ -359,7 +415,7 @@ namespace RaceManager.Root
                 })
                 .AddTo(this);
 
-            while (true)
+            while (animate)
             {
                 targetScale = scaleDown ? aAction.minScale : aAction.maxScale;
 
@@ -383,10 +439,13 @@ namespace RaceManager.Root
 
             TweenerCore<Vector3, Vector3, VectorOptions> tween = null;
 
+            bool animate = true;
+
             StopAnimationSubject
                 .Where(t => t == AnimationType.MoveFromTo)
-                .Subscribe(t => 
+                .Subscribe(t =>
                 {
+                    animate = false;
                     tween?.Kill();
                     tween = null;
                     //tween = transform.DOMove(originPos, aAction.animationDuration * aAction.moveDurationFactor);
@@ -395,7 +454,7 @@ namespace RaceManager.Root
                 })
                 .AddTo(this);
 
-            while (true)
+            while (animate)
             {
                 transform.position = fromPosition;
 

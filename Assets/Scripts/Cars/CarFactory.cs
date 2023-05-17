@@ -1,9 +1,6 @@
 ﻿using RaceManager.Effects;
 using RaceManager.Waypoints;
-using Sirenix.OdinInspector.Editor.Internal;
-using Sirenix.Utilities.Editor;
 using UnityEngine;
-using Zenject;
 
 namespace RaceManager.Cars
 {

@@ -1,11 +1,26 @@
 ﻿namespace RaceManager.Race
 {
-    public struct RaceScoresData
+    public struct TotalScoreData
     {
-        public RaceScoresType ScoresType;
+        public int Value;
+        public int Timer;
+        public bool ShowScores;
+    }
+
+    public struct DriftScoresData
+    { 
         public int CurrentScoresValue;
         public int TotalScoresValue;
+        public float ScoresFactorThisType;
 
-        public int Timer;
+        public bool isDrifting;
+    }
+
+    public struct CollisionScoresData
+    {
+        public RaceScoresType ScoresType;
+
+        public int CurrentScoresThisTypeValue;
+        public int TotalScoresThisTypeValue;
     }
 }

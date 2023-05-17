@@ -47,15 +47,6 @@ namespace RaceManager.Root
             EffectsController.InstallSettings(_settingsContainer);
             StartPlayingRandomRaceTrack();
 
-            //this.FixedUpdateAsObservable()
-            //    .Where(_ => _raceUI.RaceFinished == false)
-            //    .Subscribe(_ =>
-            //    {
-            //        HandleWheels();
-            //        HandleCarSpeed();
-            //    })
-            //    .AddTo(this);
-
             this.UpdateAsObservable()
                 .Where(_ => _raceUI.RaceFinished == false)
                 .Subscribe(_ => 

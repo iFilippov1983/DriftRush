@@ -28,7 +28,6 @@ namespace RaceManager.Progress
         private Lootbox _lootboxToAdd;
 
         private List<Lootbox> _lootboxes = new List<Lootbox>();
-        private List<LevelName> _levels = new List<LevelName>();
 
         public int Money => _money;
         public int Gems => _gems;
@@ -36,16 +35,17 @@ namespace RaceManager.Progress
 
         public int MoneyCost => _moneyCost;
         public int GemsCost => _gemsCost;
+        public int CardsAmount => _cardsAmount;
+        public int VictoriesCycleCounter => _victoriesCycleCounter;
         public float IncomeFactor => _incomeFactor;
 
         public bool CanStartImmediate => _playerProfile.CanStartImmediate;
         public bool GotFirstFreeLootbox => _playerProfile.GotFirstFreeLootbox;
         public bool GotSpecialOffer => _playerProfile.GotSpecialOffer;
         public bool LootboxForRaceEnabled => _playerProfile.LootboxForRaceEnabled;
-        
-        public int VictoriesCycleCounter => _victoriesCycleCounter;
-        public int CardsAmount => _cardsAmount;
 
+        public int RacesTotalCounter => _playerProfile.RacesTotalCounter;
+        
         public CarName CarName => _carName;
         public PositionInRace LastInRacePosition => _positionInRace;
         public Lootbox LootboxToAdd => _lootboxToAdd;
@@ -70,7 +70,6 @@ namespace RaceManager.Progress
         }
 
         public void SetLootboxList(List<Lootbox> lootboxes) => _lootboxes = lootboxes;
-        public void SetLevelsList(List<LevelName> levels) => _levels = levels;
         public void SetImmediateStart() => _playerProfile.CanStartImmediate = true;
         public void SetNoAds() => _playerProfile.GotSpecialOffer = true;
         public void SetAdsOn() => _playerProfile.GotSpecialOffer = false;

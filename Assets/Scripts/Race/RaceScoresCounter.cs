@@ -10,38 +10,48 @@ namespace RaceManager.Race
 {
     public class RaceScoresCounter : IDisposable
     {
-        private const int StopDriftCountValue = -1;
-
         private int _scoresDrift;
         private int _scoresBump;
         private int _scoresCrush;
+        private int _scoresTotal;
 
         private float _driftDistanceCounter;
-        private float _driftPauseTime;
+        private float _showTotalTime;
+        private float _driftCountTime;
+        private float _driftTime;
+        private float _driftFactor;
 
         private Car _car;
         private RaceRewardsScheme _rewardsScheme;
 
         private Dictionary<string, float> _collidingObects = new Dictionary<string, float>();
 
-        public Subject<RaceScoresData> ScoresCount;
-        public Subject<RaceScoresData> ExtraScoresCount;
+        public Subject<TotalScoreData> TotalScoresCount;
+        public Subject<DriftScoresData> DriftScoresCount;
+        public Subject<CollisionScoresData> CollisionScoresCount;
 
         public RaceScoresCounter(Car car, RaceRewardsScheme rewardsScheme)
         {
             _car = car;
             _rewardsScheme = rewardsScheme;
-            _driftPauseTime = PauseDuration;
+            _showTotalTime = ShowScoresTime;
+            _driftFactor = DriftFactorMin;
+            _driftTime = 0f;
 
-            ScoresCount = new Subject<RaceScoresData>();
-            ExtraScoresCount = new Subject<RaceScoresData>();
+            TotalScoresCount = new Subject<TotalScoreData>();
+            DriftScoresCount = new Subject<DriftScoresData>();
+            CollisionScoresCount = new Subject<CollisionScoresData>();
 
-            _car.CollisionAction += CountExtraScores;
+            _car.CollisionAction += CountCollisionScores;
             _car.CollisionStayAction += ResetCollisionTimer;
         }
 
-        private float DriftFactor => _rewardsScheme.DriftFactor;
-        private float PauseDuration => _rewardsScheme.CountPauseDuration;
+        private float DriftFactorMin => _rewardsScheme.DriftFactorMin;
+        private float DriftFactorMax => _rewardsScheme.DriftFactorMax;
+        private float DriftFactorInreaseStep => _rewardsScheme.DriftFactorIncreaseStep;
+        private float DriftFactorInreaseTime => _rewardsScheme.DrifFactorIncreaseTime;
+        private float DriftCountTime => _rewardsScheme.DriftCountTime;
+        private float ShowScoresTime => _rewardsScheme.ShowScoresDuration;
         private float MinDriftDistanceValue => _rewardsScheme.MinDriftDistanceValue;
         private float BumpScores => _rewardsScheme.BumpScores;
         private float MinCollisionInterval => _rewardsScheme.MinCollisionInterval;
@@ -60,114 +70,181 @@ namespace RaceManager.Race
             }
         }
 
-        public void CountScores()
+        public void CountDriftScores()
         {
-            RaceScoresData data;
+            DriftScoresData data;
 
             if (CarIsSlipping)
             {
-                _driftPauseTime = PauseDuration;
+                _showTotalTime = ShowScoresTime;
+                _driftCountTime = DriftCountTime;
+                _driftTime += Time.fixedDeltaTime;
                 _driftDistanceCounter += _car.CurrentSpeed * Time.fixedDeltaTime;
 
                 if (_driftDistanceCounter > MinDriftDistanceValue)
                 {
-                    int scoresValue = Mathf.RoundToInt(_driftDistanceCounter * DriftFactor);
-
-                    data = new RaceScoresData()
+                    if (_driftTime > DriftFactorInreaseTime)
                     {
-                        ScoresType = RaceScoresType.Drift,
+                        _driftTime = 0;
+                        _driftFactor += DriftFactorInreaseStep;
+
+                        if(_driftFactor > DriftFactorMax)
+                            _driftFactor = DriftFactorMax;
+                    }
+
+                    int scoresValue = Mathf.RoundToInt(_driftDistanceCounter * DriftFactorMin);
+
+                    data = new DriftScoresData()
+                    {
                         CurrentScoresValue = scoresValue,
                         TotalScoresValue = _scoresDrift,
-                        Timer = 0
+                        ScoresFactorThisType = _driftFactor,
+                        isDrifting = true
                     };
 
-                    ScoresCount.OnNext(data);
+                    DriftScoresCount.OnNext(data);
                 }
             }
             else
             {
-                _driftPauseTime -= Time.fixedDeltaTime;
+                _driftCountTime -= Time.fixedDeltaTime;
+                
+                int lastDriftValue = Mathf.RoundToInt(_driftDistanceCounter * DriftFactorMin);
 
-                int pauseTimerValue = Mathf.CeilToInt(_driftPauseTime);
-                int lastDriftValue = Mathf.RoundToInt(_driftDistanceCounter * DriftFactor);
-
-                data = new RaceScoresData()
+                data = new DriftScoresData()
                 {
-                    ScoresType = RaceScoresType.Drift,
-                    CurrentScoresValue = lastDriftValue
+                    ScoresFactorThisType = _driftFactor
                 };
 
-                if (_driftPauseTime < 0 && lastDriftValue > 0)
+                if (_driftCountTime < 0 && lastDriftValue > 0)
                 {
+                    _driftTime = 0;
+
+                    lastDriftValue = Mathf.RoundToInt(lastDriftValue * _driftFactor) ;
                     _scoresDrift += lastDriftValue;
                     _driftDistanceCounter = 0f;
 
-                    data.Timer = StopDriftCountValue;
-                }
-                else
-                {
-                    data.Timer = pauseTimerValue;
+                    data.CurrentScoresValue = lastDriftValue;
+                    data.isDrifting = false;
+
+                    _driftFactor = DriftFactorMin;
+
+                    Debug.Log($"Drift scores counted: {lastDriftValue} => Total: {_scoresDrift}");
+
+                    CountTotalScores();
                 }
 
                 data.TotalScoresValue = _scoresDrift;
 
-                ScoresCount.OnNext(data);
+                DriftScoresCount.OnNext(data);
+
+                _showTotalTime -= Time.fixedDeltaTime;
             }
         }
 
-        private void CountExtraScores(Car car, Collision collision)
+        public void CountDriftScoresImmediate()
         {
-            if (collision.gameObject.TryGetComponent(out ICountableCollision countable))
+            int lastDriftValue = Mathf.RoundToInt(_driftDistanceCounter * DriftFactorMin);
+
+            DriftScoresData data = new DriftScoresData()
             {
-                if (_collidingObects.ContainsKey(countable.ID))
-                {
-                    if ((Time.time - _collidingObects[countable.ID]) < MinCollisionInterval)
-                        return;
-                }
-                else
-                {
-                    _collidingObects.Add(countable.ID, 0f);
-                }
+                ScoresFactorThisType = _driftFactor
+            };
 
-                int colLayer = countable.Layer;
-                int carLayer = car.Layer;
-                int scores = 0;
-                RaceScoresData data = default;
+            if (lastDriftValue > 0)
+            {
+                lastDriftValue = Mathf.RoundToInt(lastDriftValue * _driftFactor);
+                _scoresDrift += lastDriftValue;
+                _driftDistanceCounter = 0f;
 
-                if (colLayer == carLayer)
-                {
-                    scores = Mathf.RoundToInt(BumpScores);
-                    _scoresBump += scores;
+                data.CurrentScoresValue = lastDriftValue;
+                data.isDrifting = false;
 
-                    data = new RaceScoresData()
-                    {
-                        ScoresType = RaceScoresType.Bump,
-                        CurrentScoresValue = scores,
-                        TotalScoresValue = _scoresBump
-                    };
-                }
-                else if (colLayer == LayerMask.NameToLayer(Layer.Crushable))
-                {
-                    scores = Mathf.RoundToInt(CrushScores);
-                    _scoresCrush += scores;
+                _driftFactor = DriftFactorMin;
 
-                    data = new RaceScoresData()
-                    {
-                        ScoresType = RaceScoresType.Crush,
-                        CurrentScoresValue = scores,
-                        TotalScoresValue = _scoresCrush
-                    };
-                }
-
-                if (scores != 0)
-                {
-                    _driftPauseTime = PauseDuration;
-                    ExtraScoresCount.OnNext(data);
-                }
-                    
-
-                _collidingObects[countable.ID] = Time.time;
+                Debug.Log($"Drift scores counted IMMEDIATE: {lastDriftValue} => Total: {_scoresDrift}");
             }
+
+            data.TotalScoresValue = _scoresDrift;
+
+            DriftScoresCount.OnNext(data);
+        }
+
+        private void CountCollisionScores(Car car, Collision collision)
+        {
+            if (collision.gameObject.TryGetComponent(out ICountableCollision countable) == false)
+                return;
+
+            if (_collidingObects.ContainsKey(countable.ID))
+            {
+                float lastCollisionTime = _collidingObects[countable.ID];
+                if ((Time.time - lastCollisionTime) < MinCollisionInterval)
+                    return;
+            }
+            else
+            {
+                _collidingObects.Add(countable.ID, 0f);
+            }
+
+            int colLayer = countable.Layer;
+            int carLayer = car.Layer;
+            int scores = 0;
+            CollisionScoresData data = default;
+
+            if (colLayer == carLayer)
+            {
+                scores = Mathf.RoundToInt(BumpScores);
+                _scoresBump += scores;
+
+                data = new CollisionScoresData()
+                {
+                    ScoresType = RaceScoresType.Bump,
+                    CurrentScoresThisTypeValue = scores,
+                    TotalScoresThisTypeValue = _scoresBump
+                };
+            }
+            else if (colLayer == LayerMask.NameToLayer(Layer.Crushable))
+            {
+                scores = Mathf.RoundToInt(CrushScores);
+                _scoresCrush += scores;
+
+                data = new CollisionScoresData()
+                {
+                    ScoresType = RaceScoresType.Crush,
+                    CurrentScoresThisTypeValue = scores,
+                    TotalScoresThisTypeValue = _scoresCrush,
+                };
+            }
+
+            if (scores != 0)
+            {
+                _showTotalTime = ShowScoresTime;
+                CollisionScoresCount.OnNext(data);
+            }
+
+            _collidingObects[countable.ID] = Time.time;
+        }
+
+        private void CountTotalScores()
+        {
+            int total = _scoresDrift + _scoresBump + _scoresCrush;
+            
+            bool newTotal = _scoresTotal != total;
+            _scoresTotal = total;
+
+            if (newTotal)
+                _showTotalTime = ShowScoresTime;
+
+            int showTotalTimerValue = Mathf.CeilToInt(_showTotalTime);
+
+            TotalScoreData totalData = new TotalScoreData()
+            {
+                Value = _scoresTotal,
+                Timer = showTotalTimerValue,
+                ShowScores = _showTotalTime > 0 && newTotal
+            };
+
+            TotalScoresCount.OnNext(totalData);
         }
 
         private void ResetCollisionTimer(Car car, Collision collision)
@@ -180,7 +257,7 @@ namespace RaceManager.Race
 
         public void Dispose()
         {
-            _car.CollisionAction -= CountExtraScores;
+            _car.CollisionAction -= CountCollisionScores;
             _car.CollisionStayAction -= ResetCollisionTimer;
         }
     }

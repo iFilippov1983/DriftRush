@@ -47,6 +47,8 @@ namespace RaceManager.Race
         private bool _raceStarted;
         private bool _adjustOpponents;
 
+        private float _lastDriftFactor = 1f;
+
         private bool CanStartImmediate => _profiler.CanStartImmediate;
 
         [Inject]
@@ -59,7 +61,6 @@ namespace RaceManager.Race
             Profiler profiler,
             InRacePositionsHandler positionsHandler,
             RaceUI raceUI,
-            RaceLevelInitializer levelInitializer, 
             RewardsHandler rewardsHandler,
             GameEvents gameEvents
             )
@@ -71,28 +72,50 @@ namespace RaceManager.Race
             _profiler = profiler;
             _positionsHandler = positionsHandler;
             _raceUI = raceUI;
-            _raceLevelInitializer = levelInitializer;
             _rewardsHandler = rewardsHandler;
             _gameEvents = gameEvents;
         }
 
         public void Initialize()
         {
-            _raceLevel = _raceLevelInitializer.GetRaceLevel();
-
-            _startPoints = _raceLevel.StartPoints;
-            _waypointTrackMain = _raceLevel.WaypointTrackMain;
-            _waypointTrackEven = _raceLevel.WaypointTrackEven;
-            _waypointTrackOdd = _raceLevel.WaypointTrackOdd;
-
-            _lootboxHandler = new InRaceLootboxHandler(_profiler);
-
+            InitRaceLevel();
+            InitLootboxHandler();
             InitLineHandler();
             InitOpponentsTuner();
             InitDrivers();
             MakeSubscriptions();
 
             _positionsHandler.StartHandling(_waypointsTrackersList);
+        }
+
+        private void InitRaceLevel()
+        {
+            var builder = GetLevelBuilder();
+            _raceLevelInitializer = new RaceLevelInitializer(_profiler, builder);
+
+            if (_profiler.RacesTotalCounter > 0)
+            {
+                _raceUI.ShowSimpleFinish = false;
+                _raceLevelInitializer.MakeCommonRaceRunLevel();
+            }
+            else 
+            {
+                _raceUI.ShowSimpleFinish = true;
+                _raceLevelInitializer.MakeInitialLevel();
+            }
+
+            _raceLevel = builder.GetResult();
+            //_raceLevel = _raceLevelInitializer.GetRaceLevel();
+
+            _startPoints = _raceLevel.StartPoints;
+            _waypointTrackMain = _raceLevel.WaypointTrackMain;
+            _waypointTrackEven = _raceLevel.WaypointTrackEven;
+            _waypointTrackOdd = _raceLevel.WaypointTrackOdd;
+        }
+
+        private void InitLootboxHandler()
+        {
+            _lootboxHandler = new InRaceLootboxHandler(_profiler);
         }
 
         private void InitLineHandler()
@@ -103,10 +126,13 @@ namespace RaceManager.Race
         private void InitOpponentsTuner()
         {
             _adjustOpponents = _opponentsCarTuner.CanAdjust || _opponentsCarTuner.CanAdjustThreshold > _profiler.GetVictoriesTotalCount();
-            bool needPercentageGrade = _profiler.GetLastInRacePosition() == PositionInRace.First;
-            
+
             if (_adjustOpponents)
+            {
+                bool needPercentageGrade = _profiler.GetLastInRacePosition() == PositionInRace.First;
                 _opponentsCarTuner.Initialize(_opponentsCarsDepot, needPercentageGrade);
+            }
+                
         }
 
         private void InitDrivers()
@@ -119,6 +145,9 @@ namespace RaceManager.Race
 
             for (int i = 0; i < _startPoints.Length; i++)
             {
+                if (_startPoints[i].isAvailable == false)
+                    continue;
+
                 var driverGo = Instantiate(driverPrefab, _startPoints[i].transform.position, _startPoints[i].transform.rotation);
                 driverGo.name = $"{_startPoints[i].Type} driver";
 
@@ -150,8 +179,15 @@ namespace RaceManager.Race
                         tracker.ResetTargetToCashedValues();
                     }
 
+                    int participantsCount = 0;
+                    foreach (var sp in _startPoints)
+                    { 
+                        if(sp.isAvailable)
+                            participantsCount++;
+                    }
                     //_raceUI.Initialize(_raceLevelInitializer, selfRighting.RightCar, GetToCheckpoint);
-                    _raceUI.Initialize(_startPoints.Length, selfRighting.RightCar, GetToCheckpoint);
+                    //_raceUI.Initialize(_startPoints.Length, selfRighting.RightCar, GetToCheckpoint);
+                    _raceUI.Initialize(participantsCount, selfRighting.RightCar, GetToCheckpoint);
 
                     _scoresCounter = new RaceScoresCounter(driver.Car, _rewardsScheme);
                 }
@@ -190,7 +226,7 @@ namespace RaceManager.Race
                 .Subscribe(_ =>
                 {
                     _lootboxHandler.Handle();
-                    _scoresCounter.CountScores();
+                    _scoresCounter.CountDriftScores();
                 })
                 .AddTo(this);
 
@@ -230,29 +266,45 @@ namespace RaceManager.Race
                 })
                 .AddTo(this);
 
-            _scoresCounter.ScoresCount
-                .Where(data => data.CurrentScoresValue > 0)
+            _scoresCounter.TotalScoresCount
+                .Where(data => data.Value > 0)
                 .Subscribe(data =>
                 {
-                    bool showPause = data.Timer > 0;
-                    bool showScores = data.Timer >= 0;
-
-                    _raceUI.ShowPause(showPause, data.Timer);
-                    _raceUI.ShowScores(showScores, data.CurrentScoresValue);
-
-                    int totalScores = data.CurrentScoresValue > data.TotalScoresValue
-                    ? data.CurrentScoresValue
-                    : data.TotalScoresValue;
-
-                    _rewardsHandler.SetMoneyReward(data.ScoresType, totalScores);
+                    _raceUI.ShowScoresTotal(data.ShowScores, data.Value, data.Timer).AddTo(_raceUI);
+                    _raceUI.ShowPause(data.ShowScores, data.Timer);
                 })
                 .AddTo(this);
 
-            _scoresCounter.ExtraScoresCount
+            _scoresCounter.DriftScoresCount
+                .Where(data => data.CurrentScoresValue > 0)
                 .Subscribe(data =>
                 {
-                    _raceUI.ShowExtraScores(data.ScoresType, data.CurrentScoresValue);
-                    _rewardsHandler.SetMoneyReward(data.ScoresType, data.TotalScoresValue);
+                    bool animateFactor = data.ScoresFactorThisType != _lastDriftFactor;
+
+                    _raceUI.ShowDriftScores
+                        (
+                        data.isDrifting,
+                        data.CurrentScoresValue,
+                        data.ScoresFactorThisType,
+                        animateFactor
+                        )
+                        .AddTo(_raceUI);
+
+                    int totalScoresThisType = data.CurrentScoresValue > data.TotalScoresValue
+                        ? data.CurrentScoresValue
+                        : data.TotalScoresValue;
+
+                    _rewardsHandler.SetMoneyReward(RaceScoresType.Drift, totalScoresThisType);
+
+                    _lastDriftFactor = data.ScoresFactorThisType;
+                })
+                .AddTo(this);
+
+            _scoresCounter.CollisionScoresCount
+                .Subscribe(data =>
+                {
+                    _raceUI.ShowCollisionScores(data.ScoresType, data.CurrentScoresThisTypeValue);
+                    _rewardsHandler.SetMoneyReward(data.ScoresType, data.TotalScoresThisTypeValue);
                 })
                 .AddTo(this);
 
@@ -278,6 +330,7 @@ namespace RaceManager.Race
                 case CarState.OnTrack:
                     break;
                 case CarState.Finished:
+                    _scoresCounter.CountDriftScoresImmediate();
                     _rewardsHandler.RewardForRaceInit(playerDriver.DriverProfile.PositionInRace, out RaceRewardInfo info);
                     _raceUI.SetFinishValues(info);
                     _lineHandler.StopHandling();
@@ -296,10 +349,17 @@ namespace RaceManager.Race
         {
             //TODO: implement cases: complete/fail
 
-            await Task.Delay(1000);
+            await Task.Delay(1000);//To fake ad period
 
             _rewardsHandler.RewardForRaceMoneyMultiplyed();
             _raceUI.OnAdsRewardAction();
+        }
+
+        private IRaceLevelBuilder GetLevelBuilder()
+        {
+            //TODO: return builder type depending on race type
+
+            return new CommonRaceRunLevelBuilder();
         }
 
         private void SetRaceUI(Lootbox lootbox) => _raceUI.SetLootboxToGrant(lootbox.Rarity);
@@ -312,8 +372,6 @@ namespace RaceManager.Race
             _waypointTrackMain.OnWaypointPassedNotification -= MakeNotification;
 
             _scoresCounter.Dispose();
-
-            //Destroy(_opponentsCarsDepot);
         }
     }
 }

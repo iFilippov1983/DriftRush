@@ -18,7 +18,7 @@ namespace RaceManager.Root
         private NotificationPopup _popup;
 
         [ShowInInspector]
-        private Dictionary<CarName, CarInfo> _cars;
+        private Dictionary<CarName, CarInfo> _carsInfo;
 
         public Action<CarName> OnNotification;
 
@@ -33,11 +33,11 @@ namespace RaceManager.Root
         public void Initialize(NotificationPopup popup)
         {
             _popup = popup;
-            _cars = new Dictionary<CarName, CarInfo>();
+            _carsInfo = new Dictionary<CarName, CarInfo>();
 
             foreach (CarProfile profile in _playerCarsDepot.ProfilesList)
             {
-                if (!_cars.ContainsKey(profile.CarName))
+                if (!_carsInfo.ContainsKey(profile.CarName))
                 {
                     var scheme = profile.RankingScheme;
 
@@ -52,7 +52,7 @@ namespace RaceManager.Root
                         cashedCardsAmount = _profiler.GetCardsAmount(name),
                     };
 
-                    _cars.Add(name, info);
+                    _carsInfo.Add(name, info);
                 }
             }
 
@@ -63,7 +63,7 @@ namespace RaceManager.Root
 
         public void NotifyIfNeeded()
         {
-            foreach (var car in _cars)
+            foreach (var car in _carsInfo)
             {
                 if (car.Value.needsNotification)
                 {
@@ -100,7 +100,7 @@ namespace RaceManager.Root
 
                     OnNotification?.Invoke(carName);
 
-                    _cars[carName] = carInfo;
+                    _carsInfo[carName] = carInfo;
 
                     return;
                 }
@@ -109,7 +109,7 @@ namespace RaceManager.Root
 
         private void UpdateCarInfo(CarUpdateData data)
         {
-            CarInfo carInfo = _cars[data.carName];
+            CarInfo carInfo = _carsInfo[data.carName];
             CarRankingScheme scheme = _playerCarsDepot.GetProfile(data.carName).RankingScheme;
 
             int cardsAmount = _profiler.GetCardsAmount(data.carName);
@@ -121,9 +121,9 @@ namespace RaceManager.Root
             carInfo.isNotified = !carInfo.needsNotification;
             carInfo.cashedCardsAmount = cardsAmount;
 
-            _cars[data.carName] = carInfo;
+            _carsInfo[data.carName] = carInfo;
 
-            $"Updating car info {data.carName} => Current rank {scheme.CurrentRank.Rank} => Cur cards amount: {cardsAmount} => Goal cards amount: {cardsAmountToUpgrade}".Log(Logger.ColorYellow);
+            //$"Updating car info {data.carName} => Current rank {scheme.CurrentRank.Rank} => Cur cards amount: {cardsAmount} => Goal cards amount: {cardsAmountToUpgrade}".Log(Logger.ColorYellow);
         }
 
         private struct CarInfo

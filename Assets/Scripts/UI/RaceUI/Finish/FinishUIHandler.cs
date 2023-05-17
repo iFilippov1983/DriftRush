@@ -70,6 +70,45 @@ namespace RaceManager.UI
             _lootboxRewardPanel.LootboxImage.sprite = lootboxSprite;
         }
 
+        public IDisposable ShowSimpleFinish()
+        {
+            HasJob = true;
+            _moneyRewardPanel.SetActive(true);
+            _moneyRewardPanel.ContinueButton.onClick.RemoveAllListeners();
+            _moneyRewardPanel.ContinueButton.onClick.AddListener(() => 
+            {
+                _moneyRewardPanel.ContinueButton.interactable = false;
+
+                OnButtonPressed.OnNext
+                ((
+                    bName: _moneyRewardPanel.ContinueButton.name,
+                    isFinal: true
+                ));
+            });
+
+            foreach (var sPanel in _moneyRewardPanel.ShowPanels)
+            {
+                sPanel.SetActive(false);
+            }
+
+            foreach (var rPanel in _moneyRewardPanel.RewardPanels)
+            { 
+                rPanel.SetActive(false);
+            }
+
+            Tween titleTween = _titleRect.DOMove(_moneyRewardPanel.TitlePosition.position, _duration)
+                .OnComplete(() => HasJob = false);
+
+            return Disposable.Create(() =>
+            {
+                _appearSequence?.Complete(true);
+                _appearSequence = null;
+
+                titleTween?.Complete(true);
+                titleTween = null;
+            });
+        }
+
         public IDisposable ShowMoneyRewardPanel(RaceRewardInfo info)
         {
             _rewardInfo = info;

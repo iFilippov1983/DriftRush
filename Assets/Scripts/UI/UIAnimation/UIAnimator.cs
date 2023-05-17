@@ -31,6 +31,8 @@ namespace RaceManager.UI
         [Space]
         [SerializeField] private float _durationRandomizationFactor = 2f;
         [SerializeField] private float _defaultDuration = 1f;
+        [Space]
+        [SerializeField] private Vector3 _defaultShakeStrength = new Vector3(3f, 2f, 0f);
 
         private int _counter;
 
@@ -246,21 +248,26 @@ namespace RaceManager.UI
             return Disposable.Create(() => tween?.Kill());
         }
 
-        public IDisposable RectAnimate(RectTransform rect, TweenCallback finishCallBack = null, params AnimationType[] animationsSequence)
-        { 
+        public IDisposable RectAnimate(RectTransform rect, float duration = 0f, bool resetOnComplete = true, TweenCallback finishCallBack = null, params AnimationType[] animationsSequence)
+        {
+            if (duration == 0)
+                duration = _rectAnimDuration;
+
             Sequence animSequence = DOTween.Sequence();
 
             Vector3 targetScale = rect.transform.localScale * _rectScaleMax;
             Vector3 initialScale = rect.transform.localScale;
+            Vector3 initialPosition = rect.transform.position;
 
             foreach (var animation in animationsSequence)
             {
                 Tween tween = animation switch
                 {
-                    AnimationType.ScaleFromZero => rect.transform.DOScale(0f, _rectAnimDuration).From(),
-                    AnimationType.ScaleToZero => rect.transform.DOScale(0f, _rectAnimDuration),
-                    AnimationType.PunchScale => rect.transform.DOPunchScale(targetScale, _rectAnimDuration),
-                    AnimationType.ShakeScale => rect.transform.DOShakeScale(_rectAnimDuration),
+                    AnimationType.ScaleFromZero => rect.transform.DOScale(0f, duration).From(),
+                    AnimationType.ScaleToZero => rect.transform.DOScale(0f, duration),
+                    AnimationType.PunchScale => rect.transform.DOPunchScale(targetScale, duration),
+                    AnimationType.ShakeScale => rect.transform.DOShakeScale(duration),
+                    AnimationType.ShakePosition => rect.transform.DOShakePosition(duration, _defaultShakeStrength, 10, 45, false, false, ShakeRandomnessMode.Harmonic),
                     _ => null,
                 };
 
@@ -271,7 +278,12 @@ namespace RaceManager.UI
             if(finishCallBack != null)
                 animSequence.AppendCallback(finishCallBack);
 
-            animSequence.AppendCallback(() => rect.transform.localScale = initialScale);
+            if(resetOnComplete)
+                animSequence.AppendCallback(() => 
+                {
+                    rect.transform.localScale = initialScale;
+                    rect.transform.position = initialPosition;
+                });
 
             ForceCompleteAnimation
                 .Where(s => rect != null && animSequence != null && s == rect.name)

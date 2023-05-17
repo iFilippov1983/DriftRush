@@ -11,7 +11,9 @@
     { 
         public int CurrentScoresValue;
         public int TotalScoresValue;
+        
         public float ScoresFactorThisType;
+        public float ScoresCountTime;
 
         public bool isDrifting;
     }

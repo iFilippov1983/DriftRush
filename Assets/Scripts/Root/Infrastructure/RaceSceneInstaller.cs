@@ -29,14 +29,15 @@ namespace RaceManager.Infrastructure
 
         public override void InstallBindings()
         {
-            BindSingletons();
             BindObjects();
+            BindSingletons();
             BindClasses();
         }
 
         private void BindSingletons()
         {
             Bind(Singleton<Resolver>.Instance);
+            Bind(Singleton<UIAnimator>.Instance);
         }
 
         private void BindObjects()

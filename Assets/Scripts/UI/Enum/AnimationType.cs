@@ -20,6 +20,8 @@
         MoveInX,
         MoveOutX,
         MoveInY,
-        MoveOutY
+        MoveOutY,
+
+        ShakePosition
     }
 }

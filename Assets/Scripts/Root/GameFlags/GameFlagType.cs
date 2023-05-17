@@ -16,6 +16,7 @@
 
         UpgradeCar = 9,
         TuneCar = 10,
+        AdjustCar = 34,
 
         WinRace_1 = 11,
         WinRace_2 = 12,

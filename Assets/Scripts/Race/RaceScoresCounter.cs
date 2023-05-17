@@ -99,6 +99,7 @@ namespace RaceManager.Race
                         CurrentScoresValue = scoresValue,
                         TotalScoresValue = _scoresDrift,
                         ScoresFactorThisType = _driftFactor,
+                        ScoresCountTime = _driftCountTime,
                         isDrifting = true
                     };
 

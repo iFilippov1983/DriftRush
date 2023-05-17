@@ -286,6 +286,7 @@ namespace RaceManager.Race
                         data.isDrifting,
                         data.CurrentScoresValue,
                         data.ScoresFactorThisType,
+                        data.ScoresCountTime,
                         animateFactor
                         )
                         .AddTo(_raceUI);

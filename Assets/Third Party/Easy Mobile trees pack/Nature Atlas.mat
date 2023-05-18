@@ -8,13 +8,15 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Nature Atlas
-  m_Shader: {fileID: 10511, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: EFFECT_BILLBOARD EFFECT_HUE_VARIATION _ALPHAPREMULTIPLY_ON _WINDQUALITY_FASTEST
-  m_LightmapFlags: 4
+  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: EFFECT_BILLBOARD EFFECT_HUE_VARIATION _ALPHABLEND_ON _EMISSION
+    _WINDQUALITY_FASTEST
+  m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
+  m_CustomRenderQueue: 3000
+  stringTagMap:
+    RenderType: Transparent
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
@@ -40,7 +42,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 028a20054dc394041820fbdd1bd0ab5a, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ExtraTex:
@@ -52,7 +54,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 028a20054dc394041820fbdd1bd0ab5a, type: 3}
+        m_Texture: {fileID: 2800000, guid: bae0eded41b3bd246aa72a1be90467eb, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -86,7 +88,7 @@ Material:
     - _BillboardShadowFade: 0.5
     - _BumpScale: 1
     - _Cull: 2
-    - _Cutoff: 0.68
+    - _Cutoff: 0.046
     - _DetailNormalMapScale: 1
     - _DstBlend: 10
     - _GlossMapScale: 1
@@ -94,7 +96,7 @@ Material:
     - _GlossyReflections: 1
     - _HueVariationKwToggle: 1
     - _Metallic: 0
-    - _Mode: 3
+    - _Mode: 2
     - _NormalMapKwToggle: 0
     - _Occlusion: 0
     - _OcclusionStrength: 1
@@ -104,7 +106,7 @@ Material:
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SquashAmount: 1
-    - _SrcBlend: 1
+    - _SrcBlend: 5
     - _SubsurfaceIndirect: 0.25
     - _SubsurfaceKwToggle: 0
     - _TranslucencyViewDependency: 0.31
@@ -113,8 +115,8 @@ Material:
     - _WindQuality: 1
     - _ZWrite: 0
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _Color: {r: 0.735849, g: 0.6748725, b: 0.31585974, a: 1}
+    - _EmissionColor: {r: 0.6839622, g: 0.8491639, b: 1, a: 1}
     - _HueVariation: {r: 1, g: 0.5, b: 0, a: 0.1}
     - _HueVariationColor: {r: 0.745283, g: 0.67349815, b: 0.60114807, a: 0.1}
     - _SubsurfaceColor: {r: 1, g: 1, b: 1, a: 1}

@@ -246,7 +246,7 @@ namespace RaceManager.UI
             Tween mtTween = null;
             if (animateFactor)
             {
-                mtTween = CurrentDriftIndicator.MultiplierText.rectTransform.DOPunchScale(new Vector3(1.03f, 1.03f, 1.03f), duration / 2);
+                mtTween = CurrentDriftIndicator.MultiplierText.transform.DOPunchScale(new Vector3(0f, 1.03f, 0f), duration / 2, 10, 0);
             }
 
             CurrentDriftIndicator.TotalText.SetActive(!show);
@@ -255,7 +255,7 @@ namespace RaceManager.UI
 
             if (_driftScoresShakeTween == null || !_driftScoresShakeTween.IsPlaying())
             {
-                Vector3 shakeStrength = new Vector3(3f, 2f, 0f);
+                Vector3 shakeStrength = new Vector3(1.5f, 1f, 0f);
                 Vector3 initialPos = ScoresIndicator.DriftScoresRect.position;
 
                 _driftScoresShakeTween = ScoresIndicator.DriftScoresRect
@@ -267,10 +267,11 @@ namespace RaceManager.UI
                         });
             }
 
-            Tween ttTween = null;
+            //Tween ttTween = null;
             if (!show)
             {
-                ttTween = CurrentDriftIndicator.TotalText.DOText(scoresValue.ToString(), duration * 1.5f, true, ScrambleMode.Numerals);
+                CurrentDriftIndicator.TotalText.text = scoresValue.ToString();
+                //ttTween = CurrentDriftIndicator.TotalText.DOText(scoresValue.ToString(), duration * 1.5f, true, ScrambleMode.Numerals);
 
                 _driftScoresShakeTween?.Complete();
                 _driftScoresShakeTween = null;
@@ -287,8 +288,8 @@ namespace RaceManager.UI
                     mtTween = null;
                 }
 
-                ttTween?.Complete(); 
-                ttTween = null;
+                //ttTween?.Complete(); 
+                //ttTween = null;
 
                 _driftScoresShakeTween?.Complete(true);
                 _driftScoresShakeTween = null;
@@ -374,7 +375,7 @@ namespace RaceManager.UI
 
             Sequence sequence = DOTween.Sequence();
             sequence.Append(indicator.Rect.DOMove(ScoresIndicator.DriftScoresMoveToRect.position, duration * 2));
-            sequence.Join(indicator.Rect.DOPunchScale(new Vector3(1.05f, 1.05f, 1.05f), duration / 2));
+            sequence.Join(indicator.Rect.DOPunchScale(new Vector3(1.05f, 1.05f, 1.05f), duration / 2, 10, 0));
             sequence.Append(indicator.TotalText.DOFade(0f, duration));
             sequence.Join(indicator.TitleText.DOFade(0f, duration));
             sequence.OnComplete(OnComplete);

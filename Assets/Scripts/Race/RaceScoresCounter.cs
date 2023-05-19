@@ -130,7 +130,7 @@ namespace RaceManager.Race
 
                     _driftFactor = DriftFactorMin;
 
-                    Debug.Log($"Drift scores counted: {lastDriftValue} => Total: {_scoresDrift}");
+                    //Debug.Log($"Drift scores counted: {lastDriftValue} => Total: {_scoresDrift}");
 
                     CountTotalScores();
                 }

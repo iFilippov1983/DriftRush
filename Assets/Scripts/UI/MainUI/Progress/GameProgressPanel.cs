@@ -317,7 +317,7 @@ namespace RaceManager.UI
                         window.RewardSimple.SetActive(false);
                         window.RewardLootbox.SetActive(false);
                         window.RewardCards.SetActive(true);
-                        window.RewardCards.CarImage.sprite = _spritesCars.GetCarSprite(card.CarName);
+                        window.RewardCards.CarImage.sprite = _spritesCars.GetCarSprite(card.CarName, true);
                         window.RewardCards.CardAmountText.text = card.CardsAmount.ToString();
                         break;
                     case GameUnitType.RaceReward:

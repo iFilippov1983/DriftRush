@@ -15,6 +15,7 @@
         RaceTrack_03 = 203,
 
         SFX_ButtonPressed = 1000,
+        SFX_DriftScoresCount = 1001,
 
         SFX_MetalCollision_Light = 1100,
         SFX_MetalCollision_Medium = 1101,

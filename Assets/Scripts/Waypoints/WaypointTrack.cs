@@ -128,9 +128,12 @@ namespace RaceManager.Waypoints
                     if (node != null)
                     {
                         wp.RecomendedSpeed = node.recomendedSpeed;
-                        if (node.isCheckpoint || node.isRaceLinePoint)
+
+                        if (node.isBrakeCheckpoint || node.isRaceLinePoint || node.isDriftCheckpointA || node.isDriftCheckpointB)
                         {
-                            wp.isCheckpoint = node.isCheckpoint;
+                            wp.isBrakeCheckpoint = node.isBrakeCheckpoint;
+                            wp.isDriftCheckpointA = node.isDriftCheckpointA;
+                            wp.isDriftCheckpointB = node.isDriftCheckpointB;
                             wp.isRaceLinePoint = node.isRaceLinePoint;
                             wp.OnPassed += OnWaypointPassed;
                         }
@@ -267,19 +270,29 @@ namespace RaceManager.Waypoints
         private void OnDrawGizmosSelected() => DrawGizmos(true);
 
         private void OnWaypointPassed(Waypoint wp)
-        { 
-            if(wp.isCheckpoint)
-                OnWaypointPassedNotification?.Invoke(NotificationType.Checkpoint);
+        {
+            if (wp.isBrakeCheckpoint)
+            {
+                OnWaypointPassedNotification?.Invoke(NotificationType.CheckpointBrake);
+                //Debug.Log("[Brake Checkpoint Notification]");
+            }
+                
 
             if(wp.isRaceLinePoint)
                 OnWaypointPassedNotification?.Invoke(NotificationType.RaceLine);
 
-            wp.OnPassed -= OnWaypointPassed;
-        }
+            if (wp.isDriftCheckpointA)
+            {
+                OnWaypointPassedNotification?.Invoke(NotificationType.CheckpointDriftA);
+                //Debug.Log("[Drift Checkpoint Notification]");
+            }
 
-        private void OnRaceLinePointPassed()
-        { 
-            
+            if (wp.isDriftCheckpointB)
+            {
+                OnWaypointPassedNotification?.Invoke(NotificationType.CheckpointDriftB);
+            }
+
+            wp.OnPassed -= OnWaypointPassed;
         }
 
         protected virtual void DrawGizmos(bool selected)

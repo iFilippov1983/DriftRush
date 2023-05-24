@@ -23,6 +23,8 @@ namespace RaceManager.Race
         [SerializeField] private List<GameObject> _activeObjects;
         [GUIColor(1f, 0.6f, 0.4f)]
         [SerializeField] private List<GameObject> _inactiveObjects;
+        [GUIColor(1f, 0f, 0.4f)]
+        [SerializeField] private List<GameObject> _accessoryObjects;
 
         public Difficulty Difficulty => _difficulty;
         public StartPoint[] StartPoints => _startPoints;
@@ -33,5 +35,6 @@ namespace RaceManager.Race
         public Vector3 FinishCamInitialPosition => _finishCamInitialPoint.position;
         public List<GameObject> Actives => _activeObjects;
         public List<GameObject> Inactives => _inactiveObjects;
+        public List<GameObject> Accessory => _accessoryObjects;
     }
 }

@@ -12,7 +12,9 @@ namespace RaceManager.Waypoints
     {
         public int Number;
         public bool isFinishLine = false;
-        public bool isCheckpoint = false;
+        public bool isBrakeCheckpoint = false;
+        public bool isDriftCheckpointA = false;
+        public bool isDriftCheckpointB = false;
         public bool isRaceLinePoint = false;
         [ReadOnly]
         public Waypoint NextWaypoint;
@@ -62,12 +64,12 @@ namespace RaceManager.Waypoints
 
         private void SetAndNotify(Car car, Collider other)
         {
-            if (isCheckpoint)
+            if (isBrakeCheckpoint)
             {
                 car.CarSelfRighting.LastCheckpoint = transform;
             }
 
-            if (isCheckpoint || isRaceLinePoint)
+            if (isBrakeCheckpoint || isRaceLinePoint || isDriftCheckpointA || isDriftCheckpointB)
             {
                 bool isPlayer = other.TryGetComponent(out PlayerControl playerControl);
 

@@ -6,7 +6,9 @@ namespace RaceManager.Waypoints
     public class TrackNode : MonoBehaviour 
     {
         public float recomendedSpeed;
-        public bool isCheckpoint;
+        public bool isBrakeCheckpoint;
+        public bool isDriftCheckpointA;
+        public bool isDriftCheckpointB;
         public bool isRaceLinePoint;
         public bool isFinishPoint;
 

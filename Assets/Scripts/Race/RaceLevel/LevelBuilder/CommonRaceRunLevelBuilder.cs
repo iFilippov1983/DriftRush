@@ -7,7 +7,7 @@ namespace RaceManager.Race
     public class CommonRaceRunLevelBuilder : IRaceLevelBuilder
     {
         private IRaceLevel _raceLevel;
-
+        private TrackConfiguration _currentConfiguration;
         public IRaceLevel GetResult() => _raceLevel;
 
         public void SetPrefab(string path)
@@ -26,11 +26,11 @@ namespace RaceManager.Race
             foreach (var trackConfiguration in configurations)
                 trackConfiguration.SetActive(false);
 
-            TrackConfiguration c;
+            //TrackConfiguration _currentConfiguration;
 
             if (configurationDif == Difficulty.Zero)
             {
-                c = configurations[Random.Range(0, configurations.Count)];
+                _currentConfiguration = configurations[Random.Range(0, configurations.Count)];
             }
             else
             {
@@ -41,19 +41,19 @@ namespace RaceManager.Race
                         concreteConfigurations.Add(trackConfiguration);
                 }
 
-                c = concreteConfigurations[Random.Range(0, concreteConfigurations.Count)];
+                _currentConfiguration = concreteConfigurations[Random.Range(0, concreteConfigurations.Count)];
             }
 
-            foreach (var active in c.Actives)
+            foreach (var active in _currentConfiguration.Actives)
                 active.SetActive(true);
 
-            foreach (var inactive in c.Inactives)
+            foreach (var inactive in _currentConfiguration.Inactives)
                 inactive.SetActive(false);
 
-            c.SetActive(true);
-            _raceLevel.SetCurrentConfiguration(c);
+            _currentConfiguration.SetActive(true);
+            _raceLevel.SetCurrentConfiguration(_currentConfiguration);
 
-            Debug.Log($"Race level configuration loaded => [{c.name}]");
+            Debug.Log($"Race level configuration loaded => [{_currentConfiguration.name}]");
         }
 
         /// <summary>
@@ -78,6 +78,22 @@ namespace RaceManager.Race
                 {
                     startPoints[i].isAvailable = i < a;
                 }
+            }
+        }
+
+        public void ActivateAccessoryObjects()
+        {
+            Debug.Log("enter");
+            if (_currentConfiguration is null || _currentConfiguration.Accessory is null || _currentConfiguration.Accessory.Count == 0)
+            {
+                Debug.Log($"[ActivateAccessoryObjects] Configuration is null: {_currentConfiguration is null}; Accessory List is null: {_currentConfiguration.Accessory is null}; Accessory List count is 0: {_currentConfiguration.Accessory.Count == 0}");
+                return;
+            }
+            Debug.Log("check");
+            foreach (var a in _currentConfiguration.Accessory)
+            {
+                a.SetActive(true);
+                Debug.Log($"{a.name}");
             }
         }
     }

@@ -6,9 +6,11 @@
         FirstLootbox,
         IapLootbox,
         Start,
-        Checkpoint,
+        CheckpointBrake,
         Finish,
         SecondLootbox,
-        RaceLine
+        RaceLine,
+        CheckpointDriftA,
+        CheckpointDriftB,
     }
 }

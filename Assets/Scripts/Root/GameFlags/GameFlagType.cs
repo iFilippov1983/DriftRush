@@ -7,12 +7,18 @@
         GlobalDeactivation = 1,
 
         InitialGameStart = 2,
-        FirstsRace = 3,
+        FirstRace = 3,
+
         AccelerationStart = 4,
         AccelerationFinish = 5,
+
         BrakeRequest = 6,
         Brake = 7,
-        Drift = 8,
+
+        DriftRequestA = 35,
+        DriftA = 8,
+        DriftRequestB = 36,
+        DriftB = 37,//top number        
 
         UpgradeCar = 9,
         TuneCar = 10,

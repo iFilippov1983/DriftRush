@@ -1,4 +1,5 @@
-﻿using UniRx;
+﻿using Sirenix.OdinInspector;
+using UniRx;
 using UnityEngine;
 using Zenject;
 
@@ -19,7 +20,7 @@ namespace RaceManager.Root
         private GameFlagsHandler _flagsHandler;
         private Vector3 _originalScale;
 
-        public bool TimeToAct => _flagsHandler.HasFlag(_key);
+        private bool TimeToAct => _flagsHandler.HasFlag(_key);
 
         [Inject]
         private void Construct(GameFlagsHandler flagsHandler, Resolver resolver)

@@ -262,6 +262,7 @@ namespace RaceManager.Race
                 .Subscribe(_ =>
                 {
                     _raceStarted = true;
+                    _scoresCounter.CanCount = true;
                     EventsHub<RaceEvent>.BroadcastNotification(RaceEvent.COUNTDOWN);
                 })
                 .AddTo(this);
@@ -298,6 +299,8 @@ namespace RaceManager.Race
                     _rewardsHandler.SetMoneyReward(RaceScoresType.Drift, totalScoresThisType);
 
                     _lastDriftFactor = data.ScoresFactorThisType;
+
+                    Singleton<GameEffectsController>.Instance.PlayEffect(Effects.AudioType.SFX_DriftScoresCount);
                 })
                 .AddTo(this);
 
@@ -332,6 +335,7 @@ namespace RaceManager.Race
                     break;
                 case CarState.Finished:
                     _scoresCounter.CountDriftScoresImmediate();
+                    _scoresCounter.CanCount = false;
                     _rewardsHandler.RewardForRaceInit(playerDriver.DriverProfile.PositionInRace, out RaceRewardInfo info);
                     _raceUI.SetFinishValues(info);
                     _lineHandler.StopHandling();

@@ -68,7 +68,7 @@ namespace RaceManager.Root
         public void HandleSceneFor(Driver driver, IRaceLevel raceLevel)
         {
             _playerDriver = driver;
-            _gameEvents.ScreenTaped.Subscribe((u) => SetImmediateStart());
+            _gameEvents.ScreenTaped.Subscribe(u => SetImmediateStart());
 
             CamerasHandler.SetTargets(new CamerasData()
             {

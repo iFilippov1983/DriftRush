@@ -100,7 +100,7 @@ namespace RaceManager.Root
 
         private void ToggleEffectSetting(bool toggleValue, EffectType type)
         {
-            bool use = toggleValue;// > 0.5f ? true : false;
+            bool use = toggleValue;
 
             switch (type)
             {
@@ -121,7 +121,7 @@ namespace RaceManager.Root
 
         private void ToggleSettings(bool toggleValue, SettingsType settingsType)
         {
-            bool use = toggleValue;// > 0.5f ? true : false;
+            bool use = toggleValue;
 
             switch (settingsType)
             {

@@ -261,6 +261,10 @@ namespace RaceManager.Effects
                 if (job.Action == EffectAction.STOP)
                     track.Source.Stop();
             }
+            else
+            {
+                track.Source.volume = target;
+            }
 
             _jobTableAudio.Remove(job.Type);
             Log($"Job count {_jobTableAudio.Count}");

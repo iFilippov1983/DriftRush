@@ -16,6 +16,8 @@
         /// <param name="amount"></param>
         public void SetOpponents(int amount = 0);
 
+        public void ActivateAccessoryObjects();
+
         public IRaceLevel GetResult();
     }
 }

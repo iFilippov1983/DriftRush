@@ -59,6 +59,7 @@ namespace RaceManager.Race
         {
             _builder.SetPrefab(_profiler.NextLevelToLoad.ToString());
             _builder.SetTrackConfigurations(Difficulty.Easy);
+            _builder.ActivateAccessoryObjects();
             _builder.SetOpponents();
         }
 

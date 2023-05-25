@@ -167,7 +167,7 @@ namespace RaceManager.Root
                 .Subscribe(aAction.key, () => ClickAgent(aAction.actionStartDelay))
                 .AddTo(this);
 
-            Debug.Log($"ClickOnFlag subscribed => Key: [{aAction.key}] => Object: [{gameObject.name}]");
+            //Debug.Log($"ClickOnFlag subscribed => Key: [{aAction.key}] => Object: [{gameObject.name}]");
         }
 
         private void InteractableOnFlag(bool interactable, AgentAction aAction)
@@ -190,7 +190,7 @@ namespace RaceManager.Root
                 .Subscribe(aAction.key, () => MakeButtonInteractable(interactable))
                 .AddTo(this);
 
-            Debug.Log($"InteractableOnFlag ({interactable}) subscribed => Key: [{aAction.key}] => Object: [{gameObject.name}]");
+            //Debug.Log($"InteractableOnFlag ({interactable}) subscribed => Key: [{aAction.key}] => Object: [{gameObject.name}]");
         }
 
         private void ToggleAnimationOnFlag(bool start, AgentAction aAction)
@@ -216,7 +216,7 @@ namespace RaceManager.Root
                 .Subscribe(aAction.key, () => ToggleAnimationsStatus(start, aAction))
                 .AddTo(this);
 
-            Debug.Log($"ToggleAnimationOnFlag ({start}) subscribed => Key: [{aAction.key}] => Object: [{gameObject.name}]");
+            //Debug.Log($"ToggleAnimationOnFlag ({start}) subscribed => Key: [{aAction.key}] => Object: [{gameObject.name}]");
         }
 
         private void ToggleTweenOnFlag(bool play, AgentAction aAction)
@@ -241,7 +241,7 @@ namespace RaceManager.Root
                 .Subscribe(aAction.key, () => ToggleTweensStatus(play, aAction))
                 .AddTo(this);
 
-            Debug.Log($"ToggleTweenOnFlag ({play}) subscribed => Key: [{aAction.key}] => Object: [{gameObject.name}]");
+            //Debug.Log($"ToggleTweenOnFlag ({play}) subscribed => Key: [{aAction.key}] => Object: [{gameObject.name}]");
         }
 
         private async void ClickAgent(float actionDelaySeconds = 0)
@@ -299,6 +299,9 @@ namespace RaceManager.Root
 
             if (start)
             {
+                if (gameObject is null)
+                    return;
+
                 while (!gameObject.activeInHierarchy)
                 {
                     await Task.Yield();

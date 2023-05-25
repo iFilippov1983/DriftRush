@@ -30,6 +30,8 @@ namespace RaceManager.Race
         public Subject<DriftScoresData> DriftScoresCount;
         public Subject<CollisionScoresData> CollisionScoresCount;
 
+        public bool CanCount { get; set; } = true;
+
         public RaceScoresCounter(Car car, RaceRewardsScheme rewardsScheme)
         {
             _car = car;
@@ -72,6 +74,9 @@ namespace RaceManager.Race
 
         public void CountDriftScores()
         {
+            if (!CanCount)
+                return;
+
             DriftScoresData data;
 
             if (CarIsSlipping)
@@ -130,7 +135,7 @@ namespace RaceManager.Race
 
                     _driftFactor = DriftFactorMin;
 
-                    Debug.Log($"Drift scores counted: {lastDriftValue} => Total: {_scoresDrift}");
+                    //Debug.Log($"Drift scores counted: {lastDriftValue} => Total: {_scoresDrift}");
 
                     CountTotalScores();
                 }
@@ -163,7 +168,7 @@ namespace RaceManager.Race
 
                 _driftFactor = DriftFactorMin;
 
-                Debug.Log($"Drift scores counted IMMEDIATE: {lastDriftValue} => Total: {_scoresDrift}");
+                //Debug.Log($"Drift scores counted IMMEDIATE: {lastDriftValue} => Total: {_scoresDrift}");
             }
 
             data.TotalScoresValue = _scoresDrift;
@@ -173,7 +178,7 @@ namespace RaceManager.Race
 
         private void CountCollisionScores(Car car, Collision collision)
         {
-            if (collision.gameObject.TryGetComponent(out ICountableCollision countable) == false)
+            if (collision.gameObject.TryGetComponent(out ICountableCollision countable) == false || !CanCount)
                 return;
 
             if (_collidingObects.ContainsKey(countable.ID))

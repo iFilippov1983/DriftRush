@@ -16,7 +16,7 @@ namespace RaceManager.Race
         }
 
         /// <summary>
-        /// Pass Difficulty.Zero to set random configuration
+        /// Pass Difficulty. Zero to set random configuration.
         /// </summary>
         /// <param name="configurationDif"></param>
         public void SetTrackConfigurations(Difficulty configurationDif = Difficulty.Zero)
@@ -57,7 +57,7 @@ namespace RaceManager.Race
         }
 
         /// <summary>
-        /// Pass int value less then 0 to set default opponents amount
+        /// Pass int value less then 0 to set default opponents amount. Also sets default opponents amount if value is greater than available start places amount on track configuration.
         /// </summary>
         /// <param name="amount"></param>
         public void SetOpponents(int amount = 0)
@@ -85,7 +85,7 @@ namespace RaceManager.Race
         {
             if (_currentConfiguration is null || _currentConfiguration.Accessory is null || _currentConfiguration.Accessory.Count == 0)
             {
-                Debug.Log($"[ActivateAccessoryObjects] DENIED => Configuration is null: {_currentConfiguration is null}; Accessory List is null: {_currentConfiguration.Accessory is null}; Accessory List count is 0: {_currentConfiguration.Accessory.Count == 0}");
+                //Debug.Log($"[ActivateAccessoryObjects] DENIED => Configuration is null: {_currentConfiguration is null}; Accessory List is null: {_currentConfiguration.Accessory is null}; Accessory List count is 0: {_currentConfiguration.Accessory.Count == 0}");
                 return;
             }
 

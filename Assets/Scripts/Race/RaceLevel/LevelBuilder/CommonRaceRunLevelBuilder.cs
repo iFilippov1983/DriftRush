@@ -83,17 +83,15 @@ namespace RaceManager.Race
 
         public void ActivateAccessoryObjects()
         {
-            Debug.Log("enter");
             if (_currentConfiguration is null || _currentConfiguration.Accessory is null || _currentConfiguration.Accessory.Count == 0)
             {
-                Debug.Log($"[ActivateAccessoryObjects] Configuration is null: {_currentConfiguration is null}; Accessory List is null: {_currentConfiguration.Accessory is null}; Accessory List count is 0: {_currentConfiguration.Accessory.Count == 0}");
+                Debug.Log($"[ActivateAccessoryObjects] DENIED => Configuration is null: {_currentConfiguration is null}; Accessory List is null: {_currentConfiguration.Accessory is null}; Accessory List count is 0: {_currentConfiguration.Accessory.Count == 0}");
                 return;
             }
-            Debug.Log("check");
+
             foreach (var a in _currentConfiguration.Accessory)
             {
                 a.SetActive(true);
-                Debug.Log($"{a.name}");
             }
         }
     }

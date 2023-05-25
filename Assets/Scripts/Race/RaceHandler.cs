@@ -185,6 +185,7 @@ namespace RaceManager.Race
                         if(sp.isAvailable)
                             participantsCount++;
                     }
+
                     //_raceUI.Initialize(_raceLevelInitializer, selfRighting.RightCar, GetToCheckpoint);
                     //_raceUI.Initialize(_startPoints.Length, selfRighting.RightCar, GetToCheckpoint);
                     _raceUI.Initialize(participantsCount, selfRighting.RightCar, GetToCheckpoint);
@@ -300,7 +301,7 @@ namespace RaceManager.Race
 
                     _lastDriftFactor = data.ScoresFactorThisType;
 
-                    Singleton<GameEffectsController>.Instance.PlayEffect(Effects.AudioType.SFX_DriftScoresCount);
+                    _sceneHandler.HandleDriftScoresCountEffect();
                 })
                 .AddTo(this);
 

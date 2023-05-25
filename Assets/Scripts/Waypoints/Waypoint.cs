@@ -32,13 +32,11 @@ namespace RaceManager.Waypoints
 
         private void OnTriggerEnter(Collider other)
         {
-            Car car = other.GetComponentInParent<Car>();
-
-            if (car == null)
-                return;
-
-            SetRespawnPosition(car);
-            SetAndNotify(car, other);
+            if (other.TryGetComponent(out Car car))
+            {
+                SetRespawnPosition(car);
+                SetAndNotify(car, other);
+            }
         }
 
         private void SetRespawnPosition(Car car)

@@ -15,16 +15,19 @@ namespace RaceManager.Root
     public class RaceSceneHandler : MonoBehaviour, IInitializable
     {
         [Tooltip("Player's Car speed, when speed effect starts")]
-        [SerializeField] private int SpeedEffectThreshold = 70;
+        [SerializeField] private int _speedEffectThreshold = 70;
+        [SerializeField] private int _driftScoresEffectThreshold = 6;
+        private int _driftScoresEffectCounter = 0;
+
+        private float _carPreviousSpeed;
+
+        private bool _speedEffectActing;
 
         private GameEvents _gameEvents;
         private RaceUI _raceUI;
         private GameSettingsContainer _settingsContainer;
         private Driver _playerDriver;
         private AudioType _currentTrackType;
-
-        private float _carPreviousSpeed;
-        private bool _speedEffectActing;
 
         private GameEffectsController EffectsController => Singleton<GameEffectsController>.Instance;
         private RaceCamerasHandler CamerasHandler => Singleton<RaceCamerasHandler>.Instance;
@@ -84,6 +87,17 @@ namespace RaceManager.Root
             CamerasHandler.FinishCam.position = raceLevel.FinishCamInitialPosition;
         }
 
+        public void HandleDriftScoresCountEffect()
+        {
+            _driftScoresEffectCounter++;
+
+            if (_driftScoresEffectCounter > _driftScoresEffectThreshold)
+            {
+                _driftScoresEffectCounter = 0;
+                EffectsController.PlayEffect(Effects.AudioType.SFX_DriftScoresCount);
+            }
+        }
+
         #endregion
 
         #region Private Functions
@@ -107,7 +121,7 @@ namespace RaceManager.Root
         private void HandleCarSpeed()
         {
             //float speedPercent = (CarCurrentSpeed / CarMaxSpeed) * 100;
-            if (CarCurrentSpeed >= SpeedEffectThreshold)
+            if (CarCurrentSpeed >= _speedEffectThreshold)
             {
                 //"[Speed Effect] => START".Log(Logger.ColorRed);
 

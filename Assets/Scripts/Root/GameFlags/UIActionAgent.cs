@@ -412,7 +412,7 @@ namespace RaceManager.Root
                     tween?.Kill();
                     tween = null;
                     targetScale = _originalScale.x;
-                    tween = transform.DOScale(targetScale, aAction.animationDuration);
+                    tween = transform?.DOScale(targetScale, aAction.animationDuration);
 
                     //ResetScale();
                 })
@@ -422,7 +422,7 @@ namespace RaceManager.Root
             {
                 targetScale = scaleDown ? aAction.minScale : aAction.maxScale;
 
-                tween = transform.DOScale(targetScale, aAction.animationDuration)
+                tween = transform?.DOScale(targetScale, aAction.animationDuration)
                     .OnComplete(() => scaleDown = !scaleDown);
 
                 while (tween.IsActive())
@@ -461,7 +461,7 @@ namespace RaceManager.Root
             {
                 transform.position = fromPosition;
 
-                tween = transform.DOMove(toPosition, aAction.animationDuration * aAction.moveDurationFactor);
+                tween = transform?.DOMove(toPosition, aAction.animationDuration * aAction.moveDurationFactor);
 
                 while (tween.IsActive())
                 {

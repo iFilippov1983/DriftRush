@@ -8,6 +8,7 @@ namespace RaceManager.Race
     {
         private IRaceLevel _raceLevel;
         private TrackConfiguration _currentConfiguration;
+
         public IRaceLevel GetResult() => _raceLevel;
 
         public void SetPrefab(string path)
@@ -25,8 +26,6 @@ namespace RaceManager.Race
 
             foreach (var trackConfiguration in configurations)
                 trackConfiguration.SetActive(false);
-
-            //TrackConfiguration _currentConfiguration;
 
             if (configurationDif == Difficulty.Zero)
             {

@@ -136,7 +136,7 @@ namespace RaceManager.Waypoints
                     }
                 }
 
-                if (waypoint.isBrakeCheckpoint)
+                if (waypoint.isRaceLinePoint)
                 { 
                     _cashedDistance = _progressDistance;
                     _cashedPosition = _lastPosition;

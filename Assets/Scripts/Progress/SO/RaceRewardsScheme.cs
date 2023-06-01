@@ -64,7 +64,7 @@ namespace RaceManager.Progress
 
         public RaceReward GetRewardFor(PositionInRace position)
         {
-            Debug.Log($"Player position => {position}");
+            //Debug.Log($"Player position => {position}");
             RaceReward blank = _scheme[position];
             RaceReward reward = new RaceReward();
             reward.IsReceived = blank.IsReceived;
@@ -169,7 +169,7 @@ namespace RaceManager.Progress
         }
 
         [Button]
-        private void ResetCounters()
+        private void ResetCountersToZero()
         {
             _counter = 0;
             _yes = 0;

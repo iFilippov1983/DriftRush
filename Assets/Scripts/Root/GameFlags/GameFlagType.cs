@@ -12,13 +12,19 @@
         AccelerationStart = 4,
         AccelerationFinish = 5,
 
-        BrakeRequest = 6,
-        Brake = 7,
+        BrakeRequestA = 6,
+        BrakeA = 7,
+
+        BrakeRequestB = 40,
+        BrakeB = 41,//top
 
         DriftRequestA = 35,
+        DriftReleaseA = 38,
         DriftA = 8,
+
         DriftRequestB = 36,
-        DriftB = 37,//top number        
+        DriftReleaseB = 39,
+        DriftB = 37,       
 
         UpgradeCar = 9,
         TuneCar = 10,

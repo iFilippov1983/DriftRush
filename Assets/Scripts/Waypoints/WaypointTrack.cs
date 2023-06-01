@@ -129,9 +129,17 @@ namespace RaceManager.Waypoints
                     {
                         wp.RecomendedSpeed = node.recomendedSpeed;
 
-                        if (node.isBrakeCheckpoint || node.isRaceLinePoint || node.isDriftCheckpointA || node.isDriftCheckpointB)
+                        bool hasFeature = 
+                            node.isBrakeCheckpointA
+                            || node.isRaceLinePoint
+                            || node.isDriftCheckpointA
+                            || node.isDriftCheckpointB
+                            || node.isBrakeCheckpointB;
+
+                        if (hasFeature)
                         {
-                            wp.isBrakeCheckpoint = node.isBrakeCheckpoint;
+                            wp.isBrakeCheckpointA = node.isBrakeCheckpointA;
+                            wp.isBrakeCheckpointB = node.isBrakeCheckpointB;
                             wp.isDriftCheckpointA = node.isDriftCheckpointA;
                             wp.isDriftCheckpointB = node.isDriftCheckpointB;
                             wp.isRaceLinePoint = node.isRaceLinePoint;
@@ -271,15 +279,19 @@ namespace RaceManager.Waypoints
 
         private void OnWaypointPassed(Waypoint wp)
         {
-            if (wp.isBrakeCheckpoint)
+            if (wp.isRaceLinePoint)
+                OnWaypointPassedNotification?.Invoke(NotificationType.RaceLine);
+
+            if (wp.isBrakeCheckpointA)
             {
-                OnWaypointPassedNotification?.Invoke(NotificationType.CheckpointBrake);
+                OnWaypointPassedNotification?.Invoke(NotificationType.CheckpointBrakeA);
                 //Debug.Log("[Brake Checkpoint Notification]");
             }
-                
 
-            if(wp.isRaceLinePoint)
-                OnWaypointPassedNotification?.Invoke(NotificationType.RaceLine);
+            if (wp.isBrakeCheckpointB)
+            { 
+                OnWaypointPassedNotification?.Invoke(NotificationType.CheckpointBrakeB);
+            }
 
             if (wp.isDriftCheckpointA)
             {

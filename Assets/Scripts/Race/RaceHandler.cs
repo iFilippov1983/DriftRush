@@ -49,6 +49,7 @@ namespace RaceManager.Race
 
         private float _lastDriftFactor = 1f;
 
+        private MaxSdkAdvertisement Advertisement => Singleton<MaxSdkAdvertisement>.Instance;
         private bool CanStartImmediate => _profiler.CanStartImmediate;
 
         [Inject]
@@ -351,14 +352,23 @@ namespace RaceManager.Race
             return Disposable.Empty;
         }
 
-        private async void ShowAds()
+        private void ShowAds()
         {
-            //TODO: implement cases: complete/fail
+            Advertisement.OnRewardedAdComplete
+                .Subscribe(async rewarded =>
+                {
+                    Debug.Log($"OnRewardedAdComlete => Rewarded: {rewarded}");
 
-            await Task.Delay(1000);//To fake ad period
+                    if (rewarded)
+                    {
+                        await Task.Delay(400);
+                        _rewardsHandler.RewardForRaceMoneyMultiplyed();
+                        _raceUI.OnAdsRewardAction();
+                    }
 
-            _rewardsHandler.RewardForRaceMoneyMultiplyed();
-            _raceUI.OnAdsRewardAction();
+                }).AddTo(this);
+
+            Advertisement.LoadRewardedAd();
         }
 
         private IRaceLevelBuilder GetLevelBuilder()

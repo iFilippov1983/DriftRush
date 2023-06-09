@@ -182,6 +182,9 @@ namespace RaceManager.UI
             _moneyRewardPanel.ContinueButton.onClick.RemoveAllListeners();
             _moneyRewardPanel.ContinueButton.onClick.AddListener(() => 
             {
+                _moneyRewardPanel.ContinueButton.interactable = false;
+                _moneyRewardPanel.ContinueButton.onClick.RemoveAllListeners();
+
                 _disappearSequence?.Complete(true);
                 _disappearSequence = null;
 
@@ -294,6 +297,9 @@ namespace RaceManager.UI
             _cupsRewardPanel.ContinueButton.onClick.RemoveAllListeners();
             _cupsRewardPanel.ContinueButton.onClick.AddListener(() => 
             {
+                _cupsRewardPanel.ContinueButton.interactable = false;
+                _cupsRewardPanel.ContinueButton.onClick.RemoveAllListeners();
+
                 _disappearSequence?.Complete(true);
                 _disappearSequence = null;
 
@@ -411,6 +417,7 @@ namespace RaceManager.UI
             _lootboxRewardPanel.ClaimButton.onClick.RemoveAllListeners();
             _lootboxRewardPanel.ClaimButton.onClick.AddListener(() => 
             {
+                _lootboxRewardPanel.ClaimButton.interactable = false;
                 _lootboxRewardPanel.ClaimButton.onClick.RemoveAllListeners();
 
                 _disappearSequence?.Complete(true);
@@ -510,14 +517,18 @@ namespace RaceManager.UI
         {
             string name = _moneyRewardPanel.MultiplyRewardPanel.WatchAdsButton.name;
             OnButtonPressed.OnNext((bName: name, isFinal: false));
-            OnWatchAds.OnNext();
+            OnWatchAds?.OnNext();
         }
 
-        public IDisposable OnWatchAdsSuccess()
+        public IDisposable OnWatchRewardedAdsSuccess()
         {
+            var multPanel = _moneyRewardPanel.MultiplyRewardPanel;
+            multPanel.WatchAdsButton.onClick.RemoveAllListeners();
+            multPanel.WatchAdsButton.interactable = false;
+
             Sequence scrambleSequence = DOTween.Sequence();
-            scrambleSequence.Append(_moneyRewardPanel.MultiplyRewardPanel.ShowRect
-                .DOMove(_moneyRewardPanel.MultiplyRewardPanel.HideRect.position, _duration / 3));
+            scrambleSequence.Append(multPanel.ShowRect
+                .DOMove(multPanel.HideRect.position, _duration / 3));
 
             int multyValue = _totalScores * _rewardInfo.MoneyMultiplyer;
             scrambleSequence.Join(_moneyRewardPanel.MoneyTotalText.DOText(multyValue.ToString(), _duration, true, ScrambleMode.Numerals));

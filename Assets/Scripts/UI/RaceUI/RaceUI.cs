@@ -80,6 +80,7 @@ namespace RaceManager.UI
                 return _driftScoreIndicatorPrefab;
             }
         }
+        private MaxSdkAdvertisement Advertisement => Singleton<MaxSdkAdvertisement>.Instance;
 
         public bool RaceFinished => _isRaceFinished;
         public bool ShowSimpleFinish { get; set; }
@@ -357,7 +358,7 @@ namespace RaceManager.UI
 
         public void OnAdsRewardAction()
         {
-            _finishUIHandler.OnWatchAdsSuccess()?.AddTo(this);
+            _finishUIHandler.OnWatchRewardedAdsSuccess()?.AddTo(this);
         }
 
         #endregion
@@ -486,6 +487,11 @@ namespace RaceManager.UI
         {
             while (_finishUIHandler.HasJob)
                 await Task.Yield();
+
+            if (!Advertisement.PlayerRewarded)
+            {
+                Advertisement.LoadInterstitial();
+            }
 
             EventsHub<RaceEvent>.BroadcastNotification(RaceEvent.QUIT);
         }

@@ -1,7 +1,9 @@
-﻿using RaceManager.Progress;
+﻿using DG.Tweening;
+using RaceManager.Progress;
 using RaceManager.Root;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
@@ -16,6 +18,7 @@ namespace RaceManager.UI
 
         [Space]
         [Header("Main Fields")]
+        [SerializeField] private float _lootboxSpeedupSeconds = 60f * 60f;
         [SerializeField] private LootboxProgressPanel _lootboxProgress;
         [SerializeField] private LootboxPopup _lootboxPopup;
         [SerializeField] private List<LootboxSlot> _lootboxSlots = new List<LootboxSlot>(LootboxesListCapacity);
@@ -28,17 +31,20 @@ namespace RaceManager.UI
         private LootboxImageAnimationHandler _lootboxAnimationHandler;
         private GameEvents _gameEvents;
 
+        private Tween _activeTween;
+
         private bool _hasActiveTimerSlot;
 
         private float _hoursRounded;
         private float _hours;
         private float _minutes;
 
-        public Action<bool> OnPopupIsActive;
         public Action<Button> OnButtonPressed;
         public Action OnInstantLootboxOpen;
+        public Action<bool> OnRewardedAdsReward;
 
         private UIAnimator Animator => Singleton<UIAnimator>.Instance;
+        private MaxSdkAdvertisement Advertisement => Singleton<MaxSdkAdvertisement>.Instance;
 
         [Inject]
         private void Construct(Profiler profiler, SpritesContainerRewards spritesRewards, GameEvents gameEvents)
@@ -61,6 +67,12 @@ namespace RaceManager.UI
             _lootboxAnimationHandler.OnAnimationFinish += _lootboxProgress.OnAnimationFinish;
 
             _lootboxProgress.OnImagesDisableComplete += InitializeLootboxProgressPanel;
+
+            OnRewardedAdsReward += GiveRewardIfGranted;
+
+            Advertisement.OnRewardedAdComplete
+                .Subscribe(OnRewardedAdsReward)
+                .AddTo(this);
         }
 
         public void InitializeLootboxProgressPanel()
@@ -91,11 +103,13 @@ namespace RaceManager.UI
             _lootboxProgress.MoreWinsText.text = text.ToUpper();
         }
 
-        public void UpdateTimer()
+        public void UpdateTimer(float subtrahend = -1)
         {
             if (_hasActiveTimerSlot)
             {
-                _activeTimerLootbox.TimeToOpenLeft -= Time.deltaTime;
+                float time = subtrahend < 0 ? Time.deltaTime : subtrahend;
+
+                _activeTimerLootbox.TimeToOpenLeft -= time;
                 _activeTimerLootbox.RecalculateGemsToOpen();
             }
         }
@@ -214,8 +228,6 @@ namespace RaceManager.UI
 
             _lootboxPopup.LastAppearTransform = slot.transform;
             Animator.AppearSubject(_lootboxPopup, slot.transform).AddTo(this);
-
-            OnPopupIsActive?.Invoke(true);
         }
 
         public void OpenFreeLootboxPopup()
@@ -257,8 +269,6 @@ namespace RaceManager.UI
 
             _lootboxPopup.LastAppearTransform = _lootboxProgress.transform;
             Animator.AppearSubject(_lootboxPopup, _lootboxProgress.transform).AddTo(this);
-
-            OnPopupIsActive?.Invoke(true);
         }
 
         private void SlotStartTimer(LootboxSlot slot)
@@ -301,7 +311,23 @@ namespace RaceManager.UI
 
         private void SlotSpeedupTimer(LootboxSlot slot)
         {
-            Debug.LogWarning("Speedup not implemented");
+            Advertisement.LoadRewardedAd();
+
+            Debug.Log("[LootboxSlotsHandler] SlotSpeedupTimer");
+        }
+
+        private async void GiveRewardIfGranted(bool rewarded)
+        {
+            Debug.Log($"OnRewardedAdComlete => Rewarded: {rewarded}");
+
+            if (rewarded)
+            {
+                CloseLootboxPopup();
+                await Task.Delay(100);
+                
+                UpdateTimer(_lootboxSpeedupSeconds);
+                _activeTween = _activeTimerSlot.TimerRect.DOPunchScale(new Vector3(1f, 1.03f, 1f), 1f, 8, 0);
+            }
         }
 
         private void CloseLootboxPopup()
@@ -312,8 +338,6 @@ namespace RaceManager.UI
             _lootboxPopup.GetFreeLootboxButton.onClick.RemoveAllListeners();
 
             _lootboxPopup.SetActive(false);
-
-            OnPopupIsActive?.Invoke(false);
         }
 
         private void GrantCommonLootbox()
@@ -376,6 +400,7 @@ namespace RaceManager.UI
                 else
                 {
                     _activeTimerSlot.SetStatusLootboxOpen();
+                    _activeTween = _activeTimerSlot.TimerText.rectTransform.DOPunchScale(new Vector3(1f, 1.05f, 1f), 1f, 8, 0);
 
                     Lootbox lootbox = _profiler.GetLootboxWithId(_activeTimerSlot.CurrentLootboxId);
                     lootbox.TimeToOpenLeft = -1;
@@ -414,6 +439,11 @@ namespace RaceManager.UI
             _lootboxAnimationHandler.OnAnimationFinish -= _lootboxProgress.OnAnimationFinish;
 
             _lootboxProgress.OnImagesDisableComplete -= InitializeLootboxProgressPanel;
+
+            OnRewardedAdsReward -= GiveRewardIfGranted;
+
+            _activeTween?.Complete(true);
+            _activeTween = null;
         }
 
         #endregion

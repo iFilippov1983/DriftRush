@@ -240,7 +240,7 @@ namespace RaceManager.UI
                 .Take(1)
                 .Subscribe(i => 
                 { 
-                    tween.Complete(true);
+                    tween?.Complete(true);
                     tween = null;
                 })
                 .AddTo(this);

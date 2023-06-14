@@ -214,7 +214,7 @@ public class MaxSdkAdvertisement : MonoBehaviour
         _playerRewarded = false;
         MaxSdk.LoadInterstitial(_adUnitId);
 
-        Debug.Log("[MaxSdkAdvertisemetn] LoadInterstitial");
+        Debug.Log("[MaxSdkAdvertisemet] LoadInterstitial");
     }
 
     public void LoadRewardedAd()
@@ -222,7 +222,7 @@ public class MaxSdkAdvertisement : MonoBehaviour
         _playerRewarded = false;
         MaxSdk.LoadRewardedAd(_adUnitId);
 
-        Debug.Log("[MaxSdkAdvertisemetn] LoadRewarded");
+        Debug.Log("[MaxSdkAdvertisement] LoadRewarded");
     }
 
     #endregion

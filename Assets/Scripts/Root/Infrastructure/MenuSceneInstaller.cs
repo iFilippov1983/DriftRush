@@ -34,7 +34,7 @@ namespace RaceManager.Infrastructure
         [Space]
         [SerializeField] private GameSettingsContainer _effectsSettings;
 
-        private MainSceneRoot _mainSceneRoot;
+        private MenuSceneRoot _menuSceneRoot;
 
         public override void InstallBindings()
         {
@@ -87,8 +87,8 @@ namespace RaceManager.Infrastructure
         {
             base.Start();
 
-            _mainSceneRoot ??= Singleton<MainSceneRoot>.Instance;
-            _mainSceneRoot.Run();
+            _menuSceneRoot ??= Singleton<MenuSceneRoot>.Instance;
+            _menuSceneRoot.Run();
         }
     }
 }

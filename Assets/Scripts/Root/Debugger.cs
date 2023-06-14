@@ -176,6 +176,7 @@ namespace RaceManager.Root
             OpponentsTuneScheme.ResetScheme();
             
             SaveManager.RemoveSave();
+            PlayerPrefs.DeleteAll();
         }
 
         [Button]

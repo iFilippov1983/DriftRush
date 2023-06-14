@@ -21,7 +21,7 @@ namespace RaceManager.Root
 
         public void Run()
         {
-            RegisterSavebles();
+            RegisterSaveables();
             LoadFromSave();
             InvokeInitializables();
             RunTutorial();
@@ -36,7 +36,7 @@ namespace RaceManager.Root
             Loader.Load(Loader.Scene.MenuScene);
         }
 
-        private void RegisterSavebles()
+        private void RegisterSaveables()
         {
             try
             {

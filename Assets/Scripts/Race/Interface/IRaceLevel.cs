@@ -6,6 +6,7 @@ namespace RaceManager.Race
 {
     public interface IRaceLevel
     {
+        string Name { get; }
         public RaceLine RaceLine { get; }
         public StartPoint[] StartPoints { get; }
         public WaypointTrack WaypointTrackMain { get; }

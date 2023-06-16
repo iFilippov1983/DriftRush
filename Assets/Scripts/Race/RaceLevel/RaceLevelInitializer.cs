@@ -18,6 +18,21 @@ namespace RaceManager.Race
             _builder = builder;
         }
 
+        public void MakeInitialLevel()
+        {
+            _builder.SetPrefab(_profiler.NextLevelToLoad.ToString());
+            _builder.SetTrackConfigurations(Difficulty.Easy);
+            _builder.ActivateAccessoryObjects();
+            _builder.SetOpponents();
+        }
+
+        public void MakeCommonRaceRunLevel()
+        { 
+            _builder.SetPrefab( _profiler.NextLevelToLoad.ToString());
+            _builder.SetTrackConfigurations();
+            _builder.SetOpponents(-1);
+        }
+
         //public IRaceLevel GetRaceLevel()
         //{
         //    if (_raceLevel == null)
@@ -54,20 +69,5 @@ namespace RaceManager.Race
 
         //    return level;
         //}
-
-        public void MakeInitialLevel()
-        {
-            _builder.SetPrefab(_profiler.NextLevelToLoad.ToString());
-            _builder.SetTrackConfigurations(Difficulty.Easy);
-            _builder.ActivateAccessoryObjects();
-            _builder.SetOpponents();
-        }
-
-        public void MakeCommonRaceRunLevel()
-        { 
-            _builder.SetPrefab( _profiler.NextLevelToLoad.ToString());
-            _builder.SetTrackConfigurations();
-            _builder.SetOpponents(-1);
-        }
     }
 }

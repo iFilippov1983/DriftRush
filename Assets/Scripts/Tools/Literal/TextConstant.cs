@@ -7,5 +7,6 @@
         public const string Continue = "Continue";
 
         public const string PrefsKey_FirstSession = "FirstSession";
+        public const string PrefsKey_LevelFinishEventSent = "FinishEventSent";
     }
 }

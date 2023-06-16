@@ -1,6 +1,7 @@
 ﻿using DG.Tweening;
 using RaceManager.Progress;
 using RaceManager.Root;
+using RaceManager.Services;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -311,7 +312,7 @@ namespace RaceManager.UI
 
         private void SlotSpeedupTimer(LootboxSlot slot)
         {
-            Advertisement.LoadRewardedAd();
+            Advertisement.LoadRewardedAd(AdvertisementPlacement.SpeedupLootboxOpen);
 
             Debug.Log("[LootboxSlotsHandler] SlotSpeedupTimer");
         }

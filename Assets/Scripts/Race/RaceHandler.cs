@@ -3,6 +3,7 @@ using RaceManager.Tools;
 using RaceManager.Cars;
 using RaceManager.Cameras;
 using RaceManager.Progress;
+using RaceManager.Services;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -48,8 +49,12 @@ namespace RaceManager.Race
         private bool _adjustOpponents;
 
         private float _lastDriftFactor = 1f;
+        private float _raceStartTime;
+
+        private LevelAnalyticsInfo _curLevelAnalyticsInfo;
 
         private MaxSdkAdvertisement Advertisement => Singleton<MaxSdkAdvertisement>.Instance;
+        private AnalyticsService AnalyticsService => Singleton<AnalyticsService>.Instance;
         private bool CanStartImmediate => _profiler.CanStartImmediate;
 
         [Inject]
@@ -85,6 +90,7 @@ namespace RaceManager.Race
             InitOpponentsTuner();
             InitDrivers();
             MakeSubscriptions();
+            SendEventLevelStarted();
 
             _positionsHandler.StartHandling(_waypointsTrackersList);
         }
@@ -265,6 +271,7 @@ namespace RaceManager.Race
                 {
                     _raceStarted = true;
                     _scoresCounter.CanCount = true;
+                    _raceStartTime = Time.time;
                     EventsHub<RaceEvent>.BroadcastNotification(RaceEvent.COUNTDOWN);
                 })
                 .AddTo(this);
@@ -325,6 +332,8 @@ namespace RaceManager.Race
             _raceUI.OnAdsInit += ShowAds;
             _rewardsHandler.OnRaceRewardLootboxAdded += SetRaceUI;
             _waypointTrackMain.OnWaypointPassedNotification += MakeNotification;
+
+            EventsHub<RaceEvent>.Subscribe(RaceEvent.QUIT, SendEventLevelTerminated);
         }
 
         private IDisposable HandlePlayerCarState(CarState playerCarState, Driver playerDriver)
@@ -368,7 +377,7 @@ namespace RaceManager.Race
 
                 }).AddTo(this);
 
-            Advertisement.LoadRewardedAd();
+            Advertisement.LoadRewardedAd(AdvertisementPlacement.MultiplyRaceScores);
         }
 
         private IRaceLevelBuilder GetLevelBuilder()
@@ -378,8 +387,45 @@ namespace RaceManager.Race
             return new CommonRaceRunLevelBuilder();
         }
 
+        private void SendEventLevelStarted()
+        {
+            _curLevelAnalyticsInfo = new LevelAnalyticsInfo() 
+            { 
+                LevelName = _raceLevel.Name.ToLower(),
+                LevelCount = _profiler.RacesTotalCounter + 1,
+                LevelRandom = _profiler.RacesTotalCounter > 0,
+
+                Finished = default,
+                Time = default
+            };
+
+            AnalyticsService.SendEvent(AnalyticsEventType.Level_Start, _curLevelAnalyticsInfo);
+        }
+
+        private void SendEventLevelTerminated(bool finished)
+        {
+            _curLevelAnalyticsInfo.Finished = finished;
+            _curLevelAnalyticsInfo.Time = Time.time - _raceStartTime;
+
+            AnalyticsService.SendEvent(AnalyticsEventType.Level_Finish, _curLevelAnalyticsInfo);
+
+            $"Level terminated => Finished: {finished}".Log(Logger.ColorRed);
+        }
+
+        private void SendEventLevelTerminated()
+        {
+            EventsHub<RaceEvent>.Unsunscribe(RaceEvent.QUIT, SendEventLevelTerminated);
+
+            SendEventLevelTerminated(true);
+        }
+
         private void SetRaceUI(Lootbox lootbox) => _raceUI.SetLootboxToGrant(lootbox.Rarity);
         private void MakeNotification(NotificationType notification) => _gameEvents.Notification.OnNext(notification.ToString());
+
+        private void OnApplicationQuit()
+        {
+            SendEventLevelTerminated(false);
+        }
 
         private void OnDestroy()
         {

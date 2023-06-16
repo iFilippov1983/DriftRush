@@ -13,6 +13,7 @@ namespace RaceManager.Race
         [ShowInInspector, ReadOnly]
         private TrackConfiguration _configuration;
 
+        public string Name => gameObject.name;
         public RaceLine RaceLine => _raceLine;
         public StartPoint[] StartPoints => _configuration.StartPoints;
         public WaypointTrack WaypointTrackMain => _configuration.WaypointTrackMain;

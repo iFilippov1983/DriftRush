@@ -16,6 +16,7 @@ namespace RaceManager.Race
         [SerializeField] private Transform _startCamInitialPoint;
         [SerializeField] private Transform _finishCamInitialPoint;
 
+        public string Name => gameObject.name;
         public RaceLine RaceLine => _raceLine;
         public StartPoint[] StartPoints => _startPoints;
         public WaypointTrack WaypointTrackMain => _waypointTrackMain;

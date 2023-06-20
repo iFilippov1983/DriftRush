@@ -12,7 +12,8 @@ namespace RaceManager.Services
         private const string AdType_Interstitial = "interstitial";
         private const string AdType_Rewarded = "rewarded";
 
-        [SerializeField] private string _adUnitId;
+        [SerializeField] private string _interstitialUnitId;
+        [SerializeField] private string _rewardedUnitId;
         [SerializeField] private string _bannerAdUnitId;
         [SerializeField] private string _sdkKey;
         [SerializeField] private string _userId;
@@ -322,7 +323,7 @@ namespace RaceManager.Services
             _playerRewarded = false;
             _adClicked = false;
 
-            MaxSdk.LoadInterstitial(_adUnitId);
+            MaxSdk.LoadInterstitial(_interstitialUnitId);
 
             Debug.Log("[MaxSdkAdvertisemet] LoadInterstitial");
         }
@@ -333,7 +334,7 @@ namespace RaceManager.Services
             _playerRewarded = false;
             _adClicked = false;
 
-            MaxSdk.LoadRewardedAd(_adUnitId);
+            MaxSdk.LoadRewardedAd(_rewardedUnitId);
 
             Debug.Log("[MaxSdkAdvertisement] LoadRewarded");
         }

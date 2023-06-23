@@ -1,6 +1,5 @@
 ﻿using AppsFlyerSDK;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace RaceManager.Services
 {

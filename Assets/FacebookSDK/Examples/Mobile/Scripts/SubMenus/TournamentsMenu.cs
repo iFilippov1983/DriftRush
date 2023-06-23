@@ -30,6 +30,7 @@ namespace Facebook.Unity.Example
         private string score = string.Empty;
         private string tournamentID = string.Empty;
 
+        [Obsolete]
         protected override void GetGui()
         {
             bool enabled = GUI.enabled;

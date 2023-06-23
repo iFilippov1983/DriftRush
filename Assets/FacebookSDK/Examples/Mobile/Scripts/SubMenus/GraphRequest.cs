@@ -28,6 +28,7 @@ namespace Facebook.Unity.Example
         private string apiQuery = string.Empty;
         private Texture2D profilePic;
 
+        [System.Obsolete]
         protected override void GetGui()
         {
             bool enabled = GUI.enabled;

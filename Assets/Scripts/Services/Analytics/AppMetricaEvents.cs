@@ -29,7 +29,6 @@ namespace RaceManager.Services
                 { "connection", connection ? 1 : 0 }
             };
             AppMetrica.Instance.ReportEvent(ADS_AVAILABLE, eventValues);
-            //AppMetrica.Instance.SendEventsBuffer();
 
 #if UNITY_EDITOR
             Debug.Log($"<color=blue>[AppMetricaEvents] Ads Available Event: ad_type = {ad_type}, placement = {placement}, result = {result}, connection = {(connection ? 1 : 0)}</color>");
@@ -51,7 +50,6 @@ namespace RaceManager.Services
                 { "connection", connection ? 1 : 0 }
             };
             AppMetrica.Instance.ReportEvent(ADS_STARTED, eventValues);
-            //AppMetrica.Instance.SendEventsBuffer();
 
 #if UNITY_EDITOR
             Debug.Log($"<color=blue>[AppMetricaEvents] Ads Started Event: ad_type = {ad_type}, placement = {placement}, result = {result}, connection = {(connection ? 1 : 0)}</color>");
@@ -74,7 +72,6 @@ namespace RaceManager.Services
                 { "connection", connection ? 1 : 0 }
             };
             AppMetrica.Instance.ReportEvent(ADS_WATCHED, eventValues);
-            //AppMetrica.Instance.SendEventsBuffer();
 
 #if UNITY_EDITOR
             Debug.Log($"<color=blue>[AppMetricaEvents] Ads Watched Event: ad_type = {ad_type}, placement = {placement}, result = {result}, connection = {(connection ? 1 : 0)}</color>");

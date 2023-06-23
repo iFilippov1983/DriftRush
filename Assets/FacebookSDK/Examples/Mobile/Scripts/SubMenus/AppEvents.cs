@@ -24,6 +24,7 @@ namespace Facebook.Unity.Example
 
     internal class AppEvents : MenuBase
     {
+        [System.Obsolete]
         protected override void GetGui()
         {
             if (this.Button("Log FB App Event"))

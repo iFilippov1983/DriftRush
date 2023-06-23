@@ -370,14 +370,14 @@ namespace RaceManager.Race
 
                     if (rewarded)
                     {
-                        await Task.Delay(400);
+                        await Task.Delay(300);
                         _rewardsHandler.RewardForRaceMoneyMultiplyed();
                         _raceUI.OnAdsRewardAction();
                     }
 
                 }).AddTo(this);
 
-            Advertisement.LoadRewardedAd(AdvertisementPlacement.MultiplyRaceScores);
+            Advertisement.ShowRewardedAd(AdvertisementPlacement.MultiplyRaceScores);
         }
 
         private IRaceLevelBuilder GetLevelBuilder()

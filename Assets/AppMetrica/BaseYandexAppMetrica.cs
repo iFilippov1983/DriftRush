@@ -68,6 +68,7 @@ public abstract class BaseYandexAppMetrica : IYandexAppMetrica
 
     public abstract void ReportUserProfile(YandexAppMetricaUserProfile userProfile);
 
+    [Obsolete]
     public abstract void ReportRevenue(YandexAppMetricaRevenue revenue);
 
     public abstract void SetStatisticsSending(bool enabled);

@@ -114,6 +114,7 @@ public class YandexAppMetricaDummy : BaseYandexAppMetrica
     {
     }
 
+    [Obsolete]
     public override void ReportRevenue(YandexAppMetricaRevenue revenue)
     {
     }

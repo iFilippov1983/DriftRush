@@ -52,6 +52,7 @@ namespace Facebook.Unity.Example
             #endif
         }
 
+        [Obsolete]
         protected override void GetGui()
         {
             bool enabled = GUI.enabled;

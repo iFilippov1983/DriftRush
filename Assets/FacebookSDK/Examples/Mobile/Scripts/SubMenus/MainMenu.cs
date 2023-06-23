@@ -45,6 +45,7 @@ namespace Facebook.Unity.Example
             return false;
         }
 
+        [System.Obsolete]
         protected override void GetGui()
         {
             GUILayout.BeginVertical();

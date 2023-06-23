@@ -26,6 +26,7 @@ namespace Facebook.Unity.Example
     {
         private string payProduct = string.Empty;
 
+        [System.Obsolete]
         protected override void GetGui()
         {
             this.LabelAndTextField("Product: ", ref this.payProduct);

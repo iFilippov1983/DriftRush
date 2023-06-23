@@ -312,7 +312,7 @@ namespace RaceManager.UI
 
         private void SlotSpeedupTimer(LootboxSlot slot)
         {
-            Advertisement.LoadRewardedAd(AdvertisementPlacement.SpeedupLootboxOpen);
+            Advertisement.ShowRewardedAd(AdvertisementPlacement.SpeedupLootboxOpen);
 
             Debug.Log("[LootboxSlotsHandler] SlotSpeedupTimer");
         }

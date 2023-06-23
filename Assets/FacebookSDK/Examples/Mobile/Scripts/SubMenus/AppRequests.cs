@@ -43,6 +43,7 @@ namespace Facebook.Unity.Example
             OGActionType.TURN.ToString()
         };
 
+        [System.Obsolete]
         protected override void GetGui()
         {
             if (this.Button("Select - Filter None"))

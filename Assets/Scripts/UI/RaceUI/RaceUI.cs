@@ -13,8 +13,8 @@ using UnityEngine.UI;
 using Zenject;
 using DG.Tweening;
 using UniRx;
-using TMPro;
 using UniRx.Triggers;
+using TMPro;
 using Sirenix.OdinInspector;
 
 namespace RaceManager.UI
@@ -135,7 +135,6 @@ namespace RaceManager.UI
                     {
                         FinalizeRace();
                     }
-                        
                 })
                 .AddTo(this);
 
@@ -491,7 +490,7 @@ namespace RaceManager.UI
 
             if (!Advertisement.PlayerRewarded)
             {
-                Advertisement.LoadInterstitial();
+                Advertisement.ShowInterstitialAd();
             }
 
             EventsHub<RaceEvent>.BroadcastNotification(RaceEvent.QUIT);

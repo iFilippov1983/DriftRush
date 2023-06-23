@@ -1,6 +1,8 @@
 using RaceManager.Root;
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using UniRx;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -22,6 +24,9 @@ namespace RaceManager.Services
 
         private bool _playerRewarded;
         private bool _adClicked;
+        private bool _adDisplayed;
+
+        private CancellationTokenSource _adsLoadCancellation;
 
         private AdvertisementPlacement _lastAdsPlacement;
 
@@ -33,19 +38,21 @@ namespace RaceManager.Services
             { AdvertisementPlacement.SpeedupLootboxOpen, "lootbox_open_speedup"}
         };
 
-        public Subject<bool> OnInterstitialAdDisplay;
         public Subject<bool> OnRewardedAdComplete;
 
         private string LastAdsPlacement => _adsPlacements[_lastAdsPlacement];
         private AnalyticsService AnalyticsService => Singleton<AnalyticsService>.Instance;
 
         public bool PlayerRewarded => _playerRewarded;
+        public bool IsRewardedAdReady => MaxSdk.IsRewardedAdReady(_rewardedUnitId);
+        public bool IsInterstitialAdReady => MaxSdk.IsInterstitialReady(_interstitialUnitId);
 
         #region Unity Functions
 
         private void Awake()
         {
-            OnInterstitialAdDisplay = new Subject<bool>();
+            _adsLoadCancellation = new CancellationTokenSource();
+
             OnRewardedAdComplete = new Subject<bool>();
 
             DontDestroyOnLoad(this);
@@ -59,6 +66,7 @@ namespace RaceManager.Services
 
         private void OnDestroy()
         {
+            _adsLoadCancellation?.Cancel();
             UnsubscribeFromCallbacks();
         }
 
@@ -75,7 +83,7 @@ namespace RaceManager.Services
 
         private void SubscribeToCallbacks()
         {
-            MaxSdkCallbacks.OnSdkInitializedEvent += InitializeAdBanner;
+            MaxSdkCallbacks.OnSdkInitializedEvent += OnSdkInitialized;
 
             MaxSdkCallbacks.Interstitial.OnAdLoadedEvent += OnInterstitialLoadedEvent;
             MaxSdkCallbacks.Interstitial.OnAdLoadFailedEvent += OnInterstitialLoadFailedEvent;
@@ -98,7 +106,7 @@ namespace RaceManager.Services
 
         private void UnsubscribeFromCallbacks()
         {
-            MaxSdkCallbacks.OnSdkInitializedEvent -= InitializeAdBanner;
+            MaxSdkCallbacks.OnSdkInitializedEvent -= OnSdkInitialized;
 
             MaxSdkCallbacks.Interstitial.OnAdLoadedEvent -= OnInterstitialLoadedEvent;
             MaxSdkCallbacks.Interstitial.OnAdLoadFailedEvent -= OnInterstitialLoadFailedEvent;
@@ -119,7 +127,7 @@ namespace RaceManager.Services
             SceneManager.activeSceneChanged -= ResetOnSceneChange;
         }
 
-        private void InitializeAdBanner(MaxSdkBase.SdkConfiguration configuration)
+        private void OnSdkInitialized(MaxSdkBase.SdkConfiguration configuration)
         {
             // AppLovin SDK is initialized, start loading ads
             // Banners are automatically sized to 320x50 on phones and 728x90 on tablets
@@ -127,12 +135,16 @@ namespace RaceManager.Services
             MaxSdk.CreateBanner(_bannerAdUnitId, MaxSdkBase.BannerPosition.BottomCenter);
             MaxSdk.SetBannerBackgroundColor(_bannerAdUnitId, Color.black);
             MaxSdk.ShowBanner(_bannerAdUnitId);
+
+            MaxSdk.LoadInterstitial(_interstitialUnitId);
+            MaxSdk.LoadRewardedAd(_rewardedUnitId);
         }
 
         private void ResetOnSceneChange(Scene a, Scene b)
         {
             _playerRewarded = false;
             _adClicked = false;
+            _adDisplayed = false;
         }
 
         #endregion
@@ -148,9 +160,9 @@ namespace RaceManager.Services
                 AdsResult = AdvertisementResult.SUCCESS
             });
 
-            MaxSdk.ShowInterstitial(adUnitId);
-
             _retryAttempt = 0;
+
+            //Debug.Log("[MaxSdkAdvertisment] OnInterstitialLoadedEvent");
         }
 
         private void OnInterstitialLoadFailedEvent(string adUnitId, MaxSdkBase.ErrorInfo errorInfo)
@@ -160,7 +172,9 @@ namespace RaceManager.Services
             _retryAttempt++;
             double retryDelay = Math.Pow(2, Math.Min(maxPow, _retryAttempt));
 
-            Invoke(nameof(LoadInterstitial), (float)retryDelay);
+            Invoke(nameof(ShowInterstitialAd), (float)retryDelay);
+
+            //Debug.Log("[MaxSdkAdvertisment] OnInterstitialLoadFailedEvent");
         }
 
         private void OnInterstitialDisplayedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
@@ -171,6 +185,10 @@ namespace RaceManager.Services
                 AdsPlacement = LastAdsPlacement,
                 AdsResult = AdvertisementResult.START
             });
+
+            _adDisplayed = true;
+
+            //Debug.Log("[MaxSdkAdvertisment] OnInterstitialDisplayedEvent");
         }
 
         private void OnInterstitialAdFailedToDisplayEvent(string adUnitId, MaxSdkBase.ErrorInfo errorInfo, MaxSdkBase.AdInfo adInfo)
@@ -183,12 +201,16 @@ namespace RaceManager.Services
             });
 
             // Interstitial ad failed to display. AppLovin recommends that you load the next ad.
-            LoadInterstitial();
+            MaxSdk.LoadInterstitial(_interstitialUnitId);
+
+            //Debug.Log("[MaxSdkAdvertisment] OnInterstitialAdFailedToDisplayEvent");
         }
 
         private void OnInterstitialClickedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo) 
         { 
             _adClicked = true;
+
+            //Debug.Log("[MaxSdkAdvertisment] OnInterstitialClickedEvent");
         }
 
         private void OnInterstitialHiddenEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
@@ -204,8 +226,12 @@ namespace RaceManager.Services
                 AdsResult = result
             });
 
+            _adDisplayed = false;
+
             // Interstitial ad is hidden. Pre-load the next ad.
-            // LoadInterstitial();
+            MaxSdk.LoadInterstitial(_interstitialUnitId);
+
+            //Debug.Log("[MaxSdkAdvertisment] OnInterstitialHiddenEvent");
         }
 
         #endregion
@@ -221,11 +247,9 @@ namespace RaceManager.Services
                 AdsResult = AdvertisementResult.SUCCESS
             });
 
-            MaxSdk.ShowRewardedAd(adUnitId);
-
             _retryAttempt = 0;
 
-            Debug.Log("[MaxSdkAdvertisment] OnRewardedAdLoadedEvent");
+            //Debug.Log("[MaxSdkAdvertisment] OnRewardedAdLoadedEvent");
         }
 
         private void OnRewardedAdLoadFailedEvent(string adUnitId, MaxSdkBase.ErrorInfo errorInfo)
@@ -235,9 +259,9 @@ namespace RaceManager.Services
             _retryAttempt++;
             double retryDelay = Math.Pow(2, Math.Min(maxPow, _retryAttempt));
 
-            Invoke(nameof(LoadRewardedAd), (float)retryDelay);
+            Invoke(nameof(ShowRewardedAd), (float)retryDelay);
 
-            Debug.Log("[MaxSdkAdvertisment] OnRewardedAdLoadFailedEvent");
+            //Debug.Log("[MaxSdkAdvertisment] OnRewardedAdLoadFailedEvent");
         }
 
         private void OnRewardedAdDisplayedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
@@ -249,7 +273,9 @@ namespace RaceManager.Services
                 AdsResult = AdvertisementResult.START
             });
 
-            Debug.Log("[MaxSdkAdvertisment] OnRewardedAdDisplayedEvent");
+            _adDisplayed = true;
+
+            //Debug.Log("[MaxSdkAdvertisment] OnRewardedAdDisplayedEvent");
         }
 
         private void OnRewardedAdFailedToDisplayEvent(string adUnitId, MaxSdkBase.ErrorInfo errorInfo, MaxSdkBase.AdInfo adInfo)
@@ -262,16 +288,16 @@ namespace RaceManager.Services
             });
 
             // Rewarded ad failed to display. AppLovin recommends that you load the next ad.
-            LoadRewardedAd(_lastAdsPlacement);
+            MaxSdk.LoadRewardedAd(_rewardedUnitId);
 
-            Debug.Log("[MaxSdkAdvertisment] OnRewardedAdFailedToDisplayEvent");
+            //Debug.Log("[MaxSdkAdvertisment] OnRewardedAdFailedToDisplayEvent");
         }
 
         private void OnRewardedAdClickedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
         {
             _adClicked = true;
 
-            Debug.Log("[MaxSdkAdvertisment] OnRewardedAdClickedEvent");
+            //Debug.Log("[MaxSdkAdvertisment] OnRewardedAdClickedEvent");
         }
 
         private void OnRewardedAdHiddenEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
@@ -291,10 +317,12 @@ namespace RaceManager.Services
                 AdsResult = result
             });
 
-            // Rewarded ad is hidden. Pre-load the next ad
-            // LoadRewardedAd();
+            _adDisplayed = false;
 
-            Debug.Log("[MaxSdkAdvertisment] OnRewardedAdHiddenEvent");
+            // Rewarded ad is hidden. Pre-load the next ad
+            MaxSdk.LoadRewardedAd(_rewardedUnitId);
+
+            //Debug.Log("[MaxSdkAdvertisment] OnRewardedAdHiddenEvent");
         }
 
         private void OnRewardedAdReceivedRewardEvent(string adUnitId, MaxSdk.Reward reward, MaxSdkBase.AdInfo adInfo)
@@ -302,41 +330,67 @@ namespace RaceManager.Services
             // The rewarded ad displayed and the user should receive the reward.
             _playerRewarded = true;
 
-            Debug.Log("[MaxSdkAdvertisment] OnRewardedAdReceivedRewardEvent");
+            //Debug.Log("[MaxSdkAdvertisment] OnRewardedAdReceivedRewardEvent");
         }
 
         private void OnRewardedAdRevenuePaidEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
         {
             // Ad revenue paid. Use this callback to track user revenue.
-            // ??
+            // ?..
 
-            Debug.Log("[MaxSdkAdvertisment] OnRewardedAdRevenuePaidEvent");
+            //Debug.Log("[MaxSdkAdvertisment] OnRewardedAdRevenuePaidEvent");
         }
 
         #endregion
 
         #region Public Functions
 
-        public void LoadInterstitial(AdvertisementPlacement placement = AdvertisementPlacement.MenuEnter)
+        public async void ShowInterstitialAd(AdvertisementPlacement placement = AdvertisementPlacement.MenuEnter)
         {
+            if(_adDisplayed) return;
+
             _lastAdsPlacement = placement;
             _playerRewarded = false;
             _adClicked = false;
 
-            MaxSdk.LoadInterstitial(_interstitialUnitId);
+            if (!IsInterstitialAdReady)
+            {
+                MaxSdk.LoadInterstitial(_interstitialUnitId);
+            }
 
-            Debug.Log("[MaxSdkAdvertisemet] LoadInterstitial");
+            while (!IsInterstitialAdReady)
+            {
+                _adsLoadCancellation.Token.ThrowIfCancellationRequested();
+                await Task.Yield();
+            }
+
+            MaxSdk.ShowInterstitial(_interstitialUnitId);
+
+            Debug.Log("[MaxSdkAdvertisemet] ShowInterstitial");
         }
 
-        public void LoadRewardedAd(AdvertisementPlacement placement = AdvertisementPlacement.RetryingPrevious)
+        public async void ShowRewardedAd(AdvertisementPlacement placement = AdvertisementPlacement.RetryingPrevious)
         {
+            if(_adDisplayed) return;
+
             _lastAdsPlacement = placement;
             _playerRewarded = false;
             _adClicked = false;
 
-            MaxSdk.LoadRewardedAd(_rewardedUnitId);
+            if (!IsRewardedAdReady)
+            {
+                MaxSdk.LoadInterstitial(_interstitialUnitId);
+            }
 
-            Debug.Log("[MaxSdkAdvertisement] LoadRewarded");
+            while (!IsRewardedAdReady)
+            {
+                _adsLoadCancellation.Token.ThrowIfCancellationRequested();
+                await Task.Yield();
+            }
+
+            MaxSdk.ShowRewardedAd(_rewardedUnitId);
+
+            Debug.Log("[MaxSdkAdvertisement] ShowRewarded");
         }
 
         #endregion

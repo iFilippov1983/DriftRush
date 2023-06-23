@@ -27,6 +27,7 @@ namespace Facebook.Unity.Example
         private string subscriptionProductId = string.Empty;
         private string cancelSubscriptionProductId = string.Empty;
 
+        [System.Obsolete]
         protected override void GetGui()
         {
             if (this.Button("Call Get Subscribable Catalog"))

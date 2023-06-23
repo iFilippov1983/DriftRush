@@ -22,6 +22,7 @@ namespace Facebook.Unity.Example
 {
     internal class AppLinks : MenuBase
     {
+        [System.Obsolete]
         protected override void GetGui()
         {
             if (this.Button("Get App Link"))

@@ -32,7 +32,7 @@ namespace RaceManager.Services
             //AppMetrica.Instance.SendEventsBuffer();
 
 #if UNITY_EDITOR
-            Debug.Log($"<color=green>[AppMetricaEvents] Ads Available Event: ad_type = {ad_type}, placement = {placement}, result = {result}, connection = {(connection ? 1 : 0)}</color>");
+            Debug.Log($"<color=blue>[AppMetricaEvents] Ads Available Event: ad_type = {ad_type}, placement = {placement}, result = {result}, connection = {(connection ? 1 : 0)}</color>");
 #endif
         }
 
@@ -54,7 +54,7 @@ namespace RaceManager.Services
             //AppMetrica.Instance.SendEventsBuffer();
 
 #if UNITY_EDITOR
-            Debug.Log($"<color=green>[AppMetricaEvents] Ads Started Event: ad_type = {ad_type}, placement = {placement}, result = {result}, connection = {(connection ? 1 : 0)}</color>");
+            Debug.Log($"<color=blue>[AppMetricaEvents] Ads Started Event: ad_type = {ad_type}, placement = {placement}, result = {result}, connection = {(connection ? 1 : 0)}</color>");
 #endif
         }
 
@@ -77,7 +77,7 @@ namespace RaceManager.Services
             //AppMetrica.Instance.SendEventsBuffer();
 
 #if UNITY_EDITOR
-            Debug.Log($"<color=green>[AppMetricaEvents] Ads Watched Event: ad_type = {ad_type}, placement = {placement}, result = {result}, connection = {(connection ? 1 : 0)}</color>");
+            Debug.Log($"<color=blue>[AppMetricaEvents] Ads Watched Event: ad_type = {ad_type}, placement = {placement}, result = {result}, connection = {(connection ? 1 : 0)}</color>");
 #endif
         }
 
@@ -93,7 +93,7 @@ namespace RaceManager.Services
             AppMetrica.Instance.SendEventsBuffer();
 
 #if UNITY_EDITOR
-            Debug.Log($"<color=green>[AppMetrica] Level Start Event: level_name = {levelName}, level_count = {levelCount}, level_random = {(levelRandom ? 1 : 0)}</color>");
+            Debug.Log($"<color=blue>[AppMetrica] Level Start Event: level_name = {levelName}, level_count = {levelCount}, level_random = {(levelRandom ? 1 : 0)}</color>");
 #endif
         }
 
@@ -111,7 +111,7 @@ namespace RaceManager.Services
             AppMetrica.Instance.SendEventsBuffer();
 
 #if UNITY_EDITOR
-            Debug.Log($"<color=green>[AppMetrica] Level Finish Event: level_name = {levelName}, level_count = {levelCount}, level_random = {(levelRandom ? 1 : 0)}, result = {result}, time = {completeTime}</color>");
+            Debug.Log($"<color=blue>[AppMetrica] Level Finish Event: level_name = {levelName}, level_count = {levelCount}, level_random = {(levelRandom ? 1 : 0)}, result = {result}, time = {completeTime}</color>");
 #endif
         }
     }

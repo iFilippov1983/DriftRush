@@ -16,20 +16,23 @@ namespace RaceManager.Waypoints
             if(!_handle) return;
 
             _raceLine = raceLine;
-            _raceLine.PrepareSelf(mainTrack);
+            _raceLine?.PrepareSelf(mainTrack);
         }
 
         public void StartHandling()
         {
             if(!_handle) return;
 
-            _raceLine.ShowLine?.OnNext();
+            _raceLine?.ShowLine?.OnNext();
         }
 
         public void StopHandling()
         {
-            _handle = false;
-            _raceLine.RaceFinish?.OnNext();
+            if (_handle)
+            {
+                _handle = false;
+                _raceLine.RaceFinish?.OnNext();
+            }
         }
 
         public void OnNext(DriverProfile profile)

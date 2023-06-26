@@ -140,13 +140,13 @@ namespace RaceManager.UI
             _carStatsProgressText.text = $"{currentValue}"; //  /{maxValue}";
         }
 
-        public void SetCarWindow(Rarity carRarity, int upgradeCost, bool upgraded, bool isAvailable)
+        public void SetCarWindow(Rarity carRarity, int upgradeCost, bool upgraded, bool isAvailable, bool hasFunds)
         {
             //_carWindow.CardsImage.color = _spritesCarsCollection.GetCarRarityColor(carRarity);
             _carWindow.UpgradeCostText.text = upgradeCost.ToString();
 
             _carWindow.UpgradeButton.SetActive(!upgraded);
-            _carWindow.UpgradeButton.interactable = isAvailable;
+            _carWindow.UpgradeButton.interactable = isAvailable && hasFunds;
         }
 
         public async void OpenCarWindow(CarName carName)

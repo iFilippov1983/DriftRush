@@ -114,6 +114,10 @@ namespace RaceManager.Progress
             return rank != null && (unusedFactors / rank.StatsToAddPerUpgrade) >= 1f;
         }
 
+        public bool HasMoneyToUpgradeCurrentCarFactors() => _profiler.HasEnoughMoneyFor(CurrentRank.UpgradeCostCurrent);
+
+        public bool HasMoneyToUpgradeCar() => _profiler.HasEnoughMoneyFor(CurrentRank.AccessCost);
+
         public bool CurrentCarHasMaxFactorsUpgrade()
         {
             var characteristics = _carsDepot.CurrentCarProfile.CarCharacteristics;

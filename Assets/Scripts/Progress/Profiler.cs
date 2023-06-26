@@ -155,7 +155,7 @@ namespace RaceManager.Progress
 
         public bool TryBuyWithMoney(int cost)
         {
-            if (cost > _playerProfile.Money)
+            if (HasEnoughMoneyFor(cost) == false)
                 return false;
 
             _moneyCost = cost;
@@ -192,6 +192,8 @@ namespace RaceManager.Progress
             lootbox = _lootboxes.Find(l => l.OpenTimerActivated == true && !l.IsOpen);
             return lootbox != null;
         }
+
+        public bool HasEnoughMoneyFor(int cost) => _playerProfile.Money >= cost;
 
         public Lootbox GetLootboxIndexOf(int index)
         {

@@ -266,6 +266,7 @@ namespace RaceManager.UI
             if (active)
             {
                 _tuningPanel.SetActive(active);
+                UpdateTuningPanelValues();
                 Animator.AppearSubject(_tuningPanel).AddTo(this);
             }
             else
@@ -540,6 +541,7 @@ namespace RaceManager.UI
                 _currentCarProfile.CarCharacteristics.CurrentFactorsProgress
                 );
 
+            _tuningPanel.UpgradeButton.interactable = _upgradesHandler.HasMoneyToUpgradeCurrentCarFactors();
             _tuningPanel.UpgradeWindow.SetActive(_upgradesHandler.CanUpgradeCurrentCarFactors());
             _tuningPanel.UpgradeCostText.text = _upgradesHandler.CurrentUpgradeCost.ToString();
             _tuningPanel.PartsAmountText.text = _upgradesHandler.CurrentUpgradeStatsToAdd.ToString();
@@ -579,10 +581,11 @@ namespace RaceManager.UI
             int cost = rank.AccessCost;
             bool isUpgraded = rank.IsGranted;
             bool isAvailable = rank.IsReached;
+            bool hasFunds = _upgradesHandler.HasMoneyToUpgradeCar();
 
             Rarity carRarity = profile.CarCharacteristics.Rarity;
 
-            _carsCollectionPanel.SetCarWindow(carRarity, cost, isUpgraded, isAvailable);
+            _carsCollectionPanel.SetCarWindow(carRarity, cost, isUpgraded, isAvailable, hasFunds);
         }
 
         public void UpdateCurrencyAmountPanels(GameUnitType type)

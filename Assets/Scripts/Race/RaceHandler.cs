@@ -409,7 +409,7 @@ namespace RaceManager.Race
 
             AnalyticsService.SendEvent(AnalyticsEventType.Level_Finish, _curLevelAnalyticsInfo);
 
-            $"Level terminated => Finished: {finished}".Log(Logger.ColorRed);
+            $"[RaceHandler] Level terminated => Finished: {finished}".Log(Logger.ColorRed);
         }
 
         private void SendEventLevelTerminated()

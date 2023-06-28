@@ -109,6 +109,8 @@ namespace RaceManager.Race
             {
                 _raceUI.ShowSimpleFinish = true;
                 _raceLevelInitializer.MakeInitialLevel();
+
+                _rewardsHandler.GrantInitialMoneyToPlayer();
             }
 
             _raceLevel = builder.GetResult();
@@ -409,7 +411,8 @@ namespace RaceManager.Race
 
             AnalyticsService.SendEvent(AnalyticsEventType.Level_Finish, _curLevelAnalyticsInfo);
 
-            $"[RaceHandler] Level terminated => Finished: {finished}".Log(Logger.ColorRed);
+            string color = finished ? Logger.ColorGreen : Logger.ColorRed;
+            $"[RaceHandler] Level terminated => Finished: {finished}".Log(color);
         }
 
         private void SendEventLevelTerminated()

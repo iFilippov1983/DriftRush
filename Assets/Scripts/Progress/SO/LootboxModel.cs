@@ -172,6 +172,8 @@ namespace RaceManager.Progress
         private int _epic = 0;
         private int _legendary = 0;
 
+        private Dictionary<CarName, CarTestInfo> _carProbabilities = new Dictionary<CarName, CarTestInfo>();
+
         [Button]
         private void TestProbability()
         {
@@ -183,6 +185,15 @@ namespace RaceManager.Progress
             //    if (pair.Value.Contains(name))
             //        rarity = pair.Key;
             //}
+
+            if (_carProbabilities.ContainsKey(name))
+            {
+                _carProbabilities[name].counter++;
+            }
+            else
+            { 
+                _carProbabilities.Add(name, new CarTestInfo() { rarity = rarity, counter = 1});
+            }
 
             _counter++;
 
@@ -206,20 +217,25 @@ namespace RaceManager.Progress
             }
 
             Debug.Log($"Chest rarity: {_rarity} | Card rarity: {rarity} | Atempts made: {_counter}");
-            Debug.Log($"C: {_common}; U: {_uncommon} | R: {_rare} | E: {_epic} | L: {_legendary}");
+            Debug.Log($"Rarities => C: {_common}; U: {_uncommon} | R: {_rare} | E: {_epic} | L: {_legendary}");
         }
 
         [Button]
-        private void TestProbability100()
+        private void TestProbabilityTimes(int times)
         {
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < times; i++)
             {
                 TestProbability();
+            }
+
+            foreach (var c in _carProbabilities)
+            {
+                Debug.Log($"Car [{c.Value.rarity}]: {c.Key} => {c.Value.counter}");
             }
         }
 
         [Button]
-        private void ResetCounters()
+        private void ResetTestValues()
         {
             _counter = 0;
 
@@ -228,7 +244,16 @@ namespace RaceManager.Progress
             _rare = 0;
             _epic = 0;
             _legendary = 0;
+
+            _carProbabilities.Clear();
         }
+
+        private class CarTestInfo
+        { 
+            public Rarity rarity;
+            public int counter;
+        }
+
         #endregion
     }
 }

@@ -488,7 +488,7 @@ namespace RaceManager.UI
             while (_finishUIHandler.HasJob)
                 await Task.Yield();
 
-            if (!Advertisement.PlayerRewarded)
+            if (!Advertisement.PlayerRewarded && !ShowSimpleFinish)
             {
                 Advertisement.ShowInterstitialAd();
             }

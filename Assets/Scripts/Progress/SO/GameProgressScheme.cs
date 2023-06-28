@@ -12,6 +12,12 @@ namespace RaceManager.Progress
     [CreateAssetMenu(menuName = "Progress/GameProgressScheme", fileName = "GameProgressScheme", order = 1)]
     public class GameProgressScheme : SerializedScriptableObject, ISaveable
     {
+        [SerializeField] private bool _grantMoneyOnStart;
+
+        [ShowIf("_grantMoneyOnStart")]
+        [SerializeField] private int _startMoneyAmount = 1000;
+
+        [Space(20)]
         [SerializeField]
         [DictionaryDrawerSettings(KeyLabel = "Cups To Reach", ValueLabel = "Progress Step")]
         private Dictionary<int, ProgressStep> ProgressSteps = new Dictionary<int, ProgressStep>();
@@ -34,8 +40,9 @@ namespace RaceManager.Progress
             }
         }
 
+        public bool GrantMoneyOnStart => _grantMoneyOnStart;
+        public int StartMoneyAmount => _startMoneyAmount;
         public IReadOnlyDictionary<int, ProgressStep> Steps => ProgressSteps;
-
         public KeyValuePair<int, ProgressStep> LastGlobalGoal => ProgressSteps.First(p => p.Value.IsLast == true);
 
         public ProgressStep GetStepWhithGoal(int goalCupsAmount)

@@ -8682,16 +8682,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _defaultTimeScale: 1
-  _minTimeScale: 0.3
+  _lowerTimeScale: 0.3
+  _minTimeScale: 0.075
   _fixedTimeFactor: 0.01
   _animDuration: 0.7
   _doneSignRect: {fileID: 8105532411228383094}
   _contexts:
-  - gameFlag: 5
-    actions: 00000000
+  - gameFlag: 4
+    actions: 03000000
     showPlaceRect: {fileID: 8683703695575700450}
+  - gameFlag: 5
+    actions: 0000000002000000
+    showPlaceRect: {fileID: 8683703695575700450}
+  - gameFlag: 6
+    actions: 03000000
+    showPlaceRect: {fileID: 1577534080984532037}
   - gameFlag: 7
-    actions: 00000000
+    actions: 0000000002000000
+    showPlaceRect: {fileID: 1577534080984532037}
+  - gameFlag: 40
+    actions: 03000000
+    showPlaceRect: {fileID: 1577534080984532037}
+  - gameFlag: 41
+    actions: 0000000002000000
     showPlaceRect: {fileID: 1577534080984532037}
   - gameFlag: 35
     actions: 01000000

@@ -29,9 +29,9 @@ namespace RaceManager.Progress
 
         private List<Lootbox> _lootboxes = new List<Lootbox>();
 
-        public int Money => _money;
-        public int Gems => _gems;
-        public int Cups => _cups;
+        public int MoneyCached => _money;
+        public int GemsCached => _gems;
+        public int CupsCached => _cups;
 
         public int MoneyCost => _moneyCost;
         public int GemsCost => _gemsCost;
@@ -44,6 +44,7 @@ namespace RaceManager.Progress
         public bool GotSpecialOffer => _playerProfile.GotSpecialOffer;
         public bool LootboxForRaceEnabled => _playerProfile.LootboxForRaceEnabled;
 
+        public int MoneyHave => _playerProfile.Money;
         public int RacesTotalCounter => _playerProfile.RacesTotalCounter;
         
         public CarName CarName => _carName;

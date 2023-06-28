@@ -104,6 +104,8 @@ namespace RaceManager.UI
                 { 
                     card.CardsAmount = 0;
                     card.ReplacementInfo = null;
+                    card.transform.SetParent(transform);
+                    card.SetActive(false);
                 }
             }
         }
@@ -114,6 +116,7 @@ namespace RaceManager.UI
             if (_cardsStack.Count != 0)
             {
                 cardView = _cardsStack.Pop();
+                cardView.transform.SetParent(_receivedCardsContent.transform);
                 cardView.SetActive(true);
             }
             else 
@@ -160,6 +163,7 @@ namespace RaceManager.UI
             else if (_cardsStack.Count != 0)
             {
                 cardView = _cardsStack.Pop();
+                cardView.transform.SetParent(_receivedCardsContent.transform);
                 cardView.SetActive(true);
             }
             else

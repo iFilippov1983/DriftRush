@@ -20,14 +20,14 @@ namespace RaceManager.Race
         /// Pass Difficulty. Zero to set random configuration.
         /// </summary>
         /// <param name="configurationDif"></param>
-        public void SetTrackConfigurations(Difficulty configurationDif = Difficulty.Zero)
+        public void SetTrackConfigurations(Difficulty configurationDif = Difficulty.Random)
         {
             var configurations = _raceLevel.Configurations;
 
             foreach (var trackConfiguration in configurations)
                 trackConfiguration.SetActive(false);
 
-            if (configurationDif == Difficulty.Zero)
+            if (configurationDif == Difficulty.Random)
             {
                 _currentConfiguration = configurations[Random.Range(0, configurations.Count)];
             }
@@ -80,7 +80,7 @@ namespace RaceManager.Race
             }
         }
 
-        public void ActivateAccessoryObjects()
+        public void ActivateAccessoryObjects(bool activate)
         {
             if (_currentConfiguration is null || _currentConfiguration.Accessory is null || _currentConfiguration.Accessory.Count == 0)
             {
@@ -90,7 +90,7 @@ namespace RaceManager.Race
 
             foreach (var a in _currentConfiguration.Accessory)
             {
-                a.SetActive(true);
+                a.SetActive(activate);
             }
         }
     }

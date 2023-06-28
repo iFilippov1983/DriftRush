@@ -7,9 +7,9 @@ namespace RaceManager.Root
 {
     public interface IProfiler
     {
-        public int Money { get; }
-        public int Gems { get; }
-        public int Cups { get; }
+        public int MoneyCached { get; }
+        public int GemsCached { get; }
+        public int CupsCached { get; }
         public int MoneyCost { get; }
         public int GemsCost { get; }
         public float IncomeFactor { get; }

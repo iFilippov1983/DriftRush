@@ -22,7 +22,7 @@ namespace RaceManager.Race
         {
             _builder.SetPrefab(_profiler.NextLevelToLoad.ToString());
             _builder.SetTrackConfigurations(Difficulty.Easy);
-            _builder.ActivateAccessoryObjects();
+            _builder.ActivateAccessoryObjects(true);
             _builder.SetOpponents();
         }
 
@@ -30,6 +30,7 @@ namespace RaceManager.Race
         { 
             _builder.SetPrefab( _profiler.NextLevelToLoad.ToString());
             _builder.SetTrackConfigurations();
+            _builder.ActivateAccessoryObjects(false);
             _builder.SetOpponents(-1);
         }
 

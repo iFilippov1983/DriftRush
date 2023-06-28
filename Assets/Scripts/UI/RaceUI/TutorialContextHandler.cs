@@ -17,8 +17,9 @@ namespace RaceManager.UI
         public enum ContextAction
         { 
             ShowDoneImage,
-            TimeScaleDown,
-            TimeScaleUp
+            TimeScaleLower,
+            TimeScaleDefault,
+            TimeScaleMin
         }
 
         [Serializable]
@@ -29,11 +30,13 @@ namespace RaceManager.UI
             [ShowIf("ShowDoneImage")]
             public RectTransform showPlaceRect;
 
+            //Only for Inspector property
             private bool ShowDoneImage => actions.Contains(ContextAction.ShowDoneImage);
         }
 
         [SerializeField] private float _defaultTimeScale = 1f;
-        [SerializeField] private float _minTimeScale = 0.2f;
+        [SerializeField] private float _lowerTimeScale = 0.3f;
+        [SerializeField] private float _minTimeScale = 0.02f;
         [SerializeField] private float _fixedTimeFactor = 0.01f;
         [SerializeField] private float _animDuration = 0.7f;
         [Space]
@@ -63,16 +66,21 @@ namespace RaceManager.UI
                         case ContextAction.ShowDoneImage:
                             ShowDoneImageOnFlag(context);
                             break;
-                        case ContextAction.TimeScaleDown:
-                            TimeScaleDownOnFlag(context.gameFlag);
+                        case ContextAction.TimeScaleLower:
+                            //TimeScaleLowerOnFlag(context.gameFlag);
+                            ChangeTimeScaleOnFlag(context.gameFlag, _lowerTimeScale);
                             break;
-                        case ContextAction.TimeScaleUp:
-                            TimeScaleUpOnFlag(context.gameFlag);
+                        case ContextAction.TimeScaleDefault:
+                            //TimeScaleDefaultOnFlag(context.gameFlag);
+                            ChangeTimeScaleOnFlag(context.gameFlag, _defaultTimeScale);
+                            break;
+                        case ContextAction.TimeScaleMin:
+                            //TimeScaleMinOnFlag(context.gameFlag);
+                            ChangeTimeScaleOnFlag(context.gameFlag, _minTimeScale);
                             break;
                     }
                 }
             }
-
             //Debug.Log($"[Initial] TS: {Time.timeScale}; FDT: {Time.fixedDeltaTime}");
         }
 
@@ -88,23 +96,47 @@ namespace RaceManager.UI
             //$"[Tutor Context] ShowDoneImage => OnFlag: [{context.gameFlag}]".Log(Logger.ColorYellow);
         }
 
-        private void TimeScaleDownOnFlag(GameFlagType gameFlag)
+        private void ChangeTimeScaleOnFlag(GameFlagType gameFlag, float timeScaleValue)
+        {
+            if (Passed(gameFlag))
+                return;
+
+            _flagsHandler
+                //.Subscribe(gameFlag, TimeScaleToDefault)
+                .Subscribe(gameFlag, () => TimeScaleTo(timeScaleValue))
+                .AddTo(this);
+        }
+
+        private void TimeScaleDefaultOnFlag(GameFlagType gameFlag)
+        {
+            if (Passed(gameFlag))
+                return;
+
+            _flagsHandler
+                //.Subscribe(gameFlag, TimeScaleToDefault)
+                .Subscribe(gameFlag, () => TimeScaleTo(_defaultTimeScale))
+                .AddTo(this);
+        }
+
+        private void TimeScaleLowerOnFlag(GameFlagType gameFlag)
         { 
             if(Passed(gameFlag))
                 return;
 
             _flagsHandler
-                .Subscribe(gameFlag, TimeScaleDown)
+                //.Subscribe(gameFlag, TimeScaleToLower)
+                .Subscribe(gameFlag, () => TimeScaleTo(_lowerTimeScale))
                 .AddTo(this);
         }
 
-        private void TimeScaleUpOnFlag(GameFlagType gameFlag)
+        private void TimeScaleMinOnFlag(GameFlagType gameFlag)
         { 
             if(Passed(gameFlag))
                 return;
 
-            _flagsHandler 
-                .Subscribe(gameFlag, TimeScaleUp)
+            _flagsHandler
+                //.Subscribe(gameFlag, TimeScaleToMin)
+                .Subscribe(gameFlag, () => TimeScaleTo(_minTimeScale))
                 .AddTo(this);
         }
 
@@ -128,24 +160,40 @@ namespace RaceManager.UI
             //Debug.Log($"[ShowDoneImage] Pos: {rect.position}");
         }
 
-        private void TimeScaleDown()
-        {
-            Time.timeScale = _minTimeScale;
-            Time.fixedDeltaTime = Time.timeScale * _fixedTimeFactor;
-
-            //Debug.Log($"[Down] TS: {Time.timeScale}; FDT: {Time.fixedDeltaTime}");
-        }
-
-        private void TimeScaleUp()
+        private void TimeScaleToDefault()
         {
             Time.timeScale = _defaultTimeScale;
             Time.fixedDeltaTime = Time.timeScale * _fixedTimeFactor;
 
-            //Debug.Log($"[Up] TS: {Time.timeScale}; FDT: {Time.fixedDeltaTime}");
+            //Debug.Log($"[TutorialContextHandler] [Up] TS: {Time.timeScale}; FDT: {Time.fixedDeltaTime}");
+        }
+
+        private void TimeScaleToLower()
+        {
+            Time.timeScale = _lowerTimeScale;
+            Time.fixedDeltaTime = Time.timeScale * _fixedTimeFactor;
+
+            //Debug.Log($"[TutorialContextHandler] [Down] TS: {Time.timeScale}; FDT: {Time.fixedDeltaTime}");
+        }
+
+        private void TimeScaleToMin()
+        {
+            Time.timeScale = _minTimeScale;
+            Time.fixedDeltaTime = Time.timeScale * _fixedTimeFactor;
+
+            Debug.Log("[TutorialContextHandler] TS is set to Zero");
+        }
+
+        private void TimeScaleTo(float value)
+        {
+            Time.timeScale = value;
+            Time.fixedDeltaTime = Time.timeScale * _fixedTimeFactor;
         }
 
         private void OnDestroy()
         {
+            //TimeScaleToDefault();
+            TimeScaleTo(_defaultTimeScale);
             _currentDoneTween?.Complete(true);
         }
     }

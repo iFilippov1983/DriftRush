@@ -50,7 +50,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5028114199541200105
 Transform:
   m_ObjectHideFlags: 0
@@ -1573,7 +1573,7 @@ ParticleSystem:
     rowMode: 1
     sprites:
     - sprite: {fileID: 0}
-    flipU: 1
+    flipU: 0
     flipV: 0
   VelocityModule:
     enabled: 0
@@ -4868,7 +4868,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 40dd725df3be8f74489b8de7495b290b, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4901,7 +4900,7 @@ ParticleSystemRenderer:
   m_ShadowBias: 0
   m_RenderAlignment: 0
   m_Pivot: {x: 0, y: 0, z: 0}
-  m_Flip: {x: 0, y: 0, z: 0}
+  m_Flip: {x: 1, y: 0, z: 0}
   m_UseCustomVertexStreams: 0
   m_EnableGPUInstancing: 0
   m_ApplyActiveColorSpace: 0
@@ -9752,7 +9751,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 6747cfac18b9ab04592753c619055b2a, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -11817,11 +11815,11 @@ MonoBehaviour:
   LST: 592.47015
   lastHourUpdate: 11
   hourTime: 0
-  cloudAnim: {x: 0, y: -0.48125464, z: 0.48180354}
-  cloudFlatBaseAnim: {x: 0, y: 0.55148566}
-  cloudFlatDetailAnim: {x: 0, y: -0.18483655}
-  cloudAnimNonScaled: {x: 0, y: -3.4486182}
-  cirrusAnim: {x: 0, y: 0.2756439}
+  cloudAnim: {x: 0, y: -0.7284208, z: 0.45683706}
+  cloudFlatBaseAnim: {x: 0, y: 0.5267696}
+  cloudFlatDetailAnim: {x: 0, y: -0.80275124}
+  cloudAnimNonScaled: {x: 0, y: -3.4733388}
+  cirrusAnim: {x: 0, y: 0.26328585}
   windIntensity: 0.49499997
   shadowIntensityMod: 0
   interiorMode: 0
@@ -11888,10 +11886,10 @@ MonoBehaviour:
     lastActiveWeatherPreset: {fileID: 0}
     VFXHolder: {fileID: 9205440548843202988}
     SFXHolder: {fileID: 9205440550196373090}
-    wetness: 4.9e-44
-    curWetness: 4.9e-44
-    snowStrength: 4.9e-44
-    curSnowStrength: 4.9e-44
+    wetness: 4e-44
+    curWetness: 4e-44
+    snowStrength: 4e-44
+    curSnowStrength: 4e-44
     thundersfx: 0
     currentAudioSource: {fileID: 9205440549541026604}
     weatherFullyChanged: 0
@@ -11906,7 +11904,7 @@ MonoBehaviour:
     Moon: {fileID: 9205440549770205679}
     DirectLight: {fileID: 9205440548503561856}
     AdditionalDirectLight: {fileID: 0}
-    GlobalReflectionProbe: {fileID: 0}
+    GlobalReflectionProbe: {fileID: 9205440549114551355}
     windZone: {fileID: 9205440550033846965}
     LightningGenerator: {fileID: 9205440548469437782}
     satellites: {fileID: 9205440549784715005}

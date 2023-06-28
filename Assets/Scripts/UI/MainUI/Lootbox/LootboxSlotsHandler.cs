@@ -327,7 +327,7 @@ namespace RaceManager.UI
                 await Task.Delay(100);
                 
                 UpdateTimer(_lootboxSpeedupSeconds);
-                _activeTween = _activeTimerSlot.TimerRect.DOPunchScale(new Vector3(1f, 1.03f, 1f), 1f, 8, 0);
+                _activeTween = _activeTimerSlot?.TimerRect.DOPunchScale(new Vector3(1f, 1.03f, 1f), 1f, 8, 0);
             }
         }
 

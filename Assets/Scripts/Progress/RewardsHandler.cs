@@ -160,6 +160,17 @@ namespace RaceManager.Progress
             }
         }
 
+        public void GrantInitialMoneyToPlayer()
+        {
+            bool canGrant = _gameProgressScheme.GrantMoneyOnStart && _profiler.MoneyHave == 0;
+
+            if (canGrant)
+            {
+                _profiler.AddMoney(_gameProgressScheme.StartMoneyAmount);
+                _saveManager.Save();
+            }
+        }
+
         private void HandleLootboxOpen(Lootbox lootbox)
         {
             List<CarCardReward> list = lootbox.CardsList;

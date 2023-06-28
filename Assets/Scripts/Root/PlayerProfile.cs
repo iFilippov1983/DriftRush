@@ -111,9 +111,9 @@ namespace RaceManager.Root
 
         #endregion
 
-        public void AddMoney(IProfiler profiler) => _currency.Money += profiler.Money;
-        public void AddCups(IProfiler profiler) => _currency.Cups += profiler.Cups;
-        public void AddGems(IProfiler profiler) => _currency.Gems += profiler.Gems;
+        public void AddMoney(IProfiler profiler) => _currency.Money += profiler.MoneyCached;
+        public void AddCups(IProfiler profiler) => _currency.Cups += profiler.CupsCached;
+        public void AddGems(IProfiler profiler) => _currency.Gems += profiler.GemsCached;
         public void AddLootbox(IProfiler profiler) => _lootboxes.Add(profiler.LootboxToAdd);
         public void AddCards(IProfiler profiler) => _currency.CarCards[profiler.CarName] += profiler.CardsAmount;
         public void AddRaceCount(IProfiler profiler)

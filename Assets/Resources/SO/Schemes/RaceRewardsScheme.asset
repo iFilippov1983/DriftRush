@@ -280,10 +280,14 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-  _scoresFactorDrift: 1
+  _driftScoresFactorMin: 1
+  _driftScoresFactorMax: 5
+  _driftScoresFactorIncreaseStep: 0.1
+  _driftScoresFactorIncreaseTime: 2
+  _driftCountTime: 5.5
   _minDriftDistanceValue: 1
   _scoresForBump: 100
   _scoresForCrush: 100
   _minCollisionInterval: 1
   _moneyMultiplyerForAds: 3
-  _scoresCountPauseDutation: 5
+  _showScoresDuration: 5

@@ -164,7 +164,7 @@ namespace RaceManager.UI
             stepView.ClaimButton.SetActive(step.IsReached);
             stepView.ClaimButton.onClick.RemoveAllListeners();
             stepView.ClaimButton.onClick.AddListener(claimButtonAction);
-            stepView.ClaimButton.onClick.AddListener(() => UpdateStepStatus(step, stepView));
+            stepView.ClaimButton.onClick.AddListener(() => UpdateStepStatus(step, stepView, true));
             stepView.ClaimButton.onClick.AddListener(() => OnButtonPressedMethod(stepView.ClaimButton));
 
 
@@ -214,7 +214,7 @@ namespace RaceManager.UI
             stepView.CupsAmountSlider.SliderFlag.localPosition = localPos;
         }
 
-        private void UpdateStepStatus(ProgressStep step, ProgressStepView stepView)
+        private void UpdateStepStatus(ProgressStep step, ProgressStepView stepView, bool animateReceiving = false)
         {
             bool received = step.RewardsReceived;
 
@@ -234,7 +234,7 @@ namespace RaceManager.UI
 
             image.SetActive(received);
 
-            if (received) 
+            if (received && animateReceiving) 
             {
                 RectTransform rect = step.BigPrefab
                 ? stepView.StepWindowBig.ClaimedImage.rectTransform

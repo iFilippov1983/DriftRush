@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace RaceManager.Cars
@@ -51,7 +52,7 @@ namespace RaceManager.Cars
                             _opponentsTuneScheme.SpeedPercentageValueRange
                         );
 
-                    //Debug.Log($"Speed factor: {speedFactor}");
+                    Debug.Log($"Speed factor: {speedFactor}");
 
                     float speedValue = oProfile.CarCharacteristics.MaxSpeedFactor * speedFactor;
 
@@ -63,16 +64,16 @@ namespace RaceManager.Cars
                 {
                     oProfile.Handling = pProfile.Handling;
 
-                    float mobilityFactor = CalculateValueFactor
+                    float handlindFactor = CalculateValueFactor
                         (
                             _opponentsTuneScheme.MaxHandlingPercentage,
                             _opponentsTuneScheme.MinHandlingPercentageCurrent,
                             _opponentsTuneScheme.HandlingPercentageValueRange
                         );
 
-                    //Debug.Log($"Mobility factor: {mobilityFactor}");
+                    Debug.Log($"Handling factor: {handlindFactor}");
 
-                    float mobilityValue = oProfile.CarCharacteristics.MaxHandlingFactor * mobilityFactor;
+                    float mobilityValue = oProfile.CarCharacteristics.MaxHandlingFactor * handlindFactor;
 
                     _tuner.OnCharacteristicValueChanged?.Invoke(CharacteristicType.Handling, mobilityValue, !randomizeView);
                 }
@@ -80,18 +81,18 @@ namespace RaceManager.Cars
                 if (_opponentsTuneScheme.UseFrictionAdjust)
                 { 
                     oProfile.Friction = pProfile.Friction;
-                    float gripFactor = CalculateValueFactor
+                    float frictionFactor = CalculateValueFactor
                         (
                             _opponentsTuneScheme.MaxFrictionPercentage,
                             _opponentsTuneScheme.MinFrictionPercentage,
                             _opponentsTuneScheme.FrictionPercentageValueRange
                         );
 
-                    //Debug.Log($"Grip factor: {mobilityFactor}");
+                    Debug.Log($"Grip factor: {frictionFactor}");
 
-                    float gripValue = oProfile.CarCharacteristics.MaxFrictionFactor * gripFactor;
+                    float frictionValue = oProfile.CarCharacteristics.MaxFrictionFactor * frictionFactor;
 
-                    _tuner.OnCharacteristicValueChanged?.Invoke(CharacteristicType.Friction, gripValue, !randomizeView);
+                    _tuner.OnCharacteristicValueChanged?.Invoke(CharacteristicType.Friction, frictionValue, !randomizeView);
                 }
 
                 if (_opponentsTuneScheme.UseAccelerationAdjust)
@@ -105,7 +106,7 @@ namespace RaceManager.Cars
                             _opponentsTuneScheme.AccelerationPercentageValueRange
                         );
 
-                    //Debug.Log($"Acceleration factor: {accelerationFactor}");
+                    Debug.Log($"Acceleration factor: {accelerationFactor}");
 
                     float accelerationValue = oProfile.CarCharacteristics.MaxAccelerationFactor * accelerationFactor;
 
@@ -220,7 +221,28 @@ namespace RaceManager.Cars
                         _opponentsTuneScheme.MinAccelerationPercentageCurrent = _opponentsTuneScheme.MinAccelerationPercentage;
                 }
             }
+
+            if (_opponentsTuneScheme.UseFrictionAdjust)
+            {
+                if (grade)
+                {
+                    _opponentsTuneScheme.MinFrictionPercentageCurrent += _opponentsTuneScheme.VictoryPercentageStep;
+                    if (_opponentsTuneScheme.MinFrictionPercentageCurrent > _opponentsTuneScheme.MaxFrictionPercentage)
+                        _opponentsTuneScheme.MinFrictionPercentageCurrent = _opponentsTuneScheme.MaxFrictionPercentage;
+                }
+                else
+                {
+                    _opponentsTuneScheme.MinFrictionPercentageCurrent -= _opponentsTuneScheme.VictoryPercentageStep;
+                    if (_opponentsTuneScheme.MinFrictionPercentageCurrent < _opponentsTuneScheme.MinFrictionPercentage)
+                        _opponentsTuneScheme.MinFrictionPercentageCurrent = _opponentsTuneScheme.MinFrictionPercentage;
+                }
+            }
         }
+
+        //private float Recalculate(float curMinVal, float minVal, float maxVal, float gradeStep)
+        //{ 
+        
+        //}
 
         public void Dispose()
         {

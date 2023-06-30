@@ -52,7 +52,7 @@ namespace RaceManager.Cars
                             _opponentsTuneScheme.SpeedPercentageValueRange
                         );
 
-                    Debug.Log($"Speed factor: {speedFactor}");
+                    //Debug.Log($"Speed factor: {speedFactor}");
 
                     float speedValue = oProfile.CarCharacteristics.MaxSpeedFactor * speedFactor;
 
@@ -71,7 +71,7 @@ namespace RaceManager.Cars
                             _opponentsTuneScheme.HandlingPercentageValueRange
                         );
 
-                    Debug.Log($"Handling factor: {handlindFactor}");
+                    //Debug.Log($"Handling factor: {handlindFactor}");
 
                     float mobilityValue = oProfile.CarCharacteristics.MaxHandlingFactor * handlindFactor;
 
@@ -88,7 +88,7 @@ namespace RaceManager.Cars
                             _opponentsTuneScheme.FrictionPercentageValueRange
                         );
 
-                    Debug.Log($"Grip factor: {frictionFactor}");
+                    //Debug.Log($"Grip factor: {frictionFactor}");
 
                     float frictionValue = oProfile.CarCharacteristics.MaxFrictionFactor * frictionFactor;
 
@@ -106,7 +106,7 @@ namespace RaceManager.Cars
                             _opponentsTuneScheme.AccelerationPercentageValueRange
                         );
 
-                    Debug.Log($"Acceleration factor: {accelerationFactor}");
+                    //Debug.Log($"Acceleration factor: {accelerationFactor}");
 
                     float accelerationValue = oProfile.CarCharacteristics.MaxAccelerationFactor * accelerationFactor;
 
@@ -160,89 +160,92 @@ namespace RaceManager.Cars
         {
             if (_opponentsTuneScheme.UseSpeedAdjust)
             {
-                if (grade)
-                {
-                    _opponentsTuneScheme.MinSpeedPercentageCurrent += _opponentsTuneScheme.VictoryPercentageStep;
-                    if (_opponentsTuneScheme.MinSpeedPercentageCurrent > _opponentsTuneScheme.MaxSpeedPercentage)
-                        _opponentsTuneScheme.MinSpeedPercentageCurrent = _opponentsTuneScheme.MaxSpeedPercentage;
-                }
-                else
-                {
-                    _opponentsTuneScheme.MinSpeedPercentageCurrent -= _opponentsTuneScheme.LoosePercentageStep;
-                    if (_opponentsTuneScheme.MinSpeedPercentageCurrent < _opponentsTuneScheme.MinSpeedPercentage)
-                        _opponentsTuneScheme.MinSpeedPercentageCurrent = _opponentsTuneScheme.MinSpeedPercentage;
-                }
+                _opponentsTuneScheme.MinSpeedPercentageCurrent = 
+                    RecalculateValue
+                    (
+                        _opponentsTuneScheme.MinSpeedPercentageCurrent,
+                        _opponentsTuneScheme.MinSpeedPercentage,
+                        _opponentsTuneScheme.MaxSpeedPercentage,
+                        _opponentsTuneScheme.VictoryPercentageStep,
+                        _opponentsTuneScheme.LoosePercentageStep,
+                        grade
+                    );
             }
 
             if (_opponentsTuneScheme.UseHandlingAdjust)
             {
-                if (grade)
-                {
-                    _opponentsTuneScheme.MinHandlingPercentageCurrent += _opponentsTuneScheme.VictoryPercentageStep;
-                    if (_opponentsTuneScheme.MinHandlingPercentageCurrent > _opponentsTuneScheme.MaxHandlingPercentage)
-                        _opponentsTuneScheme.MinHandlingPercentageCurrent = _opponentsTuneScheme.MaxHandlingPercentage;
-                }
-                else
-                {
-                    _opponentsTuneScheme.MinHandlingPercentageCurrent -= _opponentsTuneScheme.LoosePercentageStep;
-                    if (_opponentsTuneScheme.MinHandlingPercentageCurrent < _opponentsTuneScheme.MinHandlingPercentage)
-                        _opponentsTuneScheme.MinHandlingPercentageCurrent = _opponentsTuneScheme.MinHandlingPercentage;
-                }
-            }
-
-            if (_opponentsTuneScheme.UseDurabilityAdjust)
-            {
-                if (grade)
-                {
-                    _opponentsTuneScheme.MinDurabilityPercentageCurrent += _opponentsTuneScheme.VictoryPercentageStep;
-                    if (_opponentsTuneScheme.MinDurabilityPercentageCurrent > _opponentsTuneScheme.MaxDurabilityPercentage)
-                        _opponentsTuneScheme.MinDurabilityPercentageCurrent = _opponentsTuneScheme.MaxDurabilityPercentage;
-                }
-                else
-                {
-                    _opponentsTuneScheme.MinDurabilityPercentageCurrent -= _opponentsTuneScheme.LoosePercentageStep;
-                    if (_opponentsTuneScheme.MinDurabilityPercentageCurrent < _opponentsTuneScheme.MinDurabilityPercentage)
-                        _opponentsTuneScheme.MinDurabilityPercentageCurrent = _opponentsTuneScheme.MinDurabilityPercentage;
-                }
+                _opponentsTuneScheme.MinHandlingPercentageCurrent =
+                    RecalculateValue
+                    (
+                        _opponentsTuneScheme.MinHandlingPercentageCurrent,
+                        _opponentsTuneScheme.MinHandlingPercentage,
+                        _opponentsTuneScheme.MaxHandlingPercentage,
+                        _opponentsTuneScheme.VictoryPercentageStep,
+                        _opponentsTuneScheme.LoosePercentageStep,
+                        grade
+                    );
             }
 
             if (_opponentsTuneScheme.UseAccelerationAdjust)
             {
-                if (grade)
-                {
-                    _opponentsTuneScheme.MinAccelerationPercentageCurrent += _opponentsTuneScheme.VictoryPercentageStep;
-                    if (_opponentsTuneScheme.MinAccelerationPercentageCurrent > _opponentsTuneScheme.MaxAccelerationPercentage)
-                        _opponentsTuneScheme.MinAccelerationPercentageCurrent = _opponentsTuneScheme.MaxAccelerationPercentage;
-                }
-                else
-                {
-                    _opponentsTuneScheme.MinAccelerationPercentageCurrent -= _opponentsTuneScheme.LoosePercentageStep;
-                    if (_opponentsTuneScheme.MinAccelerationPercentageCurrent < _opponentsTuneScheme.MinAccelerationPercentage)
-                        _opponentsTuneScheme.MinAccelerationPercentageCurrent = _opponentsTuneScheme.MinAccelerationPercentage;
-                }
+                _opponentsTuneScheme.MinAccelerationPercentageCurrent =
+                    RecalculateValue
+                    (
+                        _opponentsTuneScheme.MinAccelerationPercentageCurrent,
+                        _opponentsTuneScheme.MinAccelerationPercentage,
+                        _opponentsTuneScheme.MaxAccelerationPercentage,
+                        _opponentsTuneScheme.VictoryPercentageStep,
+                        _opponentsTuneScheme.LoosePercentageStep,
+                        grade
+                    );
             }
 
             if (_opponentsTuneScheme.UseFrictionAdjust)
             {
-                if (grade)
-                {
-                    _opponentsTuneScheme.MinFrictionPercentageCurrent += _opponentsTuneScheme.VictoryPercentageStep;
-                    if (_opponentsTuneScheme.MinFrictionPercentageCurrent > _opponentsTuneScheme.MaxFrictionPercentage)
-                        _opponentsTuneScheme.MinFrictionPercentageCurrent = _opponentsTuneScheme.MaxFrictionPercentage;
-                }
-                else
-                {
-                    _opponentsTuneScheme.MinFrictionPercentageCurrent -= _opponentsTuneScheme.VictoryPercentageStep;
-                    if (_opponentsTuneScheme.MinFrictionPercentageCurrent < _opponentsTuneScheme.MinFrictionPercentage)
-                        _opponentsTuneScheme.MinFrictionPercentageCurrent = _opponentsTuneScheme.MinFrictionPercentage;
-                }
+                _opponentsTuneScheme.MinFrictionPercentageCurrent = 
+                    RecalculateValue
+                    (
+                        _opponentsTuneScheme.MinFrictionPercentageCurrent,
+                        _opponentsTuneScheme.MinFrictionPercentage,
+                        _opponentsTuneScheme.MaxFrictionPercentage,
+                        _opponentsTuneScheme.VictoryPercentageStep,
+                        _opponentsTuneScheme.LoosePercentageStep,
+                        grade
+                    );
+            }
+
+            if (_opponentsTuneScheme.UseDurabilityAdjust)
+            {
+                _opponentsTuneScheme.MinDurabilityPercentageCurrent =
+                    RecalculateValue
+                    (
+                        _opponentsTuneScheme.MinDurabilityPercentageCurrent,
+                        _opponentsTuneScheme.MinDurabilityPercentage,
+                        _opponentsTuneScheme.MaxDurabilityPercentage,
+                        _opponentsTuneScheme.VictoryPercentageStep,
+                        _opponentsTuneScheme.LoosePercentageStep,
+                        grade
+                    );
             }
         }
 
-        //private float Recalculate(float curMinVal, float minVal, float maxVal, float gradeStep)
-        //{ 
-        
-        //}
+        private float RecalculateValue(float curMinVal, float minVal, float maxVal, float upGradeStep, float downGradeStep, bool doGrade)
+        {
+            if (doGrade)
+            {
+                curMinVal += upGradeStep;
+                if(curMinVal > maxVal)
+                    curMinVal = maxVal;
+            }
+            else
+            { 
+                curMinVal -= downGradeStep;
+                if(curMinVal < minVal)
+                    curMinVal = minVal;
+            }
+
+            return curMinVal;
+        }
 
         public void Dispose()
         {

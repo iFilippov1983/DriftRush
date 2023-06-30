@@ -64,6 +64,15 @@ namespace RaceManager.Root
                         _gameEvents.ScreenTapReleased.OnNext();
                 }).AddTo(this);
 
+            this.FixedUpdateAsObservable()
+                .Where(_ => _raceUI.RaceFinished == false)
+                .Subscribe(_ => 
+                {
+                    HandleWheels();
+                    HandleCarSpeed();
+                })
+                .AddTo(this);
+
             EventsHub<RaceEvent>.Subscribe(RaceEvent.START, SendStartNotification);
             _raceUI.OnButtonPressed += PlayButtonPressedEffect;
         }

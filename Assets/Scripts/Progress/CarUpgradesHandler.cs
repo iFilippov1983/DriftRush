@@ -17,7 +17,8 @@ namespace RaceManager.Progress
         public Action<CarName> OnCarFactorsUpgrade;
         public Subject<CarUpdateData> OnCarUpdate = new Subject<CarUpdateData>();
 
-        public CarRankingScheme.CarRank CurrentRank => _carsDepot.CurrentCarProfile.RankingScheme.CurrentRank;
+        public CarRankingScheme.CarRank CurrentRank => _carsDepot.CurrentCarProfile.RankingScheme.GetCurrentRank();
+        public CarRankingScheme.CarRank NextRank => _carsDepot.CurrentCarProfile.RankingScheme.GetNextRank();
         public int CurrentUpgradeCost => CurrentRank.UpgradeCostCurrent;
         public float CurrentUpgradeStatsToAdd => CurrentRank.StatsToAddPerUpgrade;
 
@@ -41,23 +42,23 @@ namespace RaceManager.Progress
             var scheme = carProfile.RankingScheme;
 
             bool canUpgrade = 
-                !scheme.CurrentRank.IsGranted 
+                !scheme.GetNextRank().IsGranted 
                 && 
-                _profiler.TryBuyWithMoney(scheme.CurrentRank.AccessCost)
+                _profiler.TryBuyWithMoney(scheme.GetNextRank().AccessCost)
                 &&
-                _profiler.TryBuyWithCards(carProfile.CarName, scheme.CurrentRank.PointsForAccess);
+                _profiler.TryBuyWithCards(carProfile.CarName, scheme.GetNextRank().PointsForAccess);
 
             if (canUpgrade)
             {
-                int currentUpgradeCost = scheme.CurrentRank.UpgradeCostCurrent;
+                int currentUpgradeCost = scheme.GetNextRank().UpgradeCostCurrent;
 
-                scheme.CurrentRank.IsGranted = true;
+                scheme.GetNextRank().IsGranted = true;
                 UpdateRankProgress(carProfile.CarName, _profiler.GetCardsAmount(carProfile.CarName));
                 UpdateCarMaxFactorsCurrent(carProfile);
                 _carsDepot.UpdateProfile(carProfile);
 
-                if (scheme.CurrentRank.UpgradeCostCurrent < currentUpgradeCost)
-                    scheme.CurrentRank.UpgradeCostCurrent = currentUpgradeCost;
+                if (scheme.GetNextRank().UpgradeCostCurrent < currentUpgradeCost)
+                    scheme.GetNextRank().UpgradeCostCurrent = currentUpgradeCost;
 
                 OnCarUpdate?.OnNext(new CarUpdateData() 
                 { 
@@ -116,7 +117,7 @@ namespace RaceManager.Progress
 
         public bool HasMoneyToUpgradeCurrentCarFactors() => _profiler.HasEnoughMoneyFor(CurrentRank.UpgradeCostCurrent);
 
-        public bool HasMoneyToUpgradeCar() => _profiler.HasEnoughMoneyFor(CurrentRank.AccessCost);
+        public bool HasMoneyToUpgradeCar() => _profiler.HasEnoughMoneyFor(NextRank.AccessCost);
 
         public bool CurrentCarHasMaxFactorsUpgrade()
         {
@@ -136,7 +137,7 @@ namespace RaceManager.Progress
         private void UpdateRankProgress(CarName carName, int cardsAmount = 0)
         {
             CarProfile profile = _carsDepot.GetProfile(carName);
-            var carRank = profile.RankingScheme.CurrentRank;
+            var carRank = profile.RankingScheme.GetNextRank();
 
             if (cardsAmount >= carRank.PointsForAccess)
             {
@@ -157,7 +158,7 @@ namespace RaceManager.Progress
 
         private bool TryUnlockCar(CarProfile profile)
         {
-            var carRank = profile.RankingScheme.CurrentRank;
+            var carRank = profile.RankingScheme.GetNextRank();
 
             if (carRank.IsGranted)
                 return false;

@@ -47,7 +47,7 @@ namespace RaceManager.Root
                     {
                         needsNotification = false,
                         isAvailable = scheme.CarIsAvailable,
-                        isUpgradeable = scheme.CurrentRank.IsReached && !scheme.CurrentRank.IsGranted,
+                        isUpgradeable = scheme.GetNextRank().IsReached && !scheme.GetNextRank().IsGranted,
                         isNotified = false,
                         cashedCardsAmount = _profiler.GetCardsAmount(name),
                     };
@@ -63,13 +63,13 @@ namespace RaceManager.Root
 
         public void NotifyIfNeeded()
         {
-            foreach (var car in _carsInfo)
+            foreach (var info in _carsInfo)
             {
-                if (car.Value.needsNotification)
+                if (info.Value.needsNotification)
                 {
-                    CarName carName = car.Key;
+                    CarName carName = info.Key;
 
-                    CarInfo carInfo = car.Value;
+                    CarInfo carInfo = info.Value;
 
                     string name = carName.ToString().SplitByUppercaseWith(" ");
                     name = name.Replace('_', ' ');
@@ -113,7 +113,7 @@ namespace RaceManager.Root
             CarRankingScheme scheme = _playerCarsDepot.GetProfile(data.carName).RankingScheme;
 
             int cardsAmount = _profiler.GetCardsAmount(data.carName);
-            int cardsAmountToUpgrade = scheme.CurrentRank.PointsForAccess;
+            int cardsAmountToUpgrade = scheme.GetNextRank().PointsForAccess;
 
             carInfo.needsNotification = data.gotUnlocked || cardsAmount > cardsAmountToUpgrade;
             carInfo.isAvailable = carInfo.isAvailable != data.gotUnlocked;

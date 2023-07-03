@@ -72,11 +72,11 @@ namespace RaceManager.Progress
                     &&
                     LastSceneWasRace
                     &&
-                    !scheme.CurrentRank.IsGranted
+                    !scheme.GetCurrentRank().IsGranted
                     &&
-                    _playerProfile.Money > scheme.CurrentRank.AccessCost 
+                    _playerProfile.Money > scheme.GetCurrentRank().AccessCost 
                     &&
-                    _playerProfile.CarCardsAmount(profile.CarName) >= scheme.CurrentRank.PointsForAccess;
+                    _playerProfile.CarCardsAmount(profile.CarName) >= scheme.GetCurrentRank().PointsForAccess;
 
                 if (canUpgrade)
                 {
@@ -94,7 +94,7 @@ namespace RaceManager.Progress
             foreach (var profile in _playerCarDepot.ProfilesList)
             {
                 var scheme = profile.RankingScheme;
-                var curRank = scheme.CurrentRank;
+                var curRank = scheme.GetCurrentRank();
 
                 bool canUnlock = 
                     _tutorialSteps.IsTutorialComplete

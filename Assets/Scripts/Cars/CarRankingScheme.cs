@@ -16,29 +16,30 @@ namespace RaceManager.Cars
         private List<CarRank> _ranks = new List<CarRank>();
 
         private CarRank _currentRank;
+        private CarRank _nextRank;
 
         [JsonIgnore]
         public List<CarRank> Ranks => _ranks;
 
-        [ShowInInspector, ReadOnly]
-        public CarRank CurrentRank
-        {
-            get
-            {
-                try
-                {
-                    _currentRank = _ranks.First(s => s.IsGranted == false);
-                }
-                catch (Exception)
-                {
-                    _currentRank = _ranks.Last(s => s.IsGranted == true);
-                }
+        //[ShowInInspector, ReadOnly]
+        //public CarRank GetCurrentRank
+        //{
+        //    get
+        //    {
+        //        try
+        //        {
+        //            _currentRank = _ranks.First(s => s.IsGranted == false);
+        //        }
+        //        catch (Exception)
+        //        {
+        //            _currentRank = _ranks.Last(s => s.IsGranted == true);
+        //        }
 
-                return _currentRank;
-            }
-        }
+        //        return _currentRank;
+        //    }
+        //}
 
-        public int CurrentRankPointsForAccess => CurrentRank.PointsForAccess;
+        public int NextRankPointsForAccess => GetNextRank().PointsForAccess;
 
         public int RankPointsTotalForCar
         {
@@ -57,29 +58,59 @@ namespace RaceManager.Cars
         {
             get
             {
-                var step = CurrentRank.Rank == Rank.Rank_1 && CurrentRank.IsGranted
-                    ? CurrentRank
-                    : _ranks?.Find(s => s.Rank == Rank.Rank_1 && s.IsGranted);
-
-                return step != null;
-            }
-        }
-
-        public float RanksWeightTotal
-        {
-            get 
-            {
-                float weight = 0;
                 foreach (var rank in _ranks)
-                    weight += rank.AvailableTunePercentage;
+                { 
+                    if(rank.Rank == Rank.Rank_1 && rank.IsGranted)
+                        return true;
+                }
 
-                return weight;
+                return false;
             }
         }
 
         public bool AllRanksGranted => _ranks.TrueForAll(r => r.IsGranted == true);
 
         public bool AllRanksReached => _ranks.TrueForAll(r => r.IsReached == true);
+
+        public CarRank GetCurrentRank()
+        {
+            _currentRank = null;
+
+            try
+            {
+                _currentRank = _ranks.Last(r => r.IsGranted == true);
+            }
+            catch
+            {
+                foreach (var rank in _ranks)
+                {
+                    if (rank.IsReached)
+                    {
+                        _currentRank = rank;
+                        break;
+                    }
+                }
+
+                if (_currentRank == null)
+                    _currentRank = _ranks[0];
+            }
+
+            return _currentRank;
+        }
+
+        public CarRank GetNextRank()
+        {
+            try
+            {
+                _nextRank = _ranks.First(s => s.IsGranted == false);
+            }
+            catch
+            {
+                GetCurrentRank();
+            }
+
+            return _nextRank;
+        }
 
         [Serializable]
         public class CarRank

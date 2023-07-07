@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 3
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 579887380}
+  m_SkyboxMaterial: {fileID: 349024488}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.16405213, g: 0.421947, b: 0.6657393, a: 1}
+  m_IndirectSpecularColor: {r: 0.16424292, g: 0.42207584, b: 0.6658138, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -489,6 +489,47 @@ MonoBehaviour:
   _spritesContainerRewards: {fileID: 11400000, guid: 0844653bf283a2f4daf4bf2b4726e92f,
     type: 2}
   _settingsContainer: {fileID: 11400000, guid: 7cccbf65641ddad40949bf04f2f4307d, type: 2}
+--- !u!21 &349024488
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Enviro/Lite/SkyboxSimple
+  m_Shader: {fileID: 4800000, guid: 846f1e8b410d51444866f03712815c1e, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _FlatCloudsBaseTexture:
+        m_Texture: {fileID: 2800000, guid: 9b9ac0c14a0678d498b26fb2486005f1, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _FlatCloudsDetailTexture:
+        m_Texture: {fileID: 2800000, guid: 3904de3fb7c0ff1419fd3064f8114c90, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MoonTex:
+        m_Texture: {fileID: 2800000, guid: 66ad4c55c5a3a7045a25295e064fc7d2, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Stars:
+        m_Texture: {fileID: 8900000, guid: 214e1a8de772f334886a8d3bee074dc9, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats: []
+    m_Colors:
+    - _HorizonColor: {r: 0.89067185, g: 0.89067185, b: 0.89067185, a: 1}
+    - _SkyColor: {r: 0.4585134, g: 0.60972184, b: 0.71637094, a: 0.7178091}
+    - _SunColor: {r: 0.9253507, g: 0.8097497, b: 0.68740606, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1 &497530277
 GameObject:
   m_ObjectHideFlags: 0
@@ -725,47 +766,6 @@ MonoBehaviour:
     EventFilter: 
     Count: 1
     FlagType: 33
---- !u!21 &579887380
-Material:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Enviro/Lite/SkyboxSimple
-  m_Shader: {fileID: 4800000, guid: 846f1e8b410d51444866f03712815c1e, type: 3}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _FlatCloudsBaseTexture:
-        m_Texture: {fileID: 2800000, guid: 9b9ac0c14a0678d498b26fb2486005f1, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _FlatCloudsDetailTexture:
-        m_Texture: {fileID: 2800000, guid: 3904de3fb7c0ff1419fd3064f8114c90, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MoonTex:
-        m_Texture: {fileID: 2800000, guid: 66ad4c55c5a3a7045a25295e064fc7d2, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _Stars:
-        m_Texture: {fileID: 8900000, guid: 214e1a8de772f334886a8d3bee074dc9, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Floats: []
-    m_Colors:
-    - _HorizonColor: {r: 0.89067185, g: 0.89067185, b: 0.89067185, a: 1}
-    - _SkyColor: {r: 0.4585134, g: 0.60972184, b: 0.71637094, a: 0.7178091}
-    - _SunColor: {r: 0.9253507, g: 0.8097497, b: 0.68740606, a: 1}
-  m_BuildTextureStacks: []
 --- !u!1 &732609195
 GameObject:
   m_ObjectHideFlags: 3
@@ -1701,7 +1701,7 @@ PrefabInstance:
         type: 3}
       propertyPath: skyMat
       value: 
-      objectReference: {fileID: 579887380}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 455085492cdfa0b47af1496be2a7457e, type: 3}
 --- !u!1 &1692561985
@@ -2118,13 +2118,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _useSpeedFactor: 1
   _cameraShakeAmountForSpeed: 1
-  _shakeSpeedForSpeed: 1
+  _shakeSpeedForSpeed: 3
   _xDampingChangeSpeed: 5
-  _fovEncreaseSpeed: 1
-  _fovDecreaseSpeed: 2
-  _maxExtraFovValue: 5
-  _cameraShakeAmountForOffRoad: 0.6
-  _shakeSpeedForOffRoad: 1.5
+  _fovEncreaseSpeed: 2
+  _fovDecreaseSpeed: 3
+  _maxExtraFovValue: 10
+  _cameraShakeAmountForOffRoad: 2
+  _shakeSpeedForOffRoad: 6
   _cinemachineBrain: {fileID: 1776837661}
   _followCamera: {fileID: 497530278}
   _finishCamera: {fileID: 1245620397}

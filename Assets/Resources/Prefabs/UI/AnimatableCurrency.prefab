@@ -50,7 +50,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Animate: 1
-  _randomnessFactor: 100
+  _settings:
+    appearAnimDuration: 0
+    disappearAnimDuration: 0
+    stateAnimDuration: 0
+    animPauseDuration: 0
+    maxScale: 0
+    minScale: 0
   _animationsData:
   - animationType: 8
     animationDuration: 1
@@ -139,7 +145,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:

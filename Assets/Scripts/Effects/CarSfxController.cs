@@ -20,7 +20,7 @@ namespace RaceManager.Effects
         [Space]
 		[Header("Wheels sounds")]
         //[SerializeField] private float _minSlipSound = 0.15f;
-        [SerializeField] private float _maxSlipForSound = 1f;
+        [SerializeField] private float _maxSlipForSound = 0.4f;
         //[SerializeField] private AudioSource _slipSource;
         [SerializeField] private AudioSource[] _audioSourcesForWheels;
         [SerializeField] private List<GroundSounds> _groundSounds = new List<GroundSounds>();
@@ -182,7 +182,7 @@ namespace RaceManager.Effects
                 }
 
                 var slipVolumePercent = _car.CurrentMaxSlip / _maxSlipForSound;
-                source.volume = slipVolumePercent * 0.5f;
+                //source.volume = slipVolumePercent * 0.5f;
                 source.pitch = Mathf.Clamp(slipVolumePercent, 0.75f, 1);
             }
         }
@@ -195,8 +195,8 @@ namespace RaceManager.Effects
 		private void PlayBackfire()
 		{
             if (!isActiveAndEnabled)
-                return;
-
+              return;
+            
             _engineSource.PlayOneShot(_engineBackFireClip);
 		}
 
@@ -268,7 +268,7 @@ namespace RaceManager.Effects
 
         private void PlayOneShot(CollisionEvent colEvent, float volume, Vector3 point)
         {
-            _collisionSource.volume = volume;
+            _collisionSource.volume = 0.2f;
             _collisionSource.transform.position = point;
             _collisionSource.PlayOneShot(colEvent.CollisionClip);
         }
@@ -320,7 +320,7 @@ namespace RaceManager.Effects
                     || _currentFrictionEvent.CollisionClip != _currentFrictionSoundData.Source.clip)
                 {
                     _currentFrictionSoundData.Source.Stop();
-                    _currentFrictionSoundData.Source.volume = _currentFrictionVolume;
+                    _currentFrictionSoundData.Source.volume = 0.1f;
                     _currentFrictionSoundData.Source.clip = _currentFrictionEvent.CollisionClip;
                     _currentFrictionSoundData.Source.Play();
                 }

@@ -5,7 +5,7 @@ namespace RaceManager.Cars
 {
 
 	[CustomEditor (typeof (WheelColliderHandler)), CanEditMultipleObjects]
-	public class WheelColliderHandlerEditor :Editor
+	public class WheelColliderHandlerEditor : Editor
 	{
 		public override void OnInspectorGUI ()
 		{

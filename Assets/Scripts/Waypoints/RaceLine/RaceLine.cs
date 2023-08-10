@@ -37,6 +37,12 @@ namespace RaceManager.Waypoints
         private int _currentIndex = 0;
         private bool _showLine = false;
 
+        #region Minor variables
+
+        private LinePoint m_NewLinePoint;
+
+        #endregion
+
         private List<RaceLineSegment> _segments;
         private Dictionary<int, LinePoint> _linePoints;
 
@@ -137,18 +143,18 @@ namespace RaceManager.Waypoints
         private void MoveSegment(RaceLineSegment segment)
         {
             int newIndex = segment.CurrentIndex + _segments.Count;
-            LinePoint newPoint = newIndex <= (_linePoints.Count - 1)
+            m_NewLinePoint = newIndex <= (_linePoints.Count - 1)
                 ? _linePoints[newIndex]
                 : _linePoints[0];
 
             segment.CurrentIndex = newIndex;
-            segment.DistanceFromStart = newPoint.distanceFromStart;
-            segment.transform.position = newPoint.position;
-            segment.transform.rotation = Quaternion.LookRotation(newPoint.direction);
+            segment.DistanceFromStart = m_NewLinePoint.distanceFromStart;
+            segment.Transform.position = m_NewLinePoint.position;
+            segment.Transform.rotation = Quaternion.LookRotation(m_NewLinePoint.direction);
 
             segment.Initiallize(new RaceLineSegmentData()
             {
-                recomendedSpeed = newPoint.recomendedSpeed,
+                recomendedSpeed = m_NewLinePoint.recomendedSpeed,
                 fadeSpeed = _segmentFadeSpeed,
                 colorTransitionSpeed = _segmentColorTransitionSpeed,
                 baseColor = _showLine ? _baseColor : _initialColor,
@@ -159,16 +165,14 @@ namespace RaceManager.Waypoints
 
         private float GetRecomendedSpeed(WaypointTrack track, float distanceFromStart)
         {
-            TrackNode prev;
-            TrackNode next;
-            var distances = track.Distances;
-            var waypoints = track.Waypoints;
+            float[] distances = track.Distances;
+
             for (int i = 1; i < distances.Length; i++)
             {
                 if (distances[i] > distanceFromStart || Mathf.Approximately(distances[i], distanceFromStart))
                 {
-                    prev = waypoints[i - 1].GetComponent<TrackNode>();
-                    next = waypoints[i].GetComponent<TrackNode>();
+                    TrackNode prev = track.Nodes[i - 1];
+                    TrackNode next = track.Nodes[i];
                     float speedDif = next.recomendedSpeed - prev.recomendedSpeed;
                     float distDif = distanceFromStart - distances[i - 1];
                     float distFactor = distDif / (distances[i] - distances[i - 1]);

@@ -27,7 +27,7 @@ namespace RaceManager.Infrastructure
 
             TaskScheduler.UnobservedTaskException += HandleTaskException;
 
-            Application.targetFrameRate = 60;
+            //Application.targetFrameRate = 60;
             CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
 
             Loader.Load(Loader.Scene.MenuScene);

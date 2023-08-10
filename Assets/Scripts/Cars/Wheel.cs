@@ -11,6 +11,8 @@ namespace RaceManager.Cars
 	[System.Serializable]
 	public class Wheel : MonoBehaviour
 	{
+        private const int WheelPosCheckInterval = 3;
+
 		public WheelCollider WheelCollider;
 		public Transform WheelView;
 		[ReadOnly]
@@ -31,6 +33,7 @@ namespace RaceManager.Cars
 		public bool HasForwardSlip => CurrentForwardSlip > WheelCollider.forwardFriction.asymptoteSlip;
 		public bool HasSideSlip => CurrentSidewaysSlip > WheelCollider.sidewaysFriction.asymptoteSlip;
 		public bool IsGrounded => WheelCollider.isGrounded;
+        public bool IsSteering { get; set; }
 
 		private Transform[] _childsView;
         private WheelHit _hit;
@@ -40,6 +43,22 @@ namespace RaceManager.Cars
 
 		private WheelFrictionCurve _initialForwardFriction;
 		private WheelFrictionCurve _initialSidewaysFriction;
+
+        private int _wheelPosCheckCounter;
+
+        #region Minor variables
+
+        private GroundConfig m_GroundConfigNew;
+
+        private WheelFrictionCurve m_ForwardFriction;
+        private WheelFrictionCurve m_SidewaysFriction;
+
+        private Vector3 m_WheelPos;
+        private Quaternion m_WheelRot;
+
+        private float m_FrictionMultiplier;
+
+        #endregion
 
         private GroundDetection GroundDetection => Singleton<GroundDetection>.Instance;
 		private GroundConfig DefaultGroundConfig => GroundDetection.DefaultGroundConfig;
@@ -80,12 +99,13 @@ namespace RaceManager.Cars
 		private void FixedUpdate()
 		{
 			UpdateGameplayLogic();
-		}
+            UpdateTransform();
+        }
 
-		private void LateUpdate()
-		{
-			UpdateTransform();
-		}
+		//private void LateUpdate()
+		//{
+		//	UpdateTransform();
+		//}
 
 		public void InitializeSelf()
 		{ 
@@ -115,13 +135,13 @@ namespace RaceManager.Cars
 
                 SlipNormalized = Mathf.Max(ForwardSlipNormalized, SidewaysSlipNormalized);
 
-                GroundConfig groundConfig = DefaultGroundConfig;
+                m_GroundConfigNew = DefaultGroundConfig;
                 if (GroundDetection.TryGetGroundEntity(_hit.collider.gameObject, out IGround groundEntity))
                 {
-                    groundConfig = groundEntity.Config;
+                    m_GroundConfigNew = groundEntity.Config;
                 }
 
-				CurrentGroundConfig = groundConfig;
+				CurrentGroundConfig = m_GroundConfigNew;
             }
             else
             {
@@ -138,33 +158,29 @@ namespace RaceManager.Cars
 
 		private void UpdateFriction()
         {
-            //float stiffness = _stiffnessMultiplier;
-            //var friction = WheelCollider.forwardFriction;
-            //friction.stiffness = stiffness;
-            //WheelCollider.forwardFriction = friction;
+            m_FrictionMultiplier = _stiffnessMultiplier;
 
-            //friction = WheelCollider.sidewaysFriction;
-            //friction.stiffness = stiffness * Mathf.Lerp(0.3f, 1, Mathf.InverseLerp(2, 1, ForwardSlipNormalized));
-            //WheelCollider.sidewaysFriction = friction;
+            m_ForwardFriction = _initialForwardFriction;
+            m_ForwardFriction.stiffness *= m_FrictionMultiplier;
 
-            float multiplier = _stiffnessMultiplier;
+            m_SidewaysFriction = _initialSidewaysFriction;
+            m_SidewaysFriction.stiffness *= m_FrictionMultiplier * Mathf.Lerp(0.3f, 1, Mathf.InverseLerp(2, 1, ForwardSlipNormalized));
 
-            var fFriction = _initialForwardFriction;
-            fFriction.stiffness *= multiplier;
-
-            var sFriction = _initialSidewaysFriction;
-            sFriction.stiffness *= multiplier * Mathf.Lerp(0.3f, 1, Mathf.InverseLerp(2, 1, ForwardSlipNormalized));
-
-			WheelColliderHandler.UpdateStiffness(fFriction.stiffness, sFriction.stiffness);
+			WheelColliderHandler.UpdateStiffness(m_ForwardFriction.stiffness, m_SidewaysFriction.stiffness);
         }
 
         public void UpdateTransform()
 		{
-			Vector3 pos;
-			Quaternion quat;
-			WheelCollider.GetWorldPose(out pos, out quat);
-            WheelView.position = pos;
-            WheelView.rotation = quat;
+            _wheelPosCheckCounter++;
+
+            if (_wheelPosCheckCounter == WheelPosCheckInterval)
+            {
+                _wheelPosCheckCounter = 0;
+
+                WheelCollider.GetWorldPose(out m_WheelPos, out m_WheelRot);
+                WheelView.position = m_WheelPos;
+                WheelView.rotation = m_WheelRot;
+            }
         }
 
         public void OnResetAction()

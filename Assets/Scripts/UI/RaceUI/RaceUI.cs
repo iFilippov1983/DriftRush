@@ -19,7 +19,7 @@ using Sirenix.OdinInspector;
 
 namespace RaceManager.UI
 {
-    public class RaceUI : MonoBehaviour, IObserver<DriverProfile>
+    public class RaceUI : MonoBehaviour
     {
         [SerializeField] private RaceUIView _inRaceUI;
         [SerializeField] private FinishUIView _finishUI;
@@ -268,11 +268,9 @@ namespace RaceManager.UI
                         });
             }
 
-            //Tween ttTween = null;
             if (!show)
             {
                 CurrentDriftIndicator.TotalText.text = scoresValue.ToString();
-                //ttTween = CurrentDriftIndicator.TotalText.DOText(scoresValue.ToString(), duration * 1.5f, true, ScrambleMode.Numerals);
 
                 _driftScoresShakeTween?.Complete();
                 _driftScoresShakeTween = null;
@@ -361,6 +359,15 @@ namespace RaceManager.UI
             _finishUIHandler.OnWatchRewardedAdsSuccess()?.AddTo(this);
         }
 
+        public void UpdateDataFrom(DriverProfile profile)
+        {
+            _currentSpeed = profile.CarCurrentSpeed;
+            _trackProgress = profile.TrackProgress;
+            _currentPosition = profile.PositionInRace == 0
+                ? _driversCount
+                : (int)profile.PositionInRace;
+        }
+
         #endregion
 
         #region Private Functions
@@ -401,14 +408,12 @@ namespace RaceManager.UI
 
         private IDisposable AnimateCollisionScoresFinalization(ExtraScoresIndicatorView indicator)
         {
-            float duration = _scoresAnimDuration;
-
             Color initialTextColor = indicator.ExtraScoresText.color;
 
             Sequence sequence = DOTween.Sequence();
-            sequence.Append(indicator.Rect.DOMove(ScoresIndicator.ScoresRect.transform.position, duration));
-            sequence.Insert(duration / 2, indicator.ExtraScoresText.DOFade(0f, duration / 2));
-            sequence.Insert(duration / 2, indicator.ExtraScoresTitle.DOFade(0f, duration / 2));
+            sequence.Append(indicator.Rect.DOMove(ScoresIndicator.ScoresRect.transform.position, _scoresAnimDuration));
+            sequence.Insert(_scoresAnimDuration / 2, indicator.ExtraScoresText.DOFade(0f, _scoresAnimDuration / 2));
+            sequence.Insert(_scoresAnimDuration / 2, indicator.ExtraScoresTitle.DOFade(0f, _scoresAnimDuration / 2));
             sequence.OnComplete(OnComplete);
 
             void OnComplete()
@@ -530,22 +535,6 @@ namespace RaceManager.UI
                 }).AddTo(this);
             }
         }
-
-        #endregion
-
-        #region Observer Functions
-
-        public void OnNext(DriverProfile profile)
-        {
-            _currentSpeed = profile.CarCurrentSpeed;
-            _trackProgress = profile.TrackProgress;
-            _currentPosition = profile.PositionInRace == 0 
-                ? _driversCount 
-                : (int)profile.PositionInRace;
-        }
-
-        public void OnCompleted() => throw new NotImplementedException();
-        public void OnError(Exception error) => throw error;
 
         #endregion
     }

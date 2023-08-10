@@ -54,6 +54,7 @@ namespace RaceManager.Waypoints
 
         public float Length { get; protected set; }
         public Transform[] Waypoints => waypointList.items;
+        public TrackNode[] Nodes => _trackNodes;
         public List<Waypoint> WaypointsList => _waypoints;
         public Vector3[] Points => _points;
         public float[] Distances => _distances;
@@ -64,6 +65,14 @@ namespace RaceManager.Waypoints
         public float HeightAboveRoad => _pointPosHeightAboveRoad;
         public LayerMask RoadMask => _roadMask;
         public int LapsToComplete => _lapsToComplete;
+
+        #region Minor variables
+
+        private Vector3 m_RoutePoint_1;
+        private Vector3 m_RoutePoint_2;
+        private Vector3 m_Delta;
+
+        #endregion
 
         private void Awake()
         {
@@ -165,15 +174,15 @@ namespace RaceManager.Waypoints
         public RoutePoint GetRoutePoint(float dist)
         {
             // position and direction
-            Vector3 p1 = GetRoutePosition(dist, out int index1);
-            Vector3 p2 = GetRoutePosition(dist + DeltaStep, out int index2);
-            Vector3 delta = p2 - p1;
+            m_RoutePoint_1 = GetRoutePosition(dist, out int index1);
+            m_RoutePoint_2 = GetRoutePosition(dist + DeltaStep, out int index2);
+            m_Delta = m_RoutePoint_2 - m_RoutePoint_1;
 
             float s1 = _trackNodes[index1].recomendedSpeed;
             float s2 = _trackNodes[index2].recomendedSpeed;
             float rSpeed = (s1 + s2) / 2f;
 
-            return new RoutePoint(p1, delta.normalized, rSpeed);
+            return new RoutePoint(m_RoutePoint_1, m_Delta.normalized, rSpeed);
         }
 
         public virtual Vector3 GetRoutePosition(float dist, out int index)

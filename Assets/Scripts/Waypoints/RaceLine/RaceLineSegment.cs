@@ -45,7 +45,18 @@ namespace RaceManager.Waypoints
         private CancellationTokenSource _cancelTokenFade = new CancellationTokenSource();
         private CancellationTokenSource _cancelTokenColor = new CancellationTokenSource();
 
-        private Material MeshMaterial => _mesh.material;
+        #region Minor variables
+
+        private Transform _itsTransform;
+
+        private Color m_ColorToFade;
+
+        private Color m_ColorToChange;
+        private Color m_TargetColor;
+
+        #endregion
+
+        private Material MeshMaterial { get; set; }
 
         public Subject<(bool isVisible, RaceLineSegment segment)> OnVisibilityChange = new Subject<(bool isVisible, RaceLineSegment segment)>();
 
@@ -55,8 +66,12 @@ namespace RaceManager.Waypoints
         [ShowInInspector, ReadOnly]
         public int CurrentIndex { get; set; }
 
+        public Transform Transform => _itsTransform;
+
         public void Initiallize(RaceLineSegmentData data)
         {
+            _itsTransform = transform;
+
             _recomendedSpeed = data.recomendedSpeed;
             _fadeSpeed = data.fadeSpeed;
             _colorTransitionSpeed = data.colorTransitionSpeed;
@@ -66,6 +81,8 @@ namespace RaceManager.Waypoints
 
             _isVisible = true;
             _isWarning = false;
+
+            MeshMaterial = _mesh.material;
             MeshMaterial.color = _baseColor;
         }
 
@@ -96,10 +113,8 @@ namespace RaceManager.Waypoints
         {
             if (!_isVisible) return;
 
-            //bool isInRange = _checkDistance * _checkDistanceFactor >= DistanceFromStart;
             bool isOverspeed = speed >= _recomendedSpeed;
 
-            //if (isOverspeed != _isWarning && isInRange && (_currentColorTask == null || _currentColorTask.IsCompleted))
             if (isOverspeed != _isWarning && (_currentColorTask == null || _currentColorTask.IsCompleted))
             {
                 _currentColorTask = ColorChange(isOverspeed, _cancelTokenColor.Token);
@@ -119,7 +134,7 @@ namespace RaceManager.Waypoints
         {
             if (MeshMaterial == null) return false;
 
-            Color color = MeshMaterial.color;
+            m_ColorToFade = MeshMaterial.color;
 
             float maxAlphaValue = _isWarning
                 ? _warningColor.a
@@ -127,14 +142,14 @@ namespace RaceManager.Waypoints
 
             float targetAlpha = fade ? 0 : maxAlphaValue;
 
-            while (!Mathf.Approximately(color.a, targetAlpha))
+            while (!Mathf.Approximately(m_ColorToFade.a, targetAlpha))
             {
                 try
                 {
                     token.ThrowIfCancellationRequested();
 
-                    color.a = Mathf.Lerp(color.a, targetAlpha, Time.deltaTime * _fadeSpeed);
-                    MeshMaterial.color = color;
+                    m_ColorToFade.a = Mathf.Lerp(m_ColorToFade.a, targetAlpha, Time.deltaTime * _fadeSpeed);
+                    MeshMaterial.color = m_ColorToFade;
 
                     await Task.Yield();
                 }
@@ -152,20 +167,20 @@ namespace RaceManager.Waypoints
         {
             if (MeshMaterial == null) return false;
 
-            Color color = MeshMaterial.color;
-            Color targetColor = warning ? _warningColor : _baseColor;
-            targetColor.a = MeshMaterial.color.a;
+            m_ColorToChange = MeshMaterial.color;
+            m_TargetColor = warning ? _warningColor : _baseColor;
+            m_TargetColor.a = MeshMaterial.color.a;
 
-            while (!Equals(color, targetColor))
+            while (!Equals(m_ColorToChange, m_TargetColor))
             {
                 try
                 {
                     token.ThrowIfCancellationRequested();
 
-                    color = Color.Lerp(color, targetColor, Time.deltaTime * _colorTransitionSpeed);
-                    color.a = MeshMaterial.color.a;
-                    targetColor.a = MeshMaterial.color.a;
-                    MeshMaterial.color = color;
+                    m_ColorToChange = Color.Lerp(m_ColorToChange, m_TargetColor, Time.deltaTime * _colorTransitionSpeed);
+                    m_ColorToChange.a = MeshMaterial.color.a;
+                    m_TargetColor.a = MeshMaterial.color.a;
+                    MeshMaterial.color = m_ColorToChange;
 
                     await Task.Yield();
                 }

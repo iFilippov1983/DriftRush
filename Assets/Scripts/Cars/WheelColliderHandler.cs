@@ -51,10 +51,10 @@ namespace RaceManager.Cars
 
 		public void UpdateConfig ()
 		{
-			UpdateConfig (WheelConfig);
+			UpdateConfig(WheelConfig);
 		}
 
-		public void UpdateConfig (WheelColliderConfig newConfig)
+		public void UpdateConfig(WheelColliderConfig newConfig)
 		{
 			if (RB == null)
 			{

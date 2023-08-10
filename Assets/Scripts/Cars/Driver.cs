@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UniRx;
+using UniRx.Triggers;
 using UnityEngine;
 
 namespace RaceManager.Cars
@@ -13,7 +14,7 @@ namespace RaceManager.Cars
     /// <summary>
     /// Handles a specific car
     /// </summary>
-    public class Driver : MonoBehaviour, IObservable<DriverProfile>
+    public class Driver : MonoBehaviour
     {
         private const float StopSpeedThreshold = 1f;
 
@@ -29,6 +30,8 @@ namespace RaceManager.Cars
         private MaterialsContainer _materialsContainer;
 
         private List<IObserver<DriverProfile>> _observersList;
+
+        public Subject<DriverProfile> Profile;
 
         public DriverProfile DriverProfile => _driverProfile;
         public GameObject CarObject => _carObject;
@@ -59,10 +62,29 @@ namespace RaceManager.Cars
             CarFactory carFactory = new CarFactory(type, carsDepot, waypointTrack, _materialsContainer, transform);
             _carObject = carFactory.ConstructCarForRace(out _car, out _carVisual, out _carAI, out _waypointsTracker, out _driverProfile, playSouds);
 
-            //_driverProfile.CarState.Value = CarState.OnTrack;
-            _driverProfile.CarState.Subscribe(s => OnCarStateChange(s));
+            _driverProfile.CarState
+                .Subscribe(s => OnCarStateChange(s))
+                .AddTo(this);
 
             _observersList = new List<IObserver<DriverProfile>>();
+
+            if (_profiler != null)
+            {
+                Profile = new Subject<DriverProfile>();
+
+                this.UpdateAsObservable()
+                    .Subscribe(_ => 
+                    {
+                        _driverProfile.CarCurrentSpeed = _car.SpeedInDesiredUnits;
+                        _driverProfile.TrackProgress = _waypointsTracker.Progress;
+                        _driverProfile.DistanceFromStart = _waypointsTracker.DistanceFromStart;
+                        _driverProfile.PositionInRace = (PositionInRace)_waypointsTracker.CarPosition;
+
+                        Profile?.OnNext(_driverProfile);
+                    })
+                    .AddTo(this);
+            }
+
         }
 
         public void TrackRecommendedSpeed()
@@ -90,23 +112,6 @@ namespace RaceManager.Cars
         private void OnDestroy()
         {
             StopAllCoroutines();
-        }
-
-        private void Update()
-        {
-            UpdateProfile();
-        }
-
-        private void UpdateProfile()
-        {
-            if (_profiler != null)
-            {
-                _driverProfile.CarCurrentSpeed = _car.SpeedInDesiredUnits;
-                _driverProfile.TrackProgress = _waypointsTracker.Progress;
-                _driverProfile.DistanceFromStart = _waypointsTracker.DistanceFromStart;
-                _driverProfile.PositionInRace = (PositionInRace)_waypointsTracker.CarPosition;
-                NotifyObservers();
-            }
         }
 
         private void OnCarStateChange(CarState carState)
@@ -141,7 +146,8 @@ namespace RaceManager.Cars
         private void StartRace()
         {
             _carAI.StartDriving();
-            NotifyObservers();
+
+            Profile?.OnNext(_driverProfile);
         }
 
         public void StopRace()
@@ -165,18 +171,6 @@ namespace RaceManager.Cars
                 yield return null;
             
             _driverProfile.CarState.Value = CarState.Stopped;
-        }
-
-        private void NotifyObservers()
-        {
-            foreach (var o in _observersList)
-                o.OnNext(_driverProfile);
-        }
-
-        public IDisposable Subscribe(IObserver<DriverProfile> observer)
-        {
-            _observersList.Add(observer);
-            return Disposable.Empty;
         }
     }
 }

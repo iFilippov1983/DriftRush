@@ -175,8 +175,14 @@ namespace RaceManager.Race
 
                     _sceneHandler.HandleSceneFor(driver, _raceLevel);
 
-                    driver.Subscribe(_raceUI);
-                    driver.Subscribe(_lineHandler);
+                    driver.Profile
+                        .Subscribe(p => 
+                        {
+                            _raceUI.UpdateDataFrom(p);
+                            _lineHandler.UpdateDataFrom(p);
+                        })
+                        .AddTo(this);
+
                     driver.DriverProfile.CarState.Subscribe(cs => HandlePlayerCarState(cs, driver));
 
                     var selfRighting = driver.CarObject.GetComponent<CarSelfRighting>();
@@ -195,8 +201,6 @@ namespace RaceManager.Race
                             participantsCount++;
                     }
 
-                    //_raceUI.Initialize(_raceLevelInitializer, selfRighting.RightCar, GetToCheckpoint);
-                    //_raceUI.Initialize(_startPoints.Length, selfRighting.RightCar, GetToCheckpoint);
                     _raceUI.Initialize(participantsCount, selfRighting.RightCar, GetToCheckpoint);
 
                     _scoresCounter = new RaceScoresCounter(driver.Car, _rewardsScheme);

@@ -4,7 +4,7 @@ using System;
 
 namespace RaceManager.Waypoints
 {
-    public class RaceLineHandler : IObserver<DriverProfile>
+    public class RaceLineHandler
     {
         private RaceLine _raceLine;
         private bool _handle;
@@ -35,15 +35,12 @@ namespace RaceManager.Waypoints
             }
         }
 
-        public void OnNext(DriverProfile profile)
+        public void UpdateDataFrom(DriverProfile profile)
         {
             if (!_handle) return;
 
             _raceLine.SpeedChange?.OnNext(profile.CarCurrentSpeed);
             _raceLine.DistanceChange?.OnNext(profile.DistanceFromStart);
         }
-
-        public void OnCompleted() => throw new NotImplementedException();
-        public void OnError(Exception error) => throw error;
     }
 }

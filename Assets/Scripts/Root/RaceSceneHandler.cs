@@ -1,4 +1,5 @@
 ﻿using UniRx;
+using UniRx.Triggers;
 using UnityEngine;
 using Zenject;
 using RaceManager.UI;
@@ -8,7 +9,6 @@ using RaceManager.Cars;
 using RaceManager.Race;
 using Random = UnityEngine.Random;
 using AudioType = RaceManager.Effects.AudioType;
-using UniRx.Triggers;
 
 namespace RaceManager.Root
 {
@@ -64,14 +64,14 @@ namespace RaceManager.Root
                         _gameEvents.ScreenTapReleased.OnNext();
                 }).AddTo(this);
 
-            this.FixedUpdateAsObservable()
-                .Where(_ => _raceUI.RaceFinished == false)
-                .Subscribe(_ => 
-                {
-                    HandleWheels();
-                    HandleCarSpeed();
-                })
-                .AddTo(this);
+            //this.FixedUpdateAsObservable()
+            //    .Where(_ => _raceUI.RaceFinished == false)
+            //    .Subscribe(_ => 
+            //    {
+            //        HandleWheels();
+            //        HandleCarSpeed();
+            //    })
+            //    .AddTo(this);
 
             EventsHub<RaceEvent>.Subscribe(RaceEvent.START, SendStartNotification);
             _raceUI.OnButtonPressed += PlayButtonPressedEffect;
@@ -103,7 +103,7 @@ namespace RaceManager.Root
             if (_driftScoresEffectCounter > _driftScoresEffectThreshold)
             {
                 _driftScoresEffectCounter = 0;
-                EffectsController.PlayEffect(Effects.AudioType.SFX_DriftScoresCount);
+                EffectsController.PlayEffect(AudioType.SFX_DriftScoresCount);
             }
         }
 

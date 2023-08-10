@@ -1,7 +1,5 @@
 ﻿using Sirenix.OdinInspector;
 using System;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 
 namespace RaceManager.Cars

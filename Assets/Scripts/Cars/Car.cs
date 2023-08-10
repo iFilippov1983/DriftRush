@@ -186,6 +186,21 @@ namespace RaceManager.Cars
         int FirstDriveWheel;
         int LastDriveWheel;
 
+        #region Minor variables
+
+        private Transform _itsTransform;
+
+        private Vector3 m_centerPosDraw;
+        private Vector3 m_forwardPosDraw;
+        private Vector3 m_velocityDraw;
+
+        private Vector3 m_currAngleSteer;
+
+        private WheelColliderConfig m_wheelColliderConfig;
+
+        private float m_targetSteerAngle;
+        #endregion
+
         public void Initialize(CarConfig carConfig)
         {
             _carConfig = carConfig;
@@ -193,6 +208,7 @@ namespace RaceManager.Cars
             _carBody = GetComponentInChildren<CarBody>();
             _id = MakeId();
             _layer = gameObject.layer;
+            _itsTransform = transform;
 
             RB.centerOfMass = COM.localPosition;
 
@@ -251,28 +267,28 @@ namespace RaceManager.Cars
             RearLeftWheel.TrailOffset = TrailOffsetLeft;
             RearRightWheel.TrailOffset = TrailOffsetRight;
 
-            var config = FrontLeftWheel.WheelColliderHandler.Config;
-            config.ForwardFriction = _carConfig.FWheelsForwardFriction;
-            config.SidewaysFriction = _carConfig.FWheelsSidewaysFriction;
-            FrontLeftWheel.WheelColliderHandler.Config = config;
+            m_wheelColliderConfig = FrontLeftWheel.WheelColliderHandler.Config;
+            m_wheelColliderConfig.ForwardFriction = _carConfig.FWheelsForwardFriction;
+            m_wheelColliderConfig.SidewaysFriction = _carConfig.FWheelsSidewaysFriction;
+            FrontLeftWheel.WheelColliderHandler.Config = m_wheelColliderConfig;
             FrontLeftWheel.WheelColliderHandler.UpdateConfig();
 
-            config = FrontRightWheel.WheelColliderHandler.Config;
-            config.ForwardFriction = _carConfig.FWheelsForwardFriction;
-            config.SidewaysFriction = _carConfig.FWheelsSidewaysFriction;
-            FrontRightWheel.WheelColliderHandler.Config = config;
+            m_wheelColliderConfig = FrontRightWheel.WheelColliderHandler.Config;
+            m_wheelColliderConfig.ForwardFriction = _carConfig.FWheelsForwardFriction;
+            m_wheelColliderConfig.SidewaysFriction = _carConfig.FWheelsSidewaysFriction;
+            FrontRightWheel.WheelColliderHandler.Config = m_wheelColliderConfig;
             FrontRightWheel.WheelColliderHandler.UpdateConfig();
 
-            config = RearLeftWheel.WheelColliderHandler.Config;
-            config.ForwardFriction = _carConfig.RWheelsForwardFriction;
-            config.SidewaysFriction = _carConfig.RWheelsSidewaysFriction;
-            RearLeftWheel.WheelColliderHandler.Config = config;
+            m_wheelColliderConfig = RearLeftWheel.WheelColliderHandler.Config;
+            m_wheelColliderConfig.ForwardFriction = _carConfig.RWheelsForwardFriction;
+            m_wheelColliderConfig.SidewaysFriction = _carConfig.RWheelsSidewaysFriction;
+            RearLeftWheel.WheelColliderHandler.Config = m_wheelColliderConfig;
             RearLeftWheel.WheelColliderHandler.UpdateConfig();
 
-            config = RearRightWheel.WheelColliderHandler.Config;
-            config.ForwardFriction = _carConfig.RWheelsForwardFriction;
-            config.SidewaysFriction = _carConfig.RWheelsSidewaysFriction;
-            RearRightWheel.WheelColliderHandler.Config = config;
+            m_wheelColliderConfig = RearRightWheel.WheelColliderHandler.Config;
+            m_wheelColliderConfig.ForwardFriction = _carConfig.RWheelsForwardFriction;
+            m_wheelColliderConfig.SidewaysFriction = _carConfig.RWheelsSidewaysFriction;
+            RearRightWheel.WheelColliderHandler.Config = m_wheelColliderConfig;
             RearRightWheel.WheelColliderHandler.UpdateConfig();
 
             _wheels = new Wheel[4] 
@@ -304,14 +320,14 @@ namespace RaceManager.Cars
         /// <param name="brake">Brake</param>
         public void UpdateControls(float horizontal, float vertical, bool handBrake)
         {
-            float targetSteerAngle = horizontal * MaxSteerAngle;
+            m_targetSteerAngle = horizontal * MaxSteerAngle;
 
             if (EnableSteerAngleMultiplier)
             {
-                targetSteerAngle *= Mathf.Clamp(1 - SpeedInDesiredUnits / MaxSpeedForMinAngleMultiplier, MinSteerAngleMultiplier, MaxSteerAngleMultiplier);
+                m_targetSteerAngle *= Mathf.Clamp(1 - SpeedInDesiredUnits / MaxSpeedForMinAngleMultiplier, MinSteerAngleMultiplier, MaxSteerAngleMultiplier);
             }
 
-            CurrentSteerAngle = Mathf.MoveTowards(CurrentSteerAngle, targetSteerAngle, Time.deltaTime * SteerAngleChangeSpeed);
+            CurrentSteerAngle = Mathf.MoveTowards(CurrentSteerAngle, m_targetSteerAngle, Time.deltaTime * SteerAngleChangeSpeed);
 
             CurrentAcceleration = vertical;
             InHandBrake = handBrake;
@@ -381,21 +397,24 @@ namespace RaceManager.Cars
 
         private void OnDrawGizmosSelected()
         {
-            var centerPos = transform.position;
-            var velocity = transform.position + (Vector3.ClampMagnitude(RB.velocity, 4));
-            var forwardPos = transform.TransformPoint(Vector3.forward * 4);
+            if(_itsTransform == null)
+                _itsTransform = transform;
+
+            m_centerPosDraw = _itsTransform.position;
+            m_velocityDraw = _itsTransform.position + (Vector3.ClampMagnitude(RB.velocity, 4));
+            m_forwardPosDraw = _itsTransform.TransformPoint(Vector3.forward * 4);
 
             Gizmos.color = Color.green;
 
-            Gizmos.DrawWireSphere(centerPos, 0.2f);
-            Gizmos.DrawLine(centerPos, velocity);
-            Gizmos.DrawLine(centerPos, forwardPos);
+            Gizmos.DrawWireSphere(m_centerPosDraw, 0.2f);
+            Gizmos.DrawLine(m_centerPosDraw, m_velocityDraw);
+            Gizmos.DrawLine(m_centerPosDraw, m_forwardPosDraw);
 
             Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(forwardPos, 0.2f);
+            Gizmos.DrawWireSphere(m_forwardPosDraw, 0.2f);
 
             Gizmos.color = Color.blue;
-            Gizmos.DrawWireSphere(velocity, 0.2f);
+            Gizmos.DrawWireSphere(m_velocityDraw, 0.2f);
 
             Gizmos.color = Color.white;
         }
@@ -425,7 +444,7 @@ namespace RaceManager.Cars
         {
             var needHelp = SpeedInDesiredUnits > MinSpeedForSteerHelp && CarDirection > 0;
             float targetAngle = 0;
-            VelocityAngle = -Vector3.SignedAngle(RB.velocity, transform.TransformDirection(Vector3.forward), Vector3.up);
+            VelocityAngle = -Vector3.SignedAngle(RB.velocity, _itsTransform.TransformDirection(Vector3.forward), Vector3.up);
 
             if (needHelp)
             {
@@ -443,30 +462,30 @@ namespace RaceManager.Cars
             if (needHelp)
             {
                 //Angular velocity helper.
-                var absAngle = Mathf.Abs(VelocityAngle);
+                float absAngle = Mathf.Abs(VelocityAngle);
 
                 //Get current procent help angle.
                 float currentAngularPercent = absAngle / MaxAngularVelocityHelpAngle;
 
-                var currAngle = RB.angularVelocity;
+                m_currAngleSteer = RB.angularVelocity;
 
                 if (VelocityAngle * CurrentSteerAngle > 0)
                 {
                     //Turn to the side opposite to the angle. To change the angular velocity.
-                    var angularVelocityMagnitudeHelp = OppositeAngularVelocityHelpPower * CurrentSteerAngle * Time.fixedDeltaTime;
-                    currAngle.y += angularVelocityMagnitudeHelp * currentAngularPercent;
+                    float angularVelocityMagnitudeHelp = OppositeAngularVelocityHelpPower * CurrentSteerAngle * Time.fixedDeltaTime;
+                    m_currAngleSteer.y += angularVelocityMagnitudeHelp * currentAngularPercent;
                 }
                 else if (!Mathf.Approximately(CurrentSteerAngle, 0))
                 {
                     //Turn to the side positive to the angle. To change the angular velocity.
-                    var angularVelocityMagnitudeHelp = PositiveAngularVelocityHelpPower * CurrentSteerAngle * Time.fixedDeltaTime;
-                    currAngle.y += angularVelocityMagnitudeHelp * (1 - currentAngularPercent);
+                    float angularVelocityMagnitudeHelp = PositiveAngularVelocityHelpPower * CurrentSteerAngle * Time.fixedDeltaTime;
+                    m_currAngleSteer.y += angularVelocityMagnitudeHelp * (1 - currentAngularPercent);
                 }
 
                 //Clamp and apply of angular velocity.
-                var maxMagnitude = ((AngularVelocityInMaxAngle - AngularVelocityInMinAngle) * currentAngularPercent) + AngularVelocityInMinAngle;
-                currAngle.y = Mathf.Clamp(currAngle.y, -maxMagnitude, maxMagnitude);
-                RB.angularVelocity = currAngle;
+                float maxMagnitude = ((AngularVelocityInMaxAngle - AngularVelocityInMinAngle) * currentAngularPercent) + AngularVelocityInMinAngle;
+                m_currAngleSteer.y = Mathf.Clamp(m_currAngleSteer.y, -maxMagnitude, maxMagnitude);
+                RB.angularVelocity = m_currAngleSteer;
             }
         }
 
@@ -550,7 +569,7 @@ namespace RaceManager.Cars
                     CurrentBrake = 0;
 
                     float motorTorqueFromRpm = MotorTorqueFromRpmCurve.Evaluate(EngineRPM * 0.001f); //0.001f
-                    var motorTorque = CurrentAcceleration * (motorTorqueFromRpm * (MaxMotorTorque * AllGearsRatio[CurrentGearIndex]));
+                    float motorTorque = CurrentAcceleration * (motorTorqueFromRpm * (MaxMotorTorque * AllGearsRatio[CurrentGearIndex]));
                     if (Mathf.Abs(minRPM) * AllGearsRatio[CurrentGearIndex] > MaxRPM)
                     {
                         motorTorque = 0;

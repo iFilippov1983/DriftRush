@@ -42,7 +42,22 @@ namespace RaceManager.Waypoints
 
         public Action<WaypointsTracker> OnPassedWaypoint;
         public Subject<float> OnRecommendedSpeedChange;
-        
+
+        #region Minor variables
+
+        private Transform _itsTransform;
+
+        private RoutePoint m_RoutePointForPos;
+        private RoutePoint m_RoutePointForRot;
+
+        private Vector3 m_ProgressDelta;
+
+        #endregion
+
+        private void Awake()
+        {
+            _itsTransform = transform;
+        }
 
         private void Start()
         {
@@ -86,27 +101,27 @@ namespace RaceManager.Waypoints
             // we use lerp as a simple way of smoothing out the speed over time.
             if (Time.deltaTime > 0)
             {
-                _speed = Mathf.Lerp(_speed, (_lastPosition - transform.position).magnitude / Time.deltaTime, Time.deltaTime);
+                _speed = Mathf.Lerp(_speed, (_lastPosition - _itsTransform.position).magnitude / Time.deltaTime, Time.deltaTime);
             }
 
-            RoutePoint routePointForPos = _waypointTrack.GetRoutePoint(_progressDistance + _lookAheadForTargetOffset + _lookAheadForTargetFactor * _speed);
-            _target.position = routePointForPos.position;
+            m_RoutePointForPos = _waypointTrack.GetRoutePoint(_progressDistance + _lookAheadForTargetOffset + _lookAheadForTargetFactor * _speed);
+            _target.position = m_RoutePointForPos.position;
 
-            RoutePoint routePointForRot = _waypointTrack.GetRoutePoint(_progressDistance + _lookAheadForSpeedOffset + _lookAheadForSpeedFactor * _speed);
-            _target.rotation = Quaternion.LookRotation(routePointForRot.direction);
+            m_RoutePointForRot = _waypointTrack.GetRoutePoint(_progressDistance + _lookAheadForSpeedOffset + _lookAheadForSpeedFactor * _speed);
+            _target.rotation = Quaternion.LookRotation(m_RoutePointForRot.direction);
 
             // get our current progress along the route
             ProgressPoint = _waypointTrack.GetRoutePoint(_progressDistance);
 
             OnRecommendedSpeedChange?.OnNext(ProgressPoint.recomendedSpeed);
 
-            Vector3 progressDelta = ProgressPoint.position - transform.position;
-            if (Vector3.Dot(progressDelta, ProgressPoint.direction) < 0)
+            m_ProgressDelta = ProgressPoint.position - _itsTransform.position;
+            if (Vector3.Dot(m_ProgressDelta, ProgressPoint.direction) < 0)
             {
-                _progressDistance += progressDelta.magnitude * 0.5f;
+                _progressDistance += m_ProgressDelta.magnitude * 0.5f;
             }
 
-            _lastPosition = transform.position;
+            _lastPosition = _itsTransform.position;
         }
 
         private void OnTriggerEnter(Collider other)
@@ -149,7 +164,7 @@ namespace RaceManager.Waypoints
             if (Application.isPlaying && _waypointTrack != null)
             {
                 Gizmos.color = Color.green;
-                Gizmos.DrawLine(transform.position, _target.position);
+                Gizmos.DrawLine(_itsTransform.position, _target.position);
                 Gizmos.DrawWireSphere(_waypointTrack.GetRoutePosition(_progressDistance, out _), 1);
                 Gizmos.color = Color.yellow;
                 Gizmos.DrawLine(_target.position, _target.position + _target.forward);

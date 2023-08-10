@@ -52,6 +52,12 @@ namespace RaceManager.Cameras
         private float _defaultMainCamDampingX;
         private Vector3 _defaultCamAimOffset;
 
+        #region Minor variables
+
+        private Vector3 m_ShakeRandomPoint;
+
+        #endregion
+
         private float CurrentCamFov => _followCamera.m_Lens.FieldOfView;
         private float CurrentCamDampingX
         { 
@@ -214,9 +220,9 @@ namespace RaceManager.Cameras
         {
             while (shake)
             {
-                Vector3 randomPoint = _defaultCamAimOffset + Random.insideUnitSphere * shakeAmount;
-                randomPoint.z = _defaultCamAimOffset.z;
-                CameraAimOffset = Vector3.Lerp(CameraAimOffset, randomPoint, Time.deltaTime * shakeSpeed);
+                m_ShakeRandomPoint = _defaultCamAimOffset + Random.insideUnitSphere * shakeAmount;
+                m_ShakeRandomPoint.z = _defaultCamAimOffset.z;
+                CameraAimOffset = Vector3.Lerp(CameraAimOffset, m_ShakeRandomPoint, Time.deltaTime * shakeSpeed);
                 yield return null;
             }
 

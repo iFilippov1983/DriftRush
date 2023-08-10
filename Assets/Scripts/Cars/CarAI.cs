@@ -40,6 +40,27 @@ namespace RaceManager.Cars
 
         public float DesiredSpeed;
 
+        #region Minor variables
+
+        private Transform _itsTransform;
+
+        private Vector3 m_VectorToTargetSteer;
+        private Vector3 m_OffsetTargetPosWander;
+        private Vector3 m_AvoidanceVector;
+
+        private Vector3 m_PushContactPoint;
+        private Vector3 m_PushDirection;
+        private Vector3 m_PushForce;
+
+        private Vector3 m_OtherCarLocalDelta;
+
+        private RaycastHit m_RaycastHitFrontCheck;
+
+        private float m_Acceleration;
+        private float m_Steering;
+
+        #endregion
+
         public bool isDriving => _isDriving;
         public bool PlayerDriving
         { 
@@ -84,6 +105,7 @@ namespace RaceManager.Cars
             _randomPerlin = Random.value * 100;
 
             _criticalSteeAngle = _car.CarConfig.MaxSteerAngle;
+            _itsTransform = transform;
 
             PlayerDriving = false;
         }
@@ -98,11 +120,10 @@ namespace RaceManager.Cars
         {
             if (isDriving)
             {
-                bool handBrake = IsStopping;
-                float accel = IsStopping ? 0 : CalculateAcceleration();
-                float steer = CalculateSteering();
+                m_Acceleration = IsStopping ? 0 : CalculateAcceleration();
+                m_Steering = CalculateSteering();
 
-                _car.UpdateControls(steer, accel, handBrake);
+                _car.UpdateControls(m_Steering, m_Acceleration, IsStopping);
             }
             else
             {
@@ -125,16 +146,16 @@ namespace RaceManager.Cars
             if (_target == null)
                 return 0;
 
-            Vector3 vectorToTarget = _target.position - transform.position;
-            vectorToTarget.Normalize();
+            m_VectorToTargetSteer = _target.position - _itsTransform.position;
+            m_VectorToTargetSteer.Normalize();
 
             if (_isAvoidingCars)
-                AvoidAICars(vectorToTarget, out vectorToTarget);
+                AvoidAICars(m_VectorToTargetSteer, out m_VectorToTargetSteer);
 
             //Vector3 position = MakeWanderPositionOffsetFromTarget();
             //vectorToTarget = Vector3.Lerp(vectorToTarget, position, _avoidanceLerpFactor * Time.fixedDeltaTime);
 
-            float targetAngle = Vector3.SignedAngle(transform.forward, vectorToTarget, transform.up);
+            float targetAngle = Vector3.SignedAngle(_itsTransform.forward, m_VectorToTargetSteer, _itsTransform.up);
             float steer = targetAngle / _criticalSteeAngle;
 
             //steer = Mathf.Clamp(steer, -1f, 1f);
@@ -145,9 +166,9 @@ namespace RaceManager.Cars
         private Vector3 MakeWanderPositionOffsetFromTarget()
         {
             if (_target == null)
-                return transform.position;
+                return _itsTransform.position;
 
-            Vector3 offsetTargetPos = _target.position;
+            m_OffsetTargetPosWander = _target.position;
 
             // if are we currently taking evasive action to prevent being stuck against another car:
             if (Time.time < _avoidOtherCarTime)
@@ -156,18 +177,18 @@ namespace RaceManager.Cars
                 DesiredSpeed *= _avoidOtherCarFactor;
 
                 // and veer towards the side of our path-to-target that is away from the other car
-                offsetTargetPos += _target.right * _avoidPathOffset;
+                m_OffsetTargetPosWander += _target.right * _avoidPathOffset;
             }
             else
             {
                 // no need for evasive action, we can just wander across the path-to-target in a random way,
                 // which can help prevent AI from seeming too uniform and robotic in their driving
-                offsetTargetPos += _target.right *
+                m_OffsetTargetPosWander += _target.right *
                                    (Mathf.PerlinNoise(Time.time * _lateralWanderSpeed, _randomPerlin) * 2 - 1) *
                                    _lateralWanderDistance;
             }
 
-            return offsetTargetPos;
+            return m_OffsetTargetPosWander;
         }
 
         private void HandbrakeIfNeeded()
@@ -182,23 +203,22 @@ namespace RaceManager.Cars
         {
             _sphereCollider.enabled = false;
 
-            RaycastHit raycastHit;
-            Physics.SphereCast(transform.position + transform.forward * 0.5f, _spherecastRadius, transform.forward, out raycastHit, _castMaxDistance, 1 << LayerMask.NameToLayer(Layer.Car));
+            Physics.SphereCast(_itsTransform.position + _itsTransform.forward * 0.5f, _spherecastRadius, _itsTransform.forward, out m_RaycastHitFrontCheck, _castMaxDistance, 1 << LayerMask.NameToLayer(Layer.Car));
 
             _sphereCollider.enabled = true;
 
-            if (raycastHit.collider != null)
+            if (m_RaycastHitFrontCheck.collider != null)
             {
-                Debug.DrawRay(transform.position, transform.forward * _castMaxDistance, Color.red);
+                Debug.DrawRay(_itsTransform.position, _itsTransform.forward * _castMaxDistance, Color.red);
 
-                position = raycastHit.collider.transform.position;
-                otherCarRightVector = raycastHit.collider.transform.right;
+                position = m_RaycastHitFrontCheck.collider.transform.position;
+                otherCarRightVector = m_RaycastHitFrontCheck.collider.transform.right;
 
                 return true;
             }
             else
             {
-                Debug.DrawRay(transform.position, transform.forward * _castMaxDistance, Color.black);
+                Debug.DrawRay(_itsTransform.position, _itsTransform.forward * _castMaxDistance, Color.black);
             }
 
             position = Vector3.zero;
@@ -210,10 +230,9 @@ namespace RaceManager.Cars
         {
             if (IsCarInFrontOfAICar(out Vector3 otherCarPosition, out Vector3 otherCarRightVector))
             {
-                Vector3 avoidanceVector;
-                avoidanceVector = Vector3.Reflect((otherCarPosition - transform.position).normalized, otherCarRightVector);
+                m_AvoidanceVector = Vector3.Reflect((otherCarPosition - _itsTransform.position).normalized, otherCarRightVector);
 
-                float distanceTotarget = (_target.position - transform.position).magnitude;
+                float distanceTotarget = (_target.position - _itsTransform.position).magnitude;
 
                 //As we get closer to waypoint the desire to reach the waypoint increases
                 float driveToTargetInfluence = _desireToGetTheWaypoint / distanceTotarget;// / _carController.CurrentSpeed;
@@ -222,13 +241,13 @@ namespace RaceManager.Cars
 
                 float avoidanceInfluence = 1f - driveToTargetInfluence;
 
-                _avoidanceVectorLerped = Vector3.Lerp(_avoidanceVectorLerped, avoidanceVector, Time.fixedDeltaTime * _avoidanceLerpFactor / _car.CurrentSpeed);
+                _avoidanceVectorLerped = Vector3.Lerp(_avoidanceVectorLerped, m_AvoidanceVector, Time.fixedDeltaTime * _avoidanceLerpFactor / _car.CurrentSpeed);
 
                 newVectorToTarget = vectorToTarget * driveToTargetInfluence + _avoidanceVectorLerped * avoidanceInfluence;
                 newVectorToTarget.Normalize();
 
-                Debug.DrawRay(transform.position, avoidanceVector * _castMaxDistance, Color.green);
-                Debug.DrawRay(transform.position, newVectorToTarget * _castMaxDistance, Color.yellow);
+                Debug.DrawRay(_itsTransform.position, m_AvoidanceVector * _castMaxDistance, Color.green);
+                Debug.DrawRay(_itsTransform.position, newVectorToTarget * _castMaxDistance, Color.yellow);
                 return;
             }
 
@@ -256,13 +275,13 @@ namespace RaceManager.Cars
 
         private void PushOpponent(Collision collision)
         {
-            Vector3 contactPoint = collision.GetContact(0).point;
-            Vector3 direction = collision.rigidbody.transform.position - transform.position;
-            direction.Normalize();
-            Vector3 force = direction * _car.CarConfig.Durability * _car.CurrentSpeed;
-            force.y = 0f;
+            m_PushContactPoint = collision.GetContact(0).point;
+            m_PushDirection = collision.rigidbody.transform.position - _itsTransform.position;
+            m_PushDirection.Normalize();
+            m_PushForce = m_PushDirection * _car.CarConfig.Durability * _car.CurrentSpeed;
+            m_PushForce.y = 0f;
 
-            collision.rigidbody.AddForceAtPosition(force, contactPoint, ForceMode.Impulse);
+            collision.rigidbody.AddForceAtPosition(m_PushForce, m_PushContactPoint, ForceMode.Impulse);
         }
 
         private void HandleCarsJam(CarAI otherAI)
@@ -270,7 +289,7 @@ namespace RaceManager.Cars
             // we'll take evasive action for 1 second
             _avoidOtherCarTime = Time.time + 1;
 
-            float contactAngle = Vector3.Angle(transform.forward, otherAI.transform.position - transform.position);
+            float contactAngle = Vector3.Angle(_itsTransform.forward, otherAI.transform.position - _itsTransform.position);
             // but who's in front?...
             if (contactAngle < 90)
             {
@@ -285,8 +304,8 @@ namespace RaceManager.Cars
 
             // both cars should take evasive action by driving along an offset from the path centre,
             // away from the other car
-            var otherCarLocalDelta = transform.InverseTransformPoint(otherAI.transform.position);
-            float otherCarAngle = Mathf.Atan2(otherCarLocalDelta.x, otherCarLocalDelta.z);
+            m_OtherCarLocalDelta = _itsTransform.InverseTransformPoint(otherAI.transform.position);
+            float otherCarAngle = Mathf.Atan2(m_OtherCarLocalDelta.x, m_OtherCarLocalDelta.z);
             _avoidPathOffset = _lateralWanderDistance * -Mathf.Sign(otherCarAngle);
         }
 

@@ -29,8 +29,6 @@ namespace RaceManager.Cars
         private WaypointsTracker _waypointsTracker;
         private MaterialsContainer _materialsContainer;
 
-        private List<IObserver<DriverProfile>> _observersList;
-
         public Subject<DriverProfile> Profile;
 
         public DriverProfile DriverProfile => _driverProfile;
@@ -66,8 +64,6 @@ namespace RaceManager.Cars
                 .Subscribe(s => OnCarStateChange(s))
                 .AddTo(this);
 
-            _observersList = new List<IObserver<DriverProfile>>();
-
             if (_profiler != null)
             {
                 Profile = new Subject<DriverProfile>();
@@ -84,7 +80,6 @@ namespace RaceManager.Cars
                     })
                     .AddTo(this);
             }
-
         }
 
         public void TrackRecommendedSpeed()

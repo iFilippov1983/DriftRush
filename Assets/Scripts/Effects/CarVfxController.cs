@@ -42,6 +42,18 @@ namespace RaceManager.Effects
             public float MaxMagnitudeCollision;
         }
 
+        #region Minor variables
+
+        private Wheel m_Wheel;
+        private GroundConfig m_GroundConfig;
+
+        private TrailRenderer m_TrailCur;
+        private TrailRenderer m_TrailNew;
+
+        private EmitParams m_EmitParams;
+
+        #endregion
+
         #region Unity Functions
 
         protected virtual void Awake()
@@ -95,52 +107,51 @@ namespace RaceManager.Effects
 
         private void HandleWheels()
         {
-            EmitParams emitParams;
             float rndValue = Random.Range(0, 1f);
             for (int i = 0; i < _car.Wheels.Length; i++)
             {
-                var wheel = _car.Wheels[i];
-                var groundConfig = wheel.CurrentGroundConfig;
-                var hasSlip = wheel.HasForwardSlip || wheel.HasSideSlip;
+                m_Wheel = _car.Wheels[i];
+                m_GroundConfig = m_Wheel.CurrentGroundConfig;
+                bool hasSlip = m_Wheel.HasForwardSlip || m_Wheel.HasSideSlip;
 
                 //Emit particle.
-                if (_car.IsVisible && groundConfig != null)
+                if (_car.IsVisible && m_GroundConfig != null)
                 {
-                    var particles = hasSlip ? groundConfig.SlipParticles : groundConfig.IdleParticles;
+                    var particles = hasSlip ? m_GroundConfig.SlipParticles : m_GroundConfig.IdleParticles;
                     if (particles)
                     {
-                        float sizeAndLifeTimeMultiplier = (groundConfig.SpeedDependent
-                            ? (Mathf.Max(_car.CurrentSpeed, (wheel.Radius * Mathf.PI * wheel.RPM / SpeedDivider)) / SpeedDivider).Clamp()
+                        float sizeAndLifeTimeMultiplier = (m_GroundConfig.SpeedDependent
+                            ? (Mathf.Max(_car.CurrentSpeed, (m_Wheel.Radius * Mathf.PI * m_Wheel.RPM / SpeedDivider)) / SpeedDivider).Clamp()
                             : 1)
                             * rndValue;
 
-                        var point = wheel.transform.position;
-                        point.y = wheel.GetHit.point.y;
+                        var point = m_Wheel.transform.position;
+                        point.y = m_Wheel.GetHit.point.y;
 
-                        var particleVelocity = -wheel.GetHit.forwardDir * wheel.GetHit.forwardSlip;
-                        particleVelocity += wheel.GetHit.sidewaysDir * wheel.GetHit.sidewaysSlip;
+                        var particleVelocity = -m_Wheel.GetHit.forwardDir * m_Wheel.GetHit.forwardSlip;
+                        particleVelocity += m_Wheel.GetHit.sidewaysDir * m_Wheel.GetHit.sidewaysSlip;
                         particleVelocity += _car.RB.velocity;
 
-                        emitParams = new EmitParams();
+                        m_EmitParams = new EmitParams();
 
-                        emitParams.position = point;
-                        emitParams.velocity = particleVelocity;
-                        emitParams.startSize = Mathf.Max(1f, particles.main.startSize.constant * sizeAndLifeTimeMultiplier);
-                        emitParams.startLifetime = particles.main.startLifetime.constant * sizeAndLifeTimeMultiplier;
-                        emitParams.startColor = particles.main.startColor.color;
+                        m_EmitParams.position = point;
+                        m_EmitParams.velocity = particleVelocity;
+                        m_EmitParams.startSize = Mathf.Max(1f, particles.main.startSize.constant * sizeAndLifeTimeMultiplier);
+                        m_EmitParams.startLifetime = particles.main.startLifetime.constant * sizeAndLifeTimeMultiplier;
+                        m_EmitParams.startColor = particles.main.startColor.color;
 
-                        particles.Emit(emitParams, 1);
+                        particles.Emit(m_EmitParams, 1);
 
-                        _debugInfo[wheel].HasSlip = hasSlip;
-                        _debugInfo[wheel].ParticleName = particles.name;
-                        _debugInfo[wheel].P_Velocity = emitParams.velocity;
-                        _debugInfo[wheel].P_StartSize = emitParams.startSize;
-                        _debugInfo[wheel].P_StartLifetime = emitParams.startLifetime;
+                        _debugInfo[m_Wheel].HasSlip = hasSlip;
+                        _debugInfo[m_Wheel].ParticleName = particles.name;
+                        _debugInfo[m_Wheel].P_Velocity = m_EmitParams.velocity;
+                        _debugInfo[m_Wheel].P_StartSize = m_EmitParams.startSize;
+                        _debugInfo[m_Wheel].P_StartLifetime = m_EmitParams.startLifetime;
                     }
                 }
 
                 //Emit trail
-                UpdateTrail(wheel, wheel.IsGrounded && hasSlip);
+                UpdateTrail(m_Wheel, m_Wheel.IsGrounded && hasSlip);
             }
         }
 
@@ -174,46 +185,46 @@ namespace RaceManager.Effects
 
         public void UpdateTrail(Wheel wheel, bool emmit)
         {
-            var trail = ActiveTrails[wheel];
+            m_TrailCur = ActiveTrails[wheel];
 
             if (emmit)
             {
-                if (trail == null)
+                if (m_TrailCur == null)
                 {
                     //Get free or create trail.
-                    trail = GetTrail(wheel.WheelView.position + (wheel.transform.up * (-wheel.Radius + TrailOffset)));
-                    trail.transform.SetParent(wheel.transform);
-                    ActiveTrails[wheel] = trail;
+                    m_TrailCur = GetTrail(wheel.WheelView.position + (wheel.transform.up * (-wheel.Radius + TrailOffset)));
+                    m_TrailCur.transform.SetParent(wheel.transform);
+                    ActiveTrails[wheel] = m_TrailCur;
                 }
                 else
                 {
                     //Move the trail to the desired position
-                    trail.transform.position = wheel.WheelView.position + (wheel.transform.up * (-wheel.Radius + TrailOffset));
+                    m_TrailCur.transform.position = wheel.WheelView.position + (wheel.transform.up * (-wheel.Radius + TrailOffset));
                 }
             }
             else if (ActiveTrails[wheel] != null)
             {
                 //Set trail as free.
-                SetTrailAsFree(trail);
-                trail = null;
-                ActiveTrails[wheel] = trail;
+                SetTrailAsFree(m_TrailCur);
+                m_TrailCur = null;
+                ActiveTrails[wheel] = m_TrailCur;
             }
         }
 
         private void ResetAllTrails()
         {
-            TrailRenderer trail;
+            //TrailRenderer trail;
             for (int i = 0; i < _car.Wheels.Length; i++)
             {
-                trail = ActiveTrails[_car.Wheels[i]];
-                if (trail)
+                m_TrailCur = ActiveTrails[_car.Wheels[i]];
+                if (m_TrailCur)
                 {
                     if (!_car.Wheels[i].IsGrounded)
-                        trail.Clear();
+                        m_TrailCur.Clear();
 
-                    SetTrailAsFree(trail);
-                    trail = null;
-                    ActiveTrails[_car.Wheels[i]] = trail;
+                    SetTrailAsFree(m_TrailCur);
+                    m_TrailCur = null;
+                    ActiveTrails[_car.Wheels[i]] = m_TrailCur;
                 }
             }
         }
@@ -223,21 +234,21 @@ namespace RaceManager.Effects
         /// </summary>
         public TrailRenderer GetTrail(Vector3 startPos)
         {
-            TrailRenderer trail;
+            //TrailRenderer trail;
             if (_freeTrails.Count > 0)
             {
-                trail = _freeTrails.Dequeue();
+                m_TrailNew = _freeTrails.Dequeue();
             }
             else
             {
-                trail = Instantiate(_trailPrefab, _vfxParent);
+                m_TrailNew = Instantiate(_trailPrefab, _vfxParent);
             }
 
-            trail.transform.position = startPos;
-            trail.gameObject.SetActive(true);
-            trail.Clear();
+            m_TrailNew.transform.position = startPos;
+            m_TrailNew.gameObject.SetActive(true);
+            m_TrailNew.Clear();
 
-            return trail;
+            return m_TrailNew;
         }
 
         /// <summary>

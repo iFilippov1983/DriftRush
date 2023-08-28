@@ -57,6 +57,21 @@ namespace RaceManager.DamageSystem
         private float _lastHitTime;
         private Vector3 _localCenterPoint;
 
+        #region Minor variables
+
+        private List<DamageableObjectData> _tempListDod;
+        private List<DamageableMeshData> _tempListDmd;
+        private List<IDetachable> _tempListDetach;
+
+        private ContactPoint m_Contact;
+        private Vector3 m_Force = Vector3.zero;
+        private Vector3 m_Normal = Vector3.zero;
+        private Vector3 m_ForceResult;
+        private Vector3 m_NormalResult;
+        private Rigidbody m_Rb;
+
+        #endregion
+
         private Vector3 CenterPoint => _thisTransform.TransformPoint(_localCenterPoint);
 
         public event System.Action<DamageData> OnDamageAction;
@@ -181,22 +196,22 @@ namespace RaceManager.DamageSystem
                 return;
             }
 
-            ContactPoint contact;
-            Vector3 force = Vector3.zero;
-            Vector3 normal = Vector3.zero;
-            Vector3 forceResult;
-            Vector3 normalResult;
+            //ContactPoint contact;
+            m_Force = Vector3.zero;
+            m_Normal = Vector3.zero;
+            //Vector3 forceResult;
+            //Vector3 normalResult;
             float massFactor;
-            Rigidbody rb;
+            //Rigidbody rb;
             int contactsCount = Mathf.Min(col.contacts.Length, _maxContactPoints);
 
             float impuls = (col.impulse.magnitude * 0.001f).Clamp(0, _maxImpulseMagnitude);
             float relativeVelocityMagnitude = col.relativeVelocity.magnitude;
 
-            rb = col.rigidbody;
-            if (rb != null && !rb.isKinematic)
+            m_Rb = col.rigidbody;
+            if (m_Rb != null && !m_Rb.isKinematic)
             {
-                var percent = (rb.mass / _thisRb.mass).Clamp();
+                var percent = (m_Rb.mass / _thisRb.mass).Clamp();
                 massFactor = percent <= 0.1f ? Mathf.Sqrt(percent) : 1;    //To prevent damage from small objects (eg cones).
             }
             else
@@ -208,53 +223,53 @@ namespace RaceManager.DamageSystem
             {
                 if (fromStayCollistion && impuls > relativeVelocityMagnitude)
                 {
-                    force = Vector3.ClampMagnitude(col.impulse * 0.001f, _maxImpulseMagnitude);
-                    normal = col.impulse.normalized;
+                    m_Force = Vector3.ClampMagnitude(col.impulse * 0.001f, _maxImpulseMagnitude);
+                    m_Normal = col.impulse.normalized;
                 }
 
                 for (int i = 0; i < contactsCount; i++)
                 {
-                    contact = col.contacts[i];
+                    m_Contact = col.contacts[i];
 
                     if (fromStayCollistion)
                     {
                         if (relativeVelocityMagnitude > impuls)
                         {
-                            normal = contact.normal;
-                            force = col.relativeVelocity;
+                            m_Normal = m_Contact.normal;
+                            m_Force = col.relativeVelocity;
                         }
 
-                        if (fromStayCollistion && Vector3.Dot(force, contact.point - CenterPoint) > 0)
+                        if (fromStayCollistion && Vector3.Dot(m_Force, m_Contact.point - CenterPoint) > 0)
                         {
-                            forceResult = -force;
-                            normalResult = -normal;
+                            m_ForceResult = -m_Force;
+                            m_NormalResult = -m_Normal;
                         }
                         else
                         {
-                            forceResult = force;
-                            normalResult = normal;
+                            m_ForceResult = m_Force;
+                            m_NormalResult = m_Normal;
                         }
                     }
                     else
                     {
-                        forceResult = col.relativeVelocity;
-                        normalResult = contact.normal;
+                        m_ForceResult = col.relativeVelocity;
+                        m_NormalResult = m_Contact.normal;
                     }
 
                     SetDamage(new DamageData()
                     {
-                        DamagePoint = contact.point,
-                        DamageForce = forceResult,
-                        SurfaceNormal = normalResult,
+                        DamagePoint = m_Contact.point,
+                        DamageForce = m_ForceResult,
+                        SurfaceNormal = m_NormalResult,
                         MassFactor = massFactor,
                     });
 
                     if (_enableLogAndGizmo)
                     {
                         CurrentGizmoIndex = MathExtentions.Repeat(CurrentGizmoIndex + 1, 0, GizmosData.Length - 1);
-                        GizmosData[CurrentGizmoIndex].ContactPoint = contact.point;
-                        GizmosData[CurrentGizmoIndex].Force = forceResult;
-                        GizmosData[CurrentGizmoIndex].Normal = normalResult;
+                        GizmosData[CurrentGizmoIndex].ContactPoint = m_Contact.point;
+                        GizmosData[CurrentGizmoIndex].Force = m_ForceResult;
+                        GizmosData[CurrentGizmoIndex].Normal = m_NormalResult;
                     }
                 }
 
@@ -322,9 +337,9 @@ namespace RaceManager.DamageSystem
                 }
                 catch
                 {
-                    List<DamageableMeshData> tempList = new List<DamageableMeshData>(_damageableMeshes);
-                    tempList.Remove(_damageableMeshes[i]);
-                    _damageableMeshes = tempList.ToArray();
+                    _tempListDmd = new List<DamageableMeshData>(_damageableMeshes);
+                    _tempListDmd.Remove(_damageableMeshes[i]);
+                    _damageableMeshes = _tempListDmd.ToArray();
                     continue;
                 }
                 
@@ -379,9 +394,9 @@ namespace RaceManager.DamageSystem
                 }
                 catch
                 {
-                    List<DamageableObjectData> tempList = new List<DamageableObjectData>(_damageableObjects);
-                    tempList.Remove(_damageableObjects[i]);
-                    _damageableObjects = tempList.ToArray();
+                    _tempListDod = new List<DamageableObjectData>(_damageableObjects);
+                    _tempListDod.Remove(_damageableObjects[i]);
+                    _damageableObjects = _tempListDod.ToArray();
                     continue;
                 }
             }
@@ -398,13 +413,12 @@ namespace RaceManager.DamageSystem
                 }
                 catch
                 { 
-                    List<IDetachable> tempList = new List<IDetachable>(_detachables);
-                    tempList.Remove(_detachables[i]);
-                    _detachables = tempList.ToArray();
+                    _tempListDetach = new List<IDetachable>(_detachables);
+                    _tempListDetach.Remove(_detachables[i]);
+                    _detachables = _tempListDetach.ToArray();
                     continue;
                 }
 
-                
                 localDamageForceAndSurfaceDot = detachableObject.Transform.InverseTransformDirection(clampForce) * deformSurfaceDot;
 
                 for (int j = 0; j < detachableObject.DamageCheckPoints.Length; j++)

@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using DG.Tweening;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Threading;
@@ -12,14 +13,11 @@ namespace RaceManager.Waypoints
     public class RaceLineSegment : MonoBehaviour
     {
         [SerializeField] private MeshRenderer _mesh;
-        //[SerializeField] private float _checkDistanceFactor = 2f;
 
-        //private float _distanceFromStart;
-        [ShowInInspector, ReadOnly]
-        private float _recomendedSpeed;
-        private float _fadeSpeed;
-        private float _colorTransitionSpeed;
         private float _checkOffset;
+
+        private float _colorTransitionDuration;
+        private float _alphaTransitionDuration;
 
         [ShowInInspector, ReadOnly]
         private float _checkDistance;
@@ -32,29 +30,19 @@ namespace RaceManager.Waypoints
         [ShowInInspector, ReadOnly]
         private bool _isWarning = false;
 
-        //[ShowInInspector, ReadOnly]
-        //private IEnumerator _currentFadeJob;
-        //[ShowInInspector, ReadOnly]
-        //private IEnumerator _currentColorJob;
-
-        [ShowInInspector, ReadOnly]
-        private Task<bool> _currentFadeTask;
-        [ShowInInspector, ReadOnly]
-        private Task<bool> _currentColorTask;
-
-        private CancellationTokenSource _cancelTokenFade = new CancellationTokenSource();
-        private CancellationTokenSource _cancelTokenColor = new CancellationTokenSource();
+        private Tween _colorTransitionTween;
+        private Tween _alphaTransitionTween;
 
         #region Minor variables
 
         private Transform _itsTransform;
 
-        private Color m_ColorToFade;
-
-        private Color m_ColorToChange;
         private Color m_TargetColor;
 
         #endregion
+
+        [ReadOnly]
+        public float RecomendedSpeed { get; set; }
 
         private Material MeshMaterial { get; set; }
 
@@ -72,9 +60,11 @@ namespace RaceManager.Waypoints
         {
             _itsTransform = transform;
 
-            _recomendedSpeed = data.recomendedSpeed;
-            _fadeSpeed = data.fadeSpeed;
-            _colorTransitionSpeed = data.colorTransitionSpeed;
+            RecomendedSpeed = data.recomendedSpeed;
+
+            _colorTransitionDuration = data.colorTransitionDuration;
+            _alphaTransitionDuration = data.alphaTransitionDuration;
+
             _baseColor = data.baseColor;
             _warningColor = data.warningColor;
             _checkOffset = data.checkOffset;
@@ -88,53 +78,32 @@ namespace RaceManager.Waypoints
 
         #region Using Tasks implementation
 
-        public async void DistanceCheck(float distance)
+        public void DistanceCheck(float distance)
         {
             _checkDistance = distance + _checkOffset;
             bool isPassed = _checkDistance >= DistanceFromStart;
 
-            if (isPassed == _isVisible && (_currentFadeTask == null || _currentFadeTask.IsCompleted))
+            if (isPassed == _isVisible && !_alphaTransitionTween.IsActive())
             {
-                _currentFadeTask = VisibilityChange(isPassed, _cancelTokenFade.Token);
-                await _currentFadeTask;
-
-                while (!_currentFadeTask.IsCompleted)
-                {
-                    _cancelTokenFade.Token.ThrowIfCancellationRequested();
-                    await Task.Yield();
-                }
-
-                _isVisible = _currentFadeTask.Result;
-                OnVisibilityChange?.OnNext((isVisible: _isVisible, segment: this));
+                VisibilityChange(isPassed);
             }
         }
 
-        public async void SpeedCheck(float speed)
+        public void SpeedCheck(float speed)
         {
             if (!_isVisible) return;
 
-            bool isOverspeed = speed >= _recomendedSpeed;
+            bool isOverspeed = speed >= RecomendedSpeed;
 
-            if (isOverspeed != _isWarning && (_currentColorTask == null || _currentColorTask.IsCompleted))
+            if (isOverspeed != _isWarning && !_colorTransitionTween.IsActive())
             {
-                _currentColorTask = ColorChange(isOverspeed, _cancelTokenColor.Token);
-                await _currentColorTask;
-
-                while (!_currentColorTask.IsCompleted)
-                {
-                    _cancelTokenColor.Token.ThrowIfCancellationRequested();
-                    await Task.Yield();
-                }
-
-                _isWarning = _currentColorTask.Result;
+                ColorChange(isOverspeed);
             }
         }
 
-        private async Task<bool> VisibilityChange(bool fade, CancellationToken token)
+        private void VisibilityChange(bool fade)
         {
-            if (MeshMaterial == null) return false;
-
-            m_ColorToFade = MeshMaterial.color;
+            if (MeshMaterial == null) return;
 
             float maxAlphaValue = _isWarning
                 ? _warningColor.a
@@ -142,140 +111,56 @@ namespace RaceManager.Waypoints
 
             float targetAlpha = fade ? 0 : maxAlphaValue;
 
-            while (!Mathf.Approximately(m_ColorToFade.a, targetAlpha))
+            if (_colorTransitionTween.IsActive())
             {
-                try
-                {
-                    token.ThrowIfCancellationRequested();
-
-                    m_ColorToFade.a = Mathf.Lerp(m_ColorToFade.a, targetAlpha, Time.deltaTime * _fadeSpeed);
-                    MeshMaterial.color = m_ColorToFade;
-
-                    await Task.Yield();
-                }
-                catch (Exception)
-                {
-                    return !fade;
-                }
-                
+                _colorTransitionTween.Complete(true);
+                _colorTransitionTween = null;
             }
 
-            return !fade;
+            _alphaTransitionTween = MeshMaterial.DOFade(targetAlpha, _alphaTransitionDuration)
+                .OnComplete(() => SetVisibility(!fade));
         }
 
-        private async Task<bool> ColorChange(bool warning, CancellationToken token)
+        private void SetVisibility(bool isVisible)
         {
-            if (MeshMaterial == null) return false;
+            _isVisible = isVisible;
+            OnVisibilityChange?.OnNext((isVisible: _isVisible, segment: this));
+        }
 
-            m_ColorToChange = MeshMaterial.color;
+        private void ColorChange(bool warning)
+        {
+            if (MeshMaterial == null) return;
+
             m_TargetColor = warning ? _warningColor : _baseColor;
-            m_TargetColor.a = MeshMaterial.color.a;
 
-            while (!Equals(m_ColorToChange, m_TargetColor))
+            if (_alphaTransitionTween.IsActive())
             {
-                try
-                {
-                    token.ThrowIfCancellationRequested();
-
-                    m_ColorToChange = Color.Lerp(m_ColorToChange, m_TargetColor, Time.deltaTime * _colorTransitionSpeed);
-                    m_ColorToChange.a = MeshMaterial.color.a;
-                    m_TargetColor.a = MeshMaterial.color.a;
-                    MeshMaterial.color = m_ColorToChange;
-
-                    await Task.Yield();
-                }
-                catch (Exception)
-                {
-                    return warning;
-                }
+                _alphaTransitionTween.Complete(true);
+                _alphaTransitionTween = null;
             }
 
-            return warning;
+            _colorTransitionTween = MeshMaterial.DOColor(m_TargetColor, _colorTransitionDuration)
+                .OnComplete(() => 
+                { 
+                    _isWarning = warning;
+                });
         }
-        #endregion
-
-        #region Using Coroutines implementation 
-
-        //public void CheckDistance(float distance)
-        //{
-        //    _checkDistance = distance + _checkOffset;
-        //    bool isPassed = _checkDistance > _distanceFromStart;
-
-        //    if (isPassed == _isVisible && _currentFadeJob == null)
-        //    {
-        //        //if (_currentFadeJob != null && !isPassed)
-        //        //    StopCoroutine(_currentFadeJob);
-
-        //        _currentFadeJob = ChangeVisibility(isPassed);
-        //        StartCoroutine(_currentFadeJob);
-        //    }
-        //}
-
-        //public void CheckSpeed(float speed)
-        //{
-        //    if (!_isVisible) return;
-
-        //    bool isInRange = _checkDistance * _checkDistanceFactor > _distanceFromStart;
-        //    bool isOverspeed = speed >= _recomendedSpeed;
-
-        //    if (isOverspeed != _isWarning && _currentColorTask == null && isInRange)
-        //    {
-        //        //if (_currentColorJob != null)
-        //        //    StopCoroutine(_currentColorJob);
-
-        //        _currentColorJob = ChangeColor(isOverspeed);
-        //        StartCoroutine(_currentColorJob);
-        //    }
-        //}
-
-        //private IEnumerator ChangeVisibility(bool fade)
-        //{
-        //    Color color = MeshMaterial.color;
-
-        //    float maxAlphaValue = _isWarning
-        //        ? _warningColor.a
-        //        : _baseColor.a;
-
-        //    float targetAlpha = fade ? 0 : maxAlphaValue;
-
-        //    while (!Mathf.Approximately(color.a, targetAlpha))
-        //    {
-        //        color.a = Mathf.Lerp(color.a, targetAlpha, Time.deltaTime * _fadeSpeed);
-        //        MeshMaterial.color = color;
-
-        //        yield return null;
-        //    }
-
-        //    _isVisible = !fade;
-        //    _currentFadeJob = null;
-        //}
-
-        //private IEnumerator ChangeColor(bool warning)
-        //{
-        //    Color color = MeshMaterial.color;
-        //    Color targetColor = warning ? _warningColor : _baseColor;
-        //    targetColor.a = color.a;
-
-        //    while (!Equals(color, targetColor))
-        //    {
-        //        color = Color.Lerp(color, targetColor, Time.deltaTime * _colorTransitionSpeed);
-        //        MeshMaterial.color = color;
-
-        //        yield return null;
-        //    }
-
-        //    _isWarning = warning;
-        //    _currentColorTask = null;
-        //}
 
         #endregion
 
         private void OnDestroy()
         {
-            _cancelTokenFade.Cancel();
-            _cancelTokenColor.Cancel();
+            if (_colorTransitionTween.IsActive())
+            {
+                _colorTransitionTween.Complete(true);
+                _colorTransitionTween = null;
+            }
 
-            StopAllCoroutines();
+            if (_alphaTransitionTween.IsActive())
+            {
+                _alphaTransitionTween.Complete(true);
+                _alphaTransitionTween = null;
+            }
         }
     }
 }

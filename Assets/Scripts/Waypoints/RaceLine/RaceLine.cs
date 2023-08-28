@@ -25,8 +25,9 @@ namespace RaceManager.Waypoints
         [SerializeField] private Color _baseColor = Color.blue;
         [SerializeField] private Color _warningColor = Color.red;
         [SerializeField] private Color _initialColor = Color.white;
-        [SerializeField] private float _segmentFadeSpeed = 30f;
-        [SerializeField] private float _segmentColorTransitionSpeed = 30f;
+        [Space]
+        [SerializeField] private float _segmentColorTransitionDuration = 0.25f;
+        [SerializeField] private float _segmentAlphaTransitionDuration = 0.2f;
         [Space]
         [SerializeField] private float _segmentSpawnInterval = 1f;
         [SerializeField] private int _segmentsMaxAmount = 50;
@@ -35,7 +36,6 @@ namespace RaceManager.Waypoints
 
         private float _currentDistance = 0;
         private int _currentIndex = 0;
-        private bool _showLine = false;
 
         #region Minor variables
 
@@ -99,8 +99,10 @@ namespace RaceManager.Waypoints
                     segment.Initiallize(new RaceLineSegmentData()
                     {
                         recomendedSpeed = GetRecomendedSpeed(mainTrack, segment.DistanceFromStart),
-                        fadeSpeed = _segmentFadeSpeed,
-                        colorTransitionSpeed = _segmentColorTransitionSpeed,
+
+                        colorTransitionDuration = _segmentColorTransitionDuration,
+                        alphaTransitionDuration = _segmentAlphaTransitionDuration,
+
                         baseColor = _initialColor,
                         warningColor = _initialColor,
                         checkOffset = _segmentCheckOffset
@@ -119,12 +121,13 @@ namespace RaceManager.Waypoints
                     RaceFinish.Subscribe(_ => Destroy(segment.gameObject)).AddTo(this);
                     ShowLine.Subscribe(_ =>
                     {
-                        _showLine = true;
                         segment.Initiallize(new RaceLineSegmentData()
                         {
                             recomendedSpeed = GetRecomendedSpeed(mainTrack, segment.DistanceFromStart),
-                            fadeSpeed = _segmentFadeSpeed,
-                            colorTransitionSpeed = _segmentColorTransitionSpeed,
+
+                            colorTransitionDuration = _segmentColorTransitionDuration,
+                            alphaTransitionDuration = _segmentAlphaTransitionDuration,
+
                             baseColor = _baseColor,
                             warningColor = _warningColor,
                             checkOffset = _segmentCheckOffset
@@ -151,32 +154,19 @@ namespace RaceManager.Waypoints
             segment.DistanceFromStart = m_NewLinePoint.distanceFromStart;
             segment.Transform.position = m_NewLinePoint.position;
             segment.Transform.rotation = Quaternion.LookRotation(m_NewLinePoint.direction);
-
-            segment.Initiallize(new RaceLineSegmentData()
-            {
-                recomendedSpeed = m_NewLinePoint.recomendedSpeed,
-                fadeSpeed = _segmentFadeSpeed,
-                colorTransitionSpeed = _segmentColorTransitionSpeed,
-                baseColor = _showLine ? _baseColor : _initialColor,
-                warningColor = _showLine ? _warningColor : _initialColor,
-                checkOffset = _segmentCheckOffset
-            });
+            segment.RecomendedSpeed = m_NewLinePoint.recomendedSpeed;
         }
 
         private float GetRecomendedSpeed(WaypointTrack track, float distanceFromStart)
         {
-            float[] distances = track.Distances;
-
-            for (int i = 1; i < distances.Length; i++)
+            for (int i = 1; i < track.Distances.Length; i++)
             {
-                if (distances[i] > distanceFromStart || Mathf.Approximately(distances[i], distanceFromStart))
+                if (track.Distances[i] > distanceFromStart || Mathf.Approximately(track.Distances[i], distanceFromStart))
                 {
-                    TrackNode prev = track.Nodes[i - 1];
-                    TrackNode next = track.Nodes[i];
-                    float speedDif = next.recomendedSpeed - prev.recomendedSpeed;
-                    float distDif = distanceFromStart - distances[i - 1];
-                    float distFactor = distDif / (distances[i] - distances[i - 1]);
-                    float value = prev.recomendedSpeed + speedDif * distFactor;
+                    float speedDif = track.Nodes[i].recomendedSpeed - track.Nodes[i - 1].recomendedSpeed;
+                    float distDif = distanceFromStart - track.Distances[i - 1];
+                    float distFactor = distDif / (track.Distances[i] - track.Distances[i - 1]);
+                    float value = track.Nodes[i - 1].recomendedSpeed + speedDif * distFactor;
                     return value;
                 }
             }

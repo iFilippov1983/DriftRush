@@ -21,9 +21,18 @@ namespace RaceManager.UI
 {
     public class RaceUI : MonoBehaviour
     {
+        private readonly Vector3 _shakeStrengthLight = new Vector3(1.5f, 1f, 0f);
+        private readonly Vector3 _shakeStrengthHard = new Vector3(3f, 2f, 0f);
+
+        private readonly Vector3 _punchValueLight = new Vector3(0f, 1.03f, 0f);
+        private readonly Vector3 _punchValueHard = new Vector3(1.05f, 1.05f, 1.05f);
+
+        private readonly float _fillAmountThreshold = 0.05f;
+
         [SerializeField] private RaceUIView _inRaceUI;
         [SerializeField] private FinishUIView _finishUI;
         [SerializeField] private float _scoresAnimDuration = 0.7f;
+        [SerializeField] private float _accelerationAnimDuration = 2f;
         [SerializeField] private bool _showDriftPauseTimer;
         [Space]
         [SerializeField] private bool _showPerformance;
@@ -40,6 +49,7 @@ namespace RaceManager.UI
 
         private Tweener _totalScoresShakeTween;
         private Tweener _driftScoresShakeTween;
+        private Tweener _multiplyerTextTween;
 
         private RaceRewardInfo _rewardInfo;
         private Vector3 _scoresInitialPos;
@@ -57,6 +67,20 @@ namespace RaceManager.UI
 
         public Action<string> OnButtonPressed;
         public Action OnAdsInit;
+
+        #region Minor variables
+
+        private bool m_Accelerating;
+
+        private Vector3 m_DriftScoresInitalPos;
+
+        private Color m_InitialTotalColor;
+        private Color m_InitialTitleColor;
+        private Color m_InitialTextColor;
+
+        private Tween m_AccelerationTween;
+
+        #endregion
 
         private DriftScoresIndicatorView CurrentDriftIndicator { get; set; }
         private UIAnimator Animator => Singleton<UIAnimator>.Instance;
@@ -188,9 +212,8 @@ namespace RaceManager.UI
 
                 if (_totalScoresShakeTween == null || !_totalScoresShakeTween.IsPlaying())
                 {
-                    Vector3 shakeStrength = new Vector3(3f, 2f, 0f);
                     _totalScoresShakeTween = ScoresIndicator.ScoresRect
-                            .DOShakeAnchorPos(showDuration, shakeStrength, 10, 45, false, false, ShakeRandomnessMode.Harmonic)
+                            .DOShakeAnchorPos(showDuration, _shakeStrengthHard, 10, 45, false, false, ShakeRandomnessMode.Harmonic)
                             .OnComplete(() =>
                             {
                                 ScoresIndicator.ScoresRect.position = _scoresInitialPos;
@@ -202,7 +225,7 @@ namespace RaceManager.UI
             }
             else
             {
-                _totalScoresShakeTween?.Complete();
+                _totalScoresShakeTween?.Complete(true);
                 _totalScoresShakeTween = null;
             }
 
@@ -218,7 +241,6 @@ namespace RaceManager.UI
 
         public IDisposable ShowDriftScores(bool show, int scoresValue, float factorValue, float scoresCountTime, bool animateFactor = false)
         {
-            float duration = _scoresAnimDuration;
 
             if (CurrentDriftIndicator == null || CurrentDriftIndicator.isFinalizing)
             {
@@ -244,10 +266,9 @@ namespace RaceManager.UI
             CurrentDriftIndicator.MultiplierText.SetActive(show);
             CurrentDriftIndicator.MultiplierText.text = factorValue.ToString();
 
-            Tween mtTween = null;
             if (animateFactor)
             {
-                mtTween = CurrentDriftIndicator.MultiplierText.transform.DOPunchScale(new Vector3(0f, 1.03f, 0f), duration / 2, 10, 0);
+                _multiplyerTextTween = CurrentDriftIndicator.MultiplierText.transform.DOPunchScale(_punchValueLight, _scoresAnimDuration / 2, 10, 0);
             }
 
             CurrentDriftIndicator.TotalText.SetActive(!show);
@@ -256,14 +277,13 @@ namespace RaceManager.UI
 
             if (_driftScoresShakeTween == null || !_driftScoresShakeTween.IsPlaying())
             {
-                Vector3 shakeStrength = new Vector3(1.5f, 1f, 0f);
-                Vector3 initialPos = ScoresIndicator.DriftScoresRect.position;
+                m_DriftScoresInitalPos = ScoresIndicator.DriftScoresRect.position;
 
                 _driftScoresShakeTween = ScoresIndicator.DriftScoresRect
-                        .DOShakeAnchorPos(scoresCountTime, shakeStrength, 10, 45, false, false, ShakeRandomnessMode.Harmonic)
+                        .DOShakeAnchorPos(scoresCountTime, _shakeStrengthLight, 10, 45, false, false, ShakeRandomnessMode.Harmonic)
                         .OnComplete(() =>
                         {
-                            ScoresIndicator.DriftScoresRect.position = initialPos;
+                            ScoresIndicator.DriftScoresRect.position = m_DriftScoresInitalPos;
                             _driftScoresShakeTween = null;
                         });
             }
@@ -272,7 +292,7 @@ namespace RaceManager.UI
             {
                 CurrentDriftIndicator.TotalText.text = scoresValue.ToString();
 
-                _driftScoresShakeTween?.Complete();
+                _driftScoresShakeTween?.Complete(true);
                 _driftScoresShakeTween = null;
 
                 AnimateDriftScoresFinalization(CurrentDriftIndicator)?.AddTo(this);
@@ -281,14 +301,8 @@ namespace RaceManager.UI
 
             return Disposable.Create(() =>
             {
-                if (mtTween != null)
-                { 
-                    mtTween.Complete();
-                    mtTween = null;
-                }
-
-                //ttTween?.Complete(); 
-                //ttTween = null;
+                _multiplyerTextTween?.Complete(true);
+                _multiplyerTextTween = null;
 
                 _driftScoresShakeTween?.Complete(true);
                 _driftScoresShakeTween = null;
@@ -350,6 +364,9 @@ namespace RaceManager.UI
 
         public void HandleAcceleration(bool accelerating) 
         {
+            if (accelerating == m_Accelerating) return;
+
+            m_Accelerating = accelerating;
             StopAllCoroutines();
             StartCoroutine(HandleAccelerationRepresentation(accelerating));
         }
@@ -374,25 +391,23 @@ namespace RaceManager.UI
 
         private IDisposable AnimateDriftScoresFinalization(DriftScoresIndicatorView indicator)
         {
-            float duration = _scoresAnimDuration;
-
-            Color initialTotalColor = indicator.TotalText.color;
-            Color initialTitleColor = indicator.TitleText.color;
+            m_InitialTotalColor = indicator.TotalText.color;
+            m_InitialTitleColor = indicator.TitleText.color;
 
             indicator.isFinalizing = true;
 
             Sequence sequence = DOTween.Sequence();
-            sequence.Append(indicator.Rect.DOMove(ScoresIndicator.DriftScoresMoveToRect.position, duration * 2));
-            sequence.Join(indicator.Rect.DOPunchScale(new Vector3(1.05f, 1.05f, 1.05f), duration / 2, 10, 0));
-            sequence.Append(indicator.TotalText.DOFade(0f, duration));
-            sequence.Join(indicator.TitleText.DOFade(0f, duration));
+            sequence.Append(indicator.Rect.DOMove(ScoresIndicator.DriftScoresMoveToRect.position, _scoresAnimDuration * 2));
+            sequence.Join(indicator.Rect.DOPunchScale(_punchValueHard, _scoresAnimDuration / 2, 10, 0));
+            sequence.Append(indicator.TotalText.DOFade(0f, _scoresAnimDuration));
+            sequence.Join(indicator.TitleText.DOFade(0f, _scoresAnimDuration));
             sequence.OnComplete(OnComplete);
 
             void OnComplete()
             { 
-                indicator.TotalText.color = initialTotalColor;
-                indicator.TitleText.color = initialTitleColor;
-                indicator.transform.position = ScoresIndicator.DriftScoresRect.position;
+                indicator.TotalText.color = m_InitialTotalColor;
+                indicator.TitleText.color = m_InitialTitleColor;
+                indicator.Transform.position = ScoresIndicator.DriftScoresRect.position;
                 indicator.isFinalizing = false;
 
                 indicator.SetActive(false);
@@ -401,14 +416,14 @@ namespace RaceManager.UI
 
             return Disposable.Create(() =>
             { 
-                sequence.Complete(true);
+                sequence?.Complete(true);
                 sequence = null;
             });
         }
 
         private IDisposable AnimateCollisionScoresFinalization(ExtraScoresIndicatorView indicator)
         {
-            Color initialTextColor = indicator.ExtraScoresText.color;
+            m_InitialTextColor = indicator.ExtraScoresText.color;
 
             Sequence sequence = DOTween.Sequence();
             sequence.Append(indicator.Rect.DOMove(ScoresIndicator.ScoresRect.transform.position, _scoresAnimDuration));
@@ -418,30 +433,31 @@ namespace RaceManager.UI
 
             void OnComplete()
             {
-                indicator.ExtraScoresText.color = initialTextColor;
-                indicator.ExtraScoresTitle.color = initialTextColor;
-                indicator.transform.position = ScoresIndicator.ExtraScoresRect.transform.position;
+                indicator.ExtraScoresText.color = m_InitialTextColor;
+                indicator.ExtraScoresTitle.color = m_InitialTextColor;
+                indicator.Transform.position = ScoresIndicator.ExtraScoresTransform.position;
                 indicator.SetActive(false);
                 _collisionScoresStack.Push(indicator);
             }
 
             return Disposable.Create(() =>
             {
-                sequence.Complete(true);
+                sequence?.Complete(true);
                 sequence = null;
             });
         }
 
         private IEnumerator HandleAccelerationRepresentation(bool isAccelerating)
         {
-            int lerpToValue = isAccelerating ? 1 : 0;
-            while (!Mathf.Approximately(_inRaceUI.SpeedIndicator.AccelerationIntenseImage.fillAmount, lerpToValue))
+            int toValue = isAccelerating ? 1 : 0;
+
+            while (!Mathf.Approximately(_inRaceUI.SpeedIndicator.AccelerationIntenseImage.fillAmount, toValue))
             {
                 _inRaceUI.SpeedIndicator.AccelerationIntenseImage.fillAmount = 
                     Mathf.Lerp
                     (
                         _inRaceUI.SpeedIndicator.AccelerationIntenseImage.fillAmount, 
-                        lerpToValue, 
+                        toValue, 
                         Time.deltaTime
                     );
 

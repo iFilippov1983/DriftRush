@@ -19,6 +19,12 @@ namespace RaceManager.UI
         public RectTransform ExtraScoresRect => _extraScoresRect;
         public RectTransform DriftScoresRect => _driftScoresRect;
         public RectTransform DriftScoresMoveToRect => _driftScoresMoveToRect;
+        public Transform ExtraScoresTransform { get; private set; }
+
+        private void Awake()
+        {
+            ExtraScoresTransform = ExtraScoresRect.transform;
+        }
     }
 }
 

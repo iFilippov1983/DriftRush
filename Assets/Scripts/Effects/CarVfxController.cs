@@ -50,6 +50,10 @@ namespace RaceManager.Effects
         private TrailRenderer m_TrailCur;
         private TrailRenderer m_TrailNew;
 
+        private ParticleSystem m_Particles;
+        private Vector3 m_ParticlesPoint;
+        private Vector3 m_ParticlesVelocity;
+
         private EmitParams m_EmitParams;
 
         #endregion
@@ -107,7 +111,6 @@ namespace RaceManager.Effects
 
         private void HandleWheels()
         {
-            float rndValue = Random.Range(0, 1f);
             for (int i = 0; i < _car.Wheels.Length; i++)
             {
                 m_Wheel = _car.Wheels[i];
@@ -117,33 +120,33 @@ namespace RaceManager.Effects
                 //Emit particle.
                 if (_car.IsVisible && m_GroundConfig != null)
                 {
-                    var particles = hasSlip ? m_GroundConfig.SlipParticles : m_GroundConfig.IdleParticles;
-                    if (particles)
+                    m_Particles = hasSlip ? m_GroundConfig.SlipParticles : m_GroundConfig.IdleParticles;
+                    if (m_Particles)
                     {
                         float sizeAndLifeTimeMultiplier = (m_GroundConfig.SpeedDependent
                             ? (Mathf.Max(_car.CurrentSpeed, (m_Wheel.Radius * Mathf.PI * m_Wheel.RPM / SpeedDivider)) / SpeedDivider).Clamp()
                             : 1)
-                            * rndValue;
+                            * Random.Range(0, 1f);
 
-                        var point = m_Wheel.transform.position;
-                        point.y = m_Wheel.GetHit.point.y;
+                        m_ParticlesPoint = m_Wheel.transform.position;
+                        m_ParticlesPoint.y = m_Wheel.GetHit.point.y;
 
-                        var particleVelocity = -m_Wheel.GetHit.forwardDir * m_Wheel.GetHit.forwardSlip;
-                        particleVelocity += m_Wheel.GetHit.sidewaysDir * m_Wheel.GetHit.sidewaysSlip;
-                        particleVelocity += _car.RB.velocity;
+                        m_ParticlesVelocity = -m_Wheel.GetHit.forwardDir * m_Wheel.GetHit.forwardSlip;
+                        m_ParticlesVelocity += m_Wheel.GetHit.sidewaysDir * m_Wheel.GetHit.sidewaysSlip;
+                        m_ParticlesVelocity += _car.RB.velocity;
 
                         m_EmitParams = new EmitParams();
 
-                        m_EmitParams.position = point;
-                        m_EmitParams.velocity = particleVelocity;
-                        m_EmitParams.startSize = Mathf.Max(1f, particles.main.startSize.constant * sizeAndLifeTimeMultiplier);
-                        m_EmitParams.startLifetime = particles.main.startLifetime.constant * sizeAndLifeTimeMultiplier;
-                        m_EmitParams.startColor = particles.main.startColor.color;
+                        m_EmitParams.position = m_ParticlesPoint;
+                        m_EmitParams.velocity = m_ParticlesVelocity;
+                        m_EmitParams.startSize = Mathf.Max(1f, m_Particles.main.startSize.constant * sizeAndLifeTimeMultiplier);
+                        m_EmitParams.startLifetime = m_Particles.main.startLifetime.constant * sizeAndLifeTimeMultiplier;
+                        m_EmitParams.startColor = m_Particles.main.startColor.color;
 
-                        particles.Emit(m_EmitParams, 1);
+                        m_Particles.Emit(m_EmitParams, 1);
 
                         _debugInfo[m_Wheel].HasSlip = hasSlip;
-                        _debugInfo[m_Wheel].ParticleName = particles.name;
+                        _debugInfo[m_Wheel].ParticleName = m_Particles.name;
                         _debugInfo[m_Wheel].P_Velocity = m_EmitParams.velocity;
                         _debugInfo[m_Wheel].P_StartSize = m_EmitParams.startSize;
                         _debugInfo[m_Wheel].P_StartLifetime = m_EmitParams.startLifetime;

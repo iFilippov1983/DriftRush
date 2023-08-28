@@ -48,7 +48,18 @@ namespace RaceManager.Effects
         private float _currentFrictionVolume;
         //private float _lastColTime;
 
-		private float MaxRPM => _car.GetMaxRPM;
+        #region Minor variables
+
+        private Wheel m_WheelToHandle;
+        private AudioSource m_AudioSource;
+        private GroundSounds m_GroundSounds;
+        private AudioClip m_AudioClip;
+
+        private LayerMask m_LayerMask;
+
+        #endregion
+
+        private float MaxRPM => _car.GetMaxRPM;
 		private float EngineRPM =>_car.EngineRPM; 
 
         [Serializable]
@@ -143,47 +154,46 @@ namespace RaceManager.Effects
 
             foreach (var kvp in _wheelsAudioSources)
             {
-                Wheel wheel = kvp.Key;
-                AudioSource source = kvp.Value;
-                bool hasSlip = wheel.HasForwardSlip || wheel.HasSideSlip;
+                m_WheelToHandle = kvp.Key;
+                m_AudioSource = kvp.Value;
+                bool hasSlip = m_WheelToHandle.HasForwardSlip || m_WheelToHandle.HasSideSlip;
 
-                LayerMask layer = wheel.CurrentGroundConfig.LayerMask;
-                GroundSounds groundSounds = _groundSounds.Find(g => g.Layer.LayerInMask(layer));
+                m_LayerMask = m_WheelToHandle.CurrentGroundConfig.LayerMask;
+                m_GroundSounds = _groundSounds.Find(g => g.Layer.LayerInMask(m_LayerMask));
 
-                if (groundSounds == null)
+                if (m_GroundSounds == null)
                 {
-                    Debug.LogWarning($"GroundSounds doesn't contain sounds for layer: {LayerMask.LayerToName(layer)}");
+                    Debug.LogWarning($"GroundSounds doesn't contain sounds for layer: {LayerMask.LayerToName(m_LayerMask)}");
                     continue;
                 }
 
-                AudioClip clip;
-                if (hasSlip && groundSounds.SlipSound != null)
+                if (hasSlip && m_GroundSounds.SlipSound != null)
                 {
-                    clip = groundSounds.SlipSound;
-                    if (!source.isPlaying || source.clip != clip)
+                    m_AudioClip = m_GroundSounds.SlipSound;
+                    if (!m_AudioSource.isPlaying || m_AudioSource.clip != m_AudioClip)
                     {
-                        source.clip = clip;
-                        source.Play();
+                        m_AudioSource.clip = m_AudioClip;
+                        m_AudioSource.Play();
                     }
 
                 }
-                else if (groundSounds.IdleSound != null)
+                else if (m_GroundSounds.IdleSound != null)
                 {
-                    clip = groundSounds.IdleSound;
-                    if (!source.isPlaying || source.clip != clip)
+                    m_AudioClip = m_GroundSounds.IdleSound;
+                    if (!m_AudioSource.isPlaying || m_AudioSource.clip != m_AudioClip)
                     {
-                        source.clip = groundSounds.IdleSound;
-                        source.Play();
+                        m_AudioSource.clip = m_GroundSounds.IdleSound;
+                        m_AudioSource.Play();
                     }
                 }
                 else
                 {
-                    source.Stop();
+                    m_AudioSource.Stop();
                 }
 
                 var slipVolumePercent = _car.CurrentMaxSlip / _maxSlipForSound;
-                //source.volume = slipVolumePercent * 0.5f;
-                source.pitch = Mathf.Clamp(slipVolumePercent, 0.75f, 1);
+                //m_AudioSource.volume = slipVolumePercent * 0.5f;
+                m_AudioSource.pitch = Mathf.Clamp(slipVolumePercent, 0.75f, 1);
             }
         }
 

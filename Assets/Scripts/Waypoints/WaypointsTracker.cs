@@ -46,6 +46,7 @@ namespace RaceManager.Waypoints
         #region Minor variables
 
         private Transform _itsTransform;
+        private Waypoint _wpToCheck;
 
         private RoutePoint m_RoutePointForPos;
         private RoutePoint m_RoutePointForRot;
@@ -128,17 +129,17 @@ namespace RaceManager.Waypoints
         {
             if (other.CompareTag(Tag.Waypoint))
             {
-                Waypoint waypoint = other.GetComponent<Waypoint>();
+                _wpToCheck = other.GetComponent<Waypoint>();
 
-                if (_passedWaypointNumber + 1 == waypoint.Number)
+                if (_passedWaypointNumber + 1 == _wpToCheck.Number)
                 {
-                    _passedWaypointNumber = waypoint.Number;
+                    _passedWaypointNumber = _wpToCheck.Number;
                     _numberOfPassedWaypoints++;
                     _timeAtLastPassedWaypoint = Time.time;
 
                     OnPassedWaypoint?.Invoke(this);
 
-                    if (waypoint.isFinishLine)
+                    if (_wpToCheck.isFinishLine)
                     {
                         _passedWaypointNumber = 0;
                         _lapsCompleted++;
@@ -151,7 +152,7 @@ namespace RaceManager.Waypoints
                     }
                 }
 
-                if (waypoint.isRaceLinePoint)
+                if (_wpToCheck.isRaceLinePoint)
                 { 
                     _cashedDistance = _progressDistance;
                     _cashedPosition = _lastPosition;

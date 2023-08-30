@@ -21,18 +21,20 @@ namespace RaceManager.UI
 {
     public class RaceUI : MonoBehaviour
     {
+        private const int IndicatorsInitialAmount = 5;
+
         private readonly Vector3 _shakeStrengthLight = new Vector3(1.5f, 1f, 0f);
         private readonly Vector3 _shakeStrengthHard = new Vector3(3f, 2f, 0f);
 
         private readonly Vector3 _punchValueLight = new Vector3(0f, 1.03f, 0f);
         private readonly Vector3 _punchValueHard = new Vector3(1.05f, 1.05f, 1.05f);
 
-        private readonly float _fillAmountThreshold = 0.05f;
+        //private readonly float _fillAmountThreshold = 0.05f;
 
         [SerializeField] private RaceUIView _inRaceUI;
         [SerializeField] private FinishUIView _finishUI;
         [SerializeField] private float _scoresAnimDuration = 0.7f;
-        [SerializeField] private float _accelerationAnimDuration = 2f;
+        //[SerializeField] private float _accelerationAnimDuration = 2f;
         [SerializeField] private bool _showDriftPauseTimer;
         [Space]
         [SerializeField] private bool _showPerformance;
@@ -48,8 +50,12 @@ namespace RaceManager.UI
         private PerformanceDisplayer _fpsDisplayer;
 
         private Tweener _totalScoresShakeTween;
+        private Tweener _totalScoresTextTween;
         private Tweener _driftScoresShakeTween;
         private Tweener _multiplyerTextTween;
+
+        private Sequence _finalizationSequenceDrift;
+        private Sequence _finalizationSequenceCollision;
 
         private RaceRewardInfo _rewardInfo;
         private Vector3 _scoresInitialPos;
@@ -83,6 +89,8 @@ namespace RaceManager.UI
         #endregion
 
         private DriftScoresIndicatorView CurrentDriftIndicator { get; set; }
+        private ExtraScoresIndicatorView CurrentExtraIndicator { get; set; }
+
         private UIAnimator Animator => Singleton<UIAnimator>.Instance;
         private ScoresIndicatorView ScoresIndicator => _inRaceUI.ScoresIndicator;
         private GameObject ExtraScoresPrefab
@@ -137,7 +145,7 @@ namespace RaceManager.UI
 
             _scoresInitialPos = ScoresIndicator.ScoresRect.position;
             ScoresIndicator.ScoresRect.SetActive(false);
-            ScoresIndicator.ExtraScoresRect.SetActive(false);
+            //ScoresIndicator.ExtraScoresRect.SetActive(false);
 
             foreach (var panel in _finishUI.AnimatablePanels)
             {
@@ -167,6 +175,8 @@ namespace RaceManager.UI
                 .AddTo(this);
 
             _finishUI.gameObject.SetActive(false);
+
+            InitializeDriftIndicators();
         }
 
         public void ChangeViewDependingOn(CarState playerCarState)
@@ -208,7 +218,13 @@ namespace RaceManager.UI
 
             if (show)
             {
-                ScoresIndicator.ScoresText.DOText(scoresTotalValue.ToString(), _scoresAnimDuration / 2, true, ScrambleMode.Numerals);
+                if (_totalScoresTextTween.IsActive())
+                {
+                    _totalScoresTextTween.Complete();
+                    _totalScoresTextTween = null;
+                }
+
+                _totalScoresTextTween = ScoresIndicator.ScoresText.DOText(scoresTotalValue.ToString(), _scoresAnimDuration / 2, true, ScrambleMode.Numerals);
 
                 if (_totalScoresShakeTween == null || !_totalScoresShakeTween.IsPlaying())
                 {
@@ -227,14 +243,23 @@ namespace RaceManager.UI
             {
                 _totalScoresShakeTween?.Complete(true);
                 _totalScoresShakeTween = null;
+
+                _totalScoresTextTween?.Complete(true);
+                _totalScoresTextTween = null;
             }
 
             return Disposable.Create(() =>
             {
-                if (_totalScoresShakeTween != null)
+                if (_totalScoresShakeTween.IsActive())
                 {
                     _totalScoresShakeTween.Complete(true);
                     _totalScoresShakeTween = null;
+                }
+
+                if (_totalScoresTextTween.IsActive())
+                {
+                    _totalScoresTextTween.Complete(true);
+                    _totalScoresTextTween = null;
                 }
             });
         }
@@ -258,12 +283,19 @@ namespace RaceManager.UI
                 CurrentDriftIndicator.isFinalizing = false;
             }
 
-            CurrentDriftIndicator.ScoreText.SetActive(show);
+            if (CurrentDriftIndicator.isActive != show)
+            {
+                CurrentDriftIndicator.ScoreText.SetActive(show);
+                CurrentDriftIndicator.SignText.SetActive(show);
+                CurrentDriftIndicator.MultiplierText.SetActive(show);
+                CurrentDriftIndicator.isActive = show;
+
+                CurrentDriftIndicator.TotalText.SetActive(!show);
+
+                ScoresIndicator.DriftScoresRect.SetActive(true);
+            }
+
             CurrentDriftIndicator.ScoreText.text = scoresValue.ToString();
-
-            CurrentDriftIndicator.SignText.SetActive(show);
-
-            CurrentDriftIndicator.MultiplierText.SetActive(show);
             CurrentDriftIndicator.MultiplierText.text = factorValue.ToString();
 
             if (animateFactor)
@@ -271,11 +303,8 @@ namespace RaceManager.UI
                 _multiplyerTextTween = CurrentDriftIndicator.MultiplierText.transform.DOPunchScale(_punchValueLight, _scoresAnimDuration / 2, 10, 0);
             }
 
-            CurrentDriftIndicator.TotalText.SetActive(!show);
-
-            ScoresIndicator.DriftScoresRect.SetActive(true);
-
-            if (_driftScoresShakeTween == null || !_driftScoresShakeTween.IsPlaying())
+            //if (_driftScoresShakeTween == null || !_driftScoresShakeTween.IsPlaying())
+            if(!_driftScoresShakeTween.IsActive())
             {
                 m_DriftScoresInitalPos = ScoresIndicator.DriftScoresRect.position;
 
@@ -311,24 +340,30 @@ namespace RaceManager.UI
 
         public void ShowCollisionScores(RaceScoresType scoresType, int scoresValue)
         {
-            ExtraScoresIndicatorView indicator;
             if (_collisionScoresStack.Count == 0)
             {
                 GameObject indicatorGo = Instantiate(ExtraScoresPrefab, ScoresIndicator.ExtraScoresRect.transform, false);
-                indicator = indicatorGo.GetComponent<ExtraScoresIndicatorView>();
+                CurrentExtraIndicator = indicatorGo.GetComponent<ExtraScoresIndicatorView>();
             }
             else
-            { 
-                indicator = _collisionScoresStack.Pop();
-                indicator.SetActive(true);
+            {
+                CurrentExtraIndicator = _collisionScoresStack.Pop();
+                CurrentExtraIndicator.SetActive(true);
             }
 
-            string titleText = scoresType.ToString().ToUpper();
-            indicator.ExtraScoresTitle.text = titleText;
-            indicator.ExtraScoresText.text = scoresValue.ToString();
+            CurrentExtraIndicator.ExtraScoresTitle.text = scoresType switch
+            {
+                RaceScoresType.Drift => TextConstant.Drift_UpperCase,
+                RaceScoresType.Bump => TextConstant.Bump_UpperCase,
+                RaceScoresType.Crush => TextConstant.Crush_UpperCase,
+                RaceScoresType.Finish => TextConstant.Finish_UpperCase,
+                _ => throw new NotImplementedException(),
+            };
 
-            ScoresIndicator.ExtraScoresRect.SetActive(true);
-            AnimateCollisionScoresFinalization(indicator).AddTo(this);
+            CurrentExtraIndicator.ExtraScoresText.text = scoresValue.ToString();
+
+            //ScoresIndicator.ExtraScoresRect.SetActive(true);
+            AnimateCollisionScoresFinalization(CurrentExtraIndicator).AddTo(this);
         }
 
         public void ShowPause(bool show, int pauseTime = 0)
@@ -389,6 +424,35 @@ namespace RaceManager.UI
 
         #region Private Functions
 
+        private void InitializeDriftIndicators()
+        {
+            for(int i = 0; i < IndicatorsInitialAmount; i++)
+            {
+                CurrentDriftIndicator = Instantiate(DriftScoresPrefab, ScoresIndicator.DriftScoresRect.transform, false)
+                    .GetComponent<DriftScoresIndicatorView>();
+
+                CurrentDriftIndicator.SetActive(false);
+                CurrentDriftIndicator.isActive = false;
+
+                _driftScoresStack.Push(CurrentDriftIndicator);
+            }
+
+            CurrentDriftIndicator = null;
+
+            for (int i = 0; i < IndicatorsInitialAmount; i++)
+            {
+                CurrentExtraIndicator = Instantiate(ExtraScoresPrefab, ScoresIndicator.ExtraScoresRect.transform, false)
+                    .GetComponent<ExtraScoresIndicatorView>();
+
+                CurrentExtraIndicator.SetActive(false);
+                CurrentExtraIndicator.isActive = false;
+
+                _collisionScoresStack.Push(CurrentExtraIndicator);
+            }
+
+            CurrentExtraIndicator = null;
+        }
+
         private IDisposable AnimateDriftScoresFinalization(DriftScoresIndicatorView indicator)
         {
             m_InitialTotalColor = indicator.TotalText.color;
@@ -396,12 +460,12 @@ namespace RaceManager.UI
 
             indicator.isFinalizing = true;
 
-            Sequence sequence = DOTween.Sequence();
-            sequence.Append(indicator.Rect.DOMove(ScoresIndicator.DriftScoresMoveToRect.position, _scoresAnimDuration * 2));
-            sequence.Join(indicator.Rect.DOPunchScale(_punchValueHard, _scoresAnimDuration / 2, 10, 0));
-            sequence.Append(indicator.TotalText.DOFade(0f, _scoresAnimDuration));
-            sequence.Join(indicator.TitleText.DOFade(0f, _scoresAnimDuration));
-            sequence.OnComplete(OnComplete);
+            _finalizationSequenceDrift = DOTween.Sequence();
+            _finalizationSequenceDrift.Append(indicator.Rect.DOMove(ScoresIndicator.DriftScoresMoveToRect.position, _scoresAnimDuration * 2));
+            _finalizationSequenceDrift.Join(indicator.Rect.DOPunchScale(_punchValueHard, _scoresAnimDuration / 2, 10, 0));
+            _finalizationSequenceDrift.Append(indicator.TotalText.DOFade(0f, _scoresAnimDuration));
+            _finalizationSequenceDrift.Join(indicator.TitleText.DOFade(0f, _scoresAnimDuration));
+            _finalizationSequenceDrift.OnComplete(OnComplete);
 
             void OnComplete()
             { 
@@ -412,12 +476,14 @@ namespace RaceManager.UI
 
                 indicator.SetActive(false);
                 _driftScoresStack.Push(indicator);
+
+                _finalizationSequenceDrift = null;
             }
 
             return Disposable.Create(() =>
-            { 
-                sequence?.Complete(true);
-                sequence = null;
+            {
+                _finalizationSequenceDrift?.Complete(true);
+                _finalizationSequenceDrift = null;
             });
         }
 
@@ -425,11 +491,11 @@ namespace RaceManager.UI
         {
             m_InitialTextColor = indicator.ExtraScoresText.color;
 
-            Sequence sequence = DOTween.Sequence();
-            sequence.Append(indicator.Rect.DOMove(ScoresIndicator.ScoresRect.transform.position, _scoresAnimDuration));
-            sequence.Insert(_scoresAnimDuration / 2, indicator.ExtraScoresText.DOFade(0f, _scoresAnimDuration / 2));
-            sequence.Insert(_scoresAnimDuration / 2, indicator.ExtraScoresTitle.DOFade(0f, _scoresAnimDuration / 2));
-            sequence.OnComplete(OnComplete);
+            _finalizationSequenceCollision = DOTween.Sequence();
+            _finalizationSequenceCollision.Append(indicator.Rect.DOMove(ScoresIndicator.ScoresRect.transform.position, _scoresAnimDuration));
+            _finalizationSequenceCollision.Insert(_scoresAnimDuration / 2, indicator.ExtraScoresText.DOFade(0f, _scoresAnimDuration / 2));
+            _finalizationSequenceCollision.Insert(_scoresAnimDuration / 2, indicator.ExtraScoresTitle.DOFade(0f, _scoresAnimDuration / 2));
+            _finalizationSequenceCollision.OnComplete(OnComplete);
 
             void OnComplete()
             {
@@ -438,12 +504,14 @@ namespace RaceManager.UI
                 indicator.Transform.position = ScoresIndicator.ExtraScoresTransform.position;
                 indicator.SetActive(false);
                 _collisionScoresStack.Push(indicator);
+
+                _finalizationSequenceCollision = null;
             }
 
             return Disposable.Create(() =>
             {
-                sequence?.Complete(true);
-                sequence = null;
+                _finalizationSequenceCollision?.Complete(true);
+                _finalizationSequenceCollision = null;
             });
         }
 

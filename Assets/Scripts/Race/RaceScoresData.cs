@@ -16,6 +16,17 @@
         public float ScoresCountTime;
 
         public bool isDrifting;
+
+        public void Reset()
+        { 
+            CurrentScoresValue = 0;
+            TotalScoresValue = 0;
+
+            ScoresFactorThisType = 0;
+            ScoresCountTime = 0;
+
+            isDrifting = false;
+        }
     }
 
     public struct CollisionScoresData

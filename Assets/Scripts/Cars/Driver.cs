@@ -68,8 +68,7 @@ namespace RaceManager.Cars
             {
                 Profile = new Subject<DriverProfile>();
 
-                this.UpdateAsObservable()
-                    .BatchFrame<Unit>()
+                this.FixedUpdateAsObservable()
                     .Subscribe(_ => 
                     {
                         _driverProfile.CarCurrentSpeed = _car.SpeedInDesiredUnits;

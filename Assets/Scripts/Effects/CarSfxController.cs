@@ -57,6 +57,8 @@ namespace RaceManager.Effects
 
         private LayerMask m_LayerMask;
 
+        private float m_SlipVolumePercent;
+
         #endregion
 
         private float MaxRPM => _car.GetMaxRPM;
@@ -156,7 +158,6 @@ namespace RaceManager.Effects
             {
                 m_WheelToHandle = kvp.Key;
                 m_AudioSource = kvp.Value;
-                bool hasSlip = m_WheelToHandle.HasForwardSlip || m_WheelToHandle.HasSideSlip;
 
                 m_LayerMask = m_WheelToHandle.CurrentGroundConfig.LayerMask;
                 m_GroundSounds = _groundSounds.Find(g => g.Layer.LayerInMask(m_LayerMask));
@@ -167,6 +168,7 @@ namespace RaceManager.Effects
                     continue;
                 }
 
+                bool hasSlip = m_WheelToHandle.HasForwardSlip || m_WheelToHandle.HasSideSlip;
                 if (hasSlip && m_GroundSounds.SlipSound != null)
                 {
                     m_AudioClip = m_GroundSounds.SlipSound;
@@ -191,9 +193,9 @@ namespace RaceManager.Effects
                     m_AudioSource.Stop();
                 }
 
-                var slipVolumePercent = _car.CurrentMaxSlip / _maxSlipForSound;
-                //m_AudioSource.volume = slipVolumePercent * 0.5f;
-                m_AudioSource.pitch = Mathf.Clamp(slipVolumePercent, 0.75f, 1);
+                m_SlipVolumePercent = _car.CurrentMaxSlip / _maxSlipForSound;
+                //m_AudioSource.volume = m_SlipVolumePercent * 0.5f;
+                m_AudioSource.pitch = Mathf.Clamp(m_SlipVolumePercent, 0.75f, 1);
             }
         }
 

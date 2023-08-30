@@ -173,7 +173,7 @@ namespace RaceManager.Root
                 _mainUI.OnButtonPressed -= HandleButton;
             }
 
-            _gameEvents.ScreenTaped.OnNext();
+            _gameEvents.ScreenTaped?.OnNext();
         }
 
         #endregion

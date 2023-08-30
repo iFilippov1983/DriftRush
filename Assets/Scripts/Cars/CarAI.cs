@@ -48,6 +48,9 @@ namespace RaceManager.Cars
         private Vector3 m_OffsetTargetPosWander;
         private Vector3 m_AvoidanceVector;
 
+        private Vector3 m_OtherCarPosition;
+        private Vector3 m_OtherCarRightVector;
+
         private Vector3 m_PushContactPoint;
         private Vector3 m_PushDirection;
         private Vector3 m_PushForce;
@@ -149,8 +152,8 @@ namespace RaceManager.Cars
             m_VectorToTargetSteer = _target.position - _itsTransform.position;
             m_VectorToTargetSteer.Normalize();
 
-            if (_isAvoidingCars)
-                AvoidAICars(m_VectorToTargetSteer, out m_VectorToTargetSteer);
+            //if (_isAvoidingCars)
+            //    AvoidAICars(m_VectorToTargetSteer, out m_VectorToTargetSteer);
 
             //Vector3 position = MakeWanderPositionOffsetFromTarget();
             //vectorToTarget = Vector3.Lerp(vectorToTarget, position, _avoidanceLerpFactor * Time.fixedDeltaTime);
@@ -228,9 +231,9 @@ namespace RaceManager.Cars
 
         private void AvoidAICars(Vector3 vectorToTarget, out Vector3 newVectorToTarget)
         {
-            if (IsCarInFrontOfAICar(out Vector3 otherCarPosition, out Vector3 otherCarRightVector))
+            if (IsCarInFrontOfAICar(out m_OtherCarPosition, out m_OtherCarRightVector))
             {
-                m_AvoidanceVector = Vector3.Reflect((otherCarPosition - _itsTransform.position).normalized, otherCarRightVector);
+                m_AvoidanceVector = Vector3.Reflect((m_OtherCarPosition - _itsTransform.position).normalized, m_OtherCarRightVector);
 
                 float distanceTotarget = (_target.position - _itsTransform.position).magnitude;
 

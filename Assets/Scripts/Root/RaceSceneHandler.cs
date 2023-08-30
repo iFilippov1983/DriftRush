@@ -29,6 +29,8 @@ namespace RaceManager.Root
         private Driver _playerDriver;
         private AudioType _currentTrackType;
 
+        private Vector3 _shiftVector;
+
         private GameEffectsController EffectsController => Singleton<GameEffectsController>.Instance;
         private RaceCamerasHandler CamerasHandler => Singleton<RaceCamerasHandler>.Instance;
         private Wheel[] Wheels => _playerDriver.Car.Wheels;
@@ -43,6 +45,7 @@ namespace RaceManager.Root
             _gameEvents = gameEvents;
             _raceUI = raceUI;
             _settingsContainer = settingsContainer;
+            _shiftVector = Vector3.zero;
         }
 
         public void Initialize()
@@ -55,18 +58,18 @@ namespace RaceManager.Root
                 .Subscribe(_ => 
                 {
                     if (Input.GetMouseButtonDown(0))
-                        _gameEvents.ScreenTaped.OnNext();
+                        _gameEvents.ScreenTaped?.OnNext();
 
                     if (Input.GetMouseButton(0))
-                        _gameEvents.ScreenTapHold.OnNext();
+                        _gameEvents.ScreenTapHold?.OnNext();
 
                     if (Input.GetMouseButtonUp(0))
-                        _gameEvents.ScreenTapReleased.OnNext();
+                        _gameEvents.ScreenTapReleased?.OnNext();
                 }).AddTo(this);
 
-            //this.FixedUpdateAsObservable()
+            //this.LateUpdateAsObservable()
             //    .Where(_ => _raceUI.RaceFinished == false)
-            //    .Subscribe(_ => 
+            //    .Subscribe(_ =>
             //    {
             //        HandleWheels();
             //        HandleCarSpeed();
@@ -103,7 +106,7 @@ namespace RaceManager.Root
             if (_driftScoresEffectCounter > _driftScoresEffectThreshold)
             {
                 _driftScoresEffectCounter = 0;
-                EffectsController.PlayEffect(AudioType.SFX_DriftScoresCount);
+                EffectsController.PlayEffectUnsafe(AudioType.SFX_DriftScoresCount);
             }
         }
 

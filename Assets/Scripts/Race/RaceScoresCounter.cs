@@ -42,6 +42,8 @@ namespace RaceManager.Race
 
         private TotalScoreData m_TotalScoreData;
 
+        private int m_LastDriftValue;
+
         #endregion
 
         public bool CanCount { get; set; } = true;
@@ -57,6 +59,10 @@ namespace RaceManager.Race
             TotalScoresCount = new Subject<TotalScoreData>();
             DriftScoresCount = new Subject<DriftScoresData>();
             CollisionScoresCount = new Subject<CollisionScoresData>();
+
+            m_DriftScoresData = new DriftScoresData();
+            m_CollisionScoresData = new CollisionScoresData();
+            m_TotalScoreData = new TotalScoreData();
 
             _car.CollisionAction += CountCollisionScores;
             _car.CollisionStayAction += ResetCollisionTimer;
@@ -109,16 +115,21 @@ namespace RaceManager.Race
                             _driftFactor = DriftFactorMax;
                     }
 
-                    int scoresValue = Mathf.RoundToInt(_driftDistanceCounter * DriftFactorMin);
+                    m_DriftScoresData.Reset();
+                    m_DriftScoresData.CurrentScoresValue = Mathf.RoundToInt(_driftDistanceCounter * DriftFactorMin);
+                    m_DriftScoresData.TotalScoresValue = _scoresDrift;
+                    m_DriftScoresData.ScoresFactorThisType = _driftFactor;
+                    m_DriftScoresData.ScoresCountTime = _driftCountTime;
+                    m_DriftScoresData.isDrifting = true;
 
-                    m_DriftScoresData = new DriftScoresData()
-                    {
-                        CurrentScoresValue = scoresValue,
-                        TotalScoresValue = _scoresDrift,
-                        ScoresFactorThisType = _driftFactor,
-                        ScoresCountTime = _driftCountTime,
-                        isDrifting = true
-                    };
+                    //m_DriftScoresData = new DriftScoresData()
+                    //{
+                    //    CurrentScoresValue = Mathf.RoundToInt(_driftDistanceCounter * DriftFactorMin),
+                    //    TotalScoresValue = _scoresDrift,
+                    //    ScoresFactorThisType = _driftFactor,
+                    //    ScoresCountTime = _driftCountTime,
+                    //    isDrifting = true
+                    //};
 
                     DriftScoresCount.OnNext(m_DriftScoresData);
                 }
@@ -126,23 +137,26 @@ namespace RaceManager.Race
             else
             {
                 _driftCountTime -= Time.fixedDeltaTime;
-                
-                int lastDriftValue = Mathf.RoundToInt(_driftDistanceCounter * DriftFactorMin);
 
-                m_DriftScoresData = new DriftScoresData()
-                {
-                    ScoresFactorThisType = _driftFactor
-                };
+                m_LastDriftValue = Mathf.RoundToInt(_driftDistanceCounter * DriftFactorMin);
 
-                if (_driftCountTime < 0 && lastDriftValue > 0)
+                m_DriftScoresData.Reset();
+                m_DriftScoresData.ScoresFactorThisType = _driftFactor;
+
+                //m_DriftScoresData = new DriftScoresData()
+                //{
+                //    ScoresFactorThisType = _driftFactor
+                //};
+
+                if (_driftCountTime < 0 && m_LastDriftValue > 0)
                 {
                     _driftTime = 0;
 
-                    lastDriftValue = Mathf.RoundToInt(lastDriftValue * _driftFactor) ;
-                    _scoresDrift += lastDriftValue;
+                    m_LastDriftValue = Mathf.RoundToInt(m_LastDriftValue * _driftFactor) ;
+                    _scoresDrift += m_LastDriftValue;
                     _driftDistanceCounter = 0f;
 
-                    m_DriftScoresData.CurrentScoresValue = lastDriftValue;
+                    m_DriftScoresData.CurrentScoresValue = m_LastDriftValue;
                     m_DriftScoresData.isDrifting = false;
 
                     _driftFactor = DriftFactorMin;
@@ -214,24 +228,32 @@ namespace RaceManager.Race
                 scores = Mathf.RoundToInt(BumpScores);
                 _scoresBump += scores;
 
-                m_CollisionScoresData = new CollisionScoresData()
-                {
-                    ScoresType = RaceScoresType.Bump,
-                    CurrentScoresThisTypeValue = scores,
-                    TotalScoresThisTypeValue = _scoresBump
-                };
+                m_CollisionScoresData.ScoresType = RaceScoresType.Bump;
+                m_CollisionScoresData.CurrentScoresThisTypeValue = scores;
+                m_CollisionScoresData.TotalScoresThisTypeValue = _scoresBump;
+
+                //m_CollisionScoresData = new CollisionScoresData()
+                //{
+                //    ScoresType = RaceScoresType.Bump,
+                //    CurrentScoresThisTypeValue = scores,
+                //    TotalScoresThisTypeValue = _scoresBump
+                //};
             }
             else if (colLayer == LayerMask.NameToLayer(Layer.Crushable))
             {
                 scores = Mathf.RoundToInt(CrushScores);
                 _scoresCrush += scores;
 
-                m_CollisionScoresData = new CollisionScoresData()
-                {
-                    ScoresType = RaceScoresType.Crush,
-                    CurrentScoresThisTypeValue = scores,
-                    TotalScoresThisTypeValue = _scoresCrush,
-                };
+                m_CollisionScoresData.ScoresType = RaceScoresType.Crush;
+                m_CollisionScoresData.CurrentScoresThisTypeValue = scores;
+                m_CollisionScoresData.TotalScoresThisTypeValue = _scoresCrush;
+
+                //m_CollisionScoresData = new CollisionScoresData()
+                //{
+                //    ScoresType = RaceScoresType.Crush,
+                //    CurrentScoresThisTypeValue = scores,
+                //    TotalScoresThisTypeValue = _scoresCrush,
+                //};
             }
 
             if (scores != 0)
@@ -255,12 +277,16 @@ namespace RaceManager.Race
 
             int showTotalTimerValue = Mathf.CeilToInt(_showTotalTime);
 
-            m_TotalScoreData = new TotalScoreData()
-            {
-                Value = _scoresTotal,
-                Timer = showTotalTimerValue,
-                ShowScores = _showTotalTime > 0 && newTotal
-            };
+            m_TotalScoreData.Value = _scoresTotal;
+            m_TotalScoreData.Timer = showTotalTimerValue;
+            m_TotalScoreData.ShowScores = _showTotalTime > 0 && newTotal;
+
+            //m_TotalScoreData = new TotalScoreData()
+            //{
+            //    Value = _scoresTotal,
+            //    Timer = showTotalTimerValue,
+            //    ShowScores = _showTotalTime > 0 && newTotal
+            //};
 
             TotalScoresCount.OnNext(m_TotalScoreData);
         }

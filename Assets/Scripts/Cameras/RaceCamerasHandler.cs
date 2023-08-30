@@ -46,10 +46,14 @@ namespace RaceManager.Cameras
 
         private CinemachineTransposer _transposer;
         private CinemachineComposer _composer;
+
         private Transform _cameraFinalTarget;
         private Transform _cameraFinalPosition;
+        private Transform _cameraLookTarget;
+
         private float _defaultMainCamFov;
         private float _defaultMainCamDampingX;
+
         private Vector3 _defaultCamAimOffset;
 
         #region Minor variables
@@ -73,7 +77,7 @@ namespace RaceManager.Cameras
         public Transform FollowCam => _followCamera.transform;
         public Transform FinishCam => _finishCamera.transform;
         public Transform StartCam => _startCamera.transform;
-
+        public Transform LookAtTarget => _followCamera.LookAt;
 
         #region Public Functions
 
@@ -254,6 +258,7 @@ namespace RaceManager.Cameras
         {
             foreach (var cam in cameras)
             {
+                //cam.gameObject.SetActive(isActive);
                 cam.Priority = priority;
             }
         }

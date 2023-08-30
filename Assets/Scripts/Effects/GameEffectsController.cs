@@ -10,7 +10,7 @@ namespace RaceManager.Effects
 {
     public class GameEffectsController : MonoBehaviour
     {
-        public bool debug;
+        //public bool debug;
         [SerializeField] private AudioTrack[] _tracks;
 
         [ShowInInspector, ReadOnly]
@@ -22,6 +22,16 @@ namespace RaceManager.Effects
         private Hashtable _jobTableAudio;
 
         private IEffectsSettings _settings;
+
+        private Coroutine _newJobRunner;
+        private Coroutine _runningJob;
+
+        private AudioType _conflictAudio;
+        private AudioType _audioType;
+
+        private AudioTrack _audioTrackNeeded;
+        private AudioTrack _audioTrackInUse;
+        private AudioTrack _trackToHandle;
 
         private Dictionary<HapticType, HapticPatterns.PresetType> _haptics = new Dictionary<HapticType, HapticPatterns.PresetType>()
         {
@@ -137,6 +147,20 @@ namespace RaceManager.Effects
             AddJob(new AudioJob(EffectAction.RESTART, type, fade, delay));
         }
 
+        public void PlayEffectUnsafe(AudioType type)
+        {
+            bool cantPlayMusic =
+                GetAudioTrack(type).Type == AudioTrackType.MUSIC && _settings.PlayMusic == false;
+
+            bool cantPlaySounds =
+                GetAudioTrack(type).Type == AudioTrackType.SFX && _settings.PlaySounds == false;
+
+            if (cantPlayMusic || cantPlaySounds)
+                return;
+
+            RunAudio(type);
+        }
+
         #endregion
 
         #region Private Functions
@@ -171,10 +195,10 @@ namespace RaceManager.Effects
 
             RemoveConflictingJob(job.Type);
 
-            Coroutine jobRunner = StartCoroutine(RunAudioJob(job));
-            _jobTableAudio.Add(job.Type, jobRunner);
+            _newJobRunner = StartCoroutine(RunAudioJob(job));
+            _jobTableAudio.Add(job.Type, _newJobRunner);
 
-            Log($"Starting job on [{job.Type}] with operation: {job.Action}");
+            //Log($"Starting job on [{job.Type}] with operation: {job.Action}");
         }
 
         private void RemoveJob(AudioType type)
@@ -185,8 +209,8 @@ namespace RaceManager.Effects
                 return;
             }
 
-            Coroutine runningJob = (Coroutine)_jobTableAudio[type];
-            StopCoroutine(runningJob);
+            _runningJob = (Coroutine)_jobTableAudio[type];
+            StopCoroutine(_runningJob);
             _jobTableAudio.Remove(type);
         }
 
@@ -195,23 +219,32 @@ namespace RaceManager.Effects
             if (_jobTableAudio.ContainsKey(type))
                 RemoveJob(type);
 
-            AudioType conflictAudio = AudioType.None;
-            AudioTrack audioTrackNeeded = GetAudioTrack(type, "Get Audio Track Needed");
+            _conflictAudio = AudioType.None;
+            _audioTrackNeeded = GetAudioTrack(type, "Get Audio Track Needed");
 
             foreach (DictionaryEntry entry in _jobTableAudio)
             {
-                AudioType audioType = (AudioType)entry.Key;
-                AudioTrack audioTrackInUse = GetAudioTrack(audioType, "Get Audio Track In Use");
+                _audioType = (AudioType)entry.Key;
+                _audioTrackInUse = GetAudioTrack(_audioType, "Get Audio Track In Use");
 
-                if (audioTrackInUse.Source == audioTrackNeeded.Source)
+                if (_audioTrackInUse.Source == _audioTrackNeeded.Source)
                 {
-                    conflictAudio = audioType;
+                    _conflictAudio = _audioType;
                     break;
                 }  
             }
 
-            if (conflictAudio != AudioType.None)
-                RemoveJob(conflictAudio);
+            if (_conflictAudio != AudioType.None)
+                RemoveJob(_conflictAudio);
+        }
+
+        private void RunAudio(AudioType type)
+        {
+            _trackToHandle = GetAudioTrack(type);
+            _trackToHandle.Source.clip = GetAudioClipFromAudioTrack(type, _trackToHandle, out float volume);
+            _trackToHandle.Source.volume = volume;
+
+            _trackToHandle.Source.Play();
         }
 
         private IEnumerator RunAudioJob(AudioJob job)
@@ -219,26 +252,26 @@ namespace RaceManager.Effects
             if (job.Delay != null)
                 yield return job.Delay;
 
-            AudioTrack track = GetAudioTrack(job.Type);
-            track.Source.clip = GetAudioClipFromAudioTrack(job.Type, track, out float volume);
+            _trackToHandle = GetAudioTrack(job.Type);
+            _trackToHandle.Source.clip = GetAudioClipFromAudioTrack(job.Type, _trackToHandle, out float volume);
 
             float initial = 0f;
             float target = volume;
             switch (job.Action)
             {
                 case EffectAction.START:
-                    track.Source.Play();
+                    _trackToHandle.Source.Play();
                     break;
                 case EffectAction.STOP when !job.Fade:
-                    track.Source.Stop();
+                    _trackToHandle.Source.Stop();
                     break;
                 case EffectAction.STOP:
                     initial = volume;
                     target = 0f;
                     break;
                 case EffectAction.RESTART:
-                    track.Source.Stop();
-                    track.Source.Play();
+                    _trackToHandle.Source.Stop();
+                    _trackToHandle.Source.Play();
                     break;
             }
 
@@ -249,25 +282,25 @@ namespace RaceManager.Effects
 
                 while (timer <= duration)
                 {
-                    track.Source.volume = Mathf.Lerp(initial, target, timer / duration);
+                    _trackToHandle.Source.volume = Mathf.Lerp(initial, target, timer / duration);
                     timer += Time.deltaTime;
                     yield return null;
                 }
 
                 // if _timer was 0.9999 and Time.deltaTime was 0.01 we would not have reached the target
                 // make sure the volume is set to the value we want
-                track.Source.volume = target;
+                _trackToHandle.Source.volume = target;
 
                 if (job.Action == EffectAction.STOP)
-                    track.Source.Stop();
+                    _trackToHandle.Source.Stop();
             }
             else
             {
-                track.Source.volume = target;
+                _trackToHandle.Source.volume = target;
             }
 
             _jobTableAudio.Remove(job.Type);
-            Log($"Job count {_jobTableAudio.Count}");
+            //Log($"Job count {_jobTableAudio.Count}");
             yield return null;
         }
 
@@ -284,7 +317,7 @@ namespace RaceManager.Effects
                     else
                     {
                         _audioTable.Add(aObj.Type, track);
-                        Log($"Registering audio [{aObj.Type}]");
+                        //Log($"Registering audio [{aObj.Type}]");
                     }
                 }
             }
@@ -317,13 +350,13 @@ namespace RaceManager.Effects
 
         private void Log(string msg)
         { 
-            if(!debug) return;
+            //if(!debug) return;
             Debug.Log($"[Audio Controller]: {msg}");
         }
 
         private void LogWarning(string msg)
         {
-            if (!debug) return;
+            //if (!debug) return;
             Debug.LogWarning($"[Audio Controller]: {msg}");
         }
 

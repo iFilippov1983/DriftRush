@@ -60,11 +60,11 @@ namespace RaceManager.UI
                 .Subscribe(_ => 
                 {
                     if(gameObject.activeInHierarchy)
-                        UpdateStatus(Advertisment.IsRewardedAdReady);
+                        Initialize(Advertisment.IsRewardedAdReady);
                 }).AddTo(this);
         }
 
-        private void UpdateStatus(bool adsAvailable)
+        private void Initialize(bool adsAvailable)
         {
             ActivateDependents(adsAvailable, _adsAvaObjects, _avaAnimations);
             ActivateDependents(!adsAvailable, _adsNotAvaObjects, _notAvaAnimations);

@@ -53,6 +53,13 @@ namespace RaceManager.Race
 
         private LevelAnalyticsInfo _curLevelAnalyticsInfo;
 
+        #region Minor variables
+
+        private bool m_AnimateFactor;
+        private int m_TotalScoresThisType;
+
+        #endregion
+
         private MaxSdkAdvertisement Advertisement => Singleton<MaxSdkAdvertisement>.Instance;
         private AnalyticsService AnalyticsService => Singleton<AnalyticsService>.Instance;
         private bool CanStartImmediate => _profiler.CanStartImmediate;
@@ -295,7 +302,7 @@ namespace RaceManager.Race
                 .Where(data => data.CurrentScoresValue > 0)
                 .Subscribe(data =>
                 {
-                    bool animateFactor = data.ScoresFactorThisType != _lastDriftFactor;
+                    m_AnimateFactor = data.ScoresFactorThisType != _lastDriftFactor;
 
                     _raceUI.ShowDriftScores
                         (
@@ -303,15 +310,15 @@ namespace RaceManager.Race
                         data.CurrentScoresValue,
                         data.ScoresFactorThisType,
                         data.ScoresCountTime,
-                        animateFactor
+                        m_AnimateFactor
                         )
                         .AddTo(_raceUI);
 
-                    int totalScoresThisType = data.CurrentScoresValue > data.TotalScoresValue
+                    m_TotalScoresThisType = data.CurrentScoresValue > data.TotalScoresValue
                         ? data.CurrentScoresValue
                         : data.TotalScoresValue;
 
-                    _rewardsHandler.SetMoneyReward(RaceScoresType.Drift, totalScoresThisType);
+                    _rewardsHandler.SetMoneyReward(RaceScoresType.Drift, m_TotalScoresThisType);
 
                     _lastDriftFactor = data.ScoresFactorThisType;
 

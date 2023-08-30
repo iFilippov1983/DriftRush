@@ -150,13 +150,13 @@ namespace RaceManager.Shed
         private void Update()
         {
             if (Input.GetMouseButtonDown(0))
-                _gameEvents.ScreenTaped.OnNext();
+                _gameEvents.ScreenTaped?.OnNext();
 
             if (Input.GetMouseButton(0))
-                _gameEvents.ScreenTapHold.OnNext();
+                _gameEvents.ScreenTapHold?.OnNext();
 
             if (Input.GetMouseButtonUp(0))
-                _gameEvents.ScreenTapReleased.OnNext();
+                _gameEvents.ScreenTapReleased?.OnNext();
         }
 
         public void Dispose()

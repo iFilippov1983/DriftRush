@@ -14,6 +14,7 @@ namespace RaceManager.UI
 
         public Transform Transform { get; private set; }
         public bool isFinalizing { get; set; }
+        public bool isActive { get; set; }
 
         public RectTransform Rect => _itsRect;
         public TMP_Text TitleText => _titleText;

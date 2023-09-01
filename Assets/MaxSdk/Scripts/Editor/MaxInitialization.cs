@@ -20,7 +20,6 @@ namespace AppLovinMax.Scripts.Editor
         private static readonly List<string> ObsoleteNetworks = new List<string>
         {
             "Snap",
-            "VerizonAds",
             "VoodooAds"
         };
 

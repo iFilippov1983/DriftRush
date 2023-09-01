@@ -99,7 +99,6 @@ namespace RaceManager.UI
                 return;
 
             _flagsHandler
-                //.Subscribe(gameFlag, TimeScaleToDefault)
                 .Subscribe(gameFlag, () => TimeScaleTo(timeScaleValue))
                 .AddTo(this);
         }

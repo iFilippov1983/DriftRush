@@ -89,6 +89,8 @@ namespace RaceManager.Effects
                    ParticleName = string.Empty
                 });
             }
+
+            m_EmitParams = new EmitParams();
         }
 
         private void Update()
@@ -128,14 +130,14 @@ namespace RaceManager.Effects
                             : 1)
                             * Random.Range(0, 1f);
 
-                        m_ParticlesPoint = m_Wheel.transform.position;
+                        m_ParticlesPoint = m_Wheel.Transform.position;
                         m_ParticlesPoint.y = m_Wheel.GetHit.point.y;
 
                         m_ParticlesVelocity = -m_Wheel.GetHit.forwardDir * m_Wheel.GetHit.forwardSlip;
                         m_ParticlesVelocity += m_Wheel.GetHit.sidewaysDir * m_Wheel.GetHit.sidewaysSlip;
                         m_ParticlesVelocity += _car.RB.velocity;
 
-                        m_EmitParams = new EmitParams();
+                        //m_EmitParams = new EmitParams();
 
                         m_EmitParams.position = m_ParticlesPoint;
                         m_EmitParams.velocity = m_ParticlesVelocity;
@@ -195,14 +197,14 @@ namespace RaceManager.Effects
                 if (m_TrailCur == null)
                 {
                     //Get free or create trail.
-                    m_TrailCur = GetTrail(wheel.WheelView.position + (wheel.transform.up * (-wheel.Radius + TrailOffset)));
-                    m_TrailCur.transform.SetParent(wheel.transform);
+                    m_TrailCur = GetTrail(wheel.WheelView.position + (wheel.Transform.up * (-wheel.Radius + TrailOffset)));
+                    m_TrailCur.transform.SetParent(wheel.Transform);
                     ActiveTrails[wheel] = m_TrailCur;
                 }
                 else
                 {
                     //Move the trail to the desired position
-                    m_TrailCur.transform.position = wheel.WheelView.position + (wheel.transform.up * (-wheel.Radius + TrailOffset));
+                    m_TrailCur.transform.position = wheel.WheelView.position + (wheel.Transform.up * (-wheel.Radius + TrailOffset));
                 }
             }
             else if (ActiveTrails[wheel] != null)

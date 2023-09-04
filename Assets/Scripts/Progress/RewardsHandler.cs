@@ -51,9 +51,9 @@ namespace RaceManager.Progress
             _profiler.OnLootboxOpen += HandleLootboxOpen;
         }
 
-        public void RewardForRaceInit(PositionInRace positionInRace, out RaceRewardInfo info)
+        public void RewardForRaceInit(int positionInRace, out RaceRewardInfo info)
         {
-            _raceReward = _raceRewardsScheme.GetRewardFor(positionInRace);
+            _raceReward = _raceRewardsScheme.GetRewardFor((PositionInRace)positionInRace);
 
             info = new RaceRewardInfo()
             {
@@ -71,7 +71,7 @@ namespace RaceManager.Progress
             _raceReward.AddMoney(extraMoney);
             _raceReward.Reward(_profiler);
 
-            if (positionInRace == PositionInRace.First)
+            if ((PositionInRace)positionInRace == PositionInRace.First)
             {
                 _profiler.CountVictoryCycle();
 

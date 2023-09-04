@@ -84,7 +84,10 @@ namespace RaceManager.UI
         private Color m_InitialTitleColor;
         private Color m_InitialTextColor;
 
-        private Tween m_AccelerationTween;
+        private IDisposable m_ShowDriftScoresDisposable;
+        private IDisposable m_ShowTotalScoresDisposable;
+        private IDisposable m_FinalizationDriftDisposable;
+        private IDisposable m_FinalizationCollisionDisposable;
 
         #endregion
 
@@ -248,7 +251,7 @@ namespace RaceManager.UI
                 _totalScoresTextTween = null;
             }
 
-            return Disposable.Create(() =>
+            m_ShowTotalScoresDisposable ??= Disposable.Create(() =>
             {
                 if (_totalScoresShakeTween.IsActive())
                 {
@@ -262,11 +265,12 @@ namespace RaceManager.UI
                     _totalScoresTextTween = null;
                 }
             });
+
+            return m_ShowTotalScoresDisposable;
         }
 
         public IDisposable ShowDriftScores(bool show, int scoresValue, float factorValue, float scoresCountTime, bool animateFactor = false)
         {
-
             if (CurrentDriftIndicator == null || CurrentDriftIndicator.isFinalizing)
             {
                 if (_driftScoresStack.Count == 0)
@@ -328,7 +332,7 @@ namespace RaceManager.UI
                 CurrentDriftIndicator = null;
             }
 
-            return Disposable.Create(() =>
+            m_ShowDriftScoresDisposable ??= Disposable.Create(() =>
             {
                 _multiplyerTextTween?.Complete(true);
                 _multiplyerTextTween = null;
@@ -336,6 +340,8 @@ namespace RaceManager.UI
                 _driftScoresShakeTween?.Complete(true);
                 _driftScoresShakeTween = null;
             });
+
+            return m_ShowDriftScoresDisposable;
         }
 
         public void ShowCollisionScores(RaceScoresType scoresType, int scoresValue)
@@ -417,7 +423,7 @@ namespace RaceManager.UI
             _trackProgress = profile.TrackProgress;
             _currentPosition = profile.PositionInRace == 0
                 ? _driversCount
-                : (int)profile.PositionInRace;
+                : profile.PositionInRace;
         }
 
         #endregion
@@ -480,11 +486,13 @@ namespace RaceManager.UI
                 _finalizationSequenceDrift = null;
             }
 
-            return Disposable.Create(() =>
+            m_FinalizationDriftDisposable ??= Disposable.Create(() =>
             {
                 _finalizationSequenceDrift?.Complete(true);
                 _finalizationSequenceDrift = null;
             });
+
+            return m_FinalizationDriftDisposable;
         }
 
         private IDisposable AnimateCollisionScoresFinalization(ExtraScoresIndicatorView indicator)
@@ -508,11 +516,13 @@ namespace RaceManager.UI
                 _finalizationSequenceCollision = null;
             }
 
-            return Disposable.Create(() =>
+            m_FinalizationCollisionDisposable ??= Disposable.Create(() =>
             {
                 _finalizationSequenceCollision?.Complete(true);
                 _finalizationSequenceCollision = null;
             });
+
+            return m_FinalizationCollisionDisposable;
         }
 
         private IEnumerator HandleAccelerationRepresentation(bool isAccelerating)

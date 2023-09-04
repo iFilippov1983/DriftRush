@@ -80,9 +80,9 @@ namespace RaceManager.Progress
             _playerProfile.NextLevelPrefabToLoad = _levelName;
         }
 
-        public void SetInRacePosition(PositionInRace positionInRace)
+        public void SetInRacePosition(int positionInRace)
         {
-            _positionInRace = positionInRace;
+            _positionInRace = (PositionInRace)positionInRace;
             _playerProfile.SetLastInRacePosition(this);
             _playerProfile.AddRaceCount(this);
 

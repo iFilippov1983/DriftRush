@@ -36,6 +36,7 @@ namespace RaceManager.Cars
         public bool IsSteering { get; set; }
 
 		private Transform[] _childsView;
+        private Transform _thisTransform;
         private WheelHit _hit;
 		private GroundConfig _currentGroundConfig;
 		private WheelColliderHandler _wcHandler;
@@ -63,6 +64,7 @@ namespace RaceManager.Cars
         private GroundDetection GroundDetection => Singleton<GroundDetection>.Instance;
 		private GroundConfig DefaultGroundConfig => GroundDetection.DefaultGroundConfig;
 
+        public Transform Transform => _thisTransform;
         public GroundConfig CurrentGroundConfig
 		{
 			get => _currentGroundConfig;
@@ -120,6 +122,8 @@ namespace RaceManager.Cars
 
 			_initialForwardFriction = WheelCollider.forwardFriction;
 			_initialSidewaysFriction = WheelCollider.sidewaysFriction;
+            _thisTransform = transform;
+
 			CurrentGroundConfig = DefaultGroundConfig;
         }
 

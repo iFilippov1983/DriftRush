@@ -37,6 +37,8 @@ namespace RaceManager.Waypoints
 
         private Transform _itsTransform;
 
+        private (bool isVisible, RaceLineSegment segment) _infoTuple;
+
         private Color m_TargetColor;
 
         #endregion
@@ -124,7 +126,11 @@ namespace RaceManager.Waypoints
         private void SetVisibility(bool isVisible)
         {
             _isVisible = isVisible;
-            OnVisibilityChange?.OnNext((isVisible: _isVisible, segment: this));
+            _infoTuple.isVisible = isVisible;
+            _infoTuple.segment = this;
+
+            //OnVisibilityChange?.OnNext((isVisible: _isVisible, segment: this));
+            OnVisibilityChange?.OnNext(_infoTuple);
         }
 
         private void ColorChange(bool warning)

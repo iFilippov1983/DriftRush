@@ -10,6 +10,8 @@ namespace RaceManager.Waypoints
     [RequireComponent(typeof(BoxCollider))]
     public class Waypoint : MonoBehaviour, IObservable<string>, IObserver<string>
     {
+        private const int NumberOfCarsOnTrack = 6;
+
         public int Number;
         public bool isFinishLine = false;
         public bool isBrakeCheckpointA = false;
@@ -20,36 +22,44 @@ namespace RaceManager.Waypoints
         [ReadOnly]
         public Waypoint NextWaypoint;
 
-        public float RecomendedSpeed { get; set; }
-
-        private const int NumberOfCarsOnTrack = 6;
-
         [SerializeField]
         private RespawnPoint[] _respawnPoints = new RespawnPoint[NumberOfCarsOnTrack];
         private List<string> _carIDs = new List<string>();
         private List<IObserver<string>> _observers = new List<IObserver<string>>();
 
+        private string _id;
+        private Car _carToHandle;
+        private PlayerControl _playerControl;
+        private Transform _thisTransform;
+
         public Action<Waypoint> OnPassed;
+
+        public float RecomendedSpeed { get; set; }
+
+        private void Awake()
+        {
+            _thisTransform = transform;
+        }
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.TryGetComponent(out Car car))
+            if (other.TryGetComponent(out _carToHandle))
             {
-                SetRespawnPosition(car);
-                SetAndNotify(car, other);
+                SetRespawnPosition(_carToHandle);
+                SetAndNotify(_carToHandle, other);
             }
         }
 
         private void SetRespawnPosition(Car car)
         {
-            string id = car.ID;
+            _id = car.ID;
             //Made in purpose to avoid multiple triggering
-            bool contains = _carIDs.Contains(id);
+            bool contains = _carIDs.Contains(_id);
             
             if (!contains)
             {
-                _carIDs.Add(id);
-                NotifyObservers(id);
+                _carIDs.Add(_id);
+                NotifyObservers(_id);
 
                 for (int i = 0; i < _respawnPoints.Length; i++)
                 {
@@ -65,14 +75,14 @@ namespace RaceManager.Waypoints
         {
             if (isRaceLinePoint)
             {
-                car.CarSelfRighting.LastCheckpoint = transform;
+                car.CarSelfRighting.LastCheckpoint = _thisTransform;
             }
 
             bool hasFeature = isBrakeCheckpointA || isBrakeCheckpointB || isDriftCheckpointA || isDriftCheckpointB || isRaceLinePoint;
 
             if (hasFeature)
             {
-                bool isPlayer = other.TryGetComponent(out PlayerControl playerControl);
+                bool isPlayer = other.TryGetComponent(out _playerControl);
 
                 if (isPlayer)
                     OnPassed?.Invoke(this);
